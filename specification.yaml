@@ -1,0 +1,3431 @@
+openapi: 3.0.3
+info:
+  title: Lago API documentation
+  description: |-
+    Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
+  contact:
+    email: tech@getlago.com
+  version: 0.0.1
+externalDocs:
+  description: Lago Github
+  url: https://github.com/getlago
+servers:
+  - url: https://api.getlago.com/api/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: billable_metrics
+    description: Everything about Billable metric collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/billable_metrics/billable-metric-object
+  - name: add_ons
+    description: Everything about Add-on collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/add_ons/add-on-object
+  - name: coupons
+    description: Everything about Coupon collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/coupons/coupon-object
+  - name: organizations
+    description: Everything about Organization collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/organizations/organization-object
+  - name: customers
+    description: Everything about Customer collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/customers/customer-object
+  - name: events
+    description: Everything about Event collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/events/event-object
+  - name: plans
+    description: Everything about Plan collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/plans/plan-object
+  - name: subscriptions
+    description: Everything about Subscription collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/subscriptions/subscription-object
+  - name: webhooks
+    description: Everything about Webhooks
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/webhooks/message-signature#1-retrieve-the-public-key
+  - name: invoices
+    description: Everything about Invoice collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/invoices/invoice-object
+  - name: wallets
+    description: Everything about Wallet collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/wallets/wallet-object
+paths:
+  /billable_metrics:
+    post:
+      tags:
+        - billable_metrics
+      summary: Create a new billable metric
+      description: Create a new billable metric
+      operationId: createBillableMetric
+      requestBody:
+        description: Billable metric payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillableMetricInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /billable_metrics/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing billable metric
+        required: true
+        schema:
+          type: string
+          example: example_code
+    put:
+      tags:
+        - billable_metrics
+      summary: Update an existing billable metric
+      description: Update an existing billable metric by code
+      operationId: updateBillableMetric
+      requestBody:
+        description: Update an existing billable metric
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillableMetricInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - billable_metrics
+      summary: Find billable metric by code
+      description: Return a single billable metric
+      operationId: FindBillableMetric
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+    delete:
+      tags:
+        - billable_metrics
+      summary: Delete a billable metric
+      description: Delete a billable metric
+      operationId: destroyBillableMetric
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /billable_metrics/:
+    get:
+      tags:
+        - billable_metrics
+      summary: Find Billable metrics
+      description: Find all billable metrics in certain organisation
+      operationId: findAllBillableMetrics
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetrics'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /billable_metrics/{code}/groups:
+    get:
+      tags:
+        - billable_metrics
+      summary: Find Billable metric groups
+      description: Find all billable metric groups in certain organisation
+      operationId: findAllBillableMetricGroups
+      parameters:
+        - name: code
+          in: path
+          description: Code of the existing billable metric
+          required: true
+          schema:
+            type: string
+            example: example_code
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Groups'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /add_ons:
+    post:
+      tags:
+        - add_ons
+      summary: Create a new add-on
+      description: Create a new add-on
+      operationId: createAddOn
+      requestBody:
+        description: Add-on payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOnInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /add_ons/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing add-on
+        required: true
+        schema:
+          type: string
+          example: example_code
+    put:
+      tags:
+        - add_ons
+      summary: Update an existing add-on
+      description: Update an existing add-on by code
+      operationId: updateAddOn
+      requestBody:
+        description: Update an existing add-on
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOnInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - add_ons
+      summary: Find add-on by code
+      description: Return a single add-on
+      operationId: FindAddOn
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+    delete:
+      tags:
+        - add_ons
+      summary: Delete an add-on
+      description: Delete an add-on
+      operationId: destroyAddOn
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /add_ons/:
+    get:
+      tags:
+        - add_ons
+      summary: Find add-ons
+      description: Find all add-ons in certain organisation
+      operationId: findAllAddOns
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOns'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /applied_add_ons:
+    post:
+      tags:
+        - add_ons
+      summary: Apply an add-on to a customer
+      description: Apply an add-on to a customer
+      operationId: applyAddOn
+      requestBody:
+        description: Apply add-on payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppliedAddOnInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedAddOn'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /coupons:
+    post:
+      tags:
+        - coupons
+      summary: Create a new coupon
+      description: Create a new coupon
+      operationId: createCoupon
+      requestBody:
+        description: Coupon payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /coupons/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing coupon
+        required: true
+        schema:
+          type: string
+          example: example_code
+    put:
+      tags:
+        - coupons
+      summary: Update an existing coupon
+      description: Update an existing coupon by code
+      operationId: updateCoupon
+      requestBody:
+        description: Update an existing coupon
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - coupons
+      summary: Find coupon by code
+      description: Return a single coupon
+      operationId: FindCoupon
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+    delete:
+      tags:
+        - coupons
+      summary: Delete a coupon
+      description: Delete a coupon
+      operationId: destroyCoupon
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /coupons/:
+    get:
+      tags:
+        - coupons
+      summary: Find Coupons
+      description: Find all coupons in certain organisation
+      operationId: findAllCoupons
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupons'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /applied_coupons:
+    post:
+      tags:
+        - coupons
+      summary: Apply a coupon to a customer
+      description: Apply a coupon to a customer
+      operationId: applyCoupon
+      requestBody:
+        description: Apply coupon payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppliedCouponInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCoupon'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /applied_coupons/:
+    get:
+      tags:
+        - coupons
+      summary: Find Applied Coupons
+      description: Find all applied coupons
+      operationId: findAllAppliedCoupons
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: status
+          in: query
+          description: Applied coupon status
+          required: false
+          explode: true
+          schema:
+            type: string
+            description: Status
+            enum:
+              - active
+              - terminated
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 12345
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCoupons'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /organizations/:
+    put:
+      tags:
+        - organizations
+      summary: Update an existing Organization
+      description: Update an existing organization
+      operationId: updateOrganization
+      requestBody:
+        description: Update an existing organization
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /customers:
+    post:
+      tags:
+        - customers
+      summary: Create a customer
+      description: Create a new customer
+      operationId: createCustomer
+      requestBody:
+        description: Customer payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /customers/{external_id}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing customer
+        required: true
+        schema:
+          type: string
+          example: 12345
+    get:
+      tags:
+        - customers
+      summary: Find customer by external ID
+      description: Return a single customer
+      operationId: FindCustomer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+  /customers/{customer_external_id}/current_usage:
+    get:
+      tags:
+        - customers
+      summary: Find customer current usage
+      parameters:
+        - name: customer_external_id
+          in: path
+          description: External ID of the existing customer
+          required: true
+          schema:
+            type: string
+            example: 12345
+        - name: external_subscription_id
+          in: query
+          description: External subscription ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: 54321
+      description: Return a customer current usage
+      operationId: FindCustomerCurrentUsage
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerUsage'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+  /customers/:
+    get:
+      tags:
+        - customers
+      summary: Find customers
+      description: Find all customers in certain organisation
+      operationId: findAllCustomers
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customers'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /events:
+    post:
+      tags:
+        - events
+      summary: Create a new event
+      description: Create a new event
+      operationId: createEvent
+      requestBody:
+        description: Event payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /events/batch:
+    post:
+      tags:
+        - events
+      summary: Create batch events
+      description: Create batch events
+      operationId: createBatchEvents
+      requestBody:
+        description: Batch events payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchEventInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /events/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Id of the existing transaction
+        required: true
+        schema:
+          type: string
+          example: 12345
+    get:
+      tags:
+        - events
+      summary: Find event by transaction ID
+      description: Return a single event
+      operationId: FindEvent
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+  /plans:
+    post:
+      tags:
+        - plans
+      summary: Create a new plan
+      description: Create a new plan
+      operationId: createPlan
+      requestBody:
+        description: Plan payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /plans/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan
+        required: true
+        schema:
+          type: string
+          example: example_code
+    put:
+      tags:
+        - plans
+      summary: Update an existing plan
+      description: Update an existing plan by code
+      operationId: updatePlan
+      requestBody:
+        description: Update an existing plan
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - plans
+      summary: Fin plan by code
+      description: Return a single plan
+      operationId: FindPlan
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+    delete:
+      tags:
+        - plans
+      summary: Delete a plan
+      description: Delete a plan
+      operationId: destroyPlan
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /plans/:
+    get:
+      tags:
+        - plans
+      summary: Find plans
+      description: Find all plans in certain organisation
+      operationId: findAllPlans
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plans'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /subscriptions:
+    post:
+      tags:
+        - subscriptions
+      summary: Assign a plan to a customer
+      description: Assign a plan to a customer
+      operationId: createSubscription
+      requestBody:
+        description: Subscription payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /subscriptions/{external_id}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: example_id
+    put:
+      tags:
+        - subscriptions
+      summary: Update an existing subscription
+      description: Update an existing subscription by external ID
+      operationId: updateSubscription
+      requestBody:
+        description: Update an existing subscription
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    delete:
+      tags:
+        - subscriptions
+      summary: Terminate a subscription
+      description: Terminate a subscription
+      operationId: destroySubscription
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /subscriptions/:
+    get:
+      tags:
+        - subscriptions
+      summary: Find subscriptions
+      description: Find all suscriptions for certain customer
+      operationId: findAllSubscriptions
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: 12345
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+  /webhooks/public_key/:
+    get:
+      tags:
+        - webhooks
+      summary: Fetch webhook public key
+      description: Webhook public key
+      operationId: fetchPublicKey
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /invoices/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID of the existing Lago Invoice
+        required: true
+        schema:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+    put:
+      tags:
+        - invoices
+      summary: Update an existing invoice status
+      description: Update an existing invoice
+      operationId: updateInvoice
+      requestBody:
+        description: Update an existing invoice
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - invoices
+      summary: Find invoice by ID
+      description: Return a single invoice
+      operationId: FindInvoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+  /invoices/{id}/download:
+    post:
+      tags:
+        - invoices
+      summary: Download an existing invoice
+      parameters:
+        - name: id
+          in: path
+          description: ID of the existing Lago Invoice
+          required: true
+          schema:
+            type: string
+            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+      description: Download an existing invoice
+      operationId: downloadInvoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+  /invoices/:
+    get:
+      tags:
+        - invoices
+      summary: Find ainvoices
+      description: Find all invoices in certain organisation
+      operationId: findAllInvoices
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 12345
+        - name: issuing_date_from
+          in: query
+          description: Date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 2022-07-08
+        - name: issuing_date_to
+          in: query
+          description: Date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 2022-08-09
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoices'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /wallets:
+    post:
+      tags:
+        - wallets
+      summary: Create a new wallet
+      description: Create a new wallet
+      operationId: createWallet
+      requestBody:
+        description: Wallet payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /wallets/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Lago ID of the existing wallet
+        required: true
+        schema:
+          type: string
+          example: 321da83c-c007-4fbb-afcd-b00c07c41ssd
+    put:
+      tags:
+        - wallets
+      summary: Update an existing wallet
+      description: Update an existing wallet
+      operationId: updateWallet
+      requestBody:
+        description: Update an existing wallet
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - wallets
+      summary: Find wallet
+      description: Return a wallet
+      operationId: FindWallet
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+    delete:
+      tags:
+        - wallets
+      summary: Delete a wallet
+      description: Delete a wallet
+      operationId: destroyWallet
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /wallets/:
+    get:
+      tags:
+        - wallets
+      summary: Find wallets
+      description: Find all wallets for certain customer
+      operationId: findAllWallets
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: 12345
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallets'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /wallet_transactions:
+    post:
+      tags:
+        - wallets
+      summary: Create a new wallet transaction
+      description: Create a new wallet transaction
+      operationId: createWalletTransaction
+      requestBody:
+        description: Wallet transaction payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletTransactionInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletTransaction'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+components:
+  schemas:
+    BillableMetricGroup:
+      type: object
+      properties:
+        key:
+          type: string
+          example: region
+        values:
+          type: array
+          items:
+            oneOf:
+              - type: string
+              - type: object
+    BillableMetricObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        name:
+          type: string
+          example: bm1
+        code:
+          type: string
+          example: example_code
+        description:
+          type: string
+          example: description
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        field_name:
+          type: string
+          example: amount
+        aggregation_type:
+          type: string
+          description: Aggregation type
+          enum:
+            - count_agg
+            - sum_agg
+            - max_agg
+            - unique_count_agg
+            - recurring_count_agg
+        group:
+          $ref: '#/components/schemas/BillableMetricGroup'
+    BillableMetric:
+      type: object
+      properties:
+        billable_metric:
+          $ref: '#/components/schemas/BillableMetricObject'
+    BillableMetrics:
+      type: object
+      properties:
+        billable_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillableMetricObject'
+    BillableMetricInput:
+      type: object
+      properties:
+        billable_metric:
+          type: object
+          properties:
+            name:
+              type: string
+              example: bm1
+            code:
+              type: string
+              example: example_code
+            description:
+              type: string
+              example: description
+            field_name:
+              type: string
+              example: amount
+            aggregation_type:
+              type: string
+              description: Aggregation type
+              enum:
+                - count_agg
+                - sum_agg
+                - max_agg
+                - unique_count_agg
+                - recurring_count_agg
+            group:
+              $ref: '#/components/schemas/BillableMetricGroup'
+    GroupObject:
+      type: object
+      properties:
+        key:
+          type: string
+          example: region
+        value:
+          type: string
+          example: EU
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+    Groups:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupObject'
+    AddOnObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        name:
+          type: string
+          example: example name
+        code:
+          type: string
+          example: example_code
+        description:
+          type: string
+          example: description
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+    AddOn:
+      type: object
+      properties:
+        add_on:
+          $ref: '#/components/schemas/AddOnObject'
+    AddOns:
+      type: object
+      properties:
+        add_ons:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddOnObject'
+    AddOnInput:
+      type: object
+      properties:
+        add_on:
+          type: object
+          properties:
+            name:
+              type: string
+              example: example name
+            code:
+              type: string
+              example: example_code
+            description:
+              type: string
+              example: description
+            amount_cents:
+              type: integer
+              example: 1200
+            amount_currency:
+              type: string
+              example: EUR
+    AppliedAddOnObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        lago_add_on_id:
+          type: string
+          example: 457uj93c-c007-4fbb-afcd-b00c07c41kki
+        add_on_code:
+          type: string
+          example: code
+        lago_customer_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        external_customer_id:
+          type: string
+          example: 1234567
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+    AppliedAddOn:
+      type: object
+      properties:
+        applied_add_on:
+          $ref: '#/components/schemas/AppliedAddOnObject'
+    AppliedAddOnInput:
+      type: object
+      properties:
+        applied_add_on:
+          type: object
+          properties:
+            external_customer_id:
+              type: string
+              example: 1234567
+            add_on_code:
+              type: string
+              example: code
+            amount_cents:
+              type: integer
+              example: 1200
+            amount_currency:
+              type: string
+              example: EUR
+    CouponObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        name:
+          type: string
+          example: coupon1
+        code:
+          type: string
+          example: example_code
+        coupon_type:
+          type: string
+          description: Coupon type
+          enum:
+            - fixed_amount
+            - percentage
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        percentage_rate:
+          type: number
+          example: 25.00
+        frequency:
+          type: string
+          description: Frequency type
+          enum:
+            - once
+            - recurring
+        frequency_duration:
+          type: integer
+          example: 3
+        expiration_date:
+          type: string
+          example: 2022-09-14T00:00:00Z
+        expiration:
+          type: string
+          description: Expiration type
+          enum:
+            - no_expiration
+            - time_limit
+    Coupon:
+      type: object
+      properties:
+        coupon:
+          $ref: '#/components/schemas/CouponObject'
+    Coupons:
+      type: object
+      properties:
+        coupons:
+          type: array
+          items:
+            $ref: '#/components/schemas/CouponObject'
+    CouponInput:
+      type: object
+      properties:
+        coupon:
+          type: object
+          properties:
+            name:
+              type: string
+              example: coupon1
+            code:
+              type: string
+              example: example_code
+            coupon_type:
+              type: string
+              description: Coupon type
+              enum:
+                - fixed_amount
+                - percentage
+            amount_cents:
+              type: integer
+              example: 1200
+            amount_currency:
+              type: string
+              example: EUR
+            percentage_rate:
+              type: number
+              example: 25.00
+            frequency:
+              type: string
+              description: Frequency type
+              enum:
+                - once
+                - recurring
+            frequency_duration:
+              type: integer
+              example: 3
+            expiration_date:
+              type: string
+              example: 2022-09-14
+            expiration:
+              type: string
+              description: Expiration type
+              enum:
+                - no_expiration
+                - time_limit
+    AppliedCouponObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        lago_coupon_id:
+          type: string
+          example: 544da83c-c007-4fbb-afcd-b00c07c41iit
+        coupon_code:
+          type: string
+          example: example_code
+        lago_customer_id:
+          type: string
+          example: 321da83c-c007-4fbb-afcd-b00c07c41ssd
+        external_customer_id:
+          type: string
+          example: 123456
+        status:
+          type: string
+          description: Status
+          enum:
+            - active
+            - terminated
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_cents_remaining:
+          type: integer
+          example: 800
+        amount_currency:
+          type: string
+          example: EUR
+        percentage_rate:
+          type: number
+          example: 25.00
+        frequency:
+          type: string
+          description: Frequency type
+          enum:
+            - once
+            - recurring
+        frequency_duration:
+          type: integer
+          example: 3
+        frequency_duration_remaining:
+          type: integer
+          example: 2
+        expiration_date:
+          type: string
+          example: 2022-09-14T00:00:00Z
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        terminated_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+    AppliedCoupon:
+      type: object
+      properties:
+        applied_coupon:
+          $ref: '#/components/schemas/AppliedCouponObject'
+    AppliedCoupons:
+      type: object
+      properties:
+        applied_coupons:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppliedCouponObject'
+    AppliedCouponInput:
+      type: object
+      properties:
+        applied_coupon:
+          type: object
+          properties:
+            external_customer_id:
+              type: string
+              example: 123456
+            coupon_code:
+              type: string
+              example: example_code
+            frequency:
+              type: string
+              description: Frequency type
+              enum:
+                - once
+                - recurring
+            frequency_duration:
+              type: integer
+              example: 3
+            amount_cents:
+              type: integer
+              example: 1200
+            amount_currency:
+              type: string
+              example: EUR
+            percentage_rate:
+              type: number
+              example: 25.00
+    BillingConfigurationOrganization:
+      type: object
+      properties:
+        invoice_footer:
+          type: string
+          example: text
+        vat_rate:
+          type: number
+          example: 25.00
+        invoice_grace_period:
+          type: integer
+          example: 5
+    OrganizationObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        name:
+          type: string
+          example: example name
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        webhook_url:
+          type: string
+          example: https://example.com
+        country:
+          type: string
+          example: CZ
+        address_line1:
+          type: string
+          example: address1
+        address_line2:
+          type: string
+          example: address2
+        state:
+          type: string
+          example: state1
+        zipode:
+          type: string
+          example: 10000
+        email:
+          type: string
+          example: example@example.com
+        city:
+          type: string
+          example: City
+        legal_name:
+          type: string
+          example: name1
+        legal_number:
+          type: string
+          example: 10000
+        timezone:
+          type: string
+          example: UTC
+        billing_configuration:
+          $ref: '#/components/schemas/BillingConfigurationOrganization'
+    Organization:
+      type: object
+      properties:
+        organization:
+          $ref: '#/components/schemas/OrganizationObject'
+    OrganizationInput:
+      type: object
+      properties:
+        organization:
+          type: object
+          properties:
+            webhook_url:
+              type: string
+              example: https://example.com
+            country:
+              type: string
+              example: CZ
+            address_line1:
+              type: string
+              example: address1
+            address_line2:
+              type: string
+              example: address2
+            state:
+              type: string
+              example: state1
+            zipode:
+              type: string
+              example: 10000
+            email:
+              type: string
+              example: example@example.com
+            city:
+              type: string
+              example: City
+            legal_name:
+              type: string
+              example: name1
+            legal_number:
+              type: string
+              example: 10000
+            billing_configuration:
+              $ref: '#/components/schemas/BillingConfigurationOrganization'
+    BillingConfigurationCustomer:
+      type: object
+      additionalProperties: true
+      properties:
+        invoice_grace_period:
+          type: integer
+          example: 3
+        vat_rate:
+          type: number
+          example: 25.00
+        payment_provider:
+          type: string
+          description: Payment provider type
+          enum:
+            - stripe
+            - gocardless
+        provider_customer_id:
+          type: string
+          example: 123456
+        sync_with_provider:
+          type: boolean
+          example: true
+    CustomerObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        external_id:
+          type: string
+          example: 886da83c-c007-4fbb-afcd-b00c07c41ffe
+        name:
+          type: string
+          example: John Doe
+        sequential_id:
+          type: integer
+          example: 12345
+        slug:
+          type: string
+          example: slug
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        country:
+          type: string
+          example: CZ
+        address_line1:
+          type: string
+          example: address1
+        address_line2:
+          type: string
+          example: address2
+        state:
+          type: string
+          example: state1
+        zipode:
+          type: string
+          example: 10000
+        email:
+          type: string
+          example: example@example.com
+        city:
+          type: string
+          example: City
+        url:
+          type: string
+          example: https://example.com
+        phone:
+          type: string
+          example: +3551234567
+        lago_url:
+          type: string
+          example: https://lago.url
+        legal_name:
+          type: string
+          example: name1
+        legal_number:
+          type: string
+          example: 10000
+        currency:
+          type: string
+          example: EUR
+        timezone:
+          type: string
+          example: UTC
+        applicable_timezone:
+          type: string
+          example: UTC
+        billing_configuration:
+          $ref: '#/components/schemas/BillingConfigurationCustomer'
+    Customer:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerObject'
+    Customers:
+      type: object
+      properties:
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerObject'
+    CustomerInput:
+      type: object
+      properties:
+        customer:
+          type: object
+          properties:
+            external_id:
+              type: string
+              example: 886da83c-c007-4fbb-afcd-b00c07c41ffe
+            name:
+              type: string
+              example: John Doe
+            country:
+              type: string
+              example: CZ
+            address_line1:
+              type: string
+              example: address1
+            address_line2:
+              type: string
+              example: address2
+            state:
+              type: string
+              example: state1
+            zipode:
+              type: string
+              example: 10000
+            email:
+              type: string
+              example: example@example.com
+            city:
+              type: string
+              example: City
+            url:
+              type: string
+              example: https://example.com
+            phone:
+              type: string
+              example: +3551234567
+            lago_url:
+              type: string
+              example: https://lago.url
+            legal_name:
+              type: string
+              example: name1
+            legal_number:
+              type: string
+              example: 10000
+            currency:
+              type: string
+              example: EUR
+            billing_configuration:
+              $ref: '#/components/schemas/BillingConfigurationCustomer'
+    ChargeUsageObject:
+      type: object
+      properties:
+        units:
+          type: number
+          example: 3.0
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+        charge:
+          type: object
+          properties:
+            lago_id:
+              type: string
+              example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+            charge_model:
+              type: string
+              description: Charge model type
+              enum:
+                - standard
+                - graduated
+                - package
+                - percentage
+                - volume
+        billable_metric:
+          type: object
+          properties:
+            lago_id:
+              type: string
+              example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+            name:
+              type: string
+              example: Example name
+            code:
+              type: string
+              example: code
+            aggregation_type:
+              type: string
+              description: Aggregation type
+              enum:
+                - count_agg
+                - sum_agg
+                - max_agg
+                - unique_count_agg
+                - recurring_count_agg
+        groups:
+          type: array
+          items:
+            type: object
+            properties:
+              lago_id:
+                type: string
+                example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+              key:
+                type: string
+                example: key
+              value:
+                type: string
+                example: value
+              units:
+                type: number
+                example: 3.5
+              amount_cents:
+                type: integer
+                example: 1200
+    CustomerUsageObject:
+      type: object
+      properties:
+        from_date:
+          type: string
+          example: 2022-09-14T00:00:00Z
+        to_date:
+          type: string
+          example: 2022-09-14T00:00:00Z
+        issuing_date:
+          type: string
+          example: 2022-09-15T00:00:00Z
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+        total_amount_cents:
+          type: integer
+          example: 1400
+        total_amount_currency:
+          type: string
+          example: EUR
+        vat_amount_cents:
+          type: integer
+          example: 200
+        vat_amount_currency:
+          type: string
+          example: EUR
+        charges_usage:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeUsageObject'
+    CustomerUsage:
+      type: object
+      properties:
+        customer_usage:
+          $ref: '#/components/schemas/CustomerUsageObject'
+    EventObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        transaction_id:
+          type: string
+          example: 987654321
+        lago_customer_id:
+          type: string
+          example: 111da83c-c007-4fbb-afcd-b00c07c41iop
+        external_customer_id:
+          type: string
+          example: 123456
+        code:
+          type: string
+          example: code
+        timestamp:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        properties:
+          type: object
+        lago_subscription_id:
+          type: string
+          example: 447da83c-c007-4fbb-afcd-b00c07c41ffe
+        external_subscription_id:
+          type: string
+          example: 123456
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+    Event:
+      type: object
+      properties:
+        event:
+          $ref: '#/components/schemas/EventObject'
+    EventInput:
+      type: object
+      properties:
+        event:
+          type: object
+          properties:
+            transaction_id:
+              type: string
+              example: 123456
+            external_customer_id:
+              type: string
+              example: 654321
+            code:
+              type: string
+              example: code
+            timestamp:
+              type: integer
+              example: 1669823754
+            external_subscription_id:
+              type: string
+              example: 123456
+            properties:
+              type: object
+    BatchEventInput:
+      type: object
+      properties:
+        event:
+          type: object
+          properties:
+            transaction_id:
+              type: string
+              example: 123456
+            external_customer_id:
+              type: string
+              example: 654321
+            code:
+              type: string
+              example: code
+            timestamp:
+              type: integer
+              example: 1669823754
+            external_subscription_ids:
+              type: array
+              items:
+                type: string
+            properties:
+              type: object
+    GroupPropertiesObject:
+      type: object
+      properties:
+        group_id:
+          type: string
+          example: 123456
+        values:
+          type: object
+    ChargeObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        lago_billable_metric_id:
+          type: string
+          example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        charge_model:
+          type: string
+          description: Charge model type
+          enum:
+            - standard
+            - graduated
+            - package
+            - percentage
+            - volume
+        properties:
+          type: object
+        group_properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupPropertiesObject'
+    PlanObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        name:
+          type: string
+          example: example name
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        code:
+          type: string
+          example: example_code
+        interval:
+          type: string
+          description: Plan interval
+          enum:
+            - weekly
+            - monthly
+            - yearly
+        description:
+          type: string
+          example: description
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+        trial_period:
+          type: number
+          example: 2
+        pay_in_advance:
+          type: boolean
+          example: true
+        bill_charges_monthly:
+          type: boolean
+          example: false
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeObject'
+    Plan:
+      type: object
+      properties:
+        plan:
+          $ref: '#/components/schemas/PlanObject'
+    Plans:
+      type: object
+      properties:
+        plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanObject'
+    PlanInput:
+      type: object
+      properties:
+        plan:
+          type: object
+          properties:
+            name:
+              type: string
+              example: example name
+            code:
+              type: string
+              example: example_code
+            interval:
+              type: string
+              description: Plan interval
+              enum:
+                - weekly
+                - monthly
+                - yearly
+            description:
+              type: string
+              example: description
+            amount_cents:
+              type: integer
+              example: 1200
+            amount_currency:
+              type: string
+              example: EUR
+            trial_period:
+              type: number
+              example: 2
+            pay_in_advance:
+              type: boolean
+              example: true
+            bill_charges_monthly:
+              type: boolean
+              example: false
+            charges:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                  billable_metric_id:
+                    type: string
+                    example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+                  charge_model:
+                    type: string
+                    description: Charge model type
+                    enum:
+                      - standard
+                      - graduated
+                      - package
+                      - percentage
+                      - volume
+                  properties:
+                    type: object
+                  group_properties:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        group_id:
+                          type: string
+                          example: 123456
+                        values:
+                          type: object
+    SubscriptionObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        external_id:
+          type: string
+          example: 12345
+        lago_customer_id:
+          type: string
+          example: 995da83c-c007-4fbb-afcd-b00c07c41tre
+        external_customer_id:
+          type: string
+          example: 54321
+        name:
+          type: string
+          example: Test subscription
+        plan_code:
+          type: string
+          example: plan_code
+        status:
+          type: string
+          description: Subscription status
+          enum:
+            - active
+            - pending
+            - terminated
+            - canceled
+        billing_time:
+          type: string
+          description: Billing time
+          enum:
+            - calendar
+            - anniversary
+        subscription_date:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        started_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        terminated_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        canceled_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        previous_plan_code:
+          type: string
+          example: previous_code
+        next_plan_code:
+          type: string
+          example: next_code
+        downgrade_plan_date:
+          type: string
+          example: 2022-09-14T16:35:31Z
+    Subscription:
+      type: object
+      properties:
+        subscription:
+          $ref: '#/components/schemas/SubscriptionObject'
+    Subscriptions:
+      type: object
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionObject'
+    SubscriptionCreateInput:
+      type: object
+      properties:
+        subscription:
+          type: object
+          properties:
+            external_customer_id:
+              type: string
+              example: 12345
+            plan_code:
+              type: string
+              example: example_code
+            name:
+              type: string
+              example: Test name
+            external_id:
+              type: string
+              example: 54321
+            billing_time:
+              type: string
+              description: Billing time
+              enum:
+                - calendar
+                - anniversary
+            subscription_date:
+              type: string
+              example: 2022-08-08
+    SubscriptionUpdateInput:
+      type: object
+      properties:
+        subscription:
+          type: object
+          properties:
+            name:
+              type: string
+              example: New name
+            subscription_date:
+              type: string
+              example: 2022-08-08
+    CreditObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+        item:
+          type: object
+          properties:
+            lago_id:
+              type: string
+              example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            type:
+              type: string
+              example: coupon
+            code:
+              type: string
+              example: code
+            name:
+              type: string
+              example: name
+    FeeObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        lago_group_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+        vat_amount_cents:
+          type: integer
+          example: 1200
+        vat_amount_currency:
+          type: string
+          example: EUR
+        units:
+          type: number
+          example: 2.5
+        events_count:
+          type: integer
+          example: 5
+        item:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Billing time
+              enum:
+                - charge
+                - add_on
+                - subscription
+                - credit
+            code:
+              type: string
+              example: code
+            name:
+              type: string
+              example: name
+    InvoiceObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        sequential_id:
+          type: integer
+          example: 12345
+        number:
+          type: string
+          example: 222345
+        issuing_date:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        invoice_type:
+          type: string
+          description: Invoice type
+          enum:
+            - subscription
+            - add_on
+            - credit
+        status:
+          type: string
+          description: Status
+          enum:
+            - pending
+            - succeeded
+            - failed
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: EUR
+        vat_amount_cents:
+          type: integer
+          example: 20
+        vat_amount_currency:
+          type: string
+          example: EUR
+        total_amount_cents:
+          type: integer
+          example: 1220
+        total_amount_currency:
+          type: string
+          example: EUR
+        file_url:
+          type: string
+          example: https://example.com
+        customer:
+          $ref: '#/components/schemas/CustomerObject'
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionObject'
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeObject'
+        credits:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditObject'
+    Invoice:
+      type: object
+      properties:
+        invoice:
+          $ref: '#/components/schemas/InvoiceObject'
+    Invoices:
+      type: object
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceObject'
+    InvoiceInput:
+      type: object
+      properties:
+        invoice:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Status
+              enum:
+                - pending
+                - succeeded
+                - failed
+    WalletObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        lago_customer_id:
+          type: string
+          example: 254da83c-c007-4fbb-afcd-b00c07c41oit
+        external_customer_id:
+          type: string
+          example: 12345
+        status:
+          type: string
+          description: Status
+          enum:
+            - active
+            - terminated
+        currency:
+          type: string
+          example: EUR
+        name:
+          type: string
+          example: Name
+        rate_amount:
+          type: number
+          example: 2.0
+        credits_balance:
+          type: number
+          example: 500.0
+        balance:
+          type: number
+          example: 1000.0
+        consumed_credits:
+          type: number
+          example: 100.0
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        expiration_date:
+          type: string
+          example: 2022-09-14T00:00:00Z
+        last_balance_sync_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        last_consumed_credit_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        terminated_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+    Wallet:
+      type: object
+      properties:
+        wallet:
+          $ref: '#/components/schemas/WalletObject'
+    Wallets:
+      type: object
+      properties:
+        wallets:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletObject'
+    WalletInput:
+      type: object
+      properties:
+        wallet:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Wallet name
+            rate_amount:
+              type: number
+              example: 2.0
+            currency:
+              type: string
+              example: EUR
+            paid_credits:
+              type: number
+              example: 500.0
+            granted_credits:
+              type: number
+              example: 10.0
+            external_customer_id:
+              type: string
+              example: 12345
+            expiration_date:
+              type: string
+              example: 2022-09-14
+    WalletUpdateInput:
+      type: object
+      properties:
+        wallet:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Wallet name
+            expiration_date:
+              type: string
+              example: 2022-09-14
+    WalletTransactionObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        lago_wallet_id:
+          type: string
+          example: 985da83c-c007-4fbb-afcd-b00c07c41ffe
+        status:
+          type: string
+          description: Status
+          enum:
+            - pending
+            - settled
+        transaction_type:
+          type: string
+          description: Transaction type
+          enum:
+            - inbound
+            - outbound
+        amount:
+          type: number
+          example: 500.0
+        credit_amount:
+          type: number
+          example: 100.0
+        settled_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
+    WalletTransaction:
+      type: object
+      properties:
+        wallet_transaction:
+          $ref: '#/components/schemas/WalletTransactionObject'
+    WalletTransactionInput:
+      type: object
+      properties:
+        wallet_transaction:
+          type: object
+          properties:
+            wallet_id:
+              type: string
+              example: 985da83c-c007-4fbb-afcd-b00c07c41ffe
+            paid_credits:
+              type: number
+              example: 100.0
+            granted_credits:
+              type: number
+              example: 10.0
+    ApiResponseBadRequest:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 400
+        error:
+          type: string
+          example: Bad request
+    ApiResponseUnauthorized:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+    ApiResponseUnprocessableEntity:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 422
+        error:
+          type: string
+          example: Unprocessable entity
+        code:
+          type: string
+          example: validation_errors
+        error_details:
+          type: object
+    ApiResponseNotFound:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        code:
+          type: string
+          example: object_not_found
+    ApiResponseNotAllowed:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 405
+        error:
+          type: string
+          example: Method Not Allowed
+        code:
+          type: string
+          example: not_allowed
+  requestBodies:
+    BillableMetric:
+      description: Billable metric object that needs to be created or updated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillableMetricInput'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
