@@ -2400,9 +2400,9 @@ components:
         frequency_duration:
           type: integer
           example: 3
-        expiration_date:
+        expiration_at:
           type: string
-          example: 2022-09-14T00:00:00Z
+          example: 2022-09-14T23:59:59
         expiration:
           type: string
           description: Expiration type
@@ -2460,9 +2460,9 @@ components:
             frequency_duration:
               type: integer
               example: 3
-            expiration_date:
+            expiration_at:
               type: string
-              example: 2022-09-14
+              example: 2022-09-14T23:59:59Z
             expiration:
               type: string
               description: Expiration type
@@ -2517,9 +2517,9 @@ components:
         frequency_duration_remaining:
           type: integer
           example: 2
-        expiration_date:
+        expiration_at:
           type: string
-          example: 2022-09-14T00:00:00Z
+          example: 2022-09-14T23:59:59Z
         created_at:
           type: string
           example: 2022-09-14T16:35:31Z
@@ -2668,6 +2668,9 @@ components:
             legal_number:
               type: string
               example: 10000
+            timezone:
+              type: string
+              example: Europe/Paris
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationOrganization'
     BillingConfigurationCustomer:
@@ -2823,6 +2826,9 @@ components:
             currency:
               type: string
               example: EUR
+            timezone:
+              type: string
+              example: Europe/Paris
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationCustomer'
     ChargeUsageObject:
@@ -2896,10 +2902,10 @@ components:
     CustomerUsageObject:
       type: object
       properties:
-        from_date:
+        from_datetime:
           type: string
           example: 2022-09-14T00:00:00Z
-        to_date:
+        to_datetime:
           type: string
           example: 2022-09-14T00:00:00Z
         issuing_date:
@@ -3211,7 +3217,7 @@ components:
           enum:
             - calendar
             - anniversary
-        subscription_date:
+        subscription_at:
           type: string
           example: 2022-09-14T16:35:31Z
         started_at:
@@ -3271,9 +3277,9 @@ components:
               enum:
                 - calendar
                 - anniversary
-            subscription_date:
+            subscription_at:
               type: string
-              example: 2022-08-08
+              example: 2022-08-08T00:00:00Z
     SubscriptionUpdateInput:
       type: object
       properties:
@@ -3283,9 +3289,9 @@ components:
             name:
               type: string
               example: New name
-            subscription_date:
+            subscription_at:
               type: string
-              example: 2022-08-08
+              example: 2022-08-08T00:00:00Z
     CreditObject:
       type: object
       properties:
@@ -3494,9 +3500,9 @@ components:
         created_at:
           type: string
           example: 2022-09-14T16:35:31Z
-        expiration_date:
+        expiration_at:
           type: string
-          example: 2022-09-14T00:00:00Z
+          example: 2022-09-14T23:59:59Z
         last_balance_sync_at:
           type: string
           example: 2022-09-14T16:35:31Z
@@ -3542,9 +3548,9 @@ components:
             external_customer_id:
               type: string
               example: 12345
-            expiration_date:
+            expiration_at:
               type: string
-              example: 2022-09-14
+              example: 2022-09-14T23:59:59Z
     WalletUpdateInput:
       type: object
       properties:
@@ -3554,9 +3560,9 @@ components:
             name:
               type: string
               example: Wallet name
-            expiration_date:
+            expiration_at:
               type: string
-              example: 2022-09-14
+              example: 2022-09-14T23:59:59Z
     WalletTransactionObject:
       type: object
       properties:
