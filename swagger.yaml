@@ -1616,11 +1616,79 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
+/invoices/{id}/refresh:
+    put:
+      tags:
+        - invoices
+      summary: Refresh a draft invoice
+      parameters:
+        - name: id
+          in: path
+          description: ID of the existing Lago Invoice
+          required: true
+          schema:
+            type: string
+            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+      description: Refresh a draft invoice
+      operationId: refreshInvoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+/invoices/{id}/finalize:
+    put:
+      tags:
+        - invoices
+      summary: Finalize a draft invoice
+      parameters:
+        - name: id
+          in: path
+          description: ID of the draft Lago Invoice
+          required: true
+          schema:
+            type: string
+            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+      description: Finalize a draft invoice
+      operationId: finalizeInvoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
   /invoices/:
     get:
       tags:
         - invoices
-      summary: Find ainvoices
+      summary: Find all invoices
       description: Find all invoices in certain organisation
       operationId: findAllInvoices
       parameters:
@@ -1664,6 +1732,14 @@ paths:
           schema:
             type: string
             example: 2022-08-09
+        - name: status
+          in: query
+          description: Status (draft or finalized)
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: draft
       responses:
         '200':
           description: Successful response
@@ -2574,12 +2650,12 @@ components:
         invoice_footer:
           type: string
           example: text
-        vat_rate:
-          type: number
-          example: 25.00
         invoice_grace_period:
           type: integer
           example: 5
+        vat_rate:
+          type: number
+          example: 25.00
     OrganizationObject:
       type: object
       properties:
@@ -2680,9 +2756,6 @@ components:
         invoice_grace_period:
           type: integer
           example: 3
-        vat_rate:
-          type: number
-          example: 25.00
         payment_provider:
           type: string
           description: Payment provider type
@@ -2695,6 +2768,9 @@ components:
         sync_with_provider:
           type: boolean
           example: true
+        vat_rate:
+          type: number
+          example: 25.00
     CustomerObject:
       type: object
       properties:
@@ -3380,14 +3456,17 @@ components:
           example: 2022-09-14T16:35:31Z
         invoice_type:
           type: string
-          description: Invoice type
           enum:
             - subscription
             - add_on
             - credit
+        status:
+          type: string
+          enum:
+            - draft
+            - finalized
         payment_status:
           type: string
-          description: Status
           enum:
             - pending
             - succeeded
