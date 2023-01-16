@@ -1616,7 +1616,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-/invoices/{id}/refresh:
+  /invoices/{id}/refresh:
     put:
       tags:
         - invoices
@@ -1650,7 +1650,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-/invoices/{id}/finalize:
+  /invoices/{id}/finalize:
     put:
       tags:
         - invoices
