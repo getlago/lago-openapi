@@ -1616,6 +1616,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
+  /invoices/{id}/retry_payment:
+    post:
+      tags:
+        - invoices
+      summary: Retry invoice payment
+      parameters:
+        - name: id
+          in: path
+          description: ID of the existing Lago Invoice
+          required: true
+          schema:
+            type: string
+            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+      description: Retry invoice payment
+      operationId: retryPayment
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /invoices/{id}/refresh:
     put:
       tags:
