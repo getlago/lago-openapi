@@ -214,12 +214,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /billable_metrics/:
     get:
       tags:
@@ -2303,6 +2297,12 @@ components:
             - recurring_count_agg
         group:
           $ref: '#/components/schemas/BillableMetricGroup'
+        active_subscriptions_count:
+          type: integer
+          example: 0
+        draft_invoices_count:
+          type: integer
+          example: 0
     BillableMetric:
       type: object
       properties:
