@@ -3209,6 +3209,12 @@ components:
         bill_charges_monthly:
           type: boolean
           example: false
+        active_subscriptions_count:
+          type: integer
+          example: 2
+        draft_invoices_count:
+          type: integer
+          example: 2
         charges:
           type: array
           items:
