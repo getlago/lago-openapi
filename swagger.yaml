@@ -1996,7 +1996,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WalletTransaction'
+                $ref: '#/components/schemas/WalletTransactions'
         '400':
           description: Bad Request error
           content:
@@ -2015,6 +2015,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /wallets/{id}/wallet_transactions:
+    get:
+      tags:
+        - wallets
+      summary: Find wallet transactions
+      description: Find all wallet transactions for certain wallet
+      operationId: findAllWalletTransactions
+      parameters:
+        - name: id
+          in: path
+          description: Lago ID of the existing wallet
+          required: true
+          schema:
+            type: string
+            example: 321da83c-c007-4fbb-afcd-b00c07c41ssd
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: status
+          in: query
+          description: Status (pending or settled)
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: pending
+        - name: transaction_type
+          in: query
+          description: Transaction Type (inbound or outbound)
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: inbound
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletTransactions'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
   /credit_notes:
     post:
       tags:
@@ -3716,6 +3782,13 @@ components:
       properties:
         wallet_transaction:
           $ref: '#/components/schemas/WalletTransactionObject'
+    WalletTransactions:
+      type: object
+      properties:
+        wallet_transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactionInput:
       type: object
       properties:
