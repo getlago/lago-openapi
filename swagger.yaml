@@ -2563,6 +2563,14 @@ components:
         reusable:
           type: boolean
           example: true
+        limited_plans:
+          type: boolean
+          example: true
+        plan_codes:
+          type: array
+          items:
+            type: string
+            example: code1
         created_at:
           type: string
           example: 2022-09-14T16:35:31Z
@@ -2647,6 +2655,14 @@ components:
               enum:
                 - no_expiration
                 - time_limit
+            applies_to:
+              type: object
+              properties:
+                plan_codes:
+                  type: array
+                  items:
+                    type: string
+                    example: code1
     AppliedCouponObject:
       type: object
       properties:
