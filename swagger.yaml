@@ -923,6 +923,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
+    delete:
+      tags:
+        - customers
+      summary: Delete a customer
+      description: Return the deleted customer
+      operationId: DeleteCustomer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /customers/{customer_external_id}/current_usage:
     get:
       tags:
