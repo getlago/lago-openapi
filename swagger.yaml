@@ -996,6 +996,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
+  /customers/{customer_external_id}/applied_coupons/{applied_coupon_id}:
+    delete:
+      tags:
+        - customers
+      summary: Delete customer's appplied coupon
+      parameters:
+        - name: customer_external_id
+          in: path
+          description: External ID of the existing customer
+          required: true
+          schema:
+            type: string
+            example: 12345
+        - name: applied_coupon_id
+          in: path
+          description: Applied Coupon Lago ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: 54321
+      description: Delete customer's appplied coupon
+      operationId: deleteAppliedCoupon
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCoupon'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
   /customers/:
     get:
       tags:
