@@ -2802,6 +2802,9 @@ components:
         invoice_grace_period:
           type: integer
           example: 5
+        document_locale:
+          type: string
+          example: fr
         vat_rate:
           type: number
           example: 25.00
@@ -2917,6 +2920,9 @@ components:
         sync_with_provider:
           type: boolean
           example: true
+        document_locale:
+          type: string
+          example: fr
         vat_rate:
           type: number
           example: 25.00
