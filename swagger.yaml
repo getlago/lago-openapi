@@ -2918,6 +2918,9 @@ components:
           example: 25.00
     OrganizationObject:
       type: object
+      required:
+        - name
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2965,6 +2968,8 @@ components:
           $ref: '#/components/schemas/BillingConfigurationOrganization'
     Organization:
       type: object
+      required:
+        - organization
       properties:
         organization:
           $ref: '#/components/schemas/OrganizationObject'
