@@ -2641,6 +2641,14 @@ components:
               example: EUR
     CouponObject:
       type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - expiration
+        - coupon_type
+        - frequency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2700,11 +2708,15 @@ components:
             - time_limit
     Coupon:
       type: object
+      required:
+        - coupon
       properties:
         coupon:
           $ref: '#/components/schemas/CouponObject'
     Coupons:
       type: object
+      required:
+        - coupons
       properties:
         coupons:
           type: array
@@ -2712,6 +2724,12 @@ components:
             $ref: '#/components/schemas/CouponObject'
     CouponInput:
       type: object
+      required:
+        - name
+        - code
+        - expiration
+        - coupon_type
+        - frequency
       properties:
         coupon:
           type: object
@@ -2768,6 +2786,17 @@ components:
                     example: code1
     AppliedCouponObject:
       type: object
+      required:
+        - lago_id
+        - lago_coupon_id
+        - coupon_code
+        - external_customer_id
+        - lago_customer_id
+        - status
+        - amount_cents
+        - amount_currency
+        - frequency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2825,11 +2854,15 @@ components:
           example: 2022-09-14T16:35:31Z
     AppliedCoupon:
       type: object
+      required:
+        - applied_coupon
       properties:
         applied_coupon:
           $ref: '#/components/schemas/AppliedCouponObject'
     AppliedCoupons:
       type: object
+      required:
+        - applied_coupons
       properties:
         applied_coupons:
           type: array
@@ -2837,6 +2870,9 @@ components:
             $ref: '#/components/schemas/AppliedCouponObject'
     AppliedCouponInput:
       type: object
+      required:
+        - external_customer_id
+        - coupon_code
       properties:
         applied_coupon:
           type: object
