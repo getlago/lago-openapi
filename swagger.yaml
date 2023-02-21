@@ -2504,6 +2504,13 @@ components:
             $ref: '#/components/schemas/GroupObject'
     AddOnObject:
       type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - amount_cents
+        - amount_currency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2528,11 +2535,15 @@ components:
           example: EUR
     AddOn:
       type: object
+      required:
+        - add_on
       properties:
         add_on:
           $ref: '#/components/schemas/AddOnObject'
     AddOns:
       type: object
+      required:
+        - add_ons
       properties:
         add_ons:
           type: array
@@ -2540,6 +2551,11 @@ components:
             $ref: '#/components/schemas/AddOnObject'
     AddOnInput:
       type: object
+      required:
+        - name
+        - code
+        - amount_cents
+        - amount_currency
       properties:
         add_on:
           type: object
@@ -2561,6 +2577,15 @@ components:
               example: EUR
     AppliedAddOnObject:
       type: object
+      required:
+        - lago_id
+        - lago_add_on_id
+        - add_on_code
+        - external_customer_id
+        - lago_customer_id
+        - amount_cents
+        - amount_currency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2588,11 +2613,16 @@ components:
           example: 2022-09-14T16:35:31Z
     AppliedAddOn:
       type: object
+      required:
+        - applied_add_on
       properties:
         applied_add_on:
           $ref: '#/components/schemas/AppliedAddOnObject'
     AppliedAddOnInput:
       type: object
+      required:
+        - external_customer_id
+        - add_on_code
       properties:
         applied_add_on:
           type: object
