@@ -2370,6 +2370,9 @@ components:
   schemas:
     BillableMetricGroup:
       type: object
+      required:
+        - key
+        - values
       properties:
         key:
           type: string
@@ -2382,6 +2385,14 @@ components:
               - type: object
     BillableMetricObject:
       type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - aggregation_type
+        - created_at
+        - active_subscriptions_count
+        - draft_invoices_count
       properties:
         lago_id:
           type: string
@@ -2420,11 +2431,15 @@ components:
           example: 0
     BillableMetric:
       type: object
+      required:
+        - billable_metric
       properties:
         billable_metric:
           $ref: '#/components/schemas/BillableMetricObject'
     BillableMetrics:
       type: object
+      required:
+        - billable_metrics
       properties:
         billable_metrics:
           type: array
@@ -2432,6 +2447,10 @@ components:
             $ref: '#/components/schemas/BillableMetricObject'
     BillableMetricInput:
       type: object
+      required:
+        - name
+        - code
+        - aggregation_type
       properties:
         billable_metric:
           type: object
@@ -2461,6 +2480,9 @@ components:
               $ref: '#/components/schemas/BillableMetricGroup'
     GroupObject:
       type: object
+      required:
+        - lago_id
+        - value
       properties:
         key:
           type: string
@@ -2473,6 +2495,8 @@ components:
           example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
     Groups:
       type: object
+      required:
+        - groups
       properties:
         groups:
           type: array
