@@ -1285,12 +1285,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /plans/:
     get:
       tags:
@@ -3322,6 +3316,12 @@ components:
         bill_charges_monthly:
           type: boolean
           example: false
+        active_subscriptions_count:
+          type: integer
+          example: 2
+        draft_invoices_count:
+          type: integer
+          example: 2
         charges:
           type: array
           items:
