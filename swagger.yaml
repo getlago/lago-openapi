@@ -437,12 +437,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /add_ons/:
     get:
       tags:
@@ -667,12 +661,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /coupons/:
     get:
       tags:
@@ -948,12 +936,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /customers/{customer_external_id}/current_usage:
     get:
       tags:
