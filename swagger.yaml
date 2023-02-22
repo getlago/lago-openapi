@@ -3954,6 +3954,8 @@ components:
             $ref: '#/components/schemas/InvoiceObject'
     InvoiceInput:
       type: object
+      required:
+        - invoice
       properties:
         invoice:
           type: object
