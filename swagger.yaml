@@ -3418,6 +3418,9 @@ components:
               type: object
     GroupPropertiesObject:
       type: object
+      required:
+        - group_id
+        - values
       properties:
         group_id:
           type: string
@@ -3426,6 +3429,11 @@ components:
           type: object
     ChargeObject:
       type: object
+      required:
+        - lago_id
+        - lago_billable_metric_id
+        - created_at
+        - charge_model
       properties:
         lago_id:
           type: string
@@ -3453,6 +3461,16 @@ components:
             $ref: '#/components/schemas/GroupPropertiesObject'
     PlanObject:
       type: object
+      required:
+        - lago_id
+        - name
+        - created_at
+        - code
+        - interval
+        - amount_cents
+        - amount_currency
+        - active_subscriptions_count
+        - draft_invoices_count
       properties:
         lago_id:
           type: string
@@ -3503,11 +3521,15 @@ components:
             $ref: '#/components/schemas/ChargeObject'
     Plan:
       type: object
+      required:
+        - plan
       properties:
         plan:
           $ref: '#/components/schemas/PlanObject'
     Plans:
       type: object
+      required:
+        - plans
       properties:
         plans:
           type: array
@@ -3515,6 +3537,13 @@ components:
             $ref: '#/components/schemas/PlanObject'
     PlanInput:
       type: object
+      required:
+        - name
+        - code
+        - interval
+        - amount_cents
+        - amount_currency
+        - pay_in_advance
       properties:
         plan:
           type: object
@@ -3554,6 +3583,9 @@ components:
               type: array
               items:
                 type: object
+                required:
+                  - billable_metric_id
+                  - charge_model
                 properties:
                   id:
                     type: string
@@ -3576,6 +3608,9 @@ components:
                     type: array
                     items:
                       type: object
+                      required:
+                        - group_id
+                        - values
                       properties:
                         group_id:
                           type: string
