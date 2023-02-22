@@ -2448,9 +2448,7 @@ components:
     BillableMetricInput:
       type: object
       required:
-        - name
-        - code
-        - aggregation_type
+        - billable_metric
       properties:
         billable_metric:
           type: object
@@ -2552,10 +2550,7 @@ components:
     AddOnInput:
       type: object
       required:
-        - name
-        - code
-        - amount_cents
-        - amount_currency
+        - add_on
       properties:
         add_on:
           type: object
@@ -2725,14 +2720,16 @@ components:
     CouponInput:
       type: object
       required:
-        - name
-        - code
-        - expiration
-        - coupon_type
-        - frequency
+        - coupon
       properties:
         coupon:
           type: object
+          required:
+            - name
+            - code
+            - expiration
+            - coupon_type
+            - frequency
           properties:
             name:
               type: string
@@ -3538,12 +3535,7 @@ components:
     PlanInput:
       type: object
       required:
-        - name
-        - code
-        - interval
-        - amount_cents
-        - amount_currency
-        - pay_in_advance
+        - plan
       properties:
         plan:
           type: object
