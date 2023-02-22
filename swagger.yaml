@@ -3130,10 +3130,12 @@ components:
     CustomerInput:
       type: object
       required:
-        - external_id
+        - customer
       properties:
         customer:
           type: object
+          required:
+            - external_id
           properties:
             external_id:
               type: string
