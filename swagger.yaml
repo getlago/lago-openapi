@@ -4385,6 +4385,9 @@ components:
                 - failed
     ApiResponseBadRequest:
       type: object
+      required:
+        - status
+        - error
       properties:
         status:
           type: integer
@@ -4395,6 +4398,9 @@ components:
           example: Bad request
     ApiResponseUnauthorized:
       type: object
+      required:
+        - status
+        - error
       properties:
         status:
           type: integer
@@ -4405,6 +4411,11 @@ components:
           example: Unauthorized
     ApiResponseUnprocessableEntity:
       type: object
+      required:
+        - status
+        - error
+        - code
+        - error_details
       properties:
         status:
           type: integer
@@ -4420,6 +4431,10 @@ components:
           type: object
     ApiResponseNotFound:
       type: object
+      required:
+        - status
+        - error
+        - code
       properties:
         status:
           type: integer
@@ -4433,6 +4448,10 @@ components:
           example: object_not_found
     ApiResponseNotAllowed:
       type: object
+      required:
+        - status
+        - error
+        - code
       properties:
         status:
           type: integer
