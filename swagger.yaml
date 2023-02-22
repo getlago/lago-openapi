@@ -2974,6 +2974,8 @@ components:
           $ref: '#/components/schemas/OrganizationObject'
     OrganizationInput:
       type: object
+      required:
+        - organization
       properties:
         organization:
           type: object
@@ -3738,6 +3740,8 @@ components:
               example: 2022-08-08T00:00:00Z
     SubscriptionUpdateInput:
       type: object
+      required:
+        - subscription
       properties:
         subscription:
           type: object
@@ -4082,6 +4086,8 @@ components:
               example: 2022-09-14T23:59:59Z
     WalletUpdateInput:
       type: object
+      required:
+        - wallet
       properties:
         wallet:
           type: object
