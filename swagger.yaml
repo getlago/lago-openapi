@@ -3366,11 +3366,13 @@ components:
     EventInput:
       type: object
       required:
-        - transaction_id
-        - code
+        - event
       properties:
         event:
           type: object
+          required:
+            - transaction_id
+            - code
           properties:
             transaction_id:
               type: string
@@ -3392,12 +3394,14 @@ components:
     BatchEventInput:
       type: object
       required:
-        - transaction_id
-        - external_subscription_ids
-        - code
+        - event
       properties:
         event:
           type: object
+          required:
+            - transaction_id
+            - external_subscription_ids
+            - code
           properties:
             transaction_id:
               type: string
