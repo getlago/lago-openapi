@@ -3706,12 +3706,14 @@ components:
     SubscriptionCreateInput:
       type: object
       required:
-        - external_customer_id
-        - plan_code
-        - external_id
+        - subscription
       properties:
         subscription:
           type: object
+          required:
+            - external_customer_id
+            - plan_code
+            - external_id
           properties:
             external_customer_id:
               type: string
