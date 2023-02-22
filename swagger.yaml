@@ -3969,6 +3969,17 @@ components:
                 - failed
     WalletObject:
       type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - status
+        - currency
+        - rate_amount
+        - credits_balance
+        - balance
+        - consumed_credits
+        - created_at
       properties:
         lago_id:
           type: string
@@ -4020,11 +4031,15 @@ components:
           example: 2022-09-14T16:35:31Z
     Wallet:
       type: object
+      required:
+        - wallet
       properties:
         wallet:
           $ref: '#/components/schemas/WalletObject'
     Wallets:
       type: object
+      required:
+        - wallets
       properties:
         wallets:
           type: array
@@ -4035,6 +4050,10 @@ components:
       properties:
         wallet:
           type: object
+          required:
+            - rate_amount
+            - currency
+            - external_customer_id
           properties:
             name:
               type: string
@@ -4071,6 +4090,14 @@ components:
               example: 2022-09-14T23:59:59Z
     WalletTransactionObject:
       type: object
+      required:
+        - lago_id
+        - lago_wallet_id
+        - status
+        - transaction_type
+        - credit_amount
+        - amount
+        - created_at
       properties:
         lago_id:
           type: string
@@ -4104,11 +4131,15 @@ components:
           example: 2022-09-14T16:35:31Z
     WalletTransaction:
       type: object
+      required:
+        - wallet_transaction
       properties:
         wallet_transaction:
           $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactions:
       type: object
+      required:
+        - wallet_transactions
       properties:
         wallet_transactions:
           type: array
@@ -4119,6 +4150,8 @@ components:
       properties:
         wallet_transaction:
           type: object
+          required:
+            - wallet_id
           properties:
             wallet_id:
               type: string
