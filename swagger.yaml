@@ -4164,6 +4164,11 @@ components:
               example: 10.0
     CreditNoteItemObject:
       type: object
+      required:
+        - lago_id
+        - amount_cents
+        - amount_currency
+        - fee
       properties:
         lago_id:
           type: string
@@ -4178,6 +4183,28 @@ components:
           $ref: '#/components/schemas/FeeObject'
     CreditNoteObject:
       type: object
+      required:
+        - lago_id
+        - sequential_id
+        - number
+        - lago_invoice_id
+        - invoice_number
+        - issuing_date
+        - reason
+        - total_amount_cents
+        - total_amount_currency
+        - credit_amount_cents
+        - credit_amount_currency
+        - refund_amount_cents
+        - refund_amount_currency
+        - balance_amount_cents
+        - balance_amount_currency
+        - vat_amount_cents
+        - vat_amount_currency
+        - sub_total_vat_excluded_amount_cents
+        - sub_total_vat_excluded_amount_currency
+        - created_at
+        - updated_at
       properties:
         lago_id:
           type: string
@@ -4277,11 +4304,15 @@ components:
             $ref: '#/components/schemas/CreditNoteItemObject'
     CreditNote:
       type: object
+      required:
+        - credit_note
       properties:
         credit_note:
           $ref: '#/components/schemas/CreditNoteObject'
     CreditNotes:
       type: object
+      required:
+        - credit_notes
       properties:
         credit_notes:
           type: array
@@ -4289,6 +4320,12 @@ components:
             $ref: '#/components/schemas/CreditNoteObject'
     CreditNoteInput:
       type: object
+      required:
+        - invoice_id
+        - reason
+        - items
+        - credit_amount_cents
+        - refund_amount_cents
       properties:
         credit_note:
           type: object
@@ -4319,6 +4356,9 @@ components:
               type: array
               items:
                 type: object
+                required:
+                  - fee_id
+                  - amount_cents
                 properties:
                   fee_id:
                     type: string
@@ -4328,9 +4368,13 @@ components:
                     example: 20
     CreditNoteUpdateInput:
       type: object
+      required:
+        - credit_note
       properties:
         credit_note:
           type: object
+          required:
+            - refund_status
           properties:
             refund_status:
               type: string
