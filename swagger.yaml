@@ -3188,6 +3188,13 @@ components:
               $ref: '#/components/schemas/BillingConfigurationCustomer'
     ChargeUsageObject:
       type: object
+      required:
+        - units
+        - amount_cents
+        - amount_currency
+        - charge
+        - billable_metric
+        - groups
       properties:
         units:
           type: number
@@ -3256,6 +3263,17 @@ components:
                 example: 1200
     CustomerUsageObject:
       type: object
+      required:
+        - from_datetime
+        - to_datetime
+        - issuing_date
+        - amount_cents
+        - amount_currency
+        - total_amount_cents
+        - total_amount_currency
+        - vat_amount_cents
+        - vat_amount_currency
+        - charges_usage
       properties:
         from_datetime:
           type: string
@@ -3290,6 +3308,8 @@ components:
             $ref: '#/components/schemas/ChargeUsageObject'
     CustomerUsage:
       type: object
+      required:
+        - customer_usage
       properties:
         customer_usage:
           $ref: '#/components/schemas/CustomerUsageObject'
