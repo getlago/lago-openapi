@@ -3315,6 +3315,16 @@ components:
           $ref: '#/components/schemas/CustomerUsageObject'
     EventObject:
       type: object
+      required:
+        - lago_id
+        - transaction_id
+        - lago_customer_id
+        - external_customer_id
+        - code
+        - timestamp
+        - lago_subscription_id
+        - external_subscription_id
+        - created_at
       properties:
         lago_id:
           type: string
@@ -3347,11 +3357,16 @@ components:
           example: 2022-09-14T16:35:31Z
     Event:
       type: object
+      required:
+        - event
       properties:
         event:
           $ref: '#/components/schemas/EventObject'
     EventInput:
       type: object
+      required:
+        - transaction_id
+        - code
       properties:
         event:
           type: object
@@ -3375,6 +3390,10 @@ components:
               type: object
     BatchEventInput:
       type: object
+      required:
+        - transaction_id
+        - external_subscription_ids
+        - code
       properties:
         event:
           type: object
