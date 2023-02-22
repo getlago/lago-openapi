@@ -4325,14 +4325,16 @@ components:
     CreditNoteInput:
       type: object
       required:
-        - invoice_id
-        - reason
-        - items
-        - credit_amount_cents
-        - refund_amount_cents
+        - credit_note
       properties:
         credit_note:
           type: object
+          required:
+            - invoice_id
+            - reason
+            - items
+            - credit_amount_cents
+            - refund_amount_cents
           properties:
             invoice_id:
               type: string
