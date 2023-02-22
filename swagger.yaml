@@ -2616,11 +2616,13 @@ components:
     AppliedAddOnInput:
       type: object
       required:
-        - external_customer_id
-        - add_on_code
+        - applied_add_on
       properties:
         applied_add_on:
           type: object
+          required:
+            - external_customer_id
+            - add_on_code
           properties:
             external_customer_id:
               type: string
