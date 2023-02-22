@@ -3619,6 +3619,17 @@ components:
                           type: object
     SubscriptionObject:
       type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - billing_time
+        - external_customer_id
+        - subscription_at
+        - created_at
+        - plan_code
+        - started_at
+        - external_id
+        - status
       properties:
         lago_id:
           type: string
@@ -3678,11 +3689,15 @@ components:
           example: 2022-09-14T16:35:31Z
     Subscription:
       type: object
+      required:
+        - subscription
       properties:
         subscription:
           $ref: '#/components/schemas/SubscriptionObject'
     Subscriptions:
       type: object
+      required:
+        - subscriptions
       properties:
         subscriptions:
           type: array
@@ -3690,6 +3705,10 @@ components:
             $ref: '#/components/schemas/SubscriptionObject'
     SubscriptionCreateInput:
       type: object
+      required:
+        - external_customer_id
+        - plan_code
+        - external_id
       properties:
         subscription:
           type: object
