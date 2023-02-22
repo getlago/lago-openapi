@@ -3041,6 +3041,11 @@ components:
           example: 25.00
     CustomerObject:
       type: object
+      required:
+        - lago_id
+        - sequential_id
+        - slug
+        - external_id
       properties:
         lago_id:
           type: string
@@ -3109,11 +3114,15 @@ components:
           $ref: '#/components/schemas/BillingConfigurationCustomer'
     Customer:
       type: object
+      required:
+        - customer
       properties:
         customer:
           $ref: '#/components/schemas/CustomerObject'
     Customers:
       type: object
+      required:
+        - customers
       properties:
         customers:
           type: array
@@ -3121,6 +3130,8 @@ components:
             $ref: '#/components/schemas/CustomerObject'
     CustomerInput:
       type: object
+      required:
+        - external_id
       properties:
         customer:
           type: object
