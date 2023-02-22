@@ -4157,6 +4157,8 @@ components:
             $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactionInput:
       type: object
+      required:
+        - wallet_transaction
       properties:
         wallet_transaction:
           type: object
