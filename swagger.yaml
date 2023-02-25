@@ -2480,17 +2480,18 @@ components:
       type: object
       required:
         - lago_id
+        - key
         - value
       properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
         key:
           type: string
           example: region
         value:
           type: string
           example: EU
-        lago_id:
-          type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
     Groups:
       type: object
       required:
