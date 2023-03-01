@@ -2865,11 +2865,13 @@ components:
     AppliedCouponInput:
       type: object
       required:
-        - external_customer_id
-        - coupon_code
+        - applied_coupon
       properties:
         applied_coupon:
           type: object
+          required:
+            - external_customer_id
+            - coupon_code
           properties:
             external_customer_id:
               type: string
