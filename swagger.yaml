@@ -2944,6 +2944,24 @@ components:
         vat_rate:
           type: number
           example: 25.00
+    CustomerMetadataObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        key:
+          type: string
+          example: name
+        value:
+          type: string
+          example: John
+        display_in_invoice:
+          type: boolean
+          example: false
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
     CustomerObject:
       type: object
       properties:
@@ -3012,6 +3030,10 @@ components:
           example: UTC
         billing_configuration:
           $ref: '#/components/schemas/BillingConfigurationCustomer'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerMetadataObject'
     Customer:
       type: object
       properties:
@@ -3080,6 +3102,23 @@ components:
               example: Europe/Paris
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationCustomer'
+            metadata:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                  key:
+                    type: string
+                    example: name
+                  value:
+                    type: string
+                    example: John
+                  display_in_invoice:
+                    type: boolean
+                    example: false
     ChargeUsageObject:
       type: object
       properties:
