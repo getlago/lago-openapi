@@ -2370,6 +2370,9 @@ components:
   schemas:
     BillableMetricGroup:
       type: object
+      required:
+        - key
+        - values
       properties:
         key:
           type: string
@@ -2382,6 +2385,14 @@ components:
               - type: object
     BillableMetricObject:
       type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - aggregation_type
+        - created_at
+        - active_subscriptions_count
+        - draft_invoices_count
       properties:
         lago_id:
           type: string
@@ -2420,11 +2431,15 @@ components:
           example: 0
     BillableMetric:
       type: object
+      required:
+        - billable_metric
       properties:
         billable_metric:
           $ref: '#/components/schemas/BillableMetricObject'
     BillableMetrics:
       type: object
+      required:
+        - billable_metrics
       properties:
         billable_metrics:
           type: array
@@ -2432,6 +2447,8 @@ components:
             $ref: '#/components/schemas/BillableMetricObject'
     BillableMetricInput:
       type: object
+      required:
+        - billable_metric
       properties:
         billable_metric:
           type: object
@@ -2461,18 +2478,24 @@ components:
               $ref: '#/components/schemas/BillableMetricGroup'
     GroupObject:
       type: object
+      required:
+        - lago_id
+        - key
+        - value
       properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
         key:
           type: string
           example: region
         value:
           type: string
           example: EU
-        lago_id:
-          type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
     Groups:
       type: object
+      required:
+        - groups
       properties:
         groups:
           type: array
@@ -2480,6 +2503,13 @@ components:
             $ref: '#/components/schemas/GroupObject'
     AddOnObject:
       type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - amount_cents
+        - amount_currency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2504,11 +2534,15 @@ components:
           example: EUR
     AddOn:
       type: object
+      required:
+        - add_on
       properties:
         add_on:
           $ref: '#/components/schemas/AddOnObject'
     AddOns:
       type: object
+      required:
+        - add_ons
       properties:
         add_ons:
           type: array
@@ -2516,6 +2550,8 @@ components:
             $ref: '#/components/schemas/AddOnObject'
     AddOnInput:
       type: object
+      required:
+        - add_on
       properties:
         add_on:
           type: object
@@ -2537,6 +2573,15 @@ components:
               example: EUR
     AppliedAddOnObject:
       type: object
+      required:
+        - lago_id
+        - lago_add_on_id
+        - add_on_code
+        - external_customer_id
+        - lago_customer_id
+        - amount_cents
+        - amount_currency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2564,14 +2609,21 @@ components:
           example: 2022-09-14T16:35:31Z
     AppliedAddOn:
       type: object
+      required:
+        - applied_add_on
       properties:
         applied_add_on:
           $ref: '#/components/schemas/AppliedAddOnObject'
     AppliedAddOnInput:
       type: object
+      required:
+        - applied_add_on
       properties:
         applied_add_on:
           type: object
+          required:
+            - external_customer_id
+            - add_on_code
           properties:
             external_customer_id:
               type: string
@@ -2587,6 +2639,14 @@ components:
               example: EUR
     CouponObject:
       type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - expiration
+        - coupon_type
+        - frequency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2646,11 +2706,15 @@ components:
             - time_limit
     Coupon:
       type: object
+      required:
+        - coupon
       properties:
         coupon:
           $ref: '#/components/schemas/CouponObject'
     Coupons:
       type: object
+      required:
+        - coupons
       properties:
         coupons:
           type: array
@@ -2658,6 +2722,8 @@ components:
             $ref: '#/components/schemas/CouponObject'
     CouponInput:
       type: object
+      required:
+        - coupon
       properties:
         coupon:
           type: object
@@ -2714,6 +2780,17 @@ components:
                     example: code1
     AppliedCouponObject:
       type: object
+      required:
+        - lago_id
+        - lago_coupon_id
+        - coupon_code
+        - external_customer_id
+        - lago_customer_id
+        - status
+        - amount_cents
+        - amount_currency
+        - frequency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2771,11 +2848,15 @@ components:
           example: 2022-09-14T16:35:31Z
     AppliedCoupon:
       type: object
+      required:
+        - applied_coupon
       properties:
         applied_coupon:
           $ref: '#/components/schemas/AppliedCouponObject'
     AppliedCoupons:
       type: object
+      required:
+        - applied_coupons
       properties:
         applied_coupons:
           type: array
@@ -2783,9 +2864,14 @@ components:
             $ref: '#/components/schemas/AppliedCouponObject'
     AppliedCouponInput:
       type: object
+      required:
+        - applied_coupon
       properties:
         applied_coupon:
           type: object
+          required:
+            - external_customer_id
+            - coupon_code
           properties:
             external_customer_id:
               type: string
@@ -2828,6 +2914,9 @@ components:
           example: 25.00
     OrganizationObject:
       type: object
+      required:
+        - name
+        - created_at
       properties:
         lago_id:
           type: string
@@ -2875,11 +2964,15 @@ components:
           $ref: '#/components/schemas/BillingConfigurationOrganization'
     Organization:
       type: object
+      required:
+        - organization
       properties:
         organization:
           $ref: '#/components/schemas/OrganizationObject'
     OrganizationInput:
       type: object
+      required:
+        - organization
       properties:
         organization:
           type: object
@@ -2946,6 +3039,11 @@ components:
           example: 25.00
     CustomerObject:
       type: object
+      required:
+        - lago_id
+        - sequential_id
+        - slug
+        - external_id
       properties:
         lago_id:
           type: string
@@ -3014,11 +3112,15 @@ components:
           $ref: '#/components/schemas/BillingConfigurationCustomer'
     Customer:
       type: object
+      required:
+        - customer
       properties:
         customer:
           $ref: '#/components/schemas/CustomerObject'
     Customers:
       type: object
+      required:
+        - customers
       properties:
         customers:
           type: array
@@ -3026,9 +3128,13 @@ components:
             $ref: '#/components/schemas/CustomerObject'
     CustomerInput:
       type: object
+      required:
+        - customer
       properties:
         customer:
           type: object
+          required:
+            - external_id
           properties:
             external_id:
               type: string
@@ -3082,6 +3188,13 @@ components:
               $ref: '#/components/schemas/BillingConfigurationCustomer'
     ChargeUsageObject:
       type: object
+      required:
+        - units
+        - amount_cents
+        - amount_currency
+        - charge
+        - billable_metric
+        - groups
       properties:
         units:
           type: number
@@ -3150,6 +3263,17 @@ components:
                 example: 1200
     CustomerUsageObject:
       type: object
+      required:
+        - from_datetime
+        - to_datetime
+        - issuing_date
+        - amount_cents
+        - amount_currency
+        - total_amount_cents
+        - total_amount_currency
+        - vat_amount_cents
+        - vat_amount_currency
+        - charges_usage
       properties:
         from_datetime:
           type: string
@@ -3184,11 +3308,23 @@ components:
             $ref: '#/components/schemas/ChargeUsageObject'
     CustomerUsage:
       type: object
+      required:
+        - customer_usage
       properties:
         customer_usage:
           $ref: '#/components/schemas/CustomerUsageObject'
     EventObject:
       type: object
+      required:
+        - lago_id
+        - transaction_id
+        - lago_customer_id
+        - external_customer_id
+        - code
+        - timestamp
+        - lago_subscription_id
+        - external_subscription_id
+        - created_at
       properties:
         lago_id:
           type: string
@@ -3221,14 +3357,21 @@ components:
           example: 2022-09-14T16:35:31Z
     Event:
       type: object
+      required:
+        - event
       properties:
         event:
           $ref: '#/components/schemas/EventObject'
     EventInput:
       type: object
+      required:
+        - event
       properties:
         event:
           type: object
+          required:
+            - transaction_id
+            - code
           properties:
             transaction_id:
               type: string
@@ -3249,9 +3392,15 @@ components:
               type: object
     BatchEventInput:
       type: object
+      required:
+        - event
       properties:
         event:
           type: object
+          required:
+            - transaction_id
+            - external_subscription_ids
+            - code
           properties:
             transaction_id:
               type: string
@@ -3273,6 +3422,9 @@ components:
               type: object
     GroupPropertiesObject:
       type: object
+      required:
+        - group_id
+        - values
       properties:
         group_id:
           type: string
@@ -3281,6 +3433,11 @@ components:
           type: object
     ChargeObject:
       type: object
+      required:
+        - lago_id
+        - lago_billable_metric_id
+        - created_at
+        - charge_model
       properties:
         lago_id:
           type: string
@@ -3308,6 +3465,16 @@ components:
             $ref: '#/components/schemas/GroupPropertiesObject'
     PlanObject:
       type: object
+      required:
+        - lago_id
+        - name
+        - created_at
+        - code
+        - interval
+        - amount_cents
+        - amount_currency
+        - active_subscriptions_count
+        - draft_invoices_count
       properties:
         lago_id:
           type: string
@@ -3358,11 +3525,15 @@ components:
             $ref: '#/components/schemas/ChargeObject'
     Plan:
       type: object
+      required:
+        - plan
       properties:
         plan:
           $ref: '#/components/schemas/PlanObject'
     Plans:
       type: object
+      required:
+        - plans
       properties:
         plans:
           type: array
@@ -3370,6 +3541,8 @@ components:
             $ref: '#/components/schemas/PlanObject'
     PlanInput:
       type: object
+      required:
+        - plan
       properties:
         plan:
           type: object
@@ -3431,6 +3604,9 @@ components:
                     type: array
                     items:
                       type: object
+                      required:
+                        - group_id
+                        - values
                       properties:
                         group_id:
                           type: string
@@ -3439,6 +3615,17 @@ components:
                           type: object
     SubscriptionObject:
       type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - billing_time
+        - external_customer_id
+        - subscription_at
+        - created_at
+        - plan_code
+        - started_at
+        - external_id
+        - status
       properties:
         lago_id:
           type: string
@@ -3498,11 +3685,15 @@ components:
           example: 2022-09-14T16:35:31Z
     Subscription:
       type: object
+      required:
+        - subscription
       properties:
         subscription:
           $ref: '#/components/schemas/SubscriptionObject'
     Subscriptions:
       type: object
+      required:
+        - subscriptions
       properties:
         subscriptions:
           type: array
@@ -3510,9 +3701,15 @@ components:
             $ref: '#/components/schemas/SubscriptionObject'
     SubscriptionCreateInput:
       type: object
+      required:
+        - subscription
       properties:
         subscription:
           type: object
+          required:
+            - external_customer_id
+            - plan_code
+            - external_id
           properties:
             external_customer_id:
               type: string
@@ -3537,6 +3734,8 @@ components:
               example: 2022-08-08T00:00:00Z
     SubscriptionUpdateInput:
       type: object
+      required:
+        - subscription
       properties:
         subscription:
           type: object
@@ -3549,6 +3748,11 @@ components:
               example: 2022-08-08T00:00:00Z
     CreditObject:
       type: object
+      required:
+        - lago_id
+        - item
+        - amount_cents
+        - amount_currency
       properties:
         lago_id:
           type: string
@@ -3561,6 +3765,11 @@ components:
           example: EUR
         item:
           type: object
+          required:
+            - lago_id
+            - type
+            - code
+            - name
           properties:
             lago_id:
               type: string
@@ -3576,6 +3785,14 @@ components:
               example: name
     FeeObject:
       type: object
+      required:
+        - lago_id
+        - item
+        - amount_cents
+        - amount_currency
+        - vat_amount_cents
+        - vat_amount_currency
+        - units
       properties:
         lago_id:
           type: string
@@ -3603,6 +3820,10 @@ components:
           example: 5
         item:
           type: object
+          required:
+            - type
+            - code
+            - name
           properties:
             type:
               type: string
@@ -3620,6 +3841,27 @@ components:
               example: name
     InvoiceObject:
       type: object
+      required:
+        - lago_id
+        - sequential_id
+        - number
+        - charges_from_date
+        - issuing_date
+        - status
+        - payment_status
+        - amount_cents
+        - amount_currency
+        - vat_amount_cents
+        - vat_amount_currency
+        - credit_amount_cents
+        - credit_amount_currency
+        - total_amount_cents
+        - total_amount_currency
+        - legacy
+        - customer
+        - subscriptions
+        - fees
+        - credits
       properties:
         lago_id:
           type: string
@@ -3696,11 +3938,15 @@ components:
             $ref: '#/components/schemas/CreditObject'
     Invoice:
       type: object
+      required:
+        - invoice
       properties:
         invoice:
           $ref: '#/components/schemas/InvoiceObject'
     Invoices:
       type: object
+      required:
+        - invoices
       properties:
         invoices:
           type: array
@@ -3708,9 +3954,13 @@ components:
             $ref: '#/components/schemas/InvoiceObject'
     InvoiceInput:
       type: object
+      required:
+        - invoice
       properties:
         invoice:
           type: object
+          required:
+            - payment_status
           properties:
             payment_status:
               type: string
@@ -3721,6 +3971,17 @@ components:
                 - failed
     WalletObject:
       type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - status
+        - currency
+        - rate_amount
+        - credits_balance
+        - balance
+        - consumed_credits
+        - created_at
       properties:
         lago_id:
           type: string
@@ -3772,11 +4033,15 @@ components:
           example: 2022-09-14T16:35:31Z
     Wallet:
       type: object
+      required:
+        - wallet
       properties:
         wallet:
           $ref: '#/components/schemas/WalletObject'
     Wallets:
       type: object
+      required:
+        - wallets
       properties:
         wallets:
           type: array
@@ -3787,6 +4052,10 @@ components:
       properties:
         wallet:
           type: object
+          required:
+            - rate_amount
+            - currency
+            - external_customer_id
           properties:
             name:
               type: string
@@ -3811,6 +4080,8 @@ components:
               example: 2022-09-14T23:59:59Z
     WalletUpdateInput:
       type: object
+      required:
+        - wallet
       properties:
         wallet:
           type: object
@@ -3823,6 +4094,14 @@ components:
               example: 2022-09-14T23:59:59Z
     WalletTransactionObject:
       type: object
+      required:
+        - lago_id
+        - lago_wallet_id
+        - status
+        - transaction_type
+        - credit_amount
+        - amount
+        - created_at
       properties:
         lago_id:
           type: string
@@ -3856,11 +4135,15 @@ components:
           example: 2022-09-14T16:35:31Z
     WalletTransaction:
       type: object
+      required:
+        - wallet_transaction
       properties:
         wallet_transaction:
           $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactions:
       type: object
+      required:
+        - wallet_transactions
       properties:
         wallet_transactions:
           type: array
@@ -3868,9 +4151,13 @@ components:
             $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactionInput:
       type: object
+      required:
+        - wallet_transaction
       properties:
         wallet_transaction:
           type: object
+          required:
+            - wallet_id
           properties:
             wallet_id:
               type: string
@@ -3883,6 +4170,11 @@ components:
               example: 10.0
     CreditNoteItemObject:
       type: object
+      required:
+        - lago_id
+        - amount_cents
+        - amount_currency
+        - fee
       properties:
         lago_id:
           type: string
@@ -3897,6 +4189,28 @@ components:
           $ref: '#/components/schemas/FeeObject'
     CreditNoteObject:
       type: object
+      required:
+        - lago_id
+        - sequential_id
+        - number
+        - lago_invoice_id
+        - invoice_number
+        - issuing_date
+        - reason
+        - total_amount_cents
+        - total_amount_currency
+        - credit_amount_cents
+        - credit_amount_currency
+        - refund_amount_cents
+        - refund_amount_currency
+        - balance_amount_cents
+        - balance_amount_currency
+        - vat_amount_cents
+        - vat_amount_currency
+        - sub_total_vat_excluded_amount_cents
+        - sub_total_vat_excluded_amount_currency
+        - created_at
+        - updated_at
       properties:
         lago_id:
           type: string
@@ -3996,11 +4310,15 @@ components:
             $ref: '#/components/schemas/CreditNoteItemObject'
     CreditNote:
       type: object
+      required:
+        - credit_note
       properties:
         credit_note:
           $ref: '#/components/schemas/CreditNoteObject'
     CreditNotes:
       type: object
+      required:
+        - credit_notes
       properties:
         credit_notes:
           type: array
@@ -4008,9 +4326,17 @@ components:
             $ref: '#/components/schemas/CreditNoteObject'
     CreditNoteInput:
       type: object
+      required:
+        - credit_note
       properties:
         credit_note:
           type: object
+          required:
+            - invoice_id
+            - reason
+            - items
+            - credit_amount_cents
+            - refund_amount_cents
           properties:
             invoice_id:
               type: string
@@ -4038,6 +4364,9 @@ components:
               type: array
               items:
                 type: object
+                required:
+                  - fee_id
+                  - amount_cents
                 properties:
                   fee_id:
                     type: string
@@ -4047,9 +4376,13 @@ components:
                     example: 20
     CreditNoteUpdateInput:
       type: object
+      required:
+        - credit_note
       properties:
         credit_note:
           type: object
+          required:
+            - refund_status
           properties:
             refund_status:
               type: string
@@ -4060,6 +4393,9 @@ components:
                 - failed
     ApiResponseBadRequest:
       type: object
+      required:
+        - status
+        - error
       properties:
         status:
           type: integer
@@ -4070,6 +4406,9 @@ components:
           example: Bad request
     ApiResponseUnauthorized:
       type: object
+      required:
+        - status
+        - error
       properties:
         status:
           type: integer
@@ -4080,6 +4419,11 @@ components:
           example: Unauthorized
     ApiResponseUnprocessableEntity:
       type: object
+      required:
+        - status
+        - error
+        - code
+        - error_details
       properties:
         status:
           type: integer
@@ -4095,6 +4439,10 @@ components:
           type: object
     ApiResponseNotFound:
       type: object
+      required:
+        - status
+        - error
+        - code
       properties:
         status:
           type: integer
@@ -4108,6 +4456,10 @@ components:
           example: object_not_found
     ApiResponseNotAllowed:
       type: object
+      required:
+        - status
+        - error
+        - code
       properties:
         status:
           type: integer
