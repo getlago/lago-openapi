@@ -3107,6 +3107,8 @@ components:
                 - package
                 - percentage
                 - volume
+            instant:
+              type: boolean
         billable_metric:
           type: object
           properties:
@@ -3300,6 +3302,9 @@ components:
             - package
             - percentage
             - volume
+        instant:
+          type: boolean
+          example: true
         properties:
           type: object
         group_properties:
@@ -3425,6 +3430,8 @@ components:
                       - package
                       - percentage
                       - volume
+                  instant:
+                    type: boolean
                   properties:
                     type: object
                   group_properties:
