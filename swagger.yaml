@@ -3618,6 +3618,21 @@ components:
             name:
               type: string
               example: name
+    InvoiceMetadataObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+        key:
+          type: string
+          example: name
+        value:
+          type: string
+          example: John
+        created_at:
+          type: string
+          example: 2022-09-14T16:35:31Z
     InvoiceObject:
       type: object
       properties:
@@ -3686,6 +3701,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionObject'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceMetadataObject'
         fees:
           type: array
           items:
@@ -3719,6 +3738,20 @@ components:
                 - pending
                 - succeeded
                 - failed
+            metadata:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                  key:
+                    type: string
+                    example: name
+                  value:
+                    type: string
+                    example: John
     WalletObject:
       type: object
       properties:
