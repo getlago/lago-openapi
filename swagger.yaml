@@ -2791,6 +2791,7 @@ components:
         - amount_currency
         - frequency
         - created_at
+        - credits
       properties:
         lago_id:
           type: string
@@ -2846,6 +2847,10 @@ components:
         terminated_at:
           type: string
           example: 2022-09-14T16:35:31Z
+        credits:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditObject'
     AppliedCoupon:
       type: object
       required:
@@ -3792,6 +3797,7 @@ components:
         - item
         - amount_cents
         - amount_currency
+        - invoice
       properties:
         lago_id:
           type: string
@@ -3822,6 +3828,21 @@ components:
             name:
               type: string
               example: name
+        invoice:
+          type: object
+          required:
+            - lago_id
+            - payment_status
+          properties:
+            lago_id:
+              type: string
+              example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            payment_status:
+              type: string
+              enum:
+                - pending
+                - succeeded
+                - failed
     FeeObject:
       type: object
       required:
