@@ -1,4 +1,4 @@
-name: Validate OpenAPI schema - editor-next.swagger.io
+name: Validate OpenAPI schema - editor.swagger.io
 
 on:
   push:
@@ -18,4 +18,3 @@ jobs:
         uses: char0n/swagger-editor-validate@v1
         with:
           definition-file: 'swagger.yaml'
-          swagger-editor-url: 'https://editor-next.swagger.io/'
