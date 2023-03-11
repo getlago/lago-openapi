@@ -1,4 +1,4 @@
-name: Validate OpenAPI schema
+name: Validate OpenAPI schema - openapi-spec-validator
 
 on:
   push:
@@ -24,7 +24,3 @@ jobs:
       - name: Run tests
         run: |
           python -m openapi_spec_validator "swagger.yaml"
-      # Run Spectral
-      - uses: stoplightio/spectral-action@latest
-        with:
-          file_glob: 'swagger.yaml'
