@@ -790,7 +790,7 @@ paths:
           explode: true
           schema:
             type: string
-            example: 12345
+            example: '12345'
       responses:
         '200':
           description: Successful response
@@ -890,7 +890,7 @@ paths:
         required: true
         schema:
           type: string
-          example: 12345
+          example: '12345'
     get:
       tags:
         - customers
@@ -953,7 +953,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 12345
+            example: '12345'
         - name: external_subscription_id
           in: query
           description: External subscription ID
@@ -961,7 +961,7 @@ paths:
           explode: true
           schema:
             type: string
-            example: 54321
+            example: '54321'
       description: Return a customer current usage
       operationId: FindCustomerCurrentUsage
       responses:
@@ -995,7 +995,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 12345
+            example: '12345'
         - name: applied_coupon_id
           in: path
           description: Applied Coupon Lago ID
@@ -1003,7 +1003,7 @@ paths:
           explode: true
           schema:
             type: string
-            example: 54321
+            example: '54321'
       description: Delete customer's appplied coupon
       operationId: deleteAppliedCoupon
       responses:
@@ -1140,7 +1140,7 @@ paths:
         required: true
         schema:
           type: string
-          example: 12345
+          example: '12345'
     get:
       tags:
         - events
@@ -1511,7 +1511,7 @@ paths:
           explode: true
           schema:
             type: string
-            example: 12345
+            example: '12345'
       responses:
         '200':
           description: Successful response
@@ -1799,7 +1799,7 @@ paths:
           explode: true
           schema:
             type: string
-            example: 12345
+            example: '12345'
         - name: issuing_date_from
           in: query
           description: Date from
@@ -2050,7 +2050,7 @@ paths:
           explode: true
           schema:
             type: string
-            example: 12345
+            example: '12345'
       responses:
         '200':
           description: Successful response
@@ -2216,7 +2216,7 @@ paths:
         required: true
         schema:
           type: string
-          example: 12345
+          example: '12345'
     put:
       tags:
         - credit_notes
@@ -2391,7 +2391,7 @@ paths:
           explode: true
           schema:
             type: string
-            example: 12345
+            example: '12345'
       responses:
         '200':
           description: Successful response
@@ -2636,7 +2636,7 @@ components:
           example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
         external_customer_id:
           type: string
-          example: 1234567
+          example: '1234567'
         amount_cents:
           type: integer
           example: 1200
@@ -2666,7 +2666,7 @@ components:
           properties:
             external_customer_id:
               type: string
-              example: 1234567
+              example: '1234567'
             add_on_code:
               type: string
               example: code
@@ -2846,7 +2846,7 @@ components:
           example: 321da83c-c007-4fbb-afcd-b00c07c41ssd
         external_customer_id:
           type: string
-          example: 123456
+          example: '123456'
         status:
           type: string
           description: Status
@@ -2919,7 +2919,7 @@ components:
           properties:
             external_customer_id:
               type: string
-              example: 123456
+              example: '123456'
             coupon_code:
               type: string
               example: example_code
@@ -2988,7 +2988,7 @@ components:
           example: state1
         zipcode:
           type: string
-          example: 10000
+          example: '10000'
         email:
           type: string
           example: example@example.com
@@ -3000,7 +3000,7 @@ components:
           example: name1
         legal_number:
           type: string
-          example: 10000
+          example: '10000'
         timezone:
           type: string
           example: UTC
@@ -3038,7 +3038,7 @@ components:
               example: state1
             zipcode:
               type: string
-              example: 10000
+              example: '10000'
             email:
               type: string
               example: example@example.com
@@ -3071,7 +3071,7 @@ components:
             - gocardless
         provider_customer_id:
           type: string
-          example: 123456
+          example: '123456'
         sync_with_provider:
           type: boolean
           example: true
@@ -3414,13 +3414,13 @@ components:
           example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
         transaction_id:
           type: string
-          example: 987654321
+          example: '987654321'
         lago_customer_id:
           type: string
           example: 111da83c-c007-4fbb-afcd-b00c07c41iop
         external_customer_id:
           type: string
-          example: 123456
+          example: '123456'
         code:
           type: string
           example: code
@@ -3434,7 +3434,7 @@ components:
           example: 447da83c-c007-4fbb-afcd-b00c07c41ffe
         external_subscription_id:
           type: string
-          example: 123456
+          example: '123456'
         created_at:
           type: string
           example: 2022-09-14T16:35:31Z
@@ -3458,10 +3458,10 @@ components:
           properties:
             transaction_id:
               type: string
-              example: 123456
+              example: '123456'
             external_customer_id:
               type: string
-              example: 654321
+              example: '654321'
             code:
               type: string
               example: code
@@ -3470,7 +3470,7 @@ components:
               example: 1669823754
             external_subscription_id:
               type: string
-              example: 123456
+              example: '123456'
             properties:
               type: object
     BatchEventInput:
@@ -3487,10 +3487,10 @@ components:
           properties:
             transaction_id:
               type: string
-              example: 123456
+              example: '123456'
             external_customer_id:
               type: string
-              example: 654321
+              example: '654321'
             code:
               type: string
               example: code
@@ -3511,7 +3511,7 @@ components:
       properties:
         group_id:
           type: string
-          example: 123456
+          example: '123456'
         values:
           type: object
     ChargeObject:
@@ -3693,7 +3693,7 @@ components:
                       properties:
                         group_id:
                           type: string
-                          example: 123456
+                          example: '123456'
                         values:
                           type: object
     SubscriptionObject:
@@ -4355,13 +4355,13 @@ components:
           example: 1234
         number:
           type: string
-          example: 123456789
+          example: '123456789'
         lago_invoice_id:
           type: string
           example: 144da83c-c007-4fbb-afcd-b00c07c41ffe
         invoice_number:
           type: string
-          example: 123456789
+          example: '123456789'
         issuing_date:
           type: string
           example: 2022-09-14T16:35:31Z
