@@ -2432,6 +2432,7 @@ components:
         - created_at
         - active_subscriptions_count
         - draft_invoices_count
+        - plans_count
       properties:
         lago_id:
           type: string
@@ -2466,6 +2467,9 @@ components:
           type: integer
           example: 0
         draft_invoices_count:
+          type: integer
+          example: 0
+        plans_count:
           type: integer
           example: 0
     BillableMetric:
