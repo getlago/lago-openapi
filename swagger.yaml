@@ -124,7 +124,7 @@ paths:
         schema:
           type: string
           examples:
-            - example_code
+            - 'example_code'
     put:
       tags:
         - billable_metrics
@@ -273,7 +273,7 @@ paths:
           schema:
             type: string
             examples:
-              - example_code
+              - 'example_code'
         - name: page
           in: query
           description: Number of page
@@ -353,7 +353,7 @@ paths:
         schema:
           type: string
           examples:
-            - example_code
+            - 'example_code'
     put:
       tags:
         - add_ons
@@ -580,7 +580,7 @@ paths:
         schema:
           type: string
           examples:
-            - example_code
+            - 'example_code'
     put:
       tags:
         - coupons
@@ -1242,7 +1242,7 @@ paths:
         schema:
           type: string
           examples:
-            - example_code
+            - 'example_code'
     put:
       tags:
         - plans
@@ -1430,7 +1430,7 @@ paths:
         schema:
           type: string
           examples:
-            - example_id
+            - 'example_id'
     put:
       tags:
         - subscriptions
@@ -1575,7 +1575,7 @@ paths:
               schema:
                 type: string
                 examples:
-                  - MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
+                  - 'MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE='
         '401':
           description: Unauthorized error
           content:
@@ -1591,7 +1591,7 @@ paths:
         schema:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
     put:
       tags:
         - invoices
@@ -1674,7 +1674,7 @@ paths:
           schema:
             type: string
             examples:
-              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+              - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Download an existing invoice
       operationId: downloadInvoice
       responses:
@@ -1709,7 +1709,7 @@ paths:
           schema:
             type: string
             examples:
-              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+              - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Retry invoice payment
       operationId: retryPayment
       responses:
@@ -1746,7 +1746,7 @@ paths:
           schema:
             type: string
             examples:
-              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+              - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Refresh a draft invoice
       operationId: refreshInvoice
       responses:
@@ -1781,7 +1781,7 @@ paths:
           schema:
             type: string
             examples:
-              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+              - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Finalize a draft invoice
       operationId: finalizeInvoice
       responses:
@@ -1864,7 +1864,7 @@ paths:
           schema:
             type: string
             examples:
-              - draft
+              - 'draft'
       responses:
         '200':
           description: Successful response
@@ -1887,7 +1887,7 @@ paths:
         schema:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
     get:
       tags:
         - fees
@@ -1961,7 +1961,7 @@ paths:
         schema:
           type: string
           examples:
-            - 321da83c-c007-4fbb-afcd-b00c07c41ssd
+            - '321da83c-c007-4fbb-afcd-b00c07c41ssd'
     put:
       tags:
         - wallets
@@ -2164,7 +2164,7 @@ paths:
           schema:
             type: string
             examples:
-              - 321da83c-c007-4fbb-afcd-b00c07c41ssd
+              - '321da83c-c007-4fbb-afcd-b00c07c41ssd'
         - name: page
           in: query
           description: Number of page
@@ -2191,7 +2191,7 @@ paths:
           schema:
             type: string
             examples:
-              - pending
+              - 'pending'
         - name: transaction_type
           in: query
           description: Transaction Type (inbound or outbound)
@@ -2200,7 +2200,7 @@ paths:
           schema:
             type: string
             examples:
-              - inbound
+              - 'inbound'
       responses:
         '200':
           description: Successful response
@@ -2351,7 +2351,7 @@ paths:
           schema:
             type: string
             examples:
-              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+              - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Download an existing credit note
       operationId: downloadCreditNote
       responses:
@@ -2386,7 +2386,7 @@ paths:
           schema:
             type: string
             examples:
-              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+              - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Void an existing credit note
       operationId: voidCreditNote
       responses:
@@ -2473,7 +2473,7 @@ components:
         key:
           type: string
           examples:
-            - region
+            - 'region'
         values:
           type: array
           items:
@@ -2494,19 +2494,19 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
           examples:
-            - bm1
+            - 'bm1'
         code:
           type: string
           examples:
-            - example_code
+            - 'example_code'
         description:
           type: string
           examples:
-            - description
+            - 'description'
         created_at:
           type: string
           examples:
@@ -2514,7 +2514,7 @@ components:
         field_name:
           type: string
           examples:
-            - amount
+            - 'amount'
         aggregation_type:
           type: string
           description: Aggregation type
@@ -2561,19 +2561,19 @@ components:
             name:
               type: string
               examples:
-                - bm1
+                - 'bm1'
             code:
               type: string
               examples:
-                - example_code
+                - 'example_code'
             description:
               type: string
               examples:
-                - description
+                - 'description'
             field_name:
               type: string
               examples:
-                - amount
+                - 'amount'
             aggregation_type:
               type: string
               description: Aggregation type
@@ -2595,11 +2595,11 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         key:
           type: string
           examples:
-            - region
+            - 'region'
         value:
           type: string
           examples:
@@ -2626,19 +2626,19 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
           examples:
-            - example name
+            - 'example name'
         code:
           type: string
           examples:
-            - example_code
+            - 'example_code'
         description:
           type: string
           examples:
-            - description
+            - 'description'
         created_at:
           type: string
           examples:
@@ -2650,7 +2650,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
     AddOn:
       type: object
       required:
@@ -2678,15 +2678,15 @@ components:
             name:
               type: string
               examples:
-                - example name
+                - 'example name'
             code:
               type: string
               examples:
-                - example_code
+                - 'example_code'
             description:
               type: string
               examples:
-                - description
+                - 'description'
             amount_cents:
               type: integer
               examples:
@@ -2694,7 +2694,7 @@ components:
             amount_currency:
               type: string
               examples:
-                - EUR
+                - 'EUR'
     AppliedAddOnObject:
       type: object
       required:
@@ -2710,19 +2710,19 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_add_on_id:
           type: string
           examples:
-            - 457uj93c-c007-4fbb-afcd-b00c07c41kki
+            - '457uj93c-c007-4fbb-afcd-b00c07c41kki'
         add_on_code:
           type: string
           examples:
-            - code
+            - 'code'
         lago_customer_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         external_customer_id:
           type: string
           examples:
@@ -2734,7 +2734,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         created_at:
           type: string
           examples:
@@ -2764,7 +2764,7 @@ components:
             add_on_code:
               type: string
               examples:
-                - code
+                - 'code'
             amount_cents:
               type: integer
               examples:
@@ -2772,7 +2772,7 @@ components:
             amount_currency:
               type: string
               examples:
-                - EUR
+                - 'EUR'
     CouponObject:
       type: object
       required:
@@ -2787,15 +2787,15 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
           examples:
-            - coupon1
+            - 'coupon1'
         code:
           type: string
           examples:
-            - example_code
+            - 'example_code'
         coupon_type:
           type: string
           description: Coupon type
@@ -2809,7 +2809,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         reusable:
           type: boolean
           examples:
@@ -2823,7 +2823,7 @@ components:
           items:
             type: string
             examples:
-              - code1
+              - 'code1'
         created_at:
           type: string
           examples:
@@ -2879,11 +2879,11 @@ components:
             name:
               type: string
               examples:
-                - coupon1
+                - 'coupon1'
             code:
               type: string
               examples:
-                - example_code
+                - 'example_code'
             coupon_type:
               type: string
               description: Coupon type
@@ -2897,7 +2897,7 @@ components:
             amount_currency:
               type: string
               examples:
-                - EUR
+                - 'EUR'
             reusable:
               type: boolean
               examples:
@@ -2934,7 +2934,7 @@ components:
                   items:
                     type: string
                     examples:
-                      - code1
+                      - 'code1'
     AppliedCouponObject:
       type: object
       required:
@@ -2953,19 +2953,19 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_coupon_id:
           type: string
           examples:
-            - 544da83c-c007-4fbb-afcd-b00c07c41iit
+            - '544da83c-c007-4fbb-afcd-b00c07c41iit'
         coupon_code:
           type: string
           examples:
-            - example_code
+            - 'example_code'
         lago_customer_id:
           type: string
           examples:
-            - 321da83c-c007-4fbb-afcd-b00c07c41ssd
+            - '321da83c-c007-4fbb-afcd-b00c07c41ssd'
         external_customer_id:
           type: string
           examples:
@@ -2987,7 +2987,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         percentage_rate:
           type: number
           examples:
@@ -3056,7 +3056,7 @@ components:
             coupon_code:
               type: string
               examples:
-                - example_code
+                - 'example_code'
             frequency:
               type: string
               description: Frequency type
@@ -3074,7 +3074,7 @@ components:
             amount_currency:
               type: string
               examples:
-                - EUR
+                - 'EUR'
             percentage_rate:
               type: number
               examples:
@@ -3085,7 +3085,7 @@ components:
         invoice_footer:
           type: string
           examples:
-            - text
+            - 'text'
         invoice_grace_period:
           type: integer
           examples:
@@ -3107,11 +3107,11 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
           examples:
-            - example name
+            - 'example name'
         created_at:
           type: string
           examples:
@@ -3127,15 +3127,15 @@ components:
         address_line1:
           type: string
           examples:
-            - address1
+            - 'address1'
         address_line2:
           type: string
           examples:
-            - address2
+            - 'address2'
         state:
           type: string
           examples:
-            - state1
+            - 'state1'
         zipcode:
           type: string
           examples:
@@ -3143,15 +3143,15 @@ components:
         email:
           type: string
           examples:
-            - example@example.com
+            - 'example@example.com'
         city:
           type: string
           examples:
-            - City
+            - 'City'
         legal_name:
           type: string
           examples:
-            - name1
+            - 'name1'
         legal_number:
           type: string
           examples:
@@ -3159,7 +3159,7 @@ components:
         timezone:
           type: string
           examples:
-            - UTC
+            - 'UTC'
         billing_configuration:
           $ref: '#/components/schemas/BillingConfigurationOrganization'
     Organization:
@@ -3188,15 +3188,15 @@ components:
             address_line1:
               type: string
               examples:
-                - address1
+                - 'address1'
             address_line2:
               type: string
               examples:
-                - address2
+                - 'address2'
             state:
               type: string
               examples:
-                - state1
+                - 'state1'
             zipcode:
               type: string
               examples:
@@ -3204,23 +3204,23 @@ components:
             email:
               type: string
               examples:
-                - example@example.com
+                - 'example@example.com'
             city:
               type: string
               examples:
-                - City
+                - 'City'
             legal_name:
               type: string
               examples:
-                - name1
+                - 'name1'
             legal_number:
               type: string
               examples:
-                - 10000
+                - '10000'
             timezone:
               type: string
               examples:
-                - Europe/Paris
+                - 'Europe/Paris'
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationOrganization'
     BillingConfigurationCustomer:
@@ -3259,15 +3259,15 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         key:
           type: string
           examples:
-            - name
+            - 'name'
         value:
           type: string
           examples:
-            - John
+            - 'John'
         display_in_invoice:
           type: boolean
           examples:
@@ -3287,15 +3287,15 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         external_id:
           type: string
           examples:
-            - 886da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '886da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
           examples:
-            - John Doe
+            - 'John Doe'
         sequential_id:
           type: integer
           examples:
@@ -3303,7 +3303,7 @@ components:
         slug:
           type: string
           examples:
-            - slug
+            - 'slug'
         created_at:
           type: string
           examples:
@@ -3315,27 +3315,27 @@ components:
         address_line1:
           type: string
           examples:
-            - address1
+            - 'address1'
         address_line2:
           type: string
           examples:
-            - address2
+            - 'address2'
         state:
           type: string
           examples:
-            - state1
+            - 'state1'
         zipcode:
           type: string
           examples:
-            - 10000
+            - '10000'
         email:
           type: string
           examples:
-            - example@example.com
+            - 'example@example.com'
         city:
           type: string
           examples:
-            - City
+            - 'City'
         url:
           type: string
           examples:
@@ -3343,7 +3343,7 @@ components:
         phone:
           type: string
           examples:
-            - 3551234567
+            - '3551234567'
         lago_url:
           type: string
           examples:
@@ -3351,23 +3351,23 @@ components:
         legal_name:
           type: string
           examples:
-            - name1
+            - 'name1'
         legal_number:
           type: string
           examples:
-            - 10000
+            - '10000'
         currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         timezone:
           type: string
           examples:
-            - UTC
+            - 'UTC'
         applicable_timezone:
           type: string
           examples:
-            - UTC
+            - 'UTC'
         billing_configuration:
           $ref: '#/components/schemas/BillingConfigurationCustomer'
         metadata:
@@ -3403,11 +3403,11 @@ components:
             external_id:
               type: string
               examples:
-                - 886da83c-c007-4fbb-afcd-b00c07c41ffe
+                - '886da83c-c007-4fbb-afcd-b00c07c41ffe'
             name:
               type: string
               examples:
-                - John Doe
+                - 'John Doe'
             country:
               type: string
               examples:
@@ -3415,27 +3415,27 @@ components:
             address_line1:
               type: string
               examples:
-                - address1
+                - 'address1'
             address_line2:
               type: string
               examples:
-                - address2
+                - 'address2'
             state:
               type: string
               examples:
-                - state1
+                - 'state1'
             zipcode:
               type: string
               examples:
-                - 10000
+                - '10000'
             email:
               type: string
               examples:
-                - example@example.com
+                - 'example@example.com'
             city:
               type: string
               examples:
-                - City
+                - 'City'
             url:
               type: string
               examples:
@@ -3443,7 +3443,7 @@ components:
             phone:
               type: string
               examples:
-                - 3551234567
+                - '3551234567'
             lago_url:
               type: string
               examples:
@@ -3451,19 +3451,19 @@ components:
             legal_name:
               type: string
               examples:
-                - name1
+                - 'name1'
             legal_number:
               type: string
               examples:
-                - 10000
+                - '10000'
             currency:
               type: string
               examples:
-                - EUR
+                - 'EUR'
             timezone:
               type: string
               examples:
-                - Europe/Paris
+                - 'Europe/Paris'
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationCustomer'
             metadata:
@@ -3474,15 +3474,15 @@ components:
                   id:
                     type: string
                     examples:
-                      - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                      - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
                   key:
                     type: string
                     examples:
-                      - name
+                      - 'name'
                   value:
                     type: string
                     examples:
-                      - John
+                      - 'John'
                   display_in_invoice:
                     type: boolean
                     examples:
@@ -3508,14 +3508,14 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         charge:
           type: object
           properties:
             lago_id:
               type: string
               examples:
-                - 278da83c-c007-4fbb-afcd-b00c07c41utg
+                - '278da83c-c007-4fbb-afcd-b00c07c41utg'
             charge_model:
               type: string
               description: Charge model type
@@ -3531,15 +3531,15 @@ components:
             lago_id:
               type: string
               examples:
-                - 278da83c-c007-4fbb-afcd-b00c07c41utg
+                - '278da83c-c007-4fbb-afcd-b00c07c41utg'
             name:
               type: string
               examples:
-                - Example name
+                - 'Example name'
             code:
               type: string
               examples:
-                - code
+                - 'code'
             aggregation_type:
               type: string
               description: Aggregation type
@@ -3557,15 +3557,15 @@ components:
               lago_id:
                 type: string
                 examples:
-                  - 278da83c-c007-4fbb-afcd-b00c07c41utg
+                  - '278da83c-c007-4fbb-afcd-b00c07c41utg'
               key:
                 type: string
                 examples:
-                  - key
+                  - 'key'
               value:
                 type: string
                 examples:
-                  - value
+                  - 'value'
               units:
                 type: number
                 examples:
@@ -3607,7 +3607,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         total_amount_cents:
           type: integer
           examples:
@@ -3615,7 +3615,7 @@ components:
         total_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         vat_amount_cents:
           type: integer
           examples:
@@ -3623,7 +3623,7 @@ components:
         vat_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         charges_usage:
           type: array
           items:
@@ -3651,7 +3651,7 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         transaction_id:
           type: string
           examples:
@@ -3659,7 +3659,7 @@ components:
         lago_customer_id:
           type: string
           examples:
-            - 111da83c-c007-4fbb-afcd-b00c07c41iop
+            - '111da83c-c007-4fbb-afcd-b00c07c41iop'
         external_customer_id:
           type: string
           examples:
@@ -3667,7 +3667,7 @@ components:
         code:
           type: string
           examples:
-            - code
+            - 'code'
         timestamp:
           type: string
           examples:
@@ -3677,7 +3677,7 @@ components:
         lago_subscription_id:
           type: string
           examples:
-            - 447da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '447da83c-c007-4fbb-afcd-b00c07c41ffe'
         external_subscription_id:
           type: string
           examples:
@@ -3715,7 +3715,7 @@ components:
             code:
               type: string
               examples:
-                - code
+                - 'code'
             timestamp:
               type: integer
               examples:
@@ -3749,7 +3749,7 @@ components:
             code:
               type: string
               examples:
-                - code
+                - 'code'
             timestamp:
               type: integer
               examples:
@@ -3783,11 +3783,11 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_billable_metric_id:
           type: string
           examples:
-            - 278da83c-c007-4fbb-afcd-b00c07c41utg
+            - '278da83c-c007-4fbb-afcd-b00c07c41utg'
         created_at:
           type: string
           examples:
@@ -3823,11 +3823,11 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
           examples:
-            - example name
+            - 'example name'
         created_at:
           type: string
           examples:
@@ -3835,7 +3835,7 @@ components:
         code:
           type: string
           examples:
-            - example_code
+            - 'example_code'
         interval:
           type: string
           description: Plan interval
@@ -3846,7 +3846,7 @@ components:
         description:
           type: string
           examples:
-            - description
+            - 'description'
         amount_cents:
           type: integer
           examples:
@@ -3854,7 +3854,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         trial_period:
           type: number
           examples:
@@ -3906,11 +3906,11 @@ components:
             name:
               type: string
               examples:
-                - example name
+                - 'example name'
             code:
               type: string
               examples:
-                - example_code
+                - 'example_code'
             interval:
               type: string
               description: Plan interval
@@ -3921,7 +3921,7 @@ components:
             description:
               type: string
               examples:
-                - description
+                - 'description'
             amount_cents:
               type: integer
               examples:
@@ -3929,7 +3929,7 @@ components:
             amount_currency:
               type: string
               examples:
-                - EUR
+                - 'EUR'
             trial_period:
               type: number
               examples:
@@ -3950,11 +3950,11 @@ components:
                   id:
                     type: string
                     examples:
-                      - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                      - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
                   billable_metric_id:
                     type: string
                     examples:
-                      - 278da83c-c007-4fbb-afcd-b00c07c41utg
+                      - '278da83c-c007-4fbb-afcd-b00c07c41utg'
                   charge_model:
                     type: string
                     description: Charge model type
@@ -3997,27 +3997,27 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         external_id:
           type: string
           examples:
-            - 12345
+            - '12345'
         lago_customer_id:
           type: string
           examples:
-            - 995da83c-c007-4fbb-afcd-b00c07c41tre
+            - '995da83c-c007-4fbb-afcd-b00c07c41tre'
         external_customer_id:
           type: string
           examples:
-            - 54321
+            - '54321'
         name:
           type: string
           examples:
-            - Test subscription
+            - 'Test subscription'
         plan_code:
           type: string
           examples:
-            - plan_code
+            - 'plan_code'
         status:
           type: string
           description: Subscription status
@@ -4055,11 +4055,11 @@ components:
         previous_plan_code:
           type: string
           examples:
-            - previous_code
+            - 'previous_code'
         next_plan_code:
           type: string
           examples:
-            - next_code
+            - 'next_code'
         downgrade_plan_date:
           type: string
           examples:
@@ -4095,19 +4095,19 @@ components:
             external_customer_id:
               type: string
               examples:
-                - 12345
+                - '12345'
             plan_code:
               type: string
               examples:
-                - example_code
+                - 'example_code'
             name:
               type: string
               examples:
-                - Test name
+                - 'Test name'
             external_id:
               type: string
               examples:
-                - 54321
+                - '54321'
             billing_time:
               type: string
               description: Billing time
@@ -4129,7 +4129,7 @@ components:
             name:
               type: string
               examples:
-                - New name
+                - 'New name'
             subscription_at:
               type: string
               examples:
@@ -4146,7 +4146,7 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         amount_cents:
           type: integer
           examples:
@@ -4154,7 +4154,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         item:
           type: object
           required:
@@ -4166,19 +4166,19 @@ components:
             lago_id:
               type: string
               examples:
-                - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
             type:
               type: string
               examples:
-                - coupon
+                - 'coupon'
             code:
               type: string
               examples:
-                - code
+                - 'code'
             name:
               type: string
               examples:
-                - name
+                - 'name'
         invoice:
           type: object
           required:
@@ -4188,7 +4188,7 @@ components:
             lago_id:
               type: string
               examples:
-                - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
             payment_status:
               type: string
               enum:
@@ -4209,11 +4209,11 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_group_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         amount_cents:
           type: integer
           examples:
@@ -4221,7 +4221,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         vat_amount_cents:
           type: integer
           examples:
@@ -4229,7 +4229,7 @@ components:
         vat_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         units:
           type: number
           examples:
@@ -4256,26 +4256,26 @@ components:
             code:
               type: string
               examples:
-                - code
+                - 'code'
             name:
               type: string
               examples:
-                - name
+                - 'name'
     InvoiceMetadataObject:
       type: object
       properties:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         key:
           type: string
           examples:
-            - name
+            - 'name'
         value:
           type: string
           examples:
-            - John
+            - 'John'
         created_at:
           type: string
           examples:
@@ -4307,7 +4307,7 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         sequential_id:
           type: integer
           examples:
@@ -4315,7 +4315,7 @@ components:
         number:
           type: string
           examples:
-            - 222345
+            - '222345'
         charges_from_date:
           type: string
           examples:
@@ -4348,7 +4348,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         vat_amount_cents:
           type: integer
           examples:
@@ -4356,7 +4356,7 @@ components:
         vat_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         credit_amount_cents:
           type: integer
           examples:
@@ -4364,7 +4364,7 @@ components:
         credit_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         total_amount_cents:
           type: integer
           examples:
@@ -4372,7 +4372,7 @@ components:
         total_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         legacy:
           type: boolean
           examples:
@@ -4440,15 +4440,15 @@ components:
                   id:
                     type: string
                     examples:
-                      - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                      - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
                   key:
                     type: string
                     examples:
-                      - name
+                      - 'name'
                   value:
                     type: string
                     examples:
-                      - John
+                      - 'John'
     WalletObject:
       type: object
       required:
@@ -4466,15 +4466,15 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_customer_id:
           type: string
           examples:
-            - 254da83c-c007-4fbb-afcd-b00c07c41oit
+            - '254da83c-c007-4fbb-afcd-b00c07c41oit'
         external_customer_id:
           type: string
           examples:
-            - 12345
+            - '12345'
         status:
           type: string
           description: Status
@@ -4484,11 +4484,11 @@ components:
         currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         name:
           type: string
           examples:
-            - Name
+            - 'Name'
         rate_amount:
           type: number
           examples:
@@ -4554,7 +4554,7 @@ components:
             name:
               type: string
               examples:
-                - Wallet name
+                - 'Wallet name'
             rate_amount:
               type: number
               examples:
@@ -4562,7 +4562,7 @@ components:
             currency:
               type: string
               examples:
-                - EUR
+                - 'EUR'
             paid_credits:
               type: number
               examples:
@@ -4574,7 +4574,7 @@ components:
             external_customer_id:
               type: string
               examples:
-                - 12345
+                - '12345'
             expiration_at:
               type: string
               examples:
@@ -4590,7 +4590,7 @@ components:
             name:
               type: string
               examples:
-                - Wallet name
+                - 'Wallet name'
             expiration_at:
               type: string
               examples:
@@ -4609,11 +4609,11 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_wallet_id:
           type: string
           examples:
-            - 985da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '985da83c-c007-4fbb-afcd-b00c07c41ffe'
         status:
           type: string
           description: Status
@@ -4671,7 +4671,7 @@ components:
             wallet_id:
               type: string
               examples:
-                - 985da83c-c007-4fbb-afcd-b00c07c41ffe
+                - '985da83c-c007-4fbb-afcd-b00c07c41ffe'
             paid_credits:
               type: number
               examples:
@@ -4691,7 +4691,7 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         amount_cents:
           type: integer
           examples:
@@ -4699,7 +4699,7 @@ components:
         amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         fee:
           $ref: '#/components/schemas/FeeObject'
     CreditNoteObject:
@@ -4730,7 +4730,7 @@ components:
         lago_id:
           type: string
           examples:
-            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         sequential_id:
           type: integer
           examples:
@@ -4742,7 +4742,7 @@ components:
         lago_invoice_id:
           type: string
           examples:
-            - 144da83c-c007-4fbb-afcd-b00c07c41ffe
+            - '144da83c-c007-4fbb-afcd-b00c07c41ffe'
         invoice_number:
           type: string
           examples:
@@ -4778,7 +4778,7 @@ components:
         description:
           type: string
           examples:
-            - description
+            - 'description'
         total_amount_cents:
           type: integer
           examples:
@@ -4786,7 +4786,7 @@ components:
         total_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         vat_amount_cents:
           type: integer
           examples:
@@ -4794,7 +4794,7 @@ components:
         vat_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         sub_total_vat_excluded_amount_cents:
           type: integer
           examples:
@@ -4802,7 +4802,7 @@ components:
         sub_total_vat_excluded_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         balance_amount_cents:
           type: integer
           examples:
@@ -4810,7 +4810,7 @@ components:
         balance_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         credit_amount_cents:
           type: integer
           examples:
@@ -4818,7 +4818,7 @@ components:
         credit_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         refund_amount_cents:
           type: integer
           examples:
@@ -4826,7 +4826,7 @@ components:
         refund_amount_currency:
           type: string
           examples:
-            - EUR
+            - 'EUR'
         created_at:
           type: string
           examples:
@@ -4878,7 +4878,7 @@ components:
             invoice_id:
               type: string
               examples:
-                - 194da83c-c007-4fbb-afcd-b00c07c41fzh
+                - '194da83c-c007-4fbb-afcd-b00c07c41fzh'
             reason:
               type: string
               description: Reason
@@ -4892,7 +4892,7 @@ components:
             description:
               type: string
               examples:
-                - description
+                - 'description'
             credit_amount_cents:
               type: integer
               examples:
@@ -4912,7 +4912,7 @@ components:
                   fee_id:
                     type: string
                     examples:
-                      - 144da83c-c007-4fbb-afcd-b00c07c41ffe
+                      - '144da83c-c007-4fbb-afcd-b00c07c41ffe'
                   amount_cents:
                     type: integer
                     examples:
@@ -4948,7 +4948,7 @@ components:
         error:
           type: string
           examples:
-            - Bad request
+            - 'Bad request'
     ApiResponseUnauthorized:
       type: object
       required:
@@ -4963,7 +4963,7 @@ components:
         error:
           type: string
           examples:
-            - Unauthorized
+            - 'Unauthorized'
     ApiResponseUnprocessableEntity:
       type: object
       required:
@@ -4980,11 +4980,11 @@ components:
         error:
           type: string
           examples:
-            - Unprocessable entity
+            - 'Unprocessable entity'
         code:
           type: string
           examples:
-            - validation_errors
+            - 'validation_errors'
         error_details:
           type: object
     ApiResponseNotFound:
@@ -5002,11 +5002,11 @@ components:
         error:
           type: string
           examples:
-            - Not Found
+            - 'Not Found'
         code:
           type: string
           examples:
-            - object_not_found
+            - 'object_not_found'
     ApiResponseNotAllowed:
       type: object
       required:
@@ -5022,11 +5022,11 @@ components:
         error:
           type: string
           examples:
-            - Method Not Allowed
+            - 'Method Not Allowed'
         code:
           type: string
           examples:
-            - not_allowed
+            - 'not_allowed'
   requestBodies:
     BillableMetric:
       description: Billable metric object that needs to be created or updated
@@ -5038,3 +5038,4 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
+
