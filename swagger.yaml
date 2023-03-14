@@ -1,16 +1,15 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: Lago API documentation
-  description: |-
-    Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
+  description: Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
   contact:
     email: tech@getlago.com
   version: 0.26.0-beta
 externalDocs:
   description: Lago Github
-  url: https://github.com/getlago
+  url: 'https://github.com/getlago'
 servers:
-  - url: https://api.getlago.com/api/v1
+  - url: 'https://api.getlago.com/api/v1'
 security:
   - bearerAuth: []
 tags:
@@ -18,62 +17,62 @@ tags:
     description: Everything about Billable metric collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/billable_metrics/billable-metric-object
+      url: 'https://doc.getlago.com/docs/api/billable_metrics/billable-metric-object'
   - name: add_ons
     description: Everything about Add-on collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/add_ons/add-on-object
+      url: 'https://doc.getlago.com/docs/api/add_ons/add-on-object'
   - name: coupons
     description: Everything about Coupon collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/coupons/coupon-object
+      url: 'https://doc.getlago.com/docs/api/coupons/coupon-object'
   - name: organizations
     description: Everything about Organization collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/organizations/organization-object
+      url: 'https://doc.getlago.com/docs/api/organizations/organization-object'
   - name: customers
     description: Everything about Customer collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/customers/customer-object
+      url: 'https://doc.getlago.com/docs/api/customers/customer-object'
   - name: events
     description: Everything about Event collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/events/event-object
+      url: 'https://doc.getlago.com/docs/api/events/event-object'
   - name: plans
     description: Everything about Plan collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/plans/plan-object
+      url: 'https://doc.getlago.com/docs/api/plans/plan-object'
   - name: subscriptions
     description: Everything about Subscription collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/subscriptions/subscription-object
+      url: 'https://doc.getlago.com/docs/api/subscriptions/subscription-object'
   - name: webhooks
     description: Everything about Webhooks
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/webhooks/message-signature#1-retrieve-the-public-key
+      url: 'https://doc.getlago.com/docs/api/webhooks/message-signature#1-retrieve-the-public-key'
   - name: invoices
     description: Everything about Invoice collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/invoices/invoice-object
+      url: 'https://doc.getlago.com/docs/api/invoices/invoice-object'
   - name: fees
     description: Everything about Fees
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object
+      url: 'https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object'
   - name: wallets
     description: Everything about Wallet collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/wallets/wallet-object
+      url: 'https://doc.getlago.com/docs/api/wallets/wallet-object'
   - name: credit_notes
     description: Everything about Credit notes collection
 paths:
@@ -116,7 +115,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /billable_metrics/{code}:
+  '/billable_metrics/{code}':
     parameters:
       - name: code
         in: path
@@ -124,7 +123,8 @@ paths:
         required: true
         schema:
           type: string
-          example: example_code
+          examples:
+            - example_code
     put:
       tags:
         - billable_metrics
@@ -234,7 +234,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -242,7 +243,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
       responses:
         '200':
           description: Successful response
@@ -256,7 +258,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnauthorized'
-  /billable_metrics/{code}/groups:
+  '/billable_metrics/{code}/groups':
     get:
       tags:
         - billable_metrics
@@ -270,7 +272,8 @@ paths:
           required: true
           schema:
             type: string
-            example: example_code
+            examples:
+              - example_code
         - name: page
           in: query
           description: Number of page
@@ -278,7 +281,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -286,7 +290,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
       responses:
         '200':
           description: Successful response
@@ -339,7 +344,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /add_ons/{code}:
+  '/add_ons/{code}':
     parameters:
       - name: code
         in: path
@@ -347,7 +352,8 @@ paths:
         required: true
         schema:
           type: string
-          example: example_code
+          examples:
+            - example_code
     put:
       tags:
         - add_ons
@@ -457,7 +463,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -465,7 +472,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
       responses:
         '200':
           description: Successful response
@@ -563,7 +571,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /coupons/{code}:
+  '/coupons/{code}':
     parameters:
       - name: code
         in: path
@@ -571,7 +579,8 @@ paths:
         required: true
         schema:
           type: string
-          example: example_code
+          examples:
+            - example_code
     put:
       tags:
         - coupons
@@ -681,7 +690,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -689,7 +699,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
       responses:
         '200':
           description: Successful response
@@ -763,7 +774,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -771,7 +783,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
         - name: status
           in: query
           description: Applied coupon status
@@ -790,7 +803,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: '12345'
+            examples:
+              - '12345'
       responses:
         '200':
           description: Successful response
@@ -882,7 +896,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /customers/{external_id}:
+  '/customers/{external_id}':
     parameters:
       - name: external_id
         in: path
@@ -890,7 +904,8 @@ paths:
         required: true
         schema:
           type: string
-          example: '12345'
+          examples:
+            - '12345'
     get:
       tags:
         - customers
@@ -941,7 +956,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /customers/{customer_external_id}/current_usage:
+  '/customers/{customer_external_id}/current_usage':
     get:
       tags:
         - customers
@@ -953,7 +968,8 @@ paths:
           required: true
           schema:
             type: string
-            example: '12345'
+            examples:
+              - '12345'
         - name: external_subscription_id
           in: query
           description: External subscription ID
@@ -961,7 +977,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: '54321'
+            examples:
+              - '54321'
       description: Return a customer current usage
       operationId: FindCustomerCurrentUsage
       responses:
@@ -983,7 +1000,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /customers/{customer_external_id}/applied_coupons/{applied_coupon_id}:
+  '/customers/{customer_external_id}/applied_coupons/{applied_coupon_id}':
     delete:
       tags:
         - customers
@@ -995,7 +1012,8 @@ paths:
           required: true
           schema:
             type: string
-            example: '12345'
+            examples:
+              - '12345'
         - name: applied_coupon_id
           in: path
           description: Applied Coupon Lago ID
@@ -1003,7 +1021,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: '54321'
+            examples:
+              - '54321'
       description: Delete customer's appplied coupon
       operationId: deleteAppliedCoupon
       responses:
@@ -1040,7 +1059,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -1048,7 +1068,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
       responses:
         '200':
           description: Successful response
@@ -1132,7 +1153,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /events/{id}:
+  '/events/{id}':
     parameters:
       - name: id
         in: path
@@ -1140,7 +1161,8 @@ paths:
         required: true
         schema:
           type: string
-          example: '12345'
+          examples:
+            - '12345'
     get:
       tags:
         - events
@@ -1211,7 +1233,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /plans/{code}:
+  '/plans/{code}':
     parameters:
       - name: code
         in: path
@@ -1219,7 +1241,8 @@ paths:
         required: true
         schema:
           type: string
-          example: example_code
+          examples:
+            - example_code
     put:
       tags:
         - plans
@@ -1329,7 +1352,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -1337,7 +1361,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
       responses:
         '200':
           description: Successful response
@@ -1396,7 +1421,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /subscriptions/{external_id}:
+  '/subscriptions/{external_id}':
     parameters:
       - name: external_id
         in: path
@@ -1404,7 +1429,8 @@ paths:
         required: true
         schema:
           type: string
-          example: example_id
+          examples:
+            - example_id
     put:
       tags:
         - subscriptions
@@ -1495,7 +1521,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -1503,7 +1530,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
         - name: external_customer_id
           in: query
           description: External customer ID
@@ -1511,7 +1539,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: '12345'
+            examples:
+              - '12345'
       responses:
         '200':
           description: Successful response
@@ -1545,14 +1574,15 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
+                examples:
+                  - MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
         '401':
           description: Unauthorized error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnauthorized'
-  /invoices/{id}:
+  '/invoices/{id}':
     parameters:
       - name: id
         in: path
@@ -1560,7 +1590,8 @@ paths:
         required: true
         schema:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
     put:
       tags:
         - invoices
@@ -1630,7 +1661,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /invoices/{id}/download:
+  '/invoices/{id}/download':
     post:
       tags:
         - invoices
@@ -1642,7 +1673,8 @@ paths:
           required: true
           schema:
             type: string
-            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            examples:
+              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
       description: Download an existing invoice
       operationId: downloadInvoice
       responses:
@@ -1664,7 +1696,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /invoices/{id}/retry_payment:
+  '/invoices/{id}/retry_payment':
     post:
       tags:
         - invoices
@@ -1676,7 +1708,8 @@ paths:
           required: true
           schema:
             type: string
-            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            examples:
+              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
       description: Retry invoice payment
       operationId: retryPayment
       responses:
@@ -1700,7 +1733,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotAllowed'
-  /invoices/{id}/refresh:
+  '/invoices/{id}/refresh':
     put:
       tags:
         - invoices
@@ -1712,7 +1745,8 @@ paths:
           required: true
           schema:
             type: string
-            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            examples:
+              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
       description: Refresh a draft invoice
       operationId: refreshInvoice
       responses:
@@ -1734,7 +1768,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /invoices/{id}/finalize:
+  '/invoices/{id}/finalize':
     put:
       tags:
         - invoices
@@ -1746,7 +1780,8 @@ paths:
           required: true
           schema:
             type: string
-            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            examples:
+              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
       description: Finalize a draft invoice
       operationId: finalizeInvoice
       responses:
@@ -1783,7 +1818,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -1791,7 +1827,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
         - name: external_customer_id
           in: query
           description: External customer ID
@@ -1799,7 +1836,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: '12345'
+            examples:
+              - '12345'
         - name: issuing_date_from
           in: query
           description: Date from
@@ -1807,7 +1845,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: 2022-07-08
+            examples:
+              - '2022-07-08'
         - name: issuing_date_to
           in: query
           description: Date to
@@ -1815,7 +1854,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: 2022-08-09
+            examples:
+              - '2022-08-09'
         - name: status
           in: query
           description: Status (draft or finalized)
@@ -1823,7 +1863,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: draft
+            examples:
+              - draft
       responses:
         '200':
           description: Successful response
@@ -1837,7 +1878,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnauthorized'
-  /fees/{id}:
+  '/fees/{id}':
     parameters:
       - name: id
         in: path
@@ -1845,7 +1886,8 @@ paths:
         required: true
         schema:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
     get:
       tags:
         - fees
@@ -1910,7 +1952,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /wallets/{id}:
+  '/wallets/{id}':
     parameters:
       - name: id
         in: path
@@ -1918,7 +1960,8 @@ paths:
         required: true
         schema:
           type: string
-          example: 321da83c-c007-4fbb-afcd-b00c07c41ssd
+          examples:
+            - 321da83c-c007-4fbb-afcd-b00c07c41ssd
     put:
       tags:
         - wallets
@@ -2034,7 +2077,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -2042,7 +2086,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
         - name: external_customer_id
           in: query
           description: External customer ID
@@ -2050,7 +2095,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: '12345'
+            examples:
+              - '12345'
       responses:
         '200':
           description: Successful response
@@ -2103,7 +2149,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /wallets/{id}/wallet_transactions:
+  '/wallets/{id}/wallet_transactions':
     get:
       tags:
         - wallets
@@ -2117,7 +2163,8 @@ paths:
           required: true
           schema:
             type: string
-            example: 321da83c-c007-4fbb-afcd-b00c07c41ssd
+            examples:
+              - 321da83c-c007-4fbb-afcd-b00c07c41ssd
         - name: page
           in: query
           description: Number of page
@@ -2125,7 +2172,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -2133,7 +2181,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
         - name: status
           in: query
           description: Status (pending or settled)
@@ -2141,7 +2190,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: pending
+            examples:
+              - pending
         - name: transaction_type
           in: query
           description: Transaction Type (inbound or outbound)
@@ -2149,7 +2199,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: inbound
+            examples:
+              - inbound
       responses:
         '200':
           description: Successful response
@@ -2208,7 +2259,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /credit_notes/{id}:
+  '/credit_notes/{id}':
     parameters:
       - name: id
         in: path
@@ -2216,7 +2267,8 @@ paths:
         required: true
         schema:
           type: string
-          example: '12345'
+          examples:
+            - '12345'
     put:
       tags:
         - credit_notes
@@ -2286,7 +2338,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /credit_notes/{id}/download:
+  '/credit_notes/{id}/download':
     post:
       tags:
         - credit_notes
@@ -2298,7 +2350,8 @@ paths:
           required: true
           schema:
             type: string
-            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            examples:
+              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
       description: Download an existing credit note
       operationId: downloadCreditNote
       responses:
@@ -2320,7 +2373,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /credit_notes/{id}/void:
+  '/credit_notes/{id}/void':
     put:
       tags:
         - credit_notes
@@ -2332,7 +2385,8 @@ paths:
           required: true
           schema:
             type: string
-            example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+            examples:
+              - 183da83c-c007-4fbb-afcd-b00c07c41ffe
       description: Void an existing credit note
       operationId: voidCreditNote
       responses:
@@ -2375,7 +2429,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 2
+            examples:
+              - 2
         - name: per_page
           in: query
           description: Number of records per page
@@ -2383,7 +2438,8 @@ paths:
           explode: true
           schema:
             type: integer
-            example: 20
+            examples:
+              - 20
         - name: external_customer_id
           in: query
           description: External customer ID
@@ -2391,7 +2447,8 @@ paths:
           explode: true
           schema:
             type: string
-            example: '12345'
+            examples:
+              - '12345'
       responses:
         '200':
           description: Successful response
@@ -2415,7 +2472,8 @@ components:
       properties:
         key:
           type: string
-          example: region
+          examples:
+            - region
         values:
           type: array
           items:
@@ -2435,22 +2493,28 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         name:
           type: string
-          example: bm1
+          examples:
+            - bm1
         code:
           type: string
-          example: example_code
+          examples:
+            - example_code
         description:
           type: string
-          example: description
+          examples:
+            - description
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         field_name:
           type: string
-          example: amount
+          examples:
+            - amount
         aggregation_type:
           type: string
           description: Aggregation type
@@ -2464,10 +2528,12 @@ components:
           $ref: '#/components/schemas/BillableMetricGroup'
         active_subscriptions_count:
           type: integer
-          example: 0
+          examples:
+            - 0
         draft_invoices_count:
           type: integer
-          example: 0
+          examples:
+            - 0
     BillableMetric:
       type: object
       required:
@@ -2494,16 +2560,20 @@ components:
           properties:
             name:
               type: string
-              example: bm1
+              examples:
+                - bm1
             code:
               type: string
-              example: example_code
+              examples:
+                - example_code
             description:
               type: string
-              example: description
+              examples:
+                - description
             field_name:
               type: string
-              example: amount
+              examples:
+                - amount
             aggregation_type:
               type: string
               description: Aggregation type
@@ -2524,13 +2594,16 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         key:
           type: string
-          example: region
+          examples:
+            - region
         value:
           type: string
-          example: EU
+          examples:
+            - EU
     Groups:
       type: object
       required:
@@ -2552,25 +2625,32 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         name:
           type: string
-          example: example name
+          examples:
+            - example name
         code:
           type: string
-          example: example_code
+          examples:
+            - example_code
         description:
           type: string
-          example: description
+          examples:
+            - description
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
     AddOn:
       type: object
       required:
@@ -2597,19 +2677,24 @@ components:
           properties:
             name:
               type: string
-              example: example name
+              examples:
+                - example name
             code:
               type: string
-              example: example_code
+              examples:
+                - example_code
             description:
               type: string
-              example: description
+              examples:
+                - description
             amount_cents:
               type: integer
-              example: 1200
+              examples:
+                - 1200
             amount_currency:
               type: string
-              example: EUR
+              examples:
+                - EUR
     AppliedAddOnObject:
       type: object
       required:
@@ -2624,28 +2709,36 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         lago_add_on_id:
           type: string
-          example: 457uj93c-c007-4fbb-afcd-b00c07c41kki
+          examples:
+            - 457uj93c-c007-4fbb-afcd-b00c07c41kki
         add_on_code:
           type: string
-          example: code
+          examples:
+            - code
         lago_customer_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         external_customer_id:
           type: string
-          example: '1234567'
+          examples:
+            - '1234567'
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
     AppliedAddOn:
       type: object
       required:
@@ -2666,16 +2759,20 @@ components:
           properties:
             external_customer_id:
               type: string
-              example: '1234567'
+              examples:
+                - '1234567'
             add_on_code:
               type: string
-              example: code
+              examples:
+                - code
             amount_cents:
               type: integer
-              example: 1200
+              examples:
+                - 1200
             amount_currency:
               type: string
-              example: EUR
+              examples:
+                - EUR
     CouponObject:
       type: object
       required:
@@ -2689,13 +2786,16 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         name:
           type: string
-          example: coupon1
+          examples:
+            - coupon1
         code:
           type: string
-          example: example_code
+          examples:
+            - example_code
         coupon_type:
           type: string
           description: Coupon type
@@ -2704,27 +2804,34 @@ components:
             - percentage
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         reusable:
           type: boolean
-          example: true
+          examples:
+            - true
         limited_plans:
           type: boolean
-          example: true
+          examples:
+            - true
         plan_codes:
           type: array
           items:
             type: string
-            example: code1
+            examples:
+              - code1
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         percentage_rate:
           type: number
-          example: 25.00
+          examples:
+            - 25
         frequency:
           type: string
           description: Frequency type
@@ -2733,10 +2840,12 @@ components:
             - recurring
         frequency_duration:
           type: integer
-          example: 3
+          examples:
+            - 3
         expiration_at:
           type: string
-          example: 2022-09-14T23:59:59
+          examples:
+            - '2022-09-14T23:59:59'
         expiration:
           type: string
           description: Expiration type
@@ -2769,10 +2878,12 @@ components:
           properties:
             name:
               type: string
-              example: coupon1
+              examples:
+                - coupon1
             code:
               type: string
-              example: example_code
+              examples:
+                - example_code
             coupon_type:
               type: string
               description: Coupon type
@@ -2781,16 +2892,20 @@ components:
                 - percentage
             amount_cents:
               type: integer
-              example: 1200
+              examples:
+                - 1200
             amount_currency:
               type: string
-              example: EUR
+              examples:
+                - EUR
             reusable:
               type: boolean
-              example: true
+              examples:
+                - true
             percentage_rate:
               type: number
-              example: 25.00
+              examples:
+                - 25
             frequency:
               type: string
               description: Frequency type
@@ -2799,10 +2914,12 @@ components:
                 - recurring
             frequency_duration:
               type: integer
-              example: 3
+              examples:
+                - 3
             expiration_at:
               type: string
-              example: 2022-09-14T23:59:59Z
+              examples:
+                - '2022-09-14T23:59:59Z'
             expiration:
               type: string
               description: Expiration type
@@ -2816,7 +2933,8 @@ components:
                   type: array
                   items:
                     type: string
-                    example: code1
+                    examples:
+                      - code1
     AppliedCouponObject:
       type: object
       required:
@@ -2834,19 +2952,24 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         lago_coupon_id:
           type: string
-          example: 544da83c-c007-4fbb-afcd-b00c07c41iit
+          examples:
+            - 544da83c-c007-4fbb-afcd-b00c07c41iit
         coupon_code:
           type: string
-          example: example_code
+          examples:
+            - example_code
         lago_customer_id:
           type: string
-          example: 321da83c-c007-4fbb-afcd-b00c07c41ssd
+          examples:
+            - 321da83c-c007-4fbb-afcd-b00c07c41ssd
         external_customer_id:
           type: string
-          example: '123456'
+          examples:
+            - '123456'
         status:
           type: string
           description: Status
@@ -2855,16 +2978,20 @@ components:
             - terminated
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_cents_remaining:
           type: integer
-          example: 800
+          examples:
+            - 800
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         percentage_rate:
           type: number
-          example: 25.00
+          examples:
+            - 25
         frequency:
           type: string
           description: Frequency type
@@ -2873,19 +3000,24 @@ components:
             - recurring
         frequency_duration:
           type: integer
-          example: 3
+          examples:
+            - 3
         frequency_duration_remaining:
           type: integer
-          example: 2
+          examples:
+            - 2
         expiration_at:
           type: string
-          example: 2022-09-14T23:59:59Z
+          examples:
+            - '2022-09-14T23:59:59Z'
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         terminated_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         credits:
           type: array
           items:
@@ -2919,10 +3051,12 @@ components:
           properties:
             external_customer_id:
               type: string
-              example: '123456'
+              examples:
+                - '123456'
             coupon_code:
               type: string
-              example: example_code
+              examples:
+                - example_code
             frequency:
               type: string
               description: Frequency type
@@ -2931,31 +3065,39 @@ components:
                 - recurring
             frequency_duration:
               type: integer
-              example: 3
+              examples:
+                - 3
             amount_cents:
               type: integer
-              example: 1200
+              examples:
+                - 1200
             amount_currency:
               type: string
-              example: EUR
+              examples:
+                - EUR
             percentage_rate:
               type: number
-              example: 25.00
+              examples:
+                - 25
     BillingConfigurationOrganization:
       type: object
       properties:
         invoice_footer:
           type: string
-          example: text
+          examples:
+            - text
         invoice_grace_period:
           type: integer
-          example: 5
+          examples:
+            - 5
         document_locale:
           type: string
-          example: fr
+          examples:
+            - fr
         vat_rate:
           type: number
-          example: 25.00
+          examples:
+            - 25
     OrganizationObject:
       type: object
       required:
@@ -2964,46 +3106,60 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         name:
           type: string
-          example: example name
+          examples:
+            - example name
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         webhook_url:
           type: string
-          example: https://example.com
+          examples:
+            - 'https://example.com'
         country:
           type: string
-          example: CZ
+          examples:
+            - CZ
         address_line1:
           type: string
-          example: address1
+          examples:
+            - address1
         address_line2:
           type: string
-          example: address2
+          examples:
+            - address2
         state:
           type: string
-          example: state1
+          examples:
+            - state1
         zipcode:
           type: string
-          example: '10000'
+          examples:
+            - '10000'
         email:
           type: string
-          example: example@example.com
+          examples:
+            - example@example.com
         city:
           type: string
-          example: City
+          examples:
+            - City
         legal_name:
           type: string
-          example: name1
+          examples:
+            - name1
         legal_number:
           type: string
-          example: '10000'
+          examples:
+            - '10000'
         timezone:
           type: string
-          example: UTC
+          examples:
+            - UTC
         billing_configuration:
           $ref: '#/components/schemas/BillingConfigurationOrganization'
     Organization:
@@ -3023,37 +3179,48 @@ components:
           properties:
             webhook_url:
               type: string
-              example: https://example.com
+              examples:
+                - 'https://example.com'
             country:
               type: string
-              example: CZ
+              examples:
+                - CZ
             address_line1:
               type: string
-              example: address1
+              examples:
+                - address1
             address_line2:
               type: string
-              example: address2
+              examples:
+                - address2
             state:
               type: string
-              example: state1
+              examples:
+                - state1
             zipcode:
               type: string
-              example: '10000'
+              examples:
+                - '10000'
             email:
               type: string
-              example: example@example.com
+              examples:
+                - example@example.com
             city:
               type: string
-              example: City
+              examples:
+                - City
             legal_name:
               type: string
-              example: name1
+              examples:
+                - name1
             legal_number:
               type: string
-              example: 10000
+              examples:
+                - 10000
             timezone:
               type: string
-              example: Europe/Paris
+              examples:
+                - Europe/Paris
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationOrganization'
     BillingConfigurationCustomer:
@@ -3062,7 +3229,8 @@ components:
       properties:
         invoice_grace_period:
           type: integer
-          example: 3
+          examples:
+            - 3
         payment_provider:
           type: string
           description: Payment provider type
@@ -3071,34 +3239,43 @@ components:
             - gocardless
         provider_customer_id:
           type: string
-          example: '123456'
+          examples:
+            - '123456'
         sync_with_provider:
           type: boolean
-          example: true
+          examples:
+            - true
         document_locale:
           type: string
-          example: fr
+          examples:
+            - fr
         vat_rate:
           type: number
-          example: 25.00
+          examples:
+            - 25
     CustomerMetadataObject:
       type: object
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         key:
           type: string
-          example: name
+          examples:
+            - name
         value:
           type: string
-          example: John
+          examples:
+            - John
         display_in_invoice:
           type: boolean
-          example: false
+          examples:
+            - false
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
     CustomerObject:
       type: object
       required:
@@ -3109,67 +3286,88 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         external_id:
           type: string
-          example: 886da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 886da83c-c007-4fbb-afcd-b00c07c41ffe
         name:
           type: string
-          example: John Doe
+          examples:
+            - John Doe
         sequential_id:
           type: integer
-          example: 12345
+          examples:
+            - 12345
         slug:
           type: string
-          example: slug
+          examples:
+            - slug
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         country:
           type: string
-          example: CZ
+          examples:
+            - CZ
         address_line1:
           type: string
-          example: address1
+          examples:
+            - address1
         address_line2:
           type: string
-          example: address2
+          examples:
+            - address2
         state:
           type: string
-          example: state1
+          examples:
+            - state1
         zipcode:
           type: string
-          example: 10000
+          examples:
+            - 10000
         email:
           type: string
-          example: example@example.com
+          examples:
+            - example@example.com
         city:
           type: string
-          example: City
+          examples:
+            - City
         url:
           type: string
-          example: https://example.com
+          examples:
+            - 'https://example.com'
         phone:
           type: string
-          example: +3551234567
+          examples:
+            - 3551234567
         lago_url:
           type: string
-          example: https://lago.url
+          examples:
+            - 'https://lago.url'
         legal_name:
           type: string
-          example: name1
+          examples:
+            - name1
         legal_number:
           type: string
-          example: 10000
+          examples:
+            - 10000
         currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         timezone:
           type: string
-          example: UTC
+          examples:
+            - UTC
         applicable_timezone:
           type: string
-          example: UTC
+          examples:
+            - UTC
         billing_configuration:
           $ref: '#/components/schemas/BillingConfigurationCustomer'
         metadata:
@@ -3204,52 +3402,68 @@ components:
           properties:
             external_id:
               type: string
-              example: 886da83c-c007-4fbb-afcd-b00c07c41ffe
+              examples:
+                - 886da83c-c007-4fbb-afcd-b00c07c41ffe
             name:
               type: string
-              example: John Doe
+              examples:
+                - John Doe
             country:
               type: string
-              example: CZ
+              examples:
+                - CZ
             address_line1:
               type: string
-              example: address1
+              examples:
+                - address1
             address_line2:
               type: string
-              example: address2
+              examples:
+                - address2
             state:
               type: string
-              example: state1
+              examples:
+                - state1
             zipcode:
               type: string
-              example: 10000
+              examples:
+                - 10000
             email:
               type: string
-              example: example@example.com
+              examples:
+                - example@example.com
             city:
               type: string
-              example: City
+              examples:
+                - City
             url:
               type: string
-              example: https://example.com
+              examples:
+                - 'https://example.com'
             phone:
               type: string
-              example: +3551234567
+              examples:
+                - 3551234567
             lago_url:
               type: string
-              example: https://lago.url
+              examples:
+                - 'https://lago.url'
             legal_name:
               type: string
-              example: name1
+              examples:
+                - name1
             legal_number:
               type: string
-              example: 10000
+              examples:
+                - 10000
             currency:
               type: string
-              example: EUR
+              examples:
+                - EUR
             timezone:
               type: string
-              example: Europe/Paris
+              examples:
+                - Europe/Paris
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationCustomer'
             metadata:
@@ -3259,16 +3473,20 @@ components:
                 properties:
                   id:
                     type: string
-                    example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                    examples:
+                      - 183da83c-c007-4fbb-afcd-b00c07c41ffe
                   key:
                     type: string
-                    example: name
+                    examples:
+                      - name
                   value:
                     type: string
-                    example: John
+                    examples:
+                      - John
                   display_in_invoice:
                     type: boolean
-                    example: false
+                    examples:
+                      - false
     ChargeUsageObject:
       type: object
       required:
@@ -3281,19 +3499,23 @@ components:
       properties:
         units:
           type: number
-          example: 3.0
+          examples:
+            - 3
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         charge:
           type: object
           properties:
             lago_id:
               type: string
-              example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+              examples:
+                - 278da83c-c007-4fbb-afcd-b00c07c41utg
             charge_model:
               type: string
               description: Charge model type
@@ -3308,13 +3530,16 @@ components:
           properties:
             lago_id:
               type: string
-              example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+              examples:
+                - 278da83c-c007-4fbb-afcd-b00c07c41utg
             name:
               type: string
-              example: Example name
+              examples:
+                - Example name
             code:
               type: string
-              example: code
+              examples:
+                - code
             aggregation_type:
               type: string
               description: Aggregation type
@@ -3331,19 +3556,24 @@ components:
             properties:
               lago_id:
                 type: string
-                example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+                examples:
+                  - 278da83c-c007-4fbb-afcd-b00c07c41utg
               key:
                 type: string
-                example: key
+                examples:
+                  - key
               value:
                 type: string
-                example: value
+                examples:
+                  - value
               units:
                 type: number
-                example: 3.5
+                examples:
+                  - 3.5
               amount_cents:
                 type: integer
-                example: 1200
+                examples:
+                  - 1200
     CustomerUsageObject:
       type: object
       required:
@@ -3360,31 +3590,40 @@ components:
       properties:
         from_datetime:
           type: string
-          example: 2022-09-14T00:00:00Z
+          examples:
+            - '2022-09-14T00:00:00Z'
         to_datetime:
           type: string
-          example: 2022-09-14T00:00:00Z
+          examples:
+            - '2022-09-14T00:00:00Z'
         issuing_date:
           type: string
-          example: 2022-09-15T00:00:00Z
+          examples:
+            - '2022-09-15T00:00:00Z'
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         total_amount_cents:
           type: integer
-          example: 1400
+          examples:
+            - 1400
         total_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         vat_amount_cents:
           type: integer
-          example: 200
+          examples:
+            - 200
         vat_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         charges_usage:
           type: array
           items:
@@ -3411,33 +3650,42 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         transaction_id:
           type: string
-          example: '987654321'
+          examples:
+            - '987654321'
         lago_customer_id:
           type: string
-          example: 111da83c-c007-4fbb-afcd-b00c07c41iop
+          examples:
+            - 111da83c-c007-4fbb-afcd-b00c07c41iop
         external_customer_id:
           type: string
-          example: '123456'
+          examples:
+            - '123456'
         code:
           type: string
-          example: code
+          examples:
+            - code
         timestamp:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         properties:
           type: object
         lago_subscription_id:
           type: string
-          example: 447da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 447da83c-c007-4fbb-afcd-b00c07c41ffe
         external_subscription_id:
           type: string
-          example: '123456'
+          examples:
+            - '123456'
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
     Event:
       type: object
       required:
@@ -3458,19 +3706,24 @@ components:
           properties:
             transaction_id:
               type: string
-              example: '123456'
+              examples:
+                - '123456'
             external_customer_id:
               type: string
-              example: '654321'
+              examples:
+                - '654321'
             code:
               type: string
-              example: code
+              examples:
+                - code
             timestamp:
               type: integer
-              example: 1669823754
+              examples:
+                - 1669823754
             external_subscription_id:
               type: string
-              example: '123456'
+              examples:
+                - '123456'
             properties:
               type: object
     BatchEventInput:
@@ -3487,16 +3740,20 @@ components:
           properties:
             transaction_id:
               type: string
-              example: '123456'
+              examples:
+                - '123456'
             external_customer_id:
               type: string
-              example: '654321'
+              examples:
+                - '654321'
             code:
               type: string
-              example: code
+              examples:
+                - code
             timestamp:
               type: integer
-              example: 1669823754
+              examples:
+                - 1669823754
             external_subscription_ids:
               type: array
               items:
@@ -3511,7 +3768,8 @@ components:
       properties:
         group_id:
           type: string
-          example: '123456'
+          examples:
+            - '123456'
         values:
           type: object
     ChargeObject:
@@ -3524,13 +3782,16 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         lago_billable_metric_id:
           type: string
-          example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+          examples:
+            - 278da83c-c007-4fbb-afcd-b00c07c41utg
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         charge_model:
           type: string
           description: Charge model type
@@ -3561,16 +3822,20 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         name:
           type: string
-          example: example name
+          examples:
+            - example name
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         code:
           type: string
-          example: example_code
+          examples:
+            - example_code
         interval:
           type: string
           description: Plan interval
@@ -3580,28 +3845,36 @@ components:
             - yearly
         description:
           type: string
-          example: description
+          examples:
+            - description
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         trial_period:
           type: number
-          example: 2
+          examples:
+            - 2
         pay_in_advance:
           type: boolean
-          example: true
+          examples:
+            - true
         bill_charges_monthly:
           type: boolean
-          example: false
+          examples:
+            - false
         active_subscriptions_count:
           type: integer
-          example: 2
+          examples:
+            - 2
         draft_invoices_count:
           type: integer
-          example: 2
+          examples:
+            - 2
         charges:
           type: array
           items:
@@ -3632,10 +3905,12 @@ components:
           properties:
             name:
               type: string
-              example: example name
+              examples:
+                - example name
             code:
               type: string
-              example: example_code
+              examples:
+                - example_code
             interval:
               type: string
               description: Plan interval
@@ -3645,22 +3920,28 @@ components:
                 - yearly
             description:
               type: string
-              example: description
+              examples:
+                - description
             amount_cents:
               type: integer
-              example: 1200
+              examples:
+                - 1200
             amount_currency:
               type: string
-              example: EUR
+              examples:
+                - EUR
             trial_period:
               type: number
-              example: 2
+              examples:
+                - 2
             pay_in_advance:
               type: boolean
-              example: true
+              examples:
+                - true
             bill_charges_monthly:
               type: boolean
-              example: false
+              examples:
+                - false
             charges:
               type: array
               items:
@@ -3668,10 +3949,12 @@ components:
                 properties:
                   id:
                     type: string
-                    example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                    examples:
+                      - 183da83c-c007-4fbb-afcd-b00c07c41ffe
                   billable_metric_id:
                     type: string
-                    example: 278da83c-c007-4fbb-afcd-b00c07c41utg
+                    examples:
+                      - 278da83c-c007-4fbb-afcd-b00c07c41utg
                   charge_model:
                     type: string
                     description: Charge model type
@@ -3693,7 +3976,8 @@ components:
                       properties:
                         group_id:
                           type: string
-                          example: '123456'
+                          examples:
+                            - '123456'
                         values:
                           type: object
     SubscriptionObject:
@@ -3712,22 +3996,28 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         external_id:
           type: string
-          example: 12345
+          examples:
+            - 12345
         lago_customer_id:
           type: string
-          example: 995da83c-c007-4fbb-afcd-b00c07c41tre
+          examples:
+            - 995da83c-c007-4fbb-afcd-b00c07c41tre
         external_customer_id:
           type: string
-          example: 54321
+          examples:
+            - 54321
         name:
           type: string
-          example: Test subscription
+          examples:
+            - Test subscription
         plan_code:
           type: string
-          example: plan_code
+          examples:
+            - plan_code
         status:
           type: string
           description: Subscription status
@@ -3744,28 +4034,36 @@ components:
             - anniversary
         subscription_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         started_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         terminated_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         canceled_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         previous_plan_code:
           type: string
-          example: previous_code
+          examples:
+            - previous_code
         next_plan_code:
           type: string
-          example: next_code
+          examples:
+            - next_code
         downgrade_plan_date:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
     Subscription:
       type: object
       required:
@@ -3796,16 +4094,20 @@ components:
           properties:
             external_customer_id:
               type: string
-              example: 12345
+              examples:
+                - 12345
             plan_code:
               type: string
-              example: example_code
+              examples:
+                - example_code
             name:
               type: string
-              example: Test name
+              examples:
+                - Test name
             external_id:
               type: string
-              example: 54321
+              examples:
+                - 54321
             billing_time:
               type: string
               description: Billing time
@@ -3814,7 +4116,8 @@ components:
                 - anniversary
             subscription_at:
               type: string
-              example: 2022-08-08T00:00:00Z
+              examples:
+                - '2022-08-08T00:00:00Z'
     SubscriptionUpdateInput:
       type: object
       required:
@@ -3825,10 +4128,12 @@ components:
           properties:
             name:
               type: string
-              example: New name
+              examples:
+                - New name
             subscription_at:
               type: string
-              example: 2022-08-08T00:00:00Z
+              examples:
+                - '2022-08-08T00:00:00Z'
     CreditObject:
       type: object
       required:
@@ -3840,13 +4145,16 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         item:
           type: object
           required:
@@ -3857,16 +4165,20 @@ components:
           properties:
             lago_id:
               type: string
-              example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+              examples:
+                - 183da83c-c007-4fbb-afcd-b00c07c41ffe
             type:
               type: string
-              example: coupon
+              examples:
+                - coupon
             code:
               type: string
-              example: code
+              examples:
+                - code
             name:
               type: string
-              example: name
+              examples:
+                - name
         invoice:
           type: object
           required:
@@ -3875,7 +4187,8 @@ components:
           properties:
             lago_id:
               type: string
-              example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+              examples:
+                - 183da83c-c007-4fbb-afcd-b00c07c41ffe
             payment_status:
               type: string
               enum:
@@ -3895,28 +4208,36 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         lago_group_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         vat_amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         vat_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         units:
           type: number
-          example: 2.5
+          examples:
+            - 2.5
         events_count:
           type: integer
-          example: 5
+          examples:
+            - 5
         item:
           type: object
           required:
@@ -3934,25 +4255,31 @@ components:
                 - credit
             code:
               type: string
-              example: code
+              examples:
+                - code
             name:
               type: string
-              example: name
+              examples:
+                - name
     InvoiceMetadataObject:
       type: object
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         key:
           type: string
-          example: name
+          examples:
+            - name
         value:
           type: string
-          example: John
+          examples:
+            - John
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
     InvoiceObject:
       type: object
       required:
@@ -3979,19 +4306,24 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         sequential_id:
           type: integer
-          example: 12345
+          examples:
+            - 12345
         number:
           type: string
-          example: 222345
+          examples:
+            - 222345
         charges_from_date:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         issuing_date:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         invoice_type:
           type: string
           enum:
@@ -4011,34 +4343,44 @@ components:
             - failed
         amount_cents:
           type: integer
-          example: 1200
+          examples:
+            - 1200
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         vat_amount_cents:
           type: integer
-          example: 20
+          examples:
+            - 20
         vat_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         credit_amount_cents:
           type: integer
-          example: 20
+          examples:
+            - 20
         credit_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         total_amount_cents:
           type: integer
-          example: 1220
+          examples:
+            - 1220
         total_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         legacy:
           type: boolean
-          example: true
+          examples:
+            - true
         file_url:
           type: string
-          example: https://example.com
+          examples:
+            - 'https://example.com'
         customer:
           $ref: '#/components/schemas/CustomerObject'
         subscriptions:
@@ -4097,13 +4439,16 @@ components:
                 properties:
                   id:
                     type: string
-                    example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+                    examples:
+                      - 183da83c-c007-4fbb-afcd-b00c07c41ffe
                   key:
                     type: string
-                    example: name
+                    examples:
+                      - name
                   value:
                     type: string
-                    example: John
+                    examples:
+                      - John
     WalletObject:
       type: object
       required:
@@ -4120,13 +4465,16 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         lago_customer_id:
           type: string
-          example: 254da83c-c007-4fbb-afcd-b00c07c41oit
+          examples:
+            - 254da83c-c007-4fbb-afcd-b00c07c41oit
         external_customer_id:
           type: string
-          example: 12345
+          examples:
+            - 12345
         status:
           type: string
           description: Status
@@ -4135,37 +4483,48 @@ components:
             - terminated
         currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         name:
           type: string
-          example: Name
+          examples:
+            - Name
         rate_amount:
           type: number
-          example: 2.0
+          examples:
+            - 2
         credits_balance:
           type: number
-          example: 500.0
+          examples:
+            - 500
         balance:
           type: number
-          example: 1000.0
+          examples:
+            - 1000
         consumed_credits:
           type: number
-          example: 100.0
+          examples:
+            - 100
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         expiration_at:
           type: string
-          example: 2022-09-14T23:59:59Z
+          examples:
+            - '2022-09-14T23:59:59Z'
         last_balance_sync_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         last_consumed_credit_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         terminated_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
     Wallet:
       type: object
       required:
@@ -4194,25 +4553,32 @@ components:
           properties:
             name:
               type: string
-              example: Wallet name
+              examples:
+                - Wallet name
             rate_amount:
               type: number
-              example: 2.0
+              examples:
+                - 2
             currency:
               type: string
-              example: EUR
+              examples:
+                - EUR
             paid_credits:
               type: number
-              example: 500.0
+              examples:
+                - 500
             granted_credits:
               type: number
-              example: 10.0
+              examples:
+                - 10
             external_customer_id:
               type: string
-              example: 12345
+              examples:
+                - 12345
             expiration_at:
               type: string
-              example: 2022-09-14T23:59:59Z
+              examples:
+                - '2022-09-14T23:59:59Z'
     WalletUpdateInput:
       type: object
       required:
@@ -4223,10 +4589,12 @@ components:
           properties:
             name:
               type: string
-              example: Wallet name
+              examples:
+                - Wallet name
             expiration_at:
               type: string
-              example: 2022-09-14T23:59:59Z
+              examples:
+                - '2022-09-14T23:59:59Z'
     WalletTransactionObject:
       type: object
       required:
@@ -4240,10 +4608,12 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         lago_wallet_id:
           type: string
-          example: 985da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 985da83c-c007-4fbb-afcd-b00c07c41ffe
         status:
           type: string
           description: Status
@@ -4258,16 +4628,20 @@ components:
             - outbound
         amount:
           type: number
-          example: 500.0
+          examples:
+            - 500
         credit_amount:
           type: number
-          example: 100.0
+          examples:
+            - 100
         settled_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
     WalletTransaction:
       type: object
       required:
@@ -4296,13 +4670,16 @@ components:
           properties:
             wallet_id:
               type: string
-              example: 985da83c-c007-4fbb-afcd-b00c07c41ffe
+              examples:
+                - 985da83c-c007-4fbb-afcd-b00c07c41ffe
             paid_credits:
               type: number
-              example: 100.0
+              examples:
+                - 100
             granted_credits:
               type: number
-              example: 10.0
+              examples:
+                - 10
     CreditNoteItemObject:
       type: object
       required:
@@ -4313,13 +4690,16 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         amount_cents:
           type: integer
-          example: 1220
+          examples:
+            - 1220
         amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         fee:
           $ref: '#/components/schemas/FeeObject'
     CreditNoteObject:
@@ -4349,22 +4729,28 @@ components:
       properties:
         lago_id:
           type: string
-          example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 183da83c-c007-4fbb-afcd-b00c07c41ffe
         sequential_id:
           type: integer
-          example: 1234
+          examples:
+            - 1234
         number:
           type: string
-          example: '123456789'
+          examples:
+            - '123456789'
         lago_invoice_id:
           type: string
-          example: 144da83c-c007-4fbb-afcd-b00c07c41ffe
+          examples:
+            - 144da83c-c007-4fbb-afcd-b00c07c41ffe
         invoice_number:
           type: string
-          example: '123456789'
+          examples:
+            - '123456789'
         issuing_date:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         credit_status:
           type: string
           description: Credit status
@@ -4391,52 +4777,68 @@ components:
             - other
         description:
           type: string
-          example: description
+          examples:
+            - description
         total_amount_cents:
           type: integer
-          example: 1220
+          examples:
+            - 1220
         total_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         vat_amount_cents:
           type: integer
-          example: 20
+          examples:
+            - 20
         vat_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         sub_total_vat_excluded_amount_cents:
           type: integer
-          example: 1000
+          examples:
+            - 1000
         sub_total_vat_excluded_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         balance_amount_cents:
           type: integer
-          example: 20
+          examples:
+            - 20
         balance_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         credit_amount_cents:
           type: integer
-          example: 20
+          examples:
+            - 20
         credit_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         refund_amount_cents:
           type: integer
-          example: 20
+          examples:
+            - 20
         refund_amount_currency:
           type: string
-          example: EUR
+          examples:
+            - EUR
         created_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         updated_at:
           type: string
-          example: 2022-09-14T16:35:31Z
+          examples:
+            - '2022-09-14T16:35:31Z'
         file_url:
           type: string
-          example: https://example.com
+          examples:
+            - 'https://example.com'
         customer:
           $ref: '#/components/schemas/CustomerObject'
         items:
@@ -4475,7 +4877,8 @@ components:
           properties:
             invoice_id:
               type: string
-              example: 194da83c-c007-4fbb-afcd-b00c07c41fzh
+              examples:
+                - 194da83c-c007-4fbb-afcd-b00c07c41fzh
             reason:
               type: string
               description: Reason
@@ -4488,13 +4891,16 @@ components:
                 - other
             description:
               type: string
-              example: description
+              examples:
+                - description
             credit_amount_cents:
               type: integer
-              example: 20
+              examples:
+                - 20
             refund_amount_cents:
               type: integer
-              example: 20
+              examples:
+                - 20
             items:
               type: array
               items:
@@ -4505,10 +4911,12 @@ components:
                 properties:
                   fee_id:
                     type: string
-                    example: 144da83c-c007-4fbb-afcd-b00c07c41ffe
+                    examples:
+                      - 144da83c-c007-4fbb-afcd-b00c07c41ffe
                   amount_cents:
                     type: integer
-                    example: 20
+                    examples:
+                      - 20
     CreditNoteUpdateInput:
       type: object
       required:
@@ -4535,10 +4943,12 @@ components:
         status:
           type: integer
           format: int32
-          example: 400
+          examples:
+            - 400
         error:
           type: string
-          example: Bad request
+          examples:
+            - Bad request
     ApiResponseUnauthorized:
       type: object
       required:
@@ -4548,10 +4958,12 @@ components:
         status:
           type: integer
           format: int32
-          example: 401
+          examples:
+            - 401
         error:
           type: string
-          example: Unauthorized
+          examples:
+            - Unauthorized
     ApiResponseUnprocessableEntity:
       type: object
       required:
@@ -4563,13 +4975,16 @@ components:
         status:
           type: integer
           format: int32
-          example: 422
+          examples:
+            - 422
         error:
           type: string
-          example: Unprocessable entity
+          examples:
+            - Unprocessable entity
         code:
           type: string
-          example: validation_errors
+          examples:
+            - validation_errors
         error_details:
           type: object
     ApiResponseNotFound:
@@ -4582,13 +4997,16 @@ components:
         status:
           type: integer
           format: int32
-          example: 404
+          examples:
+            - 404
         error:
           type: string
-          example: Not Found
+          examples:
+            - Not Found
         code:
           type: string
-          example: object_not_found
+          examples:
+            - object_not_found
     ApiResponseNotAllowed:
       type: object
       required:
@@ -4599,13 +5017,16 @@ components:
         status:
           type: integer
           format: int32
-          example: 405
+          examples:
+            - 405
         error:
           type: string
-          example: Method Not Allowed
+          examples:
+            - Method Not Allowed
         code:
           type: string
-          example: not_allowed
+          examples:
+            - not_allowed
   requestBodies:
     BillableMetric:
       description: Billable metric object that needs to be created or updated
