@@ -3909,19 +3909,25 @@ components:
           example: 183da83c-c007-4fbb-afcd-b00c07c41ffe
         amount_cents:
           type: integer
-          example: 1200
+          example: 1000
         amount_currency:
           type: string
           example: EUR
         vat_amount_cents:
           type: integer
-          example: 1200
+          example: 200
         vat_amount_currency:
           type: string
           example: EUR
         units:
           type: number
           example: 2.5
+        total_amount_cents:
+          type: integer
+          example: 1200
+        total_amount_currency:
+          type: string
+          example: EUR
         events_count:
           type: integer
           example: 5
