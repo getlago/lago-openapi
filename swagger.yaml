@@ -2490,6 +2490,7 @@ components:
         - created_at
         - active_subscriptions_count
         - draft_invoices_count
+        - plans_count
       properties:
         lago_id:
           type: string
@@ -2531,6 +2532,10 @@ components:
           examples:
             - 0
         draft_invoices_count:
+          type: integer
+          examples:
+            - 0
+        plans_count:
           type: integer
           examples:
             - 0
@@ -3777,6 +3782,7 @@ components:
       required:
         - lago_id
         - lago_billable_metric_id
+        - billable_metric_code
         - created_at
         - charge_model
       properties:
@@ -3788,6 +3794,10 @@ components:
           type: string
           examples:
             - '278da83c-c007-4fbb-afcd-b00c07c41utg'
+        billable_metric_code:
+          type: string
+          examples:
+            - 'bm_code'
         created_at:
           type: string
           examples:
