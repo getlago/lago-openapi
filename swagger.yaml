@@ -1166,6 +1166,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
+  /events/estimate_fees:
+    post:
+      tags:
+        - events
+      summary: Estimate fees for an instant charge
+      description: Estimate the fees that would be created after reception of an event for a billable metric attached to one or multiple instant charges
+      operationId: eventEstimateFees
+      requestBody:
+        description: Event payload for instant fee estimate
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventEstimateFeesInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fees'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
   /plans:
     post:
       tags:
@@ -3477,6 +3522,27 @@ components:
               example: '123456'
             properties:
               type: object
+    EventEstimateFeesInput:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          type: object
+          required:
+            - "code"
+          properties:
+            code:
+              type: string
+              example: code
+            external_customer_id:
+              type: string
+              example: '654321'
+            external_subscription_id:
+              type: string
+              example: '123456'
+            properties:
+              type: object
     BatchEventInput:
       type: object
       required:
@@ -3507,6 +3573,15 @@ components:
                 type: string
             properties:
               type: object
+    Fees:
+      type: object
+      required:
+        - fees
+      properties:
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeObject'
     GroupPropertiesObject:
       type: object
       required:
