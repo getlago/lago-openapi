@@ -1,4 +1,4 @@
-name: Validate OpenAPI schema - editor.swagger.io
+name: Validate OpenAPI schema - ApiDOM
 
 on:
   push:
@@ -15,6 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Validate OpenAPI definition
-        uses: char0n/swagger-editor-validate@v1
+        uses: char0n/apidom-validate@v1
         with:
           definition-file: 'swagger.yaml'
