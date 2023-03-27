@@ -1004,7 +1004,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerPortalUrl'
+                type: object
+                required:
+                  - customer
+                properties:
+                  customer:
+                    type: object
+                    required:
+                      - portal_url
+                    properties:
+                      portal_url:
+                        type: string
+                        example: https://lago.app/customer-portal/abc
         '401':
           description: Unauthorized error
           content:
