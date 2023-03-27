@@ -3103,6 +3103,11 @@ components:
             timezone:
               type: string
               example: Europe/Paris
+            email_settings:
+              type: array
+              items:
+                type: string
+                enum: [invoice.finalized, credit_note.created]
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationOrganization'
     BillingConfigurationCustomer:
