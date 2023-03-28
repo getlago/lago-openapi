@@ -1852,6 +1852,7 @@ paths:
           explode: true
           schema:
             type: string
+            format: 'date'
             example: '2022-07-08'
         - name: issuing_date_to
           in: query
@@ -1860,6 +1861,7 @@ paths:
           explode: true
           schema:
             type: string
+            format: 'date'
             example: '2022-08-09'
         - name: status
           in: query
@@ -2789,7 +2791,8 @@ components:
           example: 3
         expiration_at:
           type: string
-          example: '2022-09-14T23:59:59'
+          format: 'date-time'
+          example: '2022-09-14T23:59:59Z'
         expiration:
           type: string
           description: Expiration type
