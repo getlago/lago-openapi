@@ -2493,6 +2493,7 @@ components:
           example: 'description'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         field_name:
           type: string
@@ -2613,6 +2614,7 @@ components:
           example: 'description'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         amount_cents:
           type: integer
@@ -2694,6 +2696,7 @@ components:
           example: 'EUR'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
     AppliedAddOn:
       type: object
@@ -2770,6 +2773,7 @@ components:
             example: 'code1'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         percentage_rate:
           type: number
@@ -2851,6 +2855,7 @@ components:
               example: 3
             expiration_at:
               type: string
+              format: 'date-time'
               example: '2022-09-14T23:59:59Z'
             expiration:
               type: string
@@ -2928,12 +2933,15 @@ components:
           example: 2
         expiration_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T23:59:59Z'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         terminated_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         credits:
           type: array
@@ -3019,6 +3027,7 @@ components:
           example: 'example name'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         webhook_url:
           type: string
@@ -3152,6 +3161,7 @@ components:
           example: false
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
     CustomerObject:
       type: object
@@ -3178,6 +3188,7 @@ components:
           example: 'slug'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         country:
           type: string
@@ -3414,12 +3425,15 @@ components:
       properties:
         from_datetime:
           type: string
+          format: 'date-time'
           example: '2022-09-14T00:00:00Z'
         to_datetime:
           type: string
+          format: 'date-time'
           example: '2022-09-14T00:00:00Z'
         issuing_date:
           type: string
+          format: 'date-time'
           example: '2022-09-15T00:00:00Z'
         amount_cents:
           type: integer
@@ -3480,6 +3494,7 @@ components:
           example: 'code'
         timestamp:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         properties:
           type: object
@@ -3491,6 +3506,7 @@ components:
           example: '123456'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
     Event:
       type: object
@@ -3618,6 +3634,7 @@ components:
           example: 'bm_code'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         charge_model:
           type: string
@@ -3655,6 +3672,7 @@ components:
           example: 'example name'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         code:
           type: string
@@ -3832,18 +3850,23 @@ components:
             - anniversary
         subscription_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         started_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         terminated_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         canceled_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         previous_plan_code:
           type: string
@@ -3853,6 +3876,7 @@ components:
           example: 'next_code'
         downgrade_plan_date:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
     Subscription:
       type: object
@@ -3902,6 +3926,7 @@ components:
                 - anniversary
             subscription_at:
               type: string
+              format: 'date-time'
               example: '2022-08-08T00:00:00Z'
     SubscriptionUpdateInput:
       type: object
@@ -3916,6 +3941,7 @@ components:
               example: 'New name'
             subscription_at:
               type: string
+              format: 'date-time'
               example: '2022-08-08T00:00:00Z'
     CreditObject:
       type: object
@@ -4046,6 +4072,7 @@ components:
           example: 'John'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
     InvoiceObject:
       type: object
@@ -4082,9 +4109,11 @@ components:
           example: '222345'
         charges_from_date:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         issuing_date:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         invoice_type:
           type: string
@@ -4247,18 +4276,23 @@ components:
           example: 100.0
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         expiration_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T23:59:59Z'
         last_balance_sync_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         last_consumed_credit_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         terminated_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
     Wallet:
       type: object
@@ -4306,6 +4340,7 @@ components:
               example: '12345'
             expiration_at:
               type: string
+              format: 'date-time'
               example: '2022-09-14T23:59:59Z'
     WalletUpdateInput:
       type: object
@@ -4320,6 +4355,7 @@ components:
               example: 'Wallet name'
             expiration_at:
               type: string
+              format: 'date-time'
               example: '2022-09-14T23:59:59Z'
     WalletTransactionObject:
       type: object
@@ -4358,9 +4394,11 @@ components:
           example: 100.0
         settled_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
     WalletTransaction:
       type: object
@@ -4458,6 +4496,7 @@ components:
           example: '123456789'
         issuing_date:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         credit_status:
           type: string
@@ -4524,9 +4563,11 @@ components:
           example: 'EUR'
         created_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         updated_at:
           type: string
+          format: 'date-time'
           example: '2022-09-14T16:35:31Z'
         file_url:
           type: string
