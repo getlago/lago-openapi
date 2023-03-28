@@ -1605,6 +1605,7 @@ paths:
         required: true
         schema:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
     put:
       tags:
@@ -1687,6 +1688,7 @@ paths:
           required: true
           schema:
             type: string
+            format: 'uuid'
             example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Download an existing invoice
       operationId: downloadInvoice
@@ -1721,6 +1723,7 @@ paths:
           required: true
           schema:
             type: string
+            format: 'uuid'
             example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Retry invoice payment
       operationId: retryPayment
@@ -1757,6 +1760,7 @@ paths:
           required: true
           schema:
             type: string
+            format: 'uuid'
             example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Refresh a draft invoice
       operationId: refreshInvoice
@@ -1791,6 +1795,7 @@ paths:
           required: true
           schema:
             type: string
+            format: 'uuid'
             example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Finalize a draft invoice
       operationId: finalizeInvoice
@@ -1892,6 +1897,7 @@ paths:
         required: true
         schema:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
     get:
       tags:
@@ -1965,6 +1971,7 @@ paths:
         required: true
         schema:
           type: string
+          format: 'uuid'
           example: '321da83c-c007-4fbb-afcd-b00c07c41ssd'
     put:
       tags:
@@ -2164,6 +2171,7 @@ paths:
           required: true
           schema:
             type: string
+            format: 'uuid'
             example: '321da83c-c007-4fbb-afcd-b00c07c41ssd'
         - name: page
           in: query
@@ -2345,6 +2353,7 @@ paths:
           required: true
           schema:
             type: string
+            format: 'uuid'
             example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Download an existing credit note
       operationId: downloadCreditNote
@@ -2379,6 +2388,7 @@ paths:
           required: true
           schema:
             type: string
+            format: 'uuid'
             example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
       description: Void an existing credit note
       operationId: voidCreditNote
@@ -2483,6 +2493,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
@@ -2576,6 +2587,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         key:
           type: string
@@ -2604,6 +2616,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
@@ -2677,15 +2690,18 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_add_on_id:
           type: string
+          format: 'uuid'
           example: '457uj93c-c007-4fbb-afcd-b00c07c41kki'
         add_on_code:
           type: string
           example: 'code'
         lago_customer_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         external_customer_id:
           type: string
@@ -2743,6 +2759,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
@@ -2891,15 +2908,18 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_coupon_id:
           type: string
+          format: 'uuid'
           example: '544da83c-c007-4fbb-afcd-b00c07c41iit'
         coupon_code:
           type: string
           example: 'example_code'
         lago_customer_id:
           type: string
+          format: 'uuid'
           example: '321da83c-c007-4fbb-afcd-b00c07c41ssd'
         external_customer_id:
           type: string
@@ -3024,6 +3044,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
@@ -3154,6 +3175,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         key:
           type: string
@@ -3178,9 +3200,11 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         external_id:
           type: string
+          format: 'uuid'
           example: '886da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
@@ -3275,6 +3299,7 @@ components:
           properties:
             external_id:
               type: string
+              format: 'uuid'
               example: '886da83c-c007-4fbb-afcd-b00c07c41ffe'
             name:
               type: string
@@ -3331,6 +3356,7 @@ components:
                 properties:
                   id:
                     type: string
+                    format: 'uuid'
                     example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
                   key:
                     type: string
@@ -3365,6 +3391,7 @@ components:
           properties:
             lago_id:
               type: string
+              format: 'uuid'
               example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
             charge_model:
               type: string
@@ -3380,6 +3407,7 @@ components:
           properties:
             lago_id:
               type: string
+              format: 'uuid'
               example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
             name:
               type: string
@@ -3403,6 +3431,7 @@ components:
             properties:
               lago_id:
                 type: string
+                format: 'uuid'
                 example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
               key:
                 type: string
@@ -3486,12 +3515,14 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         transaction_id:
           type: string
           example: '987654321'
         lago_customer_id:
           type: string
+          format: 'uuid'
           example: '111da83c-c007-4fbb-afcd-b00c07c41iop'
         external_customer_id:
           type: string
@@ -3507,6 +3538,7 @@ components:
           type: object
         lago_subscription_id:
           type: string
+          format: 'uuid'
           example: '447da83c-c007-4fbb-afcd-b00c07c41ffe'
         external_subscription_id:
           type: string
@@ -3632,9 +3664,11 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_billable_metric_id:
           type: string
+          format: 'uuid'
           example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
         billable_metric_code:
           type: string
@@ -3673,6 +3707,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         name:
           type: string
@@ -3781,9 +3816,11 @@ components:
                 properties:
                   id:
                     type: string
+                    format: 'uuid'
                     example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
                   billable_metric_id:
                     type: string
+                    format: 'uuid'
                     example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
                   charge_model:
                     type: string
@@ -3825,12 +3862,14 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         external_id:
           type: string
           example: '12345'
         lago_customer_id:
           type: string
+          format: 'uuid'
           example: '995da83c-c007-4fbb-afcd-b00c07c41tre'
         external_customer_id:
           type: string
@@ -3961,6 +4000,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         amount_cents:
           type: integer
@@ -3978,6 +4018,7 @@ components:
           properties:
             lago_id:
               type: string
+              format: 'uuid'
               example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
             type:
               type: string
@@ -3996,6 +4037,7 @@ components:
           properties:
             lago_id:
               type: string
+              format: 'uuid'
               example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
             payment_status:
               type: string
@@ -4016,9 +4058,11 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_group_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         amount_cents:
           type: integer
@@ -4070,6 +4114,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         key:
           type: string
@@ -4107,6 +4152,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         sequential_id:
           type: integer
@@ -4227,6 +4273,7 @@ components:
                 properties:
                   id:
                     type: string
+                    format: 'uuid'
                     example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
                   key:
                     type: string
@@ -4250,9 +4297,11 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_customer_id:
           type: string
+          format: 'uuid'
           example: '254da83c-c007-4fbb-afcd-b00c07c41oit'
         external_customer_id:
           type: string
@@ -4377,9 +4426,11 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         lago_wallet_id:
           type: string
+          format: 'uuid'
           example: '985da83c-c007-4fbb-afcd-b00c07c41ffe'
         status:
           type: string
@@ -4435,6 +4486,7 @@ components:
           properties:
             wallet_id:
               type: string
+              format: 'uuid'
               example: '985da83c-c007-4fbb-afcd-b00c07c41ffe'
             paid_credits:
               type: number
@@ -4452,6 +4504,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         amount_cents:
           type: integer
@@ -4488,6 +4541,7 @@ components:
       properties:
         lago_id:
           type: string
+          format: 'uuid'
           example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
         sequential_id:
           type: integer
@@ -4497,6 +4551,7 @@ components:
           example: '123456789'
         lago_invoice_id:
           type: string
+          format: 'uuid'
           example: '144da83c-c007-4fbb-afcd-b00c07c41ffe'
         invoice_number:
           type: string
@@ -4617,6 +4672,7 @@ components:
           properties:
             invoice_id:
               type: string
+              format: 'uuid'
               example: '194da83c-c007-4fbb-afcd-b00c07c41fzh'
             reason:
               type: string
@@ -4647,6 +4703,7 @@ components:
                 properties:
                   fee_id:
                     type: string
+                    format: 'uuid'
                     example: '144da83c-c007-4fbb-afcd-b00c07c41ffe'
                   amount_cents:
                     type: integer
