@@ -19,8 +19,6 @@ The contribution documentation is available [here](https://github.com/getlago/la
 
 ## License
 
-Lago Ruby client is distributed under [MIT license](LICENSE).
-
 Lago is distributed under the [AGPLv3](LICENSE) License.
 
 Read more [here](https://www.getlago.com/blog/open-source-licensing-and-why-lago-chose-agplv3).
