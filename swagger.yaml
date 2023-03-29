@@ -1015,7 +1015,7 @@ paths:
                     properties:
                       portal_url:
                         type: string
-                        example: https://lago.app/customer-portal/abc
+                        example: 'https://app.lago.com/customer-portal/abc/'
         '401':
           description: Unauthorized error
           content:
@@ -4850,10 +4850,10 @@ components:
           example: 403
         error:
           type: string
-          example: Forbidden
+          example: 'Forbidden'
         code:
           type: string
-          example: feature_unavailable
+          example: 'feature_unavailable'
     ApiResponseNotAllowed:
       type: object
       required:
