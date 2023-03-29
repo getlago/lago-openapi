@@ -983,6 +983,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
+  /customers/{customer_external_id}/portal_url:
+    get:
+      tags:
+        - customers
+      summary: Get customer portal URL
+      parameters:
+        - name: customer_external_id
+          in: path
+          description: External ID of the existing customer
+          required: true
+          schema:
+            type: string
+            example: '12345'
+      description: Get customer portal URL
+      operationId: GetCustomerPortalUrl
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - customer
+                properties:
+                  customer:
+                    type: object
+                    required:
+                      - portal_url
+                    properties:
+                      portal_url:
+                        type: string
+                        example: 'https://app.lago.com/customer-portal/abc/'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseForbidden'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
   /customers/{customer_external_id}/applied_coupons/{applied_coupon_id}:
     delete:
       tags:
@@ -4786,6 +4837,23 @@ components:
         code:
           type: string
           example: 'object_not_found'
+    ApiResponseForbidden:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 403
+        error:
+          type: string
+          example: 'Forbidden'
+        code:
+          type: string
+          example: 'feature_unavailable'
     ApiResponseNotAllowed:
       type: object
       required:
