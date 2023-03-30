@@ -116,6 +116,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - billable_metrics
+      summary: Find Billable metrics
+      description: Find all billable metrics in certain organisation
+      operationId: findAllBillableMetrics
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetrics'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /billable_metrics/{code}:
     parameters:
       - name: code
@@ -219,43 +255,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /billable_metrics/:
-    get:
-      tags:
-        - billable_metrics
-      summary: Find Billable metrics
-      description: Find all billable metrics in certain organisation
-      operationId: findAllBillableMetrics
-      parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BillableMetrics'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /billable_metrics/{code}/groups:
     get:
       tags:
@@ -339,6 +338,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - add_ons
+      summary: Find add-ons
+      description: Find all add-ons in certain organisation
+      operationId: findAllAddOns
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOns'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /add_ons/{code}:
     parameters:
       - name: code
@@ -442,43 +477,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /add_ons/:
-    get:
-      tags:
-        - add_ons
-      summary: Find add-ons
-      description: Find all add-ons in certain organisation
-      operationId: findAllAddOns
-      parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOns'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /applied_add_ons:
     post:
       tags:
@@ -563,6 +561,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - coupons
+      summary: Find Coupons
+      description: Find all coupons in certain organisation
+      operationId: findAllCoupons
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupons'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /coupons/{code}:
     parameters:
       - name: code
@@ -666,43 +700,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /coupons/:
-    get:
-      tags:
-        - coupons
-      summary: Find Coupons
-      description: Find all coupons in certain organisation
-      operationId: findAllCoupons
-      parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Coupons'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /applied_coupons:
     post:
       tags:
@@ -748,7 +745,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /applied_coupons/:
     get:
       tags:
         - coupons
@@ -804,7 +800,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnauthorized'
-  /organizations/:
+  /organizations:
     put:
       tags:
         - organizations
@@ -882,6 +878,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - customers
+      summary: Find customers
+      description: Find all customers in certain organisation
+      operationId: findAllCustomers
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customers'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /customers/{external_id}:
     parameters:
       - name: external_id
@@ -1076,43 +1108,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /customers/:
-    get:
-      tags:
-        - customers
-      summary: Find customers
-      description: Find all customers in certain organisation
-      operationId: findAllCustomers
-      parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customers'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /events:
     post:
       tags:
@@ -1307,6 +1302,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - plans
+      summary: Find plans
+      description: Find all plans in certain organisation
+      operationId: findAllPlans
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plans'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /plans/{code}:
     parameters:
       - name: code
@@ -1410,43 +1441,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /plans/:
-    get:
-      tags:
-        - plans
-      summary: Find plans
-      description: Find all plans in certain organisation
-      operationId: findAllPlans
-      parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plans'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /subscriptions:
     post:
       tags:
@@ -1492,6 +1486,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - subscriptions
+      summary: Find subscriptions
+      description: Find all suscriptions for certain customer
+      operationId: findAllSubscriptions
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
   /subscriptions/{external_id}:
     parameters:
       - name: external_id
@@ -1576,13 +1620,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotAllowed'
-  /subscriptions/:
+  /webhooks/public_key:
     get:
       tags:
-        - subscriptions
-      summary: Find subscriptions
-      description: Find all suscriptions for certain customer
-      operationId: findAllSubscriptions
+        - webhooks
+      summary: Fetch webhook public key
+      description: Webhook public key
+      operationId: fetchPublicKey
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE='
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /invoices:
+    get:
+      tags:
+        - invoices
+      summary: Find all invoices
+      description: Find all invoices in certain organisation
+      operationId: findAllInvoices
       parameters:
         - name: page
           in: query
@@ -1603,45 +1668,46 @@ paths:
         - name: external_customer_id
           in: query
           description: External customer ID
-          required: true
+          required: false
           explode: true
           schema:
             type: string
             example: '12345'
+        - name: issuing_date_from
+          in: query
+          description: Date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: 'date'
+            example: '2022-07-08'
+        - name: issuing_date_to
+          in: query
+          description: Date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: 'date'
+            example: '2022-08-09'
+        - name: status
+          in: query
+          description: Status
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - draft
+              - finalized
       responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscriptions'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
-        '404':
-          description: Not Found error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotFound'
-  /webhooks/public_key/:
-    get:
-      tags:
-        - webhooks
-      summary: Fetch webhook public key
-      description: Webhook public key
-      operationId: fetchPublicKey
-      responses:
-        '200':
-          description: Successful response
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: 'MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE='
+                $ref: '#/components/schemas/Invoices'
         '401':
           description: Unauthorized error
           content:
@@ -1869,77 +1935,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /invoices/:
-    get:
-      tags:
-        - invoices
-      summary: Find all invoices
-      description: Find all invoices in certain organisation
-      operationId: findAllInvoices
-      parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-        - name: issuing_date_from
-          in: query
-          description: Date from
-          required: false
-          explode: true
-          schema:
-            type: string
-            format: 'date'
-            example: '2022-07-08'
-        - name: issuing_date_to
-          in: query
-          description: Date to
-          required: false
-          explode: true
-          schema:
-            type: string
-            format: 'date'
-            example: '2022-08-09'
-        - name: status
-          in: query
-          description: Status (draft or finalized)
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: 'draft'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invoices'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /fees/{id}:
     parameters:
       - name: id
@@ -2014,6 +2009,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - wallets
+      summary: Find wallets
+      description: Find all wallets for certain customer
+      operationId: findAllWallets
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallets'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /wallets/{id}:
     parameters:
       - name: id
@@ -2124,51 +2163,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotAllowed'
-  /wallets/:
-    get:
-      tags:
-        - wallets
-      summary: Find wallets
-      description: Find all wallets for certain customer
-      operationId: findAllWallets
-      parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Wallets'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /wallet_transactions:
     post:
       tags:
@@ -2314,6 +2308,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - credit_notes
+      summary: Find Credit notes
+      description: Find all credit notes in certain organisation
+      operationId: findAllCreditNotes
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNotes'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
   /credit_notes/{id}:
     parameters:
       - name: id
@@ -2468,51 +2506,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotAllowed'
-  /credit_notes/:
-    get:
-      tags:
-        - credit_notes
-      summary: Find Credit notes
-      description: Find all credit notes in certain organisation
-      operationId: findAllCreditNotes
-      parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreditNotes'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseUnauthorized'
+
 components:
   schemas:
     BillableMetricGroup:
