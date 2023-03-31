@@ -4131,6 +4131,14 @@ components:
         events_count:
           type: integer
           example: 5
+        from_date:
+          type: string
+          format: 'date-time'
+          example: '2022-08-08T00:00:00Z'
+        to_date:
+          type: string
+          format: 'date-time'
+          example: '2022-08-08T00:00:00Z'
         item:
           type: object
           required:
