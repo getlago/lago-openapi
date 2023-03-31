@@ -1723,7 +1723,7 @@ paths:
         schema:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
     put:
       tags:
         - invoices
@@ -1806,7 +1806,7 @@ paths:
           schema:
             type: string
             format: 'uuid'
-            example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
       description: Download an existing invoice
       operationId: downloadInvoice
       responses:
@@ -1841,7 +1841,7 @@ paths:
           schema:
             type: string
             format: 'uuid'
-            example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
       description: Retry invoice payment
       operationId: retryPayment
       responses:
@@ -1878,7 +1878,7 @@ paths:
           schema:
             type: string
             format: 'uuid'
-            example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
       description: Refresh a draft invoice
       operationId: refreshInvoice
       responses:
@@ -1913,7 +1913,7 @@ paths:
           schema:
             type: string
             format: 'uuid'
-            example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
       description: Finalize a draft invoice
       operationId: finalizeInvoice
       responses:
@@ -1944,7 +1944,7 @@ paths:
         schema:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
     get:
       tags:
         - fees
@@ -1970,6 +1970,223 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
+    put:
+      tags:
+        - fees
+      summary: Update an existing fee
+      description: Update an existing fee
+      operationId: updateFee
+      requestBody:
+        description: Payload to update a fee
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeeUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeObject'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /fees:
+    get:
+      tags:
+        - fees
+      summary: Find all fees
+      description: Find all fees of an organization and filter them
+      operationId: findAllFees
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+        - name: external_subscription_id
+          in: query
+          description: External subscription ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+        - name: currency
+          in: query
+          description: Amount currency
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 'EUR'
+        - name: fee_type
+          in: query
+          description: Fee type
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - charge
+              - add_on
+              - subscription
+              - credit
+              - instant_charge
+            example: 'charge'
+        - name: billable_metric_code
+          in: query
+          description: Code of the source billable metric
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 'bm_code'
+        - name: payment_status
+          in: query
+          description: Payment status
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - pending
+              - succeeded
+              - failed
+              - refunded
+            example: 'succeeded'
+        - name: created_at_from
+          in: query
+          description: Creation datetime from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: created_at_to
+          in: query
+          description: Creation date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: succeeded_at_from
+          in: query
+          description: Payment succees date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: succeeded_at_to
+          in: query
+          description: Payment succees date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: failed_at_from
+          in: query
+          description: Payment failed date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: failed_at_to
+          in: query
+          description: Payment failed date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: refunded_at_from
+          in: query
+          description: Payment refund date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: refunded_at_to
+          in: query
+          description: Payment refund date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeesPaginated'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
   /wallets:
     post:
       tags:
@@ -2062,7 +2279,7 @@ paths:
         schema:
           type: string
           format: 'uuid'
-          example: '321da83c-c007-4fbb-afcd-b00c07c41ssd'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
     put:
       tags:
         - wallets
@@ -2217,7 +2434,7 @@ paths:
           schema:
             type: string
             format: 'uuid'
-            example: '321da83c-c007-4fbb-afcd-b00c07c41ssd'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         - name: page
           in: query
           description: Number of page
@@ -2443,7 +2660,7 @@ paths:
           schema:
             type: string
             format: 'uuid'
-            example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
       description: Download an existing credit note
       operationId: downloadCreditNote
       responses:
@@ -2478,7 +2695,7 @@ paths:
           schema:
             type: string
             format: 'uuid'
-            example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
       description: Void an existing credit note
       operationId: voidCreditNote
       responses:
@@ -2539,7 +2756,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         name:
           type: string
           example: 'bm1'
@@ -2633,7 +2850,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         key:
           type: string
           example: 'region'
@@ -2662,7 +2879,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         name:
           type: string
           example: 'example name'
@@ -2736,18 +2953,18 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         lago_add_on_id:
           type: string
           format: 'uuid'
-          example: '457uj93c-c007-4fbb-afcd-b00c07c41kki'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         add_on_code:
           type: string
           example: 'code'
         lago_customer_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_customer_id:
           type: string
           example: '1234567'
@@ -2805,7 +3022,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         name:
           type: string
           example: 'coupon1'
@@ -2954,18 +3171,18 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         lago_coupon_id:
           type: string
           format: 'uuid'
-          example: '544da83c-c007-4fbb-afcd-b00c07c41iit'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         coupon_code:
           type: string
           example: 'example_code'
         lago_customer_id:
           type: string
           format: 'uuid'
-          example: '321da83c-c007-4fbb-afcd-b00c07c41ssd'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_customer_id:
           type: string
           example: '123456'
@@ -3090,7 +3307,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         name:
           type: string
           example: 'example name'
@@ -3221,7 +3438,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         key:
           type: string
           example: 'name'
@@ -3246,7 +3463,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_id:
           type: string
           example: '12345'
@@ -3400,7 +3617,7 @@ components:
                   id:
                     type: string
                     format: 'uuid'
-                    example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+                    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
                   key:
                     type: string
                     example: 'name'
@@ -3435,7 +3652,7 @@ components:
             lago_id:
               type: string
               format: 'uuid'
-              example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
             charge_model:
               type: string
               description: Charge model type
@@ -3453,7 +3670,7 @@ components:
             lago_id:
               type: string
               format: 'uuid'
-              example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
             name:
               type: string
               example: 'Example name'
@@ -3477,7 +3694,7 @@ components:
               lago_id:
                 type: string
                 format: 'uuid'
-                example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
+                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
               key:
                 type: string
                 example: 'key'
@@ -3561,14 +3778,14 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         transaction_id:
           type: string
           example: '987654321'
         lago_customer_id:
           type: string
           format: 'uuid'
-          example: '111da83c-c007-4fbb-afcd-b00c07c41iop'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_customer_id:
           type: string
           example: '123456'
@@ -3584,7 +3801,7 @@ components:
         lago_subscription_id:
           type: string
           format: 'uuid'
-          example: '447da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_subscription_id:
           type: string
           example: '123456'
@@ -3687,6 +3904,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FeeObject'
+    FeesPaginated:
+      type: object
+      required:
+        - fees
+        - meta
+      properties:
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    FeeUpdateInput:
+      type: object
+      required:
+        - invoice
+      properties:
+        invoice:
+          type: object
+          required:
+            - payment_status
+          properties:
+            payment_status:
+              type: string
+              description: Status
+              enum:
+                - pending
+                - succeeded
+                - failed
+                - refunded
     GroupPropertiesObject:
       type: object
       required:
@@ -3710,11 +3957,11 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         lago_billable_metric_id:
           type: string
           format: 'uuid'
-          example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         billable_metric_code:
           type: string
           example: 'bm_code'
@@ -3756,7 +4003,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         name:
           type: string
           example: 'example name'
@@ -3865,11 +4112,11 @@ components:
                   id:
                     type: string
                     format: 'uuid'
-                    example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+                    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
                   billable_metric_id:
                     type: string
                     format: 'uuid'
-                    example: '278da83c-c007-4fbb-afcd-b00c07c41utg'
+                    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
                   charge_model:
                     type: string
                     description: Charge model type
@@ -3913,14 +4160,14 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_id:
           type: string
           example: '12345'
         lago_customer_id:
           type: string
           format: 'uuid'
-          example: '995da83c-c007-4fbb-afcd-b00c07c41tre'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_customer_id:
           type: string
           example: '54321'
@@ -4051,7 +4298,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         amount_cents:
           type: integer
           example: 1200
@@ -4069,7 +4316,7 @@ components:
             lago_id:
               type: string
               format: 'uuid'
-              example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
             type:
               type: string
               example: 'coupon'
@@ -4088,7 +4335,7 @@ components:
             lago_id:
               type: string
               format: 'uuid'
-              example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
             payment_status:
               type: string
               enum:
@@ -4105,15 +4352,24 @@ components:
         - vat_amount_cents
         - vat_amount_currency
         - units
+        - payment_status
+        - created_at
       properties:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         lago_group_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        lago_invoice_id:
+          type: string
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+          format: uuid
+        external_subscription_id:
+          type: string
+          example: '54321'
         amount_cents:
           type: integer
           example: 1000
@@ -4138,12 +4394,37 @@ components:
         events_count:
           type: integer
           example: 5
+        payment_status:
+          type: string
+          enum:
+            - pending
+            - succeeded
+            - failed
+            - refunded
+        created_at:
+          type: string
+          example: '2022-09-14T16:35:31Z'
+          format: date-time
+        succeeded_at:
+          type: string
+          example: '2022-09-14T16:35:31Z'
+          format: date-time
+        failed_at:
+          type: string
+          example: '2022-09-14T16:35:31Z'
+          format: date-time
+        refunded_at:
+          type: string
+          example: '2022-09-14T16:35:31Z'
+          format: date-time
         item:
           type: object
           required:
             - type
             - code
             - name
+            - lago_item_id
+            - item_type
           properties:
             type:
               type: string
@@ -4159,13 +4440,24 @@ components:
             name:
               type: string
               example: 'name'
+            lago_item_id:
+              type: string
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              format: uuid
+            item_type:
+              type: string
+              enum:
+                - AddOn
+                - BillableMetric
+                - Subscription
+                - WalletTransaction
     InvoiceMetadataObject:
       type: object
       properties:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         key:
           type: string
           example: 'name'
@@ -4203,7 +4495,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         sequential_id:
           type: integer
           example: 12345
@@ -4324,7 +4616,7 @@ components:
                   id:
                     type: string
                     format: 'uuid'
-                    example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+                    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
                   key:
                     type: string
                     example: 'name'
@@ -4348,11 +4640,11 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         lago_customer_id:
           type: string
           format: 'uuid'
-          example: '254da83c-c007-4fbb-afcd-b00c07c41oit'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_customer_id:
           type: string
           example: '12345'
@@ -4477,11 +4769,11 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         lago_wallet_id:
           type: string
           format: 'uuid'
-          example: '985da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         status:
           type: string
           description: Status
@@ -4537,7 +4829,7 @@ components:
             wallet_id:
               type: string
               format: 'uuid'
-              example: '985da83c-c007-4fbb-afcd-b00c07c41ffe'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
             paid_credits:
               type: number
               example: 100.0
@@ -4555,7 +4847,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         amount_cents:
           type: integer
           example: 1220
@@ -4592,7 +4884,7 @@ components:
         lago_id:
           type: string
           format: 'uuid'
-          example: '183da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         sequential_id:
           type: integer
           example: 1234
@@ -4602,7 +4894,7 @@ components:
         lago_invoice_id:
           type: string
           format: 'uuid'
-          example: '144da83c-c007-4fbb-afcd-b00c07c41ffe'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         invoice_number:
           type: string
           example: '123456789'
@@ -4723,7 +5015,7 @@ components:
             invoice_id:
               type: string
               format: 'uuid'
-              example: '194da83c-c007-4fbb-afcd-b00c07c41fzh'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
             reason:
               type: string
               description: Reason
@@ -4754,7 +5046,7 @@ components:
                   fee_id:
                     type: string
                     format: 'uuid'
-                    example: '144da83c-c007-4fbb-afcd-b00c07c41ffe'
+                    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
                   amount_cents:
                     type: integer
                     example: 20
@@ -4775,6 +5067,28 @@ components:
                 - pending
                 - succeeded
                 - failed
+    PaginationMeta:
+      type: object
+      required:
+        - current_page
+        - total_pages
+        - total_count
+      properties:
+        current_page:
+          type: integer
+          description: Current page
+        next_page:
+          type: integer
+          description: Next page
+        prev_page:
+          type: integer
+          description: Previous page
+        total_pages:
+          type: integer
+          description: Total number of pages
+        total_count:
+          type: integer
+          description: Total number of records
     ApiResponseBadRequest:
       type: object
       required:
