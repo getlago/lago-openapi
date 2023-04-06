@@ -23,4 +23,4 @@ jobs:
           python -m pip install "openapi-spec-validator"
       - name: Run tests
         run: |
-          python -m openapi_spec_validator "swagger.yaml"
+          python -m openapi_spec_validator "openapi.yaml"
