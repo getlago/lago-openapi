@@ -3085,15 +3085,18 @@ components:
       properties:
         coupon:
           $ref: '#/components/schemas/CouponObject'
-    Coupons:
+    CouponsPaginated:
       type: object
       required:
         - coupons
+        - meta
       properties:
         coupons:
           type: array
           items:
             $ref: '#/components/schemas/CouponObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     CouponInput:
       type: object
       required:
