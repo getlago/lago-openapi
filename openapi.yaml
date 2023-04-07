@@ -2263,7 +2263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Wallets'
+                $ref: '#/components/schemas/WalletsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -4727,15 +4727,18 @@ components:
       properties:
         wallet:
           $ref: '#/components/schemas/WalletObject'
-    Wallets:
+    WalletsPaginated:
       type: object
       required:
         - wallets
+        - meta
       properties:
         wallets:
           type: array
           items:
             $ref: '#/components/schemas/WalletObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     WalletInput:
       type: object
       properties:
