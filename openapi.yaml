@@ -292,7 +292,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Groups'
+                $ref: '#/components/schemas/GroupsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -2860,15 +2860,18 @@ components:
         value:
           type: string
           example: EU
-    Groups:
+    GroupsPaginated:
       type: object
       required:
         - groups
+        - meta
       properties:
         groups:
           type: array
           items:
             $ref: '#/components/schemas/GroupObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     AddOnObject:
       type: object
       required:
