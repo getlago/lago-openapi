@@ -4642,6 +4642,7 @@ components:
         - rate_amount
         - credits_balance
         - balance
+        - balance_cents
         - consumed_credits
         - created_at
       properties:
@@ -4677,6 +4678,9 @@ components:
         balance:
           type: number
           example: 1000.0
+        balance_cents:
+          type: integer
+          example: 100000
         consumed_credits:
           type: number
           example: 100.0
