@@ -907,7 +907,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customers'
+                $ref: '#/components/schemas/CustomersPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -3539,15 +3539,18 @@ components:
       properties:
         customer:
           $ref: '#/components/schemas/CustomerObject'
-    Customers:
+    CustomersPaginated:
       type: object
       required:
         - customers
+        - meta
       properties:
         customers:
           type: array
           items:
             $ref: '#/components/schemas/CustomerObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     CustomerInput:
       type: object
       required:
@@ -5022,8 +5025,6 @@ components:
         file_url:
           type: string
           example: 'https://example.com'
-        customer:
-          $ref: '#/components/schemas/CustomerObject'
         items:
           type: array
           items:
