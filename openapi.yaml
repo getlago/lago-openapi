@@ -367,7 +367,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AddOns'
+                $ref: '#/components/schemas/AddOnsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -2909,15 +2909,18 @@ components:
       properties:
         add_on:
           $ref: '#/components/schemas/AddOnObject'
-    AddOns:
+    AddOnsPaginated:
       type: object
       required:
         - add_ons
+        - meta
       properties:
         add_ons:
           type: array
           items:
             $ref: '#/components/schemas/AddOnObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     AddOnInput:
       type: object
       required:
