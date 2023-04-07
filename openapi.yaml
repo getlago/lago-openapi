@@ -793,7 +793,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppliedCoupons'
+                $ref: '#/components/schemas/AppliedCouponsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -3172,7 +3172,6 @@ components:
         - amount_currency
         - frequency
         - created_at
-        - credits
       properties:
         lago_id:
           type: string
@@ -3234,10 +3233,17 @@ components:
           type: string
           format: 'date-time'
           example: '2022-09-14T16:35:31Z'
-        credits:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditObject'
+    AppliedCouponObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/AppliedCouponObject'
+        - type: object
+          required:
+            - credits
+          properties:
+            credits:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreditObject'
     AppliedCoupon:
       type: object
       required:
@@ -3245,15 +3251,18 @@ components:
       properties:
         applied_coupon:
           $ref: '#/components/schemas/AppliedCouponObject'
-    AppliedCoupons:
+    AppliedCouponsPaginated:
       type: object
       required:
         - applied_coupons
+        - meta
       properties:
         applied_coupons:
           type: array
           items:
-            $ref: '#/components/schemas/AppliedCouponObject'
+            $ref: '#/components/schemas/AppliedCouponObjectExtended'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     AppliedCouponInput:
       type: object
       required:
