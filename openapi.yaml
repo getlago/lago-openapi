@@ -1331,7 +1331,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Plans'
+                $ref: '#/components/schemas/PlansPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -4053,15 +4053,18 @@ components:
       properties:
         plan:
           $ref: '#/components/schemas/PlanObject'
-    Plans:
+    PlansPaginated:
       type: object
       required:
         - plans
+        - meta
       properties:
         plans:
           type: array
           items:
             $ref: '#/components/schemas/PlanObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     PlanInput:
       type: object
       required:
