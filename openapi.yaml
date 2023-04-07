@@ -2800,15 +2800,18 @@ components:
       properties:
         billable_metric:
           $ref: '#/components/schemas/BillableMetricObject'
-    BillableMetrics:
+    BillableMetricsPaginated:
       type: object
       required:
         - billable_metrics
+        - meta
       properties:
         billable_metrics:
           type: array
           items:
             $ref: '#/components/schemas/BillableMetricObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     BillableMetricInput:
       type: object
       required:
