@@ -1707,7 +1707,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Invoices'
+                $ref: '#/components/schemas/InvoicesPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -2473,7 +2473,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WalletTransactions'
+                $ref: '#/components/schemas/WalletTransactionsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -3905,17 +3905,14 @@ components:
           items:
             $ref: '#/components/schemas/FeeObject'
     FeesPaginated:
-      type: object
-      required:
-        - fees
-        - meta
-      properties:
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeeObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
+      allOf:
+        - $ref: '#/components/schemas/Fees'
+        - type: object
+          required:
+            - meta
+          properties:
+            meta:
+              $ref: '#/components/schemas/PaginationMeta'
     FeeUpdateInput:
       type: object
       required:
@@ -4496,9 +4493,6 @@ components:
         - total_amount_currency
         - legacy
         - customer
-        - subscriptions
-        - fees
-        - credits
       properties:
         lago_id:
           type: string
@@ -4567,29 +4561,38 @@ components:
           example: 'https://example.com'
         customer:
           $ref: '#/components/schemas/CustomerObject'
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionObject'
         metadata:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceMetadataObject'
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeeObject'
-        credits:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditObject'
+    InvoiceObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/InvoiceObject'
+        - type: object
+          required:
+            - subscriptions
+            - fees
+            - credits
+          properties:
+            credits:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreditObject'
+            fees:
+              type: array
+              items:
+                $ref: '#/components/schemas/FeeObject'
+            subscriptions:
+              type: array
+              items:
+                $ref: '#/components/schemas/SubscriptionObject'
     Invoice:
       type: object
       required:
         - invoice
       properties:
         invoice:
-          $ref: '#/components/schemas/InvoiceObject'
+          $ref: '#/components/schemas/InvoiceObjectExtended'
     Invoices:
       type: object
       required:
@@ -4599,6 +4602,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceObject'
+    InvoicesPaginated:
+      type: object
+      required:
+        - invoices
+        - meta
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     InvoiceInput:
       type: object
       required:
@@ -4829,6 +4844,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WalletTransactionObject'
+    WalletTransactionsPaginated:
+      allOf:
+        - $ref: '#/components/schemas/WalletTransactions'
+        - type: object
+          required:
+            - meta
+          properties:
+            meta:
+              $ref: '#/components/schemas/PaginationMeta'
     WalletTransactionInput:
       type: object
       required:
