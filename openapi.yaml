@@ -3052,6 +3052,14 @@ components:
           items:
             type: string
             example: 'code1'
+        limited_billable_metrics:
+          type: boolean
+          example: true
+        billable_metric_codes:
+          type: array
+          items:
+            type: string
+            example: 'code2'
         created_at:
           type: string
           format: 'date-time'
@@ -3153,6 +3161,11 @@ components:
                   items:
                     type: string
                     example: 'code1'
+                billable_metric_codes:
+                  type: array
+                  items:
+                    type: string
+                    example: 'code2'
     AppliedCouponObject:
       type: object
       required:
