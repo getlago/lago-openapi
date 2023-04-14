@@ -145,7 +145,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BillableMetrics'
+                $ref: '#/components/schemas/BillableMetricsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -292,7 +292,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Groups'
+                $ref: '#/components/schemas/GroupsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -367,7 +367,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AddOns'
+                $ref: '#/components/schemas/AddOnsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -590,7 +590,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Coupons'
+                $ref: '#/components/schemas/CouponsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -793,7 +793,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppliedCoupons'
+                $ref: '#/components/schemas/AppliedCouponsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -907,7 +907,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customers'
+                $ref: '#/components/schemas/CustomersPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -1331,7 +1331,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Plans'
+                $ref: '#/components/schemas/PlansPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -1523,7 +1523,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscriptions'
+                $ref: '#/components/schemas/SubscriptionsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -1707,7 +1707,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Invoices'
+                $ref: '#/components/schemas/InvoicesPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -2263,7 +2263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Wallets'
+                $ref: '#/components/schemas/WalletsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -2473,7 +2473,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WalletTransactions'
+                $ref: '#/components/schemas/WalletTransactionsPaginated'
         '401':
           description: Unauthorized error
           content:
@@ -2800,15 +2800,18 @@ components:
       properties:
         billable_metric:
           $ref: '#/components/schemas/BillableMetricObject'
-    BillableMetrics:
+    BillableMetricsPaginated:
       type: object
       required:
         - billable_metrics
+        - meta
       properties:
         billable_metrics:
           type: array
           items:
             $ref: '#/components/schemas/BillableMetricObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     BillableMetricInput:
       type: object
       required:
@@ -2857,15 +2860,18 @@ components:
         value:
           type: string
           example: EU
-    Groups:
+    GroupsPaginated:
       type: object
       required:
         - groups
+        - meta
       properties:
         groups:
           type: array
           items:
             $ref: '#/components/schemas/GroupObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     AddOnObject:
       type: object
       required:
@@ -2906,15 +2912,18 @@ components:
       properties:
         add_on:
           $ref: '#/components/schemas/AddOnObject'
-    AddOns:
+    AddOnsPaginated:
       type: object
       required:
         - add_ons
+        - meta
       properties:
         add_ons:
           type: array
           items:
             $ref: '#/components/schemas/AddOnObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     AddOnInput:
       type: object
       required:
@@ -3085,15 +3094,18 @@ components:
       properties:
         coupon:
           $ref: '#/components/schemas/CouponObject'
-    Coupons:
+    CouponsPaginated:
       type: object
       required:
         - coupons
+        - meta
       properties:
         coupons:
           type: array
           items:
             $ref: '#/components/schemas/CouponObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     CouponInput:
       type: object
       required:
@@ -3166,7 +3178,6 @@ components:
         - amount_currency
         - frequency
         - created_at
-        - credits
       properties:
         lago_id:
           type: string
@@ -3228,10 +3239,17 @@ components:
           type: string
           format: 'date-time'
           example: '2022-09-14T16:35:31Z'
-        credits:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditObject'
+    AppliedCouponObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/AppliedCouponObject'
+        - type: object
+          required:
+            - credits
+          properties:
+            credits:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreditObject'
     AppliedCoupon:
       type: object
       required:
@@ -3239,15 +3257,18 @@ components:
       properties:
         applied_coupon:
           $ref: '#/components/schemas/AppliedCouponObject'
-    AppliedCoupons:
+    AppliedCouponsPaginated:
       type: object
       required:
         - applied_coupons
+        - meta
       properties:
         applied_coupons:
           type: array
           items:
-            $ref: '#/components/schemas/AppliedCouponObject'
+            $ref: '#/components/schemas/AppliedCouponObjectExtended'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     AppliedCouponInput:
       type: object
       required:
@@ -3539,15 +3560,18 @@ components:
       properties:
         customer:
           $ref: '#/components/schemas/CustomerObject'
-    Customers:
+    CustomersPaginated:
       type: object
       required:
         - customers
+        - meta
       properties:
         customers:
           type: array
           items:
             $ref: '#/components/schemas/CustomerObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     CustomerInput:
       type: object
       required:
@@ -3905,17 +3929,14 @@ components:
           items:
             $ref: '#/components/schemas/FeeObject'
     FeesPaginated:
-      type: object
-      required:
-        - fees
-        - meta
-      properties:
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeeObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
+      allOf:
+        - $ref: '#/components/schemas/Fees'
+        - type: object
+          required:
+            - meta
+          properties:
+            meta:
+              $ref: '#/components/schemas/PaginationMeta'
     FeeUpdateInput:
       type: object
       required:
@@ -4056,15 +4077,18 @@ components:
       properties:
         plan:
           $ref: '#/components/schemas/PlanObject'
-    Plans:
+    PlansPaginated:
       type: object
       required:
         - plans
+        - meta
       properties:
         plans:
           type: array
           items:
             $ref: '#/components/schemas/PlanObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     PlanInput:
       type: object
       required:
@@ -4228,15 +4252,18 @@ components:
       properties:
         subscription:
           $ref: '#/components/schemas/SubscriptionObject'
-    Subscriptions:
+    SubscriptionsPaginated:
       type: object
       required:
         - subscriptions
+        - meta
       properties:
         subscriptions:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     SubscriptionCreateInput:
       type: object
       required:
@@ -4496,9 +4523,6 @@ components:
         - total_amount_currency
         - legacy
         - customer
-        - subscriptions
-        - fees
-        - credits
       properties:
         lago_id:
           type: string
@@ -4567,29 +4591,38 @@ components:
           example: 'https://example.com'
         customer:
           $ref: '#/components/schemas/CustomerObject'
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionObject'
         metadata:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceMetadataObject'
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeeObject'
-        credits:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditObject'
+    InvoiceObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/InvoiceObject'
+        - type: object
+          required:
+            - subscriptions
+            - fees
+            - credits
+          properties:
+            credits:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreditObject'
+            fees:
+              type: array
+              items:
+                $ref: '#/components/schemas/FeeObject'
+            subscriptions:
+              type: array
+              items:
+                $ref: '#/components/schemas/SubscriptionObject'
     Invoice:
       type: object
       required:
         - invoice
       properties:
         invoice:
-          $ref: '#/components/schemas/InvoiceObject'
+          $ref: '#/components/schemas/InvoiceObjectExtended'
     Invoices:
       type: object
       required:
@@ -4599,6 +4632,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceObject'
+    InvoicesPaginated:
+      type: object
+      required:
+        - invoices
+        - meta
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     InvoiceInput:
       type: object
       required:
@@ -4712,15 +4757,18 @@ components:
       properties:
         wallet:
           $ref: '#/components/schemas/WalletObject'
-    Wallets:
+    WalletsPaginated:
       type: object
       required:
         - wallets
+        - meta
       properties:
         wallets:
           type: array
           items:
             $ref: '#/components/schemas/WalletObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     WalletInput:
       type: object
       properties:
@@ -4829,6 +4877,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WalletTransactionObject'
+    WalletTransactionsPaginated:
+      allOf:
+        - $ref: '#/components/schemas/WalletTransactions'
+        - type: object
+          required:
+            - meta
+          properties:
+            meta:
+              $ref: '#/components/schemas/PaginationMeta'
     WalletTransactionInput:
       type: object
       required:
@@ -4989,8 +5046,6 @@ components:
         file_url:
           type: string
           example: 'https://example.com'
-        customer:
-          $ref: '#/components/schemas/CustomerObject'
         items:
           type: array
           items:
