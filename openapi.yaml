@@ -210,7 +210,7 @@ paths:
         - billable_metrics
       summary: Find billable metric by code
       description: Return a single billable metric
-      operationId: FindBillableMetric
+      operationId: findBillableMetric
       responses:
         '200':
           description: Successful response
@@ -432,7 +432,7 @@ paths:
         - add_ons
       summary: Find add-on by code
       description: Return a single add-on
-      operationId: FindAddOn
+      operationId: findAddOn
       responses:
         '200':
           description: Successful response
@@ -655,7 +655,7 @@ paths:
         - coupons
       summary: Find coupon by code
       description: Return a single coupon
-      operationId: FindCoupon
+      operationId: findCoupon
       responses:
         '200':
           description: Successful response
@@ -928,7 +928,7 @@ paths:
         - customers
       summary: Find customer by external ID
       description: Return a single customer
-      operationId: FindCustomer
+      operationId: findCustomer
       responses:
         '200':
           description: Successful response
@@ -953,7 +953,7 @@ paths:
         - customers
       summary: Delete a customer
       description: Return the deleted customer
-      operationId: DeleteCustomer
+      operationId: deleteCustomer
       responses:
         '200':
           description: Successful response
@@ -995,7 +995,7 @@ paths:
             type: string
             example: '54321'
       description: Return a customer current usage
-      operationId: FindCustomerCurrentUsage
+      operationId: findCustomerCurrentUsage
       responses:
         '200':
           description: Successful response
@@ -1029,7 +1029,7 @@ paths:
             type: string
             example: '12345'
       description: Get customer portal URL
-      operationId: GetCustomerPortalUrl
+      operationId: getCustomerPortalUrl
       responses:
         '200':
           description: Successful response
@@ -1192,7 +1192,7 @@ paths:
         - events
       summary: Find event by transaction ID
       description: Return a single event
-      operationId: FindEvent
+      operationId: findEvent
       responses:
         '200':
           description: Successful response
@@ -1396,7 +1396,7 @@ paths:
         - plans
       summary: Fin plan by code
       description: Return a single plan
-      operationId: FindPlan
+      operationId: findPlan
       responses:
         '200':
           description: Successful response
@@ -1773,7 +1773,7 @@ paths:
         - invoices
       summary: Find invoice by ID
       description: Return a single invoice
-      operationId: FindInvoice
+      operationId: findInvoice
       responses:
         '200':
           description: Successful response
@@ -1950,7 +1950,7 @@ paths:
         - fees
       summary: Find fee by ID
       description: Return a single fee
-      operationId: FindFee
+      operationId: findFee
       responses:
         '200':
           description: Successful response
@@ -2329,7 +2329,7 @@ paths:
         - wallets
       summary: Find wallet
       description: Return a wallet
-      operationId: FindWallet
+      operationId: findWallet
       responses:
         '200':
           description: Successful response
@@ -2627,7 +2627,7 @@ paths:
         - credit_notes
       summary: Find credit note
       description: Return a single credit note
-      operationId: FindCreditNote
+      operationId: findCreditNote
       responses:
         '200':
           description: Successful response
