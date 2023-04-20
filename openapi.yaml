@@ -4522,20 +4522,28 @@ components:
         - lago_id
         - sequential_id
         - number
-        - charges_from_date
         - issuing_date
+        - invoice_type
         - status
         - payment_status
-        - amount_cents
-        - amount_currency
+        - currency
+        - fees_amount_cents
+        - coupons_amount_cents
+        - credit_notes_amount_cents
+        - sub_total_vat_excluded_amount_cents
         - vat_amount_cents
-        - vat_amount_currency
-        - credit_amount_cents
-        - credit_amount_currency
+        - sub_total_vat_included_amount_cents
+        - prepaid_credit_amount_cents
         - total_amount_cents
-        - total_amount_currency
-        - legacy
+        - version_number
         - customer
+        - legacy
+        - amount_cents
+        - credit_amount_cents
+        - amount_currency
+        - total_amount_currency
+        - credit_amount_currency
+        - vat_amount_currency
       properties:
         lago_id:
           type: string
@@ -4547,10 +4555,6 @@ components:
         number:
           type: string
           example: '222345'
-        charges_from_date:
-          type: string
-          format: 'date-time'
-          example: '2022-09-14T16:35:31Z'
         issuing_date:
           type: string
           format: 'date-time'
@@ -4572,33 +4576,64 @@ components:
             - pending
             - succeeded
             - failed
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
+        currency:
           type: string
           example: 'EUR'
+        fees_amount_cents:
+          type: integer
+          example: 20
+        coupons_amount_cents:
+          type: integer
+          example: 20
+        credit_notes_amount_cents:
+          type: integer
+          example: 20
+        sub_total_vat_excluded_amount_cents:
+          type: integer
+          example: 20
         vat_amount_cents:
           type: integer
           example: 20
+        sub_total_vat_included_amount_cents:
+          type: integer
+          example: 20
+        prepaid_credit_amount_cents:
+          type: integer
+          example: 20
+        total_amount_cents:
+          type: integer
+          example: 20
+        version_number:
+          type: integer
+          example: 2
+        amount_cents:
+          type: integer
+          example: 1200
+          deprecated: true
+        amount_currency:
+          type: string
+          example: 'EUR'
+          deprecated: true
         vat_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
         credit_amount_cents:
           type: integer
           example: 20
+          deprecated: true
         credit_amount_currency:
           type: string
           example: 'EUR'
-        total_amount_cents:
-          type: integer
-          example: 1220
+          deprecated: true
         total_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
         legacy:
           type: boolean
           example: true
+          deprecated: true
         file_url:
           type: string
           example: 'https://example.com'
