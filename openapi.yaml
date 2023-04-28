@@ -3701,6 +3701,9 @@ components:
                 - volume
             instant:
               type: boolean
+            min_amount_cents:
+              type: integer
+              example: 1200
         billable_metric:
           type: object
           properties:
@@ -4015,6 +4018,9 @@ components:
         instant:
           type: boolean
           example: true
+        min_amount_cents:
+          type: integer
+          example: 1200
         properties:
           type: object
         group_properties:
@@ -4165,6 +4171,8 @@ components:
                       - volume
                   instant:
                     type: boolean
+                  min_amount_cents:
+                    type: integer
                   properties:
                     type: object
                   group_properties:
@@ -4407,6 +4415,14 @@ components:
           type: string
           example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
           format: uuid
+        lago_true_up_fee_id:
+          type: string
+          format: uuid
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        lago_true_up_parent_fee_id:
+          type: string
+          format: uuid
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         external_subscription_id:
           type: string
           example: '54321'
