@@ -1642,6 +1642,44 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnauthorized'
   /invoices:
+    post:
+      tags:
+        - invoices
+      summary: Create a new invoice
+      description: Create a new one off Invoice
+      operationId: createInvoice
+      requestBody:
+        description: Invoice payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceOneOffInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
     get:
       tags:
         - invoices
@@ -4705,6 +4743,37 @@ components:
                   value:
                     type: string
                     example: 'John'
+    InvoiceOneOffInput:
+      type: object
+      required:
+        - invoice
+      properties:
+        invoice:
+          type: object
+          properties:
+            external_customer_id:
+              type: string
+              example: '_ID_'
+            currency:
+              type: string
+              example: 'EUR'
+            fees:
+              type: array
+              items:
+                type: object
+                properties:
+                  add_on_code:
+                    type: string
+                    example: '12345'
+                  unit_amount_cents:
+                    type: integer
+                    example: 1200
+                  units:
+                    type: number
+                    example: 2.5
+                  description:
+                    type: string
+                    example: 'This is description'
     WalletObject:
       type: object
       required:
