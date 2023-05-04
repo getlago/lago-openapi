@@ -4342,6 +4342,7 @@ components:
         - amount_cents
         - amount_currency
         - invoice
+        - before_vat
       properties:
         lago_id:
           type: string
@@ -4353,6 +4354,9 @@ components:
         amount_currency:
           type: string
           example: 'EUR'
+        before_vat:
+          type: boolean
+          example: false
         item:
           type: object
           required:
@@ -4963,6 +4967,7 @@ components:
         - invoice_number
         - issuing_date
         - reason
+        - currency
         - total_amount_cents
         - total_amount_currency
         - credit_amount_cents
@@ -4975,6 +4980,7 @@ components:
         - vat_amount_currency
         - sub_total_vat_excluded_amount_cents
         - sub_total_vat_excluded_amount_currency
+        - coupons_adjustement_amount_cents
         - created_at
         - updated_at
       properties:
@@ -5026,42 +5032,54 @@ components:
         description:
           type: string
           example: 'description'
+        currency:
+          type: string
+          example: 'EUR'
         total_amount_cents:
           type: integer
           example: 1220
         total_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
         vat_amount_cents:
           type: integer
           example: 20
         vat_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
         sub_total_vat_excluded_amount_cents:
           type: integer
           example: 1000
         sub_total_vat_excluded_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
         balance_amount_cents:
           type: integer
           example: 20
         balance_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
         credit_amount_cents:
           type: integer
           example: 20
         credit_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
         refund_amount_cents:
           type: integer
           example: 20
         refund_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
+        coupons_adjustement_amount_cents:
+          type: integer
+          example: 20
         created_at:
           type: string
           format: 'date-time'
