@@ -4691,15 +4691,6 @@ components:
       properties:
         invoice:
           $ref: '#/components/schemas/InvoiceObjectExtended'
-    Invoices:
-      type: object
-      required:
-        - invoices
-      properties:
-        invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceObject'
     InvoicesPaginated:
       type: object
       required:
@@ -4927,13 +4918,6 @@ components:
           type: string
           format: 'date-time'
           example: '2022-09-14T16:35:31Z'
-    WalletTransaction:
-      type: object
-      required:
-        - wallet_transaction
-      properties:
-        wallet_transaction:
-          $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactions:
       type: object
       required:
@@ -5334,13 +5318,6 @@ components:
         code:
           type: string
           example: 'not_allowed'
-  requestBodies:
-    BillableMetric:
-      description: Billable metric object that needs to be created or updated
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BillableMetricInput'
   securitySchemes:
     bearerAuth:
       type: http
