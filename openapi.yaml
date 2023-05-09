@@ -69,6 +69,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object
+  - name: tax_rates
+    description: Everything about TaxRate collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/tax_rates/tax-rate-object
   - name: wallets
     description: Everything about Wallet collection
     externalDocs:
@@ -2233,6 +2238,184 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /tax_rates:
+    post:
+      tags:
+        - tax_rates
+      summary: Create a tax rate
+      description: Create a tax rate
+      operationId: createTaxRate
+      requestBody:
+        description: Tax rate payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxRateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRate'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - tax_rates
+      summary: Find tax rates
+      description: Find all tax rates in certain organisation
+      operationId: findAllTaxRates
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRatesPaginated'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+  /tax_rates/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing tax rate
+        required: true
+        schema:
+          type: string
+          example: 'example_code'
+    put:
+      tags:
+        - tax_rates
+      summary: Update an existing tax rate
+      description: Update an existing tax rate by code
+      operationId: updateTaxRate
+      requestBody:
+        description: Update an existing tax rate
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxRateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRate'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+    get:
+      tags:
+        - tax_rates
+      summary: Find tax rate by code
+      description: Return a single tax rate
+      operationId: findTaxRate
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRate'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+    delete:
+      tags:
+        - tax_rates
+      summary: Delete a tax rate
+      description: Delete a tax rate
+      operationId: destroyTaxRate
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRate'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
   /wallets:
     post:
       tags:
@@ -4838,6 +5021,86 @@ components:
                   description:
                     type: string
                     example: 'This is description'
+    TaxRateObject:
+      type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - value
+        - applied_by_default
+        - customers_count
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        name:
+          type: string
+          example: 'example name'
+        code:
+          type: string
+          example: 'example_code'
+        description:
+          type: string
+          example: 'description'
+        value:
+          type: number
+          example: 25.00
+        applied_by_default:
+          type: boolean
+          example: true
+          description: True when tax rate is one of the organization's default
+        customers_count:
+          type: integer
+          example: 12
+        created_at:
+          type: string
+          format: 'date-time'
+          example: '2022-09-14T16:35:31Z'
+    TaxRate:
+      type: object
+      required:
+        - tax_rate
+      properties:
+        tax_rate:
+          $ref: '#/components/schemas/TaxRateObject'
+    TaxRatesPaginated:
+      type: object
+      required:
+        - tax_rates
+        - meta
+      properties:
+        tax_rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxRateObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    TaxRateInput:
+      type: object
+      required:
+        - tax_rate
+      properties:
+        tax_rate:
+          type: object
+          properties:
+            name:
+              type: string
+              example: 'example name'
+            code:
+              type: string
+              example: 'example_code'
+            value:
+              type: number
+              example: 15.00
+            description:
+              type: string
+              example: 'description'
+            applied_by_default:
+              type: boolean
+              example: false
     WalletObject:
       type: object
       required:
