@@ -4750,6 +4750,8 @@ components:
       properties:
         invoice:
           type: object
+          required:
+            - external_customer_id
           properties:
             external_customer_id:
               type: string
@@ -4761,6 +4763,8 @@ components:
               type: array
               items:
                 type: object
+                required:
+                  - add_on_code
                 properties:
                   add_on_code:
                     type: string
