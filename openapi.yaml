@@ -1512,11 +1512,19 @@ paths:
         - name: external_customer_id
           in: query
           description: External customer ID
-          required: true
+          required: false
           explode: true
           schema:
             type: string
             example: '12345'
+        - name: plan_code
+          in: query
+          description: Code of the plan attached to the subscription
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 'example_code'
       responses:
         '200':
           description: Successful response
