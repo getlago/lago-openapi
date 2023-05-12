@@ -3561,6 +3561,7 @@ components:
         vat_rate:
           type: number
           example: 25.00
+          deprecated: true
     OrganizationObject:
       type: object
       required:
@@ -3617,6 +3618,11 @@ components:
           example: 'UTC'
         billing_configuration:
           $ref: '#/components/schemas/BillingConfigurationOrganization'
+        tax_rates:
+          description: List of default organization tax rates
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxRateObject'
     Organization:
       type: object
       required:
