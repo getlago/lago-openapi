@@ -1113,6 +1113,106 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
+  /customers/{customer_external_id}/applied_tax_rates:
+    post:
+      tags:
+        - customers
+      summary: Apply a tax rate
+      description: Apply an existing tax rate to a customer
+      operationId: applyTaxRate
+      parameters:
+        - name: customer_external_id
+          in: path
+          description: External ID of the customer
+          required: true
+          schema:
+            type: string
+            example: '12345'
+      requestBody:
+        description: Apply tax rate body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppliedTaxRateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedTaxRate'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
+  /customers/{customer_external_id}/applied_tax_rates/{tax_rate_code}:
+    delete:
+      tags:
+        - customers
+      summary: Delete customer's appplied tax rate
+      description: Delete customer's appplied tax rate
+      operationId: deleteAppliedTaxRate
+      parameters:
+        - name: customer_external_id
+          in: path
+          description: External ID of the customer
+          required: true
+          schema:
+            type: string
+            example: '12345'
+        - name: tax_rate_code
+          in: path
+          description: Code of the applied tax rate
+          required: true
+          schema:
+            type: string
+            example: '12345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedTaxRate'
+        '400':
+          description: Bad Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadRequest'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUnauthorized'
+        '404':
+          description: Not Found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotFound'
   /events:
     post:
       tags:
@@ -3546,6 +3646,58 @@ components:
             percentage_rate:
               type: number
               example: 25.00
+    AppliedTaxRate:
+      type: object
+      required:
+        - applied_tax_rate
+      properties:
+        applied_tax_rate:
+          $ref: '#/components/schemas/AppliedTaxRateObject'
+    AppliedTaxRateInput:
+      type: object
+      required:
+        - applied_tax_rate
+      properties:
+        applied_tax_rate:
+          type: object
+          required:
+            - tax_rate_code
+          properties:
+            tax_rate_code:
+              type: string
+              example: 'example_code'
+    AppliedTaxRateObject:
+      type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - lago_tax_rate_id
+        - tax_rate_code
+        - external_customer_id
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        lago_customer_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        lago_tax_rate_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        tax_rate_code:
+          type: string
+          example: 'example_code'
+        external_customer_id:
+          type: string
+          example: '123456'
+        created_at:
+          type: string
+          format: 'date-time'
+          example: '2022-09-14T16:35:31Z'
     BillingConfigurationOrganization:
       type: object
       properties:
@@ -3707,6 +3859,7 @@ components:
         vat_rate:
           type: number
           example: 25.00
+          deprecated: true
     CustomerMetadataObject:
       type: object
       properties:
