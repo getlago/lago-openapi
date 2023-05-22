@@ -69,11 +69,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object
-  - name: tax_rates
-    description: Everything about TaxRate collection
+  - name: taxes
+    description: Everything about Tax collection
     externalDocs:
       description: Find out more
-      url: https://doc.getlago.com/docs/api/tax_rates/tax-rate-object
+      url: https://doc.getlago.com/docs/api/taxes/tax-object
   - name: wallets
     description: Everything about Wallet collection
     externalDocs:
@@ -1113,13 +1113,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseNotFound'
-  /customers/{customer_external_id}/applied_tax_rates:
+  /customers/{customer_external_id}/applied_taxes:
     post:
       tags:
         - customers
-      summary: Apply a tax rate
-      description: Apply an existing tax rate to a customer
-      operationId: applyTaxRate
+      summary: Apply a tax
+      description: Apply an existing tax to a customer
+      operationId: applyTax
       parameters:
         - name: customer_external_id
           in: path
@@ -1129,11 +1129,11 @@ paths:
             type: string
             example: '12345'
       requestBody:
-        description: Apply tax rate body
+        description: Apply tax body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AppliedTaxRateInput'
+              $ref: '#/components/schemas/AppliedTaxInput'
         required: true
       responses:
         '200':
@@ -1141,7 +1141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppliedTaxRate'
+                $ref: '#/components/schemas/AppliedTax'
         '400':
           description: Bad Request error
           content:
@@ -1166,13 +1166,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /customers/{customer_external_id}/applied_tax_rates/{tax_rate_code}:
+  /customers/{customer_external_id}/applied_taxes/{tax_code}:
     delete:
       tags:
         - customers
-      summary: Delete customer's appplied tax rate
-      description: Delete customer's appplied tax rate
-      operationId: deleteAppliedTaxRate
+      summary: Delete customer's appplied tax
+      description: Delete customer's appplied tax
+      operationId: deleteAppliedTax
       parameters:
         - name: customer_external_id
           in: path
@@ -1181,9 +1181,9 @@ paths:
           schema:
             type: string
             example: '12345'
-        - name: tax_rate_code
+        - name: tax_code
           in: path
-          description: Code of the applied tax rate
+          description: Code of the applied tax
           required: true
           schema:
             type: string
@@ -1194,7 +1194,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppliedTaxRate'
+                $ref: '#/components/schemas/AppliedTax'
         '400':
           description: Bad Request error
           content:
@@ -2338,19 +2338,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
-  /tax_rates:
+  /taxes:
     post:
       tags:
         - tax_rates
-      summary: Create a tax rate
-      description: Create a tax rate
-      operationId: createTaxRate
+      summary: Create a tax
+      description: Create a tax
+      operationId: createTax
       requestBody:
-        description: Tax rate payload
+        description: Tax payload
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaxRateInput'
+              $ref: '#/components/schemas/TaxInput'
         required: true
       responses:
         '200':
@@ -2358,7 +2358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaxRate'
+                $ref: '#/components/schemas/Tax'
         '400':
           description: Bad Request error
           content:
@@ -2379,10 +2379,10 @@ paths:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
     get:
       tags:
-        - tax_rates
-      summary: Find tax rates
-      description: Find all tax rates in certain organisation
-      operationId: findAllTaxRates
+        - taxes
+      summary: Find taxes
+      description: Find all taxes in certain organization
+      operationId: findAllTaxes
       parameters:
         - name: page
           in: query
@@ -2406,34 +2406,34 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaxRatesPaginated'
+                $ref: '#/components/schemas/TaxesPaginated'
         '401':
           description: Unauthorized error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponseUnauthorized'
-  /tax_rates/{code}:
+  /taxes/{code}:
     parameters:
       - name: code
         in: path
-        description: Code of the existing tax rate
+        description: Code of the existing tax
         required: true
         schema:
           type: string
           example: 'example_code'
     put:
       tags:
-        - tax_rates
-      summary: Update an existing tax rate
-      description: Update an existing tax rate by code
-      operationId: updateTaxRate
+        - taxes
+      summary: Update an existing tax
+      description: Update an existing tax by code
+      operationId: updateTax
       requestBody:
-        description: Update an existing tax rate
+        description: Update an existing tax
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaxRateInput'
+              $ref: '#/components/schemas/TaxInput'
         required: true
       responses:
         '200':
@@ -2441,7 +2441,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaxRate'
+                $ref: '#/components/schemas/Tax'
         '400':
           description: Bad Request error
           content:
@@ -2468,17 +2468,17 @@ paths:
                 $ref: '#/components/schemas/ApiResponseUnprocessableEntity'
     get:
       tags:
-        - tax_rates
-      summary: Find tax rate by code
-      description: Return a single tax rate
-      operationId: findTaxRate
+        - taxes
+      summary: Find tax by code
+      description: Return a single tax
+      operationId: findTax
       responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaxRate'
+                $ref: '#/components/schemas/Tax'
         '401':
           description: Unauthorized error
           content:
@@ -2493,17 +2493,17 @@ paths:
                 $ref: '#/components/schemas/ApiResponseNotFound'
     delete:
       tags:
-        - tax_rates
-      summary: Delete a tax rate
-      description: Delete a tax rate
-      operationId: destroyTaxRate
+        - taxes
+      summary: Delete a tax
+      description: Delete a tax
+      operationId: destroyTax
       responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaxRate'
+                $ref: '#/components/schemas/Tax'
         '401':
           description: Unauthorized error
           content:
@@ -3646,33 +3646,33 @@ components:
             percentage_rate:
               type: number
               example: 25.00
-    AppliedTaxRate:
+    AppliedTax:
       type: object
       required:
-        - applied_tax_rate
+        - applied_tax
       properties:
-        applied_tax_rate:
-          $ref: '#/components/schemas/AppliedTaxRateObject'
-    AppliedTaxRateInput:
+        applied_tax:
+          $ref: '#/components/schemas/AppliedTaxObject'
+    AppliedTaxInput:
       type: object
       required:
-        - applied_tax_rate
+        - applied_tax
       properties:
-        applied_tax_rate:
+        applied_tax:
           type: object
           required:
-            - tax_rate_code
+            - tax_code
           properties:
-            tax_rate_code:
+            tax_code:
               type: string
               example: 'example_code'
-    AppliedTaxRateObject:
+    AppliedTaxObject:
       type: object
       required:
         - lago_id
         - lago_customer_id
-        - lago_tax_rate_id
-        - tax_rate_code
+        - lago_tax_id
+        - tax_code
         - external_customer_id
         - created_at
       properties:
@@ -3684,11 +3684,11 @@ components:
           type: string
           format: 'uuid'
           example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-        lago_tax_rate_id:
+        lago_tax_id:
           type: string
           format: 'uuid'
           example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-        tax_rate_code:
+        tax_code:
           type: string
           example: 'example_code'
         external_customer_id:
@@ -3770,11 +3770,11 @@ components:
           example: 'UTC'
         billing_configuration:
           $ref: '#/components/schemas/BillingConfigurationOrganization'
-        tax_rates:
-          description: List of default organization tax rates
+        taxes:
+          description: List of default organization taxes
           type: array
           items:
-            $ref: '#/components/schemas/TaxRateObject'
+            $ref: '#/components/schemas/TaxObject'
     Organization:
       type: object
       required:
@@ -5180,14 +5180,14 @@ components:
                   description:
                     type: string
                     example: 'This is description'
-    TaxRateObject:
+    TaxObject:
       type: object
       required:
         - lago_id
         - name
         - code
         - value
-        - applied_by_default
+        - applied_to_organization
         - customers_count
         - created_at
       properties:
@@ -5204,10 +5204,10 @@ components:
         description:
           type: string
           example: 'description'
-        value:
+        rate:
           type: number
           example: 25.00
-        applied_by_default:
+        applied_to_organization:
           type: boolean
           example: true
           description: True when tax rate is one of the organization's default
@@ -5218,31 +5218,31 @@ components:
           type: string
           format: 'date-time'
           example: '2022-09-14T16:35:31Z'
-    TaxRate:
+    Tax:
       type: object
       required:
-        - tax_rate
+        - tax
       properties:
-        tax_rate:
-          $ref: '#/components/schemas/TaxRateObject'
-    TaxRatesPaginated:
+        tax:
+          $ref: '#/components/schemas/TaxObject'
+    TaxesPaginated:
       type: object
       required:
-        - tax_rates
+        - taxes
         - meta
       properties:
-        tax_rates:
+        taxes:
           type: array
           items:
-            $ref: '#/components/schemas/TaxRateObject'
+            $ref: '#/components/schemas/TaxObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    TaxRateInput:
+    TaxInput:
       type: object
       required:
-        - tax_rate
+        - tax
       properties:
-        tax_rate:
+        tax:
           type: object
           properties:
             name:
@@ -5251,13 +5251,13 @@ components:
             code:
               type: string
               example: 'example_code'
-            value:
+            rate:
               type: number
               example: 15.00
             description:
               type: string
               example: 'description'
-            applied_by_default:
+            applied_to_organization:
               type: boolean
               example: false
     WalletObject:
