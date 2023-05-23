@@ -1216,11 +1216,11 @@ paths:
     post:
       tags:
         - events
-      summary: Estimate fees for an instant charge
-      description: Estimate the fees that would be created after reception of an event for a billable metric attached to one or multiple instant charges
+      summary: Estimate fees for an pay in advance charge
+      description: Estimate the fees that would be created after reception of an event for a billable metric attached to one or multiple pay in advance charges
       operationId: eventEstimateFees
       requestBody:
-        description: Event payload for instant fee estimate
+        description: Event payload for pay in advance fee estimate
         content:
           application/json:
             schema:
@@ -3745,7 +3745,7 @@ components:
                 - package
                 - percentage
                 - volume
-            instant:
+            pay_in_advance:
               type: boolean
             min_amount_cents:
               type: integer
@@ -4061,7 +4061,7 @@ components:
             - package
             - percentage
             - volume
-        instant:
+        pay_in_advance:
           type: boolean
           example: true
         min_amount_cents:
@@ -4215,7 +4215,7 @@ components:
                       - package
                       - percentage
                       - volume
-                  instant:
+                  pay_in_advance:
                     type: boolean
                   min_amount_cents:
                     type: integer
@@ -4500,6 +4500,9 @@ components:
         events_count:
           type: integer
           example: 5
+        pay_in_advance:
+          type: boolean
+          example: true
         from_date:
           type: string
           format: 'date-time'
