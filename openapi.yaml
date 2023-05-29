@@ -4064,6 +4064,9 @@ components:
         pay_in_advance:
           type: boolean
           example: true
+        invoiceable:
+          type: boolean
+          example: true
         min_amount_cents:
           type: integer
           example: 1200
@@ -4216,6 +4219,8 @@ components:
                       - percentage
                       - volume
                   pay_in_advance:
+                    type: boolean
+                  invoiceable:
                     type: boolean
                   min_amount_cents:
                     type: integer
@@ -4501,6 +4506,9 @@ components:
           type: integer
           example: 5
         pay_in_advance:
+          type: boolean
+          example: true
+        invoiceable:
           type: boolean
           example: true
         from_date:
