@@ -3698,6 +3698,40 @@ components:
           type: string
           format: 'date-time'
           example: '2022-09-14T16:35:31Z'
+    BaseAppliedTax:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        lago_tax_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        tax_name:
+          type: string
+          example: 'example name'
+        tax_code:
+          type: string
+          example: 'example_code'
+        tax_rate:
+          type: string
+          format: "^[0-9]+.?[0-9]*$"
+          example: "25.00"
+        tax_description:
+          type: string
+          example: 'description'
+        amount_cents:
+          type: integer
+          example: 20
+        amount_currency:
+          type: string
+          example: 'EUR'
+        created_at:
+          type: string
+          format: 'date-time'
+          example: '2022-09-14T16:35:31Z'
     BillingConfigurationOrganization:
       type: object
       properties:
@@ -4804,6 +4838,15 @@ components:
                 - pending
                 - succeeded
                 - failed
+    FeeAppliedTaxObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseAppliedTax'
+      type: object
+      properties:
+        lago_fee_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
     FeeObject:
       type: object
       required:
@@ -4811,10 +4854,10 @@ components:
         - item
         - amount_cents
         - amount_currency
-        - vat_amount_cents
-        - vat_amount_currency
         - units
         - payment_status
+        - taxes_amount_cents
+        - taxes_rate
         - created_at
       properties:
         lago_id:
@@ -4846,12 +4889,21 @@ components:
         amount_currency:
           type: string
           example: 'EUR'
+        taxes_amount_cents:
+          type: integer
+          example: 20
+        taxes_rate:
+          type: string
+          format: "^[0-9]+.?[0-9]*$"
+          example: '20.0'
         vat_amount_cents:
           type: integer
           example: 200
+          deprecated: true
         vat_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: true
         units:
           type: string
           example: "2.5"
@@ -4935,6 +4987,19 @@ components:
                 - BillableMetric
                 - Subscription
                 - WalletTransaction
+        applied_taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeAppliedTaxObject'
+    InvoiceAppliedTaxObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseAppliedTax'
+      type: object
+      properties:
+        lago_invoice_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
     InvoiceMetadataObject:
       type: object
       properties:
@@ -4966,20 +5031,12 @@ components:
         - fees_amount_cents
         - coupons_amount_cents
         - credit_notes_amount_cents
-        - sub_total_vat_excluded_amount_cents
-        - vat_amount_cents
-        - sub_total_vat_included_amount_cents
+        - sub_total_excluding_taxes_amount_cents
+        - sub_total_including_taxes_amount_cents
         - prepaid_credit_amount_cents
         - total_amount_cents
         - version_number
         - customer
-        - legacy
-        - amount_cents
-        - credit_amount_cents
-        - amount_currency
-        - total_amount_currency
-        - credit_amount_currency
-        - vat_amount_currency
       properties:
         lago_id:
           type: string
@@ -5028,12 +5085,26 @@ components:
         sub_total_vat_excluded_amount_cents:
           type: integer
           example: 20
+          deprecated: true
+        sub_total_excluding_taxes_amount_cents:
+          type: integer
+          example: 20
+          deprecated: true
+        sub_total_including_taxes_amount_cents:
+          type: integer
+          example: 20
+          deprecated: true
+        taxes_amount_cents:
+          type: integer
+          example: 20
         vat_amount_cents:
           type: integer
           example: 20
+          deprecated: true
         sub_total_vat_included_amount_cents:
           type: integer
           example: 20
+          deprecated: true
         prepaid_credit_amount_cents:
           type: integer
           example: 20
@@ -5080,6 +5151,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceMetadataObject'
+        applied_taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceAppliedTaxObject'
     InvoiceObjectExtended:
       allOf:
         - $ref: '#/components/schemas/InvoiceObject'
