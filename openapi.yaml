@@ -3717,7 +3717,7 @@ components:
           example: 'example_code'
         tax_rate:
           type: string
-          format: "^[0-9]+.?[0-9]*$"
+          format: '^[0-9]+.?[0-9]*$'
           example: "25.00"
         tax_description:
           type: string
@@ -4894,7 +4894,7 @@ components:
           example: 20
         taxes_rate:
           type: string
-          format: "^[0-9]+.?[0-9]*$"
+          format: '^[0-9]+.?[0-9]*$'
           example: '20.0'
         vat_amount_cents:
           type: integer
@@ -5583,6 +5583,15 @@ components:
           example: 'EUR'
         fee:
           $ref: '#/components/schemas/FeeObject'
+    CreditNoteAppliedTaxObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseAppliedTax'
+      type: object
+      properties:
+        lago_credit_note_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
     CreditNoteObject:
       type: object
       required:
@@ -5595,18 +5604,13 @@ components:
         - reason
         - currency
         - total_amount_cents
-        - total_amount_currency
         - credit_amount_cents
-        - credit_amount_currency
         - refund_amount_cents
-        - refund_amount_currency
         - balance_amount_cents
-        - balance_amount_currency
-        - vat_amount_cents
-        - vat_amount_currency
-        - sub_total_vat_excluded_amount_cents
-        - sub_total_vat_excluded_amount_currency
+        - taxes_amount_cents
+        - sub_total_excluding_taxes_amount_cents
         - coupons_adjustement_amount_cents
+        - taxes_rate
         - created_at
         - updated_at
       properties:
@@ -5671,6 +5675,7 @@ components:
         vat_amount_cents:
           type: integer
           example: 20
+          deprecated: true
         vat_amount_currency:
           type: string
           example: 'EUR'
@@ -5706,6 +5711,13 @@ components:
         coupons_adjustement_amount_cents:
           type: integer
           example: 20
+        taxes_amount_cents:
+          type: integer
+          example: 20
+        taxes_rate:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          example: '20.0'
         created_at:
           type: string
           format: 'date-time'
@@ -5721,6 +5733,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreditNoteItemObject'
+        applied_taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditNoteAppliedTaxObject'
     CreditNote:
       type: object
       required:
