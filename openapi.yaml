@@ -3963,6 +3963,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomerMetadataObject'
+        taxes:
+          description: List of customer taxes
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxObject'
     Customer:
       type: object
       required:
