@@ -4192,12 +4192,10 @@ components:
         - from_datetime
         - to_datetime
         - issuing_date
+        - currency
         - amount_cents
-        - amount_currency
+        - taxes_amount_cents
         - total_amount_cents
-        - total_amount_currency
-        - vat_amount_cents
-        - vat_amount_currency
         - charges_usage
       properties:
         from_datetime:
@@ -4212,24 +4210,34 @@ components:
           type: string
           format: 'date-time'
           example: '2022-09-15T00:00:00Z'
+        currency:
+          type: string
+          example: 'EUR'
         amount_cents:
           type: integer
           example: 1200
         amount_currency:
           type: string
           example: 'EUR'
+          deprecated: false
         total_amount_cents:
           type: integer
           example: 1400
         total_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: false
+        taxes_amount_cents:
+          type: integer
+          example: 200
         vat_amount_cents:
           type: integer
           example: 200
+          deprecated: false
         vat_amount_currency:
           type: string
           example: 'EUR'
+          deprecated: false
         charges_usage:
           type: array
           items:
@@ -5592,6 +5600,9 @@ components:
           type: string
           format: 'uuid'
           example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        base_amount_cents:
+          type: integer
+          example: 100
     CreditNoteObject:
       type: object
       required:
