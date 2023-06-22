@@ -1,0 +1,19 @@
+type: object
+required:
+  - status
+  - error
+  - code
+  - error_details
+properties:
+  status:
+    type: integer
+    format: int32
+    example: 422
+  error:
+    type: string
+    example: 'Unprocessable entity'
+  code:
+    type: string
+    example: 'validation_errors'
+  error_details:
+    type: object

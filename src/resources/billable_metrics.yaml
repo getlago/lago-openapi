@@ -1,0 +1,26 @@
+post:
+  tags:
+    - billable_metrics
+  summary: Create a billable metric
+  description:  This endpoint creates a new billable metric representing a pricing component of your application.
+  operationId: createBillableMetric
+  requestBody:
+    description: Billable metric payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/BillableMetricInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Billable metric created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillableMetric.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

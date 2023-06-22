@@ -1,0 +1,33 @@
+type: object
+description: 'Group with one or two dimensions, used to apply differentiated pricing based on additional properties of the billable metric.'
+required:
+  - key
+  - values
+properties:
+  key:
+    type: string
+    description: 'Name of the event property used to group values.'
+    example: 'region'
+  values:
+    type: array
+    description: 'Array of strings or objects representing all possible values.'
+    example: ['us-east-1', 'us-east-2', 'eu-west-1']
+    items:
+      oneOf:
+        - type: string
+        - type: object
+          description: 'Second dimension of group.'
+          required:
+            - key
+            - values
+          properties:
+            key:
+              type: string
+              description: 'Name of the event property used to group values.'
+              example: 'region'
+            values:
+              type: array
+              description: 'Array of strings representing all possible values.'
+              example: ['us-east-1', 'us-east-2', 'eu-west-1']
+              items:
+                type: string

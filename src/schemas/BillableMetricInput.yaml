@@ -1,0 +1,35 @@
+type: object
+required:
+  - billable_metric
+properties:
+  billable_metric:
+    type: object
+    properties:
+      name:
+        type: string
+        example: 'Storage'
+        description: 'Name of the billable metric.'
+      code:
+        type: string
+        example: 'storage'
+        description: 'Unique code used to identify the billable metric associated with the API request. This code associates each event with the correct metric.'
+      description:
+        type: string
+        example: 'GB of storage used in my application'
+        description: 'Internal description of the billable metric.'
+      field_name:
+        type: string
+        example: 'gb'
+        description: 'Property of the billable metric used for aggregating usage data. This field is not required for count_agg.'
+      aggregation_type:
+        type: string
+        example: 'sum_agg'
+        description: 'Aggregation method used to compute usage for this billable metric. Possible values are count_agg, sum_agg, max_agg or unique_count_agg.'
+        enum:
+          - count_agg
+          - sum_agg
+          - max_agg
+          - unique_count_agg
+          - recurring_count_agg
+      group:
+        $ref: './BillableMetricGroup.yaml'
