@@ -1,0 +1,42 @@
+get:
+  tags:
+    - billable_metrics
+  summary: Find a billable metric's groups
+  description: This endpoint retrieves all groups for a billable metric.
+  operationId: findAllBillableMetricGroups
+  parameters:
+    - name: code
+      in: path
+      description: Code of the existing billable metric.
+      required: true
+      schema:
+        type: string
+        example: 'example_code'
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: List of billable metric's groups
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/GroupsPaginated.yaml'
+          example:
+            groups:
+              - lago_id: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+                key: 'region'
+                value: 'us-east-1'
+              - lago_id: '1a901a90-1a90-1a90-1a90-1a901a288d80'
+                key: 'region'
+                value: 'us-east-2'
+              - lago_id: '3b288a90-1a20-1a90-1a90-1a921d921a90'
+                key: 'region'
+                value: 'eu-west-1'
+            meta:
+              current_page: 1
+              next_page: null
+              prev_page: null
+              total_pages: 1
+              total_count: 2
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

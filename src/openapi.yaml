@@ -26,6 +26,8 @@ paths:
     $ref: './resources/billable_metrics.yaml'
   /billable_metrics/{code}:
     $ref: './resources/billable_metric.yaml'
+  /billable_metrics/{code}/groups:
+    $ref: './resources/billable_metric_groups.yaml'
 components:
   parameters:
     $ref: './parameters/_index.yaml'
