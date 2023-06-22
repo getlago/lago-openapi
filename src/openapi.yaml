@@ -3,7 +3,7 @@ info:
   title: Lago API documentation
   description: |-
     Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 0.36.0-beta
+  version: 0.37.0-beta
   license:
     name: AGPLv3
   contact:
@@ -23,11 +23,17 @@ tags:
       url: https://doc.getlago.com/docs/api/billable_metrics/billable-metric-object
 paths:
   /billable_metrics:
-    $ref: "./resources/billable_metrics.yaml"
+    $ref: './resources/billable_metrics.yaml'
+  /billable_metrics/{code}:
+    $ref: './resources/billable_metric.yaml'
 components:
   parameters:
-    $ref: "./parameters/_index.yaml"
+    $ref: './parameters/_index.yaml'
   schemas:
-    $ref: "./schemas/_index.yaml"
+    $ref: './schemas/_index.yaml'
   responses:
-    $ref: "./responses/_index.yaml"
+    $ref: './responses/_index.yaml'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

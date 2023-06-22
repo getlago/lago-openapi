@@ -1,0 +1,70 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing billable metric.
+    required: true
+    schema:
+      type: string
+      example: 'storage'
+put:
+  tags:
+    - billable_metrics
+  summary: Update a billable metric
+  description: This endpoint updates an existing billable metric representing a pricing component of your application.
+  operationId: updateBillableMetric
+  requestBody:
+    description: Billable metric payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/BillableMetricInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Billable metric updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillableMetric.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - billable_metrics
+  summary: Delete a billable metric
+  description: This endpoint deletes an existing billable metric representing a pricing component of your application.
+  operationId: destroyBillableMetric
+  responses:
+    '200':
+      description: Billable metric deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillableMetric.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+get:
+  tags:
+    - billable_metrics
+  summary: Find a billable metric
+  description: This endpoint retrieves an existing billable metric that represents a pricing component of your application. The billable metric is identified by its unique code.
+  operationId: findBillableMetric
+  responses:
+    '200':
+      description: Billable metric
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillableMetric.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

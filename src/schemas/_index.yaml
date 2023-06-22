@@ -4,6 +4,8 @@ ApiErrorUnauthorized:
   $ref: './ApiErrorUnauthorized.yaml'
 ApiErrorUnprocessableEntity:
   $ref: './ApiErrorUnprocessableEntity.yaml'
+ApiErrorNotFound:
+  $ref: './ApiErrorNotFound.yaml'
 BillableMetric:
   $ref: './BillableMetric.yaml'
 BillableMetricObject:
@@ -12,3 +14,7 @@ BillableMetricInput:
   $ref: './BillableMetricInput.yaml'
 BillableMetricGroupInput:
   $ref: './BillableMetricGroup.yaml'
+BillableMetricsPaginated:
+  $ref: './BillableMetricsPaginated.yaml'
+PaginationMeta:
+  $ref: './PaginationMeta.yaml'

@@ -24,3 +24,21 @@ post:
       $ref: '../responses/Unauthorized.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - billable_metrics
+  summary: Find a billable metric
+  description: This endpoint retrieves all existing billable metrics that represent pricing components of your application.
+  operationId: findAllBillableMetrics
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: List of billable metrics
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillableMetricsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
