@@ -3733,8 +3733,8 @@ components:
         - groups
       properties:
         units:
-          type: number
-          example: 3.0
+          type: string
+          example: '3.0'
         amount_cents:
           type: integer
           example: 1200
@@ -3800,8 +3800,8 @@ components:
                 type: string
                 example: 'value'
               units:
-                type: number
-                example: 3.5
+                type: string
+                example: '3.5'
               amount_cents:
                 type: integer
                 example: 1200
@@ -4507,7 +4507,7 @@ components:
           example: 'EUR'
         units:
           type: string
-          example: "2.5"
+          example: '2.5'
         total_amount_cents:
           type: integer
           example: 1200
@@ -4877,21 +4877,21 @@ components:
           type: string
           example: 'Name'
         rate_amount:
-          type: number
-          example: 2.0
+          type: string
+          example: '2.0'
         credits_balance:
-          type: number
-          example: 500.0
+          type: string
+          example: '500.0'
         balance:
-          type: number
-          example: 1000.0
+          type: string
+          example: '1000.0'
           deprecated: true
         balance_cents:
           type: integer
           example: 100000
         consumed_credits:
-          type: number
-          example: 100.0
+          type: string
+          example: '100.0'
         created_at:
           type: string
           format: 'date-time'
@@ -4945,17 +4945,17 @@ components:
               type: string
               example: 'Wallet name'
             rate_amount:
-              type: number
-              example: 2.0
+              type: string
+              example: '2.0'
             currency:
               type: string
               example: 'EUR'
             paid_credits:
-              type: number
-              example: 500.0
+              type: string
+              example: '500.0'
             granted_credits:
-              type: number
-              example: 10.0
+              type: string
+              example: '10.0'
             external_customer_id:
               type: string
               example: '12345'
@@ -5010,11 +5010,11 @@ components:
             - inbound
             - outbound
         amount:
-          type: number
-          example: 500.0
+          type: string
+          example: '500.0'
         credit_amount:
-          type: number
-          example: 100.0
+          type: string
+          example: '100.0'
         settled_at:
           type: string
           format: 'date-time'
@@ -5056,11 +5056,11 @@ components:
               format: 'uuid'
               example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
             paid_credits:
-              type: number
-              example: 100.0
+              type: string
+              example: '100.0'
             granted_credits:
-              type: number
-              example: 10.0
+              type: string
+              example: '10.0'
     CreditNoteItemObject:
       type: object
       required:
