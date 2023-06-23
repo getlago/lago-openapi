@@ -1,0 +1,44 @@
+post:
+  tags:
+    - billable_metrics
+  summary: Create a billable metric
+  description:  This endpoint creates a new billable metric representing a pricing component of your application.
+  operationId: createBillableMetric
+  requestBody:
+    description: Billable metric payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/BillableMetricCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Billable metric created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillableMetric.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - billable_metrics
+  summary: List all billable metrics
+  description: This endpoint retrieves all existing billable metrics that represent pricing components of your application.
+  operationId: findAllBillableMetrics
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: List of billable metrics
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillableMetricsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

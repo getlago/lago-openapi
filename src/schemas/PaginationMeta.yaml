@@ -1,0 +1,28 @@
+type: object
+required:
+  - current_page
+  - total_pages
+  - total_count
+properties:
+  current_page:
+    type: integer
+    description: Current page.
+    example: 2
+  next_page:
+    type: integer
+    description: Next page.
+    example: 3
+    nullable: true
+  prev_page:
+    type: integer
+    description: Previous page.
+    example: 1
+    nullable: true
+  total_pages:
+    type: integer
+    description: Total number of pages.
+    example: 4
+  total_count:
+    type: integer
+    description: Total number of records.
+    example: 70

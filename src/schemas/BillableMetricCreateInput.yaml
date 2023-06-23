@@ -1,0 +1,11 @@
+type: object
+required:
+  - billable_metric
+properties:
+  billable_metric:
+    allOf:
+    - $ref: './BillableMetricBaseInput.yaml'
+    - required:
+      - name
+      - code
+      - aggregation_type

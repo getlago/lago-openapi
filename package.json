@@ -1,0 +1,24 @@
+{
+  "name": "lago-openapi",
+  "version": "0.37.0-beta",
+  "description": "Open API specification for Lago project.",
+  "main": "index.js",
+  "scripts": {
+    "build": "swagger-cli bundle src/openapi.yaml --outfile openapi.yaml --type yaml",
+    "test": "npm run build && spectral lint openapi.yaml",
+    "clean": "rm -r _build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getlago/lago-openapi.git"
+  },
+  "license": "AGPLv3",
+  "bugs": {
+    "url": "https://github.com/getlago/lago-openapi/issues"
+  },
+  "homepage": "https://github.com/getlago/lago-openapi#README",
+  "dependencies": {
+    "@apidevtools/swagger-cli": "^4.0.4",
+    "@stoplight/spectral": "^6.5.0"
+  }
+}

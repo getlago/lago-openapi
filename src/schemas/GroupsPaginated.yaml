@@ -1,0 +1,11 @@
+type: object
+required:
+  - groups
+  - meta
+properties:
+  groups:
+    type: array
+    items:
+      $ref: './GroupObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

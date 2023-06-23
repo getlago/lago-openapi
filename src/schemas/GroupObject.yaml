@@ -1,0 +1,19 @@
+type: object
+required:
+  - lago_id
+  - key
+  - value
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    description: 'Unique identifier of a specific group associated with the billable metric.'
+  key:
+    type: string
+    example: 'region'
+    description: 'Key of a specific group associated with the billable metric.'
+  value:
+    type: string
+    example: us-east-1
+    description: 'One of the values for a specific group associated with the billable metric.'

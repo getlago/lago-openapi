@@ -1,0 +1,11 @@
+type: object
+required:
+  - billable_metrics
+  - meta
+properties:
+  billable_metrics:
+    type: array
+    items:
+      $ref: './BillableMetricObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
