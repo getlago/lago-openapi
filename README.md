@@ -22,3 +22,23 @@ The contribution documentation is available [here](https://github.com/getlago/la
 Lago is distributed under the [AGPLv3](LICENSE) License.
 
 Read more [here](https://www.getlago.com/blog/open-source-licensing-and-why-lago-chose-agplv3).
+
+## Local development
+
+### Install dependencies
+
+```
+npm install
+```
+
+### Build openapi.yaml
+
+```
+npm run build
+```
+
+### Lint
+
+```
+npm run test
+```

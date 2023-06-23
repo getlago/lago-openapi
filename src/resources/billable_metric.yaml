@@ -17,7 +17,7 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/BillableMetricInput.yaml'
+          $ref: '../schemas/BillableMetricUpdateInput.yaml'
     required: true
   responses:
     '200':
@@ -54,7 +54,7 @@ delete:
 get:
   tags:
     - billable_metrics
-  summary: Find a billable metric
+  summary: Retrieve a billable metric
   description: This endpoint retrieves an existing billable metric that represents a pricing component of your application. The billable metric is identified by its unique code.
   operationId: findBillableMetric
   responses:

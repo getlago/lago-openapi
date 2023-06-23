@@ -10,9 +10,13 @@ BillableMetric:
   $ref: './BillableMetric.yaml'
 BillableMetricObject:
   $ref: './BillableMetricObject.yaml'
-BillableMetricInput:
-  $ref: './BillableMetricInput.yaml'
-BillableMetricGroupInput:
+BillableMetricBaseInput:
+  $ref: './BillableMetricBaseInput.yaml'
+BillableMetricCreateInput:
+  $ref: './BillableMetricCreateInput.yaml'
+BillableMetricUpdateInput:
+  $ref: './BillableMetricUpdateInput.yaml'
+BillableMetricGroup:
   $ref: './BillableMetricGroup.yaml'
 BillableMetricsPaginated:
   $ref: './BillableMetricsPaginated.yaml'
@@ -22,3 +26,2424 @@ GroupsPaginated:
   $ref: './GroupsPaginated.yaml'
 PaginationMeta:
   $ref: './PaginationMeta.yaml'
+
+# TODO: split into multiple files
+AddOnObject:
+  type: object
+  required:
+    - lago_id
+    - name
+    - code
+    - amount_cents
+    - amount_currency
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    name:
+      type: string
+      example: 'example name'
+    code:
+      type: string
+      example: 'example_code'
+    description:
+      type: string
+      example: 'description'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    amount_cents:
+      type: integer
+      example: 1200
+    amount_currency:
+      type: string
+      example: 'EUR'
+AddOn:
+  type: object
+  required:
+    - add_on
+  properties:
+    add_on:
+      $ref: '#/AddOnObject'
+AddOnsPaginated:
+  type: object
+  required:
+    - add_ons
+    - meta
+  properties:
+    add_ons:
+      type: array
+      items:
+        $ref: '#/AddOnObject'
+    meta:
+      $ref: '#/PaginationMeta'
+AddOnInput:
+  type: object
+  required:
+    - add_on
+  properties:
+    add_on:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'example name'
+        code:
+          type: string
+          example: 'example_code'
+        description:
+          type: string
+          example: 'description'
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: 'EUR'
+AppliedAddOnObject:
+  type: object
+  required:
+    - lago_id
+    - lago_add_on_id
+    - add_on_code
+    - external_customer_id
+    - lago_customer_id
+    - amount_cents
+    - amount_currency
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    lago_add_on_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    add_on_code:
+      type: string
+      example: 'code'
+    lago_customer_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_customer_id:
+      type: string
+      example: '1234567'
+    amount_cents:
+      type: integer
+      example: 1200
+    amount_currency:
+      type: string
+      example: 'EUR'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+AppliedAddOn:
+  type: object
+  required:
+    - applied_add_on
+  properties:
+    applied_add_on:
+      $ref: '#/AppliedAddOnObject'
+AppliedAddOnInput:
+  type: object
+  required:
+    - applied_add_on
+  properties:
+    applied_add_on:
+      type: object
+      required:
+        - external_customer_id
+        - add_on_code
+      properties:
+        external_customer_id:
+          type: string
+          example: '1234567'
+        add_on_code:
+          type: string
+          example: 'code'
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: 'EUR'
+CouponObject:
+  type: object
+  required:
+    - lago_id
+    - name
+    - code
+    - expiration
+    - coupon_type
+    - frequency
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    name:
+      type: string
+      example: 'coupon1'
+    code:
+      type: string
+      example: 'example_code'
+    coupon_type:
+      type: string
+      description: Coupon type
+      enum:
+        - fixed_amount
+        - percentage
+    amount_cents:
+      type: integer
+      example: 1200
+    amount_currency:
+      type: string
+      example: 'EUR'
+    reusable:
+      type: boolean
+      example: true
+    limited_plans:
+      type: boolean
+      example: true
+    plan_codes:
+      type: array
+      items:
+        type: string
+        example: 'code1'
+    limited_billable_metrics:
+      type: boolean
+      example: true
+    billable_metric_codes:
+      type: array
+      items:
+        type: string
+        example: 'code2'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    percentage_rate:
+      type: number
+      example: 25.00
+    frequency:
+      type: string
+      description: Frequency type
+      enum:
+        - once
+        - recurring
+    frequency_duration:
+      type: integer
+      example: 3
+    expiration_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T23:59:59Z'
+    expiration:
+      type: string
+      description: Expiration type
+      enum:
+        - no_expiration
+        - time_limit
+Coupon:
+  type: object
+  required:
+    - coupon
+  properties:
+    coupon:
+      $ref: '#/CouponObject'
+CouponsPaginated:
+  type: object
+  required:
+    - coupons
+    - meta
+  properties:
+    coupons:
+      type: array
+      items:
+        $ref: '#/CouponObject'
+    meta:
+      $ref: '#/PaginationMeta'
+CouponInput:
+  type: object
+  required:
+    - coupon
+  properties:
+    coupon:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'coupon1'
+        code:
+          type: string
+          example: 'example_code'
+        coupon_type:
+          type: string
+          description: Coupon type
+          enum:
+            - fixed_amount
+            - percentage
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: 'EUR'
+        reusable:
+          type: boolean
+          example: true
+        percentage_rate:
+          type: number
+          example: 25.00
+        frequency:
+          type: string
+          description: Frequency type
+          enum:
+            - once
+            - recurring
+        frequency_duration:
+          type: integer
+          example: 3
+        expiration_at:
+          type: string
+          format: 'date-time'
+          example: '2022-09-14T23:59:59Z'
+        expiration:
+          type: string
+          description: Expiration type
+          enum:
+            - no_expiration
+            - time_limit
+        applies_to:
+          type: object
+          properties:
+            plan_codes:
+              type: array
+              items:
+                type: string
+                example: 'code1'
+            billable_metric_codes:
+              type: array
+              items:
+                type: string
+                example: 'code2'
+AppliedCouponObject:
+  type: object
+  required:
+    - lago_id
+    - lago_coupon_id
+    - coupon_code
+    - external_customer_id
+    - lago_customer_id
+    - status
+    - amount_cents
+    - amount_currency
+    - frequency
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    lago_coupon_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    coupon_code:
+      type: string
+      example: 'example_code'
+    lago_customer_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_customer_id:
+      type: string
+      example: '123456'
+    status:
+      type: string
+      description: Status
+      enum:
+        - active
+        - terminated
+    amount_cents:
+      type: integer
+      example: 1200
+    amount_cents_remaining:
+      type: integer
+      example: 800
+    amount_currency:
+      type: string
+      example: 'EUR'
+    percentage_rate:
+      type: number
+      example: 25.00
+    frequency:
+      type: string
+      description: Frequency type
+      enum:
+        - once
+        - recurring
+    frequency_duration:
+      type: integer
+      example: 3
+    frequency_duration_remaining:
+      type: integer
+      example: 2
+    expiration_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T23:59:59Z'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    terminated_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+AppliedCouponObjectExtended:
+  allOf:
+    - $ref: '#/AppliedCouponObject'
+    - type: object
+      required:
+        - credits
+      properties:
+        credits:
+          type: array
+          items:
+            $ref: '#/CreditObject'
+AppliedCoupon:
+  type: object
+  required:
+    - applied_coupon
+  properties:
+    applied_coupon:
+      $ref: '#/AppliedCouponObject'
+AppliedCouponsPaginated:
+  type: object
+  required:
+    - applied_coupons
+    - meta
+  properties:
+    applied_coupons:
+      type: array
+      items:
+        $ref: '#/AppliedCouponObjectExtended'
+    meta:
+      $ref: '#/PaginationMeta'
+AppliedCouponInput:
+  type: object
+  required:
+    - applied_coupon
+  properties:
+    applied_coupon:
+      type: object
+      required:
+        - external_customer_id
+        - coupon_code
+      properties:
+        external_customer_id:
+          type: string
+          example: '123456'
+        coupon_code:
+          type: string
+          example: 'example_code'
+        frequency:
+          type: string
+          description: Frequency type
+          enum:
+            - once
+            - recurring
+        frequency_duration:
+          type: integer
+          example: 3
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: 'EUR'
+        percentage_rate:
+          type: number
+          example: 25.00
+BillingConfigurationOrganization:
+  type: object
+  properties:
+    invoice_footer:
+      type: string
+      example: 'text'
+    invoice_grace_period:
+      type: integer
+      example: 5
+    document_locale:
+      type: string
+      example: fr
+    vat_rate:
+      type: number
+      example: 25.00
+OrganizationObject:
+  type: object
+  required:
+    - name
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    name:
+      type: string
+      example: 'example name'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    webhook_url:
+      type: string
+      example: 'https://example.com'
+    country:
+      type: string
+      example: CZ
+    address_line1:
+      type: string
+      example: 'address1'
+    address_line2:
+      type: string
+      example: 'address2'
+    state:
+      type: string
+      example: 'state1'
+    zipcode:
+      type: string
+      example: '10000'
+    email:
+      type: string
+      format: 'email'
+      example: 'example@example.com'
+    city:
+      type: string
+      example: 'City'
+    legal_name:
+      type: string
+      example: 'name1'
+    legal_number:
+      type: string
+      example: '10000'
+    tax_identification_number:
+      type: string
+      example: 'EU123456789'
+    timezone:
+      type: string
+      example: 'UTC'
+    billing_configuration:
+      $ref: '#/BillingConfigurationOrganization'
+Organization:
+  type: object
+  required:
+    - organization
+  properties:
+    organization:
+      $ref: '#/OrganizationObject'
+OrganizationInput:
+  type: object
+  required:
+    - organization
+  properties:
+    organization:
+      type: object
+      properties:
+        webhook_url:
+          type: string
+          example: 'https://example.com'
+        country:
+          type: string
+          example: CZ
+        address_line1:
+          type: string
+          example: 'address1'
+        address_line2:
+          type: string
+          example: 'address2'
+        state:
+          type: string
+          example: 'state1'
+        zipcode:
+          type: string
+          example: '10000'
+        email:
+          type: string
+          format: 'email'
+          example: 'example@example.com'
+        city:
+          type: string
+          example: 'City'
+        legal_name:
+          type: string
+          example: 'name1'
+        legal_number:
+          type: string
+          example: '10000'
+        tax_identification_number:
+          type: string
+          example: 'EU123456789'
+        timezone:
+          type: string
+          example: 'Europe/Paris'
+        email_settings:
+          type: array
+          items:
+            type: string
+            enum: [invoice.finalized, credit_note.created]
+        billing_configuration:
+          $ref: '#/BillingConfigurationOrganization'
+BillingConfigurationCustomer:
+  type: object
+  additionalProperties: true
+  properties:
+    invoice_grace_period:
+      type: integer
+      example: 3
+    payment_provider:
+      type: string
+      description: Payment provider type
+      enum:
+        - stripe
+        - gocardless
+    provider_customer_id:
+      type: string
+      example: '123456'
+    sync_with_provider:
+      type: boolean
+      example: true
+    document_locale:
+      type: string
+      example: fr
+    vat_rate:
+      type: number
+      example: 25.00
+CustomerMetadataObject:
+  type: object
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    key:
+      type: string
+      example: 'name'
+    value:
+      type: string
+      example: 'John'
+    display_in_invoice:
+      type: boolean
+      example: false
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+CustomerObject:
+  type: object
+  required:
+    - lago_id
+    - sequential_id
+    - slug
+    - external_id
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_id:
+      type: string
+      example: '12345'
+    name:
+      type: string
+      example: 'John Doe'
+    sequential_id:
+      type: integer
+      example: 12345
+    slug:
+      type: string
+      example: 'slug'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    country:
+      type: string
+      example: CZ
+    address_line1:
+      type: string
+      example: 'address1'
+    address_line2:
+      type: string
+      example: 'address2'
+    state:
+      type: string
+      example: 'state1'
+    zipcode:
+      type: string
+      example: '10000'
+    email:
+      type: string
+      format: 'email'
+      example: 'example@example.com'
+    city:
+      type: string
+      example: 'City'
+    url:
+      type: string
+      example: 'https://example.com'
+    phone:
+      type: string
+      example: '+3551234567'
+    lago_url:
+      type: string
+      example: 'https://lago.url'
+    legal_name:
+      type: string
+      example: 'name1'
+    legal_number:
+      type: string
+      example: '10000'
+    tax_identification_number:
+      type: string
+      example: 'EU123456789'
+    currency:
+      type: string
+      example: 'EUR'
+    timezone:
+      type: string
+      example: 'UTC'
+    applicable_timezone:
+      type: string
+      example: 'UTC'
+    billing_configuration:
+      $ref: '#/BillingConfigurationCustomer'
+    metadata:
+      type: array
+      items:
+        $ref: '#/CustomerMetadataObject'
+Customer:
+  type: object
+  required:
+    - customer
+  properties:
+    customer:
+      $ref: '#/CustomerObject'
+CustomersPaginated:
+  type: object
+  required:
+    - customers
+    - meta
+  properties:
+    customers:
+      type: array
+      items:
+        $ref: '#/CustomerObject'
+    meta:
+      $ref: '#/PaginationMeta'
+CustomerInput:
+  type: object
+  required:
+    - customer
+  properties:
+    customer:
+      type: object
+      required:
+        - external_id
+      properties:
+        external_id:
+          type: string
+          example: '12345'
+        name:
+          type: string
+          example: 'John Doe'
+        country:
+          type: string
+          example: CZ
+        address_line1:
+          type: string
+          example: 'address1'
+        address_line2:
+          type: string
+          example: 'address2'
+        state:
+          type: string
+          example: 'state1'
+        zipcode:
+          type: string
+          example: '10000'
+        email:
+          type: string
+          format: 'email'
+          example: 'example@example.com'
+        city:
+          type: string
+          example: 'City'
+        url:
+          type: string
+          example: 'https://example.com'
+        phone:
+          type: string
+          example: '+3551234567'
+        lago_url:
+          type: string
+          example: 'https://lago.url'
+        legal_name:
+          type: string
+          example: 'name1'
+        legal_number:
+          type: string
+          example: '10000'
+        tax_identification_number:
+          type: string
+          example: 'EU123456789'
+        currency:
+          type: string
+          example: 'EUR'
+        timezone:
+          type: string
+          example: 'Europe/Paris'
+        billing_configuration:
+          $ref: '#/BillingConfigurationCustomer'
+        metadata:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: 'uuid'
+                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              key:
+                type: string
+                example: 'name'
+              value:
+                type: string
+                example: 'John'
+              display_in_invoice:
+                type: boolean
+                example: false
+ChargeUsageObject:
+  type: object
+  required:
+    - units
+    - amount_cents
+    - amount_currency
+    - charge
+    - billable_metric
+    - groups
+  properties:
+    units:
+      type: string
+      example: '3.0'
+    amount_cents:
+      type: integer
+      example: 1200
+    amount_currency:
+      type: string
+      example: 'EUR'
+    charge:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        charge_model:
+          type: string
+          description: Charge model type
+          enum:
+            - standard
+            - graduated
+            - package
+            - percentage
+            - volume
+        pay_in_advance:
+          type: boolean
+        min_amount_cents:
+          type: integer
+          example: 1200
+    billable_metric:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        name:
+          type: string
+          example: 'Example name'
+        code:
+          type: string
+          example: 'code'
+        aggregation_type:
+          type: string
+          description: Aggregation type
+          enum:
+            - count_agg
+            - sum_agg
+            - max_agg
+            - unique_count_agg
+    groups:
+      type: array
+      items:
+        type: object
+        properties:
+          lago_id:
+            type: string
+            format: 'uuid'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+          key:
+            type: string
+            example: 'key'
+          value:
+            type: string
+            example: 'value'
+          units:
+            type: string
+            example: '3.5'
+          amount_cents:
+            type: integer
+            example: 1200
+CustomerUsageObject:
+  type: object
+  required:
+    - from_datetime
+    - to_datetime
+    - issuing_date
+    - amount_cents
+    - amount_currency
+    - total_amount_cents
+    - total_amount_currency
+    - vat_amount_cents
+    - vat_amount_currency
+    - charges_usage
+  properties:
+    from_datetime:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T00:00:00Z'
+    to_datetime:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T00:00:00Z'
+    issuing_date:
+      type: string
+      format: 'date-time'
+      example: '2022-09-15T00:00:00Z'
+    amount_cents:
+      type: integer
+      example: 1200
+    amount_currency:
+      type: string
+      example: 'EUR'
+    total_amount_cents:
+      type: integer
+      example: 1400
+    total_amount_currency:
+      type: string
+      example: 'EUR'
+    vat_amount_cents:
+      type: integer
+      example: 200
+    vat_amount_currency:
+      type: string
+      example: 'EUR'
+    charges_usage:
+      type: array
+      items:
+        $ref: '#/ChargeUsageObject'
+CustomerUsage:
+  type: object
+  required:
+    - customer_usage
+  properties:
+    customer_usage:
+      $ref: '#/CustomerUsageObject'
+EventObject:
+  type: object
+  required:
+    - lago_id
+    - transaction_id
+    - lago_customer_id
+    - external_customer_id
+    - code
+    - timestamp
+    - lago_subscription_id
+    - external_subscription_id
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    transaction_id:
+      type: string
+      example: '987654321'
+    lago_customer_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_customer_id:
+      type: string
+      example: '123456'
+    code:
+      type: string
+      example: 'code'
+    timestamp:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    properties:
+      type: object
+    lago_subscription_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_subscription_id:
+      type: string
+      example: '123456'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+Event:
+  type: object
+  required:
+    - event
+  properties:
+    event:
+      $ref: '#/EventObject'
+EventInput:
+  type: object
+  required:
+    - event
+  properties:
+    event:
+      type: object
+      required:
+        - transaction_id
+        - code
+      properties:
+        transaction_id:
+          type: string
+          example: '123456'
+        external_customer_id:
+          type: string
+          example: '654321'
+        code:
+          type: string
+          example: 'code'
+        timestamp:
+          type: integer
+          example: 1669823754
+        external_subscription_id:
+          type: string
+          example: '123456'
+        properties:
+          type: object
+EventEstimateFeesInput:
+  type: object
+  required:
+    - event
+  properties:
+    event:
+      type: object
+      required:
+        - "code"
+      properties:
+        code:
+          type: string
+          example: 'code'
+        external_customer_id:
+          type: string
+          example: '654321'
+        external_subscription_id:
+          type: string
+          example: '123456'
+        properties:
+          type: object
+BatchEventInput:
+  type: object
+  required:
+    - event
+  properties:
+    event:
+      type: object
+      required:
+        - transaction_id
+        - external_subscription_ids
+        - code
+      properties:
+        transaction_id:
+          type: string
+          example: '123456'
+        external_customer_id:
+          type: string
+          example: '654321'
+        code:
+          type: string
+          example: 'code'
+        timestamp:
+          type: integer
+          example: 1669823754
+        external_subscription_ids:
+          type: array
+          items:
+            type: string
+        properties:
+          type: object
+Fees:
+  type: object
+  required:
+    - fees
+  properties:
+    fees:
+      type: array
+      items:
+        $ref: '#/FeeObject'
+FeesPaginated:
+  allOf:
+    - $ref: '#/Fees'
+    - type: object
+      required:
+        - meta
+      properties:
+        meta:
+          $ref: '#/PaginationMeta'
+FeeUpdateInput:
+  type: object
+  required:
+    - invoice
+  properties:
+    invoice:
+      type: object
+      required:
+        - payment_status
+      properties:
+        payment_status:
+          type: string
+          description: Status
+          enum:
+            - pending
+            - succeeded
+            - failed
+            - refunded
+GroupPropertiesObject:
+  type: object
+  required:
+    - group_id
+    - values
+  properties:
+    group_id:
+      type: string
+      example: '123456'
+    values:
+      type: object
+ChargeObject:
+  type: object
+  required:
+    - lago_id
+    - lago_billable_metric_id
+    - billable_metric_code
+    - created_at
+    - charge_model
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    lago_billable_metric_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    billable_metric_code:
+      type: string
+      example: 'bm_code'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    charge_model:
+      type: string
+      description: Charge model type
+      enum:
+        - standard
+        - graduated
+        - package
+        - percentage
+        - volume
+    pay_in_advance:
+      type: boolean
+      example: true
+    invoiceable:
+      type: boolean
+      example: true
+    min_amount_cents:
+      type: integer
+      example: 1200
+    properties:
+      type: object
+    group_properties:
+      type: array
+      items:
+        $ref: '#/GroupPropertiesObject'
+PlanObject:
+  type: object
+  required:
+    - lago_id
+    - name
+    - created_at
+    - code
+    - interval
+    - amount_cents
+    - amount_currency
+    - active_subscriptions_count
+    - draft_invoices_count
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    name:
+      type: string
+      example: 'example name'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    code:
+      type: string
+      example: 'example_code'
+    interval:
+      type: string
+      description: Plan interval
+      enum:
+        - weekly
+        - monthly
+        - yearly
+    description:
+      type: string
+      example: 'description'
+    amount_cents:
+      type: integer
+      example: 1200
+    amount_currency:
+      type: string
+      example: 'EUR'
+    trial_period:
+      type: number
+      example: 2
+    pay_in_advance:
+      type: boolean
+      example: true
+    bill_charges_monthly:
+      type: boolean
+      example: false
+    active_subscriptions_count:
+      type: integer
+      example: 2
+    draft_invoices_count:
+      type: integer
+      example: 2
+    charges:
+      type: array
+      items:
+        $ref: '#/ChargeObject'
+Plan:
+  type: object
+  required:
+    - plan
+  properties:
+    plan:
+      $ref: '#/PlanObject'
+PlansPaginated:
+  type: object
+  required:
+    - plans
+    - meta
+  properties:
+    plans:
+      type: array
+      items:
+        $ref: '#/PlanObject'
+    meta:
+      $ref: '#/PaginationMeta'
+PlanInput:
+  type: object
+  required:
+    - plan
+  properties:
+    plan:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'example name'
+        code:
+          type: string
+          example: 'example_code'
+        interval:
+          type: string
+          description: Plan interval
+          enum:
+            - weekly
+            - monthly
+            - yearly
+        description:
+          type: string
+          example: 'description'
+        amount_cents:
+          type: integer
+          example: 1200
+        amount_currency:
+          type: string
+          example: 'EUR'
+        trial_period:
+          type: number
+          example: 2
+        pay_in_advance:
+          type: boolean
+          example: true
+        bill_charges_monthly:
+          type: boolean
+          example: false
+        charges:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: 'uuid'
+                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              billable_metric_id:
+                type: string
+                format: 'uuid'
+                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              charge_model:
+                type: string
+                description: Charge model type
+                enum:
+                  - standard
+                  - graduated
+                  - package
+                  - percentage
+                  - volume
+              pay_in_advance:
+                type: boolean
+              invoiceable:
+                type: boolean
+              min_amount_cents:
+                type: integer
+              properties:
+                type: object
+              group_properties:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - group_id
+                    - values
+                  properties:
+                    group_id:
+                      type: string
+                      example: '123456'
+                    values:
+                      type: object
+SubscriptionObject:
+  type: object
+  required:
+    - lago_id
+    - lago_customer_id
+    - billing_time
+    - external_customer_id
+    - subscription_at
+    - created_at
+    - plan_code
+    - started_at
+    - external_id
+    - status
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_id:
+      type: string
+      example: '12345'
+    lago_customer_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_customer_id:
+      type: string
+      example: '54321'
+    name:
+      type: string
+      example: 'Test subscription'
+    plan_code:
+      type: string
+      example: 'plan_code'
+    status:
+      type: string
+      description: Subscription status
+      enum:
+        - active
+        - pending
+        - terminated
+        - canceled
+    billing_time:
+      type: string
+      description: Billing time
+      enum:
+        - calendar
+        - anniversary
+    subscription_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    started_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    terminated_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    canceled_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    previous_plan_code:
+      type: string
+      example: 'previous_code'
+    next_plan_code:
+      type: string
+      example: 'next_code'
+    downgrade_plan_date:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+Subscription:
+  type: object
+  required:
+    - subscription
+  properties:
+    subscription:
+      $ref: '#/SubscriptionObject'
+SubscriptionsPaginated:
+  type: object
+  required:
+    - subscriptions
+    - meta
+  properties:
+    subscriptions:
+      type: array
+      items:
+        $ref: '#/SubscriptionObject'
+    meta:
+      $ref: '#/PaginationMeta'
+SubscriptionCreateInput:
+  type: object
+  required:
+    - subscription
+  properties:
+    subscription:
+      type: object
+      required:
+        - external_customer_id
+        - plan_code
+        - external_id
+      properties:
+        external_customer_id:
+          type: string
+          example: '12345'
+        plan_code:
+          type: string
+          example: 'example_code'
+        name:
+          type: string
+          example: 'Test name'
+        external_id:
+          type: string
+          example: '54321'
+        billing_time:
+          type: string
+          description: Billing time
+          enum:
+            - calendar
+            - anniversary
+        subscription_at:
+          type: string
+          format: 'date-time'
+          example: '2022-08-08T00:00:00Z'
+SubscriptionUpdateInput:
+  type: object
+  required:
+    - subscription
+  properties:
+    subscription:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'New name'
+        subscription_at:
+          type: string
+          format: 'date-time'
+          example: '2022-08-08T00:00:00Z'
+CreditObject:
+  type: object
+  required:
+    - lago_id
+    - item
+    - amount_cents
+    - amount_currency
+    - invoice
+    - before_vat
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    amount_cents:
+      type: integer
+      example: 1200
+    amount_currency:
+      type: string
+      example: 'EUR'
+    before_vat:
+      type: boolean
+      example: false
+    item:
+      type: object
+      required:
+        - lago_id
+        - type
+        - code
+        - name
+      properties:
+        lago_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        type:
+          type: string
+          example: 'coupon'
+        code:
+          type: string
+          example: 'code'
+        name:
+          type: string
+          example: 'name'
+    invoice:
+      type: object
+      required:
+        - lago_id
+        - payment_status
+      properties:
+        lago_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        payment_status:
+          type: string
+          enum:
+            - pending
+            - succeeded
+            - failed
+FeeObject:
+  type: object
+  required:
+    - lago_id
+    - item
+    - amount_cents
+    - amount_currency
+    - vat_amount_cents
+    - vat_amount_currency
+    - units
+    - payment_status
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    lago_group_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    lago_invoice_id:
+      type: string
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      format: uuid
+    lago_true_up_fee_id:
+      type: string
+      format: uuid
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    lago_true_up_parent_fee_id:
+      type: string
+      format: uuid
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_subscription_id:
+      type: string
+      example: '54321'
+    amount_cents:
+      type: integer
+      example: 1000
+    amount_currency:
+      type: string
+      example: 'EUR'
+    vat_amount_cents:
+      type: integer
+      example: 200
+    vat_amount_currency:
+      type: string
+      example: 'EUR'
+    units:
+      type: string
+      example: '2.5'
+    total_amount_cents:
+      type: integer
+      example: 1200
+    total_amount_currency:
+      type: string
+      example: 'EUR'
+    events_count:
+      type: integer
+      example: 5
+    pay_in_advance:
+      type: boolean
+      example: true
+    invoiceable:
+      type: boolean
+      example: true
+    from_date:
+      type: string
+      format: 'date-time'
+      example: '2022-08-08T00:00:00Z'
+    to_date:
+      type: string
+      format: 'date-time'
+      example: '2022-08-08T00:00:00Z'
+    payment_status:
+      type: string
+      enum:
+        - pending
+        - succeeded
+        - failed
+        - refunded
+    created_at:
+      type: string
+      example: '2022-09-14T16:35:31Z'
+      format: date-time
+    succeeded_at:
+      type: string
+      example: '2022-09-14T16:35:31Z'
+      format: date-time
+    failed_at:
+      type: string
+      example: '2022-09-14T16:35:31Z'
+      format: date-time
+    refunded_at:
+      type: string
+      example: '2022-09-14T16:35:31Z'
+      format: date-time
+    item:
+      type: object
+      required:
+        - type
+        - code
+        - name
+        - lago_item_id
+        - item_type
+      properties:
+        type:
+          type: string
+          description: Billing time
+          enum:
+            - charge
+            - add_on
+            - subscription
+            - credit
+        code:
+          type: string
+          example: 'code'
+        name:
+          type: string
+          example: 'name'
+        lago_item_id:
+          type: string
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+          format: uuid
+        item_type:
+          type: string
+          enum:
+            - AddOn
+            - BillableMetric
+            - Subscription
+            - WalletTransaction
+InvoiceMetadataObject:
+  type: object
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    key:
+      type: string
+      example: 'name'
+    value:
+      type: string
+      example: 'John'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+InvoiceObject:
+  type: object
+  required:
+    - lago_id
+    - sequential_id
+    - number
+    - issuing_date
+    - invoice_type
+    - status
+    - payment_status
+    - currency
+    - fees_amount_cents
+    - coupons_amount_cents
+    - credit_notes_amount_cents
+    - sub_total_vat_excluded_amount_cents
+    - vat_amount_cents
+    - sub_total_vat_included_amount_cents
+    - prepaid_credit_amount_cents
+    - total_amount_cents
+    - version_number
+    - customer
+    - legacy
+    - amount_cents
+    - credit_amount_cents
+    - amount_currency
+    - total_amount_currency
+    - credit_amount_currency
+    - vat_amount_currency
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    sequential_id:
+      type: integer
+      example: 12345
+    number:
+      type: string
+      example: '222345'
+    issuing_date:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    invoice_type:
+      type: string
+      enum:
+        - subscription
+        - add_on
+        - credit
+        - one_off
+    status:
+      type: string
+      enum:
+        - draft
+        - finalized
+    payment_status:
+      type: string
+      enum:
+        - pending
+        - succeeded
+        - failed
+    currency:
+      type: string
+      example: 'EUR'
+    fees_amount_cents:
+      type: integer
+      example: 20
+    coupons_amount_cents:
+      type: integer
+      example: 20
+    credit_notes_amount_cents:
+      type: integer
+      example: 20
+    sub_total_vat_excluded_amount_cents:
+      type: integer
+      example: 20
+    vat_amount_cents:
+      type: integer
+      example: 20
+    sub_total_vat_included_amount_cents:
+      type: integer
+      example: 20
+    prepaid_credit_amount_cents:
+      type: integer
+      example: 20
+    total_amount_cents:
+      type: integer
+      example: 20
+    version_number:
+      type: integer
+      example: 2
+    amount_cents:
+      type: integer
+      example: 1200
+      deprecated: true
+    amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    vat_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    credit_amount_cents:
+      type: integer
+      example: 20
+      deprecated: true
+    credit_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    total_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    legacy:
+      type: boolean
+      example: true
+      deprecated: true
+    file_url:
+      type: string
+      example: 'https://example.com'
+    customer:
+      $ref: '#/CustomerObject'
+    metadata:
+      type: array
+      items:
+        $ref: '#/InvoiceMetadataObject'
+InvoiceObjectExtended:
+  allOf:
+    - $ref: '#/InvoiceObject'
+    - type: object
+      required:
+        - subscriptions
+        - fees
+        - credits
+      properties:
+        credits:
+          type: array
+          items:
+            $ref: '#/CreditObject'
+        fees:
+          type: array
+          items:
+            $ref: '#/FeeObject'
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/SubscriptionObject'
+Invoice:
+  type: object
+  required:
+    - invoice
+  properties:
+    invoice:
+      $ref: '#/InvoiceObjectExtended'
+InvoicesPaginated:
+  type: object
+  required:
+    - invoices
+    - meta
+  properties:
+    invoices:
+      type: array
+      items:
+        $ref: '#/InvoiceObject'
+    meta:
+      $ref: '#/PaginationMeta'
+InvoiceInput:
+  type: object
+  required:
+    - invoice
+  properties:
+    invoice:
+      type: object
+      properties:
+        payment_status:
+          type: string
+          description: Status
+          enum:
+            - pending
+            - succeeded
+            - failed
+        metadata:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: 'uuid'
+                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              key:
+                type: string
+                example: 'name'
+              value:
+                type: string
+                example: 'John'
+InvoiceOneOffInput:
+  type: object
+  required:
+    - invoice
+  properties:
+    invoice:
+      type: object
+      required:
+        - external_customer_id
+      properties:
+        external_customer_id:
+          type: string
+          example: '_ID_'
+        currency:
+          type: string
+          example: 'EUR'
+        fees:
+          type: array
+          items:
+            type: object
+            required:
+              - add_on_code
+            properties:
+              add_on_code:
+                type: string
+                example: '12345'
+              unit_amount_cents:
+                type: integer
+                example: 1200
+              units:
+                type: string
+                example: '2.5'
+              description:
+                type: string
+                example: 'This is description'
+WalletObject:
+  type: object
+  required:
+    - lago_id
+    - lago_customer_id
+    - external_customer_id
+    - status
+    - currency
+    - rate_amount
+    - credits_balance
+    - balance
+    - balance_cents
+    - consumed_credits
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    lago_customer_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    external_customer_id:
+      type: string
+      example: '12345'
+    status:
+      type: string
+      description: Status
+      enum:
+        - active
+        - terminated
+    currency:
+      type: string
+      example: 'EUR'
+    name:
+      type: string
+      example: 'Name'
+    rate_amount:
+      type: string
+      example: '2.0'
+    credits_balance:
+      type: string
+      example: '500.0'
+    balance:
+      type: string
+      example: '1000.0'
+      deprecated: true
+    balance_cents:
+      type: integer
+      example: 100000
+    consumed_credits:
+      type: string
+      example: '100.0'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    expiration_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T23:59:59Z'
+    last_balance_sync_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    last_consumed_credit_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    terminated_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+Wallet:
+  type: object
+  required:
+    - wallet
+  properties:
+    wallet:
+      $ref: '#/WalletObject'
+WalletsPaginated:
+  type: object
+  required:
+    - wallets
+    - meta
+  properties:
+    wallets:
+      type: array
+      items:
+        $ref: '#/WalletObject'
+    meta:
+      $ref: '#/PaginationMeta'
+WalletInput:
+  type: object
+  properties:
+    wallet:
+      type: object
+      required:
+        - rate_amount
+        - currency
+        - external_customer_id
+      properties:
+        name:
+          type: string
+          example: 'Wallet name'
+        rate_amount:
+          type: string
+          example: '2.0'
+        currency:
+          type: string
+          example: 'EUR'
+        paid_credits:
+          type: string
+          example: '500.0'
+        granted_credits:
+          type: string
+          example: '10.0'
+        external_customer_id:
+          type: string
+          example: '12345'
+        expiration_at:
+          type: string
+          format: 'date-time'
+          example: '2022-09-14T23:59:59Z'
+WalletUpdateInput:
+  type: object
+  required:
+    - wallet
+  properties:
+    wallet:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Wallet name'
+        expiration_at:
+          type: string
+          format: 'date-time'
+          example: '2022-09-14T23:59:59Z'
+WalletTransactionObject:
+  type: object
+  required:
+    - lago_id
+    - lago_wallet_id
+    - status
+    - transaction_type
+    - credit_amount
+    - amount
+    - created_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    lago_wallet_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    status:
+      type: string
+      description: Status
+      enum:
+        - pending
+        - settled
+    transaction_type:
+      type: string
+      description: Transaction type
+      enum:
+        - inbound
+        - outbound
+    amount:
+      type: string
+      example: '500.0'
+    credit_amount:
+      type: string
+      example: '100.0'
+    settled_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+WalletTransactions:
+  type: object
+  required:
+    - wallet_transactions
+  properties:
+    wallet_transactions:
+      type: array
+      items:
+        $ref: '#/WalletTransactionObject'
+WalletTransactionsPaginated:
+  allOf:
+    - $ref: '#/WalletTransactions'
+    - type: object
+      required:
+        - meta
+      properties:
+        meta:
+          $ref: '#/PaginationMeta'
+WalletTransactionInput:
+  type: object
+  required:
+    - wallet_transaction
+  properties:
+    wallet_transaction:
+      type: object
+      required:
+        - wallet_id
+      properties:
+        wallet_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        paid_credits:
+          type: string
+          example: '100.0'
+        granted_credits:
+          type: string
+          example: '10.0'
+CreditNoteItemObject:
+  type: object
+  required:
+    - lago_id
+    - amount_cents
+    - amount_currency
+    - fee
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    amount_cents:
+      type: integer
+      example: 1220
+    amount_currency:
+      type: string
+      example: 'EUR'
+    fee:
+      $ref: '#/FeeObject'
+CreditNoteObject:
+  type: object
+  required:
+    - lago_id
+    - sequential_id
+    - number
+    - lago_invoice_id
+    - invoice_number
+    - issuing_date
+    - reason
+    - currency
+    - total_amount_cents
+    - total_amount_currency
+    - credit_amount_cents
+    - credit_amount_currency
+    - refund_amount_cents
+    - refund_amount_currency
+    - balance_amount_cents
+    - balance_amount_currency
+    - vat_amount_cents
+    - vat_amount_currency
+    - sub_total_vat_excluded_amount_cents
+    - sub_total_vat_excluded_amount_currency
+    - coupons_adjustement_amount_cents
+    - created_at
+    - updated_at
+  properties:
+    lago_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    sequential_id:
+      type: integer
+      example: 1234
+    number:
+      type: string
+      example: '123456789'
+    lago_invoice_id:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    invoice_number:
+      type: string
+      example: '123456789'
+    issuing_date:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    credit_status:
+      type: string
+      description: Credit status
+      enum:
+        - available
+        - consumed
+        - voided
+    refund_status:
+      type: string
+      description: Refund status
+      enum:
+        - pending
+        - succeeded
+        - failed
+    reason:
+      type: string
+      description: Reason
+      enum:
+        - duplicated_charge
+        - product_unsatisfactory
+        - order_change
+        - order_cancellation
+        - fraudulent_charge
+        - other
+    description:
+      type: string
+      example: 'description'
+    currency:
+      type: string
+      example: 'EUR'
+    total_amount_cents:
+      type: integer
+      example: 1220
+    total_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    vat_amount_cents:
+      type: integer
+      example: 20
+    vat_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    sub_total_vat_excluded_amount_cents:
+      type: integer
+      example: 1000
+    sub_total_vat_excluded_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    balance_amount_cents:
+      type: integer
+      example: 20
+    balance_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    credit_amount_cents:
+      type: integer
+      example: 20
+    credit_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    refund_amount_cents:
+      type: integer
+      example: 20
+    refund_amount_currency:
+      type: string
+      example: 'EUR'
+      deprecated: true
+    coupons_adjustement_amount_cents:
+      type: integer
+      example: 20
+    created_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    updated_at:
+      type: string
+      format: 'date-time'
+      example: '2022-09-14T16:35:31Z'
+    file_url:
+      type: string
+      example: 'https://example.com'
+    items:
+      type: array
+      items:
+        $ref: '#/CreditNoteItemObject'
+CreditNote:
+  type: object
+  required:
+    - credit_note
+  properties:
+    credit_note:
+      $ref: '#/CreditNoteObject'
+CreditNotes:
+  type: object
+  required:
+    - credit_notes
+  properties:
+    credit_notes:
+      type: array
+      items:
+        $ref: '#/CreditNoteObject'
+CreditNoteInput:
+  type: object
+  required:
+    - credit_note
+  properties:
+    credit_note:
+      type: object
+      required:
+        - invoice_id
+        - reason
+        - items
+        - credit_amount_cents
+        - refund_amount_cents
+      properties:
+        invoice_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        reason:
+          type: string
+          description: Reason
+          enum:
+            - duplicated_charge
+            - product_unsatisfactory
+            - order_change
+            - order_cancellation
+            - fraudulent_charge
+            - other
+        description:
+          type: string
+          example: 'description'
+        credit_amount_cents:
+          type: integer
+          example: 20
+        refund_amount_cents:
+          type: integer
+          example: 20
+        items:
+          type: array
+          items:
+            type: object
+            required:
+              - fee_id
+              - amount_cents
+            properties:
+              fee_id:
+                type: string
+                format: 'uuid'
+                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              amount_cents:
+                type: integer
+                example: 20
+CreditNoteUpdateInput:
+  type: object
+  required:
+    - credit_note
+  properties:
+    credit_note:
+      type: object
+      required:
+        - refund_status
+      properties:
+        refund_status:
+          type: string
+          description: Refund status
+          enum:
+            - pending
+            - succeeded
+            - failed
+ApiResponseForbidden:
+  type: object
+  required:
+    - status
+    - error
+    - code
+  properties:
+    status:
+      type: integer
+      format: int32
+      example: 403
+    error:
+      type: string
+      example: 'Forbidden'
+    code:
+      type: string
+      example: 'feature_unavailable'
+ApiResponseNotAllowed:
+  type: object
+  required:
+    - status
+    - error
+    - code
+  properties:
+    status:
+      type: integer
+      format: int32
+      example: 405
+    error:
+      type: string
+      example: 'Method Not Allowed'
+    code:
+      type: string
+      example: 'not_allowed'

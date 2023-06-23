@@ -21,6 +21,63 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/billable_metrics/billable-metric-object
+  - name: add_ons
+    description: Everything about Add-on collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/add_ons/add-on-object
+  - name: coupons
+    description: Everything about Coupon collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/coupons/coupon-object
+  - name: organizations
+    description: Everything about Organization collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/organizations/organization-object
+  - name: customers
+    description: Everything about Customer collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/customers/customer-object
+  - name: events
+    description: Everything about Event collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/events/event-object
+  - name: plans
+    description: Everything about Plan collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/plans/plan-object
+  - name: subscriptions
+    description: Everything about Subscription collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/subscriptions/subscription-object
+  - name: webhooks
+    description: Everything about Webhooks
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/webhooks/message-signature#1-retrieve-the-public-key
+  - name: invoices
+    description: Everything about Invoice collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/invoices/invoice-object
+  - name: fees
+    description: Everything about Fees
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object
+  - name: wallets
+    description: Everything about Wallet collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/wallets/wallet-object
+  - name: credit_notes
+    description: Everything about Credit notes collection
 paths:
   /billable_metrics:
     $ref: './resources/billable_metrics.yaml'
@@ -28,6 +85,1748 @@ paths:
     $ref: './resources/billable_metric.yaml'
   /billable_metrics/{code}/groups:
     $ref: './resources/billable_metric_groups.yaml'
+
+
+  # TODO: split requests into multiple files
+  /add_ons:
+    post:
+      tags:
+        - add_ons
+      summary: Create a new add-on
+      description: Create a new add-on
+      operationId: createAddOn
+      requestBody:
+        description: Add-on payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOnInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - add_ons
+      summary: Find add-ons
+      description: Find all add-ons in certain organisation
+      operationId: findAllAddOns
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOnsPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /add_ons/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing add-on
+        required: true
+        schema:
+          type: string
+          example: 'example_code'
+    put:
+      tags:
+        - add_ons
+      summary: Update an existing add-on
+      description: Update an existing add-on by code
+      operationId: updateAddOn
+      requestBody:
+        description: Update an existing add-on
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOnInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - add_ons
+      summary: Find add-on by code
+      description: Return a single add-on
+      operationId: findAddOn
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+    delete:
+      tags:
+        - add_ons
+      summary: Delete an add-on
+      description: Delete an add-on
+      operationId: destroyAddOn
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /applied_add_ons:
+    post:
+      tags:
+        - add_ons
+      summary: Apply an add-on to a customer
+      description: Apply an add-on to a customer
+      operationId: applyAddOn
+      requestBody:
+        description: Apply add-on payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppliedAddOnInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedAddOn'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+  /coupons:
+    post:
+      tags:
+        - coupons
+      summary: Create a new coupon
+      description: Create a new coupon
+      operationId: createCoupon
+      requestBody:
+        description: Coupon payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - coupons
+      summary: Find Coupons
+      description: Find all coupons in certain organisation
+      operationId: findAllCoupons
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponsPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /coupons/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing coupon
+        required: true
+        schema:
+          type: string
+          example: 'example_code'
+    put:
+      tags:
+        - coupons
+      summary: Update an existing coupon
+      description: Update an existing coupon by code
+      operationId: updateCoupon
+      requestBody:
+        description: Update an existing coupon
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - coupons
+      summary: Find coupon by code
+      description: Return a single coupon
+      operationId: findCoupon
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+    delete:
+      tags:
+        - coupons
+      summary: Delete a coupon
+      description: Delete a coupon
+      operationId: destroyCoupon
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /applied_coupons:
+    post:
+      tags:
+        - coupons
+      summary: Apply a coupon to a customer
+      description: Apply a coupon to a customer
+      operationId: applyCoupon
+      requestBody:
+        description: Apply coupon payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppliedCouponInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCoupon'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - coupons
+      summary: Find Applied Coupons
+      description: Find all applied coupons
+      operationId: findAllAppliedCoupons
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+        - name: status
+          in: query
+          description: Applied coupon status
+          required: false
+          explode: true
+          schema:
+            type: string
+            description: Status
+            enum:
+              - active
+              - terminated
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCouponsPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /organizations:
+    put:
+      tags:
+        - organizations
+      summary: Update an existing Organization
+      description: Update an existing organization
+      operationId: updateOrganization
+      requestBody:
+        description: Update an existing organization
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+  /customers:
+    post:
+      tags:
+        - customers
+      summary: Create a customer
+      description: Create a new customer
+      operationId: createCustomer
+      requestBody:
+        description: Customer payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - customers
+      summary: Find customers
+      description: Find all customers in certain organisation
+      operationId: findAllCustomers
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomersPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /customers/{external_id}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing customer
+        required: true
+        schema:
+          type: string
+          example: '12345'
+    get:
+      tags:
+        - customers
+      summary: Find customer by external ID
+      description: Return a single customer
+      operationId: findCustomer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+    delete:
+      tags:
+        - customers
+      summary: Delete a customer
+      description: Return the deleted customer
+      operationId: destroyCustomer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /customers/{customer_external_id}/current_usage:
+    get:
+      tags:
+        - customers
+      summary: Find customer current usage
+      parameters:
+        - name: customer_external_id
+          in: path
+          description: External ID of the existing customer
+          required: true
+          schema:
+            type: string
+            example: '12345'
+        - name: external_subscription_id
+          in: query
+          description: External subscription ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: '54321'
+      description: Return a customer current usage
+      operationId: findCustomerCurrentUsage
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerUsage'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /customers/{customer_external_id}/portal_url:
+    get:
+      tags:
+        - customers
+      summary: Get customer portal URL
+      parameters:
+        - name: customer_external_id
+          in: path
+          description: External ID of the existing customer
+          required: true
+          schema:
+            type: string
+            example: '12345'
+      description: Get customer portal URL
+      operationId: getCustomerPortalUrl
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - customer
+                properties:
+                  customer:
+                    type: object
+                    required:
+                      - portal_url
+                    properties:
+                      portal_url:
+                        type: string
+                        example: 'https://app.lago.com/customer-portal/abc/'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseForbidden'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /customers/{customer_external_id}/applied_coupons/{applied_coupon_id}:
+    delete:
+      tags:
+        - customers
+      summary: Delete customer's appplied coupon
+      parameters:
+        - name: customer_external_id
+          in: path
+          description: External ID of the existing customer
+          required: true
+          schema:
+            type: string
+            example: '12345'
+        - name: applied_coupon_id
+          in: path
+          description: Applied Coupon Lago ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: '54321'
+      description: Delete customer's appplied coupon
+      operationId: deleteAppliedCoupon
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCoupon'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /events:
+    post:
+      tags:
+        - events
+      summary: Create a new event
+      description: Create a new event
+      operationId: createEvent
+      requestBody:
+        description: Event payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+  /events/batch:
+    post:
+      tags:
+        - events
+      summary: Create batch events
+      description: Create batch events
+      operationId: createBatchEvents
+      requestBody:
+        description: Batch events payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchEventInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+  /events/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Id of the existing transaction
+        required: true
+        schema:
+          type: string
+          example: '12345'
+    get:
+      tags:
+        - events
+      summary: Find event by transaction ID
+      description: Return a single event
+      operationId: findEvent
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /events/estimate_fees:
+    post:
+      tags:
+        - events
+      summary: Estimate fees for an pay in advance charge
+      description: Estimate the fees that would be created after reception of an event for a billable metric attached to one or multiple pay in advance charges
+      operationId: eventEstimateFees
+      requestBody:
+        description: Event payload for pay in advance fee estimate
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventEstimateFeesInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fees'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+  /plans:
+    post:
+      tags:
+        - plans
+      summary: Create a new plan
+      description: Create a new plan
+      operationId: createPlan
+      requestBody:
+        description: Plan payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - plans
+      summary: Find plans
+      description: Find all plans in certain organisation
+      operationId: findAllPlans
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlansPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /plans/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan
+        required: true
+        schema:
+          type: string
+          example: 'example_code'
+    put:
+      tags:
+        - plans
+      summary: Update an existing plan
+      description: Update an existing plan by code
+      operationId: updatePlan
+      requestBody:
+        description: Update an existing plan
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - plans
+      summary: Find plan by code
+      description: Return a single plan
+      operationId: findPlan
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+    delete:
+      tags:
+        - plans
+      summary: Delete a plan
+      description: Delete a plan
+      operationId: destroyPlan
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /subscriptions:
+    post:
+      tags:
+        - subscriptions
+      summary: Assign a plan to a customer
+      description: Assign a plan to a customer
+      operationId: createSubscription
+      requestBody:
+        description: Subscription payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - subscriptions
+      summary: Find subscriptions
+      description: Find all suscriptions for certain customer
+      operationId: findAllSubscriptions
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+        - name: plan_code
+          in: query
+          description: Code of the plan attached to the subscription
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 'example_code'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /subscriptions/{external_id}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 'example_id'
+    put:
+      tags:
+        - subscriptions
+      summary: Update an existing subscription
+      description: Update an existing subscription by external ID
+      operationId: updateSubscription
+      requestBody:
+        description: Update an existing subscription
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    delete:
+      tags:
+        - subscriptions
+      summary: Terminate a subscription
+      description: Terminate a subscription
+      operationId: destroySubscription
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /webhooks/public_key:
+    get:
+      tags:
+        - webhooks
+      summary: Fetch webhook public key
+      description: Webhook public key
+      operationId: fetchPublicKey
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE='
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /invoices:
+    post:
+      tags:
+        - invoices
+      summary: Create a new invoice
+      description: Create a new one off Invoice
+      operationId: createInvoice
+      requestBody:
+        description: Invoice payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceOneOffInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - invoices
+      summary: Find all invoices
+      description: Find all invoices in certain organisation
+      operationId: findAllInvoices
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+        - name: issuing_date_from
+          in: query
+          description: Date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: 'date'
+            example: '2022-07-08'
+        - name: issuing_date_to
+          in: query
+          description: Date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: 'date'
+            example: '2022-08-09'
+        - name: status
+          in: query
+          description: Status
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - draft
+              - finalized
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicesPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /invoices/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID of the existing Lago Invoice
+        required: true
+        schema:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    put:
+      tags:
+        - invoices
+      summary: Update an existing invoice status
+      description: Update an existing invoice
+      operationId: updateInvoice
+      requestBody:
+        description: Update an existing invoice
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - invoices
+      summary: Find invoice by ID
+      description: Return a single invoice
+      operationId: findInvoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /invoices/{id}/download:
+    post:
+      tags:
+        - invoices
+      summary: Download an existing invoice
+      parameters:
+        - name: id
+          in: path
+          description: ID of the existing Lago Invoice
+          required: true
+          schema:
+            type: string
+            format: 'uuid'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      description: Download an existing invoice
+      operationId: downloadInvoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /invoices/{id}/retry_payment:
+    post:
+      tags:
+        - invoices
+      summary: Retry invoice payment
+      parameters:
+        - name: id
+          in: path
+          description: ID of the existing Lago Invoice
+          required: true
+          schema:
+            type: string
+            format: 'uuid'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      description: Retry invoice payment
+      operationId: retryPayment
+      responses:
+        '200':
+          description: Successful response
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /invoices/{id}/refresh:
+    put:
+      tags:
+        - invoices
+      summary: Refresh a draft invoice
+      parameters:
+        - name: id
+          in: path
+          description: ID of the existing Lago Invoice
+          required: true
+          schema:
+            type: string
+            format: 'uuid'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      description: Refresh a draft invoice
+      operationId: refreshInvoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /invoices/{id}/finalize:
+    put:
+      tags:
+        - invoices
+      summary: Finalize a draft invoice
+      parameters:
+        - name: id
+          in: path
+          description: ID of the draft Lago Invoice
+          required: true
+          schema:
+            type: string
+            format: 'uuid'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      description: Finalize a draft invoice
+      operationId: finalizeInvoice
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /fees/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID of the existing Lago Fee
+        required: true
+        schema:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    get:
+      tags:
+        - fees
+      summary: Find fee by ID
+      description: Return a single fee
+      operationId: findFee
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeObject'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+    put:
+      tags:
+        - fees
+      summary: Update an existing fee
+      description: Update an existing fee
+      operationId: updateFee
+      requestBody:
+        description: Payload to update a fee
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeeUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeObject'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+  /fees:
+    get:
+      tags:
+        - fees
+      summary: Find all fees
+      description: Find all fees of an organization and filter them
+      operationId: findAllFees
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+        - name: external_subscription_id
+          in: query
+          description: External subscription ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+        - name: currency
+          in: query
+          description: Amount currency
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 'EUR'
+        - name: fee_type
+          in: query
+          description: Fee type
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - charge
+              - add_on
+              - subscription
+              - credit
+              - instant_charge
+            example: 'charge'
+        - name: billable_metric_code
+          in: query
+          description: Code of the source billable metric
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 'bm_code'
+        - name: payment_status
+          in: query
+          description: Payment status
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - pending
+              - succeeded
+              - failed
+              - refunded
+            example: 'succeeded'
+        - name: created_at_from
+          in: query
+          description: Creation datetime from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: created_at_to
+          in: query
+          description: Creation date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: succeeded_at_from
+          in: query
+          description: Payment succees date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: succeeded_at_to
+          in: query
+          description: Payment succees date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: failed_at_from
+          in: query
+          description: Payment failed date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: failed_at_to
+          in: query
+          description: Payment failed date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: refunded_at_from
+          in: query
+          description: Payment refund date from
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+        - name: refunded_at_to
+          in: query
+          description: Payment refund date to
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '2023-03-28T12:21:51Z'
+            format: date-time
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeesPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+  /wallets:
+    post:
+      tags:
+        - wallets
+      summary: Create a new wallet
+      description: Create a new wallet
+      operationId: createWallet
+      requestBody:
+        description: Wallet payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - wallets
+      summary: Find wallets
+      description: Find all wallets for certain customer
+      operationId: findAllWallets
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletsPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /wallets/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Lago ID of the existing wallet
+        required: true
+        schema:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    put:
+      tags:
+        - wallets
+      summary: Update an existing wallet
+      description: Update an existing wallet
+      operationId: updateWallet
+      requestBody:
+        description: Update an existing wallet
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - wallets
+      summary: Find wallet
+      description: Return a wallet
+      operationId: findWallet
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+    delete:
+      tags:
+        - wallets
+      summary: Delete a wallet
+      description: Delete a wallet
+      operationId: destroyWallet
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+  /wallet_transactions:
+    post:
+      tags:
+        - wallets
+      summary: Create a new wallet transaction
+      description: Create a new wallet transaction
+      operationId: createWalletTransaction
+      requestBody:
+        description: Wallet transaction payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletTransactionInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletTransactions'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+  /wallets/{id}/wallet_transactions:
+    get:
+      tags:
+        - wallets
+      summary: Find wallet transactions
+      description: Find all wallet transactions for certain wallet
+      operationId: findAllWalletTransactions
+      parameters:
+        - name: id
+          in: path
+          description: Lago ID of the existing wallet
+          required: true
+          schema:
+            type: string
+            format: 'uuid'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+        - name: status
+          in: query
+          description: Status (pending or settled)
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 'pending'
+        - name: transaction_type
+          in: query
+          description: Transaction Type (inbound or outbound)
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 'inbound'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletTransactionsPaginated'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /credit_notes:
+    post:
+      tags:
+        - credit_notes
+      summary: Create a new Credit note
+      description: Create a new credit note
+      operationId: createCreditNote
+      requestBody:
+        description: Credit note payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - credit_notes
+      summary: Find Credit notes
+      description: Find all credit notes in certain organisation
+      operationId: findAllCreditNotes
+      parameters:
+        - $ref: './parameters/page.yaml'
+        - $ref: './parameters/per_page.yaml'
+        - name: external_customer_id
+          in: query
+          description: External customer ID
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: '12345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNotes'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+  /credit_notes/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Id of the existing credit note
+        required: true
+        schema:
+          type: string
+          example: '12345'
+    put:
+      tags:
+        - credit_notes
+      summary: Update an existing credit note
+      description: Update an existing credit note
+      operationId: updateCreditNote
+      requestBody:
+        description: Update an existing credit note
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: './responses/BadRequest.yaml'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '422':
+          $ref: './responses/UnprocessableEntity.yaml'
+    get:
+      tags:
+        - credit_notes
+      summary: Find credit note
+      description: Return a single credit note
+      operationId: findCreditNote
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /credit_notes/{id}/download:
+    post:
+      tags:
+        - credit_notes
+      summary: Download an existing credit note
+      parameters:
+        - name: id
+          in: path
+          description: ID of the existing Lago Credit note
+          required: true
+          schema:
+            type: string
+            format: 'uuid'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      description: Download an existing credit note
+      operationId: downloadCreditNote
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+  /credit_notes/{id}/void:
+    put:
+      tags:
+        - credit_notes
+      summary: Void existing credit note
+      parameters:
+        - name: id
+          in: path
+          description: ID of the existing Lago Credit note
+          required: true
+          schema:
+            type: string
+            format: 'uuid'
+            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      description: Void an existing credit note
+      operationId: voidCreditNote
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '401':
+          $ref: './responses/Unauthorized.yaml'
+        '404':
+          $ref: './responses/NotFound.yaml'
+        '405':
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseNotAllowed'
+
+
+
 components:
   parameters:
     $ref: './parameters/_index.yaml'

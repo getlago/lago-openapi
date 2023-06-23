@@ -26,6 +26,7 @@ properties:
     type: string
     example: 'GB of storage used in my application'
     description: 'Internal description of the billable metric.'
+    nullable: true
   created_at:
     type: string
     format: 'date-time'
@@ -34,17 +35,17 @@ properties:
   field_name:
     type: string
     example: 'gb'
-    description: 'Property of the billable metric used for aggregating usage data. This field is not required for count_agg.'
+    description: 'Property of the billable metric used for aggregating usage data. This field is not required for `count_agg`.'
+    nullable: true
   aggregation_type:
     type: string
-    description: Aggregation type
+    description: 'Aggregation method used to compute usage for this billable metric. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.'
     example: 'sum_agg'
     enum:
       - count_agg
       - sum_agg
       - max_agg
       - unique_count_agg
-      - recurring_count_agg
   group:
     $ref: './BillableMetricGroup.yaml'
   active_subscriptions_count:

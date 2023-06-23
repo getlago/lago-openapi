@@ -9,7 +9,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/BillableMetricInput.yaml'
+          $ref: '../schemas/BillableMetricCreateInput.yaml'
     required: true
   responses:
     '200':
@@ -27,7 +27,7 @@ post:
 get:
   tags:
     - billable_metrics
-  summary: Find a billable metric
+  summary: List all billable metrics
   description: This endpoint retrieves all existing billable metrics that represent pricing components of your application.
   operationId: findAllBillableMetrics
   parameters:
