@@ -6,6 +6,8 @@ ApiErrorUnauthorized:
   $ref: './ApiErrorUnauthorized.yaml'
 ApiErrorUnprocessableEntity:
   $ref: './ApiErrorUnprocessableEntity.yaml'
+ApiErrorNotAllowed:
+  $ref: './ApiErrorNotAllowed.yaml'
 ApiErrorNotFound:
   $ref: './ApiErrorNotFound.yaml'
 BillableMetric:
@@ -42,6 +44,16 @@ GroupsPaginated:
   $ref: './GroupsPaginated.yaml'
 PaginationMeta:
   $ref: './PaginationMeta.yaml'
+Subscription:
+  $ref: './Subscription.yaml'
+SubscriptionCreateInput:
+  $ref: './SubscriptionCreateInput.yaml'
+SubscriptionUpdateInput:
+  $ref: './SubscriptionUpdateInput.yaml'
+SubscriptionObject:
+  $ref: './SubscriptionObject.yaml'
+SubscriptionsPaginated:
+  $ref: './SubscriptionsPaginated.yaml'
 Timezone:
   $ref: './Timezone.yaml'
 
@@ -1149,152 +1161,6 @@ PlanInput:
                       example: '123456'
                     values:
                       type: object
-SubscriptionObject:
-  type: object
-  required:
-    - lago_id
-    - lago_customer_id
-    - billing_time
-    - external_customer_id
-    - subscription_at
-    - created_at
-    - plan_code
-    - started_at
-    - external_id
-    - status
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_id:
-      type: string
-      example: '12345'
-    lago_customer_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_customer_id:
-      type: string
-      example: '54321'
-    name:
-      type: string
-      example: 'Test subscription'
-    plan_code:
-      type: string
-      example: 'plan_code'
-    status:
-      type: string
-      description: Subscription status
-      enum:
-        - active
-        - pending
-        - terminated
-        - canceled
-    billing_time:
-      type: string
-      description: Billing time
-      enum:
-        - calendar
-        - anniversary
-    subscription_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    started_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    terminated_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    canceled_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    previous_plan_code:
-      type: string
-      example: 'previous_code'
-    next_plan_code:
-      type: string
-      example: 'next_code'
-    downgrade_plan_date:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-Subscription:
-  type: object
-  required:
-    - subscription
-  properties:
-    subscription:
-      $ref: '#/SubscriptionObject'
-SubscriptionsPaginated:
-  type: object
-  required:
-    - subscriptions
-    - meta
-  properties:
-    subscriptions:
-      type: array
-      items:
-        $ref: '#/SubscriptionObject'
-    meta:
-      $ref: '#/PaginationMeta'
-SubscriptionCreateInput:
-  type: object
-  required:
-    - subscription
-  properties:
-    subscription:
-      type: object
-      required:
-        - external_customer_id
-        - plan_code
-        - external_id
-      properties:
-        external_customer_id:
-          type: string
-          example: '12345'
-        plan_code:
-          type: string
-          example: 'example_code'
-        name:
-          type: string
-          example: 'Test name'
-        external_id:
-          type: string
-          example: '54321'
-        billing_time:
-          type: string
-          description: Billing time
-          enum:
-            - calendar
-            - anniversary
-        subscription_at:
-          type: string
-          format: 'date-time'
-          example: '2022-08-08T00:00:00Z'
-SubscriptionUpdateInput:
-  type: object
-  required:
-    - subscription
-  properties:
-    subscription:
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'New name'
-        subscription_at:
-          type: string
-          format: 'date-time'
-          example: '2022-08-08T00:00:00Z'
 CreditObject:
   type: object
   required:
@@ -2202,20 +2068,3 @@ CreditNoteUpdateInput:
             - pending
             - succeeded
             - failed
-ApiResponseNotAllowed:
-  type: object
-  required:
-    - status
-    - error
-    - code
-  properties:
-    status:
-      type: integer
-      format: int32
-      example: 405
-    error:
-      type: string
-      example: 'Method Not Allowed'
-    code:
-      type: string
-      example: 'not_allowed'

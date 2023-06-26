@@ -25,6 +25,11 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/customers/customer-object'
+  - name: subscriptions
+    description: Everything about Subscription collection
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/subscriptions/subscription-object'
   - name: add_ons
     description: Everything about Add-on collection
     externalDocs:
@@ -50,11 +55,6 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/plans/plan-object'
-  - name: subscriptions
-    description: Everything about Subscription collection
-    externalDocs:
-      description: Find out more
-      url: 'https://doc.getlago.com/docs/api/subscriptions/subscription-object'
   - name: webhooks
     description: Everything about Webhooks
     externalDocs:
@@ -368,6 +368,127 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
+  /subscriptions:
+    post:
+      tags:
+        - subscriptions
+      summary: Assign a plan to a customer
+      description: 'This endpoint assigns a plan to a customer, creating or modifying a subscription. Ideal for initial subscriptions or plan changes (upgrades/downgrades).'
+      operationId: createSubscription
+      requestBody:
+        description: Subscription payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
+    get:
+      tags:
+        - subscriptions
+      summary: List all subscriptions
+      description: This endpoint retrieves all active subscriptions.
+      operationId: findAllSubscriptions
+      parameters:
+        - $ref: '#/paths/~1fees/get/parameters/0'
+        - $ref: '#/paths/~1fees/get/parameters/1'
+        - name: external_customer_id
+          in: query
+          description: The customer external unique identifier (provided by your own application)
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - name: plan_code
+          in: query
+          description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: premium
+      responses:
+        '200':
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsPaginated'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  '/subscriptions/{external_id}':
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    put:
+      tags:
+        - subscriptions
+      summary: Update a subscription
+      description: This endpoint allows you to update a subscription.
+      operationId: updateSubscription
+      requestBody:
+        description: Update an existing subscription
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Subscription updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
+    delete:
+      tags:
+        - subscriptions
+      summary: Terminate a subscription
+      description: This endpoint allows you to terminate a subscription.
+      operationId: destroySubscription
+      responses:
+        '200':
+          description: Subscription terminated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '405':
+          $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
   /add_ons:
     post:
       tags:
@@ -1017,131 +1138,6 @@ paths:
           $ref: '#/paths/~1fees/get/responses/401'
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
-  /subscriptions:
-    post:
-      tags:
-        - subscriptions
-      summary: Assign a plan to a customer
-      description: Assign a plan to a customer
-      operationId: createSubscription
-      requestBody:
-        description: Subscription payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubscriptionCreateInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscription'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
-    get:
-      tags:
-        - subscriptions
-      summary: Find subscriptions
-      description: Find all suscriptions for certain customer
-      operationId: findAllSubscriptions
-      parameters:
-        - $ref: '#/paths/~1fees/get/parameters/0'
-        - $ref: '#/paths/~1fees/get/parameters/1'
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-        - name: plan_code
-          in: query
-          description: Code of the plan attached to the subscription
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: example_code
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionsPaginated'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  '/subscriptions/{external_id}':
-    parameters:
-      - name: external_id
-        in: path
-        description: External ID of the existing subscription
-        required: true
-        schema:
-          type: string
-          example: example_id
-    put:
-      tags:
-        - subscriptions
-      summary: Update an existing subscription
-      description: Update an existing subscription by external ID
-      operationId: updateSubscription
-      requestBody:
-        description: Update an existing subscription
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubscriptionUpdateInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscription'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
-    delete:
-      tags:
-        - subscriptions
-      summary: Terminate a subscription
-      description: Terminate a subscription
-      operationId: destroySubscription
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscription'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /webhooks/public_key:
     get:
       tags:
@@ -1346,11 +1342,7 @@ paths:
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
+          $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
   '/invoices/{id}/refresh':
     put:
       tags:
@@ -1763,7 +1755,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
+                $ref: '#/components/schemas/ApiErrorNotAllowed'
   /wallet_transactions:
     post:
       tags:
@@ -1998,11 +1990,7 @@ paths:
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
+          $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
 components:
   parameters:
     page:
@@ -2073,6 +2061,23 @@ components:
           example: validation_errors
         error_details:
           type: object
+    ApiErrorNotAllowed:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 405
+        error:
+          type: string
+          example: Method Not Allowed
+        code:
+          type: string
+          example: not_allowed
     ApiErrorNotFound:
       type: object
       required:
@@ -2793,6 +2798,188 @@ components:
           type: integer
           description: Total number of records.
           example: 70
+    Subscription:
+      type: object
+      required:
+        - subscription
+      properties:
+        subscription:
+          $ref: '#/components/schemas/SubscriptionObject'
+    SubscriptionCreateInput:
+      type: object
+      required:
+        - subscription
+      properties:
+        subscription:
+          type: object
+          required:
+            - external_customer_id
+            - plan_code
+            - external_id
+          properties:
+            external_customer_id:
+              type: string
+              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+              description: The customer external unique identifier (provided by your own application)
+            plan_code:
+              type: string
+              example: premium
+              description: The unique code representing the plan to be attached to the customer. This code must correspond to the `code` property of one of the active plans.
+            name:
+              type: string
+              example: Repository A
+              description: 'The display name of the subscription on an invoice. This field allows for customization of the subscription''s name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.'
+            external_id:
+              type: string
+              example: my_sub_1234567890
+              description: 'The unique external identifier for the subscription. This identifier serves as an idempotency key, ensuring that each subscription is unique.'
+            billing_time:
+              type: string
+              description: 'The billing time for the subscription, which can be set as either `anniversary` or `calendar`. If not explicitly provided, it will default to `calendar`. The billing time determines the timing of recurring billing cycles for the subscription. By specifying `anniversary`, the billing cycle will be based on the specific date the subscription started (billed fully), while `calendar` sets the billing cycle at the first day of the week/month/year (billed with proration).'
+              example: anniversary
+              enum:
+                - calendar
+                - anniversary
+            subscription_at:
+              type: string
+              format: date-time
+              example: '2022-08-08T00:00:00Z'
+              description: 'The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
+    SubscriptionUpdateInput:
+      type: object
+      required:
+        - subscription
+      properties:
+        subscription:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Repository B
+              nullable: true
+              description: 'The display name of the subscription on an invoice. This field allows for customization of the subscription''s name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.'
+            subscription_at:
+              type: string
+              format: date-time
+              example: '2022-08-08T00:00:00Z'
+              description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    SubscriptionObject:
+      type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - billing_time
+        - external_customer_id
+        - created_at
+        - subscription_at
+        - plan_code
+        - external_id
+        - status
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription’s record within the Lago system
+        external_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The subscription external unique identifier (provided by your own application).
+        lago_customer_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
+        external_customer_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The customer external unique identifier (provided by your own application).
+        billing_time:
+          type: string
+          description: 'The billing time for the subscription, which can be set as either `anniversary` or `calendar`. If not explicitly provided, it will default to `calendar`. The billing time determines the timing of recurring billing cycles for the subscription. By specifying `anniversary`, the billing cycle will be based on the specific date the subscription started (billed fully), while `calendar` sets the billing cycle at the first day of the week/month/year (billed with proration).'
+          example: anniversary
+          enum:
+            - calendar
+            - anniversary
+        name:
+          type: string
+          example: Repository A
+          description: 'The display name of the subscription on an invoice. This field allows for customization of the subscription''s name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.'
+          nullable: true
+        plan_code:
+          type: string
+          example: premium
+          description: The unique code representing the plan to be attached to the customer. This code must correspond to the `code` property of one of the active plans.
+        status:
+          type: string
+          description: |-
+            The status of the subscription, which can have the following values:
+            - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
+            - `active`: the subscription is currently active and applied to the customer.
+            - `terminated`: the subscription is no longer active.
+            - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer or when a subscription with a pending status is terminated.
+          example: active
+          enum:
+            - active
+            - pending
+            - terminated
+            - canceled
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: 'The creation date of the subscription, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). This date provides a timestamp indicating when the subscription was initially created.'
+        canceled_at:
+          type: string
+          format: date-time
+          example: '2022-09-14T16:35:31Z'
+          description: The cancellation date of the subscription. This field is not null when the subscription is `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The effective start date of the subscription. This field can be null if the subscription is `pending` or `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+          nullable: true
+        subscription_at:
+          type: string
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The anniversary date and time of the initial subscription. This date serves as the basis for billing subscriptions with `anniversary` billing time. The `anniversary_date` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+        terminated_at:
+          type: string
+          format: date-time
+          example: '2022-09-14T16:35:31Z'
+          description: The termination date of the subscription. This field is not null when the subscription is `terminated`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC)
+          nullable: true
+        previous_plan_code:
+          type: string
+          example: null
+          description: The code identifying the previous plan associated with this subscription.
+          nullable: true
+        next_plan_code:
+          type: string
+          example: null
+          description: The code identifying the next plan in the case of a downgrade.
+          nullable: true
+        downgrade_plan_date:
+          type: string
+          format: date-time
+          example: null
+          description: 'The date when the plan will be downgraded, represented in ISO 8601 date format.'
+          nullable: true
+    SubscriptionsPaginated:
+      type: object
+      required:
+        - subscriptions
+        - meta
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     Timezone:
       type: string
       example: America/Los_Angeles
@@ -4037,152 +4224,6 @@ components:
                           example: '123456'
                         values:
                           type: object
-    SubscriptionObject:
-      type: object
-      required:
-        - lago_id
-        - lago_customer_id
-        - billing_time
-        - external_customer_id
-        - subscription_at
-        - created_at
-        - plan_code
-        - started_at
-        - external_id
-        - status
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_id:
-          type: string
-          example: '12345'
-        lago_customer_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_customer_id:
-          type: string
-          example: '54321'
-        name:
-          type: string
-          example: Test subscription
-        plan_code:
-          type: string
-          example: plan_code
-        status:
-          type: string
-          description: Subscription status
-          enum:
-            - active
-            - pending
-            - terminated
-            - canceled
-        billing_time:
-          type: string
-          description: Billing time
-          enum:
-            - calendar
-            - anniversary
-        subscription_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        started_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        terminated_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        canceled_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        previous_plan_code:
-          type: string
-          example: previous_code
-        next_plan_code:
-          type: string
-          example: next_code
-        downgrade_plan_date:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-    Subscription:
-      type: object
-      required:
-        - subscription
-      properties:
-        subscription:
-          $ref: '#/components/schemas/SubscriptionObject'
-    SubscriptionsPaginated:
-      type: object
-      required:
-        - subscriptions
-        - meta
-      properties:
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    SubscriptionCreateInput:
-      type: object
-      required:
-        - subscription
-      properties:
-        subscription:
-          type: object
-          required:
-            - external_customer_id
-            - plan_code
-            - external_id
-          properties:
-            external_customer_id:
-              type: string
-              example: '12345'
-            plan_code:
-              type: string
-              example: example_code
-            name:
-              type: string
-              example: Test name
-            external_id:
-              type: string
-              example: '54321'
-            billing_time:
-              type: string
-              description: Billing time
-              enum:
-                - calendar
-                - anniversary
-            subscription_at:
-              type: string
-              format: date-time
-              example: '2022-08-08T00:00:00Z'
-    SubscriptionUpdateInput:
-      type: object
-      required:
-        - subscription
-      properties:
-        subscription:
-          type: object
-          properties:
-            name:
-              type: string
-              example: New name
-            subscription_at:
-              type: string
-              format: date-time
-              example: '2022-08-08T00:00:00Z'
     CreditObject:
       type: object
       required:
@@ -5090,23 +5131,6 @@ components:
                 - pending
                 - succeeded
                 - failed
-    ApiResponseNotAllowed:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 405
-        error:
-          type: string
-          example: Method Not Allowed
-        code:
-          type: string
-          example: not_allowed
   responses:
     BadRequest:
       $ref: '#/paths/~1plans/post/responses/400'
@@ -5118,6 +5142,8 @@ components:
             $ref: '#/components/schemas/ApiErrorForbidden'
     Unauthorized:
       $ref: '#/paths/~1fees/get/responses/401'
+    NotAllowed:
+      $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
     NotFound:
       $ref: '#/paths/~1plans/post/responses/404'
     UnprocessableEntity:

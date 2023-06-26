@@ -1,0 +1,39 @@
+type: object
+required:
+  - subscription
+properties:
+  subscription:
+    type: object
+    required:
+      - external_customer_id
+      - plan_code
+      - external_id
+    properties:
+      external_customer_id:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        description: The customer external unique identifier (provided by your own application)
+      plan_code:
+        type: string
+        example: 'premium'
+        description: The unique code representing the plan to be attached to the customer. This code must correspond to the `code` property of one of the active plans.
+      name:
+        type: string
+        example: 'Repository A'
+        description: The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.
+      external_id:
+        type: string
+        example: 'my_sub_1234567890'
+        description: The unique external identifier for the subscription. This identifier serves as an idempotency key, ensuring that each subscription is unique.
+      billing_time:
+        type: string
+        description: The billing time for the subscription, which can be set as either `anniversary` or `calendar`. If not explicitly provided, it will default to `calendar`. The billing time determines the timing of recurring billing cycles for the subscription. By specifying `anniversary`, the billing cycle will be based on the specific date the subscription started (billed fully), while `calendar` sets the billing cycle at the first day of the week/month/year (billed with proration).
+        example: 'anniversary'
+        enum:
+          - calendar
+          - anniversary
+      subscription_at:
+        type: string
+        format: 'date-time'
+        example: '2022-08-08T00:00:00Z'
+        description: The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).

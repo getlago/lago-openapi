@@ -26,6 +26,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/customers/customer-object
+  - name: subscriptions
+    description: Everything about Subscription collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/subscriptions/subscription-object
   - name: add_ons
     description: Everything about Add-on collection
     externalDocs:
@@ -51,11 +56,6 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/plans/plan-object
-  - name: subscriptions
-    description: Everything about Subscription collection
-    externalDocs:
-      description: Find out more
-      url: https://doc.getlago.com/docs/api/subscriptions/subscription-object
   - name: webhooks
     description: Everything about Webhooks
     externalDocs:
@@ -91,6 +91,10 @@ paths:
     $ref: './resources/customer.yaml'
   /customers/{external_customer_id}/portal_url:
     $ref: './resources/customer_portal_url.yaml'
+  /subscriptions:
+    $ref: './resources/subscriptions.yaml'
+  /subscriptions/{external_id}:
+    $ref: './resources/subscription.yaml'
 
 
   # TODO: split requests into multiple files
@@ -735,131 +739,6 @@ paths:
           $ref: './responses/Unauthorized.yaml'
         '404':
           $ref: './responses/NotFound.yaml'
-  /subscriptions:
-    post:
-      tags:
-        - subscriptions
-      summary: Assign a plan to a customer
-      description: Assign a plan to a customer
-      operationId: createSubscription
-      requestBody:
-        description: Subscription payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubscriptionCreateInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscription'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - subscriptions
-      summary: Find subscriptions
-      description: Find all suscriptions for certain customer
-      operationId: findAllSubscriptions
-      parameters:
-        - $ref: './parameters/page.yaml'
-        - $ref: './parameters/per_page.yaml'
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-        - name: plan_code
-          in: query
-          description: Code of the plan attached to the subscription
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: 'example_code'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionsPaginated'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-  /subscriptions/{external_id}:
-    parameters:
-      - name: external_id
-        in: path
-        description: External ID of the existing subscription
-        required: true
-        schema:
-          type: string
-          example: 'example_id'
-    put:
-      tags:
-        - subscriptions
-      summary: Update an existing subscription
-      description: Update an existing subscription by external ID
-      operationId: updateSubscription
-      requestBody:
-        description: Update an existing subscription
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubscriptionUpdateInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscription'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    delete:
-      tags:
-        - subscriptions
-      summary: Terminate a subscription
-      description: Terminate a subscription
-      operationId: destroySubscription
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscription'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
   /webhooks/public_key:
     get:
       tags:
@@ -1064,11 +943,7 @@ paths:
         '404':
           $ref: './responses/NotFound.yaml'
         '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
+          $ref: './responses/NotAllowed.yaml'
   /invoices/{id}/refresh:
     put:
       tags:
@@ -1455,11 +1330,7 @@ paths:
         '404':
           $ref: './responses/NotFound.yaml'
         '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
+          $ref: './responses/NotAllowed.yaml'
   /wallet_transactions:
     post:
       tags:
@@ -1694,11 +1565,7 @@ paths:
         '404':
           $ref: './responses/NotFound.yaml'
         '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseNotAllowed'
+          $ref: './responses/NotAllowed.yaml'
 
 
 

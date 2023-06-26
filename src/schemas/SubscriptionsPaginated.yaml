@@ -1,0 +1,11 @@
+type: object
+required:
+  - subscriptions
+  - meta
+properties:
+  subscriptions:
+    type: array
+    items:
+      $ref: './SubscriptionObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
