@@ -34,7 +34,7 @@ properties:
       currency:
         allOf:
           - $ref: './Currency.yaml'
-          - description: Currency of the customer. Format must ISO 4217
+          - description: Currency of the customer. Format must be ISO 4217
             nullable: true
       email:
         type: string
@@ -70,7 +70,7 @@ properties:
       state:
         type: string
         example: 'CA'
-        description: The statetimezone of the customer's billing address
+        description: The state of the customer's billing address
         nullable: true
       tax_identification_number:
         type: string

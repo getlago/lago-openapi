@@ -10,7 +10,7 @@ properties:
     example: stripe
     description: |-
       The payment provider utilized to initiate payments for invoices issued by Lago.
-      Accepted values: `stripe`, `adyen`, `gocardless` or null. This field is required if you intend to assign a `provider_customer_id`
+      Accepted values: `stripe`, `adyen`, `gocardless` or null. This field is required if you intend to assign a `provider_customer_id`.
     enum:
       - stripe
       - adyen
@@ -26,7 +26,7 @@ properties:
   sync_with_provider:
     type: boolean
     example: true
-    description: Set this field to `true`` if you want to create a customer record in the payment provider's system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
+    description: Set this field to `true` if you want to create a customer record in the payment provider's system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
   document_locale:
     type: string
     example: fr

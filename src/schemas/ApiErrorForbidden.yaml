@@ -1,0 +1,16 @@
+type: object
+required:
+  - status
+  - error
+  - code
+properties:
+  status:
+    type: integer
+    format: int32
+    example: 403
+  error:
+    type: string
+    example: 'Forbidden'
+  code:
+    type: string
+    example: 'feature_unavailable'

@@ -290,7 +290,7 @@ paths:
         required: true
         schema:
           type: string
-          example: '12345'
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
     get:
       tags:
         - customers
@@ -323,6 +323,49 @@ paths:
                 $ref: '#/components/schemas/Customer'
         '401':
           $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  '/customers/{external_customer_id}/portal_url':
+    get:
+      tags:
+        - customers
+      summary: Get a customer portal URL
+      description: |-
+        Retrieves an embeddable link for displaying a customer portal.
+
+        This endpoint allows you to fetch the URL that can be embedded to provide customers access to a dedicated portal
+      parameters:
+        - name: external_customer_id
+          in: path
+          description: External ID of the existing customer
+          required: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      operationId: getCustomerPortalUrl
+      responses:
+        '200':
+          description: Portal URL
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - customer
+                properties:
+                  customer:
+                    type: object
+                    required:
+                      - portal_url
+                    properties:
+                      portal_url:
+                        type: string
+                        example: 'https://app.lago.com/customer-portal/1234567890'
+                        description: An embeddable link for displaying a customer portal
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
   /add_ons:
@@ -679,13 +722,13 @@ paths:
           $ref: '#/paths/~1fees/get/responses/401'
         '422':
           $ref: '#/paths/~1fees/get/responses/422'
-  '/customers/{customer_external_id}/current_usage':
+  '/customers/{external_customer_id}/current_usage':
     get:
       tags:
         - customers
       summary: Find customer current usage
       parameters:
-        - name: customer_external_id
+        - name: external_customer_id
           in: path
           description: External ID of the existing customer
           required: true
@@ -713,56 +756,13 @@ paths:
           $ref: '#/paths/~1fees/get/responses/401'
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
-  '/customers/{customer_external_id}/portal_url':
-    get:
-      tags:
-        - customers
-      summary: Get customer portal URL
-      parameters:
-        - name: customer_external_id
-          in: path
-          description: External ID of the existing customer
-          required: true
-          schema:
-            type: string
-            example: '12345'
-      description: Get customer portal URL
-      operationId: getCustomerPortalUrl
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - customer
-                properties:
-                  customer:
-                    type: object
-                    required:
-                      - portal_url
-                    properties:
-                      portal_url:
-                        type: string
-                        example: 'https://app.lago.com/customer-portal/abc/'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseForbidden'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  '/customers/{customer_external_id}/applied_coupons/{applied_coupon_id}':
+  '/customers/{external_customer_id}/applied_coupons/{applied_coupon_id}':
     delete:
       tags:
         - customers
       summary: Delete customer's appplied coupon
       parameters:
-        - name: customer_external_id
+        - name: external_customer_id
           in: path
           description: External ID of the existing customer
           required: true
@@ -2023,6 +2023,23 @@ components:
         error:
           type: string
           example: Bad request
+    ApiErrorForbidden:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        code:
+          type: string
+          example: feature_unavailable
     ApiErrorUnauthorized:
       type: object
       required:
@@ -2407,7 +2424,7 @@ components:
           example: stripe
           description: |-
             The payment provider utilized to initiate payments for invoices issued by Lago.
-            Accepted values: `stripe`, `adyen`, `gocardless` or null. This field is required if you intend to assign a `provider_customer_id`
+            Accepted values: `stripe`, `adyen`, `gocardless` or null. This field is required if you intend to assign a `provider_customer_id`.
           enum:
             - stripe
             - adyen
@@ -2423,7 +2440,7 @@ components:
         sync_with_provider:
           type: boolean
           example: true
-          description: 'Set this field to `true`` if you want to create a customer record in the payment provider''s system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`'
+          description: 'Set this field to `true` if you want to create a customer record in the payment provider''s system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`'
         document_locale:
           type: string
           example: fr
@@ -2465,7 +2482,7 @@ components:
             currency:
               allOf:
                 - $ref: '#/components/schemas/Currency'
-                - description: Currency of the customer. Format must ISO 4217
+                - description: Currency of the customer. Format must be ISO 4217
                   nullable: true
             email:
               type: string
@@ -2501,7 +2518,7 @@ components:
             state:
               type: string
               example: CA
-              description: The statetimezone of the customer's billing address
+              description: The state of the customer's billing address
               nullable: true
             tax_identification_number:
               type: string
@@ -2639,7 +2656,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/Currency'
             - example: USD
-              description: Currency of the customer. Format must ISO 4217
+              description: Currency of the customer. Format must be ISO 4217
               nullable: true
         email:
           type: string
@@ -2649,8 +2666,8 @@ components:
           nullable: true
         legal_name:
           type: string
-          example: name1
-          description: Coleman-Blair
+          example: Coleman-Blair
+          description: The legal company name of the customer
           nullable: true
         legal_number:
           type: string
@@ -5073,23 +5090,6 @@ components:
                 - pending
                 - succeeded
                 - failed
-    ApiResponseForbidden:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 403
-        error:
-          type: string
-          example: Forbidden
-        code:
-          type: string
-          example: feature_unavailable
     ApiResponseNotAllowed:
       type: object
       required:
@@ -5110,6 +5110,12 @@ components:
   responses:
     BadRequest:
       $ref: '#/paths/~1plans/post/responses/400'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorForbidden'
     Unauthorized:
       $ref: '#/paths/~1fees/get/responses/401'
     NotFound:

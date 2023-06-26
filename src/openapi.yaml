@@ -89,6 +89,8 @@ paths:
     $ref: './resources/customers.yaml'
   /customers/{external_id}:
     $ref: './resources/customer.yaml'
+  /customers/{external_customer_id}/portal_url:
+    $ref: './resources/customer_portal_url.yaml'
 
 
   # TODO: split requests into multiple files
@@ -446,13 +448,13 @@ paths:
           $ref: './responses/Unauthorized.yaml'
         '422':
           $ref: './responses/UnprocessableEntity.yaml'
-  /customers/{customer_external_id}/current_usage:
+  /customers/{external_customer_id}/current_usage:
     get:
       tags:
         - customers
       summary: Find customer current usage
       parameters:
-        - name: customer_external_id
+        - name: external_customer_id
           in: path
           description: External ID of the existing customer
           required: true
@@ -480,56 +482,13 @@ paths:
           $ref: './responses/Unauthorized.yaml'
         '404':
           $ref: './responses/NotFound.yaml'
-  /customers/{customer_external_id}/portal_url:
-    get:
-      tags:
-        - customers
-      summary: Get customer portal URL
-      parameters:
-        - name: customer_external_id
-          in: path
-          description: External ID of the existing customer
-          required: true
-          schema:
-            type: string
-            example: '12345'
-      description: Get customer portal URL
-      operationId: getCustomerPortalUrl
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - customer
-                properties:
-                  customer:
-                    type: object
-                    required:
-                      - portal_url
-                    properties:
-                      portal_url:
-                        type: string
-                        example: 'https://app.lago.com/customer-portal/abc/'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseForbidden'
-        '404':
-          $ref: './responses/NotFound.yaml'
-  /customers/{customer_external_id}/applied_coupons/{applied_coupon_id}:
+  /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
     delete:
       tags:
         - customers
       summary: Delete customer's appplied coupon
       parameters:
-        - name: customer_external_id
+        - name: external_customer_id
           in: path
           description: External ID of the existing customer
           required: true

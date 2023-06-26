@@ -52,7 +52,7 @@ properties:
     allOf:
     - $ref: './Currency.yaml'
     - example: 'USD'
-      description: Currency of the customer. Format must ISO 4217
+      description: Currency of the customer. Format must be ISO 4217
       nullable: true
   email:
     type: string
@@ -62,8 +62,8 @@ properties:
     nullable: true
   legal_name:
     type: string
-    example: 'name1'
-    description: 'Coleman-Blair'
+    example: 'Coleman-Blair'
+    description: 'The legal company name of the customer'
     nullable: true
   legal_number:
     type: string
