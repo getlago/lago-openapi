@@ -49,10 +49,11 @@ properties:
     description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
     nullable: true
   currency:
-    type: string
-    example: 'USD'
-    description: Currency of the customer. Format must ISO 4217
-    nullable: true
+    allOf:
+    - $ref: './Currency.yaml'
+    - example: 'USD'
+      description: Currency of the customer. Format must ISO 4217
+      nullable: true
   email:
     type: string
     format: 'email'

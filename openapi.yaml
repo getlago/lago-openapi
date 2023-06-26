@@ -2246,6 +2246,146 @@ components:
             $ref: '#/components/schemas/BillableMetricObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    Currency:
+      type: string
+      enum:
+        - AED
+        - AFN
+        - ALL
+        - AMD
+        - ANG
+        - AOA
+        - ARS
+        - AUD
+        - AWG
+        - AZN
+        - BAM
+        - BBD
+        - BDT
+        - BGN
+        - BIF
+        - BMD
+        - BND
+        - BOB
+        - BRL
+        - BSD
+        - BWP
+        - BYN
+        - BZD
+        - CAD
+        - CDF
+        - CHF
+        - CLF
+        - CLP
+        - CNY
+        - COP
+        - CRC
+        - CVE
+        - CZK
+        - DJF
+        - DKK
+        - DOP
+        - DZD
+        - EGP
+        - ETB
+        - EUR
+        - FJD
+        - FKP
+        - GBP
+        - GEL
+        - GIP
+        - GMD
+        - GNF
+        - GTQ
+        - GYD
+        - HKD
+        - HNL
+        - HRK
+        - HTG
+        - HUF
+        - IDR
+        - ILS
+        - INR
+        - ISK
+        - JMD
+        - JPY
+        - KES
+        - KGS
+        - KHR
+        - KMF
+        - KRW
+        - KYD
+        - KZT
+        - LAK
+        - LBP
+        - LKR
+        - LRD
+        - LSL
+        - MAD
+        - MDL
+        - MGA
+        - MKD
+        - MMK
+        - MNT
+        - MOP
+        - MRO
+        - MUR
+        - MVR
+        - MWK
+        - MXN
+        - MYR
+        - MZN
+        - NAD
+        - NGN
+        - NIO
+        - NOK
+        - NPR
+        - NZD
+        - PAB
+        - PEN
+        - PGK
+        - PHP
+        - PKR
+        - PLN
+        - PYG
+        - QAR
+        - RON
+        - RSD
+        - RUB
+        - RWF
+        - SAR
+        - SBD
+        - SCR
+        - SEK
+        - SGD
+        - SHP
+        - SLL
+        - SOS
+        - SRD
+        - STD
+        - SZL
+        - THB
+        - TJS
+        - TOP
+        - TRY
+        - TTD
+        - TWD
+        - TZS
+        - UAH
+        - UGX
+        - USD
+        - UYU
+        - UZS
+        - VND
+        - VUV
+        - WST
+        - XAF
+        - XCD
+        - XOF
+        - XPF
+        - YER
+        - ZAR
+        - ZMW
     Customer:
       type: object
       required:
@@ -2322,10 +2462,11 @@ components:
               description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
               nullable: true
             currency:
-              type: string
-              example: USD
-              description: Currency of the customer. Format must ISO 4217
-              nullable: true
+              allOf:
+                - $ref: '#/components/schemas/Currency'
+                - example: USD
+                  description: Currency of the customer. Format must ISO 4217
+                  nullable: true
             email:
               type: string
               format: email
@@ -2495,10 +2636,11 @@ components:
           description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
           nullable: true
         currency:
-          type: string
-          example: USD
-          description: Currency of the customer. Format must ISO 4217
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - example: USD
+              description: Currency of the customer. Format must ISO 4217
+              nullable: true
         email:
           type: string
           format: email
