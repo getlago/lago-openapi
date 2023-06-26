@@ -1,5 +1,7 @@
 ApiErrorBadRequest:
   $ref: './ApiErrorBadRequest.yaml'
+ApiErrorForbidden:
+  $ref: './ApiErrorForbidden.yaml'
 ApiErrorUnauthorized:
   $ref: './ApiErrorUnauthorized.yaml'
 ApiErrorUnprocessableEntity:
@@ -20,12 +22,28 @@ BillableMetricGroup:
   $ref: './BillableMetricGroup.yaml'
 BillableMetricsPaginated:
   $ref: './BillableMetricsPaginated.yaml'
+Currency:
+  $ref: './Currency.yaml'
+Customer:
+  $ref: './Customer.yaml'
+CustomerBillingConfiguration:
+  $ref: './CustomerBillingConfiguration.yaml'
+CustomerCreateInput:
+  $ref: './CustomerCreateInput.yaml'
+CustomerMetadata:
+  $ref: './CustomerMetadata.yaml'
+CustomerObject:
+  $ref: './CustomerObject.yaml'
+CustomersPaginated:
+  $ref: './CustomersPaginated.yaml'
 GroupObject:
   $ref: './GroupObject.yaml'
 GroupsPaginated:
   $ref: './GroupsPaginated.yaml'
 PaginationMeta:
   $ref: './PaginationMeta.yaml'
+Timezone:
+  $ref: './Timezone.yaml'
 
 # TODO: split into multiple files
 AddOnObject:
@@ -603,235 +621,6 @@ OrganizationInput:
             enum: [invoice.finalized, credit_note.created]
         billing_configuration:
           $ref: '#/BillingConfigurationOrganization'
-BillingConfigurationCustomer:
-  type: object
-  additionalProperties: true
-  properties:
-    invoice_grace_period:
-      type: integer
-      example: 3
-    payment_provider:
-      type: string
-      description: Payment provider type
-      enum:
-        - stripe
-        - gocardless
-    provider_customer_id:
-      type: string
-      example: '123456'
-    sync_with_provider:
-      type: boolean
-      example: true
-    document_locale:
-      type: string
-      example: fr
-    vat_rate:
-      type: number
-      example: 25.00
-CustomerMetadataObject:
-  type: object
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    key:
-      type: string
-      example: 'name'
-    value:
-      type: string
-      example: 'John'
-    display_in_invoice:
-      type: boolean
-      example: false
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-CustomerObject:
-  type: object
-  required:
-    - lago_id
-    - sequential_id
-    - slug
-    - external_id
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_id:
-      type: string
-      example: '12345'
-    name:
-      type: string
-      example: 'John Doe'
-    sequential_id:
-      type: integer
-      example: 12345
-    slug:
-      type: string
-      example: 'slug'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    country:
-      type: string
-      example: CZ
-    address_line1:
-      type: string
-      example: 'address1'
-    address_line2:
-      type: string
-      example: 'address2'
-    state:
-      type: string
-      example: 'state1'
-    zipcode:
-      type: string
-      example: '10000'
-    email:
-      type: string
-      format: 'email'
-      example: 'example@example.com'
-    city:
-      type: string
-      example: 'City'
-    url:
-      type: string
-      example: 'https://example.com'
-    phone:
-      type: string
-      example: '+3551234567'
-    lago_url:
-      type: string
-      example: 'https://lago.url'
-    legal_name:
-      type: string
-      example: 'name1'
-    legal_number:
-      type: string
-      example: '10000'
-    tax_identification_number:
-      type: string
-      example: 'EU123456789'
-    currency:
-      type: string
-      example: 'EUR'
-    timezone:
-      type: string
-      example: 'UTC'
-    applicable_timezone:
-      type: string
-      example: 'UTC'
-    billing_configuration:
-      $ref: '#/BillingConfigurationCustomer'
-    metadata:
-      type: array
-      items:
-        $ref: '#/CustomerMetadataObject'
-Customer:
-  type: object
-  required:
-    - customer
-  properties:
-    customer:
-      $ref: '#/CustomerObject'
-CustomersPaginated:
-  type: object
-  required:
-    - customers
-    - meta
-  properties:
-    customers:
-      type: array
-      items:
-        $ref: '#/CustomerObject'
-    meta:
-      $ref: '#/PaginationMeta'
-CustomerInput:
-  type: object
-  required:
-    - customer
-  properties:
-    customer:
-      type: object
-      required:
-        - external_id
-      properties:
-        external_id:
-          type: string
-          example: '12345'
-        name:
-          type: string
-          example: 'John Doe'
-        country:
-          type: string
-          example: CZ
-        address_line1:
-          type: string
-          example: 'address1'
-        address_line2:
-          type: string
-          example: 'address2'
-        state:
-          type: string
-          example: 'state1'
-        zipcode:
-          type: string
-          example: '10000'
-        email:
-          type: string
-          format: 'email'
-          example: 'example@example.com'
-        city:
-          type: string
-          example: 'City'
-        url:
-          type: string
-          example: 'https://example.com'
-        phone:
-          type: string
-          example: '+3551234567'
-        lago_url:
-          type: string
-          example: 'https://lago.url'
-        legal_name:
-          type: string
-          example: 'name1'
-        legal_number:
-          type: string
-          example: '10000'
-        tax_identification_number:
-          type: string
-          example: 'EU123456789'
-        currency:
-          type: string
-          example: 'EUR'
-        timezone:
-          type: string
-          example: 'Europe/Paris'
-        billing_configuration:
-          $ref: '#/BillingConfigurationCustomer'
-        metadata:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                format: 'uuid'
-                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-              key:
-                type: string
-                example: 'name'
-              value:
-                type: string
-                example: 'John'
-              display_in_invoice:
-                type: boolean
-                example: false
 ChargeUsageObject:
   type: object
   required:
@@ -2413,23 +2202,6 @@ CreditNoteUpdateInput:
             - pending
             - succeeded
             - failed
-ApiResponseForbidden:
-  type: object
-  required:
-    - status
-    - error
-    - code
-  properties:
-    status:
-      type: integer
-      format: int32
-      example: 403
-    error:
-      type: string
-      example: 'Forbidden'
-    code:
-      type: string
-      example: 'feature_unavailable'
 ApiResponseNotAllowed:
   type: object
   required:

@@ -1,0 +1,11 @@
+type: object
+required:
+  - customers
+  - meta
+properties:
+  customers:
+    type: array
+    items:
+      $ref: './CustomerObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

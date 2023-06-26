@@ -20,6 +20,11 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/billable_metrics/billable-metric-object'
+  - name: customers
+    description: Everything about Customer collection
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/customers/customer-object'
   - name: add_ons
     description: Everything about Add-on collection
     externalDocs:
@@ -35,11 +40,6 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/organizations/organization-object'
-  - name: customers
-    description: Everything about Customer collection
-    externalDocs:
-      description: Find out more
-      url: 'https://doc.getlago.com/docs/api/customers/customer-object'
   - name: events
     description: Everything about Event collection
     externalDocs:
@@ -237,6 +237,137 @@ paths:
                   total_count: 2
         '401':
           $ref: '#/paths/~1fees/get/responses/401'
+  /customers:
+    post:
+      tags:
+        - customers
+      summary: Create a customer
+      description: This endpoint creates a new customer.
+      operationId: createCustomer
+      requestBody:
+        description: Customer payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Customer created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
+    get:
+      tags:
+        - customers
+      summary: List all customers
+      description: This endpoint retrieves all existing customers.
+      operationId: findAllCustomers
+      parameters:
+        - $ref: '#/paths/~1fees/get/parameters/0'
+        - $ref: '#/paths/~1fees/get/parameters/1'
+      responses:
+        '200':
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomersPaginated'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+  '/customers/{external_id}':
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing customer
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    get:
+      tags:
+        - customers
+      summary: Retrieve a customer
+      description: This endpoint retrieves an existing customer.
+      operationId: findCustomer
+      responses:
+        '200':
+          description: Customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+    delete:
+      tags:
+        - customers
+      summary: Delete a customer
+      description: This endpoint deletes an existing customer.
+      operationId: destroyCustomer
+      responses:
+        '200':
+          description: Customer deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  '/customers/{external_customer_id}/portal_url':
+    get:
+      tags:
+        - customers
+      summary: Get a customer portal URL
+      description: |-
+        Retrieves an embeddable link for displaying a customer portal.
+
+        This endpoint allows you to fetch the URL that can be embedded to provide customers access to a dedicated portal
+      parameters:
+        - name: external_customer_id
+          in: path
+          description: External ID of the existing customer
+          required: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      operationId: getCustomerPortalUrl
+      responses:
+        '200':
+          description: Portal URL
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - customer
+                properties:
+                  customer:
+                    type: object
+                    required:
+                      - portal_url
+                    properties:
+                      portal_url:
+                        type: string
+                        example: 'https://app.lago.com/customer-portal/1234567890'
+                        description: An embeddable link for displaying a customer portal
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
   /add_ons:
     post:
       tags:
@@ -591,101 +722,13 @@ paths:
           $ref: '#/paths/~1fees/get/responses/401'
         '422':
           $ref: '#/paths/~1fees/get/responses/422'
-  /customers:
-    post:
-      tags:
-        - customers
-      summary: Create a customer
-      description: Create a new customer
-      operationId: createCustomer
-      requestBody:
-        description: Customer payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
-    get:
-      tags:
-        - customers
-      summary: Find customers
-      description: Find all customers in certain organisation
-      operationId: findAllCustomers
-      parameters:
-        - $ref: '#/paths/~1fees/get/parameters/0'
-        - $ref: '#/paths/~1fees/get/parameters/1'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomersPaginated'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-  '/customers/{external_id}':
-    parameters:
-      - name: external_id
-        in: path
-        description: External ID of the existing customer
-        required: true
-        schema:
-          type: string
-          example: '12345'
-    get:
-      tags:
-        - customers
-      summary: Find customer by external ID
-      description: Return a single customer
-      operationId: findCustomer
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-    delete:
-      tags:
-        - customers
-      summary: Delete a customer
-      description: Return the deleted customer
-      operationId: destroyCustomer
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  '/customers/{customer_external_id}/current_usage':
+  '/customers/{external_customer_id}/current_usage':
     get:
       tags:
         - customers
       summary: Find customer current usage
       parameters:
-        - name: customer_external_id
+        - name: external_customer_id
           in: path
           description: External ID of the existing customer
           required: true
@@ -713,56 +756,13 @@ paths:
           $ref: '#/paths/~1fees/get/responses/401'
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
-  '/customers/{customer_external_id}/portal_url':
-    get:
-      tags:
-        - customers
-      summary: Get customer portal URL
-      parameters:
-        - name: customer_external_id
-          in: path
-          description: External ID of the existing customer
-          required: true
-          schema:
-            type: string
-            example: '12345'
-      description: Get customer portal URL
-      operationId: getCustomerPortalUrl
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - customer
-                properties:
-                  customer:
-                    type: object
-                    required:
-                      - portal_url
-                    properties:
-                      portal_url:
-                        type: string
-                        example: 'https://app.lago.com/customer-portal/abc/'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponseForbidden'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  '/customers/{customer_external_id}/applied_coupons/{applied_coupon_id}':
+  '/customers/{external_customer_id}/applied_coupons/{applied_coupon_id}':
     delete:
       tags:
         - customers
       summary: Delete customer's appplied coupon
       parameters:
-        - name: customer_external_id
+        - name: external_customer_id
           in: path
           description: External ID of the existing customer
           required: true
@@ -2023,6 +2023,23 @@ components:
         error:
           type: string
           example: Bad request
+    ApiErrorForbidden:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        code:
+          type: string
+          example: feature_unavailable
     ApiErrorUnauthorized:
       type: object
       required:
@@ -2246,6 +2263,475 @@ components:
             $ref: '#/components/schemas/BillableMetricObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    Currency:
+      type: string
+      example: USD
+      enum:
+        - AED
+        - AFN
+        - ALL
+        - AMD
+        - ANG
+        - AOA
+        - ARS
+        - AUD
+        - AWG
+        - AZN
+        - BAM
+        - BBD
+        - BDT
+        - BGN
+        - BIF
+        - BMD
+        - BND
+        - BOB
+        - BRL
+        - BSD
+        - BWP
+        - BYN
+        - BZD
+        - CAD
+        - CDF
+        - CHF
+        - CLF
+        - CLP
+        - CNY
+        - COP
+        - CRC
+        - CVE
+        - CZK
+        - DJF
+        - DKK
+        - DOP
+        - DZD
+        - EGP
+        - ETB
+        - EUR
+        - FJD
+        - FKP
+        - GBP
+        - GEL
+        - GIP
+        - GMD
+        - GNF
+        - GTQ
+        - GYD
+        - HKD
+        - HNL
+        - HRK
+        - HTG
+        - HUF
+        - IDR
+        - ILS
+        - INR
+        - ISK
+        - JMD
+        - JPY
+        - KES
+        - KGS
+        - KHR
+        - KMF
+        - KRW
+        - KYD
+        - KZT
+        - LAK
+        - LBP
+        - LKR
+        - LRD
+        - LSL
+        - MAD
+        - MDL
+        - MGA
+        - MKD
+        - MMK
+        - MNT
+        - MOP
+        - MRO
+        - MUR
+        - MVR
+        - MWK
+        - MXN
+        - MYR
+        - MZN
+        - NAD
+        - NGN
+        - NIO
+        - NOK
+        - NPR
+        - NZD
+        - PAB
+        - PEN
+        - PGK
+        - PHP
+        - PKR
+        - PLN
+        - PYG
+        - QAR
+        - RON
+        - RSD
+        - RUB
+        - RWF
+        - SAR
+        - SBD
+        - SCR
+        - SEK
+        - SGD
+        - SHP
+        - SLL
+        - SOS
+        - SRD
+        - STD
+        - SZL
+        - THB
+        - TJS
+        - TOP
+        - TRY
+        - TTD
+        - TWD
+        - TZS
+        - UAH
+        - UGX
+        - USD
+        - UYU
+        - UZS
+        - VND
+        - VUV
+        - WST
+        - XAF
+        - XCD
+        - XOF
+        - XPF
+        - YER
+        - ZAR
+        - ZMW
+    Customer:
+      type: object
+      required:
+        - customer
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerObject'
+    CustomerBillingConfiguration:
+      type: object
+      description: 'Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.'
+      properties:
+        invoice_grace_period:
+          type: integer
+          example: 3
+          description: 'The grace period, expressed in days, for the invoice. This period refers to the additional time granted to the customer beyond the invoice due date to adjust usage and line items'
+        payment_provider:
+          type: string
+          example: stripe
+          description: |-
+            The payment provider utilized to initiate payments for invoices issued by Lago.
+            Accepted values: `stripe`, `adyen`, `gocardless` or null. This field is required if you intend to assign a `provider_customer_id`.
+          enum:
+            - stripe
+            - adyen
+            - gocardless
+        provider_customer_id:
+          type: string
+          example: cus_12345
+          description: 'The customer ID within the payment provider''s system. If this field is not provided, Lago has the option to create a new customer record within the payment provider''s system on behalf of the customer'
+        sync:
+          type: boolean
+          example: true
+          description: 'Set this field to `true` if you want to create the customer in the payment provider synchronously with the customer creation process in Lago. This option is applicable only when the `provider_customer_id` is `null` and the customer is automatically created in the payment provider through Lago. By default, the value is set to `false`'
+        sync_with_provider:
+          type: boolean
+          example: true
+          description: 'Set this field to `true` if you want to create a customer record in the payment provider''s system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`'
+        document_locale:
+          type: string
+          example: fr
+          description: 'The document locale, specified in the ISO 639-1 format. This field represents the language or locale used for the documents issued by Lago'
+    CustomerCreateInput:
+      type: object
+      required:
+        - customer
+      properties:
+        customer:
+          type: object
+          required:
+            - external_id
+          properties:
+            external_id:
+              type: string
+              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+              description: The customer external unique identifier (provided by your own application)
+            address_line1:
+              type: string
+              example: 5230 Penfield Ave
+              description: The first line of the billing address
+              nullable: true
+            address_line2:
+              type: string
+              example: ''
+              description: The second line of the billing address
+              nullable: true
+            city:
+              type: string
+              example: Woodland Hills
+              description: The city of the customer's billing address
+              nullable: true
+            country:
+              type: string
+              example: US
+              description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+              nullable: true
+            currency:
+              allOf:
+                - $ref: '#/components/schemas/Currency'
+                - description: Currency of the customer. Format must be ISO 4217
+                  nullable: true
+            email:
+              type: string
+              format: email
+              example: dinesh@piedpiper.test
+              description: The email of the customer
+              nullable: true
+            legal_name:
+              type: string
+              example: Coleman-Blair
+              description: The legal company name of the customer
+              nullable: true
+            legal_number:
+              type: string
+              example: 49-008-2965
+              description: The legal company number of the customer
+              nullable: true
+            logo_url:
+              type: string
+              example: 'http://hooli.com/logo.png'
+              description: The logo URL of the customer
+              nullable: true
+            name:
+              type: string
+              example: Gavin Belson
+              description: The full name of the customer
+              nullable: true
+            phone:
+              type: string
+              example: 1-171-883-3711 x245
+              description: The phone number of the customer
+              nullable: true
+            state:
+              type: string
+              example: CA
+              description: The state of the customer's billing address
+              nullable: true
+            tax_identification_number:
+              type: string
+              example: EU123456789
+              description: The tax identification number of the customer
+              nullable: true
+            timezone:
+              allOf:
+                - $ref: '#/components/schemas/Timezone'
+                - description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
+                  nullable: true
+            url:
+              type: string
+              example: 'http://hooli.com'
+              description: The custom website URL of the customer
+              nullable: true
+            zipcode:
+              type: string
+              example: '91364'
+              description: The zipcode of the customer's billing address
+              nullable: true
+            billing_configuration:
+              $ref: '#/components/schemas/CustomerBillingConfiguration'
+            metadata:
+              type: array
+              description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
+              items:
+                type: object
+                required:
+                  - key
+                  - value
+                  - display_in_invoice
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                    description: 'Identifier for the metadata object, only required when updating a key-value pair'
+                  key:
+                    type: string
+                    example: Purchase Order
+                    description: The metadata object key
+                  value:
+                    type: string
+                    example: '123456789'
+                    description: The metadata object value
+                  display_in_invoice:
+                    type: boolean
+                    example: true
+                    description: 'Determines whether the item or information should be displayed in the invoice. If set to true, the item or information will be included and visible in the generated invoice. If set to false, the item or information will be excluded and not displayed in the invoice.'
+    CustomerMetadata:
+      type: object
+      description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
+      required:
+        - lago_id
+        - key
+        - value
+        - display_in_invoice
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: A unique identifier for the customer metadata object in the Lago application. Can be used to update a key-value pair
+        key:
+          type: string
+          example: Purchase Order
+          description: The metadata object key
+        value:
+          type: string
+          example: '123456789'
+          description: The metadata object value
+        display_in_invoice:
+          type: boolean
+          example: true
+          description: 'Determines whether the item or information should be displayed in the invoice. If set to true, the item or information will be included and visible in the generated invoice. If set to false, the item or information will be excluded and not displayed in the invoice.'
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: 'The date of the metadata object creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the metadata object was created'
+    CustomerObject:
+      type: object
+      required:
+        - lago_id
+        - sequential_id
+        - slug
+        - external_id
+        - applicable_timezone
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
+        sequential_id:
+          type: integer
+          example: 1
+          description: 'The unique identifier assigned to the customer within the organization''s scope. This identifier is used to track and reference the customer''s order of creation within the organization''s system. It ensures that each customer has a distinct `sequential_id`` associated with them, allowing for easy identification and sorting based on the order of creation'
+        slug:
+          type: string
+          example: LAG-1234-001
+          description: 'A concise and unique identifier for the customer, formed by combining the Organization''s `name`, `id`, and customer''s `sequential_id`'
+        external_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The customer external unique identifier (provided by your own application)
+        address_line1:
+          type: string
+          example: 5230 Penfield Ave
+          description: The first line of the billing address
+          nullable: true
+        address_line2:
+          type: string
+          example: null
+          description: The second line of the billing address
+          nullable: true
+        applicable_timezone:
+          allOf:
+            - $ref: '#/components/schemas/Timezone'
+            - description: 'The customer''s applicable timezone, used for billing purposes in their local time.'
+        city:
+          type: string
+          example: Woodland Hills
+          description: The city of the customer's billing address
+          nullable: true
+        country:
+          type: string
+          example: US
+          description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+          nullable: true
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - example: USD
+              description: Currency of the customer. Format must be ISO 4217
+              nullable: true
+        email:
+          type: string
+          format: email
+          example: dinesh@piedpiper.test
+          description: The email of the customer
+          nullable: true
+        legal_name:
+          type: string
+          example: Coleman-Blair
+          description: The legal company name of the customer
+          nullable: true
+        legal_number:
+          type: string
+          example: 49-008-2965
+          description: The legal company number of the customer
+          nullable: true
+        logo_url:
+          type: string
+          example: 'http://hooli.com/logo.png'
+          description: The logo URL of the customer
+          nullable: true
+        name:
+          type: string
+          example: Gavin Belson
+          description: The full name of the customer
+          nullable: true
+        state:
+          type: string
+          example: CA
+          description: The state of the customer's billing address
+          nullable: true
+        tax_identification_number:
+          type: string
+          example: EU123456789
+          description: The tax identification number of the customer
+          nullable: true
+        timezone:
+          allOf:
+            - $ref: '#/components/schemas/Timezone'
+            - description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
+              nullable: true
+        url:
+          type: string
+          example: 'http://hooli.com'
+          description: The custom website URL of the customer
+          nullable: true
+        zipcode:
+          type: string
+          example: '91364'
+          description: The zipcode of the customer's billing address
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: 'The date of the customer creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the customer object was created'
+        billing_configuration:
+          $ref: '#/components/schemas/CustomerBillingConfiguration'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerMetadata'
+    CustomersPaginated:
+      type: object
+      required:
+        - customers
+        - meta
+      properties:
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     GroupObject:
       type: object
       required:
@@ -2307,6 +2793,145 @@ components:
           type: integer
           description: Total number of records.
           example: 70
+    Timezone:
+      type: string
+      example: America/Los_Angeles
+      enum:
+        - UTC
+        - Africa/Algiers
+        - Africa/Cairo
+        - Africa/Casablanca
+        - Africa/Harare
+        - Africa/Johannesburg
+        - Africa/Monrovia
+        - Africa/Nairobi
+        - America/Argentina/Buenos_Aires
+        - America/Bogota
+        - America/Caracas
+        - America/Chicago
+        - America/Chihuahua
+        - America/Denver
+        - America/Godthab
+        - America/Guatemala
+        - America/Guyana
+        - America/Halifax
+        - America/Indiana/Indianapolis
+        - America/Juneau
+        - America/La_Paz
+        - America/Lima
+        - America/Los_Angeles
+        - America/Mazatlan
+        - America/Mexico_City
+        - America/Monterrey
+        - America/Montevideo
+        - America/New_York
+        - America/Phoenix
+        - America/Puerto_Rico
+        - America/Regina
+        - America/Santiago
+        - America/Sao_Paulo
+        - America/St_Johns
+        - America/Tijuana
+        - Asia/Almaty
+        - Asia/Baghdad
+        - Asia/Baku
+        - Asia/Bangkok
+        - Asia/Chongqing
+        - Asia/Colombo
+        - Asia/Dhaka
+        - Asia/Hong_Kong
+        - Asia/Irkutsk
+        - Asia/Jakarta
+        - Asia/Jerusalem
+        - Asia/Kabul
+        - Asia/Kamchatka
+        - Asia/Karachi
+        - Asia/Kathmandu
+        - Asia/Kolkata
+        - Asia/Krasnoyarsk
+        - Asia/Kuala_Lumpur
+        - Asia/Kuwait
+        - Asia/Magadan
+        - Asia/Muscat
+        - Asia/Novosibirsk
+        - Asia/Rangoon
+        - Asia/Riyadh
+        - Asia/Seoul
+        - Asia/Shanghai
+        - Asia/Singapore
+        - Asia/Srednekolymsk
+        - Asia/Taipei
+        - Asia/Tashkent
+        - Asia/Tbilisi
+        - Asia/Tehran
+        - Asia/Tokyo
+        - Asia/Ulaanbaatar
+        - Asia/Urumqi
+        - Asia/Vladivostok
+        - Asia/Yakutsk
+        - Asia/Yekaterinburg
+        - Asia/Yerevan
+        - Atlantic/Azores
+        - Atlantic/Cape_Verde
+        - Atlantic/South_Georgia
+        - Australia/Adelaide
+        - Australia/Brisbane
+        - Australia/Darwin
+        - Australia/Hobart
+        - Australia/Melbourne
+        - Australia/Perth
+        - Australia/Sydney
+        - Europe/Amsterdam
+        - Europe/Athens
+        - Europe/Belgrade
+        - Europe/Berlin
+        - Europe/Bratislava
+        - Europe/Brussels
+        - Europe/Bucharest
+        - Europe/Budapest
+        - Europe/Copenhagen
+        - Europe/Dublin
+        - Europe/Helsinki
+        - Europe/Istanbul
+        - Europe/Kaliningrad
+        - Europe/Kiev
+        - Europe/Lisbon
+        - Europe/Ljubljana
+        - Europe/London
+        - Europe/Madrid
+        - Europe/Minsk
+        - Europe/Moscow
+        - Europe/Paris
+        - Europe/Prague
+        - Europe/Riga
+        - Europe/Rome
+        - Europe/Samara
+        - Europe/Sarajevo
+        - Europe/Skopje
+        - Europe/Sofia
+        - Europe/Stockholm
+        - Europe/Tallinn
+        - Europe/Vienna
+        - Europe/Vilnius
+        - Europe/Volgograd
+        - Europe/Warsaw
+        - Europe/Zagreb
+        - Europe/Zurich
+        - GMT+12
+        - Pacific/Apia
+        - Pacific/Auckland
+        - Pacific/Chatham
+        - Pacific/Fakaofo
+        - Pacific/Fiji
+        - Pacific/Guadalcanal
+        - Pacific/Guam
+        - Pacific/Honolulu
+        - Pacific/Majuro
+        - Pacific/Midway
+        - Pacific/Noumea
+        - Pacific/Pago_Pago
+        - Pacific/Port_Moresby
+        - Pacific/Tongatapu
     AddOnObject:
       type: object
       required:
@@ -2884,235 +3509,6 @@ components:
                   - credit_note.created
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationOrganization'
-    BillingConfigurationCustomer:
-      type: object
-      additionalProperties: true
-      properties:
-        invoice_grace_period:
-          type: integer
-          example: 3
-        payment_provider:
-          type: string
-          description: Payment provider type
-          enum:
-            - stripe
-            - gocardless
-        provider_customer_id:
-          type: string
-          example: '123456'
-        sync_with_provider:
-          type: boolean
-          example: true
-        document_locale:
-          type: string
-          example: fr
-        vat_rate:
-          type: number
-          example: 25
-    CustomerMetadataObject:
-      type: object
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        key:
-          type: string
-          example: name
-        value:
-          type: string
-          example: John
-        display_in_invoice:
-          type: boolean
-          example: false
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-    CustomerObject:
-      type: object
-      required:
-        - lago_id
-        - sequential_id
-        - slug
-        - external_id
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_id:
-          type: string
-          example: '12345'
-        name:
-          type: string
-          example: John Doe
-        sequential_id:
-          type: integer
-          example: 12345
-        slug:
-          type: string
-          example: slug
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        country:
-          type: string
-          example: CZ
-        address_line1:
-          type: string
-          example: address1
-        address_line2:
-          type: string
-          example: address2
-        state:
-          type: string
-          example: state1
-        zipcode:
-          type: string
-          example: '10000'
-        email:
-          type: string
-          format: email
-          example: example@example.com
-        city:
-          type: string
-          example: City
-        url:
-          type: string
-          example: 'https://example.com'
-        phone:
-          type: string
-          example: '+3551234567'
-        lago_url:
-          type: string
-          example: 'https://lago.url'
-        legal_name:
-          type: string
-          example: name1
-        legal_number:
-          type: string
-          example: '10000'
-        tax_identification_number:
-          type: string
-          example: EU123456789
-        currency:
-          type: string
-          example: EUR
-        timezone:
-          type: string
-          example: UTC
-        applicable_timezone:
-          type: string
-          example: UTC
-        billing_configuration:
-          $ref: '#/components/schemas/BillingConfigurationCustomer'
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerMetadataObject'
-    Customer:
-      type: object
-      required:
-        - customer
-      properties:
-        customer:
-          $ref: '#/components/schemas/CustomerObject'
-    CustomersPaginated:
-      type: object
-      required:
-        - customers
-        - meta
-      properties:
-        customers:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    CustomerInput:
-      type: object
-      required:
-        - customer
-      properties:
-        customer:
-          type: object
-          required:
-            - external_id
-          properties:
-            external_id:
-              type: string
-              example: '12345'
-            name:
-              type: string
-              example: John Doe
-            country:
-              type: string
-              example: CZ
-            address_line1:
-              type: string
-              example: address1
-            address_line2:
-              type: string
-              example: address2
-            state:
-              type: string
-              example: state1
-            zipcode:
-              type: string
-              example: '10000'
-            email:
-              type: string
-              format: email
-              example: example@example.com
-            city:
-              type: string
-              example: City
-            url:
-              type: string
-              example: 'https://example.com'
-            phone:
-              type: string
-              example: '+3551234567'
-            lago_url:
-              type: string
-              example: 'https://lago.url'
-            legal_name:
-              type: string
-              example: name1
-            legal_number:
-              type: string
-              example: '10000'
-            tax_identification_number:
-              type: string
-              example: EU123456789
-            currency:
-              type: string
-              example: EUR
-            timezone:
-              type: string
-              example: Europe/Paris
-            billing_configuration:
-              $ref: '#/components/schemas/BillingConfigurationCustomer'
-            metadata:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                  key:
-                    type: string
-                    example: name
-                  value:
-                    type: string
-                    example: John
-                  display_in_invoice:
-                    type: boolean
-                    example: false
     ChargeUsageObject:
       type: object
       required:
@@ -4694,23 +5090,6 @@ components:
                 - pending
                 - succeeded
                 - failed
-    ApiResponseForbidden:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 403
-        error:
-          type: string
-          example: Forbidden
-        code:
-          type: string
-          example: feature_unavailable
     ApiResponseNotAllowed:
       type: object
       required:
@@ -4731,6 +5110,12 @@ components:
   responses:
     BadRequest:
       $ref: '#/paths/~1plans/post/responses/400'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorForbidden'
     Unauthorized:
       $ref: '#/paths/~1fees/get/responses/401'
     NotFound:

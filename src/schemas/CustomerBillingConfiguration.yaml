@@ -1,0 +1,33 @@
+type: object
+description: Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.
+properties:
+  invoice_grace_period:
+    type: integer
+    example: 3
+    description: The grace period, expressed in days, for the invoice. This period refers to the additional time granted to the customer beyond the invoice due date to adjust usage and line items
+  payment_provider:
+    type: string
+    example: stripe
+    description: |-
+      The payment provider utilized to initiate payments for invoices issued by Lago.
+      Accepted values: `stripe`, `adyen`, `gocardless` or null. This field is required if you intend to assign a `provider_customer_id`.
+    enum:
+      - stripe
+      - adyen
+      - gocardless
+  provider_customer_id:
+    type: string
+    example: 'cus_12345'
+    description: The customer ID within the payment provider's system. If this field is not provided, Lago has the option to create a new customer record within the payment provider's system on behalf of the customer
+  sync:
+    type: boolean
+    example: true
+    description: Set this field to `true` if you want to create the customer in the payment provider synchronously with the customer creation process in Lago. This option is applicable only when the `provider_customer_id` is `null` and the customer is automatically created in the payment provider through Lago. By default, the value is set to `false`
+  sync_with_provider:
+    type: boolean
+    example: true
+    description: Set this field to `true` if you want to create a customer record in the payment provider's system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
+  document_locale:
+    type: string
+    example: fr
+    description: The document locale, specified in the ISO 639-1 format. This field represents the language or locale used for the documents issued by Lago
