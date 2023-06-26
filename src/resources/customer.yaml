@@ -1,0 +1,42 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing customer
+    required: true
+    schema:
+      type: string
+      example: '12345'
+get:
+  tags:
+    - customers
+  summary: Retrieve a customer
+  description: This endpoint retrieves an existing customer.
+  operationId: findCustomer
+  responses:
+    '200':
+      description: Customer
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Customer.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+delete:
+  tags:
+    - customers
+  summary: Delete a customer
+  description: This endpoint deletes an existing customer.
+  operationId: destroyCustomer
+  responses:
+    '200':
+      description: Customer deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Customer.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

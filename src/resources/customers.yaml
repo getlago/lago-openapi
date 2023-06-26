@@ -1,0 +1,44 @@
+post:
+  tags:
+    - customers
+  summary: Create a customer
+  description: This endpoint creates a new customer.
+  operationId: createCustomer
+  requestBody:
+    description: Customer payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/CustomerCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Customer created or updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Customer.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - customers
+  summary: List all customers
+  description: This endpoint retrieves all existing customers.
+  operationId: findAllCustomers
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: List of customers
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CustomersPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

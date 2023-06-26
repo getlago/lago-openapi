@@ -1,0 +1,123 @@
+type: object
+required:
+  - customer
+properties:
+  customer:
+    type: object
+    required:
+      - external_id
+    properties:
+      external_id:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        description: The customer external unique identifier (provided by your own application)
+      address_line1:
+        type: string
+        example: '5230 Penfield Ave'
+        description: The first line of the billing address
+        nullable: true
+      address_line2:
+        type: string
+        example: ''
+        description: The second line of the billing address
+        nullable: true
+      city:
+        type: string
+        example: 'Woodland Hills'
+        description: The city of the customer's billing address
+        nullable: true
+      country:
+        type: string
+        example: US
+        description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+        nullable: true
+      currency:
+        type: string
+        example: 'USD'
+        description: Currency of the customer. Format must ISO 4217
+        nullable: true
+      email:
+        type: string
+        format: 'email'
+        example: 'dinesh@piedpiper.test'
+        description: The email of the customer
+        nullable: true
+      legal_name:
+        type: string
+        example: 'Coleman-Blair'
+        description: The legal company name of the customer
+        nullable: true
+      legal_number:
+        type: string
+        example: '49-008-2965'
+        description: The legal company number of the customer
+        nullable: true
+      logo_url:
+        type: string
+        example: 'http://hooli.com/logo.png'
+        description: The logo URL of the customer
+        nullable: true
+      name:
+        type: string
+        example: 'Gavin Belson'
+        description: 'The full name of the customer'
+        nullable: true
+      phone:
+        type: string
+        example: '1-171-883-3711 x245'
+        description: The phone number of the customer
+        nullable: true
+      state:
+        type: string
+        example: 'CA'
+        description: The statetimezone of the customer's billing address
+        nullable: true
+      tax_identification_number:
+        type: string
+        example: 'EU123456789'
+        description: The tax identification number of the customer
+        nullable: true
+      timezone:
+        type: string
+        example: 'America/Los_Angeles'
+        description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
+        nullable: true
+      url:
+        type: string
+        example: 'http://hooli.com'
+        description: The custom website URL of the customer
+        nullable: true
+      zipcode:
+        type: string
+        example: '91364'
+        description: The zipcode of the customer's billing address
+        nullable: true
+      billing_configuration:
+        $ref: './CustomerBillingConfiguration.yaml'
+      metadata:
+        type: array
+        description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
+        items:
+          type: object
+          required:
+            - key
+            - value
+            - display_in_invoice
+          properties:
+            id:
+              type: string
+              format: 'uuid'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              description: Identifier for the metadata object, only required when updating a key-value pair
+            key:
+              type: string
+              example: 'Purchase Order'
+              description: The metadata object key
+            value:
+              type: string
+              example: '123456789'
+              description: The metadata object value
+            display_in_invoice:
+              type: boolean
+              example: true
+              description: Determines whether the item or information should be displayed in the invoice. If set to true, the item or information will be included and visible in the generated invoice. If set to false, the item or information will be excluded and not displayed in the invoice.
