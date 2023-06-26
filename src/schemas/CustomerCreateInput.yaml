@@ -34,8 +34,7 @@ properties:
       currency:
         allOf:
           - $ref: './Currency.yaml'
-          - example: 'USD'
-            description: Currency of the customer. Format must ISO 4217
+          - description: Currency of the customer. Format must ISO 4217
             nullable: true
       email:
         type: string
@@ -79,10 +78,10 @@ properties:
         description: The tax identification number of the customer
         nullable: true
       timezone:
-        type: string
-        example: 'America/Los_Angeles'
-        description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
-        nullable: true
+        allOf:
+          - $ref: './Timezone.yaml'
+          - description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
+            nullable: true
       url:
         type: string
         example: 'http://hooli.com'

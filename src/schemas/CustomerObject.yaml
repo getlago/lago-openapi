@@ -35,9 +35,9 @@ properties:
     description: 'The second line of the billing address'
     nullable: true
   applicable_timezone:
-    type: string
-    example: 'Europe/Paris'
-    description: The customer's applicable timezone, used for billing purposes in their local time.
+    allOf:
+      - $ref: './Timezone.yaml'
+      - description: The customer's applicable timezone, used for billing purposes in their local time.
   city:
     type: string
     example: 'Woodland Hills'
@@ -91,10 +91,10 @@ properties:
     description: The tax identification number of the customer
     nullable: true
   timezone:
-    type: string
-    example: 'Europe/Paris'
-    description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
-    nullable: true
+    allOf:
+      - $ref: './Timezone.yaml'
+      - description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
+        nullable: true
   url:
     type: string
     example: 'http://hooli.com'
