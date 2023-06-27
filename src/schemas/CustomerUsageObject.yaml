@@ -1,0 +1,60 @@
+type: object
+required:
+  - from_datetime
+  - to_datetime
+  - issuing_date
+  - amount_cents
+  - amount_currency
+  - total_amount_cents
+  - total_amount_currency
+  - vat_amount_cents
+  - vat_amount_currency
+  - charges_usage
+properties:
+  from_datetime:
+    type: string
+    format: 'date-time'
+    description: The lower bound of the billing period, expressed in the ISO 8601 datetime format in Coordinated Universal Time (UTC).
+    example: '2022-07-01T00:00:00Z'
+  to_datetime:
+    type: string
+    format: 'date-time'
+    description: The upper bound of the billing period, expressed in the ISO 8601 datetime format in Coordinated Universal Time (UTC).
+    example: '2022-07-31T23:59:59Z'
+  issuing_date:
+    type: string
+    format: 'date-time'
+    description: The date of creation of the invoice.
+    example: '2022-08-01T23:59:59Z'
+  amount_cents:
+    type: integer
+    description: The amount in cents, tax excluded.
+    example: 123
+  amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of the customer’s current usage amount excluding tax.
+        example: 'EUR'
+  total_amount_cents:
+    type: integer
+    description: The total amount in cents, tax included.
+    example: 123
+  total_amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of the customer’s current usage amount including tax.
+        example: 'EUR'
+  vat_amount_cents:
+    type: integer
+    description: The tax amount in cents.
+    example: 0
+  vat_amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of the customer’s current usage tax.
+        example: 'EUR'
+  charges_usage:
+    type: array
+    description: Array of charges that comprise the current usage. It contains detailed information about individual charge items associated with the usage.
+    items:
+      $ref: './CustomerChargeUsageObject.yaml'

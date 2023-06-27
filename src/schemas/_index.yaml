@@ -30,6 +30,8 @@ Customer:
   $ref: './Customer.yaml'
 CustomerBillingConfiguration:
   $ref: './CustomerBillingConfiguration.yaml'
+CustomerChargeUsageObject:
+  $ref: './CustomerChargeUsageObject.yaml'
 CustomerCreateInput:
   $ref: './CustomerCreateInput.yaml'
 CustomerMetadata:
@@ -38,6 +40,10 @@ CustomerObject:
   $ref: './CustomerObject.yaml'
 CustomersPaginated:
   $ref: './CustomersPaginated.yaml'
+CustomerUsage:
+  $ref: './CustomerUsage.yaml'
+CustomerUsageObject:
+  $ref: './CustomerUsageObject.yaml'
 Event:
   $ref: './Event.yaml'
 EventBatchInput:
@@ -641,143 +647,6 @@ OrganizationInput:
             enum: [invoice.finalized, credit_note.created]
         billing_configuration:
           $ref: '#/BillingConfigurationOrganization'
-ChargeUsageObject:
-  type: object
-  required:
-    - units
-    - amount_cents
-    - amount_currency
-    - charge
-    - billable_metric
-    - groups
-  properties:
-    units:
-      type: string
-      example: '3.0'
-    amount_cents:
-      type: integer
-      example: 1200
-    amount_currency:
-      type: string
-      example: 'EUR'
-    charge:
-      type: object
-      properties:
-        lago_id:
-          type: string
-          format: 'uuid'
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-        charge_model:
-          type: string
-          description: Charge model type
-          enum:
-            - standard
-            - graduated
-            - package
-            - percentage
-            - volume
-        pay_in_advance:
-          type: boolean
-        min_amount_cents:
-          type: integer
-          example: 1200
-    billable_metric:
-      type: object
-      properties:
-        lago_id:
-          type: string
-          format: 'uuid'
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-        name:
-          type: string
-          example: 'Example name'
-        code:
-          type: string
-          example: 'code'
-        aggregation_type:
-          type: string
-          description: Aggregation type
-          enum:
-            - count_agg
-            - sum_agg
-            - max_agg
-            - unique_count_agg
-    groups:
-      type: array
-      items:
-        type: object
-        properties:
-          lago_id:
-            type: string
-            format: 'uuid'
-            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-          key:
-            type: string
-            example: 'key'
-          value:
-            type: string
-            example: 'value'
-          units:
-            type: string
-            example: '3.5'
-          amount_cents:
-            type: integer
-            example: 1200
-CustomerUsageObject:
-  type: object
-  required:
-    - from_datetime
-    - to_datetime
-    - issuing_date
-    - amount_cents
-    - amount_currency
-    - total_amount_cents
-    - total_amount_currency
-    - vat_amount_cents
-    - vat_amount_currency
-    - charges_usage
-  properties:
-    from_datetime:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T00:00:00Z'
-    to_datetime:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T00:00:00Z'
-    issuing_date:
-      type: string
-      format: 'date-time'
-      example: '2022-09-15T00:00:00Z'
-    amount_cents:
-      type: integer
-      example: 1200
-    amount_currency:
-      type: string
-      example: 'EUR'
-    total_amount_cents:
-      type: integer
-      example: 1400
-    total_amount_currency:
-      type: string
-      example: 'EUR'
-    vat_amount_cents:
-      type: integer
-      example: 200
-    vat_amount_currency:
-      type: string
-      example: 'EUR'
-    charges_usage:
-      type: array
-      items:
-        $ref: '#/ChargeUsageObject'
-CustomerUsage:
-  type: object
-  required:
-    - customer_usage
-  properties:
-    customer_usage:
-      $ref: '#/CustomerUsageObject'
 EventEstimateFeesInput:
   type: object
   required:

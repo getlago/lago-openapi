@@ -368,6 +368,40 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
+  '/customers/{external_customer_id}/current_usage':
+    get:
+      tags:
+        - customers
+      summary: Retrieve customer current usage
+      description: This endpoint enables the retrieval of the usage-based billing data for a customer within the current period.
+      parameters:
+        - name: external_customer_id
+          in: path
+          description: The customer external unique identifier (provided by your own application).
+          required: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - name: external_subscription_id
+          in: query
+          description: The unique identifier of the subscription within your application.
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: sub_1234567890
+      operationId: findCustomerCurrentUsage
+      responses:
+        '200':
+          description: Customer usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerUsage'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
   /events:
     post:
       tags:
@@ -915,40 +949,6 @@ paths:
           $ref: '#/paths/~1fees/get/responses/401'
         '422':
           $ref: '#/paths/~1fees/get/responses/422'
-  '/customers/{external_customer_id}/current_usage':
-    get:
-      tags:
-        - customers
-      summary: Find customer current usage
-      parameters:
-        - name: external_customer_id
-          in: path
-          description: External ID of the existing customer
-          required: true
-          schema:
-            type: string
-            example: '12345'
-        - name: external_subscription_id
-          in: query
-          description: External subscription ID
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: '54321'
-      description: Return a customer current usage
-      operationId: findCustomerCurrentUsage
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerUsage'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
   '/customers/{external_customer_id}/applied_coupons/{applied_coupon_id}':
     delete:
       tags:
@@ -2450,6 +2450,117 @@ components:
           type: string
           example: fr
           description: 'The document locale, specified in the ISO 639-1 format. This field represents the language or locale used for the documents issued by Lago'
+    CustomerChargeUsageObject:
+      type: object
+      required:
+        - units
+        - amount_cents
+        - amount_currency
+        - charge
+        - billable_metric
+        - groups
+      properties:
+        units:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          example: '1.0'
+          description: The number of units consumed by the customer for a specific charge item.
+        amount_cents:
+          type: integer
+          example: 123
+          description: 'The amount in cents, tax excluded, consumed by the customer for a specific charge item.'
+        amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of a usage item consumed by the customer.
+              example: EUR
+        charge:
+          type: object
+          description: Object listing all the properties for a specific charge item.
+          required:
+            - lago_id
+            - charge_model
+          properties:
+            lago_id:
+              type: string
+              format: uuid
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              description: Unique identifier assigned to the charge within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge’s record within the Lago system.
+            charge_model:
+              type: string
+              description: 'The pricing model applied to this charge. Possible values are standard, `graduated`, `percentage`, `package` or `volume`.'
+              enum:
+                - standard
+                - graduated
+                - package
+                - percentage
+                - volume
+              example: graduated
+        billable_metric:
+          type: object
+          description: The related billable metric object.
+          required:
+            - lago_id
+            - name
+            - code
+            - aggregation_type
+          properties:
+            lago_id:
+              type: string
+              format: uuid
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              description: Unique identifier assigned to the billable metric within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the billable metric’s record within the Lago system.
+            name:
+              type: string
+              example: Storage
+              description: The name of the billable metric used for this charge.
+            code:
+              type: string
+              example: storage
+              description: The code of the billable metric used for this charge.
+            aggregation_type:
+              type: string
+              description: 'The aggregation type of the billable metric used for this charge. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.'
+              enum:
+                - count_agg
+                - sum_agg
+                - max_agg
+                - unique_count_agg
+              example: sum_agg
+        groups:
+          type: array
+          description: 'Array of group object, representing multiple dimensions for a charge item.'
+          required:
+            - lago_id
+            - value
+            - units
+            - amount_cents
+          items:
+            type: object
+            properties:
+              lago_id:
+                type: string
+                format: uuid
+                example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                description: Unique identifier assigned to the group within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the group record within the Lago system.
+              key:
+                type: string
+                example: null
+                description: 'The group key, only returned for groups with two dimensions.'
+                nullable: true
+              value:
+                type: string
+                example: eruope
+                description: The group value.
+              units:
+                type: string
+                format: '^[0-9]+.?[0-9]*$'
+                example: '0.9'
+                description: The number of units consumed for a specific group related to a charge item.
+              amount_cents:
+                type: integer
+                example: 1000
+                description: 'The amount in cents, tax excluded, consumed for a specific group related to a charge item.'
     CustomerCreateInput:
       type: object
       required:
@@ -2737,6 +2848,74 @@ components:
             $ref: '#/components/schemas/CustomerObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    CustomerUsage:
+      type: object
+      required:
+        - customer_usage
+      properties:
+        customer_usage:
+          $ref: '#/components/schemas/CustomerUsageObject'
+    CustomerUsageObject:
+      type: object
+      required:
+        - from_datetime
+        - to_datetime
+        - issuing_date
+        - amount_cents
+        - amount_currency
+        - total_amount_cents
+        - total_amount_currency
+        - vat_amount_cents
+        - vat_amount_currency
+        - charges_usage
+      properties:
+        from_datetime:
+          type: string
+          format: date-time
+          description: 'The lower bound of the billing period, expressed in the ISO 8601 datetime format in Coordinated Universal Time (UTC).'
+          example: '2022-07-01T00:00:00Z'
+        to_datetime:
+          type: string
+          format: date-time
+          description: 'The upper bound of the billing period, expressed in the ISO 8601 datetime format in Coordinated Universal Time (UTC).'
+          example: '2022-07-31T23:59:59Z'
+        issuing_date:
+          type: string
+          format: date-time
+          description: The date of creation of the invoice.
+          example: '2022-08-01T23:59:59Z'
+        amount_cents:
+          type: integer
+          description: 'The amount in cents, tax excluded.'
+          example: 123
+        amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the customer’s current usage amount excluding tax.
+              example: EUR
+        total_amount_cents:
+          type: integer
+          description: 'The total amount in cents, tax included.'
+          example: 123
+        total_amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the customer’s current usage amount including tax.
+              example: EUR
+        vat_amount_cents:
+          type: integer
+          description: The tax amount in cents.
+          example: 0
+        vat_amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the customer’s current usage tax.
+              example: EUR
+        charges_usage:
+          type: array
+          description: Array of charges that comprise the current usage. It contains detailed information about individual charge items associated with the usage.
+          items:
+            $ref: '#/components/schemas/CustomerChargeUsageObject'
     Event:
       type: object
       required:
@@ -3863,143 +4042,6 @@ components:
                   - credit_note.created
             billing_configuration:
               $ref: '#/components/schemas/BillingConfigurationOrganization'
-    ChargeUsageObject:
-      type: object
-      required:
-        - units
-        - amount_cents
-        - amount_currency
-        - charge
-        - billable_metric
-        - groups
-      properties:
-        units:
-          type: string
-          example: '3.0'
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: EUR
-        charge:
-          type: object
-          properties:
-            lago_id:
-              type: string
-              format: uuid
-              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-            charge_model:
-              type: string
-              description: Charge model type
-              enum:
-                - standard
-                - graduated
-                - package
-                - percentage
-                - volume
-            pay_in_advance:
-              type: boolean
-            min_amount_cents:
-              type: integer
-              example: 1200
-        billable_metric:
-          type: object
-          properties:
-            lago_id:
-              type: string
-              format: uuid
-              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-            name:
-              type: string
-              example: Example name
-            code:
-              type: string
-              example: code
-            aggregation_type:
-              type: string
-              description: Aggregation type
-              enum:
-                - count_agg
-                - sum_agg
-                - max_agg
-                - unique_count_agg
-        groups:
-          type: array
-          items:
-            type: object
-            properties:
-              lago_id:
-                type: string
-                format: uuid
-                example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              key:
-                type: string
-                example: key
-              value:
-                type: string
-                example: value
-              units:
-                type: string
-                example: '3.5'
-              amount_cents:
-                type: integer
-                example: 1200
-    CustomerUsageObject:
-      type: object
-      required:
-        - from_datetime
-        - to_datetime
-        - issuing_date
-        - amount_cents
-        - amount_currency
-        - total_amount_cents
-        - total_amount_currency
-        - vat_amount_cents
-        - vat_amount_currency
-        - charges_usage
-      properties:
-        from_datetime:
-          type: string
-          format: date-time
-          example: '2022-09-14T00:00:00Z'
-        to_datetime:
-          type: string
-          format: date-time
-          example: '2022-09-14T00:00:00Z'
-        issuing_date:
-          type: string
-          format: date-time
-          example: '2022-09-15T00:00:00Z'
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: EUR
-        total_amount_cents:
-          type: integer
-          example: 1400
-        total_amount_currency:
-          type: string
-          example: EUR
-        vat_amount_cents:
-          type: integer
-          example: 200
-        vat_amount_currency:
-          type: string
-          example: EUR
-        charges_usage:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChargeUsageObject'
-    CustomerUsage:
-      type: object
-      required:
-        - customer_usage
-      properties:
-        customer_usage:
-          $ref: '#/components/schemas/CustomerUsageObject'
     EventEstimateFeesInput:
       type: object
       required:

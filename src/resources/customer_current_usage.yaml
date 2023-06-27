@@ -1,0 +1,33 @@
+get:
+  tags:
+    - customers
+  summary: Retrieve customer current usage
+  description: This endpoint enables the retrieval of the usage-based billing data for a customer within the current period.
+  parameters:
+    - name: external_customer_id
+      in: path
+      description: The customer external unique identifier (provided by your own application).
+      required: true
+      schema:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    - name: external_subscription_id
+      in: query
+      description: The unique identifier of the subscription within your application.
+      required: true
+      explode: true
+      schema:
+        type: string
+        example: 'sub_1234567890'
+  operationId: findCustomerCurrentUsage
+  responses:
+    '200':
+      description: Customer usage
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CustomerUsage.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
