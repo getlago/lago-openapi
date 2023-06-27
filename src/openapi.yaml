@@ -26,6 +26,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/customers/customer-object
+  - name: plans
+    description: Everything about Plan collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/plans/plan-object
   - name: subscriptions
     description: Everything about Subscription collection
     externalDocs:
@@ -56,11 +61,6 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object
-  - name: plans
-    description: Everything about Plan collection
-    externalDocs:
-      description: Find out more
-      url: https://doc.getlago.com/docs/api/plans/plan-object
   - name: webhooks
     description: Everything about Webhooks
     externalDocs:
@@ -139,6 +139,10 @@ paths:
     $ref: './resources/invoice_retry_payment.yaml'
   /organizations:
     $ref: './resources/organizations.yaml'
+  /plans:
+    $ref: './resources/plans.yaml'
+  /plans/{code}:
+    $ref: './resources/plan.yaml'
   /subscriptions:
     $ref: './resources/subscriptions.yaml'
   /subscriptions/{external_id}:
@@ -183,124 +187,6 @@ paths:
           $ref: './responses/NotFound.yaml'
         '422':
           $ref: './responses/UnprocessableEntity.yaml'
-  /plans:
-    post:
-      tags:
-        - plans
-      summary: Create a new plan
-      description: Create a new plan
-      operationId: createPlan
-      requestBody:
-        description: Plan payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PlanInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plan'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - plans
-      summary: Find plans
-      description: Find all plans in certain organisation
-      operationId: findAllPlans
-      parameters:
-        - $ref: './parameters/page.yaml'
-        - $ref: './parameters/per_page.yaml'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlansPaginated'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-  /plans/{code}:
-    parameters:
-      - name: code
-        in: path
-        description: Code of the existing plan
-        required: true
-        schema:
-          type: string
-          example: 'example_code'
-    put:
-      tags:
-        - plans
-      summary: Update an existing plan
-      description: Update an existing plan by code
-      operationId: updatePlan
-      requestBody:
-        description: Update an existing plan
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PlanInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plan'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - plans
-      summary: Find plan by code
-      description: Return a single plan
-      operationId: findPlan
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plan'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-    delete:
-      tags:
-        - plans
-      summary: Delete a plan
-      description: Delete a plan
-      operationId: destroyPlan
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plan'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
   /webhooks/public_key:
     get:
       tags:

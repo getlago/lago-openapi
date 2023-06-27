@@ -1,0 +1,57 @@
+type: object
+required:
+  - lago_id
+  - lago_billable_metric_id
+  - billable_metric_code
+  - created_at
+  - charge_model
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier of charge, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  lago_billable_metric_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier of the billable metric created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  billable_metric_code:
+    type: string
+    description: Unique code identifying a billable metric.
+    example: 'requests'
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date and time when the charge was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
+    example: '2022-09-14T16:35:31Z'
+  charge_model:
+    type: string
+    description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `package`, `percentage` or `volume`.
+    enum:
+      - standard
+      - graduated
+      - package
+      - percentage
+      - volume
+  pay_in_advance:
+    type: boolean
+    description: This field determines the billing timing for this specific usage-based charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to `false`, the charge is due and invoiced at the end of each billing period.
+    example: true
+  invoiceable:
+    type: boolean
+    description: This field specifies whether the charge should be included in a proper invoice. If set to `false`, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.
+    example: true
+  min_amount_cents:
+    type: integer
+    description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
+    example: 1200
+  properties:
+    allOf:
+      - $ref: './ChargeProperties.yaml'
+      - description: List of all thresholds utilized for calculating the charge.
+  group_properties:
+    type: array
+    description: All charge information, sorted by groups.
+    items:
+      $ref: './GroupPropertiesObject.yaml'

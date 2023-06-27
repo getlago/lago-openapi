@@ -25,6 +25,11 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/customers/customer-object'
+  - name: plans
+    description: Everything about Plan collection
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/plans/plan-object'
   - name: subscriptions
     description: Everything about Subscription collection
     externalDocs:
@@ -55,11 +60,6 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object'
-  - name: plans
-    description: Everything about Plan collection
-    externalDocs:
-      description: Find out more
-      url: 'https://doc.getlago.com/docs/api/plans/plan-object'
   - name: webhooks
     description: Everything about Webhooks
     externalDocs:
@@ -100,11 +100,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOn'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - add_ons
@@ -112,8 +112,8 @@ paths:
       description: This endpoint is used to list all existing add-ons.
       operationId: findAllAddOns
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: Add-ons
@@ -122,7 +122,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOnsPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   '/add_ons/{code}':
     parameters:
       - name: code
@@ -153,13 +153,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOn'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - add_ons
@@ -174,9 +174,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOn'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
     delete:
       tags:
         - add_ons
@@ -191,9 +191,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOn'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   /applied_add_ons:
     post:
       tags:
@@ -217,13 +217,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppliedAddOn'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
   /applied_coupons:
     post:
       tags:
@@ -246,13 +246,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppliedCoupon'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - coupons
@@ -260,8 +260,8 @@ paths:
       description: This endpoint is used to list all applied coupons. You can filter by coupon status and by customer.
       operationId: findAllAppliedCoupons
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
         - name: status
           in: query
           description: The status of the coupon. Can be either `active` or `terminated`.
@@ -289,7 +289,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppliedCouponsPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   /billable_metrics:
     post:
       tags:
@@ -312,11 +312,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - billable_metrics
@@ -324,8 +324,8 @@ paths:
       description: This endpoint retrieves all existing billable metrics that represent pricing components of your application.
       operationId: findAllBillableMetrics
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: List of billable metrics
@@ -334,7 +334,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetricsPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   '/billable_metrics/{code}':
     parameters:
       - name: code
@@ -365,13 +365,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     delete:
       tags:
         - billable_metrics
@@ -386,9 +386,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
     get:
       tags:
         - billable_metrics
@@ -403,9 +403,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/billable_metrics/{code}/groups':
     get:
       tags:
@@ -421,8 +421,8 @@ paths:
           schema:
             type: string
             example: example_code
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: List of billable metric's groups
@@ -448,7 +448,7 @@ paths:
                   total_pages: 1
                   total_count: 2
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   /coupons:
     post:
       tags:
@@ -471,11 +471,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Coupon'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - coupons
@@ -483,8 +483,8 @@ paths:
       description: This endpoint is used to list all existing coupons.
       operationId: findAllCoupons
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: Coupons
@@ -493,7 +493,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CouponsPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   '/coupons/{code}':
     parameters:
       - name: code
@@ -524,13 +524,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Coupon'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - coupons
@@ -545,9 +545,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Coupon'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
     delete:
       tags:
         - coupons
@@ -562,9 +562,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Coupon'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   /credit_notes:
     post:
       tags:
@@ -587,11 +587,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - credit_notes
@@ -599,8 +599,8 @@ paths:
       description: This endpoint list all existing credit notes.
       operationId: findAllCreditNotes
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/external_customer_id'
       responses:
         '200':
@@ -610,7 +610,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNotes'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   '/credit_notes/{lago_id}':
     parameters:
       - name: lago_id
@@ -641,13 +641,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - credit_notes
@@ -662,9 +662,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/credit_notes/{lago_id}/download':
     post:
       tags:
@@ -689,9 +689,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/credit_notes/{lago_id}/void':
     put:
       tags:
@@ -716,9 +716,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '405':
           $ref: '#/components/responses/NotAllowed'
   /customers:
@@ -743,11 +743,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - customers
@@ -755,8 +755,8 @@ paths:
       description: This endpoint retrieves all existing customers.
       operationId: findAllCustomers
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: List of customers
@@ -765,7 +765,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomersPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   '/customers/{external_id}':
     parameters:
       - name: external_id
@@ -789,9 +789,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
     delete:
       tags:
         - customers
@@ -806,9 +806,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/customers/{external_customer_id}/applied_coupons/{applied_coupon_id}':
     delete:
       tags:
@@ -842,9 +842,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppliedCoupon'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/customers/{external_customer_id}/portal_url':
     get:
       tags:
@@ -883,11 +883,11 @@ paths:
                         example: 'https://app.lago.com/customer-portal/1234567890'
                         description: An embeddable link for displaying a customer portal
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/customers/{external_customer_id}/current_usage':
     get:
       tags:
@@ -919,9 +919,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomerUsage'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   /events:
     post:
       tags:
@@ -940,11 +940,11 @@ paths:
         '200':
           description: Event received
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
   /events/batch:
     post:
       tags:
@@ -963,11 +963,11 @@ paths:
         '200':
           description: Event received
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
   '/events/{transaction_id}':
     parameters:
       - name: transaction_id
@@ -991,9 +991,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Event'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   /fees:
     get:
       tags:
@@ -1002,8 +1002,8 @@ paths:
       description: This endpoint is used for retrieving all fees that has been issued.
       operationId: findAllFees
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/external_customer_id'
         - $ref: '#/components/parameters/external_subscription_id'
         - name: currency
@@ -1130,9 +1130,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/FeesPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
   '/fees/{lago_id}':
     parameters:
       - name: lago_id
@@ -1157,9 +1157,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Fee'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
     put:
       tags:
         - fees
@@ -1180,13 +1180,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Fee'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
   /invoices:
     post:
       tags:
@@ -1209,11 +1209,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - invoices
@@ -1221,8 +1221,8 @@ paths:
       description: This endpoint is used for retrievign all invoices.
       operationId: findAllInvoices
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/external_customer_id'
         - name: issuing_date_from
           in: query
@@ -1271,7 +1271,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/InvoicesPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   '/invoices/{lago_id}':
     parameters:
       - $ref: '#/components/parameters/lago_invoice_id'
@@ -1296,13 +1296,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - invoices
@@ -1317,9 +1317,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/invoices/{lago_id}/download':
     post:
       tags:
@@ -1337,9 +1337,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/invoices/{lago_id}/finalize':
     put:
       tags:
@@ -1357,9 +1357,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/invoices/{lago_id}/refresh':
     put:
       tags:
@@ -1377,9 +1377,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/invoices/{lago_id}/retry_payment':
     post:
       tags:
@@ -1393,9 +1393,9 @@ paths:
         '200':
           description: Invoice payment retried
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '405':
           $ref: '#/components/responses/NotAllowed'
   /organizations:
@@ -1420,11 +1420,129 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organization'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+  /plans:
+    post:
+      tags:
+        - plans
+      summary: Create a plan
+      description: This endpoint creates a plan with subscription and usage-based charges. It supports flexible billing cadence (in-advance or in-arrears) and allows for both recurring and metered charges.
+      operationId: createPlan
+      requestBody:
+        description: Plan payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanInput'
+        required: true
+      responses:
+        '200':
+          description: Plan created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '400':
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+        '401':
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+        '404':
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+        '422':
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+    get:
+      tags:
+        - plans
+      summary: List all plans
+      description: This endpoint retrieves all existing plans.
+      operationId: findAllPlans
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: Plans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlansPaginated'
+        '401':
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+  '/plans/{code}':
+    parameters:
+      - name: code
+        in: path
+        description: 'The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.'
+        required: true
+        schema:
+          type: string
+          example: startup
+    put:
+      tags:
+        - plans
+      summary: Update a plan
+      description: This endpoint updates a specific plan with subscription and usage-based charges. It supports flexible billing cadence (in-advance or in-arrears) and allows for both recurring and metered charges.
+      operationId: updatePlan
+      requestBody:
+        description: Plan payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanInput'
+        required: true
+      responses:
+        '200':
+          description: Plan updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '400':
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+        '401':
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+        '404':
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+        '422':
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+    get:
+      tags:
+        - plans
+      summary: Retrieve a plan
+      description: This endpoint retrieves a specific plan.
+      operationId: findPlan
+      responses:
+        '200':
+          description: Plan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '401':
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+        '404':
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+    delete:
+      tags:
+        - plans
+      summary: Delete a plan
+      description: This endpoint deletes a specific plan. Note that this plan could be associated with active subscriptions.
+      operationId: destroyPlan
+      responses:
+        '200':
+          description: Plan deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        '401':
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+        '404':
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   /subscriptions:
     post:
       tags:
@@ -1447,13 +1565,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - subscriptions
@@ -1461,8 +1579,8 @@ paths:
       description: This endpoint retrieves all active subscriptions.
       operationId: findAllSubscriptions
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
         - name: external_customer_id
           in: query
           description: The customer external unique identifier (provided by your own application)
@@ -1487,9 +1605,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/SubscriptionsPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   '/subscriptions/{external_id}':
     parameters:
       - name: external_id
@@ -1520,13 +1638,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     delete:
       tags:
         - subscriptions
@@ -1541,9 +1659,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '405':
           $ref: '#/components/responses/NotAllowed'
   /wallets:
@@ -1568,11 +1686,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Wallet'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - wallets
@@ -1580,8 +1698,8 @@ paths:
       description: This endpoint is used to list all wallets with prepaid credits.
       operationId: findAllWallets
       parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
         - name: external_customer_id
           in: query
           description: The customer external unique identifier (provided by your own application).
@@ -1598,7 +1716,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/WalletsPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
   '/wallets/{lago_id}':
     parameters:
       - name: lago_id
@@ -1630,13 +1748,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Wallet'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
     get:
       tags:
         - wallets
@@ -1651,9 +1769,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Wallet'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
     delete:
       tags:
         - wallets
@@ -1668,9 +1786,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Wallet'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
         '405':
           $ref: '#/components/responses/NotAllowed'
   /wallet_transactions:
@@ -1695,11 +1813,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/WalletTransactions'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '422':
-          $ref: '#/paths/~1plans/post/responses/422'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
   '/wallets/{lago_id}/wallet_transactions':
     get:
       tags:
@@ -1716,8 +1834,8 @@ paths:
             type: string
             format: uuid
             example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
         - name: status
           in: query
           description: The status of the wallet transaction. Possible values are `pending` or `settled`.
@@ -1742,9 +1860,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/WalletTransactionsPaginated'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
-          $ref: '#/paths/~1plans/post/responses/404'
+          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
   /events/estimate_fees:
     post:
       tags:
@@ -1767,42 +1885,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Fees'
         '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '422':
-          $ref: '#/paths/~1plans/post/responses/422'
-  /plans:
-    post:
-      tags:
-        - plans
-      summary: Create a new plan
-      description: Create a new plan
-      operationId: createPlan
-      requestBody:
-        description: Plan payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PlanInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plan'
-        '400':
           description: Bad Request error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorBadRequest'
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
         '404':
           description: Not Found error
           content:
@@ -1815,113 +1904,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
-    get:
-      tags:
-        - plans
-      summary: Find plans
-      description: Find all plans in certain organisation
-      operationId: findAllPlans
-      parameters:
-        - name: page
-          in: query
-          description: Page number.
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 1
-        - name: per_page
-          in: query
-          description: Number of records per page.
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlansPaginated'
-        '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorUnauthorized'
-  '/plans/{code}':
-    parameters:
-      - name: code
-        in: path
-        description: Code of the existing plan
-        required: true
-        schema:
-          type: string
-          example: example_code
-    put:
-      tags:
-        - plans
-      summary: Update an existing plan
-      description: Update an existing plan by code
-      operationId: updatePlan
-      requestBody:
-        description: Update an existing plan
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PlanInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plan'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '422':
-          $ref: '#/paths/~1plans/post/responses/422'
-    get:
-      tags:
-        - plans
-      summary: Find plan by code
-      description: Return a single plan
-      operationId: findPlan
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plan'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-    delete:
-      tags:
-        - plans
-      summary: Delete a plan
-      description: Delete a plan
-      operationId: destroyPlan
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Plan'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
   /webhooks/public_key:
     get:
       tags:
@@ -1938,7 +1920,11 @@ paths:
                 type: string
                 example: MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
         '401':
-          $ref: '#/paths/~1plans/get/responses/401'
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorUnauthorized'
 components:
   parameters:
     external_customer_id:
@@ -1969,9 +1955,23 @@ components:
         format: uuid
         example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     page:
-      $ref: '#/paths/~1plans/get/parameters/0'
+      name: page
+      in: query
+      description: Page number.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 1
     per_page:
-      $ref: '#/paths/~1plans/get/parameters/1'
+      name: per_page
+      in: query
+      description: Number of records per page.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 20
   schemas:
     AddOnBaseInput:
       type: object
@@ -2627,6 +2627,169 @@ components:
             $ref: '#/components/schemas/BillableMetricObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    ChargeObject:
+      type: object
+      required:
+        - lago_id
+        - lago_billable_metric_id
+        - billable_metric_code
+        - created_at
+        - charge_model
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of charge, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_billable_metric_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the billable metric created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        billable_metric_code:
+          type: string
+          description: Unique code identifying a billable metric.
+          example: requests
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the charge was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2022-09-14T16:35:31Z'
+        charge_model:
+          type: string
+          description: 'Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `package`, `percentage` or `volume`.'
+          enum:
+            - standard
+            - graduated
+            - package
+            - percentage
+            - volume
+        pay_in_advance:
+          type: boolean
+          description: 'This field determines the billing timing for this specific usage-based charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to `false`, the charge is due and invoiced at the end of each billing period.'
+          example: true
+        invoiceable:
+          type: boolean
+          description: 'This field specifies whether the charge should be included in a proper invoice. If set to `false`, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.'
+          example: true
+        min_amount_cents:
+          type: integer
+          description: 'The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.'
+          example: 1200
+        properties:
+          allOf:
+            - $ref: '#/components/schemas/ChargeProperties'
+            - description: List of all thresholds utilized for calculating the charge.
+        group_properties:
+          type: array
+          description: 'All charge information, sorted by groups.'
+          items:
+            $ref: '#/components/schemas/GroupPropertiesObject'
+    ChargeProperties:
+      type: object
+      properties:
+        graduated_ranges:
+          type: array
+          description: 'Graduated ranges, sorted from bottom to top tiers, used for a `graduated` charge model.'
+          items:
+            type: object
+            required:
+              - from_value
+              - to_value
+              - flat_amount
+              - per_unit_amount
+            properties:
+              from_value:
+                type: integer
+                description: Specifies the lower value of a tier for a `graduated` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+                example: 0
+              to_value:
+                type: integer
+                description: |-
+                  Specifies the highest value of a tier for a `graduated` charge model.
+                  - This value must be higher than the from_value of the same tier.
+                  - This value must be null for the last tier.
+                nullable: true
+                example: 10
+              flat_amount:
+                type: string
+                format: '^[0-9]+.?[0-9]*$'
+                description: 'The flat amount for a whole tier, excluding tax, for a `graduated` charge model. It is expressed as a decimal value.'
+                example: '10'
+              per_unit_amount:
+                type: string
+                format: '^[0-9]+.?[0-9]*$'
+                description: 'The unit price, excluding tax, for a specific tier of a `graduated` charge model. It is expressed as a decimal value.'
+                example: '0.5'
+        amount:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: |-
+            - The unit price, excluding tax, for a `standard` charge model. It is expressed as a decimal value.
+            - The amount, excluding tax, for a complete set of units in a `package` charge model. It is expressed as a decimal value.
+          example: '30'
+        free_units:
+          type: integer
+          description: The quantity of units that are provided free of charge for each billing period in a `package` charge model. This field specifies the number of units that customers can use without incurring any additional cost during each billing cycle.
+          example: 100
+        package_size:
+          type: integer
+          description: The quantity of units included in each pack or set for a `package` charge model. It indicates the number of units that are bundled together as a single package or set within the pricing structure.
+          example: 1000
+        rate:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The percentage rate that is applied to the amount of each transaction for a `percentage` charge model. It is expressed as a decimal value.
+          example: '1'
+        fixed_amount:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The fixed fee that is applied to each transaction for a `percentage` charge model. It is expressed as a decimal value.
+          example: '0.5'
+        free_units_per_events:
+          type: integer
+          description: The count of transactions that are not impacted by the `percentage` rate and fixed fee in a percentage charge model. This field indicates the number of transactions that are exempt from the calculation of charges based on the specified percentage rate and fixed fee.
+          nullable: true
+          example: 5
+        free_units_per_total_aggregation:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The transaction amount that is not impacted by the `percentage` rate and fixed fee in a percentage charge model. This field indicates the portion of the transaction amount that is exempt from the calculation of charges based on the specified percentage rate and fixed fee.
+          nullable: true
+          example: '500'
+        volume_ranges:
+          type: array
+          description: 'Volume ranges, sorted from bottom to top tiers, used for a `volume` charge model.'
+          items:
+            type: object
+            required:
+              - from_value
+              - to_value
+              - flat_amount
+              - per_unit_amount
+            properties:
+              from_value:
+                type: integer
+                description: Specifies the lower value of a tier for a `volume` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+                example: 0
+              to_value:
+                type: integer
+                description: |-
+                  Specifies the highest value of a tier for a `volume` charge model.
+                  - This value must be higher than the `from_value` of the same tier.
+                  - This value must be `null` for the last tier.
+                nullable: true
+                example: 10
+              flat_amount:
+                type: string
+                format: '^[0-9]+.?[0-9]*$'
+                description: 'The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.'
+                example: '10'
+              per_unit_amount:
+                type: string
+                format: '^[0-9]+.?[0-9]*$'
+                description: 'The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.'
+                example: '0.5'
     Coupon:
       type: object
       required:
@@ -4332,6 +4495,21 @@ components:
           type: string
           example: us-east-1
           description: One of the values for a specific group associated with the billable metric.
+    GroupPropertiesObject:
+      type: object
+      required:
+        - group_id
+        - values
+      properties:
+        group_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of a billable metric group, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        values:
+          allOf:
+            - $ref: '#/components/schemas/ChargeProperties'
+            - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
     GroupsPaginated:
       type: object
       required:
@@ -4840,6 +5018,367 @@ components:
           type: integer
           description: Total number of records.
           example: 70
+    Plan:
+      type: object
+      required:
+        - plan
+      properties:
+        plan:
+          $ref: '#/components/schemas/PlanObject'
+    PlanInput:
+      type: object
+      required:
+        - plan
+      properties:
+        plan:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Startup
+              description: The name of the plan.
+            code:
+              type: string
+              example: startup
+              description: 'The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.'
+            interval:
+              type: string
+              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `monthly`, or `weekly`.'
+              example: monthly
+              enum:
+                - weekly
+                - monthly
+                - yearly
+            description:
+              type: string
+              description: The description on the plan.
+              example: Plan for early stage startups.
+            amount_cents:
+              type: integer
+              description: 'The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.'
+              example: 10000
+            amount_currency:
+              allOf:
+                - $ref: '#/components/schemas/Currency'
+                - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+                  example: USD
+            trial_period:
+              type: number
+              description: The duration in days during which the base cost of the plan is offered for free.
+              example: 5
+            pay_in_advance:
+              type: boolean
+              description: 'This field determines the billing timing for the plan. When set to `true`, the base cost of the plan is due at the beginning of each billing period. Conversely, when set to `false`, the base cost of the plan is due at the end of each billing period.'
+              example: true
+            bill_charges_monthly:
+              type: boolean
+              description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.'
+              nullable: true
+              example: null
+            charges:
+              type: array
+              description: Additional usage-based charges for this plan.
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the charge created by Lago.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  billable_metric_id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the billable metric created by Lago.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  charge_model:
+                    type: string
+                    description: 'Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `package`, `percentage` or `volume`.'
+                    enum:
+                      - standard
+                      - graduated
+                      - package
+                      - percentage
+                      - volume
+                    example: standard
+                  pay_in_advance:
+                    type: boolean
+                    example: false
+                    description: 'This field determines the billing timing for this specific usage-based charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to false, the charge is due and invoiced at the end of each billing period.'
+                  invoiceable:
+                    type: boolean
+                    description: 'This field specifies whether the charge should be included in a proper invoice. If set to false, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.'
+                    example: true
+                  min_amount_cents:
+                    type: integer
+                    description: 'The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.'
+                    example: 0
+                  properties:
+                    allOf:
+                      - $ref: '#/components/schemas/ChargeProperties'
+                      - description: List of all thresholds utilized for calculating the charge.
+                  group_properties:
+                    type: array
+                    description: 'All charge information, sorted by groups.'
+                    items:
+                      type: object
+                      required:
+                        - group_id
+                        - values
+                      properties:
+                        group_id:
+                          type: string
+                          description: 'Unique identifier of a billable metric group, created by Lago.'
+                          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                        values:
+                          allOf:
+                            - $ref: '#/components/schemas/ChargeProperties'
+                            - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+              example:
+                - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
+                  charge_model: package
+                  invoiceable: true
+                  pay_in_advance: false
+                  min_amount_cents: 3000
+                  properties:
+                    amount: '30'
+                    free_units: 100
+                    package_size: 1000
+                  group_properties: []
+                - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
+                  charge_model: graduated
+                  invoiceable: true
+                  pay_in_advance: false
+                  min_amount_cents: 0
+                  properties:
+                    graduated_ranges:
+                      - to_value: 10
+                        from_value: 0
+                        flat_amount: '10'
+                        per_unit_amount: '0.5'
+                      - to_value: null
+                        from_value: 11
+                        flat_amount: '0'
+                        per_unit_amount: '0.4'
+                  group_properties: []
+                - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
+                  charge_model: standard
+                  invoiceable: true
+                  pay_in_advance: true
+                  min_amount_cents: 0
+                  properties: {}
+                  group_properties:
+                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a01
+                      values:
+                        amount: '10'
+                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a02
+                      values:
+                        amount: '5'
+                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a03
+                      values:
+                        amount: '8'
+                - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
+                  charge_model: volume
+                  invoiceable: true
+                  pay_in_advance: false
+                  min_amount_cents: 0
+                  properties:
+                    volume_ranges:
+                      - from_value: 0
+                        to_value: 100
+                        flat_amount: '0'
+                        per_unit_amount: '0'
+                      - from_value: 101
+                        to_value: null
+                        flat_amount: '0'
+                        per_unit_amount: '0.5'
+                  group_properties: []
+                - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
+                  charge_model: percentage
+                  invoiceable: false
+                  pay_in_advance: true
+                  min_amount_cents: 0
+                  properties:
+                    rate: '1'
+                    fixed_amount: '0.5'
+                    free_units_per_events: 5
+                    free_units_per_total_aggregation: '500'
+                  group_properties: []
+    PlanObject:
+      type: object
+      required:
+        - lago_id
+        - name
+        - created_at
+        - code
+        - interval
+        - amount_cents
+        - amount_currency
+        - active_subscriptions_count
+        - draft_invoices_count
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the plan created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        name:
+          type: string
+          description: The name of the plan.
+          example: Startup
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the plan was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the plan was initially created.
+          example: '2023-06-27T19:43:42Z'
+        code:
+          type: string
+          description: 'The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.'
+          example: startup
+        interval:
+          type: string
+          description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `monthly` or `weekly`.'
+          enum:
+            - weekly
+            - monthly
+            - yearly
+          example: monthly
+        description:
+          type: string
+          description: The description on the plan.
+          example: ''
+        amount_cents:
+          type: integer
+          description: 'The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.'
+          example: 10000
+        amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+              example: USD
+        trial_period:
+          type: number
+          description: The duration in days during which the base cost of the plan is offered for free.
+          example: 5
+        pay_in_advance:
+          type: boolean
+          description: 'This field determines the billing timing for the plan. When set to `true`, the base cost of the plan is due at the beginning of each billing period. Conversely, when set to `false`, the base cost of the plan is due at the end of each billing period.'
+          example: true
+        bill_charges_monthly:
+          type: boolean
+          nullable: true
+          description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.'
+          example: null
+        active_subscriptions_count:
+          type: integer
+          description: 'The count of active subscriptions that are currently associated with the plan. This field provides valuable information regarding the impact of deleting the plan. By checking the value of this field, you can determine the number of subscriptions that will be affected if the plan is deleted.'
+          example: 0
+        draft_invoices_count:
+          type: integer
+          description: 'The number of draft invoices that include a subscription attached to the plan. This field provides valuable information about the impact of deleting the plan. By checking the value of this field, you can determine the number of draft invoices that will be affected if the plan is deleted.'
+          example: 0
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeObject'
+          description: Additional usage-based charges for this plan.
+          example:
+            - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
+              lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
+              billable_metric_code: requests
+              created_at: '2023-06-27T19:43:42Z'
+              charge_model: package
+              invoiceable: true
+              pay_in_advance: false
+              min_amount_cents: 3000
+              properties:
+                amount: '30'
+                free_units: 100
+                package_size: 1000
+              group_properties: []
+            - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
+              lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
+              billable_metric_code: cpu
+              created_at: '2023-06-27T19:43:42Z'
+              charge_model: graduated
+              invoiceable: true
+              pay_in_advance: false
+              min_amount_cents: 0
+              properties:
+                graduated_ranges:
+                  - from_value: 0
+                    to_value: 10
+                    flat_amount: '10'
+                    per_unit_amount: '0.5'
+                  - from_value: 11
+                    to_value: null
+                    flat_amount: '0'
+                    per_unit_amount: '0.4'
+              group_properties: []
+            - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
+              lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
+              billable_metric_code: seats
+              created_at: '2023-06-27T19:43:42Z'
+              charge_model: standard
+              invoiceable: true
+              pay_in_advance: true
+              min_amount_cents: 0
+              properties: {}
+              group_properties:
+                - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a01
+                  values:
+                    amount: '10'
+                - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a02
+                  values:
+                    amount: '5'
+                - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a03
+                  values:
+                    amount: '8'
+            - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
+              lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
+              billable_metric_code: storage
+              created_at: '2023-06-27T19:43:42Z'
+              charge_model: volume
+              invoiceable: true
+              pay_in_advance: false
+              min_amount_cents: 0
+              properties:
+                volume_ranges:
+                  - from_value: 0
+                    to_value: 100
+                    flat_amount: '0'
+                    per_unit_amount: '0'
+                  - from_value: 101
+                    to_value: null
+                    flat_amount: '0'
+                    per_unit_amount: '0.5'
+              group_properties: []
+            - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
+              lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
+              billable_metric_code: payments
+              created_at: '2023-06-27T19:43:42Z'
+              charge_model: percentage
+              invoiceable: false
+              pay_in_advance: true
+              min_amount_cents: 0
+              properties:
+                rate: '1'
+                fixed_amount: '0.5'
+                free_units_per_events: 5
+                free_units_per_total_aggregation: '500'
+              group_properties: []
+    PlansPaginated:
+      type: object
+      required:
+        - plans
+        - meta
+      properties:
+        plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     Subscription:
       type: object
       required:
@@ -5457,231 +5996,9 @@ components:
               example: '123456'
             properties:
               type: object
-    GroupPropertiesObject:
-      type: object
-      required:
-        - group_id
-        - values
-      properties:
-        group_id:
-          type: string
-          example: '123456'
-        values:
-          type: object
-    ChargeObject:
-      type: object
-      required:
-        - lago_id
-        - lago_billable_metric_id
-        - billable_metric_code
-        - created_at
-        - charge_model
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_billable_metric_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        billable_metric_code:
-          type: string
-          example: bm_code
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        charge_model:
-          type: string
-          description: Charge model type
-          enum:
-            - standard
-            - graduated
-            - package
-            - percentage
-            - volume
-        pay_in_advance:
-          type: boolean
-          example: true
-        invoiceable:
-          type: boolean
-          example: true
-        min_amount_cents:
-          type: integer
-          example: 1200
-        properties:
-          type: object
-        group_properties:
-          type: array
-          items:
-            $ref: '#/components/schemas/GroupPropertiesObject'
-    PlanObject:
-      type: object
-      required:
-        - lago_id
-        - name
-        - created_at
-        - code
-        - interval
-        - amount_cents
-        - amount_currency
-        - active_subscriptions_count
-        - draft_invoices_count
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        name:
-          type: string
-          example: example name
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        code:
-          type: string
-          example: example_code
-        interval:
-          type: string
-          description: Plan interval
-          enum:
-            - weekly
-            - monthly
-            - yearly
-        description:
-          type: string
-          example: description
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: EUR
-        trial_period:
-          type: number
-          example: 2
-        pay_in_advance:
-          type: boolean
-          example: true
-        bill_charges_monthly:
-          type: boolean
-          example: false
-        active_subscriptions_count:
-          type: integer
-          example: 2
-        draft_invoices_count:
-          type: integer
-          example: 2
-        charges:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChargeObject'
-    Plan:
-      type: object
-      required:
-        - plan
-      properties:
-        plan:
-          $ref: '#/components/schemas/PlanObject'
-    PlansPaginated:
-      type: object
-      required:
-        - plans
-        - meta
-      properties:
-        plans:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlanObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    PlanInput:
-      type: object
-      required:
-        - plan
-      properties:
-        plan:
-          type: object
-          properties:
-            name:
-              type: string
-              example: example name
-            code:
-              type: string
-              example: example_code
-            interval:
-              type: string
-              description: Plan interval
-              enum:
-                - weekly
-                - monthly
-                - yearly
-            description:
-              type: string
-              example: description
-            amount_cents:
-              type: integer
-              example: 1200
-            amount_currency:
-              type: string
-              example: EUR
-            trial_period:
-              type: number
-              example: 2
-            pay_in_advance:
-              type: boolean
-              example: true
-            bill_charges_monthly:
-              type: boolean
-              example: false
-            charges:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                  billable_metric_id:
-                    type: string
-                    format: uuid
-                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                  charge_model:
-                    type: string
-                    description: Charge model type
-                    enum:
-                      - standard
-                      - graduated
-                      - package
-                      - percentage
-                      - volume
-                  pay_in_advance:
-                    type: boolean
-                  invoiceable:
-                    type: boolean
-                  min_amount_cents:
-                    type: integer
-                  properties:
-                    type: object
-                  group_properties:
-                    type: array
-                    items:
-                      type: object
-                      required:
-                        - group_id
-                        - values
-                      properties:
-                        group_id:
-                          type: string
-                          example: '123456'
-                        values:
-                          type: object
   responses:
     BadRequest:
-      $ref: '#/paths/~1plans/post/responses/400'
+      $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
     Forbidden:
       description: Forbidden
       content:
@@ -5689,7 +6006,7 @@ components:
           schema:
             $ref: '#/components/schemas/ApiErrorForbidden'
     Unauthorized:
-      $ref: '#/paths/~1plans/get/responses/401'
+      $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
     NotAllowed:
       description: Not Allowed error
       content:
@@ -5697,9 +6014,9 @@ components:
           schema:
             $ref: '#/components/schemas/ApiErrorNotAllowed'
     NotFound:
-      $ref: '#/paths/~1plans/post/responses/404'
+      $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
     UnprocessableEntity:
-      $ref: '#/paths/~1plans/post/responses/422'
+      $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
   securitySchemes:
     bearerAuth:
       type: http

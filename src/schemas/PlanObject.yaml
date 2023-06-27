@@ -1,0 +1,162 @@
+type: object
+required:
+  - lago_id
+  - name
+  - created_at
+  - code
+  - interval
+  - amount_cents
+  - amount_currency
+  - active_subscriptions_count
+  - draft_invoices_count
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier of the plan created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  name:
+    type: string
+    description: The name of the plan.
+    example: 'Startup'
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date and time when the plan was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the plan was initially created.
+    example: '2023-06-27T19:43:42Z'
+  code:
+    type: string
+    description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.
+    example: 'startup'
+  interval:
+    type: string
+    description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `monthly` or `weekly`.'
+    enum:
+      - weekly
+      - monthly
+      - yearly
+    example: monthly
+  description:
+    type: string
+    description: The description on the plan.
+    example: ''
+  amount_cents:
+    type: integer
+    description: The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.
+    example: 10000
+  amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
+        example: 'USD'
+  trial_period:
+    type: number
+    description: The duration in days during which the base cost of the plan is offered for free.
+    example: 5
+  pay_in_advance:
+    type: boolean
+    description: This field determines the billing timing for the plan. When set to `true`, the base cost of the plan is due at the beginning of each billing period. Conversely, when set to `false`, the base cost of the plan is due at the end of each billing period.
+    example: true
+  bill_charges_monthly:
+    type: boolean
+    nullable: true
+    description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.
+    example: null
+  active_subscriptions_count:
+    type: integer
+    description: The count of active subscriptions that are currently associated with the plan. This field provides valuable information regarding the impact of deleting the plan. By checking the value of this field, you can determine the number of subscriptions that will be affected if the plan is deleted.
+    example: 0
+  draft_invoices_count:
+    type: integer
+    description: The number of draft invoices that include a subscription attached to the plan. This field provides valuable information about the impact of deleting the plan. By checking the value of this field, you can determine the number of draft invoices that will be affected if the plan is deleted.
+    example: 0
+  charges:
+    type: array
+    items:
+      $ref: './ChargeObject.yaml'
+    description: Additional usage-based charges for this plan.
+    example:
+      - lago_id: '1a901a90-1a90-1a90-1a90-1a901a901a91'
+        lago_billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a91'
+        billable_metric_code: 'requests'
+        created_at: '2023-06-27T19:43:42Z'
+        charge_model: 'package'
+        invoiceable: true
+        pay_in_advance: false
+        min_amount_cents: 3000
+        properties:
+          amount: '30'
+          free_units: 100
+          package_size: 1000
+        group_properties: []
+      - lago_id: '1a901a90-1a90-1a90-1a90-1a901a901a92'
+        lago_billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a92'
+        billable_metric_code: 'cpu'
+        created_at: '2023-06-27T19:43:42Z'
+        charge_model: 'graduated'
+        invoiceable: true
+        pay_in_advance: false
+        min_amount_cents: 0
+        properties:
+          graduated_ranges:
+            - from_value: 0
+              to_value: 10
+              flat_amount: '10'
+              per_unit_amount: '0.5'
+            - from_value: 11
+              to_value: null
+              flat_amount: '0'
+              per_unit_amount: '0.4'
+        group_properties: []
+      - lago_id: '1a901a90-1a90-1a90-1a90-1a901a901a93'
+        lago_billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a93'
+        billable_metric_code: 'seats'
+        created_at: '2023-06-27T19:43:42Z'
+        charge_model: 'standard'
+        invoiceable: true
+        pay_in_advance: true
+        min_amount_cents: 0
+        properties: {}
+        group_properties:
+          - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a01'
+            values:
+              amount: '10'
+          - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a02'
+            values:
+              amount: '5'
+          - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a03'
+            values:
+              amount: '8'
+      - lago_id: '1a901a90-1a90-1a90-1a90-1a901a901a94'
+        lago_billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a94'
+        billable_metric_code: 'storage'
+        created_at: '2023-06-27T19:43:42Z'
+        charge_model: 'volume'
+        invoiceable: true
+        pay_in_advance: false
+        min_amount_cents: 0
+        properties:
+          volume_ranges:
+            - from_value: 0
+              to_value: 100
+              flat_amount: '0'
+              per_unit_amount: '0'
+            - from_value: 101
+              to_value: null
+              flat_amount: '0'
+              per_unit_amount: '0.5'
+        group_properties: []
+      - lago_id: '1a901a90-1a90-1a90-1a90-1a901a901a95'
+        lago_billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a95'
+        billable_metric_code: 'payments'
+        created_at: '2023-06-27T19:43:42Z'
+        charge_model: 'percentage'
+        invoiceable: false
+        pay_in_advance: true
+        min_amount_cents: 0
+        properties:
+          rate: '1'
+          fixed_amount: '0.5'
+          free_units_per_events: 5
+          free_units_per_total_aggregation: '500'
+        group_properties: []

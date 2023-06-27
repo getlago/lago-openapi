@@ -1,0 +1,46 @@
+post:
+  tags:
+    - plans
+  summary: Create a plan
+  description: This endpoint creates a plan with subscription and usage-based charges. It supports flexible billing cadence (in-advance or in-arrears) and allows for both recurring and metered charges.
+  operationId: createPlan
+  requestBody:
+    description: Plan payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/PlanInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Plan created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Plan.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - plans
+  summary: List all plans
+  description: This endpoint retrieves all existing plans.
+  operationId: findAllPlans
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: Plans
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PlansPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

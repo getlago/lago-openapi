@@ -1,0 +1,70 @@
+parameters:
+  - name: code
+    in: path
+    description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+put:
+  tags:
+    - plans
+  summary: Update a plan
+  description: This endpoint updates a specific plan with subscription and usage-based charges. It supports flexible billing cadence (in-advance or in-arrears) and allows for both recurring and metered charges.
+  operationId: updatePlan
+  requestBody:
+    description: Plan payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/PlanInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Plan updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Plan.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - plans
+  summary: Retrieve a plan
+  description: This endpoint retrieves a specific plan.
+  operationId: findPlan
+  responses:
+    '200':
+      description: Plan
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Plan.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+delete:
+  tags:
+    - plans
+  summary: Delete a plan
+  description: This endpoint deletes a specific plan. Note that this plan could be associated with active subscriptions.
+  operationId: destroyPlan
+  responses:
+    '200':
+      description: Plan deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Plan.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
