@@ -91,6 +91,8 @@ paths:
     $ref: './resources/customer.yaml'
   /customers/{external_customer_id}/portal_url:
     $ref: './resources/customer_portal_url.yaml'
+  /customers/{external_customer_id}/current_usage:
+    $ref: './resources/customer_current_usage.yaml'
   /events:
     $ref: './resources/events.yaml'
   /events/batch:
@@ -458,40 +460,6 @@ paths:
           $ref: './responses/Unauthorized.yaml'
         '422':
           $ref: './responses/UnprocessableEntity.yaml'
-  /customers/{external_customer_id}/current_usage:
-    get:
-      tags:
-        - customers
-      summary: Find customer current usage
-      parameters:
-        - name: external_customer_id
-          in: path
-          description: External ID of the existing customer
-          required: true
-          schema:
-            type: string
-            example: '12345'
-        - name: external_subscription_id
-          in: query
-          description: External subscription ID
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: '54321'
-      description: Return a customer current usage
-      operationId: findCustomerCurrentUsage
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerUsage'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
   /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
     delete:
       tags:

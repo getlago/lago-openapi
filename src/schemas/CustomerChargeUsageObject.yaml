@@ -1,0 +1,111 @@
+type: object
+required:
+  - units
+  - amount_cents
+  - amount_currency
+  - charge
+  - billable_metric
+  - groups
+properties:
+  units:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    example: '1.0'
+    description: The number of units consumed by the customer for a specific charge item.
+  amount_cents:
+    type: integer
+    example: 123
+    description: The amount in cents, tax excluded, consumed by the customer for a specific charge item.
+  amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of a usage item consumed by the customer.
+        example: 'EUR'
+  charge:
+    type: object
+    description: Object listing all the properties for a specific charge item.
+    required:
+      - lago_id
+      - charge_model
+    properties:
+      lago_id:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        description: Unique identifier assigned to the charge within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge’s record within the Lago system.
+      charge_model:
+        type: string
+        description: The pricing model applied to this charge. Possible values are standard, `graduated`, `percentage`, `package` or `volume`.
+        enum:
+          - standard
+          - graduated
+          - package
+          - percentage
+          - volume
+        example: graduated
+  billable_metric:
+    type: object
+    description: The related billable metric object.
+    required:
+      - lago_id
+      - name
+      - code
+      - aggregation_type
+    properties:
+      lago_id:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        description: Unique identifier assigned to the billable metric within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the billable metric’s record within the Lago system.
+      name:
+        type: string
+        example: 'Storage'
+        description: The name of the billable metric used for this charge.
+      code:
+        type: string
+        example: 'storage'
+        description: The code of the billable metric used for this charge.
+      aggregation_type:
+        type: string
+        description: The aggregation type of the billable metric used for this charge. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.
+        enum:
+          - count_agg
+          - sum_agg
+          - max_agg
+          - unique_count_agg
+        example: sum_agg
+  groups:
+    type: array
+    description: Array of group object, representing multiple dimensions for a charge item.
+    required:
+      - lago_id
+
+      - value
+      - units
+      - amount_cents
+    items:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          format: 'uuid'
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+          description: Unique identifier assigned to the group within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the group record within the Lago system.
+        key:
+          type: string
+          example: null
+          description: The group key, only returned for groups with two dimensions.
+          nullable: true
+        value:
+          type: string
+          example: 'eruope'
+          description: The group value.
+        units:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          example: '0.9'
+          description: The number of units consumed for a specific group related to a charge item.
+        amount_cents:
+          type: integer
+          example: 1000
+          description: The amount in cents, tax excluded, consumed for a specific group related to a charge item.
