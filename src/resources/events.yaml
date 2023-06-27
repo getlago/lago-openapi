@@ -1,0 +1,22 @@
+post:
+  tags:
+    - events
+  summary: Send usage events
+  description: This endpoint is used for transmitting usage measurement events to either a designated customer or a specific subscription.
+  operationId: createEvent
+  requestBody:
+    description: Event payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/EventInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Event received
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

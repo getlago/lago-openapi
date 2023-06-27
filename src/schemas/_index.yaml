@@ -38,6 +38,14 @@ CustomerObject:
   $ref: './CustomerObject.yaml'
 CustomersPaginated:
   $ref: './CustomersPaginated.yaml'
+Event:
+  $ref: './Event.yaml'
+EventBatchInput:
+  $ref: './EventBatchInput.yaml'
+EventInput:
+  $ref: './EventInput.yaml'
+EventObject:
+  $ref: './EventObject.yaml'
 GroupObject:
   $ref: './GroupObject.yaml'
 GroupsPaginated:
@@ -770,88 +778,6 @@ CustomerUsage:
   properties:
     customer_usage:
       $ref: '#/CustomerUsageObject'
-EventObject:
-  type: object
-  required:
-    - lago_id
-    - transaction_id
-    - lago_customer_id
-    - external_customer_id
-    - code
-    - timestamp
-    - lago_subscription_id
-    - external_subscription_id
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    transaction_id:
-      type: string
-      example: '987654321'
-    lago_customer_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_customer_id:
-      type: string
-      example: '123456'
-    code:
-      type: string
-      example: 'code'
-    timestamp:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    properties:
-      type: object
-    lago_subscription_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_subscription_id:
-      type: string
-      example: '123456'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-Event:
-  type: object
-  required:
-    - event
-  properties:
-    event:
-      $ref: '#/EventObject'
-EventInput:
-  type: object
-  required:
-    - event
-  properties:
-    event:
-      type: object
-      required:
-        - transaction_id
-        - code
-      properties:
-        transaction_id:
-          type: string
-          example: '123456'
-        external_customer_id:
-          type: string
-          example: '654321'
-        code:
-          type: string
-          example: 'code'
-        timestamp:
-          type: integer
-          example: 1669823754
-        external_subscription_id:
-          type: string
-          example: '123456'
-        properties:
-          type: object
 EventEstimateFeesInput:
   type: object
   required:
@@ -871,36 +797,6 @@ EventEstimateFeesInput:
         external_subscription_id:
           type: string
           example: '123456'
-        properties:
-          type: object
-BatchEventInput:
-  type: object
-  required:
-    - event
-  properties:
-    event:
-      type: object
-      required:
-        - transaction_id
-        - external_subscription_ids
-        - code
-      properties:
-        transaction_id:
-          type: string
-          example: '123456'
-        external_customer_id:
-          type: string
-          example: '654321'
-        code:
-          type: string
-          example: 'code'
-        timestamp:
-          type: integer
-          example: 1669823754
-        external_subscription_ids:
-          type: array
-          items:
-            type: string
         properties:
           type: object
 Fees:
