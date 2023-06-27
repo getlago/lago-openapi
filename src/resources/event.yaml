@@ -1,0 +1,25 @@
+parameters:
+  - name: transaction_id
+    in: path
+    description: This field represents the unique identifier sent for this specific event.
+    required: true
+    schema:
+      type: string
+      example: 'transaction_1234567890'
+get:
+  tags:
+    - events
+  summary: Retrieve a specific event
+  description: This endpoint is used for retrieving a specific usage measurement event that has been sent to a customer or a subscription.
+  operationId: findEvent
+  responses:
+    '200':
+      description: Event
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Event.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

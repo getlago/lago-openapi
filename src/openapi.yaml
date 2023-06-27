@@ -31,6 +31,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/subscriptions/subscription-object
+  - name: events
+    description: Everything about Event collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/events/event-object
   - name: add_ons
     description: Everything about Add-on collection
     externalDocs:
@@ -46,11 +51,6 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/organizations/organization-object
-  - name: events
-    description: Everything about Event collection
-    externalDocs:
-      description: Find out more
-      url: https://doc.getlago.com/docs/api/events/event-object
   - name: plans
     description: Everything about Plan collection
     externalDocs:
@@ -91,6 +91,12 @@ paths:
     $ref: './resources/customer.yaml'
   /customers/{external_customer_id}/portal_url:
     $ref: './resources/customer_portal_url.yaml'
+  /events:
+    $ref: './resources/events.yaml'
+  /events/batch:
+    $ref: './resources/events_batch.yaml'
+  /events/{transaction_id}:
+    $ref: './resources/event.yaml'
   /subscriptions:
     $ref: './resources/subscriptions.yaml'
   /subscriptions/{external_id}:
@@ -516,78 +522,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppliedCoupon'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-  /events:
-    post:
-      tags:
-        - events
-      summary: Create a new event
-      description: Create a new event
-      operationId: createEvent
-      requestBody:
-        description: Event payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EventInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-  /events/batch:
-    post:
-      tags:
-        - events
-      summary: Create batch events
-      description: Create batch events
-      operationId: createBatchEvents
-      requestBody:
-        description: Batch events payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BatchEventInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-  /events/{id}:
-    parameters:
-      - name: id
-        in: path
-        description: Id of the existing transaction
-        required: true
-        schema:
-          type: string
-          example: '12345'
-    get:
-      tags:
-        - events
-      summary: Find event by transaction ID
-      description: Return a single event
-      operationId: findEvent
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Event'
         '401':
           $ref: './responses/Unauthorized.yaml'
         '404':

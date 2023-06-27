@@ -1,0 +1,22 @@
+post:
+  tags:
+    - events
+  summary: Batch multiple events
+  description: This endpoint is used for transmitting a batch of usage measurement events to multiple subscriptions for a single customer.
+  operationId: createBatchEvents
+  requestBody:
+    description: Batch events payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/EventBatchInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Event received
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

@@ -30,6 +30,11 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/subscriptions/subscription-object'
+  - name: events
+    description: Everything about Event collection
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/events/event-object'
   - name: add_ons
     description: Everything about Add-on collection
     externalDocs:
@@ -45,11 +50,6 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/organizations/organization-object'
-  - name: events
-    description: Everything about Event collection
-    externalDocs:
-      description: Find out more
-      url: 'https://doc.getlago.com/docs/api/events/event-object'
   - name: plans
     description: Everything about Plan collection
     externalDocs:
@@ -366,6 +366,78 @@ paths:
           $ref: '#/paths/~1fees/get/responses/401'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  /events:
+    post:
+      tags:
+        - events
+      summary: Send usage events
+      description: This endpoint is used for transmitting usage measurement events to either a designated customer or a specific subscription.
+      operationId: createEvent
+      requestBody:
+        description: Event payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInput'
+        required: true
+      responses:
+        '200':
+          description: Event received
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
+  /events/batch:
+    post:
+      tags:
+        - events
+      summary: Batch multiple events
+      description: This endpoint is used for transmitting a batch of usage measurement events to multiple subscriptions for a single customer.
+      operationId: createBatchEvents
+      requestBody:
+        description: Batch events payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventBatchInput'
+        required: true
+      responses:
+        '200':
+          description: Event received
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
+  '/events/{transaction_id}':
+    parameters:
+      - name: transaction_id
+        in: path
+        description: This field represents the unique identifier sent for this specific event.
+        required: true
+        schema:
+          type: string
+          example: transaction_1234567890
+    get:
+      tags:
+        - events
+      summary: Retrieve a specific event
+      description: This endpoint is used for retrieving a specific usage measurement event that has been sent to a customer or a subscription.
+      operationId: findEvent
+      responses:
+        '200':
+          description: Event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
   /subscriptions:
@@ -907,78 +979,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppliedCoupon'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  /events:
-    post:
-      tags:
-        - events
-      summary: Create a new event
-      description: Create a new event
-      operationId: createEvent
-      requestBody:
-        description: Event payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EventInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
-  /events/batch:
-    post:
-      tags:
-        - events
-      summary: Create batch events
-      description: Create batch events
-      operationId: createBatchEvents
-      requestBody:
-        description: Batch events payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BatchEventInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
-  '/events/{id}':
-    parameters:
-      - name: id
-        in: path
-        description: Id of the existing transaction
-        required: true
-        schema:
-          type: string
-          example: '12345'
-    get:
-      tags:
-        - events
-      summary: Find event by transaction ID
-      description: Return a single event
-      operationId: findEvent
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Event'
         '401':
           $ref: '#/paths/~1fees/get/responses/401'
         '404':
@@ -2737,6 +2737,173 @@ components:
             $ref: '#/components/schemas/CustomerObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    Event:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/EventObject'
+    EventBatchInput:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          type: object
+          required:
+            - transaction_id
+            - external_subscription_ids
+            - code
+          properties:
+            transaction_id:
+              type: string
+              example: transaction_1234567890
+              description: 'This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.'
+            external_customer_id:
+              type: string
+              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+              description: 'The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_ids`, targeting a specific subscription.'
+            external_subscription_ids:
+              type: array
+              items:
+                type: string
+              description: Array of unique identifiers of the targeted subscriptions within your application.
+              example:
+                - sub_1234567890
+                - sub_0987654321
+            code:
+              type: string
+              example: storage
+              description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
+            timestamp:
+              type: integer
+              example: 1651240791
+              description: 'This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.'
+            properties:
+              type: object
+              description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
+              additionalProperties: true
+              properties:
+                operation_type:
+                  type: string
+                  description: 'The `operation_type` field is only necessary when adding or removing a specific unit when the targeted billable metric adopts a `unique_count_agg` aggregation method. In other cases, the `operation_type` field is not required. The valid values for the `operation_type` field are `add` or `remove`, which indicate whether the unit is being added or removed from the unique count aggregation, respectively.'
+                  enum:
+                    - add
+                    - remove
+              example:
+                gb: 10
+    EventInput:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          type: object
+          required:
+            - transaction_id
+            - code
+          properties:
+            transaction_id:
+              type: string
+              example: transaction_1234567890
+              description: 'This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.'
+            external_customer_id:
+              type: string
+              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+              description: 'The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.'
+            external_subscription_id:
+              type: string
+              example: sub_1234567890
+              description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
+            code:
+              type: string
+              example: storage
+              description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
+            timestamp:
+              type: integer
+              example: 1651240791
+              description: 'This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.'
+            properties:
+              type: object
+              description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
+              additionalProperties: true
+              properties:
+                operation_type:
+                  type: string
+                  description: 'The `operation_type` field is only necessary when adding or removing a specific unit when the targeted billable metric adopts a `unique_count_agg` aggregation method. In other cases, the `operation_type` field is not required. The valid values for the `operation_type` field are `add` or `remove`, which indicate whether the unit is being added or removed from the unique count aggregation, respectively.'
+                  enum:
+                    - add
+                    - remove
+              example:
+                gb: 10
+    EventObject:
+      type: object
+      required:
+        - lago_id
+        - transaction_id
+        - lago_customer_id
+        - external_customer_id
+        - code
+        - timestamp
+        - lago_subscription_id
+        - external_subscription_id
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the event within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the event's record within the Lago system
+        transaction_id:
+          type: string
+          example: transaction_1234567890
+          description: 'This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.'
+        lago_customer_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
+        external_customer_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: 'The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.'
+        code:
+          type: string
+          example: storage
+          description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
+        timestamp:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: 'This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.'
+        properties:
+          type: object
+          description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
+          additionalProperties: true
+          properties:
+            operation_type:
+              type: string
+              description: 'The `operation_type` field is only necessary when adding or removing a specific unit when the targeted billable metric adopts a `unique_count_agg` aggregation method. In other cases, the `operation_type` field is not required. The valid values for the `operation_type` field are `add` or `remove`, which indicate whether the unit is being added or removed from the unique count aggregation, respectively.'
+              enum:
+                - add
+                - remove
+          example:
+            gb: 10
+        lago_subscription_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription’s record within the Lago system
+        external_subscription_id:
+          type: string
+          example: sub_1234567890
+          description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: 'The creation date of the event''s record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event''s record was created within the Lago application'
     GroupObject:
       type: object
       required:
@@ -3833,88 +4000,6 @@ components:
       properties:
         customer_usage:
           $ref: '#/components/schemas/CustomerUsageObject'
-    EventObject:
-      type: object
-      required:
-        - lago_id
-        - transaction_id
-        - lago_customer_id
-        - external_customer_id
-        - code
-        - timestamp
-        - lago_subscription_id
-        - external_subscription_id
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        transaction_id:
-          type: string
-          example: '987654321'
-        lago_customer_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_customer_id:
-          type: string
-          example: '123456'
-        code:
-          type: string
-          example: code
-        timestamp:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        properties:
-          type: object
-        lago_subscription_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_subscription_id:
-          type: string
-          example: '123456'
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-    Event:
-      type: object
-      required:
-        - event
-      properties:
-        event:
-          $ref: '#/components/schemas/EventObject'
-    EventInput:
-      type: object
-      required:
-        - event
-      properties:
-        event:
-          type: object
-          required:
-            - transaction_id
-            - code
-          properties:
-            transaction_id:
-              type: string
-              example: '123456'
-            external_customer_id:
-              type: string
-              example: '654321'
-            code:
-              type: string
-              example: code
-            timestamp:
-              type: integer
-              example: 1669823754
-            external_subscription_id:
-              type: string
-              example: '123456'
-            properties:
-              type: object
     EventEstimateFeesInput:
       type: object
       required:
@@ -3934,36 +4019,6 @@ components:
             external_subscription_id:
               type: string
               example: '123456'
-            properties:
-              type: object
-    BatchEventInput:
-      type: object
-      required:
-        - event
-      properties:
-        event:
-          type: object
-          required:
-            - transaction_id
-            - external_subscription_ids
-            - code
-          properties:
-            transaction_id:
-              type: string
-              example: '123456'
-            external_customer_id:
-              type: string
-              example: '654321'
-            code:
-              type: string
-              example: code
-            timestamp:
-              type: integer
-              example: 1669823754
-            external_subscription_ids:
-              type: array
-              items:
-                type: string
             properties:
               type: object
     Fees:
