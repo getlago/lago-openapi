@@ -36,6 +36,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/events/event-object
+  - name: organizations
+    description: Everything about Organization collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/organizations/organization-object
   - name: add_ons
     description: Everything about Add-on collection
     externalDocs:
@@ -46,11 +51,6 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/coupons/coupon-object
-  - name: organizations
-    description: Everything about Organization collection
-    externalDocs:
-      description: Find out more
-      url: https://doc.getlago.com/docs/api/organizations/organization-object
   - name: plans
     description: Everything about Plan collection
     externalDocs:
@@ -99,6 +99,8 @@ paths:
     $ref: './resources/events_batch.yaml'
   /events/{transaction_id}:
     $ref: './resources/event.yaml'
+  /organizations:
+    $ref: './resources/organizations.yaml'
   /subscriptions:
     $ref: './resources/subscriptions.yaml'
   /subscriptions/{external_id}:
@@ -433,33 +435,6 @@ paths:
                 $ref: '#/components/schemas/AppliedCouponsPaginated'
         '401':
           $ref: './responses/Unauthorized.yaml'
-  /organizations:
-    put:
-      tags:
-        - organizations
-      summary: Update an existing Organization
-      description: Update an existing organization
-      operationId: updateOrganization
-      requestBody:
-        description: Update an existing organization
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrganizationInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
   /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
     delete:
       tags:

@@ -35,6 +35,11 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/events/event-object'
+  - name: organizations
+    description: Everything about Organization collection
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/organizations/organization-object'
   - name: add_ons
     description: Everything about Add-on collection
     externalDocs:
@@ -45,11 +50,6 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/coupons/coupon-object'
-  - name: organizations
-    description: Everything about Organization collection
-    externalDocs:
-      description: Find out more
-      url: 'https://doc.getlago.com/docs/api/organizations/organization-object'
   - name: plans
     description: Everything about Plan collection
     externalDocs:
@@ -474,6 +474,33 @@ paths:
           $ref: '#/paths/~1fees/get/responses/401'
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
+  /organizations:
+    put:
+      tags:
+        - organizations
+      summary: Update your organization
+      description: This endpoint is used to update your own organization's settings.
+      operationId: updateOrganization
+      requestBody:
+        description: Update an existing organization
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
   /subscriptions:
     post:
       tags:
@@ -922,33 +949,6 @@ paths:
                 $ref: '#/components/schemas/AppliedCouponsPaginated'
         '401':
           $ref: '#/paths/~1fees/get/responses/401'
-  /organizations:
-    put:
-      tags:
-        - organizations
-      summary: Update an existing Organization
-      description: Update an existing organization
-      operationId: updateOrganization
-      requestBody:
-        description: Update an existing organization
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrganizationInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
   '/customers/{external_customer_id}/applied_coupons/{applied_coupon_id}':
     delete:
       tags:
@@ -3115,6 +3115,204 @@ components:
             $ref: '#/components/schemas/GroupObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    Organization:
+      type: object
+      required:
+        - organization
+      properties:
+        organization:
+          $ref: '#/components/schemas/OrganizationObject'
+    OrganizationBillingConfiguration:
+      type: object
+      description: The custom billing settings for your organization.
+      properties:
+        invoice_footer:
+          type: string
+          example: This is my customer footer
+          description: The customer invoice message that appears at the bottom of each billing documents.
+          nullable: true
+        invoice_grace_period:
+          type: integer
+          example: 3
+          description: 'The grace period, expressed in days, for finalizing the invoice. This period refers to the additional time granted to your customers beyond the invoice due date to adjust usage and line items. Can be overwritten by the customer’s grace period.'
+        document_locale:
+          type: string
+          example: en
+          description: 'The locale of the billing documents, expressed in the ISO 639-1 format. This field indicates the language or regional variant used for the documents content issued or the embeddable customer portal.'
+        vat_rate:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          example: '15.0'
+          description: The custom VAT (Value Added Tax) applied to your organization. Can be overwritten by the customer’s VAT rate.
+    OrganizationObject:
+      type: object
+      required:
+        - lago_id
+        - name
+        - created_at
+        - email_settings
+        - billing_configuration
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the organization within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the organization's record within the Lago system
+        name:
+          type: string
+          example: Name1
+          description: The name of your organization.
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-05-02T13:04:09Z'
+          description: 'The date of creation of your organization, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
+          nullable: true
+        webhook_url:
+          type: string
+          example: 'https://webhook.brex.com'
+          description: 'The URL of your newest updated webhook endpoint. This URL allows your organization to receive important messages, notifications, or data from the Lago system. By configuring your webhook endpoint to this URL, you can ensure that your organization stays informed and receives relevant information in a timely manner.'
+          nullable: true
+        country:
+          type: string
+          example: US
+          description: The country of your organization.
+          nullable: true
+        address_line1:
+          type: string
+          example: 100 Brex Street
+          description: The first line of your organization’s billing address.
+          nullable: true
+        address_line2:
+          type: string
+          example: null
+          description: The second line of your organization’s billing address.
+          nullable: true
+        state:
+          type: string
+          example: NYC
+          description: The state of your organization’s billing address.
+          nullable: true
+        zipcode:
+          type: string
+          example: '10000'
+          description: The zipcode of your organization’s billing address.
+          nullable: true
+        email:
+          type: string
+          format: email
+          example: brex@brex.com
+          description: The email address of your organization used to bill your customers.
+          nullable: true
+        city:
+          type: string
+          example: New York
+          description: The city of your organization’s billing address.
+          nullable: true
+        legal_name:
+          type: string
+          example: null
+          description: The legal name of your organization.
+          nullable: true
+        legal_number:
+          type: string
+          example: null
+          description: The legal number of your organization.
+          nullable: true
+        tax_identification_number:
+          type: string
+          example: US123456789
+          description: The tax identification number of your organization.
+          nullable: true
+        timezone:
+          allOf:
+            - $ref: '#/components/schemas/Timezone'
+            - description: 'Your organization’s timezone, used for billing purposes in your own local time. Can be overwritten by the customer’s timezone.'
+              example: America/New_York
+        billing_configuration:
+          $ref: '#/components/schemas/OrganizationBillingConfiguration'
+    OrganizationUpdateInput:
+      type: object
+      required:
+        - organization
+      properties:
+        organization:
+          type: object
+          properties:
+            webhook_url:
+              type: string
+              example: 'https://webhook.brex.com'
+              description: 'The URL of your newest updated webhook endpoint. This URL allows your organization to receive important messages, notifications, or data from the Lago system. By configuring your webhook endpoint to this URL, you can ensure that your organization stays informed and receives relevant information in a timely manner.'
+              nullable: true
+            country:
+              type: string
+              example: US
+              description: The country of your organization.
+              nullable: true
+            address_line1:
+              type: string
+              example: 100 Brex Street
+              description: The first line of your organization’s billing address.
+              nullable: true
+            address_line2:
+              type: string
+              example: null
+              description: The second line of your organization’s billing address.
+              nullable: true
+            state:
+              type: string
+              example: NYC
+              description: The state of your organization’s billing address.
+              nullable: true
+            zipcode:
+              type: string
+              example: '10000'
+              description: The zipcode of your organization’s billing address.
+              nullable: true
+            email:
+              type: string
+              format: email
+              example: brex@brex.com
+              description: The email address of your organization used to bill your customers.
+              nullable: true
+            city:
+              type: string
+              example: New York
+              description: The city of your organization’s billing address.
+              nullable: true
+            legal_name:
+              type: string
+              example: null
+              description: The legal name of your organization.
+              nullable: true
+            legal_number:
+              type: string
+              example: null
+              description: The legal number of your organization.
+              nullable: true
+            tax_identification_number:
+              type: string
+              example: US123456789
+              description: The tax identification number of your organization.
+              nullable: true
+            timezone:
+              allOf:
+                - $ref: '#/components/schemas/Timezone'
+                - description: 'Your organization’s timezone, used for billing purposes in your own local time. Can be overwritten by the customer’s timezone.'
+                  example: America/New_York
+            email_settings:
+              type: array
+              description: 'Represents the email settings of the organization. It allows you to define which documents are sent by email. The field value determines the types of documents that trigger email notifications. Possible values for are `invoice.finalized` and `credit_note.created`. By configuring this field, you can specify whether invoices, credit notes, or both should be sent to recipients via email.'
+              example:
+                - invoice.finalized
+                - credit_note.created
+              items:
+                type: string
+                enum:
+                  - invoice.finalized
+                  - credit_note.created
+            billing_configuration:
+              $ref: '#/components/schemas/OrganizationBillingConfiguration'
     PaginationMeta:
       type: object
       required:
@@ -3910,138 +4108,6 @@ components:
             percentage_rate:
               type: number
               example: 25
-    BillingConfigurationOrganization:
-      type: object
-      properties:
-        invoice_footer:
-          type: string
-          example: text
-        invoice_grace_period:
-          type: integer
-          example: 5
-        document_locale:
-          type: string
-          example: fr
-        vat_rate:
-          type: number
-          example: 25
-    OrganizationObject:
-      type: object
-      required:
-        - name
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        name:
-          type: string
-          example: example name
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        webhook_url:
-          type: string
-          example: 'https://example.com'
-        country:
-          type: string
-          example: CZ
-        address_line1:
-          type: string
-          example: address1
-        address_line2:
-          type: string
-          example: address2
-        state:
-          type: string
-          example: state1
-        zipcode:
-          type: string
-          example: '10000'
-        email:
-          type: string
-          format: email
-          example: example@example.com
-        city:
-          type: string
-          example: City
-        legal_name:
-          type: string
-          example: name1
-        legal_number:
-          type: string
-          example: '10000'
-        tax_identification_number:
-          type: string
-          example: EU123456789
-        timezone:
-          type: string
-          example: UTC
-        billing_configuration:
-          $ref: '#/components/schemas/BillingConfigurationOrganization'
-    Organization:
-      type: object
-      required:
-        - organization
-      properties:
-        organization:
-          $ref: '#/components/schemas/OrganizationObject'
-    OrganizationInput:
-      type: object
-      required:
-        - organization
-      properties:
-        organization:
-          type: object
-          properties:
-            webhook_url:
-              type: string
-              example: 'https://example.com'
-            country:
-              type: string
-              example: CZ
-            address_line1:
-              type: string
-              example: address1
-            address_line2:
-              type: string
-              example: address2
-            state:
-              type: string
-              example: state1
-            zipcode:
-              type: string
-              example: '10000'
-            email:
-              type: string
-              format: email
-              example: example@example.com
-            city:
-              type: string
-              example: City
-            legal_name:
-              type: string
-              example: name1
-            legal_number:
-              type: string
-              example: '10000'
-            tax_identification_number:
-              type: string
-              example: EU123456789
-            timezone:
-              type: string
-              example: Europe/Paris
-            email_settings:
-              type: array
-              items:
-                type: string
-                enum:
-                  - invoice.finalized
-                  - credit_note.created
-            billing_configuration:
-              $ref: '#/components/schemas/BillingConfigurationOrganization'
     EventEstimateFeesInput:
       type: object
       required:
