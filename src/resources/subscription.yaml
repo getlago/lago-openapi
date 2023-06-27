@@ -1,0 +1,55 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription
+    required: true
+    schema:
+      type: string
+      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+put:
+  tags:
+    - subscriptions
+  summary: Update a subscription
+  description: This endpoint allows you to update a subscription.
+  operationId: updateSubscription
+  requestBody:
+    description: Update an existing subscription
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/SubscriptionUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Subscription updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Subscription.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - subscriptions
+  summary: Terminate a subscription
+  description: This endpoint allows you to terminate a subscription.
+  operationId: destroySubscription
+  responses:
+    '200':
+      description: Subscription terminated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Subscription.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'

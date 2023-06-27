@@ -1,0 +1,64 @@
+post:
+  tags:
+    - subscriptions
+  summary: Assign a plan to a customer
+  description: This endpoint assigns a plan to a customer, creating or modifying a subscription. Ideal for initial subscriptions or plan changes (upgrades/downgrades).
+  operationId: createSubscription
+  requestBody:
+    description: Subscription payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/SubscriptionCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Subscription created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Subscription.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - subscriptions
+  summary: List all subscriptions
+  description: This endpoint retrieves all active subscriptions.
+  operationId: findAllSubscriptions
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - name: external_customer_id
+      in: query
+      description: The customer external unique identifier (provided by your own application)
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    - name: plan_code
+      in: query
+      description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'premium'
+  responses:
+    '200':
+      description: List of subscriptions
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/SubscriptionsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

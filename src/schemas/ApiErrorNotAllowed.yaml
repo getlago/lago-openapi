@@ -1,0 +1,16 @@
+type: object
+required:
+  - status
+  - error
+  - code
+properties:
+  status:
+    type: integer
+    format: int32
+    example: 405
+  error:
+    type: string
+    example: 'Method Not Allowed'
+  code:
+    type: string
+    example: 'not_allowed'
