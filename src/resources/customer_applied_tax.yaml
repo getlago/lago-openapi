@@ -1,0 +1,34 @@
+delete:
+  tags:
+    - customers
+  summary: Delete customer's appplied tax
+  description: Delete customer's appplied tax
+  operationId: deleteAppliedTax
+  parameters:
+    - name: external_customer_id
+      in: path
+      description: External ID of the customer
+      required: true
+      schema:
+        type: string
+        example: '12345'
+    - name: tax_code
+      in: path
+      description: Code of the applied tax
+      required: true
+      schema:
+        type: string
+        example: '12345'
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CustomerAppliedTax.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

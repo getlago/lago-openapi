@@ -46,6 +46,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/organizations/organization-object
+  - name: taxes
+    description: Everything about Tax collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/taxes/tax-object
   - name: coupons
     description: Everything about Coupon collection
     externalDocs:
@@ -114,6 +119,10 @@ paths:
     $ref: './resources/customer.yaml'
   /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
     $ref: './resources/customer_applied_coupon.yaml'
+  /customers/{external_customer_id}/applied_taxes:
+    $ref: './resources/customer_applied_taxes.yaml'
+  /customers/{external_customer_id}/applied_taxes/{tax_code}:
+    $ref: './resources/customer_applied_tax.yaml'
   /customers/{external_customer_id}/portal_url:
     $ref: './resources/customer_portal_url.yaml'
   /customers/{external_customer_id}/current_usage:
@@ -152,6 +161,10 @@ paths:
     $ref: './resources/subscriptions.yaml'
   /subscriptions/{external_id}:
     $ref: './resources/subscription.yaml'
+  /taxes:
+    $ref: './resources/taxes.yaml'
+  /taxes/{code}:
+    $ref: './resources/tax.yaml'
   /wallets:
     $ref: './resources/wallets.yaml'
   /wallets/{lago_id}:

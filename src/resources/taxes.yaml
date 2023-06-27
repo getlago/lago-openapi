@@ -1,0 +1,58 @@
+post:
+  tags:
+    - taxes
+  summary: Create a tax
+  description: Create a tax
+  operationId: createTax
+  requestBody:
+    description: Tax payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/TaxInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - taxes
+  summary: Find taxes
+  description: Find all taxes in certain organization
+  operationId: findAllTaxes
+  parameters:
+    - name: page
+      in: query
+      description: Number of page
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 2
+    - name: per_page
+      in: query
+      description: Number of records per page
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 20
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/TaxesPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

@@ -112,3 +112,12 @@ properties:
     description: The date of the customer creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the customer object was created
   billing_configuration:
     $ref: './CustomerBillingConfiguration.yaml'
+  metadata:
+    type: array
+    items:
+      $ref: './CustomerMetadata.yaml'
+  taxes:
+    description: List of customer taxes
+    type: array
+    items:
+      $ref: './TaxObject.yaml'

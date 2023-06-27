@@ -45,6 +45,11 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/organizations/organization-object'
+  - name: taxes
+    description: Everything about Tax collection
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/taxes/tax-object'
   - name: coupons
     description: Everything about Coupon collection
     externalDocs:
@@ -166,7 +171,7 @@ paths:
     get:
       tags:
         - add_ons
-      summary: Retrive an add-on
+      summary: Retrieve an add-on
       description: This endpoint is used to retrieve a specific add-on.
       operationId: findAddOn
       responses:
@@ -844,6 +849,78 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppliedCoupon'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/customers/{external_customer_id}/applied_taxes':
+    post:
+      tags:
+        - customers
+      summary: Apply a tax
+      description: Apply an existing tax to a customer
+      operationId: applyTax
+      parameters:
+        - name: external_customer_id
+          in: path
+          description: External ID of the customer
+          required: true
+          schema:
+            type: string
+            example: '12345'
+      requestBody:
+        description: Apply tax body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerAppliedTaxInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerAppliedTax'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  '/customers/{external_customer_id}/applied_taxes/{tax_code}':
+    delete:
+      tags:
+        - customers
+      summary: Delete customer's appplied tax
+      description: Delete customer's appplied tax
+      operationId: deleteAppliedTax
+      parameters:
+        - name: external_customer_id
+          in: path
+          description: External ID of the customer
+          required: true
+          schema:
+            type: string
+            example: '12345'
+        - name: tax_code
+          in: path
+          description: Code of the applied tax
+          required: true
+          schema:
+            type: string
+            example: '12345'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerAppliedTax'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1696,6 +1773,136 @@ paths:
           $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
+  /taxes:
+    post:
+      tags:
+        - taxes
+      summary: Create a tax
+      description: Create a tax
+      operationId: createTax
+      requestBody:
+        description: Tax payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - taxes
+      summary: Find taxes
+      description: Find all taxes in certain organization
+      operationId: findAllTaxes
+      parameters:
+        - name: page
+          in: query
+          description: Number of page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 2
+        - name: per_page
+          in: query
+          description: Number of records per page
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  '/taxes/{code}':
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing tax
+        required: true
+        schema:
+          type: string
+          example: example_code
+    put:
+      tags:
+        - taxes
+      summary: Update an existing tax
+      description: Update an existing tax by code
+      operationId: updateTax
+      requestBody:
+        description: Update an existing tax
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxInput'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - taxes
+      summary: Find tax by code
+      description: Return a single tax
+      operationId: findTax
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - taxes
+      summary: Delete a tax
+      description: Delete a tax
+      operationId: destroyTax
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /wallets:
     post:
       tags:
@@ -2441,6 +2648,49 @@ components:
             $ref: '#/components/schemas/AppliedCouponObjectExtended'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    BaseAppliedTax:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the applied tax, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_tax_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the tax, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        tax_name:
+          type: string
+          description: The name of the tax.
+          example: example name
+        tax_code:
+          type: string
+          description: The code of the tax.
+          example: example_code
+        tax_rate:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The rate of the tax.
+          example: '25.0'
+        tax_description:
+          type: string
+          description: The description of the tax.
+          example: description
+        amount_cents:
+          type: integer
+          example: 20
+        amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the tax.
+              example: EUR
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the applied tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the applied tax was initially created.
+          example: '2022-09-14T16:35:31Z'
     BillableMetric:
       type: object
       required:
@@ -3124,6 +3374,19 @@ components:
       properties:
         credit_note:
           $ref: '#/components/schemas/CreditNoteObject'
+    CreditNoteAppliedTaxObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseAppliedTax'
+      type: object
+      properties:
+        lago_credit_note_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the credit note, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        base_amount_cents:
+          type: integer
+          example: 100
     CreditNoteItemObject:
       type: object
       required:
@@ -3165,8 +3428,9 @@ components:
         - credit_amount_cents
         - refund_amount_cents
         - balance_amount_cents
-        - vat_amount_cents
-        - sub_total_vat_excluded_amount_cents
+        - taxes_amount_cents
+        - taxes_rate
+        - sub_total_excluding_taxes_amount_cents
         - coupons_adjustement_amount_cents
         - created_at
         - updated_at
@@ -3253,11 +3517,16 @@ components:
           type: integer
           description: 'The total amount of the credit note, expressed in cents.'
           example: 120
-        vat_amount_cents:
+        taxes_amount_cents:
           type: integer
           description: 'The tax amount of the credit note, expressed in cents.'
           example: 20
-        sub_total_vat_excluded_amount_cents:
+        taxes_rate:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The tax rate associated with this specific credit note.
+          example: '20.0'
+        sub_total_excluding_taxes_amount_cents:
           type: integer
           description: 'The subtotal of the credit note excluding any applicable taxes, expressed in cents.'
           example: 100
@@ -3297,6 +3566,10 @@ components:
           items:
             $ref: '#/components/schemas/CreditNoteItemObject'
           description: Array of credit note’s items.
+        applied_taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditNoteAppliedTaxObject'
     CreditNotes:
       type: object
       required:
@@ -3544,6 +3817,65 @@ components:
       properties:
         customer:
           $ref: '#/components/schemas/CustomerObjectExtended'
+    CustomerAppliedTax:
+      type: object
+      required:
+        - applied_tax
+      properties:
+        applied_tax:
+          $ref: '#/components/schemas/CustomerAppliedTaxObject'
+    CustomerAppliedTaxInput:
+      type: object
+      required:
+        - applied_tax
+      properties:
+        applied_tax:
+          type: object
+          required:
+            - tax_code
+          properties:
+            tax_code:
+              type: string
+              description: Unique code used to identify the tax.
+              example: vat_fr
+    CustomerAppliedTaxObject:
+      type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - lago_tax_id
+        - tax_code
+        - external_customer_id
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the applied tax, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the customer, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_tax_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the tax, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        tax_code:
+          type: string
+          description: The code of the tax.
+          example: example_code
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the applied tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the applied tax was initially created.
+          example: '2022-09-14T16:35:31Z'
     CustomerBillingConfiguration:
       type: object
       description: 'Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.'
@@ -3960,6 +4292,15 @@ components:
           description: 'The date of the customer creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the customer object was created'
         billing_configuration:
           $ref: '#/components/schemas/CustomerBillingConfiguration'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerMetadata'
+        taxes:
+          description: List of customer taxes
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxObject'
     CustomerObjectExtended:
       allOf:
         - $ref: '#/components/schemas/CustomerObject'
@@ -3995,11 +4336,8 @@ components:
         - to_datetime
         - issuing_date
         - amount_cents
-        - amount_currency
+        - taxes_amount_cents
         - total_amount_cents
-        - total_amount_currency
-        - vat_amount_cents
-        - vat_amount_currency
         - charges_usage
       properties:
         from_datetime:
@@ -4017,33 +4355,23 @@ components:
           format: date-time
           description: The date of creation of the invoice.
           example: '2022-08-01T23:59:59Z'
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the customer’s current usage.
+              example: EUR
         amount_cents:
           type: integer
           description: 'The amount in cents, tax excluded.'
           example: 123
-        amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the customer’s current usage amount excluding tax.
-              example: EUR
+        taxes_amount_cents:
+          type: integer
+          description: The tax amount in cents.
+          example: 200
         total_amount_cents:
           type: integer
           description: 'The total amount in cents, tax included.'
           example: 123
-        total_amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the customer’s current usage amount including tax.
-              example: EUR
-        vat_amount_cents:
-          type: integer
-          description: The tax amount in cents.
-          example: 0
-        vat_amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the customer’s current usage tax.
-              example: EUR
         charges_usage:
           type: array
           description: Array of charges that comprise the current usage. It contains detailed information about individual charge items associated with the usage.
@@ -4248,6 +4576,16 @@ components:
       properties:
         fee:
           $ref: '#/components/schemas/FeeObject'
+    FeeAppliedTaxObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseAppliedTax'
+      type: object
+      properties:
+        lago_fee_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the fee, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     FeeObject:
       type: object
       required:
@@ -4450,6 +4788,11 @@ components:
                 - WalletTransaction
               description: 'The type of the fee item. Possible values are `AddOn`, `BillableMetric`, `WalletTransaction` or `Subscription`.'
               example: Subscription
+        applied_taxes:
+          type: array
+          description: List of fee applied taxes
+          items:
+            $ref: '#/components/schemas/FeeAppliedTaxObject'
     Fees:
       type: object
       required:
@@ -4541,6 +4884,16 @@ components:
       properties:
         invoice:
           $ref: '#/components/schemas/InvoiceObjectExtended'
+    InvoiceAppliedTaxObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseAppliedTax'
+      type: object
+      properties:
+        lago_invoice_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the invoice, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     InvoiceMetadataObject:
       type: object
       properties:
@@ -4576,9 +4929,9 @@ components:
         - fees_amount_cents
         - coupons_amount_cents
         - credit_notes_amount_cents
-        - sub_total_vat_excluded_amount_cents
-        - vat_amount_cents
-        - sub_total_vat_included_amount_cents
+        - sub_total_excluding_taxes_amount_cents
+        - taxes_amount_cents
+        - sub_total_including_taxes_amount_cents
         - prepaid_credit_amount_cents
         - total_amount_cents
         - version_number
@@ -4649,25 +5002,27 @@ components:
           type: integer
           description: 'The total sum of all credit notes discounted on the invoice. It calculates the cumulative discount amount applied by credit notes, expressed in cents.'
           example: 10
-        sub_total_vat_excluded_amount_cents:
+        sub_total_excluding_taxes_amount_cents:
           type: integer
           description: |-
             Subtotal amount, excluding taxes, expressed in cents.
             This field depends on the version number. Here are the definitions based on the version:
             - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
             - Version 2: is equal to the `fees_amount_cents`.
+            - Version 3: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
           example: 100
-        vat_amount_cents:
+        taxes_amount_cents:
           type: integer
           description: 'The sum of tax amount associated with the invoice, expressed in cents.'
           example: 20
-        sub_total_vat_included_amount_cents:
+        sub_total_including_taxes_amount_cents:
           type: integer
           description: |-
             Subtotal amount, including taxes, expressed in cents.
             This field depends on the version number. Here are the definitions based on the version:
             - Version 1: is equal to the `total_amount_cents`.
-            - Version 2: is equal to the sum of `fees_amount_cents` and `vat_amount_cents`.
+            - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
+            - Version 3: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
           example: 120
         prepaid_credit_amount_cents:
           type: integer
@@ -4693,6 +5048,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceMetadataObject'
+        applied_taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceAppliedTaxObject'
     InvoiceObjectExtended:
       allOf:
         - $ref: '#/components/schemas/InvoiceObject'
@@ -4827,11 +5186,6 @@ components:
           type: string
           example: en
           description: 'The locale of the billing documents, expressed in the ISO 639-1 format. This field indicates the language or regional variant used for the documents content issued or the embeddable customer portal.'
-        vat_rate:
-          type: string
-          format: '^[0-9]+.?[0-9]*$'
-          example: '15.0'
-          description: The custom VAT (Value Added Tax) applied to your organization. Can be overwritten by the customer’s VAT rate.
     OrganizationObject:
       type: object
       required:
@@ -4919,6 +5273,11 @@ components:
               example: America/New_York
         billing_configuration:
           $ref: '#/components/schemas/OrganizationBillingConfiguration'
+        taxes:
+          type: array
+          description: List of default organization taxes
+          items:
+            $ref: '#/components/schemas/TaxObject'
     OrganizationUpdateInput:
       type: object
       required:
@@ -5573,6 +5932,99 @@ components:
             $ref: '#/components/schemas/SubscriptionObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    Tax:
+      type: object
+      required:
+        - tax
+      properties:
+        tax:
+          $ref: '#/components/schemas/TaxObject'
+    TaxesPaginated:
+      type: object
+      required:
+        - taxes
+        - meta
+      properties:
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    TaxInput:
+      type: object
+      required:
+        - tax
+      properties:
+        tax:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the tax.
+              example: French VAT
+            code:
+              type: string
+              description: Unique code used to identify the tax.
+              example: vat_fr
+            rate:
+              type: string
+              format: '^[0-9]+.?[0-9]*$'
+              description: The rate of the tax
+              example: '15.0'
+            description:
+              type: string
+              description: Description of the tax.
+              example: description
+            applied_to_organization:
+              type: boolean
+              description: Set to `true` if the tax is used as one of the organization's default.
+              example: false
+    TaxObject:
+      type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - value
+        - applied_to_organization
+        - customers_count
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        name:
+          type: string
+          description: The name of the tax.
+          example: French VAT
+        code:
+          type: string
+          description: Unique code used to identify the tax.
+          example: vat_fr
+        description:
+          type: string
+          description: Description of the tax.
+          example: description
+        rate:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The rate of the tax
+          example: '25.0'
+        applied_to_organization:
+          type: boolean
+          example: true
+          description: Set to `true` if the tax is used as one of the organization's default.
+        customers_count:
+          type: integer
+          description: Number of customer this tax is applied to (directly or via the organization's default).
+          example: 12
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the tax was initially created.
+          example: '2022-09-14T16:35:31Z'
     Timezone:
       type: string
       example: America/Los_Angeles

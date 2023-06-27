@@ -1,0 +1,42 @@
+type: object
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier of the applied tax, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  lago_tax_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier of the tax, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  tax_name:
+    type: string
+    description: The name of the tax.
+    example: 'example name'
+  tax_code:
+    type: string
+    description: The code of the tax.
+    example: 'example_code'
+  tax_rate:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: The rate of the tax.
+    example: "25.0"
+  tax_description:
+    type: string
+    description: The description of the tax.
+    example: 'description'
+  amount_cents:
+    type: integer
+    example: 20
+  amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of the tax.
+        example: 'EUR'
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date and time when the applied tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the applied tax was initially created.
+    example: '2022-09-14T16:35:31Z'
