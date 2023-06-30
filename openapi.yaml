@@ -2673,6 +2673,11 @@ components:
           type: string
           description: Unique code used to identify the coupon.
           example: startup_deal
+        description:
+          type: string
+          nullable: true
+          description: Description of the coupon.
+          example: I am a coupon description
         coupon_type:
           type: string
           enum:
@@ -2799,6 +2804,11 @@ components:
           type: string
           description: Unique code used to identify the coupon.
           example: startup_deal
+        description:
+          type: string
+          nullable: true
+          description: Description of the coupon.
+          example: I am a coupon description
         coupon_type:
           type: string
           enum:
