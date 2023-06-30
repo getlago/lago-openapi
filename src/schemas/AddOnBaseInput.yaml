@@ -1,0 +1,24 @@
+type: object
+properties:
+  name:
+    type: string
+    description: The name of the add-on.
+    example: 'Setup Fee'
+  code:
+    type: string
+    description: Unique code used to identify the add-on.
+    example: 'setup_fee'
+  amount_cents:
+    type: integer
+    description: The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.
+    example: 50000
+  amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of the add-on.
+        example: 'USD'
+  description:
+    type: string
+    nullable: true
+    description: The description of the add-on.
+    example: 'Implementation fee for new customers.'

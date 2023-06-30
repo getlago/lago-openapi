@@ -1,0 +1,29 @@
+post:
+  tags:
+    - add_ons
+  summary: Apply an add-on to a customer
+  description: Apply an add-on to a customer
+  operationId: applyAddOn
+  deprecated: true
+  requestBody:
+    description: Apply add-on payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/AppliedAddOnInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Add-on applied
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/AppliedAddOn.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

@@ -1,0 +1,44 @@
+post:
+  tags:
+    - add_ons
+  summary: Create an add-on
+  description: This endpoint is used to create an add-on that can be then attached to a one-off invoice.
+  operationId: createAddOn
+  requestBody:
+    description: Add-on payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/AddOnCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Add-on created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/AddOn.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - add_ons
+  summary: List all add-ons
+  description: This endpoint is used to list all existing add-ons.
+  operationId: findAllAddOns
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: Add-ons
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/AddOnsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

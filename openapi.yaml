@@ -78,6 +78,152 @@ tags:
   - name: credit_notes
     description: Everything about Credit notes collection
 paths:
+  /add_ons:
+    post:
+      tags:
+        - add_ons
+      summary: Create an add-on
+      description: This endpoint is used to create an add-on that can be then attached to a one-off invoice.
+      operationId: createAddOn
+      requestBody:
+        description: Add-on payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOnCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Add-on created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
+    get:
+      tags:
+        - add_ons
+      summary: List all add-ons
+      description: This endpoint is used to list all existing add-ons.
+      operationId: findAllAddOns
+      parameters:
+        - $ref: '#/paths/~1fees/get/parameters/0'
+        - $ref: '#/paths/~1fees/get/parameters/1'
+      responses:
+        '200':
+          description: Add-ons
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOnsPaginated'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+  '/add_ons/{code}':
+    parameters:
+      - name: code
+        in: path
+        description: Unique code used to identify the add-on.
+        required: true
+        schema:
+          type: string
+          example: setup_fee
+    put:
+      tags:
+        - add_ons
+      summary: Update an add-on
+      description: This endpoint is used to update an existing add-on.
+      operationId: updateAddOn
+      requestBody:
+        description: Add-on payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOnUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Add-on updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
+    get:
+      tags:
+        - add_ons
+      summary: Retrive an add-on
+      description: This endpoint is used to retrieve a specific add-on.
+      operationId: findAddOn
+      responses:
+        '200':
+          description: Add-on
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+    delete:
+      tags:
+        - add_ons
+      summary: Delete an add-on
+      description: This endpoint is used to delete an existing add-on.
+      operationId: destroyAddOn
+      responses:
+        '200':
+          description: Add-on deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOn'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  /applied_add_ons:
+    post:
+      tags:
+        - add_ons
+      summary: Apply an add-on to a customer
+      description: Apply an add-on to a customer
+      operationId: applyAddOn
+      deprecated: true
+      requestBody:
+        description: Apply add-on payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppliedAddOnInput'
+        required: true
+      responses:
+        '200':
+          description: Add-on applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedAddOn'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1fees/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '422':
+          $ref: '#/paths/~1fees/get/responses/422'
   /billable_metrics:
     post:
       tags:
@@ -622,151 +768,6 @@ paths:
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
           $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
-  /add_ons:
-    post:
-      tags:
-        - add_ons
-      summary: Create a new add-on
-      description: Create a new add-on
-      operationId: createAddOn
-      requestBody:
-        description: Add-on payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddOnInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOn'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
-    get:
-      tags:
-        - add_ons
-      summary: Find add-ons
-      description: Find all add-ons in certain organisation
-      operationId: findAllAddOns
-      parameters:
-        - $ref: '#/paths/~1fees/get/parameters/0'
-        - $ref: '#/paths/~1fees/get/parameters/1'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOnsPaginated'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-  '/add_ons/{code}':
-    parameters:
-      - name: code
-        in: path
-        description: Code of the existing add-on
-        required: true
-        schema:
-          type: string
-          example: example_code
-    put:
-      tags:
-        - add_ons
-      summary: Update an existing add-on
-      description: Update an existing add-on by code
-      operationId: updateAddOn
-      requestBody:
-        description: Update an existing add-on
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddOnInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOn'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
-    get:
-      tags:
-        - add_ons
-      summary: Find add-on by code
-      description: Return a single add-on
-      operationId: findAddOn
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOn'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-    delete:
-      tags:
-        - add_ons
-      summary: Delete an add-on
-      description: Delete an add-on
-      operationId: destroyAddOn
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOn'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  /applied_add_ons:
-    post:
-      tags:
-        - add_ons
-      summary: Apply an add-on to a customer
-      description: Apply an add-on to a customer
-      operationId: applyAddOn
-      requestBody:
-        description: Apply add-on payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AppliedAddOnInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppliedAddOn'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1fees/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '422':
-          $ref: '#/paths/~1fees/get/responses/422'
   /coupons:
     post:
       tags:
@@ -1998,6 +1999,112 @@ components:
     per_page:
       $ref: '#/paths/~1fees/get/parameters/1'
   schemas:
+    AddOnBaseInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the add-on.
+          example: Setup Fee
+        code:
+          type: string
+          description: Unique code used to identify the add-on.
+          example: setup_fee
+        amount_cents:
+          type: integer
+          description: 'The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.'
+          example: 50000
+        amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the add-on.
+              example: USD
+        description:
+          type: string
+          nullable: true
+          description: The description of the add-on.
+          example: Implementation fee for new customers.
+    AddOnCreateInput:
+      type: object
+      required:
+        - add_on
+      properties:
+        add_on:
+          allOf:
+            - $ref: '#/components/schemas/AddOnBaseInput'
+            - required:
+                - name
+                - code
+                - amount_cents
+                - amount_currency
+    AddOnObject:
+      type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - amount_cents
+        - amount_currency
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the add-on, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        name:
+          type: string
+          description: The name of the add-on.
+          example: Setup Fee
+        code:
+          type: string
+          description: Unique code used to identify the add-on.
+          example: setup_fee
+        amount_cents:
+          type: integer
+          description: 'The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.'
+          example: 50000
+        amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the add-on.
+              example: USD
+        description:
+          type: string
+          nullable: true
+          description: The description of the add-on.
+          example: Implementation fee for new customers.
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the add-on was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the add-on was initially created.
+          example: '2022-04-29T08:59:51Z'
+    AddOn:
+      type: object
+      required:
+        - add_on
+      properties:
+        add_on:
+          $ref: '#/components/schemas/AddOnObject'
+    AddOnsPaginated:
+      type: object
+      required:
+        - add_ons
+        - meta
+      properties:
+        add_ons:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddOnObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    AddOnUpdateInput:
+      type: object
+      required:
+        - add_on
+      properties:
+        add_on:
+          $ref: '#/components/schemas/AddOnBaseInput'
     ApiErrorBadRequest:
       type: object
       required:
@@ -2095,6 +2202,92 @@ components:
         code:
           type: string
           example: object_not_found
+    AppliedAddOn:
+      type: object
+      required:
+        - applied_add_on
+      properties:
+        applied_add_on:
+          $ref: '#/components/schemas/AppliedAddOnObject'
+    AppliedAddOnInput:
+      type: object
+      required:
+        - applied_add_on
+      properties:
+        applied_add_on:
+          type: object
+          required:
+            - external_customer_id
+            - add_on_code
+          properties:
+            external_customer_id:
+              type: string
+              description: The customer external unique identifier (provided by your own application)
+              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+            add_on_code:
+              type: string
+              description: Unique code used to identify the add-on.
+              example: setup_fee
+            amount_cents:
+              type: integer
+              nullable: true
+              description: 'The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.'
+              example: 50000
+            amount_currency:
+              allOf:
+                - $ref: '#/components/schemas/Currency'
+                - nullable: true
+                  description: The currency of the add-on.
+                  example: USD
+    AppliedAddOnObject:
+      type: object
+      required:
+        - lago_id
+        - lago_add_on_id
+        - add_on_code
+        - external_customer_id
+        - lago_customer_id
+        - amount_cents
+        - amount_currency
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the applied add-on created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_add_on_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the add-on created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        add_on_code:
+          type: string
+          description: Unique code used to identify the add-on.
+          example: setup_fee
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        amount_cents:
+          type: integer
+          description: 'The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.'
+          example: 50000
+        amount_currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - nullable: true
+              description: The currency of the add-on.
+              example: USD
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-09-14T16:35:31Z'
     BillableMetric:
       type: object
       required:
@@ -3663,151 +3856,6 @@ components:
         - Pacific/Pago_Pago
         - Pacific/Port_Moresby
         - Pacific/Tongatapu
-    AddOnObject:
-      type: object
-      required:
-        - lago_id
-        - name
-        - code
-        - amount_cents
-        - amount_currency
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        name:
-          type: string
-          example: example name
-        code:
-          type: string
-          example: example_code
-        description:
-          type: string
-          example: description
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: EUR
-    AddOn:
-      type: object
-      required:
-        - add_on
-      properties:
-        add_on:
-          $ref: '#/components/schemas/AddOnObject'
-    AddOnsPaginated:
-      type: object
-      required:
-        - add_ons
-        - meta
-      properties:
-        add_ons:
-          type: array
-          items:
-            $ref: '#/components/schemas/AddOnObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    AddOnInput:
-      type: object
-      required:
-        - add_on
-      properties:
-        add_on:
-          type: object
-          properties:
-            name:
-              type: string
-              example: example name
-            code:
-              type: string
-              example: example_code
-            description:
-              type: string
-              example: description
-            amount_cents:
-              type: integer
-              example: 1200
-            amount_currency:
-              type: string
-              example: EUR
-    AppliedAddOnObject:
-      type: object
-      required:
-        - lago_id
-        - lago_add_on_id
-        - add_on_code
-        - external_customer_id
-        - lago_customer_id
-        - amount_cents
-        - amount_currency
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_add_on_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        add_on_code:
-          type: string
-          example: code
-        lago_customer_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_customer_id:
-          type: string
-          example: '1234567'
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: EUR
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-    AppliedAddOn:
-      type: object
-      required:
-        - applied_add_on
-      properties:
-        applied_add_on:
-          $ref: '#/components/schemas/AppliedAddOnObject'
-    AppliedAddOnInput:
-      type: object
-      required:
-        - applied_add_on
-      properties:
-        applied_add_on:
-          type: object
-          required:
-            - external_customer_id
-            - add_on_code
-          properties:
-            external_customer_id:
-              type: string
-              example: '1234567'
-            add_on_code:
-              type: string
-              example: code
-            amount_cents:
-              type: integer
-              example: 1200
-            amount_currency:
-              type: string
-              example: EUR
     CouponObject:
       type: object
       required:

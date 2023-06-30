@@ -79,6 +79,12 @@ tags:
   - name: credit_notes
     description: Everything about Credit notes collection
 paths:
+  /add_ons:
+    $ref: './resources/add_ons.yaml'
+  /add_ons/{code}:
+    $ref: './resources/add_on.yaml'
+  /applied_add_ons:
+    $ref: './resources/applied_add_ons.yaml'
   /billable_metrics:
     $ref: './resources/billable_metrics.yaml'
   /billable_metrics/{code}:
@@ -108,151 +114,6 @@ paths:
 
 
   # TODO: split requests into multiple files
-  /add_ons:
-    post:
-      tags:
-        - add_ons
-      summary: Create a new add-on
-      description: Create a new add-on
-      operationId: createAddOn
-      requestBody:
-        description: Add-on payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddOnInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOn'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - add_ons
-      summary: Find add-ons
-      description: Find all add-ons in certain organisation
-      operationId: findAllAddOns
-      parameters:
-        - $ref: './parameters/page.yaml'
-        - $ref: './parameters/per_page.yaml'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOnsPaginated'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-  /add_ons/{code}:
-    parameters:
-      - name: code
-        in: path
-        description: Code of the existing add-on
-        required: true
-        schema:
-          type: string
-          example: 'example_code'
-    put:
-      tags:
-        - add_ons
-      summary: Update an existing add-on
-      description: Update an existing add-on by code
-      operationId: updateAddOn
-      requestBody:
-        description: Update an existing add-on
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddOnInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOn'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - add_ons
-      summary: Find add-on by code
-      description: Return a single add-on
-      operationId: findAddOn
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOn'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-    delete:
-      tags:
-        - add_ons
-      summary: Delete an add-on
-      description: Delete an add-on
-      operationId: destroyAddOn
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddOn'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-  /applied_add_ons:
-    post:
-      tags:
-        - add_ons
-      summary: Apply an add-on to a customer
-      description: Apply an add-on to a customer
-      operationId: applyAddOn
-      requestBody:
-        description: Apply add-on payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AppliedAddOnInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppliedAddOn'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
   /coupons:
     post:
       tags:

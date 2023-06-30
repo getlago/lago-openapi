@@ -1,0 +1,11 @@
+type: object
+required:
+  - add_ons
+  - meta
+properties:
+  add_ons:
+    type: array
+    items:
+      $ref: './AddOnObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
