@@ -56,6 +56,14 @@ GroupObject:
   $ref: './GroupObject.yaml'
 GroupsPaginated:
   $ref: './GroupsPaginated.yaml'
+Organization:
+  $ref: './Organization.yaml'
+OrganizationBillingConfiguration:
+  $ref: './OrganizationBillingConfiguration.yaml'
+OrganizationObject:
+  $ref: './OrganizationObject.yaml'
+OrganizationUpdateInput:
+  $ref: './OrganizationUpdateInput.yaml'
 PaginationMeta:
   $ref: './PaginationMeta.yaml'
 Subscription:
@@ -517,136 +525,6 @@ AppliedCouponInput:
         percentage_rate:
           type: number
           example: 25.00
-BillingConfigurationOrganization:
-  type: object
-  properties:
-    invoice_footer:
-      type: string
-      example: 'text'
-    invoice_grace_period:
-      type: integer
-      example: 5
-    document_locale:
-      type: string
-      example: fr
-    vat_rate:
-      type: number
-      example: 25.00
-OrganizationObject:
-  type: object
-  required:
-    - name
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    name:
-      type: string
-      example: 'example name'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    webhook_url:
-      type: string
-      example: 'https://example.com'
-    country:
-      type: string
-      example: CZ
-    address_line1:
-      type: string
-      example: 'address1'
-    address_line2:
-      type: string
-      example: 'address2'
-    state:
-      type: string
-      example: 'state1'
-    zipcode:
-      type: string
-      example: '10000'
-    email:
-      type: string
-      format: 'email'
-      example: 'example@example.com'
-    city:
-      type: string
-      example: 'City'
-    legal_name:
-      type: string
-      example: 'name1'
-    legal_number:
-      type: string
-      example: '10000'
-    tax_identification_number:
-      type: string
-      example: 'EU123456789'
-    timezone:
-      type: string
-      example: 'UTC'
-    billing_configuration:
-      $ref: '#/BillingConfigurationOrganization'
-Organization:
-  type: object
-  required:
-    - organization
-  properties:
-    organization:
-      $ref: '#/OrganizationObject'
-OrganizationInput:
-  type: object
-  required:
-    - organization
-  properties:
-    organization:
-      type: object
-      properties:
-        webhook_url:
-          type: string
-          example: 'https://example.com'
-        country:
-          type: string
-          example: CZ
-        address_line1:
-          type: string
-          example: 'address1'
-        address_line2:
-          type: string
-          example: 'address2'
-        state:
-          type: string
-          example: 'state1'
-        zipcode:
-          type: string
-          example: '10000'
-        email:
-          type: string
-          format: 'email'
-          example: 'example@example.com'
-        city:
-          type: string
-          example: 'City'
-        legal_name:
-          type: string
-          example: 'name1'
-        legal_number:
-          type: string
-          example: '10000'
-        tax_identification_number:
-          type: string
-          example: 'EU123456789'
-        timezone:
-          type: string
-          example: 'Europe/Paris'
-        email_settings:
-          type: array
-          items:
-            type: string
-            enum: [invoice.finalized, credit_note.created]
-        billing_configuration:
-          $ref: '#/BillingConfigurationOrganization'
 EventEstimateFeesInput:
   type: object
   required:

@@ -1,0 +1,26 @@
+put:
+  tags:
+    - organizations
+  summary: Update your organization
+  description: This endpoint is used to update your own organization's settings.
+  operationId: updateOrganization
+  requestBody:
+    description: Update an existing organization
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/OrganizationUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Organization.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
