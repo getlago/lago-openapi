@@ -1,0 +1,70 @@
+parameters:
+  - name: code
+    in: path
+    description: Unique code used to identify the coupon.
+    required: true
+    schema:
+      type: string
+      example: 'startup_deal'
+put:
+  tags:
+    - coupons
+  summary: Update a coupon
+  description: This endpoint is used to update a coupon that can be then attached to a customer to create a discount.
+  operationId: updateCoupon
+  requestBody:
+    description: Coupon payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/CouponUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Coupon updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Coupon.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - coupons
+  summary: Retrieve a coupon
+  description: This endpoint is used to retrieve a specific coupon.
+  operationId: findCoupon
+  responses:
+    '200':
+      description: Coupon
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Coupon.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+delete:
+  tags:
+    - coupons
+  summary: Delete a coupon
+  description: This endpoint is used to delete a coupon.
+  operationId: destroyCoupon
+  responses:
+    '200':
+      description: Coupon deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Coupon.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

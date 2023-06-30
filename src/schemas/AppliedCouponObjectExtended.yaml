@@ -1,0 +1,10 @@
+allOf:
+  - $ref: './AppliedCouponObject.yaml'
+  - type: object
+    required:
+      - credits
+    properties:
+      credits:
+        type: array
+        items:
+          $ref: './CreditObject.yaml'
