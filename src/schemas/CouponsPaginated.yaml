@@ -1,0 +1,11 @@
+type: object
+required:
+  - coupons
+  - meta
+properties:
+  coupons:
+    type: array
+    items:
+      $ref: './CouponObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

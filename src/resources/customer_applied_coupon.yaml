@@ -1,0 +1,35 @@
+delete:
+  tags:
+    - coupons
+    - customers
+  summary: Delete an applied coupon
+  description: This endpoint is used to delete a specific coupon that has been applied to a customer.
+  parameters:
+    - name: external_customer_id
+      in: path
+      description: The customer external unique identifier (provided by your own application)
+      required: true
+      schema:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    - name: applied_coupon_id
+      in: path
+      description: Unique identifier of the applied coupon, created by Lago.
+      required: true
+      explode: true
+      schema:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  operationId: deleteAppliedCoupon
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/AppliedCoupon.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

@@ -1,0 +1,44 @@
+post:
+  tags:
+    - coupons
+  summary: Create a coupon
+  description: This endpoint is used to create a coupon that can be then attached to a customer to create a discount.
+  operationId: createCoupon
+  requestBody:
+    description: Coupon payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/CouponCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Coupon created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Coupon.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - coupons
+  summary: List all coupons
+  description: This endpoint is used to list all existing coupons.
+  operationId: findAllCoupons
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: Coupons
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CouponsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

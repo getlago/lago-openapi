@@ -1,0 +1,117 @@
+type: object
+required:
+  - lago_id
+  - name
+  - code
+  - expiration
+  - coupon_type
+  - frequency
+  - created_at
+  - reusable
+  - limited_plans
+  - limited_billable_metrics
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier of the coupon, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  name:
+    type: string
+    description: The name of the coupon.
+    example: 'Startup Deal'
+  code:
+    type: string
+    description: Unique code used to identify the coupon.
+    example: 'startup_deal'
+  coupon_type:
+    type: string
+    enum:
+      - fixed_amount
+      - percentage
+    description: |-
+      The type of the coupon. It can have two possible values: `fixed_amount` or `percentage`.
+
+      - If set to `fixed_amount`, the coupon represents a fixed amount discount.
+      - If set to `percentage`, the coupon represents a percentage-based discount.
+    example: fixed_amount
+  amount_cents:
+    type: integer
+    nullable: true
+    description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
+    example: 5000
+  amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - nullable: true
+        description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+        example: 'USD'
+  reusable:
+    type: boolean
+    description: Indicates whether the coupon can be reused or not. If set to `true`, the coupon is reusable, meaning it can be applied multiple times to the same customer. If set to `false`, the coupon can only be used once and is not reusable. If not specified, this field is set to `true` by default.
+    example: true
+  limited_plans:
+    type: boolean
+    description: The coupon is limited to specific plans. The possible values can be `true` or `false`.
+    example: true
+  plan_codes:
+    type: array
+    description: An array of plan codes to which the coupon is applicable. By specifying the plan codes in this field, you can restrict the coupon's usage to specific plans only.
+    items:
+      type: string
+    example: ['startup_plan']
+  limited_billable_metrics:
+    type: boolean
+    description: The coupon is limited to specific billable metrics. The possible values can be `true` or `false`.
+    example: false
+  billable_metric_codes:
+    type: array
+    description: An array of billable metric codes to which the coupon is applicable. By specifying the billable metric codes in this field, you can restrict the coupon's usage to specific metrics only.
+    items:
+      type: string
+    example: []
+  percentage_rate:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    nullable: true
+    description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
+    example: null
+  frequency:
+    type: string
+    description: |-
+      The type of frequency for the coupon. It can have three possible values: `once`, `recurring`, or `forever`.
+
+      - If set to `once`, the coupon is applicable only for a single use.
+      - If set to `recurring`, the coupon can be used multiple times for recurring billing periods.
+      - If set to `forever`, the coupon has unlimited usage and can be applied indefinitely.
+    enum:
+      - once
+      - recurring
+    example: 'recurring'
+  frequency_duration:
+    type: integer
+    nullable: true
+    description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
+    example: 6
+  expiration:
+    type: string
+    description: |-
+      Specifies the type of expiration for the coupon. It can have two possible values: `time_limit` or `no_expiration`.
+
+      - If set to `time_limit`, the coupon has an expiration based on a specified time limit.
+      - If set to `no_expiration`, the coupon does not have an expiration date and remains valid indefinitely.
+    enum:
+      - no_expiration
+      - time_limit
+    example: time_limit
+  expiration_at:
+    type: string
+    format: 'date-time'
+    nullable: true
+    description: The expiration date and time of the coupon. This field is required only for coupons with `expiration` set to `time_limit`. The expiration date and time should be specified in UTC format according to the ISO 8601 datetime standard. It indicates the exact moment when the coupon will expire and is no longer valid.
+    example: '2022-08-08T23:59:59Z'
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date and time when the coupon was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the coupon was initially created.
+    example: '2022-04-29T08:59:51Z'

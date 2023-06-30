@@ -1,0 +1,11 @@
+type: object
+required:
+  - applied_coupons
+  - meta
+properties:
+  applied_coupons:
+    type: array
+    items:
+      $ref: './AppliedCouponObjectExtended.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

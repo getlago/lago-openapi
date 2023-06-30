@@ -28,6 +28,16 @@ AppliedAddOnInput:
   $ref: './AppliedAddOnInput.yaml'
 AppliedAddOnObject:
   $ref: './AppliedAddOnObject.yaml'
+AppliedCoupon:
+  $ref: './AppliedCoupon.yaml'
+AppliedCouponInput:
+  $ref: './AppliedCouponInput.yaml'
+AppliedCouponObject:
+  $ref: './AppliedCouponObject.yaml'
+AppliedCouponObjectExtended:
+  $ref: './AppliedCouponObjectExtended.yaml'
+AppliedCouponsPaginated:
+  $ref: './AppliedCouponsPaginated.yaml'
 BillableMetric:
   $ref: './BillableMetric.yaml'
 BillableMetricObject:
@@ -42,6 +52,20 @@ BillableMetricGroup:
   $ref: './BillableMetricGroup.yaml'
 BillableMetricsPaginated:
   $ref: './BillableMetricsPaginated.yaml'
+Coupon:
+  $ref: './Coupon.yaml'
+CouponBaseInput:
+  $ref: './CouponBaseInput.yaml'
+CouponCreateInput:
+  $ref: './CouponCreateInput.yaml'
+CouponObject:
+  $ref: './CouponObject.yaml'
+CouponsPaginated:
+  $ref: './CouponsPaginated.yaml'
+CouponUpdateInput:
+  $ref: './CouponUpdateInput.yaml'
+CreditObject:
+  $ref: './CreditObject.yaml'
 Currency:
   $ref: './Currency.yaml'
 Customer:
@@ -98,306 +122,6 @@ Timezone:
   $ref: './Timezone.yaml'
 
 # TODO: split into multiple files
-CouponObject:
-  type: object
-  required:
-    - lago_id
-    - name
-    - code
-    - expiration
-    - coupon_type
-    - frequency
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    name:
-      type: string
-      example: 'coupon1'
-    code:
-      type: string
-      example: 'example_code'
-    coupon_type:
-      type: string
-      description: Coupon type
-      enum:
-        - fixed_amount
-        - percentage
-    amount_cents:
-      type: integer
-      example: 1200
-    amount_currency:
-      type: string
-      example: 'EUR'
-    reusable:
-      type: boolean
-      example: true
-    limited_plans:
-      type: boolean
-      example: true
-    plan_codes:
-      type: array
-      items:
-        type: string
-        example: 'code1'
-    limited_billable_metrics:
-      type: boolean
-      example: true
-    billable_metric_codes:
-      type: array
-      items:
-        type: string
-        example: 'code2'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    percentage_rate:
-      type: number
-      example: 25.00
-    frequency:
-      type: string
-      description: Frequency type
-      enum:
-        - once
-        - recurring
-    frequency_duration:
-      type: integer
-      example: 3
-    expiration_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T23:59:59Z'
-    expiration:
-      type: string
-      description: Expiration type
-      enum:
-        - no_expiration
-        - time_limit
-Coupon:
-  type: object
-  required:
-    - coupon
-  properties:
-    coupon:
-      $ref: '#/CouponObject'
-CouponsPaginated:
-  type: object
-  required:
-    - coupons
-    - meta
-  properties:
-    coupons:
-      type: array
-      items:
-        $ref: '#/CouponObject'
-    meta:
-      $ref: '#/PaginationMeta'
-CouponInput:
-  type: object
-  required:
-    - coupon
-  properties:
-    coupon:
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'coupon1'
-        code:
-          type: string
-          example: 'example_code'
-        coupon_type:
-          type: string
-          description: Coupon type
-          enum:
-            - fixed_amount
-            - percentage
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: 'EUR'
-        reusable:
-          type: boolean
-          example: true
-        percentage_rate:
-          type: number
-          example: 25.00
-        frequency:
-          type: string
-          description: Frequency type
-          enum:
-            - once
-            - recurring
-        frequency_duration:
-          type: integer
-          example: 3
-        expiration_at:
-          type: string
-          format: 'date-time'
-          example: '2022-09-14T23:59:59Z'
-        expiration:
-          type: string
-          description: Expiration type
-          enum:
-            - no_expiration
-            - time_limit
-        applies_to:
-          type: object
-          properties:
-            plan_codes:
-              type: array
-              items:
-                type: string
-                example: 'code1'
-            billable_metric_codes:
-              type: array
-              items:
-                type: string
-                example: 'code2'
-AppliedCouponObject:
-  type: object
-  required:
-    - lago_id
-    - lago_coupon_id
-    - coupon_code
-    - external_customer_id
-    - lago_customer_id
-    - status
-    - amount_cents
-    - amount_currency
-    - frequency
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    lago_coupon_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    coupon_code:
-      type: string
-      example: 'example_code'
-    lago_customer_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_customer_id:
-      type: string
-      example: '123456'
-    status:
-      type: string
-      description: Status
-      enum:
-        - active
-        - terminated
-    amount_cents:
-      type: integer
-      example: 1200
-    amount_cents_remaining:
-      type: integer
-      example: 800
-    amount_currency:
-      type: string
-      example: 'EUR'
-    percentage_rate:
-      type: number
-      example: 25.00
-    frequency:
-      type: string
-      description: Frequency type
-      enum:
-        - once
-        - recurring
-    frequency_duration:
-      type: integer
-      example: 3
-    frequency_duration_remaining:
-      type: integer
-      example: 2
-    expiration_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T23:59:59Z'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    terminated_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-AppliedCouponObjectExtended:
-  allOf:
-    - $ref: '#/AppliedCouponObject'
-    - type: object
-      required:
-        - credits
-      properties:
-        credits:
-          type: array
-          items:
-            $ref: '#/CreditObject'
-AppliedCoupon:
-  type: object
-  required:
-    - applied_coupon
-  properties:
-    applied_coupon:
-      $ref: '#/AppliedCouponObject'
-AppliedCouponsPaginated:
-  type: object
-  required:
-    - applied_coupons
-    - meta
-  properties:
-    applied_coupons:
-      type: array
-      items:
-        $ref: '#/AppliedCouponObjectExtended'
-    meta:
-      $ref: '#/PaginationMeta'
-AppliedCouponInput:
-  type: object
-  required:
-    - applied_coupon
-  properties:
-    applied_coupon:
-      type: object
-      required:
-        - external_customer_id
-        - coupon_code
-      properties:
-        external_customer_id:
-          type: string
-          example: '123456'
-        coupon_code:
-          type: string
-          example: 'example_code'
-        frequency:
-          type: string
-          description: Frequency type
-          enum:
-            - once
-            - recurring
-        frequency_duration:
-          type: integer
-          example: 3
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: 'EUR'
-        percentage_rate:
-          type: number
-          example: 25.00
 EventEstimateFeesInput:
   type: object
   required:
@@ -677,66 +401,6 @@ PlanInput:
                       example: '123456'
                     values:
                       type: object
-CreditObject:
-  type: object
-  required:
-    - lago_id
-    - item
-    - amount_cents
-    - amount_currency
-    - invoice
-    - before_vat
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    amount_cents:
-      type: integer
-      example: 1200
-    amount_currency:
-      type: string
-      example: 'EUR'
-    before_vat:
-      type: boolean
-      example: false
-    item:
-      type: object
-      required:
-        - lago_id
-        - type
-        - code
-        - name
-      properties:
-        lago_id:
-          type: string
-          format: 'uuid'
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-        type:
-          type: string
-          example: 'coupon'
-        code:
-          type: string
-          example: 'code'
-        name:
-          type: string
-          example: 'name'
-    invoice:
-      type: object
-      required:
-        - lago_id
-        - payment_status
-      properties:
-        lago_id:
-          type: string
-          format: 'uuid'
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-        payment_status:
-          type: string
-          enum:
-            - pending
-            - succeeded
-            - failed
 FeeObject:
   type: object
   required:

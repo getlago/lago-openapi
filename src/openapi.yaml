@@ -41,16 +41,16 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/organizations/organization-object
-  - name: add_ons
-    description: Everything about Add-on collection
-    externalDocs:
-      description: Find out more
-      url: https://doc.getlago.com/docs/api/add_ons/add-on-object
   - name: coupons
     description: Everything about Coupon collection
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/coupons/coupon-object
+  - name: add_ons
+    description: Everything about Add-on collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/add_ons/add-on-object
   - name: plans
     description: Everything about Plan collection
     externalDocs:
@@ -85,16 +85,24 @@ paths:
     $ref: './resources/add_on.yaml'
   /applied_add_ons:
     $ref: './resources/applied_add_ons.yaml'
+  /applied_coupons:
+    $ref: './resources/applied_coupons.yaml'
   /billable_metrics:
     $ref: './resources/billable_metrics.yaml'
   /billable_metrics/{code}:
     $ref: './resources/billable_metric.yaml'
   /billable_metrics/{code}/groups:
     $ref: './resources/billable_metric_groups.yaml'
+  /coupons:
+    $ref: './resources/coupons.yaml'
+  /coupons/{code}:
+    $ref: './resources/coupon.yaml'
   /customers:
     $ref: './resources/customers.yaml'
   /customers/{external_id}:
     $ref: './resources/customer.yaml'
+  /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
+    $ref: './resources/customer_applied_coupon.yaml'
   /customers/{external_customer_id}/portal_url:
     $ref: './resources/customer_portal_url.yaml'
   /customers/{external_customer_id}/current_usage:
@@ -114,222 +122,6 @@ paths:
 
 
   # TODO: split requests into multiple files
-  /coupons:
-    post:
-      tags:
-        - coupons
-      summary: Create a new coupon
-      description: Create a new coupon
-      operationId: createCoupon
-      requestBody:
-        description: Coupon payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CouponInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Coupon'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - coupons
-      summary: Find Coupons
-      description: Find all coupons in certain organisation
-      operationId: findAllCoupons
-      parameters:
-        - $ref: './parameters/page.yaml'
-        - $ref: './parameters/per_page.yaml'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CouponsPaginated'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-  /coupons/{code}:
-    parameters:
-      - name: code
-        in: path
-        description: Code of the existing coupon
-        required: true
-        schema:
-          type: string
-          example: 'example_code'
-    put:
-      tags:
-        - coupons
-      summary: Update an existing coupon
-      description: Update an existing coupon by code
-      operationId: updateCoupon
-      requestBody:
-        description: Update an existing coupon
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CouponInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Coupon'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - coupons
-      summary: Find coupon by code
-      description: Return a single coupon
-      operationId: findCoupon
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Coupon'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-    delete:
-      tags:
-        - coupons
-      summary: Delete a coupon
-      description: Delete a coupon
-      operationId: destroyCoupon
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Coupon'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-  /applied_coupons:
-    post:
-      tags:
-        - coupons
-      summary: Apply a coupon to a customer
-      description: Apply a coupon to a customer
-      operationId: applyCoupon
-      requestBody:
-        description: Apply coupon payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AppliedCouponInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppliedCoupon'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - coupons
-      summary: Find Applied Coupons
-      description: Find all applied coupons
-      operationId: findAllAppliedCoupons
-      parameters:
-        - $ref: './parameters/page.yaml'
-        - $ref: './parameters/per_page.yaml'
-        - name: status
-          in: query
-          description: Applied coupon status
-          required: false
-          explode: true
-          schema:
-            type: string
-            description: Status
-            enum:
-              - active
-              - terminated
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppliedCouponsPaginated'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-  /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
-    delete:
-      tags:
-        - customers
-      summary: Delete customer's appplied coupon
-      parameters:
-        - name: external_customer_id
-          in: path
-          description: External ID of the existing customer
-          required: true
-          schema:
-            type: string
-            example: '12345'
-        - name: applied_coupon_id
-          in: path
-          description: Applied Coupon Lago ID
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: '54321'
-      description: Delete customer's appplied coupon
-      operationId: deleteAppliedCoupon
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppliedCoupon'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
   /events/estimate_fees:
     post:
       tags:

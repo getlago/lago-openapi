@@ -1,0 +1,65 @@
+post:
+  tags:
+    - coupons
+  summary: Apply a coupon to a customer
+  description: This endpoint is used to apply a specific coupon to a customer, before or during a subscription.
+  operationId: applyCoupon
+  requestBody:
+    description: Apply coupon payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/AppliedCouponInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Coupon applied
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/AppliedCoupon.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - coupons
+  summary: List all applied coupons
+  description: This endpoint is used to list all applied coupons. You can filter by coupon status and by customer.
+  operationId: findAllAppliedCoupons
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - name: status
+      in: query
+      description: The status of the coupon. Can be either `active` or `terminated`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - active
+          - terminated
+        example: active
+    - name: external_customer_id
+      in: query
+      description: The customer external unique identifier (provided by your own application)
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+  responses:
+    '200':
+      description: Applied Coupons
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/AppliedCouponsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

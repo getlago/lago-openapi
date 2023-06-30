@@ -1,0 +1,61 @@
+type: object
+required:
+  - lago_id
+  - item
+  - amount_cents
+  - amount_currency
+  - invoice
+  - before_vat
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  amount_cents:
+    type: integer
+    example: 1200
+  amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - example: 'EUR'
+  before_vat:
+    type: boolean
+    example: false
+  item:
+    type: object
+    required:
+      - lago_id
+      - type
+      - code
+      - name
+    properties:
+      lago_id:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      type:
+        type: string
+        example: 'coupon'
+      code:
+        type: string
+        example: 'startup_deal'
+      name:
+        type: string
+        example: 'Startup Deal'
+  invoice:
+    type: object
+    required:
+      - lago_id
+      - payment_status
+    properties:
+      lago_id:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      payment_status:
+        type: string
+        enum:
+          - pending
+          - succeeded
+          - failed
+        example: succeeded
