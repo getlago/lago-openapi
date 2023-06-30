@@ -94,6 +94,16 @@ EventInput:
   $ref: './EventInput.yaml'
 EventObject:
   $ref: './EventObject.yaml'
+Fee:
+  $ref: './Fee.yaml'
+FeeObject:
+  $ref: './FeeObject.yaml'
+Fees:
+  $ref: './Fees.yaml'
+FeesPaginated:
+  $ref: './FeesPaginated.yaml'
+FeeUpdateInput:
+  $ref: './FeeUpdateInput.yaml'
 GroupObject:
   $ref: './GroupObject.yaml'
 GroupsPaginated:
@@ -143,42 +153,6 @@ EventEstimateFeesInput:
           example: '123456'
         properties:
           type: object
-Fees:
-  type: object
-  required:
-    - fees
-  properties:
-    fees:
-      type: array
-      items:
-        $ref: '#/FeeObject'
-FeesPaginated:
-  allOf:
-    - $ref: '#/Fees'
-    - type: object
-      required:
-        - meta
-      properties:
-        meta:
-          $ref: '#/PaginationMeta'
-FeeUpdateInput:
-  type: object
-  required:
-    - invoice
-  properties:
-    invoice:
-      type: object
-      required:
-        - payment_status
-      properties:
-        payment_status:
-          type: string
-          description: Status
-          enum:
-            - pending
-            - succeeded
-            - failed
-            - refunded
 GroupPropertiesObject:
   type: object
   required:
@@ -401,137 +375,6 @@ PlanInput:
                       example: '123456'
                     values:
                       type: object
-FeeObject:
-  type: object
-  required:
-    - lago_id
-    - item
-    - amount_cents
-    - amount_currency
-    - vat_amount_cents
-    - vat_amount_currency
-    - units
-    - payment_status
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    lago_group_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    lago_invoice_id:
-      type: string
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-      format: uuid
-    lago_true_up_fee_id:
-      type: string
-      format: uuid
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    lago_true_up_parent_fee_id:
-      type: string
-      format: uuid
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_subscription_id:
-      type: string
-      example: '54321'
-    amount_cents:
-      type: integer
-      example: 1000
-    amount_currency:
-      type: string
-      example: 'EUR'
-    vat_amount_cents:
-      type: integer
-      example: 200
-    vat_amount_currency:
-      type: string
-      example: 'EUR'
-    units:
-      type: string
-      example: '2.5'
-    total_amount_cents:
-      type: integer
-      example: 1200
-    total_amount_currency:
-      type: string
-      example: 'EUR'
-    events_count:
-      type: integer
-      example: 5
-    pay_in_advance:
-      type: boolean
-      example: true
-    invoiceable:
-      type: boolean
-      example: true
-    from_date:
-      type: string
-      format: 'date-time'
-      example: '2022-08-08T00:00:00Z'
-    to_date:
-      type: string
-      format: 'date-time'
-      example: '2022-08-08T00:00:00Z'
-    payment_status:
-      type: string
-      enum:
-        - pending
-        - succeeded
-        - failed
-        - refunded
-    created_at:
-      type: string
-      example: '2022-09-14T16:35:31Z'
-      format: date-time
-    succeeded_at:
-      type: string
-      example: '2022-09-14T16:35:31Z'
-      format: date-time
-    failed_at:
-      type: string
-      example: '2022-09-14T16:35:31Z'
-      format: date-time
-    refunded_at:
-      type: string
-      example: '2022-09-14T16:35:31Z'
-      format: date-time
-    item:
-      type: object
-      required:
-        - type
-        - code
-        - name
-        - lago_item_id
-        - item_type
-      properties:
-        type:
-          type: string
-          description: Billing time
-          enum:
-            - charge
-            - add_on
-            - subscription
-            - credit
-        code:
-          type: string
-          example: 'code'
-        name:
-          type: string
-          example: 'name'
-        lago_item_id:
-          type: string
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-          format: uuid
-        item_type:
-          type: string
-          enum:
-            - AddOn
-            - BillableMetric
-            - Subscription
-            - WalletTransaction
 InvoiceMetadataObject:
   type: object
   properties:
