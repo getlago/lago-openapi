@@ -1,0 +1,46 @@
+type: object
+required:
+  - invoice
+properties:
+  invoice:
+    type: object
+    required:
+      - external_customer_id
+      - fees
+    properties:
+      external_customer_id:
+        type: string
+        description: Unique identifier assigned to the customer in your application.
+        example: 'hooli_1234'
+      currency:
+        allOf:
+          - $ref: './Currency.yaml'
+          - description: The currency of the invoice.
+            example: 'EUR'
+      fees:
+        type: array
+        items:
+          type: object
+          required:
+            - add_on_code
+          properties:
+            add_on_code:
+              type: string
+              description: The code of the add-on used as invoice item.
+              example: 'setup_fee'
+            unit_amount_cents:
+              type: integer
+              nullable: true
+              description: The amount of the fee per unit, expressed in cents. By default, the amount of the add-on is used.
+              example: 12000
+            units:
+              type: string
+              format: '^[0-9]+.?[0-9]*$'
+              nullable: true
+              description: The quantity of units associated with the fee. By default, only 1 unit is added to the invoice.
+              example: '2.5'
+            description:
+              type: string
+              nullable: true
+              example: 'The description of the fee line item in the invoice. By default, the description of the add-on is used.'
+              description: 'This is a description'

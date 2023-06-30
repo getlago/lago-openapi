@@ -1,0 +1,8 @@
+allOf:
+  - $ref: './CustomerObject.yaml'
+  - type: object
+    properties:
+      metadata:
+        type: array
+        items:
+          $ref: './CustomerMetadata.yaml'

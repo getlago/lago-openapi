@@ -1,0 +1,33 @@
+type: object
+required:
+  - invoice
+properties:
+  invoice:
+    type: object
+    properties:
+      payment_status:
+        type: string
+        enum:
+          - pending
+          - succeeded
+          - failed
+        description: The payment status of the invoice. Possible values are `pending`, `failed` or `succeeded`.
+        example: succeeded
+      metadata:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: 'uuid'
+              description: The metadata object identifier. Only required when updating existing metadata.
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+            key:
+              type: string
+              description: The key in the key-value pair of the metadata.
+              example: 'digital_ref_id'
+            value:
+              type: string
+              description: The value in the key-value pair of the metadata.
+              example: 'INV-0123456-98765'

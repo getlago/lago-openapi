@@ -92,6 +92,8 @@ CustomerMetadata:
   $ref: './CustomerMetadata.yaml'
 CustomerObject:
   $ref: './CustomerObject.yaml'
+CustomerObjectExtended:
+  $ref: './CustomerObjectExtended.yaml'
 CustomersPaginated:
   $ref: './CustomersPaginated.yaml'
 CustomerUsage:
@@ -120,6 +122,20 @@ GroupObject:
   $ref: './GroupObject.yaml'
 GroupsPaginated:
   $ref: './GroupsPaginated.yaml'
+Invoice:
+  $ref: './Invoice.yaml'
+InvoiceMetadataObject:
+  $ref: './InvoiceMetadataObject.yaml'
+InvoiceObject:
+  $ref: 'InvoiceObject.yaml'
+InvoiceObjectExtended:
+  $ref: './InvoiceObjectExtended.yaml'
+InvoiceOneOffCreateInput:
+  $ref: './InvoiceOneOffCreateInput.yaml'
+InvoicesPaginated:
+  $ref: './InvoicesPaginated.yaml'
+InvoiceUpdateInput:
+  $ref: './InvoiceUpdateInput.yaml'
 Organization:
   $ref: './Organization.yaml'
 OrganizationBillingConfiguration:
@@ -405,253 +421,3 @@ PlanInput:
                       example: '123456'
                     values:
                       type: object
-InvoiceMetadataObject:
-  type: object
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    key:
-      type: string
-      example: 'name'
-    value:
-      type: string
-      example: 'John'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-InvoiceObject:
-  type: object
-  required:
-    - lago_id
-    - sequential_id
-    - number
-    - issuing_date
-    - invoice_type
-    - status
-    - payment_status
-    - currency
-    - fees_amount_cents
-    - coupons_amount_cents
-    - credit_notes_amount_cents
-    - sub_total_vat_excluded_amount_cents
-    - vat_amount_cents
-    - sub_total_vat_included_amount_cents
-    - prepaid_credit_amount_cents
-    - total_amount_cents
-    - version_number
-    - customer
-    - legacy
-    - amount_cents
-    - credit_amount_cents
-    - amount_currency
-    - total_amount_currency
-    - credit_amount_currency
-    - vat_amount_currency
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    sequential_id:
-      type: integer
-      example: 12345
-    number:
-      type: string
-      example: '222345'
-    issuing_date:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    invoice_type:
-      type: string
-      enum:
-        - subscription
-        - add_on
-        - credit
-        - one_off
-    status:
-      type: string
-      enum:
-        - draft
-        - finalized
-    payment_status:
-      type: string
-      enum:
-        - pending
-        - succeeded
-        - failed
-    currency:
-      type: string
-      example: 'EUR'
-    fees_amount_cents:
-      type: integer
-      example: 20
-    coupons_amount_cents:
-      type: integer
-      example: 20
-    credit_notes_amount_cents:
-      type: integer
-      example: 20
-    sub_total_vat_excluded_amount_cents:
-      type: integer
-      example: 20
-    vat_amount_cents:
-      type: integer
-      example: 20
-    sub_total_vat_included_amount_cents:
-      type: integer
-      example: 20
-    prepaid_credit_amount_cents:
-      type: integer
-      example: 20
-    total_amount_cents:
-      type: integer
-      example: 20
-    version_number:
-      type: integer
-      example: 2
-    amount_cents:
-      type: integer
-      example: 1200
-      deprecated: true
-    amount_currency:
-      type: string
-      example: 'EUR'
-      deprecated: true
-    vat_amount_currency:
-      type: string
-      example: 'EUR'
-      deprecated: true
-    credit_amount_cents:
-      type: integer
-      example: 20
-      deprecated: true
-    credit_amount_currency:
-      type: string
-      example: 'EUR'
-      deprecated: true
-    total_amount_currency:
-      type: string
-      example: 'EUR'
-      deprecated: true
-    legacy:
-      type: boolean
-      example: true
-      deprecated: true
-    file_url:
-      type: string
-      example: 'https://example.com'
-    customer:
-      $ref: '#/CustomerObject'
-    metadata:
-      type: array
-      items:
-        $ref: '#/InvoiceMetadataObject'
-InvoiceObjectExtended:
-  allOf:
-    - $ref: '#/InvoiceObject'
-    - type: object
-      required:
-        - subscriptions
-        - fees
-        - credits
-      properties:
-        credits:
-          type: array
-          items:
-            $ref: '#/CreditObject'
-        fees:
-          type: array
-          items:
-            $ref: '#/FeeObject'
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/SubscriptionObject'
-Invoice:
-  type: object
-  required:
-    - invoice
-  properties:
-    invoice:
-      $ref: '#/InvoiceObjectExtended'
-InvoicesPaginated:
-  type: object
-  required:
-    - invoices
-    - meta
-  properties:
-    invoices:
-      type: array
-      items:
-        $ref: '#/InvoiceObject'
-    meta:
-      $ref: '#/PaginationMeta'
-InvoiceInput:
-  type: object
-  required:
-    - invoice
-  properties:
-    invoice:
-      type: object
-      properties:
-        payment_status:
-          type: string
-          description: Status
-          enum:
-            - pending
-            - succeeded
-            - failed
-        metadata:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                format: 'uuid'
-                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-              key:
-                type: string
-                example: 'name'
-              value:
-                type: string
-                example: 'John'
-InvoiceOneOffInput:
-  type: object
-  required:
-    - invoice
-  properties:
-    invoice:
-      type: object
-      required:
-        - external_customer_id
-      properties:
-        external_customer_id:
-          type: string
-          example: '_ID_'
-        currency:
-          type: string
-          example: 'EUR'
-        fees:
-          type: array
-          items:
-            type: object
-            required:
-              - add_on_code
-            properties:
-              add_on_code:
-                type: string
-                example: '12345'
-              unit_amount_cents:
-                type: integer
-                example: 1200
-              units:
-                type: string
-                example: '2.5'
-              description:
-                type: string
-                example: 'This is description'

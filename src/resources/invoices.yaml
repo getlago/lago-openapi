@@ -1,0 +1,84 @@
+post:
+  tags:
+    - invoices
+  summary: Create a one-off invoice
+  description: This endpoint is used for issuing a one-off invoice.
+  operationId: createInvoice
+  requestBody:
+    description: Invoice payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/InvoiceOneOffCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Invoice created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - invoices
+  summary: List all invoices
+  description: This endpoint is used for retrievign all invoices.
+  operationId: findAllInvoices
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - $ref: '../parameters/external_customer_id.yaml'
+    - name: issuing_date_from
+      in: query
+      description: Filter invoices starting from a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: 'date'
+        example: '2022-07-08'
+    - name: issuing_date_to
+      in: query
+      description: Filter invoices up to a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: 'date'
+        example: '2022-08-09'
+    - name: status
+      in: query
+      description: Filter invoices by status. Possible values are `draft` or `finalized`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - draft
+          - finalized
+    - name: payment_status
+      in: query
+      description: Filter invoices by payment status. Possible values are `pending`, `failed` or `succeeded`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - pending
+          - failed
+          - succeeded
+  responses:
+    '200':
+      description: Invoices
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/InvoicesPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

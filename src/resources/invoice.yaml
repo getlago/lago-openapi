@@ -1,0 +1,47 @@
+parameters:
+  - $ref: '../parameters/lago_invoice_id.yaml'
+put:
+  tags:
+    - invoices
+  summary: Update an invoice
+  description: This endpoint is used for updating an existing invoice.
+  operationId: updateInvoice
+  requestBody:
+    description: Update an existing invoice
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/InvoiceUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Invoice updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - invoices
+  summary: Retrieve an invoice
+  description: This endpoint is used for retrieving a specific invoice that has been issued.
+  operationId: findInvoice
+  responses:
+    '200':
+      description: Invoice
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

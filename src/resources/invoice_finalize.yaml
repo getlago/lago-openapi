@@ -1,0 +1,19 @@
+put:
+  tags:
+    - invoices
+  summary: Finalize a draft invoice
+  description: This endpoint is used for finalizing a draft invoice.
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+  operationId: finalizeInvoice
+  responses:
+    '200':
+      description: Invoice finalized
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

@@ -1,0 +1,20 @@
+put:
+  tags:
+    - invoices
+  summary: Refresh a draft invoice
+  description: This endpoint is used for refreshing a draft invoice.
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+
+  operationId: refreshInvoice
+  responses:
+    '200':
+      description: Invoice refreshed
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

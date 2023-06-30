@@ -720,7 +720,7 @@ paths:
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
-          $ref: '#/paths/~1invoices~1%7Bid%7D~1retry_payment/post/responses/405'
+          $ref: '#/components/responses/NotAllowed'
   /customers:
     post:
       tags:
@@ -1187,6 +1187,217 @@ paths:
           $ref: '#/paths/~1plans/post/responses/404'
         '422':
           $ref: '#/paths/~1plans/post/responses/422'
+  /invoices:
+    post:
+      tags:
+        - invoices
+      summary: Create a one-off invoice
+      description: This endpoint is used for issuing a one-off invoice.
+      operationId: createInvoice
+      requestBody:
+        description: Invoice payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceOneOffCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Invoice created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '422':
+          $ref: '#/paths/~1plans/post/responses/422'
+    get:
+      tags:
+        - invoices
+      summary: List all invoices
+      description: This endpoint is used for retrievign all invoices.
+      operationId: findAllInvoices
+      parameters:
+        - $ref: '#/paths/~1plans/get/parameters/0'
+        - $ref: '#/paths/~1plans/get/parameters/1'
+        - $ref: '#/components/parameters/external_customer_id'
+        - name: issuing_date_from
+          in: query
+          description: Filter invoices starting from a specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2022-07-08'
+        - name: issuing_date_to
+          in: query
+          description: Filter invoices up to a specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2022-08-09'
+        - name: status
+          in: query
+          description: Filter invoices by status. Possible values are `draft` or `finalized`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - draft
+              - finalized
+        - name: payment_status
+          in: query
+          description: 'Filter invoices by payment status. Possible values are `pending`, `failed` or `succeeded`.'
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - pending
+              - failed
+              - succeeded
+      responses:
+        '200':
+          description: Invoices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicesPaginated'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+  '/invoices/{lago_id}':
+    parameters:
+      - $ref: '#/components/parameters/lago_invoice_id'
+    put:
+      tags:
+        - invoices
+      summary: Update an invoice
+      description: This endpoint is used for updating an existing invoice.
+      operationId: updateInvoice
+      requestBody:
+        description: Update an existing invoice
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Invoice updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '422':
+          $ref: '#/paths/~1plans/post/responses/422'
+    get:
+      tags:
+        - invoices
+      summary: Retrieve an invoice
+      description: This endpoint is used for retrieving a specific invoice that has been issued.
+      operationId: findInvoice
+      responses:
+        '200':
+          description: Invoice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  '/invoices/{lago_id}/download':
+    post:
+      tags:
+        - invoices
+      summary: Download an invoice PDF
+      parameters:
+        - $ref: '#/components/parameters/lago_invoice_id'
+      description: This endpoint is used for downloading a specific invoice PDF document.
+      operationId: downloadInvoice
+      responses:
+        '200':
+          description: Invoice PDF
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  '/invoices/{lago_id}/finalize':
+    put:
+      tags:
+        - invoices
+      summary: Finalize a draft invoice
+      description: This endpoint is used for finalizing a draft invoice.
+      parameters:
+        - $ref: '#/components/parameters/lago_invoice_id'
+      operationId: finalizeInvoice
+      responses:
+        '200':
+          description: Invoice finalized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  '/invoices/{lago_id}/refresh':
+    put:
+      tags:
+        - invoices
+      summary: Refresh a draft invoice
+      description: This endpoint is used for refreshing a draft invoice.
+      parameters:
+        - $ref: '#/components/parameters/lago_invoice_id'
+      operationId: refreshInvoice
+      responses:
+        '200':
+          description: Invoice refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+  '/invoices/{lago_id}/retry_payment':
+    post:
+      tags:
+        - invoices
+      summary: Retry an invoice payment
+      description: This endpoint resends an invoice for collection and retry a payment.
+      parameters:
+        - $ref: '#/components/parameters/lago_invoice_id'
+      operationId: retryPayment
+      responses:
+        '200':
+          description: Invoice payment retried
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   /organizations:
     put:
       tags:
@@ -1334,7 +1545,7 @@ paths:
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
-          $ref: '#/paths/~1invoices~1%7Bid%7D~1retry_payment/post/responses/405'
+          $ref: '#/components/responses/NotAllowed'
   /wallets:
     post:
       tags:
@@ -1461,7 +1672,7 @@ paths:
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
-          $ref: '#/paths/~1invoices~1%7Bid%7D~1retry_payment/post/responses/405'
+          $ref: '#/components/responses/NotAllowed'
   /wallet_transactions:
     post:
       tags:
@@ -1728,252 +1939,6 @@ paths:
                 example: MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
         '401':
           $ref: '#/paths/~1plans/get/responses/401'
-  /invoices:
-    post:
-      tags:
-        - invoices
-      summary: Create a new invoice
-      description: Create a new one off Invoice
-      operationId: createInvoice
-      requestBody:
-        description: Invoice payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InvoiceOneOffInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invoice'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '422':
-          $ref: '#/paths/~1plans/post/responses/422'
-    get:
-      tags:
-        - invoices
-      summary: Find all invoices
-      description: Find all invoices in certain organisation
-      operationId: findAllInvoices
-      parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-        - name: issuing_date_from
-          in: query
-          description: Date from
-          required: false
-          explode: true
-          schema:
-            type: string
-            format: date
-            example: '2022-07-08'
-        - name: issuing_date_to
-          in: query
-          description: Date to
-          required: false
-          explode: true
-          schema:
-            type: string
-            format: date
-            example: '2022-08-09'
-        - name: status
-          in: query
-          description: Status
-          required: false
-          explode: true
-          schema:
-            type: string
-            enum:
-              - draft
-              - finalized
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InvoicesPaginated'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-  '/invoices/{id}':
-    parameters:
-      - name: id
-        in: path
-        description: ID of the existing Lago Invoice
-        required: true
-        schema:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-    put:
-      tags:
-        - invoices
-      summary: Update an existing invoice status
-      description: Update an existing invoice
-      operationId: updateInvoice
-      requestBody:
-        description: Update an existing invoice
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InvoiceInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invoice'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '422':
-          $ref: '#/paths/~1plans/post/responses/422'
-    get:
-      tags:
-        - invoices
-      summary: Find invoice by ID
-      description: Return a single invoice
-      operationId: findInvoice
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invoice'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  '/invoices/{id}/download':
-    post:
-      tags:
-        - invoices
-      summary: Download an existing invoice
-      parameters:
-        - name: id
-          in: path
-          description: ID of the existing Lago Invoice
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-      description: Download an existing invoice
-      operationId: downloadInvoice
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invoice'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  '/invoices/{id}/retry_payment':
-    post:
-      tags:
-        - invoices
-      summary: Retry invoice payment
-      parameters:
-        - name: id
-          in: path
-          description: ID of the existing Lago Invoice
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-      description: Retry invoice payment
-      operationId: retryPayment
-      responses:
-        '200':
-          description: Successful response
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorNotAllowed'
-  '/invoices/{id}/refresh':
-    put:
-      tags:
-        - invoices
-      summary: Refresh a draft invoice
-      parameters:
-        - name: id
-          in: path
-          description: ID of the existing Lago Invoice
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-      description: Refresh a draft invoice
-      operationId: refreshInvoice
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invoice'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  '/invoices/{id}/finalize':
-    put:
-      tags:
-        - invoices
-      summary: Finalize a draft invoice
-      parameters:
-        - name: id
-          in: path
-          description: ID of the draft Lago Invoice
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-      description: Finalize a draft invoice
-      operationId: finalizeInvoice
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invoice'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
 components:
   parameters:
     external_customer_id:
@@ -1994,6 +1959,15 @@ components:
       schema:
         type: string
         example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    lago_invoice_id:
+      name: lago_id
+      in: path
+      description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice’s record within the Lago system.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     page:
       $ref: '#/paths/~1plans/get/parameters/0'
     per_page:
@@ -2932,19 +2906,24 @@ components:
         lago_id:
           type: string
           format: uuid
+          description: Unique identifier assigned to the credit within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the credit’s item record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         amount_cents:
           type: integer
+          description: 'The amount of credit associated with the invoice, expressed in cents.'
           example: 1200
         amount_currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
-            - example: EUR
+            - description: The currency of the credit.
+              example: EUR
         before_vat:
           type: boolean
+          description: Indicates whether the credit is applied on the amount before taxes (coupons) or after taxes (credit notes). This flag helps determine the order in which credits are applied to the invoice calculation
           example: false
         item:
           type: object
+          description: The item attached to the credit.
           required:
             - lago_id
             - type
@@ -2954,15 +2933,22 @@ components:
             lago_id:
               type: string
               format: uuid
+              description: Unique identifier assigned to the credit item within the Lago application.
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
             type:
               type: string
+              enum:
+                - coupon
+                - credit_note
+              description: The type of credit applied. Possible values are `coupon` or `credit_note`.
               example: coupon
             code:
               type: string
+              description: The code of the credit applied. It can be the code of the coupon attached to the credit or the credit note's number.
               example: startup_deal
             name:
               type: string
+              description: The name of the credit applied. It can be the name of the coupon attached to the credit or the initial invoice's number linked to the credit note.
               example: Startup Deal
         invoice:
           type: object
@@ -3407,7 +3393,7 @@ components:
         - customer
       properties:
         customer:
-          $ref: '#/components/schemas/CustomerObject'
+          $ref: '#/components/schemas/CustomerObjectExtended'
     CustomerBillingConfiguration:
       type: object
       description: 'Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.'
@@ -3824,10 +3810,15 @@ components:
           description: 'The date of the customer creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the customer object was created'
         billing_configuration:
           $ref: '#/components/schemas/CustomerBillingConfiguration'
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerMetadata'
+    CustomerObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/CustomerObject'
+        - type: object
+          properties:
+            metadata:
+              type: array
+              items:
+                $ref: '#/components/schemas/CustomerMetadata'
     CustomersPaginated:
       type: object
       required:
@@ -3837,7 +3828,7 @@ components:
         customers:
           type: array
           items:
-            $ref: '#/components/schemas/CustomerObject'
+            $ref: '#/components/schemas/CustomerObjectExtended'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
     CustomerUsage:
@@ -4353,6 +4344,275 @@ components:
             $ref: '#/components/schemas/GroupObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    Invoice:
+      type: object
+      required:
+        - invoice
+      properties:
+        invoice:
+          $ref: '#/components/schemas/InvoiceObjectExtended'
+    InvoiceMetadataObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the invoice metadata within the Lago application.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        key:
+          type: string
+          description: Represents the key of the metadata’s key-value pair.
+          example: digital_ref_id
+        value:
+          type: string
+          description: Represents the value of the metadata’s key-value pair.
+          example: INV-0123456-98765
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the metadata object was created. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
+    InvoiceObject:
+      type: object
+      required:
+        - lago_id
+        - sequential_id
+        - number
+        - issuing_date
+        - invoice_type
+        - status
+        - payment_status
+        - currency
+        - fees_amount_cents
+        - coupons_amount_cents
+        - credit_notes_amount_cents
+        - sub_total_vat_excluded_amount_cents
+        - vat_amount_cents
+        - sub_total_vat_included_amount_cents
+        - prepaid_credit_amount_cents
+        - total_amount_cents
+        - version_number
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee’s record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        sequential_id:
+          type: integer
+          description: 'This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer''s context.'
+          example: 2
+        number:
+          type: string
+          description: The unique number assigned to the invoice. This number serves as a distinct identifier for the invoice and helps in differentiating it from other invoices in the system.
+          example: LAG-1234-001-002
+        issuing_date:
+          type: string
+          format: date
+          description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
+          example: '2022-04-30'
+        invoice_type:
+          type: string
+          enum:
+            - subscription
+            - add_on
+            - credit
+            - one_off
+          description: 'The type of invoice issued. Possible values are `subscription`, `one-off` or `credit`.'
+          example: subscription
+        status:
+          type: string
+          enum:
+            - draft
+            - finalized
+          description: |-
+            The status of the invoice. It indicates the current state of the invoice and can have two possible values:
+            - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
+            - `finalized`: the invoice has been issued and finalized. In this state, events cannot be ingested or added to the invoice anymore.
+          example: finalized
+        payment_status:
+          type: string
+          enum:
+            - pending
+            - succeeded
+            - failed
+          description: |-
+            The status of the payment associated with the invoice. It can have one of the following values:
+            - `pending`: the payment is pending, waiting for payment processing in Stripe or when the invoice is emitted but users have not updated the payment status through the endpoint.
+            - `succeeded`: the payment of the invoice has been successfully processed.
+            - `failed`: the payment of the invoice has failed or encountered an error during processing.
+          example: succeeded
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the invoice issued.
+              example: EUR
+        fees_amount_cents:
+          type: integer
+          description: 'The total sum of fees amount in cents. It calculates the cumulative amount of all the fees associated with the invoice, providing a consolidated value.'
+          example: 100
+        coupons_amount_cents:
+          type: integer
+          description: 'The total sum of all coupons discounted on the invoice. It calculates the cumulative discount amount applied by coupons, expressed in cents.'
+          example: 10
+        credit_notes_amount_cents:
+          type: integer
+          description: 'The total sum of all credit notes discounted on the invoice. It calculates the cumulative discount amount applied by credit notes, expressed in cents.'
+          example: 10
+        sub_total_vat_excluded_amount_cents:
+          type: integer
+          description: |-
+            Subtotal amount, excluding taxes, expressed in cents.
+            This field depends on the version number. Here are the definitions based on the version:
+            - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
+            - Version 2: is equal to the `fees_amount_cents`.
+          example: 100
+        vat_amount_cents:
+          type: integer
+          description: 'The sum of tax amount associated with the invoice, expressed in cents.'
+          example: 20
+        sub_total_vat_included_amount_cents:
+          type: integer
+          description: |-
+            Subtotal amount, including taxes, expressed in cents.
+            This field depends on the version number. Here are the definitions based on the version:
+            - Version 1: is equal to the `total_amount_cents`.
+            - Version 2: is equal to the sum of `fees_amount_cents` and `vat_amount_cents`.
+          example: 120
+        prepaid_credit_amount_cents:
+          type: integer
+          description: 'The total sum of all prepaid credits discounted on the invoice. It calculates the cumulative discount amount applied by prepaid credits, expressed in cents.'
+          example: 0
+        total_amount_cents:
+          type: integer
+          description: 'The sum of the amount and taxes amount on the invoice, expressed in cents. It calculates the total financial value of the invoice, including both the original amount and any applicable taxes.'
+          example: 100
+        version_number:
+          type: integer
+          example: 3
+        file_url:
+          type: string
+          format: uri
+          description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
+          example: 'https://getlago.com/invoice/file'
+        customer:
+          allOf:
+            - $ref: '#/components/schemas/CustomerObject'
+            - description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceMetadataObject'
+    InvoiceObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/InvoiceObject'
+        - type: object
+          properties:
+            credits:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreditObject'
+            fees:
+              type: array
+              items:
+                $ref: '#/components/schemas/FeeObject'
+            subscriptions:
+              type: array
+              items:
+                $ref: '#/components/schemas/SubscriptionObject'
+    InvoiceOneOffCreateInput:
+      type: object
+      required:
+        - invoice
+      properties:
+        invoice:
+          type: object
+          required:
+            - external_customer_id
+            - fees
+          properties:
+            external_customer_id:
+              type: string
+              description: Unique identifier assigned to the customer in your application.
+              example: hooli_1234
+            currency:
+              allOf:
+                - $ref: '#/components/schemas/Currency'
+                - description: The currency of the invoice.
+                  example: EUR
+            fees:
+              type: array
+              items:
+                type: object
+                required:
+                  - add_on_code
+                properties:
+                  add_on_code:
+                    type: string
+                    description: The code of the add-on used as invoice item.
+                    example: setup_fee
+                  unit_amount_cents:
+                    type: integer
+                    nullable: true
+                    description: 'The amount of the fee per unit, expressed in cents. By default, the amount of the add-on is used.'
+                    example: 12000
+                  units:
+                    type: string
+                    format: '^[0-9]+.?[0-9]*$'
+                    nullable: true
+                    description: 'The quantity of units associated with the fee. By default, only 1 unit is added to the invoice.'
+                    example: '2.5'
+                  description:
+                    type: string
+                    nullable: true
+                    example: 'The description of the fee line item in the invoice. By default, the description of the add-on is used.'
+                    description: This is a description
+    InvoicesPaginated:
+      type: object
+      required:
+        - invoices
+        - meta
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    InvoiceUpdateInput:
+      type: object
+      required:
+        - invoice
+      properties:
+        invoice:
+          type: object
+          properties:
+            payment_status:
+              type: string
+              enum:
+                - pending
+                - succeeded
+                - failed
+              description: 'The payment status of the invoice. Possible values are `pending`, `failed` or `succeeded`.'
+              example: succeeded
+            metadata:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: The metadata object identifier. Only required when updating existing metadata.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  key:
+                    type: string
+                    description: The key in the key-value pair of the metadata.
+                    example: digital_ref_id
+                  value:
+                    type: string
+                    description: The value in the key-value pair of the metadata.
+                    example: INV-0123456-98765
     Organization:
       type: object
       required:
@@ -5419,256 +5679,6 @@ components:
                           example: '123456'
                         values:
                           type: object
-    InvoiceMetadataObject:
-      type: object
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        key:
-          type: string
-          example: name
-        value:
-          type: string
-          example: John
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-    InvoiceObject:
-      type: object
-      required:
-        - lago_id
-        - sequential_id
-        - number
-        - issuing_date
-        - invoice_type
-        - status
-        - payment_status
-        - currency
-        - fees_amount_cents
-        - coupons_amount_cents
-        - credit_notes_amount_cents
-        - sub_total_vat_excluded_amount_cents
-        - vat_amount_cents
-        - sub_total_vat_included_amount_cents
-        - prepaid_credit_amount_cents
-        - total_amount_cents
-        - version_number
-        - customer
-        - legacy
-        - amount_cents
-        - credit_amount_cents
-        - amount_currency
-        - total_amount_currency
-        - credit_amount_currency
-        - vat_amount_currency
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        sequential_id:
-          type: integer
-          example: 12345
-        number:
-          type: string
-          example: '222345'
-        issuing_date:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        invoice_type:
-          type: string
-          enum:
-            - subscription
-            - add_on
-            - credit
-            - one_off
-        status:
-          type: string
-          enum:
-            - draft
-            - finalized
-        payment_status:
-          type: string
-          enum:
-            - pending
-            - succeeded
-            - failed
-        currency:
-          type: string
-          example: EUR
-        fees_amount_cents:
-          type: integer
-          example: 20
-        coupons_amount_cents:
-          type: integer
-          example: 20
-        credit_notes_amount_cents:
-          type: integer
-          example: 20
-        sub_total_vat_excluded_amount_cents:
-          type: integer
-          example: 20
-        vat_amount_cents:
-          type: integer
-          example: 20
-        sub_total_vat_included_amount_cents:
-          type: integer
-          example: 20
-        prepaid_credit_amount_cents:
-          type: integer
-          example: 20
-        total_amount_cents:
-          type: integer
-          example: 20
-        version_number:
-          type: integer
-          example: 2
-        amount_cents:
-          type: integer
-          example: 1200
-          deprecated: true
-        amount_currency:
-          type: string
-          example: EUR
-          deprecated: true
-        vat_amount_currency:
-          type: string
-          example: EUR
-          deprecated: true
-        credit_amount_cents:
-          type: integer
-          example: 20
-          deprecated: true
-        credit_amount_currency:
-          type: string
-          example: EUR
-          deprecated: true
-        total_amount_currency:
-          type: string
-          example: EUR
-          deprecated: true
-        legacy:
-          type: boolean
-          example: true
-          deprecated: true
-        file_url:
-          type: string
-          example: 'https://example.com'
-        customer:
-          $ref: '#/components/schemas/CustomerObject'
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceMetadataObject'
-    InvoiceObjectExtended:
-      allOf:
-        - $ref: '#/components/schemas/InvoiceObject'
-        - type: object
-          required:
-            - subscriptions
-            - fees
-            - credits
-          properties:
-            credits:
-              type: array
-              items:
-                $ref: '#/components/schemas/CreditObject'
-            fees:
-              type: array
-              items:
-                $ref: '#/components/schemas/FeeObject'
-            subscriptions:
-              type: array
-              items:
-                $ref: '#/components/schemas/SubscriptionObject'
-    Invoice:
-      type: object
-      required:
-        - invoice
-      properties:
-        invoice:
-          $ref: '#/components/schemas/InvoiceObjectExtended'
-    InvoicesPaginated:
-      type: object
-      required:
-        - invoices
-        - meta
-      properties:
-        invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    InvoiceInput:
-      type: object
-      required:
-        - invoice
-      properties:
-        invoice:
-          type: object
-          properties:
-            payment_status:
-              type: string
-              description: Status
-              enum:
-                - pending
-                - succeeded
-                - failed
-            metadata:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                  key:
-                    type: string
-                    example: name
-                  value:
-                    type: string
-                    example: John
-    InvoiceOneOffInput:
-      type: object
-      required:
-        - invoice
-      properties:
-        invoice:
-          type: object
-          required:
-            - external_customer_id
-          properties:
-            external_customer_id:
-              type: string
-              example: _ID_
-            currency:
-              type: string
-              example: EUR
-            fees:
-              type: array
-              items:
-                type: object
-                required:
-                  - add_on_code
-                properties:
-                  add_on_code:
-                    type: string
-                    example: '12345'
-                  unit_amount_cents:
-                    type: integer
-                    example: 1200
-                  units:
-                    type: string
-                    example: '2.5'
-                  description:
-                    type: string
-                    example: This is description
   responses:
     BadRequest:
       $ref: '#/paths/~1plans/post/responses/400'
@@ -5681,7 +5691,11 @@ components:
     Unauthorized:
       $ref: '#/paths/~1plans/get/responses/401'
     NotAllowed:
-      $ref: '#/paths/~1invoices~1%7Bid%7D~1retry_payment/post/responses/405'
+      description: Not Allowed error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorNotAllowed'
     NotFound:
       $ref: '#/paths/~1plans/post/responses/404'
     UnprocessableEntity:
