@@ -1,3 +1,15 @@
+AddOnBaseInput:
+  $ref: './AddOnBaseInput.yaml'
+AddOnCreateInput:
+  $ref: './AddOnCreateInput.yaml'
+AddOnObject:
+  $ref: './AddOnObject.yaml'
+AddOn:
+  $ref: './AddOn.yaml'
+AddOnsPaginated:
+  $ref: './AddOnsPaginated.yaml'
+AddOnUpdateInput:
+  $ref: './AddOnUpdateInput.yaml'
 ApiErrorBadRequest:
   $ref: './ApiErrorBadRequest.yaml'
 ApiErrorForbidden:
@@ -10,6 +22,12 @@ ApiErrorNotAllowed:
   $ref: './ApiErrorNotAllowed.yaml'
 ApiErrorNotFound:
   $ref: './ApiErrorNotFound.yaml'
+AppliedAddOn:
+  $ref: './AppliedAddOn.yaml'
+AppliedAddOnInput:
+  $ref: './AppliedAddOnInput.yaml'
+AppliedAddOnObject:
+  $ref: './AppliedAddOnObject.yaml'
 BillableMetric:
   $ref: './BillableMetric.yaml'
 BillableMetricObject:
@@ -80,151 +98,6 @@ Timezone:
   $ref: './Timezone.yaml'
 
 # TODO: split into multiple files
-AddOnObject:
-  type: object
-  required:
-    - lago_id
-    - name
-    - code
-    - amount_cents
-    - amount_currency
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    name:
-      type: string
-      example: 'example name'
-    code:
-      type: string
-      example: 'example_code'
-    description:
-      type: string
-      example: 'description'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    amount_cents:
-      type: integer
-      example: 1200
-    amount_currency:
-      type: string
-      example: 'EUR'
-AddOn:
-  type: object
-  required:
-    - add_on
-  properties:
-    add_on:
-      $ref: '#/AddOnObject'
-AddOnsPaginated:
-  type: object
-  required:
-    - add_ons
-    - meta
-  properties:
-    add_ons:
-      type: array
-      items:
-        $ref: '#/AddOnObject'
-    meta:
-      $ref: '#/PaginationMeta'
-AddOnInput:
-  type: object
-  required:
-    - add_on
-  properties:
-    add_on:
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'example name'
-        code:
-          type: string
-          example: 'example_code'
-        description:
-          type: string
-          example: 'description'
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: 'EUR'
-AppliedAddOnObject:
-  type: object
-  required:
-    - lago_id
-    - lago_add_on_id
-    - add_on_code
-    - external_customer_id
-    - lago_customer_id
-    - amount_cents
-    - amount_currency
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    lago_add_on_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    add_on_code:
-      type: string
-      example: 'code'
-    lago_customer_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_customer_id:
-      type: string
-      example: '1234567'
-    amount_cents:
-      type: integer
-      example: 1200
-    amount_currency:
-      type: string
-      example: 'EUR'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-AppliedAddOn:
-  type: object
-  required:
-    - applied_add_on
-  properties:
-    applied_add_on:
-      $ref: '#/AppliedAddOnObject'
-AppliedAddOnInput:
-  type: object
-  required:
-    - applied_add_on
-  properties:
-    applied_add_on:
-      type: object
-      required:
-        - external_customer_id
-        - add_on_code
-      properties:
-        external_customer_id:
-          type: string
-          example: '1234567'
-        add_on_code:
-          type: string
-          example: 'code'
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: 'EUR'
 CouponObject:
   type: object
   required:

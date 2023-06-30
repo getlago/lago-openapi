@@ -1,0 +1,12 @@
+type: object
+required:
+  - add_on
+properties:
+  add_on:
+    allOf:
+      - $ref: './AddOnBaseInput.yaml'
+      - required:
+        - name
+        - code
+        - amount_cents
+        - amount_currency
