@@ -51,6 +51,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/add_ons/add-on-object
+  - name: fees
+    description: Everything about Fees
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object
   - name: plans
     description: Everything about Plan collection
     externalDocs:
@@ -66,11 +71,6 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/invoices/invoice-object
-  - name: fees
-    description: Everything about Fees
-    externalDocs:
-      description: Find out more
-      url: https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object
   - name: wallets
     description: Everything about Wallet collection
     externalDocs:
@@ -113,6 +113,10 @@ paths:
     $ref: './resources/events_batch.yaml'
   /events/{transaction_id}:
     $ref: './resources/event.yaml'
+  /fees:
+    $ref: './resources/fees.yaml'
+  /fees/{lago_id}:
+    $ref: './resources/fee.yaml'
   /organizations:
     $ref: './resources/organizations.yaml'
   /subscriptions:
@@ -528,212 +532,6 @@ paths:
           $ref: './responses/Unauthorized.yaml'
         '404':
           $ref: './responses/NotFound.yaml'
-  /fees/{id}:
-    parameters:
-      - name: id
-        in: path
-        description: ID of the existing Lago Fee
-        required: true
-        schema:
-          type: string
-          format: 'uuid'
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    get:
-      tags:
-        - fees
-      summary: Find fee by ID
-      description: Return a single fee
-      operationId: findFee
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FeeObject'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-    put:
-      tags:
-        - fees
-      summary: Update an existing fee
-      description: Update an existing fee
-      operationId: updateFee
-      requestBody:
-        description: Payload to update a fee
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FeeUpdateInput'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FeeObject'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-  /fees:
-    get:
-      tags:
-        - fees
-      summary: Find all fees
-      description: Find all fees of an organization and filter them
-      operationId: findAllFees
-      parameters:
-        - $ref: './parameters/page.yaml'
-        - $ref: './parameters/per_page.yaml'
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-        - name: external_subscription_id
-          in: query
-          description: External subscription ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-        - name: currency
-          in: query
-          description: Amount currency
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: 'EUR'
-        - name: fee_type
-          in: query
-          description: Fee type
-          required: false
-          explode: true
-          schema:
-            type: string
-            enum:
-              - charge
-              - add_on
-              - subscription
-              - credit
-              - instant_charge
-            example: 'charge'
-        - name: billable_metric_code
-          in: query
-          description: Code of the source billable metric
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: 'bm_code'
-        - name: payment_status
-          in: query
-          description: Payment status
-          required: false
-          explode: true
-          schema:
-            type: string
-            enum:
-              - pending
-              - succeeded
-              - failed
-              - refunded
-            example: 'succeeded'
-        - name: created_at_from
-          in: query
-          description: Creation datetime from
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '2023-03-28T12:21:51Z'
-            format: date-time
-        - name: created_at_to
-          in: query
-          description: Creation date to
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '2023-03-28T12:21:51Z'
-            format: date-time
-        - name: succeeded_at_from
-          in: query
-          description: Payment succees date from
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '2023-03-28T12:21:51Z'
-            format: date-time
-        - name: succeeded_at_to
-          in: query
-          description: Payment succees date to
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '2023-03-28T12:21:51Z'
-            format: date-time
-        - name: failed_at_from
-          in: query
-          description: Payment failed date from
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '2023-03-28T12:21:51Z'
-            format: date-time
-        - name: failed_at_to
-          in: query
-          description: Payment failed date to
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '2023-03-28T12:21:51Z'
-            format: date-time
-        - name: refunded_at_from
-          in: query
-          description: Payment refund date from
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '2023-03-28T12:21:51Z'
-            format: date-time
-        - name: refunded_at_to
-          in: query
-          description: Payment refund date to
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '2023-03-28T12:21:51Z'
-            format: date-time
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FeesPaginated'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
   /wallets:
     post:
       tags:

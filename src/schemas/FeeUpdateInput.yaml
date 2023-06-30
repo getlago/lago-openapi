@@ -1,0 +1,18 @@
+type: object
+required:
+  - fee
+properties:
+  fee:
+    type: object
+    required:
+      - payment_status
+    properties:
+      payment_status:
+        type: string
+        enum:
+          - pending
+          - succeeded
+          - failed
+          - refunded
+        description: The payment status of the fee. Possible values are `pending`, `succeeded`, `failed` or `refunded`.
+        example: 'succeeded'

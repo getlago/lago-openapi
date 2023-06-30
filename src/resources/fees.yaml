@@ -1,0 +1,138 @@
+get:
+  tags:
+    - fees
+  summary: List all fees
+  description: This endpoint is used for retrieving all fees that has been issued.
+  operationId: findAllFees
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - $ref: '../parameters/external_customer_id.yaml'
+    - $ref: '../parameters/external_subscription_id.yaml'
+    - name: currency
+      in: query
+      description: Filter results by fee’s currency.
+      required: false
+      explode: true
+      schema:
+        allOf:
+          - $ref: '../schemas/Currency.yaml'
+          - example: 'USD'
+    - name: fee_type
+      in: query
+      description: The fee type. Possible values are `add-on`, `charge`, `credit` or `subscription`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - charge
+          - add_on
+          - subscription
+          - credit
+          - instant_charge
+        example: 'charge'
+    - name: billable_metric_code
+      in: query
+      description: Filter results by the `code` of the billable metric attached to the fee. Only applies to `charge` types.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'bm_code'
+    - name: payment_status
+      in: query
+      description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and refunded`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - pending
+          - succeeded
+          - failed
+          - refunded
+        example: 'succeeded'
+    - name: created_at_from
+      in: query
+      description: Filter results created after creation date and time in UTC.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '2023-03-28T12:21:51Z'
+        format: date-time
+    - name: created_at_to
+      in: query
+      description: Filter results created before creation date and time in UTC.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '2023-03-28T12:21:51Z'
+        format: date-time
+    - name: succeeded_at_from
+      in: query
+      description: Filter results with payment success after creation date and time in UTC.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '2023-03-28T12:21:51Z'
+        format: date-time
+    - name: succeeded_at_to
+      in: query
+      description: Filter results with payment success after creation date and time in UTC.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '2023-03-28T12:21:51Z'
+        format: date-time
+    - name: failed_at_from
+      in: query
+      description: Filter results with payment failure after creation date and time in UTC.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '2023-03-28T12:21:51Z'
+        format: date-time
+    - name: failed_at_to
+      in: query
+      description: Filter results with payment failure after creation date and time in UTC.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '2023-03-28T12:21:51Z'
+        format: date-time
+    - name: refunded_at_from
+      in: query
+      description: Filter results with payment refund after creation date and time in UTC.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '2023-03-28T12:21:51Z'
+        format: date-time
+    - name: refunded_at_to
+      in: query
+      description: Filter results with payment refund after creation date and time in UTC.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '2023-03-28T12:21:51Z'
+        format: date-time
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/FeesPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
