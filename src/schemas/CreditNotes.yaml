@@ -1,0 +1,8 @@
+type: object
+required:
+  - credit_notes
+properties:
+  credit_notes:
+    type: array
+    items:
+      $ref: './CreditNoteObject.yaml'

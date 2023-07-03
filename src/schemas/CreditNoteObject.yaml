@@ -1,0 +1,146 @@
+type: object
+required:
+  - lago_id
+  - sequential_id
+  - number
+  - lago_invoice_id
+  - invoice_number
+  - issuing_date
+  - reason
+  - currency
+  - total_amount_cents
+  - credit_amount_cents
+  - refund_amount_cents
+  - balance_amount_cents
+  - vat_amount_cents
+  - sub_total_vat_excluded_amount_cents
+  - coupons_adjustement_amount_cents
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: The credit note unique identifier, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  sequential_id:
+    type: integer
+    description: The sequential identifier of the credit note, specifically scoped on the associated invoice. It provides a unique numerical identifier for the credit note within the context of the invoice.
+    example: 2
+  number:
+    type: string
+    description: The credit note unique number.
+    example: 'LAG-1234-CN2'
+  lago_invoice_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier assigned to the invoice that the credit note belongs to
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  invoice_number:
+    type: string
+    description: The invoice unique number, related to the credit note.
+    example: 'LAG-1234'
+  issuing_date:
+    type: string
+    format: 'date'
+    description: The date of creation of the credit note. It follows the ISO 8601 date format and provides the specific date when the credit note was created.
+    example: '2022-12-06'
+  credit_status:
+    type: string
+    enum:
+      - available
+      - consumed
+      - voided
+    nullable: true
+    description: |-
+      The status of the credit portion of the credit note. It indicates the current state or condition of the credit amount associated with the credit note. The possible values for this field are:
+
+      - `available`: this status indicates that an amount remains available for future usage. The credit can be applied towards future transactions or invoices.
+      - `consumed`: this status indicates that the credit amount has been fully consumed. The remaining amount is 0, indicating that the credit has been utilized in its entirety.
+      - `voided`: this status indicates that the remaining amount of the credit cannot be used any further. The credit has been voided and is no longer available for application or redemption.
+    example: available
+  refund_status:
+    type: string
+    enum:
+      - pending
+      - succeeded
+      - failed
+    nullable: true
+    description: |-
+      The status of the refund portion of the credit note. It indicates the current state or condition of the refund associated with the credit note. The possible values for this field are:
+
+      - `pending`: this status indicates that the refund is pending execution. The refund request has been initiated but has not been processed or completed yet.
+      - `succeeded`: this status indicates that the refund has been successfully executed. The refund amount has been processed and returned to the customer or the designated recipient.
+      - `failed`: this status indicates that the refund failed to execute. The refund request encountered an error or unsuccessful processing, and the refund amount could not be returned.
+    example: pending
+  reason:
+    type: string
+    enum:
+      - duplicated_charge
+      - product_unsatisfactory
+      - order_change
+      - order_cancellation
+      - fraudulent_charge
+      - other
+    description: |-
+      The reason of the credit note creation.
+      Possible values are `duplicated_charge`, `product_unsatisfactory`, `order_change`, `order_cancellation`, `fraudulent_charge` or `other`.
+    example: other
+  description:
+    type: string
+    nullable: true
+    description: The description of the credit note.
+    example: 'Free text'
+  currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of the credit note.
+        example: 'EUR'
+  total_amount_cents:
+    type: integer
+    description: The total amount of the credit note, expressed in cents.
+    example: 120
+  vat_amount_cents:
+    type: integer
+    description: The tax amount of the credit note, expressed in cents.
+    example: 20
+  sub_total_vat_excluded_amount_cents:
+    type: integer
+    description: The subtotal of the credit note excluding any applicable taxes, expressed in cents.
+    example: 100
+  balance_amount_cents:
+    type: integer
+    description: The remaining credit note amount, expressed in cents.
+    example: 100
+  credit_amount_cents:
+    type: integer
+    description: The credited amount of the credit note, expressed in cents.
+    example: 100
+  refund_amount_cents:
+    type: integer
+    description: The refunded amount of the credit note, expressed in cents.
+    example: 0
+  coupons_adjustement_amount_cents:
+    type: integer
+    description: The pro-rated amount of the coupons applied to the source invoice.
+    example: 20
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date when the credit note was created. It is expressed in Coordinated Universal Time (UTC).
+    example: '2022-09-14T16:35:31Z'
+  updated_at:
+    type: string
+    format: 'date-time'
+    description: The date when the credit note was last updated. It is expressed in Coordinated Universal Time (UTC).
+    example: '2022-09-14T16:35:31Z'
+  file_url:
+    type: string
+    nullable: true
+    description: The PDF file of the credit note.
+    example: 'https://getlago.com/credit_note/file'
+  items:
+    type: array
+    items:
+      $ref: './CreditNoteItemObject.yaml'
+    description: Array of credit note’s items.

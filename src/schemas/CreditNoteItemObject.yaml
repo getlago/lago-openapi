@@ -1,0 +1,25 @@
+type: object
+required:
+  - lago_id
+  - amount_cents
+  - amount_currency
+  - fee
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: The credit note’s item unique identifier, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  amount_cents:
+    type: integer
+    description: The credit note’s item amount, expressed in cents.
+    example: 100
+  amount_currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The credit note’s item currency.
+        example: 'EUR'
+  fee:
+    allOf:
+      - $ref: './FeeObject.yaml'
+      - description: The fee object related to the credit note item.

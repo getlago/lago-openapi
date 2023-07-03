@@ -97,6 +97,14 @@ paths:
     $ref: './resources/coupons.yaml'
   /coupons/{code}:
     $ref: './resources/coupon.yaml'
+  /credit_notes:
+    $ref: './resources/credit_notes.yaml'
+  /credit_notes/{lago_id}:
+    $ref: './resources/credit_note.yaml'
+  /credit_notes/{lago_id}/download:
+    $ref: './resources/credit_note_download.yaml'
+  /credit_notes/{lago_id}/void:
+    $ref: './resources/credit_note_void.yaml'
   /customers:
     $ref: './resources/customers.yaml'
   /customers/{external_id}:
@@ -540,169 +548,6 @@ paths:
           $ref: './responses/Unauthorized.yaml'
         '404':
           $ref: './responses/NotFound.yaml'
-  /credit_notes:
-    post:
-      tags:
-        - credit_notes
-      summary: Create a new Credit note
-      description: Create a new credit note
-      operationId: createCreditNote
-      requestBody:
-        description: Credit note payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreditNoteInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreditNote'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - credit_notes
-      summary: Find Credit notes
-      description: Find all credit notes in certain organisation
-      operationId: findAllCreditNotes
-      parameters:
-        - $ref: './parameters/page.yaml'
-        - $ref: './parameters/per_page.yaml'
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreditNotes'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-  /credit_notes/{id}:
-    parameters:
-      - name: id
-        in: path
-        description: Id of the existing credit note
-        required: true
-        schema:
-          type: string
-          example: '12345'
-    put:
-      tags:
-        - credit_notes
-      summary: Update an existing credit note
-      description: Update an existing credit note
-      operationId: updateCreditNote
-      requestBody:
-        description: Update an existing credit note
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreditNoteUpdateInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreditNote'
-        '400':
-          $ref: './responses/BadRequest.yaml'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '422':
-          $ref: './responses/UnprocessableEntity.yaml'
-    get:
-      tags:
-        - credit_notes
-      summary: Find credit note
-      description: Return a single credit note
-      operationId: findCreditNote
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreditNote'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-  /credit_notes/{id}/download:
-    post:
-      tags:
-        - credit_notes
-      summary: Download an existing credit note
-      parameters:
-        - name: id
-          in: path
-          description: ID of the existing Lago Credit note
-          required: true
-          schema:
-            type: string
-            format: 'uuid'
-            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-      description: Download an existing credit note
-      operationId: downloadCreditNote
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreditNote'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-  /credit_notes/{id}/void:
-    put:
-      tags:
-        - credit_notes
-      summary: Void existing credit note
-      parameters:
-        - name: id
-          in: path
-          description: ID of the existing Lago Credit note
-          required: true
-          schema:
-            type: string
-            format: 'uuid'
-            example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-      description: Void an existing credit note
-      operationId: voidCreditNote
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreditNote'
-        '401':
-          $ref: './responses/Unauthorized.yaml'
-        '404':
-          $ref: './responses/NotFound.yaml'
-        '405':
-          $ref: './responses/NotAllowed.yaml'
 
 
 
