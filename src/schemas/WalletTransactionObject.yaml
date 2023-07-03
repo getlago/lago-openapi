@@ -1,0 +1,54 @@
+type: object
+required:
+  - lago_id
+  - lago_wallet_id
+  - status
+  - transaction_type
+  - credit_amount
+  - amount
+  - created_at
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction’s record within the Lago system.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  lago_wallet_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  status:
+    type: string
+    enum:
+      - pending
+      - settled
+    description: The status of the wallet transaction. Possible values are `pending` or `settled`.
+    example: settled
+  transaction_type:
+    type: string
+    enum:
+      - inbound
+      - outbound
+    description: The type of transaction. Possible values are `inbound` (increasing the balance) or `outbound` (decreasing the balance).
+    example: inbound
+  amount:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: The amount of credits based on the rate and the currency.
+    example: '10.0'
+  credit_amount:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: The number of credits used in the wallet transaction.
+    example: '100.0'
+  settled_at:
+    type: string
+    format: 'date-time'
+    description: The date when wallet transaction is settled, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    example: '2022-04-29T08:59:51Z'
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date of the wallet transaction creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    example: '2022-04-29T08:59:51Z'

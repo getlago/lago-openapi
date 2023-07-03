@@ -1178,7 +1178,206 @@ paths:
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
-          $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
+          $ref: '#/paths/~1credit_notes~1%7Bid%7D~1void/put/responses/405'
+  /wallets:
+    post:
+      tags:
+        - wallets
+      summary: Create a wallet
+      description: This endpoint is used to create a wallet with prepaid credits.
+      operationId: createWallet
+      requestBody:
+        description: Wallet payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Wallet created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '422':
+          $ref: '#/paths/~1plans/post/responses/422'
+    get:
+      tags:
+        - wallets
+      summary: List all wallets
+      description: This endpoint is used to list all wallets with prepaid credits.
+      operationId: findAllWallets
+      parameters:
+        - $ref: '#/paths/~1plans/get/parameters/0'
+        - $ref: '#/paths/~1plans/get/parameters/1'
+        - name: external_customer_id
+          in: query
+          description: The customer external unique identifier (provided by your own application).
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      responses:
+        '200':
+          description: Wallets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletsPaginated'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+  '/wallets/{lago_id}':
+    parameters:
+      - name: lago_id
+        in: path
+        description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    put:
+      tags:
+        - wallets
+      summary: Update a wallet
+      description: This endpoint is used to update an existing wallet with prepaid credits.
+      operationId: updateWallet
+      requestBody:
+        description: Wallet update payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Wallet updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '422':
+          $ref: '#/paths/~1plans/post/responses/422'
+    get:
+      tags:
+        - wallets
+      summary: Retrieve a wallet
+      description: This endpoint is used to retrieve an existing wallet with prepaid credits.
+      operationId: findWallet
+      responses:
+        '200':
+          description: Wallet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+    delete:
+      tags:
+        - wallets
+      summary: Terminate a wallet
+      description: This endpoint is used to terminate an existing wallet with prepaid credits.
+      operationId: destroyWallet
+      responses:
+        '200':
+          description: Wallet terminated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
+        '405':
+          $ref: '#/paths/~1credit_notes~1%7Bid%7D~1void/put/responses/405'
+  /wallet_transactions:
+    post:
+      tags:
+        - wallets
+      summary: Top up a wallet
+      description: This endpoint is used to top-up an active wallet.
+      operationId: createWalletTransaction
+      requestBody:
+        description: Wallet transaction payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletTransactionCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Wallet transaction created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletTransactions'
+        '400':
+          $ref: '#/paths/~1plans/post/responses/400'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '422':
+          $ref: '#/paths/~1plans/post/responses/422'
+  '/wallets/{lago_id}/wallet_transactions':
+    get:
+      tags:
+        - wallets
+      summary: List all wallet transactions
+      description: This endpoint is used to list all wallet transactions.
+      operationId: findAllWalletTransactions
+      parameters:
+        - name: lago_id
+          in: path
+          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - $ref: '#/paths/~1plans/get/parameters/0'
+        - $ref: '#/paths/~1plans/get/parameters/1'
+        - name: status
+          in: query
+          description: The status of the wallet transaction. Possible values are `pending` or `settled`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: pending
+        - name: transaction_type
+          in: query
+          description: The transaction type of the wallet transaction. Possible values are `inbound` (increasing the wallet balance) or `outbound` (decreasing the wallet balance).
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: inbound
+      responses:
+        '200':
+          description: Wallet transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletTransactionsPaginated'
+        '401':
+          $ref: '#/paths/~1plans/get/responses/401'
+        '404':
+          $ref: '#/paths/~1plans/post/responses/404'
   /events/estimate_fees:
     post:
       tags:
@@ -1560,7 +1759,7 @@ paths:
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
-          $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
+          $ref: '#/paths/~1credit_notes~1%7Bid%7D~1void/put/responses/405'
   '/invoices/{id}/refresh':
     put:
       tags:
@@ -1611,209 +1810,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-  /wallets:
-    post:
-      tags:
-        - wallets
-      summary: Create a new wallet
-      description: Create a new wallet
-      operationId: createWallet
-      requestBody:
-        description: Wallet payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WalletInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Wallet'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '422':
-          $ref: '#/paths/~1plans/post/responses/422'
-    get:
-      tags:
-        - wallets
-      summary: Find wallets
-      description: Find all wallets for certain customer
-      operationId: findAllWallets
-      parameters:
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
-        - name: external_customer_id
-          in: query
-          description: External customer ID
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: '12345'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WalletsPaginated'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-  '/wallets/{id}':
-    parameters:
-      - name: id
-        in: path
-        description: Lago ID of the existing wallet
-        required: true
-        schema:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-    put:
-      tags:
-        - wallets
-      summary: Update an existing wallet
-      description: Update an existing wallet
-      operationId: updateWallet
-      requestBody:
-        description: Update an existing wallet
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WalletUpdateInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Wallet'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '422':
-          $ref: '#/paths/~1plans/post/responses/422'
-    get:
-      tags:
-        - wallets
-      summary: Find wallet
-      description: Return a wallet
-      operationId: findWallet
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Wallet'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-    delete:
-      tags:
-        - wallets
-      summary: Delete a wallet
-      description: Delete a wallet
-      operationId: destroyWallet
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Wallet'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '404':
-          $ref: '#/paths/~1plans/post/responses/404'
-        '405':
-          description: Not Allowed error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorNotAllowed'
-  /wallet_transactions:
-    post:
-      tags:
-        - wallets
-      summary: Create a new wallet transaction
-      description: Create a new wallet transaction
-      operationId: createWalletTransaction
-      requestBody:
-        description: Wallet transaction payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WalletTransactionInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WalletTransactions'
-        '400':
-          $ref: '#/paths/~1plans/post/responses/400'
-        '401':
-          $ref: '#/paths/~1plans/get/responses/401'
-        '422':
-          $ref: '#/paths/~1plans/post/responses/422'
-  '/wallets/{id}/wallet_transactions':
-    get:
-      tags:
-        - wallets
-      summary: Find wallet transactions
-      description: Find all wallet transactions for certain wallet
-      operationId: findAllWalletTransactions
-      parameters:
-        - name: id
-          in: path
-          description: Lago ID of the existing wallet
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        - $ref: '#/paths/~1plans/get/parameters/0'
-        - $ref: '#/paths/~1plans/get/parameters/1'
-        - name: status
-          in: query
-          description: Status (pending or settled)
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: pending
-        - name: transaction_type
-          in: query
-          description: Transaction Type (inbound or outbound)
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: inbound
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WalletTransactionsPaginated'
         '401':
           $ref: '#/paths/~1plans/get/responses/401'
         '404':
@@ -1980,7 +1976,11 @@ paths:
         '404':
           $ref: '#/paths/~1plans/post/responses/404'
         '405':
-          $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
+          description: Not Allowed error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorNotAllowed'
 components:
   parameters:
     external_customer_id:
@@ -4629,6 +4629,281 @@ components:
         - Pacific/Pago_Pago
         - Pacific/Port_Moresby
         - Pacific/Tongatapu
+    Wallet:
+      type: object
+      required:
+        - wallet
+      properties:
+        wallet:
+          $ref: '#/components/schemas/WalletObject'
+    WalletCreateInput:
+      type: object
+      properties:
+        wallet:
+          type: object
+          required:
+            - rate_amount
+            - currency
+            - external_customer_id
+          properties:
+            name:
+              type: string
+              description: The name of the wallet.
+              example: Prepaid
+            rate_amount:
+              type: string
+              format: '^[0-9]+.?[0-9]*$'
+              description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
+              example: '1.5'
+            currency:
+              allOf:
+                - $ref: '#/components/schemas/Currency'
+                - description: The currency of the wallet.
+                  example: USD
+            paid_credits:
+              type: string
+              format: '^[0-9]+.?[0-9]*$'
+              nullable: true
+              description: The number of paid credits. Required only if there is no granted credits.
+              example: '20.0'
+            granted_credits:
+              type: string
+              format: '^[0-9]+.?[0-9]*$'
+              nullable: true
+              description: The number of free granted credits. Required only if there is no paid credits.
+              example: '10.0'
+            external_customer_id:
+              type: string
+              description: The customer external unique identifier (provided by your own application)
+              example: hooli_1234
+            expiration_at:
+              type: string
+              format: date-time
+              nullable: true
+              description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+              example: '2022-07-07T23:59:59Z'
+    WalletObject:
+      type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - status
+        - currency
+        - rate_amount
+        - credits_balance
+        - balance
+        - balance_cents
+        - consumed_credits
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer’s record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: hooli_1234
+        status:
+          type: string
+          enum:
+            - active
+            - terminated
+          description: The status of the wallet. Possible values are `active` or `terminated`.
+          example: active
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of the wallet.
+              example: USD
+        name:
+          type: string
+          description: The name of the wallet.
+          example: Prepaid
+        rate_amount:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
+          example: '1.5'
+        credits_balance:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The current wallet balance expressed in credits.
+          example: '28.0'
+        balance_cents:
+          type: integer
+          description: The current wallet balance expressed in cents.
+          example: 1000
+        consumed_credits:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The number of consumed credits.
+          example: '2.0'
+        created_at:
+          type: string
+          format: date-time
+          description: 'The date of the wallet creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
+          example: '2022-04-29T08:59:51Z'
+        expiration_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: null
+        last_balance_sync_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: The date and time of the last balance top-up. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
+        last_consumed_credit_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: The date and time of the last credits consumption. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
+        terminated_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2022-09-14T16:35:31Z'
+    WalletsPaginated:
+      type: object
+      required:
+        - wallets
+        - meta
+      properties:
+        wallets:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    WalletTransactionCreateInput:
+      type: object
+      required:
+        - wallet_transaction
+      properties:
+        wallet_transaction:
+          type: object
+          required:
+            - wallet_id
+          properties:
+            wallet_id:
+              type: string
+              format: uuid
+              description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            paid_credits:
+              type: string
+              format: '^[0-9]+.?[0-9]*$'
+              description: The number of paid credits. Required only if there is no granted credits.
+              example: '20.0'
+            granted_credits:
+              type: string
+              format: '^[0-9]+.?[0-9]*$'
+              description: The number of free granted credits. Required only if there is no paid credits.
+              example: '10.0'
+    WalletTransactionObject:
+      type: object
+      required:
+        - lago_id
+        - lago_wallet_id
+        - status
+        - transaction_type
+        - credit_amount
+        - amount
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction’s record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_wallet_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        status:
+          type: string
+          enum:
+            - pending
+            - settled
+          description: The status of the wallet transaction. Possible values are `pending` or `settled`.
+          example: settled
+        transaction_type:
+          type: string
+          enum:
+            - inbound
+            - outbound
+          description: The type of transaction. Possible values are `inbound` (increasing the balance) or `outbound` (decreasing the balance).
+          example: inbound
+        amount:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The amount of credits based on the rate and the currency.
+          example: '10.0'
+        credit_amount:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The number of credits used in the wallet transaction.
+          example: '100.0'
+        settled_at:
+          type: string
+          format: date-time
+          description: 'The date when wallet transaction is settled, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
+          example: '2022-04-29T08:59:51Z'
+        created_at:
+          type: string
+          format: date-time
+          description: 'The date of the wallet transaction creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
+          example: '2022-04-29T08:59:51Z'
+    WalletTransactions:
+      type: object
+      required:
+        - wallet_transactions
+      properties:
+        wallet_transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletTransactionObject'
+    WalletTransactionsPaginated:
+      allOf:
+        - $ref: '#/components/schemas/WalletTransactions'
+        - type: object
+          required:
+            - meta
+          properties:
+            meta:
+              $ref: '#/components/schemas/PaginationMeta'
+    WalletUpdateInput:
+      type: object
+      required:
+        - wallet
+      properties:
+        wallet:
+          type: object
+          properties:
+            name:
+              type: string
+              nullable: true
+              description: The name of the wallet.
+              example: new_name
+            expiration_at:
+              type: string
+              format: date-time
+              nullable: true
+              description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+              example: '2022-07-07T23:59:59Z'
     EventEstimateFeesInput:
       type: object
       required:
@@ -5122,229 +5397,6 @@ components:
                   description:
                     type: string
                     example: This is description
-    WalletObject:
-      type: object
-      required:
-        - lago_id
-        - lago_customer_id
-        - external_customer_id
-        - status
-        - currency
-        - rate_amount
-        - credits_balance
-        - balance
-        - balance_cents
-        - consumed_credits
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_customer_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_customer_id:
-          type: string
-          example: '12345'
-        status:
-          type: string
-          description: Status
-          enum:
-            - active
-            - terminated
-        currency:
-          type: string
-          example: EUR
-        name:
-          type: string
-          example: Name
-        rate_amount:
-          type: string
-          example: '2.0'
-        credits_balance:
-          type: string
-          example: '500.0'
-        balance:
-          type: string
-          example: '1000.0'
-          deprecated: true
-        balance_cents:
-          type: integer
-          example: 100000
-        consumed_credits:
-          type: string
-          example: '100.0'
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        expiration_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T23:59:59Z'
-        last_balance_sync_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        last_consumed_credit_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        terminated_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-    Wallet:
-      type: object
-      required:
-        - wallet
-      properties:
-        wallet:
-          $ref: '#/components/schemas/WalletObject'
-    WalletsPaginated:
-      type: object
-      required:
-        - wallets
-        - meta
-      properties:
-        wallets:
-          type: array
-          items:
-            $ref: '#/components/schemas/WalletObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    WalletInput:
-      type: object
-      properties:
-        wallet:
-          type: object
-          required:
-            - rate_amount
-            - currency
-            - external_customer_id
-          properties:
-            name:
-              type: string
-              example: Wallet name
-            rate_amount:
-              type: string
-              example: '2.0'
-            currency:
-              type: string
-              example: EUR
-            paid_credits:
-              type: string
-              example: '500.0'
-            granted_credits:
-              type: string
-              example: '10.0'
-            external_customer_id:
-              type: string
-              example: '12345'
-            expiration_at:
-              type: string
-              format: date-time
-              example: '2022-09-14T23:59:59Z'
-    WalletUpdateInput:
-      type: object
-      required:
-        - wallet
-      properties:
-        wallet:
-          type: object
-          properties:
-            name:
-              type: string
-              example: Wallet name
-            expiration_at:
-              type: string
-              format: date-time
-              example: '2022-09-14T23:59:59Z'
-    WalletTransactionObject:
-      type: object
-      required:
-        - lago_id
-        - lago_wallet_id
-        - status
-        - transaction_type
-        - credit_amount
-        - amount
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_wallet_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        status:
-          type: string
-          description: Status
-          enum:
-            - pending
-            - settled
-        transaction_type:
-          type: string
-          description: Transaction type
-          enum:
-            - inbound
-            - outbound
-        amount:
-          type: string
-          example: '500.0'
-        credit_amount:
-          type: string
-          example: '100.0'
-        settled_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-    WalletTransactions:
-      type: object
-      required:
-        - wallet_transactions
-      properties:
-        wallet_transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/WalletTransactionObject'
-    WalletTransactionsPaginated:
-      allOf:
-        - $ref: '#/components/schemas/WalletTransactions'
-        - type: object
-          required:
-            - meta
-          properties:
-            meta:
-              $ref: '#/components/schemas/PaginationMeta'
-    WalletTransactionInput:
-      type: object
-      required:
-        - wallet_transaction
-      properties:
-        wallet_transaction:
-          type: object
-          required:
-            - wallet_id
-          properties:
-            wallet_id:
-              type: string
-              format: uuid
-              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-            paid_credits:
-              type: string
-              example: '100.0'
-            granted_credits:
-              type: string
-              example: '10.0'
     CreditNoteItemObject:
       type: object
       required:
@@ -5600,7 +5652,7 @@ components:
     Unauthorized:
       $ref: '#/paths/~1plans/get/responses/401'
     NotAllowed:
-      $ref: '#/paths/~1wallets~1%7Bid%7D/delete/responses/405'
+      $ref: '#/paths/~1credit_notes~1%7Bid%7D~1void/put/responses/405'
     NotFound:
       $ref: '#/paths/~1plans/post/responses/404'
     UnprocessableEntity:

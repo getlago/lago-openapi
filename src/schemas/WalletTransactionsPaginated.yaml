@@ -1,0 +1,8 @@
+allOf:
+  - $ref: './WalletTransactions.yaml'
+  - type: object
+    required:
+      - meta
+    properties:
+      meta:
+        $ref: './PaginationMeta.yaml'

@@ -1,0 +1,73 @@
+parameters:
+  - name: lago_id
+    in: path
+    description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+    required: true
+    schema:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+put:
+  tags:
+    - wallets
+  summary: Update a wallet
+  description: This endpoint is used to update an existing wallet with prepaid credits.
+  operationId: updateWallet
+  requestBody:
+    description: Wallet update payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/WalletUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Wallet updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Wallet.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - wallets
+  summary: Retrieve a wallet
+  description: This endpoint is used to retrieve an existing wallet with prepaid credits.
+  operationId: findWallet
+  responses:
+    '200':
+      description: Wallet
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Wallet.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+delete:
+  tags:
+    - wallets
+  summary: Terminate a wallet
+  description: This endpoint is used to terminate an existing wallet with prepaid credits.
+  operationId: destroyWallet
+  responses:
+    '200':
+      description: Wallet terminated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Wallet.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'

@@ -1,0 +1,26 @@
+post:
+  tags:
+    - wallets
+  summary: Top up a wallet
+  description: This endpoint is used to top-up an active wallet.
+  operationId: createWalletTransaction
+  requestBody:
+    description: Wallet transaction payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/WalletTransactionCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Wallet transaction created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WalletTransactions.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

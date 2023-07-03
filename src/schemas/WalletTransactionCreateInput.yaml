@@ -1,0 +1,24 @@
+type: object
+required:
+  - wallet_transaction
+properties:
+  wallet_transaction:
+    type: object
+    required:
+      - wallet_id
+    properties:
+      wallet_id:
+        type: string
+        format: 'uuid'
+        description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      paid_credits:
+        type: string
+        format: '^[0-9]+.?[0-9]*$'
+        description: The number of paid credits. Required only if there is no granted credits.
+        example: '20.0'
+      granted_credits:
+        type: string
+        format: '^[0-9]+.?[0-9]*$'
+        description: The number of free granted credits. Required only if there is no paid credits.
+        example: '10.0'

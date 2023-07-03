@@ -1,0 +1,8 @@
+type: object
+required:
+  - wallet_transactions
+properties:
+  wallet_transactions:
+    type: array
+    items:
+      $ref: './WalletTransactionObject.yaml'

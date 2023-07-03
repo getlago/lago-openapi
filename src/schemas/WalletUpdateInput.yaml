@@ -1,0 +1,18 @@
+type: object
+required:
+  - wallet
+properties:
+  wallet:
+    type: object
+    properties:
+      name:
+        type: string
+        nullable: true
+        description: The name of the wallet.
+        example: 'new_name'
+      expiration_at:
+        type: string
+        format: 'date-time'
+        nullable: true
+        description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+        example: '2022-07-07T23:59:59Z'
