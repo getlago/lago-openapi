@@ -1,0 +1,11 @@
+type: object
+required:
+  - wallets
+  - meta
+properties:
+  wallets:
+    type: array
+    items:
+      $ref: './WalletObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

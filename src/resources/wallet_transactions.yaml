@@ -1,0 +1,44 @@
+get:
+  tags:
+    - wallets
+  summary: List all wallet transactions
+  description: This endpoint is used to list all wallet transactions.
+  operationId: findAllWalletTransactions
+  parameters:
+    - name: lago_id
+      in: path
+      description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+      required: true
+      schema:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - name: status
+      in: query
+      description: The status of the wallet transaction. Possible values are `pending` or `settled`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'pending'
+    - name: transaction_type
+      in: query
+      description: The transaction type of the wallet transaction. Possible values are `inbound` (increasing the wallet balance) or `outbound` (decreasing the wallet balance).
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'inbound'
+  responses:
+    '200':
+      description: Wallet transactions
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WalletTransactionsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

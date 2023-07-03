@@ -1,0 +1,92 @@
+type: object
+required:
+  - lago_id
+  - lago_customer_id
+  - external_customer_id
+  - status
+  - currency
+  - rate_amount
+  - credits_balance
+  - balance
+  - balance_cents
+  - consumed_credits
+  - created_at
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  lago_customer_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer’s record within the Lago system.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  external_customer_id:
+    type: string
+    description: The customer external unique identifier (provided by your own application)
+    example: 'hooli_1234'
+  status:
+    type: string
+    enum:
+      - active
+      - terminated
+    description: The status of the wallet. Possible values are `active` or `terminated`.
+    example: 'active'
+  currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of the wallet.
+        example: 'USD'
+  name:
+    type: string
+    description: The name of the wallet.
+    example: 'Prepaid'
+  rate_amount:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
+    example: '1.5'
+  credits_balance:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: The current wallet balance expressed in credits.
+    example: '28.0'
+  balance_cents:
+    type: integer
+    description: The current wallet balance expressed in cents.
+    example: 1000
+  consumed_credits:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: The number of consumed credits.
+    example: '2.0'
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date of the wallet creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    example: '2022-04-29T08:59:51Z'
+  expiration_at:
+    type: string
+    format: 'date-time'
+    nullable: true
+    description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+    example: null
+  last_balance_sync_at:
+    type: string
+    format: 'date-time'
+    nullable: true
+    description: The date and time of the last balance top-up. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+    example: '2022-04-29T08:59:51Z'
+  last_consumed_credit_at:
+    type: string
+    format: 'date-time'
+    nullable: true
+    description: The date and time of the last credits consumption. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+    example: '2022-04-29T08:59:51Z'
+  terminated_at:
+    type: string
+    format: 'date-time'
+    nullable: true
+    description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+    example: '2022-09-14T16:35:31Z'

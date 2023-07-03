@@ -1,0 +1,52 @@
+post:
+  tags:
+    - wallets
+  summary: Create a wallet
+  description: This endpoint is used to create a wallet with prepaid credits.
+  operationId: createWallet
+  requestBody:
+    description: Wallet payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/WalletCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Wallet created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Wallet.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - wallets
+  summary: List all wallets
+  description: This endpoint is used to list all wallets with prepaid credits.
+  operationId: findAllWallets
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - name: external_customer_id
+      in: query
+      description: The customer external unique identifier (provided by your own application).
+      required: true
+      explode: true
+      schema:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+  responses:
+    '200':
+      description: Wallets
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WalletsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

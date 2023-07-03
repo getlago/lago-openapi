@@ -130,6 +130,24 @@ SubscriptionsPaginated:
   $ref: './SubscriptionsPaginated.yaml'
 Timezone:
   $ref: './Timezone.yaml'
+Wallet:
+  $ref: './Wallet.yaml'
+WalletCreateInput:
+  $ref: './WalletCreateInput.yaml'
+WalletObject:
+  $ref: './WalletObject.yaml'
+WalletsPaginated:
+  $ref: './WalletsPaginated.yaml'
+WalletTransactionCreateInput:
+  $ref: './WalletTransactionCreateInput.yaml'
+WalletTransactionObject:
+  $ref: './WalletTransactionObject.yaml'
+WalletTransactions:
+  $ref: './WalletTransactions.yaml'
+WalletTransactionsPaginated:
+  $ref: './WalletTransactionsPaginated.yaml'
+WalletUpdateInput:
+  $ref: './WalletUpdateInput.yaml'
 
 # TODO: split into multiple files
 EventEstimateFeesInput:
@@ -625,229 +643,6 @@ InvoiceOneOffInput:
               description:
                 type: string
                 example: 'This is description'
-WalletObject:
-  type: object
-  required:
-    - lago_id
-    - lago_customer_id
-    - external_customer_id
-    - status
-    - currency
-    - rate_amount
-    - credits_balance
-    - balance
-    - balance_cents
-    - consumed_credits
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    lago_customer_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    external_customer_id:
-      type: string
-      example: '12345'
-    status:
-      type: string
-      description: Status
-      enum:
-        - active
-        - terminated
-    currency:
-      type: string
-      example: 'EUR'
-    name:
-      type: string
-      example: 'Name'
-    rate_amount:
-      type: string
-      example: '2.0'
-    credits_balance:
-      type: string
-      example: '500.0'
-    balance:
-      type: string
-      example: '1000.0'
-      deprecated: true
-    balance_cents:
-      type: integer
-      example: 100000
-    consumed_credits:
-      type: string
-      example: '100.0'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    expiration_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T23:59:59Z'
-    last_balance_sync_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    last_consumed_credit_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    terminated_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-Wallet:
-  type: object
-  required:
-    - wallet
-  properties:
-    wallet:
-      $ref: '#/WalletObject'
-WalletsPaginated:
-  type: object
-  required:
-    - wallets
-    - meta
-  properties:
-    wallets:
-      type: array
-      items:
-        $ref: '#/WalletObject'
-    meta:
-      $ref: '#/PaginationMeta'
-WalletInput:
-  type: object
-  properties:
-    wallet:
-      type: object
-      required:
-        - rate_amount
-        - currency
-        - external_customer_id
-      properties:
-        name:
-          type: string
-          example: 'Wallet name'
-        rate_amount:
-          type: string
-          example: '2.0'
-        currency:
-          type: string
-          example: 'EUR'
-        paid_credits:
-          type: string
-          example: '500.0'
-        granted_credits:
-          type: string
-          example: '10.0'
-        external_customer_id:
-          type: string
-          example: '12345'
-        expiration_at:
-          type: string
-          format: 'date-time'
-          example: '2022-09-14T23:59:59Z'
-WalletUpdateInput:
-  type: object
-  required:
-    - wallet
-  properties:
-    wallet:
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'Wallet name'
-        expiration_at:
-          type: string
-          format: 'date-time'
-          example: '2022-09-14T23:59:59Z'
-WalletTransactionObject:
-  type: object
-  required:
-    - lago_id
-    - lago_wallet_id
-    - status
-    - transaction_type
-    - credit_amount
-    - amount
-    - created_at
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    lago_wallet_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    status:
-      type: string
-      description: Status
-      enum:
-        - pending
-        - settled
-    transaction_type:
-      type: string
-      description: Transaction type
-      enum:
-        - inbound
-        - outbound
-    amount:
-      type: string
-      example: '500.0'
-    credit_amount:
-      type: string
-      example: '100.0'
-    settled_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-WalletTransactions:
-  type: object
-  required:
-    - wallet_transactions
-  properties:
-    wallet_transactions:
-      type: array
-      items:
-        $ref: '#/WalletTransactionObject'
-WalletTransactionsPaginated:
-  allOf:
-    - $ref: '#/WalletTransactions'
-    - type: object
-      required:
-        - meta
-      properties:
-        meta:
-          $ref: '#/PaginationMeta'
-WalletTransactionInput:
-  type: object
-  required:
-    - wallet_transaction
-  properties:
-    wallet_transaction:
-      type: object
-      required:
-        - wallet_id
-      properties:
-        wallet_id:
-          type: string
-          format: 'uuid'
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-        paid_credits:
-          type: string
-          example: '100.0'
-        granted_credits:
-          type: string
-          example: '10.0'
 CreditNoteItemObject:
   type: object
   required:
