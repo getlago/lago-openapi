@@ -1,0 +1,17 @@
+post:
+  tags:
+    - invoices
+  summary: Retry an invoice payment
+  description: This endpoint resends an invoice for collection and retry a payment.
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+  operationId: retryPayment
+  responses:
+    '200':
+      description: Invoice payment retried
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'

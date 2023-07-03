@@ -1,0 +1,19 @@
+post:
+  tags:
+    - invoices
+  summary: Download an invoice PDF
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+  description: This endpoint is used for downloading a specific invoice PDF document.
+  operationId: downloadInvoice
+  responses:
+    '200':
+      description: Invoice PDF
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

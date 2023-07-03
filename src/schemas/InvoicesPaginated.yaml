@@ -1,11 +1,11 @@
 type: object
 required:
-  - customers
+  - invoices
   - meta
 properties:
-  customers:
+  invoices:
     type: array
     items:
-      $ref: './CustomerObjectExtended.yaml'
+      $ref: './InvoiceObject.yaml'
   meta:
     $ref: './PaginationMeta.yaml'

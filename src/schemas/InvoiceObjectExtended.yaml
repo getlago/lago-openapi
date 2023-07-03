@@ -1,0 +1,16 @@
+allOf:
+  - $ref: './InvoiceObject.yaml'
+  - type: object
+    properties:
+      credits:
+        type: array
+        items:
+          $ref: './CreditObject.yaml'
+      fees:
+        type: array
+        items:
+          $ref: './FeeObject.yaml'
+      subscriptions:
+        type: array
+        items:
+          $ref: './SubscriptionObject.yaml'

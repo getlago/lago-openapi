@@ -10,19 +10,24 @@ properties:
   lago_id:
     type: string
     format: 'uuid'
+    description: Unique identifier assigned to the credit within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the credit’s item record within the Lago system.
     example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
   amount_cents:
     type: integer
+    description: The amount of credit associated with the invoice, expressed in cents.
     example: 1200
   amount_currency:
     allOf:
       - $ref: './Currency.yaml'
-      - example: 'EUR'
+      - description: The currency of the credit.
+        example: 'EUR'
   before_vat:
     type: boolean
+    description: Indicates whether the credit is applied on the amount before taxes (coupons) or after taxes (credit notes). This flag helps determine the order in which credits are applied to the invoice calculation
     example: false
   item:
     type: object
+    description: The item attached to the credit.
     required:
       - lago_id
       - type
@@ -32,15 +37,22 @@ properties:
       lago_id:
         type: string
         format: 'uuid'
+        description: Unique identifier assigned to the credit item within the Lago application.
         example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
       type:
         type: string
+        enum:
+          - coupon
+          - credit_note
+        description: The type of credit applied. Possible values are `coupon` or `credit_note`.
         example: 'coupon'
       code:
         type: string
+        description: The code of the credit applied. It can be the code of the coupon attached to the credit or the credit note's number.
         example: 'startup_deal'
       name:
         type: string
+        description: The name of the credit applied. It can be the name of the coupon attached to the credit or the initial invoice's number linked to the credit note.
         example: 'Startup Deal'
   invoice:
     type: object
