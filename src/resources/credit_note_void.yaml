@@ -1,0 +1,28 @@
+put:
+  tags:
+    - credit_notes
+  summary: Void a credit note
+  description: This endpoint voids an existing credit note.
+  parameters:
+    - name: lago_id
+      in: path
+      description: The credit note unique identifier, created by Lago.
+      required: true
+      schema:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  operationId: voidCreditNote
+  responses:
+    '200':
+      description: Credit note voided
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CreditNote.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'

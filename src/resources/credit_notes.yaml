@@ -1,0 +1,45 @@
+post:
+  tags:
+    - credit_notes
+  summary: Create a credit note
+  description: This endpoint creates a new credit note.
+  operationId: createCreditNote
+  requestBody:
+    description: Credit note payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/CreditNoteCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Credit note created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CreditNote.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - credit_notes
+  summary: List all credit notes
+  description: This endpoint list all existing credit notes.
+  operationId: findAllCreditNotes
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - $ref: '../parameters/external_customer_id.yaml'
+  responses:
+    '200':
+      description: Credit notes
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CreditNotes.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

@@ -1,0 +1,53 @@
+parameters:
+  - name: lago_id
+    in: path
+    description: The credit note unique identifier, created by Lago.
+    required: true
+    schema:
+      type: string
+      example: '12345'
+put:
+  tags:
+    - credit_notes
+  summary: Update a credit note
+  description: This endpoint updates an existing credit note.
+  operationId: updateCreditNote
+  requestBody:
+    description: Credit note update payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/CreditNoteUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Credit note updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CreditNote.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - credit_notes
+  summary: Retrieve a credit note
+  description: This endpoint retrieves an existing credit note.
+  operationId: findCreditNote
+  responses:
+    '200':
+      description: Credit note
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CreditNote.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
