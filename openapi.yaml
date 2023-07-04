@@ -166,7 +166,7 @@ paths:
     get:
       tags:
         - add_ons
-      summary: Retrive an add-on
+      summary: Retrieve an add-on
       description: This endpoint is used to retrieve a specific add-on.
       operationId: findAddOn
       responses:
@@ -4860,6 +4860,15 @@ components:
           type: string
           example: 'https://webhook.brex.com'
           description: 'The URL of your newest updated webhook endpoint. This URL allows your organization to receive important messages, notifications, or data from the Lago system. By configuring your webhook endpoint to this URL, you can ensure that your organization stays informed and receives relevant information in a timely manner.'
+          nullable: true
+        webhook_urls:
+          type: array
+          items:
+            type: string
+          example:
+            - 'https://webhook.brex.com'
+            - 'https://webhook2.brex.com'
+          description: The array containing your webhooks URLs.
           nullable: true
         country:
           type: string
