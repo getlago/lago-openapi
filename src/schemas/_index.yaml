@@ -52,6 +52,10 @@ BillableMetricGroup:
   $ref: './BillableMetricGroup.yaml'
 BillableMetricsPaginated:
   $ref: './BillableMetricsPaginated.yaml'
+ChargeObject:
+  $ref: './ChargeObject.yaml'
+ChargeProperties:
+  $ref: './ChargeProperties.yaml'
 Coupon:
   $ref: './Coupon.yaml'
 CouponBaseInput:
@@ -104,6 +108,8 @@ Event:
   $ref: './Event.yaml'
 EventBatchInput:
   $ref: './EventBatchInput.yaml'
+EventEstimateFeesInput:
+  $ref: './EventEstimateFeesInput.yaml'
 EventInput:
   $ref: './EventInput.yaml'
 EventObject:
@@ -120,6 +126,8 @@ FeeUpdateInput:
   $ref: './FeeUpdateInput.yaml'
 GroupObject:
   $ref: './GroupObject.yaml'
+GroupPropertiesObject:
+  $ref: './GroupPropertiesObject.yaml'
 GroupsPaginated:
   $ref: './GroupsPaginated.yaml'
 Invoice:
@@ -146,6 +154,14 @@ OrganizationUpdateInput:
   $ref: './OrganizationUpdateInput.yaml'
 PaginationMeta:
   $ref: './PaginationMeta.yaml'
+Plan:
+  $ref: './Plan.yaml'
+PlanInput:
+  $ref: './PlanInput.yaml'
+PlanObject:
+  $ref: './PlanObject.yaml'
+PlansPaginated:
+  $ref: './PlansPaginated.yaml'
 Subscription:
   $ref: './Subscription.yaml'
 SubscriptionCreateInput:
@@ -176,248 +192,3 @@ WalletTransactionsPaginated:
   $ref: './WalletTransactionsPaginated.yaml'
 WalletUpdateInput:
   $ref: './WalletUpdateInput.yaml'
-
-# TODO: split into multiple files
-EventEstimateFeesInput:
-  type: object
-  required:
-    - event
-  properties:
-    event:
-      type: object
-      required:
-        - "code"
-      properties:
-        code:
-          type: string
-          example: 'code'
-        external_customer_id:
-          type: string
-          example: '654321'
-        external_subscription_id:
-          type: string
-          example: '123456'
-        properties:
-          type: object
-GroupPropertiesObject:
-  type: object
-  required:
-    - group_id
-    - values
-  properties:
-    group_id:
-      type: string
-      example: '123456'
-    values:
-      type: object
-ChargeObject:
-  type: object
-  required:
-    - lago_id
-    - lago_billable_metric_id
-    - billable_metric_code
-    - created_at
-    - charge_model
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    lago_billable_metric_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    billable_metric_code:
-      type: string
-      example: 'bm_code'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    charge_model:
-      type: string
-      description: Charge model type
-      enum:
-        - standard
-        - graduated
-        - package
-        - percentage
-        - volume
-    pay_in_advance:
-      type: boolean
-      example: true
-    invoiceable:
-      type: boolean
-      example: true
-    min_amount_cents:
-      type: integer
-      example: 1200
-    properties:
-      type: object
-    group_properties:
-      type: array
-      items:
-        $ref: '#/GroupPropertiesObject'
-PlanObject:
-  type: object
-  required:
-    - lago_id
-    - name
-    - created_at
-    - code
-    - interval
-    - amount_cents
-    - amount_currency
-    - active_subscriptions_count
-    - draft_invoices_count
-  properties:
-    lago_id:
-      type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    name:
-      type: string
-      example: 'example name'
-    created_at:
-      type: string
-      format: 'date-time'
-      example: '2022-09-14T16:35:31Z'
-    code:
-      type: string
-      example: 'example_code'
-    interval:
-      type: string
-      description: Plan interval
-      enum:
-        - weekly
-        - monthly
-        - yearly
-    description:
-      type: string
-      example: 'description'
-    amount_cents:
-      type: integer
-      example: 1200
-    amount_currency:
-      type: string
-      example: 'EUR'
-    trial_period:
-      type: number
-      example: 2
-    pay_in_advance:
-      type: boolean
-      example: true
-    bill_charges_monthly:
-      type: boolean
-      example: false
-    active_subscriptions_count:
-      type: integer
-      example: 2
-    draft_invoices_count:
-      type: integer
-      example: 2
-    charges:
-      type: array
-      items:
-        $ref: '#/ChargeObject'
-Plan:
-  type: object
-  required:
-    - plan
-  properties:
-    plan:
-      $ref: '#/PlanObject'
-PlansPaginated:
-  type: object
-  required:
-    - plans
-    - meta
-  properties:
-    plans:
-      type: array
-      items:
-        $ref: '#/PlanObject'
-    meta:
-      $ref: '#/PaginationMeta'
-PlanInput:
-  type: object
-  required:
-    - plan
-  properties:
-    plan:
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'example name'
-        code:
-          type: string
-          example: 'example_code'
-        interval:
-          type: string
-          description: Plan interval
-          enum:
-            - weekly
-            - monthly
-            - yearly
-        description:
-          type: string
-          example: 'description'
-        amount_cents:
-          type: integer
-          example: 1200
-        amount_currency:
-          type: string
-          example: 'EUR'
-        trial_period:
-          type: number
-          example: 2
-        pay_in_advance:
-          type: boolean
-          example: true
-        bill_charges_monthly:
-          type: boolean
-          example: false
-        charges:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                format: 'uuid'
-                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-              billable_metric_id:
-                type: string
-                format: 'uuid'
-                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-              charge_model:
-                type: string
-                description: Charge model type
-                enum:
-                  - standard
-                  - graduated
-                  - package
-                  - percentage
-                  - volume
-              pay_in_advance:
-                type: boolean
-              invoiceable:
-                type: boolean
-              min_amount_cents:
-                type: integer
-              properties:
-                type: object
-              group_properties:
-                type: array
-                items:
-                  type: object
-                  required:
-                    - group_id
-                    - values
-                  properties:
-                    group_id:
-                      type: string
-                      example: '123456'
-                    values:
-                      type: object

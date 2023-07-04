@@ -1,0 +1,11 @@
+type: object
+required:
+  - plans
+  - meta
+properties:
+  plans:
+    type: array
+    items:
+      $ref: './PlanObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
