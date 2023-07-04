@@ -108,6 +108,8 @@ Event:
   $ref: './Event.yaml'
 EventBatchInput:
   $ref: './EventBatchInput.yaml'
+EventEstimateFeesInput:
+  $ref: './EventEstimateFeesInput.yaml'
 EventInput:
   $ref: './EventInput.yaml'
 EventObject:
@@ -190,26 +192,3 @@ WalletTransactionsPaginated:
   $ref: './WalletTransactionsPaginated.yaml'
 WalletUpdateInput:
   $ref: './WalletUpdateInput.yaml'
-
-# TODO: split into multiple files
-EventEstimateFeesInput:
-  type: object
-  required:
-    - event
-  properties:
-    event:
-      type: object
-      required:
-        - "code"
-      properties:
-        code:
-          type: string
-          example: 'code'
-        external_customer_id:
-          type: string
-          example: '654321'
-        external_subscription_id:
-          type: string
-          example: '123456'
-        properties:
-          type: object

@@ -1,0 +1,16 @@
+get:
+  tags:
+    - webhooks
+  summary: Retrieve webhook public key
+  description: This endpoint is used to retrieve the public key used to verify the webhooks signature
+  operationId: fetchPublicKey
+  responses:
+    '200':
+      description: Public key
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: 'MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE='
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

@@ -60,11 +60,6 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/invoices/invoice-object#fee-object'
-  - name: webhooks
-    description: Everything about Webhooks
-    externalDocs:
-      description: Find out more
-      url: 'https://doc.getlago.com/docs/api/webhooks/message-signature#1-retrieve-the-public-key'
   - name: invoices
     description: Everything about Invoice collection
     externalDocs:
@@ -77,6 +72,14 @@ tags:
       url: 'https://doc.getlago.com/docs/api/wallets/wallet-object'
   - name: credit_notes
     description: Everything about Credit notes collection
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/credit_notes/credit-note-object'
+  - name: webhooks
+    description: Everything about Webhooks
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/webhooks/message-signature#1-retrieve-the-public-key'
 paths:
   /add_ons:
     post:
@@ -100,11 +103,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOn'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - add_ons
@@ -122,7 +125,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOnsPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   '/add_ons/{code}':
     parameters:
       - name: code
@@ -153,13 +156,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOn'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - add_ons
@@ -174,9 +177,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOn'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
     delete:
       tags:
         - add_ons
@@ -191,9 +194,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/AddOn'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   /applied_add_ons:
     post:
       tags:
@@ -217,13 +220,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppliedAddOn'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
   /applied_coupons:
     post:
       tags:
@@ -246,13 +249,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppliedCoupon'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - coupons
@@ -289,7 +292,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppliedCouponsPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   /billable_metrics:
     post:
       tags:
@@ -312,11 +315,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - billable_metrics
@@ -334,7 +337,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetricsPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   '/billable_metrics/{code}':
     parameters:
       - name: code
@@ -365,13 +368,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     delete:
       tags:
         - billable_metrics
@@ -386,9 +389,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
     get:
       tags:
         - billable_metrics
@@ -403,9 +406,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/billable_metrics/{code}/groups':
     get:
       tags:
@@ -448,7 +451,7 @@ paths:
                   total_pages: 1
                   total_count: 2
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   /coupons:
     post:
       tags:
@@ -471,11 +474,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Coupon'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - coupons
@@ -493,7 +496,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CouponsPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   '/coupons/{code}':
     parameters:
       - name: code
@@ -524,13 +527,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Coupon'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - coupons
@@ -545,9 +548,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Coupon'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
     delete:
       tags:
         - coupons
@@ -562,9 +565,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Coupon'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   /credit_notes:
     post:
       tags:
@@ -587,11 +590,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - credit_notes
@@ -610,7 +613,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNotes'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   '/credit_notes/{lago_id}':
     parameters:
       - name: lago_id
@@ -641,13 +644,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - credit_notes
@@ -662,9 +665,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/credit_notes/{lago_id}/download':
     post:
       tags:
@@ -689,9 +692,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/credit_notes/{lago_id}/void':
     put:
       tags:
@@ -716,9 +719,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreditNote'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
   /customers:
@@ -743,11 +746,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - customers
@@ -765,7 +768,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomersPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   '/customers/{external_id}':
     parameters:
       - name: external_id
@@ -789,9 +792,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
     delete:
       tags:
         - customers
@@ -806,9 +809,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/customers/{external_customer_id}/applied_coupons/{applied_coupon_id}':
     delete:
       tags:
@@ -842,9 +845,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppliedCoupon'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/customers/{external_customer_id}/portal_url':
     get:
       tags:
@@ -883,11 +886,11 @@ paths:
                         example: 'https://app.lago.com/customer-portal/1234567890'
                         description: An embeddable link for displaying a customer portal
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/customers/{external_customer_id}/current_usage':
     get:
       tags:
@@ -919,9 +922,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomerUsage'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   /events:
     post:
       tags:
@@ -940,11 +943,11 @@ paths:
         '200':
           description: Event received
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
   /events/batch:
     post:
       tags:
@@ -963,11 +966,40 @@ paths:
         '200':
           description: Event received
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
+  /events/estimate_fees:
+    post:
+      tags:
+        - events
+      summary: Estimate fees for a pay in advance charge
+      description: Estimate the fees that would be created after reception of an event for a billable metric attached to one or multiple pay in advance charges
+      operationId: eventEstimateFees
+      requestBody:
+        description: Event estimate payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventEstimateFeesInput'
+        required: true
+      responses:
+        '200':
+          description: Fees estimate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fees'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   '/events/{transaction_id}':
     parameters:
       - name: transaction_id
@@ -991,9 +1023,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Event'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   /fees:
     get:
       tags:
@@ -1130,9 +1162,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/FeesPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
   '/fees/{lago_id}':
     parameters:
       - name: lago_id
@@ -1157,9 +1189,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Fee'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
     put:
       tags:
         - fees
@@ -1180,13 +1212,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Fee'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
   /invoices:
     post:
       tags:
@@ -1209,11 +1241,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - invoices
@@ -1271,7 +1303,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/InvoicesPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   '/invoices/{lago_id}':
     parameters:
       - $ref: '#/components/parameters/lago_invoice_id'
@@ -1296,13 +1328,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - invoices
@@ -1317,9 +1349,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/invoices/{lago_id}/download':
     post:
       tags:
@@ -1337,9 +1369,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/invoices/{lago_id}/finalize':
     put:
       tags:
@@ -1357,9 +1389,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/invoices/{lago_id}/refresh':
     put:
       tags:
@@ -1377,9 +1409,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Invoice'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/invoices/{lago_id}/retry_payment':
     post:
       tags:
@@ -1393,9 +1425,9 @@ paths:
         '200':
           description: Invoice payment retried
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
   /organizations:
@@ -1420,11 +1452,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organization'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
   /plans:
     post:
       tags:
@@ -1447,13 +1479,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Plan'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - plans
@@ -1471,7 +1503,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PlansPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   '/plans/{code}':
     parameters:
       - name: code
@@ -1502,13 +1534,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Plan'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - plans
@@ -1523,9 +1555,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Plan'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
     delete:
       tags:
         - plans
@@ -1540,9 +1572,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Plan'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   /subscriptions:
     post:
       tags:
@@ -1565,13 +1597,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - subscriptions
@@ -1605,9 +1637,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/SubscriptionsPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
   '/subscriptions/{external_id}':
     parameters:
       - name: external_id
@@ -1638,13 +1670,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     delete:
       tags:
         - subscriptions
@@ -1659,9 +1691,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
   /wallets:
@@ -1686,11 +1718,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Wallet'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - wallets
@@ -1716,7 +1748,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/WalletsPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
   '/wallets/{lago_id}':
     parameters:
       - name: lago_id
@@ -1748,13 +1780,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Wallet'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - wallets
@@ -1769,9 +1801,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Wallet'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
     delete:
       tags:
         - wallets
@@ -1786,9 +1818,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Wallet'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
   /wallet_transactions:
@@ -1813,11 +1845,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/WalletTransactions'
         '400':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '422':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+          $ref: '#/components/responses/UnprocessableEntity'
   '/wallets/{lago_id}/wallet_transactions':
     get:
       tags:
@@ -1860,71 +1892,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/WalletTransactionsPaginated'
         '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
-  /events/estimate_fees:
-    post:
-      tags:
-        - events
-      summary: Estimate fees for an pay in advance charge
-      description: Estimate the fees that would be created after reception of an event for a billable metric attached to one or multiple pay in advance charges
-      operationId: eventEstimateFees
-      requestBody:
-        description: Event payload for pay in advance fee estimate
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EventEstimateFeesInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Fees'
-        '400':
-          description: Bad Request error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorBadRequest'
-        '401':
-          $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
-        '404':
-          description: Not Found error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorNotFound'
-        '422':
-          description: Unprocessable entity error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
+          $ref: '#/components/responses/NotFound'
   /webhooks/public_key:
     get:
       tags:
         - webhooks
-      summary: Fetch webhook public key
-      description: Webhook public key
+      summary: Retrieve webhook public key
+      description: This endpoint is used to retrieve the public key used to verify the webhooks signature
       operationId: fetchPublicKey
       responses:
         '200':
-          description: Successful response
+          description: Public key
           content:
             text/plain:
               schema:
                 type: string
                 example: MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
         '401':
-          description: Unauthorized error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorUnauthorized'
+          $ref: '#/components/responses/Unauthorized'
 components:
   parameters:
     external_customer_id:
@@ -4118,6 +4105,31 @@ components:
                     - remove
               example:
                 gb: 10
+    EventEstimateFeesInput:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          type: object
+          required:
+            - code
+          properties:
+            code:
+              type: string
+              example: storage
+              description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
+            external_customer_id:
+              type: string
+              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+              description: 'The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.'
+            external_subscription_id:
+              type: string
+              example: sub_1234567890
+              description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
+            properties:
+              type: object
+              description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
     EventInput:
       type: object
       required:
@@ -5975,30 +5987,13 @@ components:
               nullable: true
               description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
               example: '2022-07-07T23:59:59Z'
-    EventEstimateFeesInput:
-      type: object
-      required:
-        - event
-      properties:
-        event:
-          type: object
-          required:
-            - code
-          properties:
-            code:
-              type: string
-              example: code
-            external_customer_id:
-              type: string
-              example: '654321'
-            external_subscription_id:
-              type: string
-              example: '123456'
-            properties:
-              type: object
   responses:
     BadRequest:
-      $ref: '#/paths/~1events~1estimate_fees/post/responses/400'
+      description: Bad Request error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorBadRequest'
     Forbidden:
       description: Forbidden
       content:
@@ -6006,7 +6001,11 @@ components:
           schema:
             $ref: '#/components/schemas/ApiErrorForbidden'
     Unauthorized:
-      $ref: '#/paths/~1webhooks~1public_key/get/responses/401'
+      description: Unauthorized error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorUnauthorized'
     NotAllowed:
       description: Not Allowed error
       content:
@@ -6014,9 +6013,17 @@ components:
           schema:
             $ref: '#/components/schemas/ApiErrorNotAllowed'
     NotFound:
-      $ref: '#/paths/~1events~1estimate_fees/post/responses/404'
+      description: Not Found error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorNotFound'
     UnprocessableEntity:
-      $ref: '#/paths/~1events~1estimate_fees/post/responses/422'
+      description: Unprocessable entity error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
   securitySchemes:
     bearerAuth:
       type: http
