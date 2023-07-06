@@ -12,8 +12,9 @@ required:
   - credit_amount_cents
   - refund_amount_cents
   - balance_amount_cents
-  - vat_amount_cents
-  - sub_total_vat_excluded_amount_cents
+  - taxes_amount_cents
+  - taxes_rate
+  - sub_total_excluding_taxes_amount_cents
   - coupons_adjustement_amount_cents
   - created_at
   - updated_at
@@ -100,11 +101,16 @@ properties:
     type: integer
     description: The total amount of the credit note, expressed in cents.
     example: 120
-  vat_amount_cents:
+  taxes_amount_cents:
     type: integer
     description: The tax amount of the credit note, expressed in cents.
     example: 20
-  sub_total_vat_excluded_amount_cents:
+  taxes_rate:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: The tax rate associated with this specific credit note.
+    example: '20.0'
+  sub_total_excluding_taxes_amount_cents:
     type: integer
     description: The subtotal of the credit note excluding any applicable taxes, expressed in cents.
     example: 100
@@ -144,3 +150,7 @@ properties:
     items:
       $ref: './CreditNoteItemObject.yaml'
     description: Array of credit note’s items.
+  applied_taxes:
+    type: array
+    items:
+      $ref: './CreditNoteAppliedTaxObject.yaml'

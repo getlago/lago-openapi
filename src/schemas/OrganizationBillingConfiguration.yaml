@@ -14,8 +14,3 @@ properties:
     type: string
     example: en
     description: The locale of the billing documents, expressed in the ISO 639-1 format. This field indicates the language or regional variant used for the documents content issued or the embeddable customer portal.
-  vat_rate:
-    type: string
-    format: '^[0-9]+.?[0-9]*$'
-    example: '15.0'
-    description: The custom VAT (Value Added Tax) applied to your organization. Can be overwritten by the customer’s VAT rate.

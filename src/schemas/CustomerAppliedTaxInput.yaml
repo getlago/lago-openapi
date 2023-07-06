@@ -1,0 +1,13 @@
+type: object
+required:
+  - applied_tax
+properties:
+  applied_tax:
+    type: object
+    required:
+      - tax_code
+    properties:
+      tax_code:
+        type: string
+        description: Unique code used to identify the tax.
+        example: 'vat_fr'

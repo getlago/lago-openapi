@@ -1,0 +1,11 @@
+type: object
+required:
+  - taxes
+  - meta
+properties:
+  taxes:
+    type: array
+    items:
+      $ref: './TaxObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

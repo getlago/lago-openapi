@@ -1,0 +1,28 @@
+type: object
+required:
+  - tax
+properties:
+  tax:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The name of the tax.
+        example: 'French VAT'
+      code:
+        type: string
+        description: Unique code used to identify the tax.
+        example: 'vat_fr'
+      rate:
+        type: string
+        format: '^[0-9]+.?[0-9]*$'
+        description: The rate of the tax
+        example: '15.0'
+      description:
+        type: string
+        description: Description of the tax.
+        example: 'description'
+      applied_to_organization:
+        type: boolean
+        description: Set to `true` if the tax is used as one of the organization's default.
+        example: false

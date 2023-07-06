@@ -84,3 +84,8 @@ properties:
         example: 'America/New_York'
   billing_configuration:
     $ref: './OrganizationBillingConfiguration.yaml'
+  taxes:
+    type: array
+    description: List of default organization taxes
+    items:
+      $ref: './TaxObject.yaml'

@@ -199,3 +199,8 @@ properties:
           - WalletTransaction
         description: The type of the fee item. Possible values are `AddOn`, `BillableMetric`, `WalletTransaction` or `Subscription`.
         example: Subscription
+  applied_taxes:
+    type: array
+    description: List of fee applied taxes
+    items:
+      $ref: './FeeAppliedTaxObject.yaml'

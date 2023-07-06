@@ -1,0 +1,9 @@
+allOf:
+  - $ref: './BaseAppliedTax.yaml'
+type: object
+properties:
+  lago_invoice_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier of the invoice, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'

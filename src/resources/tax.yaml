@@ -1,0 +1,70 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing tax
+    required: true
+    schema:
+      type: string
+      example: 'example_code'
+put:
+  tags:
+    - taxes
+  summary: Update an existing tax
+  description: Update an existing tax by code
+  operationId: updateTax
+  requestBody:
+    description: Update an existing tax
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/TaxInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - taxes
+  summary: Find tax by code
+  description: Return a single tax
+  operationId: findTax
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+delete:
+  tags:
+    - taxes
+  summary: Delete a tax
+  description: Delete a tax
+  operationId: destroyTax
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

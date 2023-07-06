@@ -1,0 +1,12 @@
+allOf:
+  - $ref: './BaseAppliedTax.yaml'
+type: object
+properties:
+  lago_credit_note_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier of the credit note, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  base_amount_cents:
+    type: integer
+    example: 100

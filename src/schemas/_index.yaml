@@ -38,6 +38,8 @@ AppliedCouponObjectExtended:
   $ref: './AppliedCouponObjectExtended.yaml'
 AppliedCouponsPaginated:
   $ref: './AppliedCouponsPaginated.yaml'
+BaseAppliedTax:
+  $ref: './BaseAppliedTax.yaml'
 BillableMetric:
   $ref: './BillableMetric.yaml'
 BillableMetricObject:
@@ -72,6 +74,8 @@ CreditObject:
   $ref: './CreditObject.yaml'
 CreditNote:
   $ref: './CreditNote.yaml'
+CreditNoteAppliedTaxObject:
+  $ref: './CreditNoteAppliedTaxObject.yaml'
 CreditNoteItemObject:
   $ref: './CreditNoteItemObject.yaml'
 CreditNoteObject:
@@ -86,6 +90,12 @@ Currency:
   $ref: './Currency.yaml'
 Customer:
   $ref: './Customer.yaml'
+CustomerAppliedTax:
+  $ref: './CustomerAppliedTax.yaml'
+CustomerAppliedTaxInput:
+  $ref: './CustomerAppliedTaxInput.yaml'
+CustomerAppliedTaxObject:
+  $ref: './CustomerAppliedTaxObject.yaml'
 CustomerBillingConfiguration:
   $ref: './CustomerBillingConfiguration.yaml'
 CustomerChargeUsageObject:
@@ -116,6 +126,8 @@ EventObject:
   $ref: './EventObject.yaml'
 Fee:
   $ref: './Fee.yaml'
+FeeAppliedTaxObject:
+  $ref: './FeeAppliedTaxObject.yaml'
 FeeObject:
   $ref: './FeeObject.yaml'
 Fees:
@@ -132,6 +144,8 @@ GroupsPaginated:
   $ref: './GroupsPaginated.yaml'
 Invoice:
   $ref: './Invoice.yaml'
+InvoiceAppliedTaxObject:
+  $ref: './InvoiceAppliedTaxObject.yaml'
 InvoiceMetadataObject:
   $ref: './InvoiceMetadataObject.yaml'
 InvoiceObject:
@@ -172,6 +186,14 @@ SubscriptionObject:
   $ref: './SubscriptionObject.yaml'
 SubscriptionsPaginated:
   $ref: './SubscriptionsPaginated.yaml'
+Tax:
+  $ref: './Tax.yaml'
+TaxesPaginated:
+  $ref: './TaxesPaginated.yaml'
+TaxInput:
+  $ref: './TaxInput.yaml'
+TaxObject:
+  $ref: './TaxObject.yaml'
 Timezone:
   $ref: './Timezone.yaml'
 Wallet:

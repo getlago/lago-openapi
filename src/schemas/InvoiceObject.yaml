@@ -11,9 +11,9 @@ required:
   - fees_amount_cents
   - coupons_amount_cents
   - credit_notes_amount_cents
-  - sub_total_vat_excluded_amount_cents
-  - vat_amount_cents
-  - sub_total_vat_included_amount_cents
+  - sub_total_excluding_taxes_amount_cents
+  - taxes_amount_cents
+  - sub_total_including_taxes_amount_cents
   - prepaid_credit_amount_cents
   - total_amount_cents
   - version_number
@@ -84,25 +84,27 @@ properties:
     type: integer
     description: The total sum of all credit notes discounted on the invoice. It calculates the cumulative discount amount applied by credit notes, expressed in cents.
     example: 10
-  sub_total_vat_excluded_amount_cents:
+  sub_total_excluding_taxes_amount_cents:
     type: integer
     description: |-
       Subtotal amount, excluding taxes, expressed in cents.
       This field depends on the version number. Here are the definitions based on the version:
       - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
       - Version 2: is equal to the `fees_amount_cents`.
+      - Version 3: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
     example: 100
-  vat_amount_cents:
+  taxes_amount_cents:
     type: integer
     description: The sum of tax amount associated with the invoice, expressed in cents.
     example: 20
-  sub_total_vat_included_amount_cents:
+  sub_total_including_taxes_amount_cents:
     type: integer
     description: |-
       Subtotal amount, including taxes, expressed in cents.
       This field depends on the version number. Here are the definitions based on the version:
       - Version 1: is equal to the `total_amount_cents`.
-      - Version 2: is equal to the sum of `fees_amount_cents` and `vat_amount_cents`.
+      - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
+      - Version 3: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
     example: 120
   prepaid_credit_amount_cents:
     type: integer
@@ -128,3 +130,7 @@ properties:
     type: array
     items:
       $ref: './InvoiceMetadataObject.yaml'
+  applied_taxes:
+    type: array
+    items:
+      $ref: './InvoiceAppliedTaxObject.yaml'
