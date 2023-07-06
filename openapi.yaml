@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Lago API documentation
   description: Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 0.37.0-beta
+  version: 0.39.0-beta
   license:
     name: AGPLv3
   contact:
@@ -6027,7 +6027,7 @@ components:
           description: Set to `true` if the tax is used as one of the organization's default.
         customers_count:
           type: integer
-          description: Number of customer this tax is applied to (directly or via the organization's default).
+          description: Number of customers this tax is applied to (directly or via the organization's default).
           example: 12
         created_at:
           type: string
