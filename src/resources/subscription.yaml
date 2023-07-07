@@ -40,6 +40,15 @@ delete:
   summary: Terminate a subscription
   description: This endpoint allows you to terminate a subscription.
   operationId: destroySubscription
+  parameters:
+    - name: status
+      in: query
+      description: If the field is not defined, Lago will terminate only `active` subscriptions. However, if you wish to cancel a `pending` subscription, please ensure that you include `status=pending` in your request.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'pending'
   responses:
     '200':
       description: Subscription terminated

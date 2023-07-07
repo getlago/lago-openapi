@@ -1685,7 +1685,7 @@ paths:
       tags:
         - subscriptions
       summary: List all subscriptions
-      description: This endpoint retrieves all active subscriptions.
+      description: This endpoint retrieves all subscriptions.
       operationId: findAllSubscriptions
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1706,6 +1706,23 @@ paths:
           schema:
             type: string
             example: premium
+        - name: status
+          in: query
+          description: 'Filter subscriptions by status. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - pending
+                - canceled
+                - terminated
+                - active
+            example:
+              - active
+              - pending
       responses:
         '200':
           description: List of subscriptions
@@ -1760,6 +1777,15 @@ paths:
       summary: Terminate a subscription
       description: This endpoint allows you to terminate a subscription.
       operationId: destroySubscription
+      parameters:
+        - name: status
+          in: query
+          description: 'If the field is not defined, Lago will terminate only `active` subscriptions. However, if you wish to cancel a `pending` subscription, please ensure that you include `status=pending` in your request.'
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: pending
       responses:
         '200':
           description: Subscription terminated
@@ -6276,10 +6302,9 @@ components:
           description: Description of the tax.
           example: description
         rate:
-          type: string
-          format: '^[0-9]+.?[0-9]*$'
+          type: number
           description: The rate of the tax
-          example: '25.0'
+          example: 25
         applied_to_organization:
           type: boolean
           example: true
