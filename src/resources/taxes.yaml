@@ -2,18 +2,18 @@ post:
   tags:
     - taxes
   summary: Create a tax
-  description: Create a tax
+  description: This endpoint creates a new tax representing a customizable tax rate applicable to either the organization or a specific customer.
   operationId: createTax
   requestBody:
-    description: Tax payload
+    description: Tax creation payload
     content:
       application/json:
         schema:
-          $ref: '../schemas/TaxInput.yaml'
+          $ref: '../schemas/TaxCreateInput.yaml'
     required: true
   responses:
     '200':
-      description: Successful response
+      description: Tax created
       content:
         application/json:
           schema:
@@ -27,32 +27,42 @@ post:
 get:
   tags:
     - taxes
-  summary: Find taxes
-  description: Find all taxes in certain organization
+  summary: List all taxes
+  description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either the organization or a specific customer.
   operationId: findAllTaxes
   parameters:
-    - name: page
-      in: query
-      description: Number of page
-      required: false
-      explode: true
-      schema:
-        type: integer
-        example: 2
-    - name: per_page
-      in: query
-      description: Number of records per page
-      required: false
-      explode: true
-      schema:
-        type: integer
-        example: 20
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
   responses:
     '200':
-      description: Successful response
+      description: Taxes
       content:
         application/json:
           schema:
             $ref: '../schemas/TaxesPaginated.yaml'
+          example:
+            taxes:
+              - lago_id: "41190609-391a-4368-9549-d4348a85a8cd"
+                name: "TVA"
+                code: "french_standard_vat"
+                description: "French standard VAT"
+                rate: "20.0"
+                applied_to_organization: true
+                customers_count: 0
+                created_at: "2023-07-06T14:35:58Z"
+              - lago_id: "2e034a10-6652-4daf-a600-b085184f93ad"
+                name: "TVA"
+                code: "french_reduced_vat"
+                description: "French reduce VAT"
+                rate: "5.0"
+                applied_to_organization: false
+                customers_count: 0
+                created_at: "2023-07-06T14:45:23Z"
+            meta:
+              current_page: 1
+              next_page: null
+              prev_page: null
+              total_pages: 1
+              total_count: 2
     '401':
       $ref: '../responses/Unauthorized.yaml'

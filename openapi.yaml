@@ -1804,18 +1804,18 @@ paths:
       tags:
         - taxes
       summary: Create a tax
-      description: Create a tax
+      description: This endpoint creates a new tax representing a customizable tax rate applicable to either the organization or a specific customer.
       operationId: createTax
       requestBody:
-        description: Tax payload
+        description: Tax creation payload
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaxInput'
+              $ref: '#/components/schemas/TaxCreateInput'
         required: true
       responses:
         '200':
-          description: Successful response
+          description: Tax created
           content:
             application/json:
               schema:
@@ -1829,60 +1829,70 @@ paths:
     get:
       tags:
         - taxes
-      summary: Find taxes
-      description: Find all taxes in certain organization
+      summary: List all taxes
+      description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either the organization or a specific customer.
       operationId: findAllTaxes
       parameters:
-        - name: page
-          in: query
-          description: Number of page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 2
-        - name: per_page
-          in: query
-          description: Number of records per page
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 20
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
-          description: Successful response
+          description: Taxes
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TaxesPaginated'
+              example:
+                taxes:
+                  - lago_id: 41190609-391a-4368-9549-d4348a85a8cd
+                    name: TVA
+                    code: french_standard_vat
+                    description: French standard VAT
+                    rate: '20.0'
+                    applied_to_organization: true
+                    customers_count: 0
+                    created_at: '2023-07-06T14:35:58Z'
+                  - lago_id: 2e034a10-6652-4daf-a600-b085184f93ad
+                    name: TVA
+                    code: french_reduced_vat
+                    description: French reduce VAT
+                    rate: '5.0'
+                    applied_to_organization: false
+                    customers_count: 0
+                    created_at: '2023-07-06T14:45:23Z'
+                meta:
+                  current_page: 1
+                  next_page: null
+                  prev_page: null
+                  total_pages: 1
+                  total_count: 2
         '401':
           $ref: '#/components/responses/Unauthorized'
   '/taxes/{code}':
     parameters:
       - name: code
         in: path
-        description: Code of the existing tax
+        description: The code of the tax. It serves as a unique identifier associated with a particular tax. The code is typically used for internal or system-level identification purposes.
         required: true
         schema:
           type: string
-          example: example_code
+          example: french_standard_vat
     put:
       tags:
         - taxes
-      summary: Update an existing tax
-      description: Update an existing tax by code
+      summary: Update a tax
+      description: This endpoint updates an existing tax representing a customizable tax rate applicable to either the organization or a specific customer.
       operationId: updateTax
       requestBody:
-        description: Update an existing tax
+        description: Tax update payload
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TaxInput'
+              $ref: '#/components/schemas/TaxUpdateInput'
         required: true
       responses:
         '200':
-          description: Successful response
+          description: Tax updated
           content:
             application/json:
               schema:
@@ -1898,12 +1908,12 @@ paths:
     get:
       tags:
         - taxes
-      summary: Find tax by code
-      description: Return a single tax
+      summary: Retrieve a Tax
+      description: This endpoint retrieves an existing tax representing a customizable tax rate applicable to either the organization or a specific customer. The tax is identified by its unique code.
       operationId: findTax
       responses:
         '200':
-          description: Successful response
+          description: Tax
           content:
             application/json:
               schema:
@@ -1916,11 +1926,11 @@ paths:
       tags:
         - taxes
       summary: Delete a tax
-      description: Delete a tax
+      description: This endpoint is used to delete a tax.
       operationId: destroyTax
       responses:
         '200':
-          description: Successful response
+          description: Tax deleted
           content:
             application/json:
               schema:
@@ -6233,6 +6243,43 @@ components:
       properties:
         tax:
           $ref: '#/components/schemas/TaxObject'
+    TaxBaseInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the tax.
+          example: TVA
+        code:
+          type: string
+          description: Unique code used to identify the tax associated with the API request.
+          example: french_standard_vat
+        rate:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The percentage rate of the tax
+          example: '20.0'
+        description:
+          type: string
+          nullable: true
+          description: Internal description of the taxe
+          example: French standard VAT
+        applied_to_organization:
+          type: boolean
+          description: Set to `true` if the tax is used as one of the organization's default
+          example: true
+    TaxCreateInput:
+      type: object
+      required:
+        - tax
+      properties:
+        tax:
+          allOf:
+            - $ref: '#/components/schemas/TaxBaseInput'
+            - required:
+                - name
+                - code
+                - rate
     TaxesPaginated:
       type: object
       required:
@@ -6245,42 +6292,13 @@ components:
             $ref: '#/components/schemas/TaxObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    TaxInput:
-      type: object
-      required:
-        - tax
-      properties:
-        tax:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the tax.
-              example: French VAT
-            code:
-              type: string
-              description: Unique code used to identify the tax.
-              example: vat_fr
-            rate:
-              type: string
-              format: '^[0-9]+.?[0-9]*$'
-              description: The rate of the tax
-              example: '15.0'
-            description:
-              type: string
-              description: Description of the tax.
-              example: description
-            applied_to_organization:
-              type: boolean
-              description: Set to `true` if the tax is used as one of the organization's default.
-              example: false
     TaxObject:
       type: object
       required:
         - lago_id
         - name
         - code
-        - value
+        - rate
         - applied_to_organization
         - customers_count
         - created_at
@@ -6288,36 +6306,45 @@ components:
         lago_id:
           type: string
           format: uuid
+          description: 'Unique identifier of the tax, created by Lago.'
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         name:
           type: string
-          description: The name of the tax.
-          example: French VAT
+          description: Name of the tax.
+          example: TVA
         code:
           type: string
-          description: Unique code used to identify the tax.
-          example: vat_fr
+          description: Unique code used to identify the tax associated with the API request.
+          example: french_standard_vat
         description:
           type: string
-          description: Description of the tax.
-          example: description
+          description: Internal description of the taxe
+          example: French standard VAT
         rate:
           type: number
-          description: The rate of the tax
-          example: 25
+          description: The percentage rate of the tax
+          example: 20
         applied_to_organization:
           type: boolean
+          description: Set to `true` if the tax is used as one of the organization's default
           example: true
-          description: Set to `true` if the tax is used as one of the organization's default.
         customers_count:
           type: integer
-          description: Number of customers this tax is applied to (directly or via the organization's default).
-          example: 12
+          description: Number of customers this tax is applied to (directly or via the organization's default)
+          example: 0
         created_at:
           type: string
           format: date-time
-          description: The date and time when the tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the tax was initially created.
-          example: '2022-09-14T16:35:31Z'
+          description: Creation date of the tax.
+          example: '2023-07-06T14:35:58Z'
+    TaxUpdateInput:
+      type: object
+      required:
+        - tax
+      properties:
+        tax:
+          allOf:
+            - $ref: '#/components/schemas/TaxBaseInput'
     Timezone:
       type: string
       example: America/Los_Angeles

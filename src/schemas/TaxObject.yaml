@@ -3,7 +3,7 @@ required:
   - lago_id
   - name
   - code
-  - value
+  - rate
   - applied_to_organization
   - customers_count
   - created_at
@@ -11,33 +11,34 @@ properties:
   lago_id:
     type: string
     format: 'uuid'
+    description: Unique identifier of the tax, created by Lago.
     example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
   name:
     type: string
-    description: The name of the tax.
-    example: 'French VAT'
+    description: Name of the tax.
+    example: 'TVA'
   code:
     type: string
-    description: Unique code used to identify the tax.
-    example: 'vat_fr'
+    description: Unique code used to identify the tax associated with the API request.
+    example: 'french_standard_vat'
   description:
     type: string
-    description: Description of the tax.
-    example: 'description'
+    description: Internal description of the taxe
+    example: 'French standard VAT'
   rate:
     type: number
-    description: The rate of the tax
-    example: 25.0
+    description: The percentage rate of the tax
+    example: 20.0
   applied_to_organization:
     type: boolean
+    description: Set to `true` if the tax is used as one of the organization's default
     example: true
-    description: Set to `true` if the tax is used as one of the organization's default.
   customers_count:
     type: integer
-    description: Number of customers this tax is applied to (directly or via the organization's default).
-    example: 12
+    description: Number of customers this tax is applied to (directly or via the organization's default)
+    example: 0
   created_at:
     type: string
     format: 'date-time'
-    description: The date and time when the tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the tax was initially created.
-    example: '2022-09-14T16:35:31Z'
+    description: Creation date of the tax.
+    example: '2023-07-06T14:35:58Z'
