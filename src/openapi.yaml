@@ -157,6 +157,8 @@ paths:
     $ref: './resources/plans.yaml'
   /plans/{code}:
     $ref: './resources/plan.yaml'
+  /plans/{code}/applied_taxes:
+    $ref: './resources/plan_applied_taxes.yaml'
   /subscriptions:
     $ref: './resources/subscriptions.yaml'
   /subscriptions/{external_id}:
