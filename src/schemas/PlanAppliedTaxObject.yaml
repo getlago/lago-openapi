@@ -1,0 +1,37 @@
+type: object
+required:
+  - lago_id
+  - lago_plan_id
+  - lago_tax_id
+  - plan_code
+  - tax_code
+  - created_at
+properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the applied tax, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  lago_plan_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the plan, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  lago_tax_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the tax, created by Lago.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  plan_code:
+    type: string
+    description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes.
+    example: 'startup'
+  tax_code:
+    type: string
+    description: Unique code used to identify the tax associated with the API request.
+    example: french_standard_vat
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date and time when the applied tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the applied tax was initially created.
+    example: '2022-09-14T16:35:31Z'
