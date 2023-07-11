@@ -79,10 +79,9 @@ properties:
     description: The cost of the tax associated with this specific fee.
     example: 20
   taxes_rate:
-    type: string
-    format: '^[0-9]+.?[0-9]*$'
+    type: number
     description: The tax rate associated with this specific fee.
-    example: '20.0'
+    example: 20.0
   units:
     type: string
     description: The number of units used to charge the customer. This field indicates the quantity or count of units consumed or utilized in the context of the charge. It helps in determining the basis for calculating the fee or cost associated with the usage of the service or product provided to the customer.
