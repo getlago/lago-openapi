@@ -1,27 +1,27 @@
 delete:
   tags:
     - customers
-  summary: Delete customer's appplied tax
-  description: Delete customer's appplied tax
+  summary: Delete a tax from a customer
+  description: This endpoint is used to unassign a tax from a customer
   operationId: deleteAppliedTax
   parameters:
     - name: external_customer_id
       in: path
-      description: External ID of the customer
+      description: Unique identifier assigned to the customer in your application.
       required: true
       schema:
         type: string
-        example: '12345'
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
     - name: tax_code
       in: path
-      description: Code of the applied tax
+      description: Unique code used to identify the tax associated with the API request.
       required: true
       schema:
         type: string
-        example: '12345'
+        example: 'french_standard_vat'
   responses:
     '200':
-      description: Successful response
+      description: Applied tax deleted
       content:
         application/json:
           schema:
