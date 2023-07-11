@@ -2670,10 +2670,9 @@ components:
           description: The code of the tax.
           example: example_code
         tax_rate:
-          type: string
-          format: '^[0-9]+.?[0-9]*$'
+          type: number
           description: The rate of the tax.
-          example: '25.0'
+          example: 25
         tax_description:
           type: string
           description: The description of the tax.
@@ -3775,10 +3774,9 @@ components:
           description: 'The tax amount of the credit note, expressed in cents.'
           example: 20
         taxes_rate:
-          type: string
-          format: '^[0-9]+.?[0-9]*$'
+          type: number
           description: The tax rate associated with this specific credit note.
-          example: '20.0'
+          example: 20
         sub_total_excluding_taxes_amount_cents:
           type: integer
           description: 'The subtotal of the credit note excluding any applicable taxes, expressed in cents.'
@@ -4928,10 +4926,9 @@ components:
           description: The cost of the tax associated with this specific fee.
           example: 20
         taxes_rate:
-          type: string
-          format: '^[0-9]+.?[0-9]*$'
+          type: number
           description: The tax rate associated with this specific fee.
-          example: '20.0'
+          example: 20
         units:
           type: string
           description: The number of units used to charge the customer. This field indicates the quantity or count of units consumed or utilized in the context of the charge. It helps in determining the basis for calculating the fee or cost associated with the usage of the service or product provided to the customer.

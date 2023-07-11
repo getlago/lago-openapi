@@ -25,10 +25,9 @@ properties:
     description: Description of the tax.
     example: 'description'
   rate:
-    type: string
-    format: '^[0-9]+.?[0-9]*$'
+    type: number
     description: The rate of the tax
-    example: '25.0'
+    example: 25.0
   applied_to_organization:
     type: boolean
     example: true
