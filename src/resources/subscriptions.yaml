@@ -30,7 +30,7 @@ get:
   tags:
     - subscriptions
   summary: List all subscriptions
-  description: This endpoint retrieves all active subscriptions.
+  description: This endpoint retrieves all subscriptions.
   operationId: findAllSubscriptions
   parameters:
     - $ref: '../parameters/page.yaml'
@@ -51,6 +51,22 @@ get:
       schema:
         type: string
         example: 'premium'
+    - name: status
+      in: query
+      description: 'Filter subscriptions by status. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - pending
+            - canceled
+            - terminated
+            - active
+        example: [active,pending]
+
   responses:
     '200':
       description: List of subscriptions
