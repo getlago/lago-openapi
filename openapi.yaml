@@ -2994,6 +2994,11 @@ components:
           description: 'All charge information, sorted by groups.'
           items:
             $ref: '#/components/schemas/GroupPropertiesObject'
+        taxes:
+          type: array
+          description: All taxes applied to the charge.
+          items:
+            $ref: '#/components/schemas/TaxObject'
     ChargeProperties:
       type: object
       properties:
@@ -5650,6 +5655,13 @@ components:
                           allOf:
                             - $ref: '#/components/schemas/ChargeProperties'
                             - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+                  tax_codes:
+                    type: array
+                    items:
+                      type: string
+                    description: List of unique code used to identify the taxes.
+                    example:
+                      - french_standard_vat
               example:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
@@ -5661,6 +5673,8 @@ components:
                     free_units: 100
                     package_size: 1000
                   group_properties: []
+                  tax_codes:
+                    - french_standard_vat
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
                   charge_model: graduated
                   invoiceable: true
@@ -5883,6 +5897,11 @@ components:
                 free_units_per_events: 5
                 free_units_per_total_aggregation: '500'
               group_properties: []
+        taxes:
+          type: array
+          description: All taxes applied to the plan.
+          items:
+            $ref: '#/components/schemas/TaxObject'
     PlansPaginated:
       type: object
       required:
