@@ -36,10 +36,11 @@ properties:
     description: The array containing your webhooks URLs.
     nullable: true
   country:
-    type: string
-    example: US
-    description: The country of your organization.
-    nullable: true
+    allOf:
+    - $ref: './Country.yaml'
+    - nullable: true
+      description: The country of your organization.
+      example: 'US'
   address_line1:
     type: string
     example: '100 Brex Street'
