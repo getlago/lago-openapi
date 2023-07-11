@@ -3027,6 +3027,259 @@ components:
                 format: '^[0-9]+.?[0-9]*$'
                 description: 'The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.'
                 example: '0.5'
+    Country:
+      type: string
+      example: US
+      enum:
+        - AD
+        - AE
+        - AF
+        - AG
+        - AI
+        - AL
+        - AM
+        - AO
+        - AQ
+        - AR
+        - AS
+        - AT
+        - AU
+        - AW
+        - AX
+        - AZ
+        - BA
+        - BB
+        - BD
+        - BE
+        - BF
+        - BG
+        - BH
+        - BI
+        - BJ
+        - BL
+        - BM
+        - BN
+        - BO
+        - BQ
+        - BR
+        - BS
+        - BT
+        - BV
+        - BW
+        - BY
+        - BZ
+        - CA
+        - CC
+        - CD
+        - CF
+        - CG
+        - CH
+        - CI
+        - CK
+        - CL
+        - CM
+        - CN
+        - CO
+        - CR
+        - CU
+        - CV
+        - CW
+        - CX
+        - CY
+        - CZ
+        - DE
+        - DJ
+        - DK
+        - DM
+        - DO
+        - DZ
+        - EC
+        - EE
+        - EG
+        - EH
+        - ER
+        - ES
+        - ET
+        - FI
+        - FJ
+        - FK
+        - FM
+        - FO
+        - FR
+        - GA
+        - GB
+        - GD
+        - GE
+        - GF
+        - GG
+        - GH
+        - GI
+        - GL
+        - GM
+        - GN
+        - GP
+        - GQ
+        - GR
+        - GS
+        - GT
+        - GU
+        - GW
+        - GY
+        - HK
+        - HM
+        - HN
+        - HR
+        - HT
+        - HU
+        - ID
+        - IE
+        - IL
+        - IM
+        - IN
+        - IO
+        - IQ
+        - IR
+        - IS
+        - IT
+        - JE
+        - JM
+        - JO
+        - JP
+        - KE
+        - KG
+        - KH
+        - KI
+        - KM
+        - KN
+        - KP
+        - KR
+        - KW
+        - KY
+        - KZ
+        - LA
+        - LB
+        - LC
+        - LI
+        - LK
+        - LR
+        - LS
+        - LT
+        - LU
+        - LV
+        - LY
+        - MA
+        - MC
+        - MD
+        - ME
+        - MF
+        - MG
+        - MH
+        - MK
+        - ML
+        - MM
+        - MN
+        - MO
+        - MP
+        - MQ
+        - MR
+        - MS
+        - MT
+        - MU
+        - MV
+        - MW
+        - MX
+        - MY
+        - MZ
+        - NA
+        - NC
+        - NE
+        - NF
+        - NG
+        - NI
+        - NL
+        - 'NO'
+        - NP
+        - NR
+        - NU
+        - NZ
+        - OM
+        - PA
+        - PE
+        - PF
+        - PG
+        - PH
+        - PK
+        - PL
+        - PM
+        - PN
+        - PR
+        - PS
+        - PT
+        - PW
+        - PY
+        - QA
+        - RE
+        - RO
+        - RS
+        - RU
+        - RW
+        - SA
+        - SB
+        - SC
+        - SD
+        - SE
+        - SG
+        - SH
+        - SI
+        - SJ
+        - SK
+        - SL
+        - SM
+        - SN
+        - SO
+        - SR
+        - SS
+        - ST
+        - SV
+        - SX
+        - SY
+        - SZ
+        - TC
+        - TD
+        - TF
+        - TG
+        - TH
+        - TJ
+        - TK
+        - TL
+        - TM
+        - TN
+        - TO
+        - TR
+        - TT
+        - TV
+        - TW
+        - TZ
+        - UA
+        - UG
+        - UM
+        - US
+        - UY
+        - UZ
+        - VA
+        - VC
+        - VE
+        - VG
+        - VI
+        - VN
+        - VU
+        - WF
+        - WS
+        - YE
+        - YT
+        - ZA
+        - ZM
+        - ZW
     Coupon:
       type: object
       required:
@@ -4051,10 +4304,11 @@ components:
               description: The city of the customer's billing address
               nullable: true
             country:
-              type: string
-              example: US
-              description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-              nullable: true
+              allOf:
+                - $ref: '#/components/schemas/Country'
+                - nullable: true
+                  description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+                  example: US
             currency:
               allOf:
                 - $ref: '#/components/schemas/Currency'
@@ -4224,10 +4478,11 @@ components:
           description: The city of the customer's billing address
           nullable: true
         country:
-          type: string
-          example: US
-          description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Country'
+            - nullable: true
+              description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+              example: US
         currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
@@ -4259,6 +4514,11 @@ components:
           type: string
           example: Gavin Belson
           description: The full name of the customer
+          nullable: true
+        phone:
+          type: string
+          example: 1-171-883-3711 x245
+          description: The phone number of the customer
           nullable: true
         state:
           type: string
@@ -5225,10 +5485,11 @@ components:
           description: The array containing your webhooks URLs.
           nullable: true
         country:
-          type: string
-          example: US
-          description: The country of your organization.
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Country'
+            - nullable: true
+              description: The country of your organization.
+              example: US
         address_line1:
           type: string
           example: 100 Brex Street
@@ -5301,10 +5562,11 @@ components:
               description: 'The URL of your newest updated webhook endpoint. This URL allows your organization to receive important messages, notifications, or data from the Lago system. By configuring your webhook endpoint to this URL, you can ensure that your organization stays informed and receives relevant information in a timely manner.'
               nullable: true
             country:
-              type: string
-              example: US
-              description: The country of your organization.
-              nullable: true
+              allOf:
+                - $ref: '#/components/schemas/Country'
+                - nullable: true
+                  description: The country of your organization.
+                  example: US
             address_line1:
               type: string
               example: 100 Brex Street
