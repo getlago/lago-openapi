@@ -1,17 +1,17 @@
 post:
   tags:
     - customers
-  summary: Apply a tax to a customer
-  description: This endpoint is used to apply a specific tax to a customer
+  summary: Apply a tax
+  description: Apply an existing tax to a customer
   operationId: applyTax
   parameters:
     - name: external_customer_id
       in: path
-      description: Unique identifier assigned to the customer in your application.
+      description: External ID of the customer
       required: true
       schema:
         type: string
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        example: '12345'
   requestBody:
     description: Apply tax body
     content:
@@ -21,7 +21,7 @@ post:
     required: true
   responses:
     '200':
-      description: Tax applied
+      description: Successful response
       content:
         application/json:
           schema:

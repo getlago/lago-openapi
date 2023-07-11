@@ -857,17 +857,17 @@ paths:
     post:
       tags:
         - customers
-      summary: Apply a tax to a customer
-      description: This endpoint is used to apply a specific tax to a customer
+      summary: Apply a tax
+      description: Apply an existing tax to a customer
       operationId: applyTax
       parameters:
         - name: external_customer_id
           in: path
-          description: Unique identifier assigned to the customer in your application.
+          description: External ID of the customer
           required: true
           schema:
             type: string
-            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+            example: '12345'
       requestBody:
         description: Apply tax body
         content:
@@ -877,7 +877,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Tax applied
+          description: Successful response
           content:
             application/json:
               schema:
@@ -894,27 +894,27 @@ paths:
     delete:
       tags:
         - customers
-      summary: Delete a tax from a customer
-      description: This endpoint is used to unassign a tax from a customer
+      summary: Delete customer's appplied tax
+      description: Delete customer's appplied tax
       operationId: deleteAppliedTax
       parameters:
         - name: external_customer_id
           in: path
-          description: Unique identifier assigned to the customer in your application.
+          description: External ID of the customer
           required: true
           schema:
             type: string
-            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+            example: '12345'
         - name: tax_code
           in: path
-          description: Unique code used to identify the tax associated with the API request.
+          description: Code of the applied tax
           required: true
           schema:
             type: string
-            example: french_standard_vat
+            example: '12345'
       responses:
         '200':
-          description: Applied tax deleted
+          description: Successful response
           content:
             application/json:
               schema:
@@ -1648,78 +1648,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Plan'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/plans/{code}/applied_taxes':
-    post:
-      tags:
-        - plans
-      summary: Apply a tax to a plan
-      description: This endpoint is used to apply a specific tax to a plan
-      operationId: planApplyTax
-      parameters:
-        - name: code
-          in: path
-          description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes.
-          required: true
-          schema:
-            type: string
-            example: startup
-      requestBody:
-        description: Apply tax body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PlanAppliedTaxInput'
-        required: true
-      responses:
-        '200':
-          description: Tax applied
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlanAppliedTax'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
-  '/plans/{code}/applied_taxes/{tax_code}':
-    delete:
-      tags:
-        - plans
-      summary: Delete a tax from a plan
-      description: This endpoint is used to unassign a tax from a plan
-      operationId: deletePlanAppliedTax
-      parameters:
-        - name: code
-          in: path
-          description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes.
-          required: true
-          schema:
-            type: string
-            example: startup
-        - name: tax_code
-          in: path
-          description: Unique code used to identify the tax associated with the API request.
-          required: true
-          schema:
-            type: string
-            example: french_standard_vat
-      responses:
-        '200':
-          description: Applied tax deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlanAppliedTax'
-        '400':
-          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -2993,11 +2921,6 @@ components:
           description: 'All charge information, sorted by groups.'
           items:
             $ref: '#/components/schemas/GroupPropertiesObject'
-        taxes:
-          type: array
-          description: All taxes applied to the charge.
-          items:
-            $ref: '#/components/schemas/TaxObject'
     ChargeProperties:
       type: object
       properties:
@@ -4164,8 +4087,8 @@ components:
           properties:
             tax_code:
               type: string
-              description: Unique code used to identify the tax associated with the API request.
-              example: french_standard_vat
+              description: Unique code used to identify the tax.
+              example: vat_fr
     CustomerAppliedTaxObject:
       type: object
       required:
@@ -5741,65 +5664,6 @@ components:
       properties:
         plan:
           $ref: '#/components/schemas/PlanObject'
-    PlanAppliedTax:
-      type: object
-      required:
-        - applied_tax
-      properties:
-        applied_tax:
-          $ref: '#/components/schemas/PlanAppliedTaxObject'
-    PlanAppliedTaxObject:
-      type: object
-      required:
-        - lago_id
-        - lago_plan_id
-        - lago_tax_id
-        - plan_code
-        - tax_code
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: 'Unique identifier of the applied tax, created by Lago.'
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_plan_id:
-          type: string
-          format: uuid
-          description: 'Unique identifier of the plan, created by Lago.'
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_tax_id:
-          type: string
-          format: uuid
-          description: 'Unique identifier of the tax, created by Lago.'
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        plan_code:
-          type: string
-          description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes.
-          example: startup
-        tax_code:
-          type: string
-          description: Unique code used to identify the tax associated with the API request.
-          example: french_standard_vat
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the applied tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the applied tax was initially created.
-          example: '2022-09-14T16:35:31Z'
-    PlanAppliedTaxInput:
-      type: object
-      required:
-        - applied_tax
-      properties:
-        applied_tax:
-          type: object
-          required:
-            - tax_code
-          properties:
-            tax_code:
-              type: string
-              description: Unique code used to identify the tax associated with the API request.
-              example: french_standard_vat
     PlanInput:
       type: object
       required:
@@ -5909,13 +5773,6 @@ components:
                           allOf:
                             - $ref: '#/components/schemas/ChargeProperties'
                             - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
-                  tax_codes:
-                    type: array
-                    items:
-                      type: string
-                    description: List of unique code used to identify the taxes.
-                    example:
-                      - french_standard_vat
               example:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
@@ -5927,8 +5784,6 @@ components:
                     free_units: 100
                     package_size: 1000
                   group_properties: []
-                  tax_codes:
-                    - french_standard_vat
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
                   charge_model: graduated
                   invoiceable: true
@@ -6151,11 +6006,6 @@ components:
                 free_units_per_events: 5
                 free_units_per_total_aggregation: '500'
               group_properties: []
-        taxes:
-          type: array
-          description: All taxes applied to the plan.
-          items:
-            $ref: '#/components/schemas/TaxObject'
     PlansPaginated:
       type: object
       required:
