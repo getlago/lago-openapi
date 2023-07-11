@@ -1,23 +1,23 @@
 post:
   tags:
-    - customers
-  summary: Apply a tax to a customer
-  description: This endpoint is used to apply a specific tax to a customer
-  operationId: applyTax
+    - plans
+  summary: Apply a tax to a plan
+  description: This endpoint is used to apply a specific tax to a plan
+  operationId: planApplyTax
   parameters:
-    - name: external_customer_id
+    - name: code
       in: path
-      description: Unique identifier assigned to the customer in your application.
+      description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes.
       required: true
       schema:
         type: string
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        example: 'startup'
   requestBody:
     description: Apply tax body
     content:
       application/json:
         schema:
-          $ref: '../schemas/CustomerAppliedTaxInput.yaml'
+          $ref: '../schemas/PlanAppliedTaxInput.yaml'
     required: true
   responses:
     '200':
@@ -25,7 +25,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/CustomerAppliedTax.yaml'
+            $ref: '../schemas/PlanAppliedTax.yaml'
     '400':
       $ref: '../responses/BadRequest.yaml'
     '401':
