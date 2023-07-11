@@ -1,27 +1,27 @@
 parameters:
   - name: code
     in: path
-    description: Code of the existing tax
+    description: The code of the tax. It serves as a unique identifier associated with a particular tax. The code is typically used for internal or system-level identification purposes.
     required: true
     schema:
       type: string
-      example: 'example_code'
+      example: 'french_standard_vat'
 put:
   tags:
     - taxes
-  summary: Update an existing tax
-  description: Update an existing tax by code
+  summary: Update a tax
+  description: This endpoint updates an existing tax representing a customizable tax rate applicable to either the organization or a specific customer.
   operationId: updateTax
   requestBody:
-    description: Update an existing tax
+    description: Tax update payload
     content:
       application/json:
         schema:
-          $ref: '../schemas/TaxInput.yaml'
+          $ref: '../schemas/TaxUpdateInput.yaml'
     required: true
   responses:
     '200':
-      description: Successful response
+      description: Tax updated
       content:
         application/json:
           schema:
@@ -37,12 +37,12 @@ put:
 get:
   tags:
     - taxes
-  summary: Find tax by code
-  description: Return a single tax
+  summary: Retrieve a Tax
+  description: This endpoint retrieves an existing tax representing a customizable tax rate applicable to either the organization or a specific customer. The tax is identified by its unique code.
   operationId: findTax
   responses:
     '200':
-      description: Successful response
+      description: Tax
       content:
         application/json:
           schema:
@@ -55,11 +55,11 @@ delete:
   tags:
     - taxes
   summary: Delete a tax
-  description: Delete a tax
+  description: This endpoint is used to delete a tax.
   operationId: destroyTax
   responses:
     '200':
-      description: Successful response
+      description: Tax deleted
       content:
         application/json:
           schema:

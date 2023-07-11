@@ -12,28 +12,29 @@ properties:
     example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
   tax_name:
     type: string
-    description: The name of the tax.
-    example: 'example name'
+    description: Name of the tax.
+    example: 'TVA'
   tax_code:
     type: string
-    description: The code of the tax.
-    example: 'example_code'
+    description: Unique code used to identify the tax associated with the API request.
+    example: 'french_standard_vat'
   tax_rate:
     type: number
-    description: The rate of the tax.
-    example: 25.0
+    description: The percentage rate of the tax
+    example: 20.0
   tax_description:
     type: string
-    description: The description of the tax.
-    example: 'description'
+    description: Internal description of the taxe
+    example: 'French standard VAT'
   amount_cents:
     type: integer
-    example: 20
+    description: Amount of the tax
+    example: 2000
   amount_currency:
     allOf:
       - $ref: './Currency.yaml'
-      - description: The currency of the tax.
-        example: 'EUR'
+      - description: Currency of the tax
+        example: 'USD'
   created_at:
     type: string
     format: 'date-time'
