@@ -4591,11 +4591,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomerMetadata'
-        taxes:
-          description: List of customer taxes
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxObject'
     CustomerObjectExtended:
       allOf:
         - $ref: '#/components/schemas/CustomerObject'
@@ -4605,6 +4600,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/CustomerMetadata'
+            taxes:
+              description: List of customer taxes
+              type: array
+              items:
+                $ref: '#/components/schemas/TaxObject'
     CustomersPaginated:
       type: object
       required:
