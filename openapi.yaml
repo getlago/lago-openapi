@@ -1685,7 +1685,7 @@ paths:
       tags:
         - subscriptions
       summary: List all subscriptions
-      description: This endpoint retrieves all subscriptions.
+      description: This endpoint retrieves all active subscriptions.
       operationId: findAllSubscriptions
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1708,7 +1708,7 @@ paths:
             example: premium
         - name: status
           in: query
-          description: 'Filter subscriptions by status. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
+          description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
           required: false
           explode: true
           schema:
