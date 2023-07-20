@@ -47,6 +47,12 @@ properties:
         description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.
         nullable: true
         example: null
+      tax_codes:
+        type: array
+        items:
+          type: string
+        description: List of unique code used to identify the taxes.
+        example: [french_standard_vat]
       charges:
         type: array
         description: Additional usage-based charges for this plan.
