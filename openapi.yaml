@@ -4198,6 +4198,15 @@ components:
           type: string
           example: fr
           description: 'The document locale, specified in the ISO 639-1 format. This field represents the language or locale used for the documents issued by Lago'
+        provider_payment_methods:
+          type: array
+          nullable: true
+          items:
+            type: string
+          description: 'Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, all the payment methods are selected. For now, possible values are `card` and `sepa_debit`.'
+          example:
+            - card
+            - sepa_debit
     CustomerChargeUsageObject:
       type: object
       required:
