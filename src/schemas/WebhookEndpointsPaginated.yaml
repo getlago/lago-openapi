@@ -1,0 +1,11 @@
+type: object
+required:
+  - webhook_endpoints
+  - meta
+properties:
+  webhook_endpoints:
+    type: array
+    items:
+      $ref: './WebhookEndpointObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

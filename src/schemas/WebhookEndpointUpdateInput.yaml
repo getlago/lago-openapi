@@ -1,0 +1,11 @@
+type: object
+properties:
+  webhook_endpoint:
+    type: object
+    required:
+      - webhook_url
+    properties:
+      webhook_url:
+        type: string
+        description: The URL of the webhook endpoint.
+        example: 'https://foo.bar'

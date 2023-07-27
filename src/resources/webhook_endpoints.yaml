@@ -1,0 +1,44 @@
+post:
+  tags:
+    - webhook_endpoints
+  summary: Create a webhook_endpoint
+  description: This endpoint is used to create a webhook endpoint.
+  operationId: createWebhookEndpoint
+  requestBody:
+    description: Webhook Endpoint payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/WebhookEndpointCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Webhook Endpoint created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WebhookEndpoint.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - webhook_endpoints
+  summary: List all webhook endpoints
+  description: This endpoint is used to list all webhook endpoints.
+  operationId: findAllWebhookEndpoints
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: WebhookEndpoints
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WebhookEndpointsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
