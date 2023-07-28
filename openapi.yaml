@@ -858,78 +858,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/customers/{external_customer_id}/applied_taxes':
-    post:
-      tags:
-        - customers
-      summary: Apply a tax
-      description: Apply an existing tax to a customer
-      operationId: applyTax
-      parameters:
-        - name: external_customer_id
-          in: path
-          description: External ID of the customer
-          required: true
-          schema:
-            type: string
-            example: '12345'
-      requestBody:
-        description: Apply tax body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerAppliedTaxInput'
-        required: true
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerAppliedTax'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
-  '/customers/{external_customer_id}/applied_taxes/{tax_code}':
-    delete:
-      tags:
-        - customers
-      summary: Delete customer's appplied tax
-      description: Delete customer's appplied tax
-      operationId: deleteAppliedTax
-      parameters:
-        - name: external_customer_id
-          in: path
-          description: External ID of the customer
-          required: true
-          schema:
-            type: string
-            example: '12345'
-        - name: tax_code
-          in: path
-          description: Code of the applied tax
-          required: true
-          schema:
-            type: string
-            example: '12345'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerAppliedTax'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
   '/customers/{external_customer_id}/portal_url':
     get:
       tags:
@@ -3170,6 +3098,11 @@ components:
           description: 'All charge information, sorted by groups.'
           items:
             $ref: '#/components/schemas/GroupPropertiesObject'
+        taxes:
+          type: array
+          description: All taxes applied to the charge.
+          items:
+            $ref: '#/components/schemas/TaxObject'
     ChargeProperties:
       type: object
       properties:
@@ -3802,7 +3735,7 @@ components:
         - amount_cents
         - amount_currency
         - invoice
-        - before_vat
+        - before_taxes
       properties:
         lago_id:
           type: string
@@ -3818,7 +3751,7 @@ components:
             - $ref: '#/components/schemas/Currency'
             - description: The currency of the credit.
               example: EUR
-        before_vat:
+        before_taxes:
           type: boolean
           description: Indicates whether the credit is applied on the amount before taxes (coupons) or after taxes (credit notes). This flag helps determine the order in which credits are applied to the invoice calculation
           example: false
@@ -4317,65 +4250,6 @@ components:
       properties:
         customer:
           $ref: '#/components/schemas/CustomerObjectExtended'
-    CustomerAppliedTax:
-      type: object
-      required:
-        - applied_tax
-      properties:
-        applied_tax:
-          $ref: '#/components/schemas/CustomerAppliedTaxObject'
-    CustomerAppliedTaxInput:
-      type: object
-      required:
-        - applied_tax
-      properties:
-        applied_tax:
-          type: object
-          required:
-            - tax_code
-          properties:
-            tax_code:
-              type: string
-              description: Unique code used to identify the tax.
-              example: vat_fr
-    CustomerAppliedTaxObject:
-      type: object
-      required:
-        - lago_id
-        - lago_customer_id
-        - lago_tax_id
-        - tax_code
-        - external_customer_id
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: 'Unique identifier of the applied tax, created by Lago.'
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_customer_id:
-          type: string
-          format: uuid
-          description: 'Unique identifier of the customer, created by Lago.'
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_tax_id:
-          type: string
-          format: uuid
-          description: 'Unique identifier of the tax, created by Lago.'
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        tax_code:
-          type: string
-          description: The code of the tax.
-          example: example_code
-        external_customer_id:
-          type: string
-          description: The customer external unique identifier (provided by your own application)
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the applied tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the applied tax was initially created.
-          example: '2022-09-14T16:35:31Z'
     CustomerBillingConfiguration:
       type: object
       description: 'Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.'
@@ -4606,6 +4480,13 @@ components:
               example: CA
               description: The state of the customer's billing address
               nullable: true
+            tax_codes:
+              type: array
+              items:
+                type: string
+              description: List of unique code used to identify the taxes.
+              example:
+                - french_standard_vat
             tax_identification_number:
               type: string
               example: EU123456789
@@ -5409,6 +5290,10 @@ components:
           format: uuid
           description: 'Unique identifier of the invoice, created by Lago.'
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        fees_amount_cents:
+          type: integer
+          description: Fees total amount on which the tax is applied
+          example: 20000
     InvoiceMetadataObject:
       type: object
       properties:
@@ -6160,6 +6045,13 @@ components:
               description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.'
               nullable: true
               example: null
+            tax_codes:
+              type: array
+              items:
+                type: string
+              description: List of unique code used to identify the taxes.
+              example:
+                - french_standard_vat
             charges:
               type: array
               description: Additional usage-based charges for this plan.
@@ -6228,6 +6120,13 @@ components:
                           allOf:
                             - $ref: '#/components/schemas/ChargeProperties'
                             - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+                  tax_codes:
+                    type: array
+                    items:
+                      type: string
+                    description: List of unique code used to identify the taxes.
+                    example:
+                      - french_standard_vat
               example:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
@@ -6240,6 +6139,8 @@ components:
                     free_units: 100
                     package_size: 1000
                   group_properties: []
+                  tax_codes:
+                    - french_standard_vat
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
                   charge_model: graduated
                   invoiceable: true
@@ -6471,6 +6372,11 @@ components:
                 free_units_per_events: 5
                 free_units_per_total_aggregation: '500'
               group_properties: []
+        taxes:
+          type: array
+          description: All taxes applied to the plan.
+          items:
+            $ref: '#/components/schemas/TaxObject'
     PlansPaginated:
       type: object
       required:
@@ -6757,9 +6663,17 @@ components:
           type: boolean
           description: Set to `true` if the tax is used as one of the organization's default
           example: true
+        charges_count:
+          type: integer
+          description: Number of charges this tax is applied to.
+          example: 0
         customers_count:
           type: integer
-          description: Number of customers this tax is applied to (directly or via the organization's default)
+          description: Number of customers this tax is applied to (directly or via the organization's default).
+          example: 0
+        plans_count:
+          type: integer
+          description: Number of plans this tax is applied to.
           example: 0
         created_at:
           type: string

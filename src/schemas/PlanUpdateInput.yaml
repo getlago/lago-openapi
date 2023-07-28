@@ -47,6 +47,12 @@ properties:
         description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.
         nullable: true
         example: null
+      tax_codes:
+        type: array
+        items:
+          type: string
+        description: List of unique code used to identify the taxes.
+        example: [french_standard_vat]
       charges:
         type: array
         description: Additional usage-based charges for this plan.
@@ -115,6 +121,12 @@ properties:
                     allOf:
                       - $ref: './ChargeProperties.yaml'
                       - description: List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.
+            tax_codes:
+              type: array
+              items:
+                type: string
+              description: List of unique code used to identify the taxes.
+              example: [french_standard_vat]
         example:
           - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a91'
             charge_model: 'package'
@@ -127,6 +139,7 @@ properties:
               free_units: 100
               package_size: 1000
             group_properties: []
+            tax_codes: [french_standard_vat]
           - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a92'
             charge_model: 'graduated'
             invoiceable: true

@@ -5,7 +5,7 @@ required:
   - amount_cents
   - amount_currency
   - invoice
-  - before_vat
+  - before_taxes
 properties:
   lago_id:
     type: string
@@ -21,7 +21,7 @@ properties:
       - $ref: './Currency.yaml'
       - description: The currency of the credit.
         example: 'EUR'
-  before_vat:
+  before_taxes:
     type: boolean
     description: Indicates whether the credit is applied on the amount before taxes (coupons) or after taxes (credit notes). This flag helps determine the order in which credits are applied to the invoice calculation
     example: false

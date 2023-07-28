@@ -64,3 +64,8 @@ properties:
     description: All charge information, sorted by groups.
     items:
       $ref: './GroupPropertiesObject.yaml'
+  taxes:
+    type: array
+    description: All taxes applied to the charge.
+    items:
+      $ref: './TaxObject.yaml'

@@ -33,9 +33,17 @@ properties:
     type: boolean
     description: Set to `true` if the tax is used as one of the organization's default
     example: true
+  charges_count:
+    type: integer
+    description: Number of charges this tax is applied to.
+    example: 0
   customers_count:
     type: integer
-    description: Number of customers this tax is applied to (directly or via the organization's default)
+    description: Number of customers this tax is applied to (directly or via the organization's default).
+    example: 0
+  plans_count:
+    type: integer
+    description: Number of plans this tax is applied to.
     example: 0
   created_at:
     type: string

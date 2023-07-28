@@ -124,10 +124,6 @@ paths:
     $ref: './resources/customer.yaml'
   /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
     $ref: './resources/customer_applied_coupon.yaml'
-  /customers/{external_customer_id}/applied_taxes:
-    $ref: './resources/customer_applied_taxes.yaml'
-  /customers/{external_customer_id}/applied_taxes/{tax_code}:
-    $ref: './resources/customer_applied_tax.yaml'
   /customers/{external_customer_id}/portal_url:
     $ref: './resources/customer_portal_url.yaml'
   /customers/{external_customer_id}/current_usage:

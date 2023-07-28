@@ -7,3 +7,7 @@ properties:
     format: 'uuid'
     description: Unique identifier of the invoice, created by Lago.
     example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  fees_amount_cents:
+    type: integer
+    description: Fees total amount on which the tax is applied
+    example: 20000
