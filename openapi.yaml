@@ -2194,7 +2194,7 @@ paths:
                 required:
                   - webhook_endpoint
                 properties:
-                  wallet:
+                  webhook_endpoint:
                     type: object
                     required:
                       - lago_id
@@ -2250,7 +2250,7 @@ paths:
                   webhook_endpoints:
                     type: array
                     items:
-                      $ref: '#/paths/~1webhook_endpoints/post/responses/200/content/application~1json/schema/properties/wallet'
+                      $ref: '#/paths/~1webhook_endpoints/post/responses/200/content/application~1json/schema/properties/webhook_endpoint'
                   meta:
                     $ref: '#/components/schemas/PaginationMeta'
         '401':
