@@ -1,0 +1,73 @@
+parameters:
+  - name: lago_id
+    in: path
+    description: Unique identifier assigned to the webhook endpoint within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the webhook endpoint's record within the Lago system.
+    required: true
+    schema:
+      type: string
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+put:
+  tags:
+    - webhook_endpoints
+  summary: Update a webhook endpoint
+  description: This endpoint is used to update an existing webhook endpoint.
+  operationId: updateWebhookEndpoint
+  requestBody:
+    description: Webhook Endpoint update payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/WebhookEndpointUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Webhook Endpoint updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WebhookEndpoint.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - webhook_endpoints
+  summary: Retrieve a webhook endpoint
+  description: This endpoint is used to retrieve an existing webhook endpoint.
+  operationId: findWebhookEndpoint
+  responses:
+    '200':
+      description: WebhookEndpoint
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WebhookEndpoint.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+delete:
+  tags:
+    - webhook_endpoints
+  summary: Delete a webhook endpoint
+  description: This endpoint is used to delete an existing webhook endpoint.
+  operationId: destroyWebhookEndpoint
+  responses:
+    '200':
+      description: Webhook Endpoint deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WebhookEndpoint.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'

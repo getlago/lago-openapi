@@ -86,6 +86,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/webhooks/message-signature#1-retrieve-the-public-key
+  - name: webhook_endpoints
+    description: Everything about Webhook Endpoints
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/webhook_endpoints/webhook-endpoint-object
 paths:
   /add_ons:
     $ref: './resources/add_ons.yaml'
@@ -175,6 +180,10 @@ paths:
     $ref: './resources/wallet_transactions.yaml'
   /webhooks/public_key:
     $ref: './resources/webhook_public_key.yaml'
+  /webhook_endpoints:
+    $ref: './resources/webhook_endpoints.yaml'
+  /webhook_endpoints/{lago_id}:
+    $ref: './resources/webhook_endpoint.yaml'
 components:
   parameters:
     $ref: './parameters/_index.yaml'

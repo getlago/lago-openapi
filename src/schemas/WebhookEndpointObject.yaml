@@ -1,0 +1,26 @@
+type: object
+required:
+  - lago_id
+  - lago_organization_id
+  - webhook_url
+  - created_at
+properties:
+  lago_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the webhook endpoint's record within the Lago system.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  lago_organization_id:
+    type: string
+    format: 'uuid'
+    description: Unique identifier assigned to the organization attached to the webhook endpoint within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the organization’s record within the Lago system.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  webhook_url:
+    type: string
+    description: The name of the wallet.
+    example: 'Prepaid'
+  created_at:
+    type: string
+    format: 'date-time'
+    description: The date of the webhook endpoint creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    example: '2022-04-29T08:59:51Z'
