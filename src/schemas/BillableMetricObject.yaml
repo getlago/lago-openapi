@@ -4,6 +4,7 @@ required:
   - name
   - code
   - aggregation_type
+  - recurring
   - created_at
   - active_subscriptions_count
   - draft_invoices_count
@@ -27,6 +28,15 @@ properties:
     example: 'GB of storage used in my application'
     description: 'Internal description of the billable metric.'
     nullable: true
+  recurring:
+    type: boolean
+    example: false
+    description: |-
+      Defines if the billable metric is persisted billing period over billing period.
+      
+      - If set to `true`: the accumulated number of units calculated from the previous billing period is persisted to the next billing period.
+      - If set to `false`: the accumulated number of units is reset to 0 at the end of the billing period.
+      - If not defined in the request, default value is `false`.
   created_at:
     type: string
     format: 'date-time'
