@@ -83,6 +83,7 @@ properties:
         charge_model: 'package'
         invoiceable: true
         pay_in_advance: false
+        prorated: false
         min_amount_cents: 3000
         properties:
           amount: '30'
@@ -96,6 +97,7 @@ properties:
         charge_model: 'graduated'
         invoiceable: true
         pay_in_advance: false
+        prorated: false
         min_amount_cents: 0
         properties:
           graduated_ranges:
@@ -115,6 +117,7 @@ properties:
         charge_model: 'standard'
         invoiceable: true
         pay_in_advance: true
+        prorated: false
         min_amount_cents: 0
         properties: {}
         group_properties:
@@ -134,6 +137,7 @@ properties:
         charge_model: 'volume'
         invoiceable: true
         pay_in_advance: false
+        prorated: false
         min_amount_cents: 0
         properties:
           volume_ranges:
@@ -153,6 +157,7 @@ properties:
         charge_model: 'percentage'
         invoiceable: false
         pay_in_advance: true
+        prorated: false
         min_amount_cents: 0
         properties:
           rate: '1'

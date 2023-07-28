@@ -81,6 +81,15 @@ properties:
               type: boolean
               description: This field specifies whether the charge should be included in a proper invoice. If set to false, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.
               example: true
+            prorated:
+              type: boolean
+              example: false
+              description: |-
+                Specifies whether a charge is prorated based on the remaining number of days in the billing period or billed fully.
+                
+                - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+                - If set to `false`, the charge is billed in full.
+                - If not defined in the request, default value is `false`.
             min_amount_cents:
               type: integer
               description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
@@ -111,6 +120,7 @@ properties:
             charge_model: 'package'
             invoiceable: true
             pay_in_advance: false
+            prorated: false
             min_amount_cents: 3000
             properties:
               amount: '30'
@@ -121,6 +131,7 @@ properties:
             charge_model: 'graduated'
             invoiceable: true
             pay_in_advance: false
+            prorated: false
             min_amount_cents: 0
             properties:
               graduated_ranges:
@@ -137,6 +148,7 @@ properties:
             charge_model: 'standard'
             invoiceable: true
             pay_in_advance: true
+            prorated: false
             min_amount_cents: 0
             properties: {}
             group_properties:
@@ -153,6 +165,7 @@ properties:
             charge_model: 'volume'
             invoiceable: true
             pay_in_advance: false
+            prorated: false
             min_amount_cents: 0
             properties:
               volume_ranges:
@@ -169,6 +182,7 @@ properties:
             charge_model: 'percentage'
             invoiceable: false
             pay_in_advance: true
+            prorated: false
             min_amount_cents: 0
             properties:
               rate: '1'
