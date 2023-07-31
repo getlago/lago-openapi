@@ -2340,6 +2340,13 @@ components:
           nullable: true
           description: The description of the add-on.
           example: Implementation fee for new customers.
+        tax_codes:
+          type: array
+          items:
+            type: string
+          description: List of unique code used to identify the taxes.
+          example:
+            - french_standard_vat
     AddOnCreateInput:
       type: object
       required:
@@ -2395,6 +2402,11 @@ components:
           format: date-time
           description: The date and time when the add-on was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the add-on was initially created.
           example: '2022-04-29T08:59:51Z'
+        taxes:
+          type: array
+          description: All taxes applied to the add-on.
+          items:
+            $ref: '#/components/schemas/TaxObject'
     AddOn:
       type: object
       required:

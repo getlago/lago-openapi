@@ -22,3 +22,9 @@ properties:
     nullable: true
     description: The description of the add-on.
     example: 'Implementation fee for new customers.'
+  tax_codes:
+    type: array
+    items:
+      type: string
+    description: List of unique code used to identify the taxes.
+    example: [french_standard_vat]
