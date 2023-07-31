@@ -36,6 +36,15 @@ properties:
     format: 'date'
     description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
     example: '2022-04-30'
+  payment_due_date:
+    type: string
+    format: 'date'
+    description: The payment due date for the invoice, specified in the ISO 8601 date format.
+    example: '2022-04-30'
+  net_payment_term:
+    type: integer
+    example: 30
+    description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
   invoice_type:
     type: string
     enum:

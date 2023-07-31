@@ -57,6 +57,10 @@ properties:
         example: null
         description: The legal number of your organization.
         nullable: true
+      net_payment_term:
+        type: integer
+        example: 30
+        description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
       tax_identification_number:
         type: string
         example: 'US123456789'
