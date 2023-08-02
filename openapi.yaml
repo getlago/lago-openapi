@@ -2111,6 +2111,14 @@ paths:
                       type: string
                       description: The URL of the webhook endpoint.
                       example: 'https://foo.bar'
+                    signature_algo:
+                      type: string
+                      description: 'The signature used for the webhook. If no value is passed,'
+                      example: hmac
+                      nullable: true
+                      enum:
+                        - jwt
+                        - hmac
         required: true
       responses:
         '200':
@@ -2144,6 +2152,13 @@ paths:
                         type: string
                         description: The name of the wallet.
                         example: Prepaid
+                      signature_algo:
+                        type: string
+                        description: The signature algo for the webhook.
+                        example: hmac
+                        enum:
+                          - jwt
+                          - hmac
                       created_at:
                         type: string
                         format: date-time
@@ -2215,6 +2230,14 @@ paths:
                       type: string
                       description: The URL of the webhook endpoint.
                       example: 'https://foo.bar'
+                    signature_algo:
+                      type: string
+                      description: 'The signature used for the webhook. If no value is passed,'
+                      example: hmac
+                      nullable: true
+                      enum:
+                        - jwt
+                        - hmac
         required: true
       responses:
         '200':
