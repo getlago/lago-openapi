@@ -4507,6 +4507,11 @@ components:
               example: '91364'
               description: The zipcode of the customer's billing address
               nullable: true
+            net_payment_term:
+              type: integer
+              example: 30
+              description: 'The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.'
+              nullable: true
             billing_configuration:
               $ref: '#/components/schemas/CustomerBillingConfiguration'
             metadata:
@@ -4681,6 +4686,11 @@ components:
           type: string
           example: '91364'
           description: The zipcode of the customer's billing address
+          nullable: true
+        net_payment_term:
+          type: integer
+          example: 30
+          description: 'The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.'
           nullable: true
         created_at:
           type: string
@@ -5359,6 +5369,15 @@ components:
           format: date
           description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
           example: '2022-04-30'
+        payment_due_date:
+          type: string
+          format: date
+          description: 'The payment due date for the invoice, specified in the ISO 8601 date format.'
+          example: '2022-04-30'
+        net_payment_term:
+          type: integer
+          example: 30
+          description: 'The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.'
         invoice_type:
           type: string
           enum:
@@ -5676,6 +5695,10 @@ components:
           example: null
           description: The legal number of your organization.
           nullable: true
+        net_payment_term:
+          type: integer
+          example: 30
+          description: 'The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.'
         tax_identification_number:
           type: string
           example: US123456789
@@ -5753,6 +5776,10 @@ components:
               example: null
               description: The legal number of your organization.
               nullable: true
+            net_payment_term:
+              type: integer
+              example: 30
+              description: 'The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.'
             tax_identification_number:
               type: string
               example: US123456789

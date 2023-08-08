@@ -111,6 +111,11 @@ properties:
     example: '91364'
     description: The zipcode of the customer's billing address
     nullable: true
+  net_payment_term:
+    type: integer
+    example: 30
+    description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+    nullable: true
   created_at:
     type: string
     format: 'date-time'
