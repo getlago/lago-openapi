@@ -5533,6 +5533,13 @@ components:
                     nullable: true
                     example: 'The description of the fee line item in the invoice. By default, the description of the add-on is used.'
                     description: This is a description
+                  tax_codes:
+                    type: array
+                    items:
+                      type: string
+                    description: List of unique code used to identify the taxes.
+                    example:
+                      - french_standard_vat
     InvoicesPaginated:
       type: object
       required:
