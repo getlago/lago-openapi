@@ -19,6 +19,13 @@ properties:
     type: string
     description: The name of the wallet.
     example: 'Prepaid'
+  signature_algo:
+    type: string
+    description: The signature algo for the webhook.
+    example: 'hmac'
+    enum:
+      - jwt
+      - hmac
   created_at:
     type: string
     format: 'date-time'
