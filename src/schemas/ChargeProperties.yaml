@@ -35,6 +35,42 @@ properties:
           description: The unit price, excluding tax, for a specific tier of a `graduated` charge model. It is expressed as a decimal value.
           example: '0.5'
 
+  # Graduated percentage charge model
+  graduated_percentage_ranges:
+    type: array
+    description: Graduated percentage ranges, sorted from bottom to top tiers, used for a `graduated_percentage` charge model.
+    items:
+      type: object
+      required:
+        - from_value
+        - to_value
+        - rate
+        - flat_amount
+        - fixed_amount
+      properties:
+        from_value:
+          type: integer
+          description: Specifies the lower value of a tier for a `graduated_percentage` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+          example: 0
+        to_value:
+          type: integer
+          description: |-
+            Specifies the highest value of a tier for a `graduated_percentage` charge model.
+            - This value must be higher than the from_value of the same tier.
+            - This value must be null for the last tier.
+          nullable: true
+          example: 10
+        rate:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The percentage rate that is applied to the amount of each transaction in the tier for a `graduated_percentage` charge model. It is expressed as a decimal value.
+          example: '1'
+        flat_amount:
+          type: string
+          format: '^[0-9]+.?[0-9]*$'
+          description: The flat amount for a whole tier, excluding tax, for a `graduated_percentage` charge model. It is expressed as a decimal value.
+          example: '10'
+
   # Package & charge model
   amount:
     type: string
