@@ -39,3 +39,8 @@ properties:
     format: 'date-time'
     description: The date and time when the add-on was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the add-on was initially created.
     example: '2022-04-29T08:59:51Z'
+  taxes:
+    type: array
+    description: All taxes applied to the add-on.
+    items:
+      $ref: './TaxObject.yaml'

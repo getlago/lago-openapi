@@ -33,6 +33,10 @@ properties:
     type: boolean
     description: Set to `true` if the tax is used as one of the organization's default
     example: true
+  add_ons_count:
+    type: integer
+    description: Number of add-ons this tax is applied to.
+    example: 0
   charges_count:
     type: integer
     description: Number of charges this tax is applied to.
