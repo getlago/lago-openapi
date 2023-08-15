@@ -5899,11 +5899,12 @@ components:
               description: 'The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.'
             interval:
               type: string
-              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `monthly`, or `weekly`.'
+              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly`, or `weekly`.'
               example: monthly
               enum:
                 - weekly
                 - monthly
+                - quarterly
                 - yearly
             description:
               type: string
@@ -6103,11 +6104,12 @@ components:
               description: 'The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.'
             interval:
               type: string
-              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `monthly`, or `weekly`.'
+              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly`, or `weekly`.'
               example: monthly
               enum:
                 - weekly
                 - monthly
+                - quarterly
                 - yearly
             description:
               type: string
@@ -6327,10 +6329,11 @@ components:
           example: startup
         interval:
           type: string
-          description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `monthly` or `weekly`.'
+          description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly` or `weekly`.'
           enum:
             - weekly
             - monthly
+            - quarterly
             - yearly
           example: monthly
         description:

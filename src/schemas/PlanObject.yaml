@@ -30,10 +30,11 @@ properties:
     example: 'startup'
   interval:
     type: string
-    description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `monthly` or `weekly`.'
+    description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly` or `weekly`.'
     enum:
       - weekly
       - monthly
+      - quarterly
       - yearly
     example: monthly
   description:
