@@ -47,7 +47,7 @@ properties:
             example: 'EUR'
       percentage_rate:
         type: string
-        format: '^[0-9]+.?[0-9]*$'
+        pattern: '^[0-9]+.?[0-9]*$'
         nullable: true
         description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
         example: null

@@ -26,19 +26,19 @@ properties:
           example: 10
         flat_amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The flat amount for a whole tier, excluding tax, for a `graduated` charge model. It is expressed as a decimal value.
           example: '10'
         per_unit_amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The unit price, excluding tax, for a specific tier of a `graduated` charge model. It is expressed as a decimal value.
           example: '0.5'
 
   # Package & charge model
   amount:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: |-
       - The unit price, excluding tax, for a `standard` charge model. It is expressed as a decimal value.
       - The amount, excluding tax, for a complete set of units in a `package` charge model. It is expressed as a decimal value.
@@ -57,12 +57,12 @@ properties:
   # Percentage charge model
   rate:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The percentage rate that is applied to the amount of each transaction for a `percentage` charge model. It is expressed as a decimal value.
     example: '1'
   fixed_amount:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The fixed fee that is applied to each transaction for a `percentage` charge model. It is expressed as a decimal value.
     example: '0.5'
   free_units_per_events:
@@ -72,7 +72,7 @@ properties:
     example: 5
   free_units_per_total_aggregation:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The transaction amount that is not impacted by the `percentage` rate and fixed fee in a percentage charge model. This field indicates the portion of the transaction amount that is exempt from the calculation of charges based on the specified percentage rate and fixed fee.
     nullable: true
     example: '500'
@@ -103,11 +103,11 @@ properties:
           example: 10
         flat_amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.
           example: '10'
         per_unit_amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.
           example: '0.5'

@@ -2696,7 +2696,7 @@ components:
                   example: EUR
             percentage_rate:
               type: string
-              format: '^[0-9]+.?[0-9]*$'
+              pattern: '^[0-9]+.?[0-9]*$'
               nullable: true
               description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
               example: null
@@ -2765,7 +2765,7 @@ components:
               example: EUR
         percentage_rate:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           nullable: true
           description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
           example: null
@@ -3166,17 +3166,17 @@ components:
                 example: 10
               flat_amount:
                 type: string
-                format: '^[0-9]+.?[0-9]*$'
+                pattern: '^[0-9]+.?[0-9]*$'
                 description: 'The flat amount for a whole tier, excluding tax, for a `graduated` charge model. It is expressed as a decimal value.'
                 example: '10'
               per_unit_amount:
                 type: string
-                format: '^[0-9]+.?[0-9]*$'
+                pattern: '^[0-9]+.?[0-9]*$'
                 description: 'The unit price, excluding tax, for a specific tier of a `graduated` charge model. It is expressed as a decimal value.'
                 example: '0.5'
         amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: |-
             - The unit price, excluding tax, for a `standard` charge model. It is expressed as a decimal value.
             - The amount, excluding tax, for a complete set of units in a `package` charge model. It is expressed as a decimal value.
@@ -3191,12 +3191,12 @@ components:
           example: 1000
         rate:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The percentage rate that is applied to the amount of each transaction for a `percentage` charge model. It is expressed as a decimal value.
           example: '1'
         fixed_amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The fixed fee that is applied to each transaction for a `percentage` charge model. It is expressed as a decimal value.
           example: '0.5'
         free_units_per_events:
@@ -3206,7 +3206,7 @@ components:
           example: 5
         free_units_per_total_aggregation:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The transaction amount that is not impacted by the `percentage` rate and fixed fee in a percentage charge model. This field indicates the portion of the transaction amount that is exempt from the calculation of charges based on the specified percentage rate and fixed fee.
           nullable: true
           example: '500'
@@ -3235,12 +3235,12 @@ components:
                 example: 10
               flat_amount:
                 type: string
-                format: '^[0-9]+.?[0-9]*$'
+                pattern: '^[0-9]+.?[0-9]*$'
                 description: 'The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.'
                 example: '10'
               per_unit_amount:
                 type: string
-                format: '^[0-9]+.?[0-9]*$'
+                pattern: '^[0-9]+.?[0-9]*$'
                 description: 'The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.'
                 example: '0.5'
     Country:
@@ -3547,7 +3547,7 @@ components:
           example: false
         percentage_rate:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           nullable: true
           description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
           example: null
@@ -3699,7 +3699,7 @@ components:
           example: []
         percentage_rate:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           nullable: true
           description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
           example: null
@@ -4340,7 +4340,7 @@ components:
       properties:
         units:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           example: '1.0'
           description: The number of units consumed by the customer for a specific charge item.
         amount_cents:
@@ -4432,7 +4432,7 @@ components:
                 description: The group value.
               units:
                 type: string
-                format: '^[0-9]+.?[0-9]*$'
+                pattern: '^[0-9]+.?[0-9]*$'
                 example: '0.9'
                 description: The number of units consumed for a specific group related to a charge item.
               amount_cents:
@@ -5566,7 +5566,7 @@ components:
                     example: 12000
                   units:
                     type: string
-                    format: '^[0-9]+.?[0-9]*$'
+                    pattern: '^[0-9]+.?[0-9]*$'
                     nullable: true
                     description: 'The quantity of units associated with the fee. By default, only 1 unit is added to the invoice.'
                     example: '2.5'
@@ -6684,7 +6684,7 @@ components:
           example: french_standard_vat
         rate:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The percentage rate of the tax
           example: '20.0'
         description:
@@ -6947,7 +6947,7 @@ components:
               example: Prepaid
             rate_amount:
               type: string
-              format: '^[0-9]+.?[0-9]*$'
+              pattern: '^[0-9]+.?[0-9]*$'
               description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
               example: '1.5'
             currency:
@@ -6957,13 +6957,13 @@ components:
                   example: USD
             paid_credits:
               type: string
-              format: '^[0-9]+.?[0-9]*$'
+              pattern: '^[0-9]+.?[0-9]*$'
               nullable: true
               description: The number of paid credits. Required only if there is no granted credits.
               example: '20.0'
             granted_credits:
               type: string
-              format: '^[0-9]+.?[0-9]*$'
+              pattern: '^[0-9]+.?[0-9]*$'
               nullable: true
               description: The number of free granted credits. Required only if there is no paid credits.
               example: '10.0'
@@ -7024,12 +7024,12 @@ components:
           example: Prepaid
         rate_amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
           example: '1.5'
         credits_balance:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The current wallet balance expressed in credits.
           example: '28.0'
         balance_cents:
@@ -7038,7 +7038,7 @@ components:
           example: 1000
         consumed_credits:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The number of consumed credits.
           example: '2.0'
         created_at:
@@ -7099,12 +7099,12 @@ components:
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
             paid_credits:
               type: string
-              format: '^[0-9]+.?[0-9]*$'
+              pattern: '^[0-9]+.?[0-9]*$'
               description: The number of paid credits. Required only if there is no granted credits.
               example: '20.0'
             granted_credits:
               type: string
-              format: '^[0-9]+.?[0-9]*$'
+              pattern: '^[0-9]+.?[0-9]*$'
               description: The number of free granted credits. Required only if there is no paid credits.
               example: '10.0'
     WalletTransactionObject:
@@ -7144,12 +7144,12 @@ components:
           example: inbound
         amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The amount of credits based on the rate and the currency.
           example: '10.0'
         credit_amount:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          pattern: '^[0-9]+.?[0-9]*$'
           description: The number of credits used in the wallet transaction.
           example: '100.0'
         settled_at:

@@ -10,7 +10,7 @@ properties:
     example: 'french_standard_vat'
   rate:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The percentage rate of the tax
     example: '20.0'
   description:
