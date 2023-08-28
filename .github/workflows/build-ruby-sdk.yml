@@ -2,10 +2,6 @@ name: Generate Ruby SDK
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: Version
-        required: true
 
 jobs:
   generate-ruby-sdk:
@@ -15,6 +11,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Checkout Lago Ruby Repository
+        uses: actions/checkout@v3
+        with:
+          repository: getlago/lago-ruby
+          ref: main
+          path: './ruby-client'
+
       - name: Generate Ruby SDK
         uses: openapi-generators/openapitools-generator-action@v1
         with:
@@ -22,6 +25,31 @@ jobs:
           openapi-file: openapi.yaml
           config-file: generators/ruby-config.yaml
 
-      - name: List generated files
+      - name: Open PR with changes on Lago Ruby Repository
         run: |
-          du -a .
+          BRANCH_NAME="new-version"
+          COMMIT_MESSAGE="misc: Version v0.45.0-beta"
+          # TODO: extract version from openapi file
+
+          # Move into client folder
+          cd ruby-client
+
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          # Commit and push the changes in a new feature branch
+          git checkout -b $BRANCH_NAME
+          git commit -a -m $COMMIT_MESSAGE
+          git push origin $BRANCH_NAME
+
+          # Store credentials for the Github CLI
+          echo "${{ secrets.ACCESS_TOKEN }}" > access_token.txt
+
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          gh auth login --with-token < token.txt
+          gh pr create \
+            --body "" \
+            --title COMMIT_MESSAGE \
+            --head "$BRANCH_NAME" \
+            --base "main"
