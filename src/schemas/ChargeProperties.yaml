@@ -112,6 +112,18 @@ properties:
     description: The transaction amount that is not impacted by the `percentage` rate and fixed fee in a percentage charge model. This field indicates the portion of the transaction amount that is exempt from the calculation of charges based on the specified percentage rate and fixed fee.
     nullable: true
     example: '500'
+  per_transaction_max_amount:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: Specifies the maximum allowable spending for a single transaction. Working as a transaction cap.
+    nullable: true
+    example: '3.75'
+  per_transaction_min_amount:
+    type: string
+    format: '^[0-9]+.?[0-9]*$'
+    description: Specifies the minimum allowable spending for a single transaction. Working as a transaction floor.
+    nullable: true
+    example: '1.75'
 
   # Volume charge model
   volume_ranges:
