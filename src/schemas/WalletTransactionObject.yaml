@@ -34,12 +34,12 @@ properties:
     example: inbound
   amount:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The amount of credits based on the rate and the currency.
     example: '10.0'
   credit_amount:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The number of credits used in the wallet transaction.
     example: '100.0'
   settled_at:

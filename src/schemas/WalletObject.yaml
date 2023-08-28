@@ -44,12 +44,12 @@ properties:
     example: 'Prepaid'
   rate_amount:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
     example: '1.5'
   credits_balance:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The current wallet balance expressed in credits.
     example: '28.0'
   balance_cents:
@@ -58,7 +58,7 @@ properties:
     example: 1000
   consumed_credits:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    pattern: '^[0-9]+.?[0-9]*$'
     description: The number of consumed credits.
     example: '2.0'
   created_at:

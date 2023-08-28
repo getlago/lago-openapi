@@ -14,11 +14,11 @@ properties:
         example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
       paid_credits:
         type: string
-        format: '^[0-9]+.?[0-9]*$'
+        pattern: '^[0-9]+.?[0-9]*$'
         description: The number of paid credits. Required only if there is no granted credits.
         example: '20.0'
       granted_credits:
         type: string
-        format: '^[0-9]+.?[0-9]*$'
+        pattern: '^[0-9]+.?[0-9]*$'
         description: The number of free granted credits. Required only if there is no paid credits.
         example: '10.0'
