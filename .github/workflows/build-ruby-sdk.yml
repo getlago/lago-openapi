@@ -1,0 +1,22 @@
+name: Generate Ruby SDK
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version
+        required: true
+
+jobs:
+  generate-ruby-sdk:
+    runs-on: ubuntu-latest
+    name: Build Lago Ruby SDK
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Generate Ruby SDK
+        uses: openapi-generators/openapitools-generator-action@v1
+        with:
+          generator: ruby
+          config-file: generators/ruby-config.yaml
