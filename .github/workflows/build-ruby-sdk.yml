@@ -28,10 +28,9 @@ jobs:
       - name: Init API version
         id: init_version
         run: |
-          CURRENT_VERSION=${{ github.event.inputs.version }}
+          OPENAPI_VERSION=`grep '  version:' openapi.yaml | tail -n1 | cut -c 11-`
 
-          # Use provided version or fetch it from the openapi file
-          [ -z "$CURRENT_VERSION" ] CURRENT_VERSION=`grep '  version:' openapi.yaml | tail -n1 | cut -c 11-`
+          [[ ! -z "${{ github.event.inputs.version }}" ]] && CURRENT_VERSION=${{ github.event.inputs.version }} || CURRENT_VERSION=$OPENAPI_VERSION
 
           # Set version into generator config
           sed -i "s/API_VERSION/$CURRENT_VERSION/" generators/ruby-config.yam
