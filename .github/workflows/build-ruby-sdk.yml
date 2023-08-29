@@ -65,7 +65,7 @@ jobs:
 
           # Authorize GitHub CLI for the current repository and
           # create a pull-requests containing the updates.
-          gh auth login --with-token < token.txt
+          gh auth login --with-token < access_token.txt
           gh pr create \
             --body "" \
             --title "$COMMIT_MESSAGE" \
