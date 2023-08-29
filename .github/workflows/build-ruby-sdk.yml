@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: getlago/lago-ruby
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           ref: main
           path: './ruby-client'
 
@@ -62,7 +62,7 @@ jobs:
           git push origin $BRANCH_NAME
 
           # Store credentials for the Github CLI
-          echo "${{ secrets.GITHUB_TOKEN }}" > access_token.txt
+          echo "${{ secrets.GH_TOKEN }}" > access_token.txt
 
           # Authorize GitHub CLI for the current repository and
           # create a pull-requests containing the updates.
