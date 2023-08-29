@@ -57,7 +57,8 @@ jobs:
 
           # Commit and push the changes in a new feature branch
           git checkout -b $BRANCH_NAME
-          git commit -a -m "$COMMIT_MESSAGE"
+          git add .
+          git commit -m "$COMMIT_MESSAGE"
           git push origin $BRANCH_NAME
 
           # Store credentials for the Github CLI
