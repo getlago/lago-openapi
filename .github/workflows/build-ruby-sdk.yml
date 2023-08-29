@@ -57,7 +57,7 @@ jobs:
 
           # Commit and push the changes in a new feature branch
           git checkout -b $BRANCH_NAME
-          git commit -a -m $COMMIT_MESSAGE
+          git commit -a -m "$COMMIT_MESSAGE"
           git push origin $BRANCH_NAME
 
           # Store credentials for the Github CLI
@@ -68,6 +68,6 @@ jobs:
           gh auth login --with-token < token.txt
           gh pr create \
             --body "" \
-            --title $COMMIT_MESSAGE \
+            --title "$COMMIT_MESSAGE" \
             --head "$BRANCH_NAME" \
             --base "main"
