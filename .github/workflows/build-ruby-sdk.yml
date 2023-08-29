@@ -33,7 +33,7 @@ jobs:
           [[ ! -z "${{ github.event.inputs.version }}" ]] && CURRENT_VERSION=${{ github.event.inputs.version }} || CURRENT_VERSION=$OPENAPI_VERSION
 
           # Set version into generator config
-          sed -i "s/API_VERSION/$CURRENT_VERSION/" generators/ruby-config.yam
+          sed -i "s/API_VERSION/$CURRENT_VERSION/" generators/ruby-config.yaml
 
           echo "api_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
       - name: Generate Ruby SDK
