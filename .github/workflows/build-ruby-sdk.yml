@@ -41,7 +41,8 @@ jobs:
         with:
           generator: ruby
           openapi-file: openapi.yaml
-          config-file: generators/ruby-config.yaml
+          config-file: generators/ruby/config.yaml
+          template-dir: generators/ruby
 
       - name: Open PR with changes on Lago Ruby Repository
         run: |
