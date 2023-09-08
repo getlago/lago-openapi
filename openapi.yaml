@@ -2070,25 +2070,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                webhook_endpoint:
-                  type: object
-                  required:
-                    - webhook_url
-                  properties:
-                    webhook_url:
-                      type: string
-                      description: The URL of the webhook endpoint.
-                      example: 'https://foo.bar'
-                    signature_algo:
-                      type: string
-                      description: 'The signature used for the webhook. If no value is passed,'
-                      example: hmac
-                      nullable: true
-                      enum:
-                        - jwt
-                        - hmac
+              $ref: '#/components/schemas/WebhookEndpointCreateInput'
         required: true
       responses:
         '200':
@@ -2096,44 +2078,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - webhook_endpoint
-                properties:
-                  webhook_endpoint:
-                    type: object
-                    required:
-                      - lago_id
-                      - lago_organization_id
-                      - webhook_url
-                      - created_at
-                    properties:
-                      lago_id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the webhook endpoint's record within the Lago system.
-                        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                      lago_organization_id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier assigned to the organization attached to the webhook endpoint within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the organization’s record within the Lago system.
-                        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                      webhook_url:
-                        type: string
-                        description: The name of the wallet.
-                        example: Prepaid
-                      signature_algo:
-                        type: string
-                        description: The signature algo for the webhook.
-                        example: hmac
-                        enum:
-                          - jwt
-                          - hmac
-                      created_at:
-                        type: string
-                        format: date-time
-                        description: 'The date of the webhook endpoint creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
-                        example: '2022-04-29T08:59:51Z'
+                $ref: '#/components/schemas/WebhookEndpoint'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2155,17 +2100,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - webhook_endpoints
-                  - meta
-                properties:
-                  webhook_endpoints:
-                    type: array
-                    items:
-                      $ref: '#/paths/~1webhook_endpoints/post/responses/200/content/application~1json/schema/properties/webhook_endpoint'
-                  meta:
-                    $ref: '#/components/schemas/PaginationMeta'
+                $ref: '#/components/schemas/WebhookEndpointsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
   '/webhook_endpoints/{lago_id}':
@@ -2189,25 +2124,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                webhook_endpoint:
-                  type: object
-                  required:
-                    - webhook_url
-                  properties:
-                    webhook_url:
-                      type: string
-                      description: The URL of the webhook endpoint.
-                      example: 'https://foo.bar'
-                    signature_algo:
-                      type: string
-                      description: 'The signature used for the webhook. If no value is passed,'
-                      example: hmac
-                      nullable: true
-                      enum:
-                        - jwt
-                        - hmac
+              $ref: '#/components/schemas/WebhookEndpointUpdateInput'
         required: true
       responses:
         '200':
@@ -2215,7 +2132,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1webhook_endpoints/post/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/WebhookEndpoint'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2236,7 +2153,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1webhook_endpoints/post/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/WebhookEndpoint'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -2253,7 +2170,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1webhook_endpoints/post/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/WebhookEndpoint'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -7126,6 +7043,99 @@ components:
               nullable: true
               description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
               example: '2022-07-07T23:59:59Z'
+    WebhookEndpoint:
+      type: object
+      required:
+        - webhook_endpoint
+      properties:
+        webhook_endpoint:
+          $ref: '#/components/schemas/WebhookEndpointObject'
+    WebhookEndpointCreateInput:
+      type: object
+      properties:
+        webhook_endpoint:
+          type: object
+          required:
+            - webhook_url
+          properties:
+            webhook_url:
+              type: string
+              description: The URL of the webhook endpoint.
+              example: 'https://foo.bar'
+            signature_algo:
+              type: string
+              description: 'The signature used for the webhook. If no value is passed,'
+              example: hmac
+              nullable: true
+              enum:
+                - jwt
+                - hmac
+    WebhookEndpointObject:
+      type: object
+      required:
+        - lago_id
+        - lago_organization_id
+        - webhook_url
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the webhook endpoint's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the organization attached to the webhook endpoint within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the organization’s record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        webhook_url:
+          type: string
+          description: The name of the wallet.
+          example: Prepaid
+        signature_algo:
+          type: string
+          description: The signature algo for the webhook.
+          example: hmac
+          enum:
+            - jwt
+            - hmac
+        created_at:
+          type: string
+          format: date-time
+          description: 'The date of the webhook endpoint creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
+          example: '2022-04-29T08:59:51Z'
+    WebhookEndpointsPaginated:
+      type: object
+      required:
+        - webhook_endpoints
+        - meta
+      properties:
+        webhook_endpoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookEndpointObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    WebhookEndpointUpdateInput:
+      type: object
+      properties:
+        webhook_endpoint:
+          type: object
+          required:
+            - webhook_url
+          properties:
+            webhook_url:
+              type: string
+              description: The URL of the webhook endpoint.
+              example: 'https://foo.bar'
+            signature_algo:
+              type: string
+              description: 'The signature used for the webhook. If no value is passed,'
+              example: hmac
+              nullable: true
+              enum:
+                - jwt
+                - hmac
   responses:
     BadRequest:
       description: Bad Request error
