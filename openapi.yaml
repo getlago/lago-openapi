@@ -2824,6 +2824,14 @@ components:
             - sum_agg
             - max_agg
             - unique_count_agg
+            - weighted_sum_agg
+        weighted_interval:
+          type: string
+          enum:
+            - seconds
+          nullable: true
+          example: seconds
+          description: Weight interval used for weighted sum aggregation. Mandatory when `aggregation_type` is `weighted_sum_agg`
         group:
           $ref: '#/components/schemas/BillableMetricGroup'
         active_subscriptions_count:
@@ -2877,6 +2885,14 @@ components:
             - sum_agg
             - max_agg
             - unique_count_agg
+            - weighted_sum_agg
+        weighted_interval:
+          type: string
+          enum:
+            - seconds
+          nullable: true
+          example: seconds
+          description: Weight interval used for weighted sum aggregation. Mandatory when `aggregation_type` is `weighted_sum_agg`
         group:
           $ref: '#/components/schemas/BillableMetricGroup'
     BillableMetricCreateInput:
@@ -4863,9 +4879,14 @@ components:
               example: storage
               description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
             timestamp:
-              type: integer
-              example: 1651240791
-              description: 'This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.'
+              anyOf:
+                - type: integer
+                - type: string
+              example: '1651240791.123'
+              description: |
+                This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
+                If this timestamp is not provided, the API will automatically set it to the time of event reception.
+                You can also provide miliseconds precision by appending decimals to the timestamp.
             properties:
               type: object
               description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
@@ -4911,7 +4932,7 @@ components:
         timestamp:
           type: string
           format: date-time
-          example: '2022-04-29T08:59:51Z'
+          example: '2022-04-29T08:59:51.123Z'
           description: 'This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.'
         properties:
           type: object

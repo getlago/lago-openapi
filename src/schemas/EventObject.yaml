@@ -35,7 +35,7 @@ properties:
   timestamp:
     type: string
     format: 'date-time'
-    example: '2022-04-29T08:59:51Z'
+    example: '2022-04-29T08:59:51.123Z'
     description: This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.
   properties:
     type: object
