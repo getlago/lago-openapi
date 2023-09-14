@@ -1,0 +1,75 @@
+name: Generate Python SDK
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version
+        required: false
+
+jobs:
+  generate-python-sdk:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    name: Build Lago Python SDK
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Checkout Lago Python Repository
+        uses: actions/checkout@v3
+        with:
+          repository: getlago/lago-python
+          token: ${{ secrets.GH_TOKEN }}
+          ref: main
+          path: './python-client'
+
+      - name: Init API version
+        id: init_version
+        run: |
+          OPENAPI_VERSION=`grep '  version:' openapi.yaml | tail -n1 | cut -c 12-`
+
+          [[ ! -z "${{ github.event.inputs.version }}" ]] && CURRENT_VERSION=${{ github.event.inputs.version }} || CURRENT_VERSION=$OPENAPI_VERSION
+
+          # Set version into generator config
+          sed -i "s/API_VERSION/$CURRENT_VERSION/" generators/python/config.yaml
+
+          echo "api_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+      - name: Generate Python SDK
+        uses: openapi-generators/openapitools-generator-action@v1
+        with:
+          generator: python
+          openapi-file: openapi.yaml
+          config-file: generators/python/config.yaml
+          template-dir: generators/python
+
+      - name: Open PR with changes on Lago Python Repository
+        run: |
+          API_VERSION="${{ steps.init_version.outputs.api_version }}"
+          BRANCH_NAME="version-${API_VERSION//./-}"
+          COMMIT_MESSAGE="misc: Version v$API_VERSION"
+
+          # Move into client folder
+          cd python-client
+
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          # Commit and push the changes in a new feature branch
+          git checkout -b $BRANCH_NAME
+          git add .
+          git commit -m "$COMMIT_MESSAGE"
+          git push origin $BRANCH_NAME
+
+          # Store credentials for the Github CLI
+          echo "${{ secrets.GH_TOKEN }}" > access_token.txt
+
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          gh auth login --with-token < access_token.txt
+          gh pr create \
+            --body "" \
+            --title "$COMMIT_MESSAGE" \
+            --head "$BRANCH_NAME" \
+            --base "main"
