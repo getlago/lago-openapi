@@ -3641,12 +3641,12 @@ components:
           type: object
           description: The item attached to the credit.
           required:
-            - lago_id
+            - lago_item_id
             - type
             - code
             - name
           properties:
-            lago_id:
+            lago_item_id:
               type: string
               format: uuid
               description: Unique identifier assigned to the credit item within the Lago application.
