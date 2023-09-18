@@ -19,6 +19,10 @@ properties:
     type: string
     description: The name of the plan.
     example: 'Startup'
+  invoice_display_name:
+    type: string
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
+    example: 'Startup plan'
   created_at:
     type: string
     format: 'date-time'

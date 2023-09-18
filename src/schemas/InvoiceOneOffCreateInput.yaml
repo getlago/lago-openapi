@@ -28,6 +28,10 @@ properties:
               type: string
               description: The code of the add-on used as invoice item.
               example: 'setup_fee'
+            invoice_display_name:
+              type: string
+              description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+              example: 'Setup Fee (SF1)'
             unit_amount_cents:
               type: integer
               nullable: true

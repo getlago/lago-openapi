@@ -184,6 +184,10 @@ properties:
         type: string
         description: The name of the fee item. It can be the name of the `add-on`, the name of the `charge`, the name of the `credit` or the name of the `subscription`.
         example: 'Startup'
+      invoice_display_name:
+        type: string
+        description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+        example: 'Setup Fee (SF1)'
       lago_item_id:
         type: string
         example: '1a901a90-1a90-1a90-1a90-1a901a901a90'

@@ -8,6 +8,10 @@ properties:
     format: uuid
     description: Unique identifier of a billable metric group, created by Lago.
     example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  invoice_display_name:
+    type: string
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual group will be used as the default display name.
+    example: 'AWS'
   values:
     allOf:
       - $ref: './ChargeProperties.yaml'

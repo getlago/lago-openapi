@@ -16,6 +16,10 @@ properties:
     type: string
     description: The name of the add-on.
     example: 'Setup Fee'
+  invoice_display_name:
+    type: string
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+    example: 'Setup Fee (SF1)'
   code:
     type: string
     description: Unique code used to identify the add-on.

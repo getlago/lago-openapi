@@ -2232,6 +2232,10 @@ components:
           type: string
           description: The name of the add-on.
           example: Setup Fee
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+          example: Setup Fee (SF1)
         code:
           type: string
           description: Unique code used to identify the add-on.
@@ -2289,6 +2293,10 @@ components:
           type: string
           description: The name of the add-on.
           example: Setup Fee
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+          example: Setup Fee (SF1)
         code:
           type: string
           description: Unique code used to identify the add-on.
@@ -2890,6 +2898,10 @@ components:
           type: string
           description: Unique code identifying a billable metric.
           example: requests
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+          example: Setup
         created_at:
           type: string
           format: date-time
@@ -5062,6 +5074,10 @@ components:
               type: string
               description: 'The name of the fee item. It can be the name of the `add-on`, the name of the `charge`, the name of the `credit` or the name of the `subscription`.'
               example: Startup
+            invoice_display_name:
+              type: string
+              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+              example: Setup Fee (SF1)
             lago_item_id:
               type: string
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
@@ -5149,6 +5165,10 @@ components:
           format: uuid
           description: 'Unique identifier of a billable metric group, created by Lago.'
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual group will be used as the default display name.'
+          example: AWS
         values:
           allOf:
             - $ref: '#/components/schemas/ChargeProperties'
@@ -5401,6 +5421,10 @@ components:
                     type: string
                     description: The code of the add-on used as invoice item.
                     example: setup_fee
+                  invoice_display_name:
+                    type: string
+                    description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+                    example: Setup Fee (SF1)
                   unit_amount_cents:
                     type: integer
                     nullable: true
@@ -5735,6 +5759,10 @@ components:
               type: string
               example: Startup
               description: The name of the plan.
+            invoice_display_name:
+              type: string
+              example: Startup plan
+              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.'
             code:
               type: string
               example: startup
@@ -5941,6 +5969,10 @@ components:
               type: string
               example: Startup
               description: The name of the plan.
+            invoice_display_name:
+              type: string
+              example: Startup plan
+              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.'
             code:
               type: string
               example: startup
@@ -6162,6 +6194,10 @@ components:
           type: string
           description: The name of the plan.
           example: Startup
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.'
+          example: Startup plan
         created_at:
           type: string
           format: date-time
