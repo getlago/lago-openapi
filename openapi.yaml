@@ -6394,6 +6394,11 @@ components:
               enum:
                 - calendar
                 - anniversary
+            ending_at:
+              type: string
+              format: date-time
+              example: '2022-10-08T00:00:00Z'
+              description: 'The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).'
             subscription_at:
               type: string
               format: date-time
@@ -6412,6 +6417,11 @@ components:
               example: Repository B
               nullable: true
               description: 'The display name of the subscription on an invoice. This field allows for customization of the subscription''s name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.'
+            ending_at:
+              type: string
+              format: date-time
+              example: '2022-10-08T00:00:00Z'
+              description: 'The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).'
             subscription_at:
               type: string
               format: date-time
@@ -6495,6 +6505,11 @@ components:
           example: '2022-08-08T00:00:00Z'
           description: The effective start date of the subscription. This field can be null if the subscription is `pending` or `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
           nullable: true
+        ending_at:
+          type: string
+          format: date-time
+          example: '2022-10-08T00:00:00Z'
+          description: 'The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).'
         subscription_at:
           type: string
           format: date-time
