@@ -65,6 +65,10 @@ properties:
     nullable: true
     description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge and the payment for the fee is made in advance (`pay_in_advance` is set to true).
     example: 'external_id'
+  invoice_display_name:
+    type: string
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+    example: 'Setup Fee (SF1)'
   amount_cents:
     type: integer
     description: The cost of this specific fee, excluding any applicable taxes.
