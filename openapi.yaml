@@ -2734,7 +2734,7 @@ components:
           nullable: true
         aggregation_type:
           type: string
-          description: 'Aggregation method used to compute usage for this billable metric. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.'
+          description: Aggregation method used to compute usage for this billable metric.
           example: sum_agg
           enum:
             - count_agg
@@ -2742,6 +2742,7 @@ components:
             - max_agg
             - unique_count_agg
             - weighted_sum_agg
+            - latest_agg
         weighted_interval:
           type: string
           enum:
@@ -2796,13 +2797,14 @@ components:
         aggregation_type:
           type: string
           example: sum_agg
-          description: 'Aggregation method used to compute usage for this billable metric. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.'
+          description: Aggregation method used to compute usage for this billable metric.
           enum:
             - count_agg
             - sum_agg
             - max_agg
             - unique_count_agg
             - weighted_sum_agg
+            - latest_agg
         weighted_interval:
           type: string
           enum:
