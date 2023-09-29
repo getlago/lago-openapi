@@ -1,0 +1,53 @@
+get:
+  tags:
+    - customers
+  summary: Retrieve customer past usage
+  description: This endpoint enables the retrieval of the usage-based billing data for a customer within past periods.
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - name: external_customer_id
+      in: path
+      description: The customer external unique identifier (provided by your own application).
+      required: true
+      schema:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    - name: external_subscription_id
+      in: query
+      description: The unique identifier of the subscription within your application.
+      required: true
+      explode: true
+      schema:
+        type: string
+        example: 'sub_1234567890'
+    - name: billable_metric_code
+      in: query
+      description: Billable metric code filter to apply to the charge usage
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'cpu'
+    - name: periods_count
+      in: query
+      description: Number of past billing period to returns in the result
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 5
+  operationId: findAllCustomerPastUsage
+  responses:
+    '200':
+      description: Customer past usage
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CustomerPastUsage.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

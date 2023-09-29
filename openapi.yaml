@@ -905,6 +905,60 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  '/customers/{external_customer_id}/past_usage':
+    get:
+      tags:
+        - customers
+      summary: Retrieve customer past usage
+      description: This endpoint enables the retrieval of the usage-based billing data for a customer within past periods.
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: external_customer_id
+          in: path
+          description: The customer external unique identifier (provided by your own application).
+          required: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - name: external_subscription_id
+          in: query
+          description: The unique identifier of the subscription within your application.
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: sub_1234567890
+        - name: billable_metric_code
+          in: query
+          description: Billable metric code filter to apply to the charge usage
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: cpu
+        - name: periods_count
+          in: query
+          description: Number of past billing period to returns in the result
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 5
+      operationId: findAllCustomerPastUsage
+      responses:
+        '200':
+          description: Customer past usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPastUsage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /events:
     post:
       tags:
@@ -4219,6 +4273,7 @@ components:
       type: object
       required:
         - units
+        - events_count
         - amount_cents
         - amount_currency
         - charge
@@ -4230,6 +4285,10 @@ components:
           pattern: '^[0-9]+.?[0-9]*$'
           example: '1.0'
           description: The number of units consumed by the customer for a specific charge item.
+        events_count:
+          type: integer
+          example: 10
+          description: The quantity of usage events that have been recorded for a particular charge during the specified time period. These events may also be referred to as the number of transactions in some contexts.
         amount_cents:
           type: integer
           example: 123
@@ -4299,6 +4358,7 @@ components:
             - lago_id
             - value
             - units
+            - events_count
             - amount_cents
           items:
             type: object
@@ -4322,6 +4382,10 @@ components:
                 pattern: '^[0-9]+.?[0-9]*$'
                 example: '0.9'
                 description: The number of units consumed for a specific group related to a charge item.
+              events_count:
+                type: integer
+                example: 10
+                description: The quantity of usage events that have been recorded for a particular charge during the specified time period. These events may also be referred to as the number of transactions in some contexts.
               amount_cents:
                 type: integer
                 example: 1000
@@ -4644,6 +4708,18 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TaxObject'
+    CustomerPastUsage:
+      type: object
+      required:
+        - usage_periods
+        - meta
+      properties:
+        usage_periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerUsage'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     CustomersPaginated:
       type: object
       required:
@@ -4689,6 +4765,12 @@ components:
           format: date-time
           description: The date of creation of the invoice.
           example: '2022-08-01T23:59:59Z'
+        lago_invoice_id:
+          type: string
+          format: uuid
+          nullable: true
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: A unique identifier associated with the invoice related to this particular usage record.
         currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
