@@ -2249,6 +2249,10 @@ components:
           type: string
           description: The name of the add-on.
           example: Setup Fee
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+          example: Setup Fee (SF1)
         code:
           type: string
           description: Unique code used to identify the add-on.
@@ -2306,6 +2310,10 @@ components:
           type: string
           description: The name of the add-on.
           example: Setup Fee
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+          example: Setup Fee (SF1)
         code:
           type: string
           description: Unique code used to identify the add-on.
@@ -2925,6 +2933,10 @@ components:
           type: string
           description: Unique code identifying a billable metric.
           example: requests
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+          example: Setup
         created_at:
           type: string
           format: date-time
@@ -4988,6 +5000,10 @@ components:
           nullable: true
           description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge and the payment for the fee is made in advance (`pay_in_advance` is set to true).
           example: external_id
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+          example: Setup Fee (SF1)
         amount_cents:
           type: integer
           description: 'The cost of this specific fee, excluding any applicable taxes.'
@@ -5107,6 +5123,10 @@ components:
               type: string
               description: 'The name of the fee item. It can be the name of the `add-on`, the name of the `charge`, the name of the `credit` or the name of the `subscription`.'
               example: Startup
+            invoice_display_name:
+              type: string
+              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+              example: Setup Fee (SF1)
             lago_item_id:
               type: string
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
@@ -5194,6 +5214,10 @@ components:
           format: uuid
           description: 'Unique identifier of a billable metric group, created by Lago.'
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual group will be used as the default display name.'
+          example: AWS
         values:
           allOf:
             - $ref: '#/components/schemas/ChargeProperties'
@@ -5446,6 +5470,10 @@ components:
                     type: string
                     description: The code of the add-on used as invoice item.
                     example: setup_fee
+                  invoice_display_name:
+                    type: string
+                    description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+                    example: Setup Fee (SF1)
                   unit_amount_cents:
                     type: integer
                     nullable: true
@@ -5780,6 +5808,10 @@ components:
               type: string
               example: Startup
               description: The name of the plan.
+            invoice_display_name:
+              type: string
+              example: Startup plan
+              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.'
             code:
               type: string
               example: startup
@@ -5856,6 +5888,10 @@ components:
                     type: boolean
                     description: 'This field specifies whether the charge should be included in a proper invoice. If set to false, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.'
                     example: true
+                  invoice_display_name:
+                    type: string
+                    description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+                    example: Setup
                   prorated:
                     type: boolean
                     example: false
@@ -5901,6 +5937,7 @@ components:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
                   invoiceable: true
+                  invoice_display_name: Setup
                   pay_in_advance: false
                   prorated: false
                   min_amount_cents: 3000
@@ -5914,6 +5951,7 @@ components:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
                   charge_model: graduated
                   invoiceable: true
+                  invoice_display_name: Setup
                   pay_in_advance: false
                   prorated: false
                   min_amount_cents: 0
@@ -5931,23 +5969,28 @@ components:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
                   charge_model: standard
                   invoiceable: true
+                  invoice_display_name: Setup
                   pay_in_advance: true
                   prorated: false
                   min_amount_cents: 0
                   properties: {}
                   group_properties:
                     - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a01
+                      invoice_display_name: Europe
                       values:
                         amount: '10'
                     - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a02
+                      invoice_display_name: USA
                       values:
                         amount: '5'
                     - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a03
+                      invoice_display_name: Africa
                       values:
                         amount: '8'
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
                   charge_model: volume
                   invoiceable: true
+                  invoice_display_name: Setup
                   pay_in_advance: false
                   prorated: false
                   min_amount_cents: 0
@@ -5965,6 +6008,7 @@ components:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
                   charge_model: percentage
                   invoiceable: false
+                  invoice_display_name: Setup
                   pay_in_advance: true
                   prorated: false
                   min_amount_cents: 0
@@ -5986,6 +6030,10 @@ components:
               type: string
               example: Startup
               description: The name of the plan.
+            invoice_display_name:
+              type: string
+              example: Startup plan
+              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.'
             code:
               type: string
               example: startup
@@ -6067,6 +6115,10 @@ components:
                     type: boolean
                     description: 'This field specifies whether the charge should be included in a proper invoice. If set to false, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.'
                     example: true
+                  invoice_display_name:
+                    type: string
+                    description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+                    example: Setup
                   prorated:
                     type: boolean
                     example: false
@@ -6112,6 +6164,7 @@ components:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
                   invoiceable: true
+                  invoice_display_name: Setup
                   pay_in_advance: false
                   prorated: false
                   min_amount_cents: 3000
@@ -6125,6 +6178,7 @@ components:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
                   charge_model: graduated
                   invoiceable: true
+                  invoice_display_name: Setup
                   pay_in_advance: false
                   prorated: false
                   min_amount_cents: 0
@@ -6142,23 +6196,28 @@ components:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
                   charge_model: standard
                   invoiceable: true
+                  invoice_display_name: Setup
                   pay_in_advance: true
                   prorated: false
                   min_amount_cents: 0
                   properties: {}
                   group_properties:
                     - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a01
+                      invoice_display_name: Europe
                       values:
                         amount: '10'
                     - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a02
+                      invoice_display_name: USA
                       values:
                         amount: '5'
                     - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a03
+                      invoice_display_name: Africa
                       values:
                         amount: '8'
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
                   charge_model: volume
                   invoiceable: true
+                  invoice_display_name: Setup
                   pay_in_advance: false
                   prorated: false
                   min_amount_cents: 0
@@ -6176,6 +6235,7 @@ components:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
                   charge_model: percentage
                   invoiceable: false
+                  invoice_display_name: Setup
                   pay_in_advance: true
                   prorated: false
                   min_amount_cents: 0
@@ -6207,6 +6267,10 @@ components:
           type: string
           description: The name of the plan.
           example: Startup
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.'
+          example: Startup plan
         created_at:
           type: string
           format: date-time
@@ -6271,6 +6335,7 @@ components:
               created_at: '2023-06-27T19:43:42Z'
               charge_model: package
               invoiceable: true
+              invoice_display_name: Setup
               pay_in_advance: false
               prorated: false
               min_amount_cents: 3000
@@ -6285,6 +6350,7 @@ components:
               created_at: '2023-06-27T19:43:42Z'
               charge_model: graduated
               invoiceable: true
+              invoice_display_name: Setup
               pay_in_advance: false
               prorated: false
               min_amount_cents: 0
@@ -6305,18 +6371,22 @@ components:
               created_at: '2023-06-27T19:43:42Z'
               charge_model: standard
               invoiceable: true
+              invoice_display_name: Setup
               pay_in_advance: true
               prorated: false
               min_amount_cents: 0
               properties: {}
               group_properties:
                 - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a01
+                  invoice_display_name: Europe
                   values:
                     amount: '10'
                 - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a02
+                  invoice_display_name: USA
                   values:
                     amount: '5'
                 - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a03
+                  invoice_display_name: Africa
                   values:
                     amount: '8'
             - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
@@ -6325,6 +6395,7 @@ components:
               created_at: '2023-06-27T19:43:42Z'
               charge_model: volume
               invoiceable: true
+              invoice_display_name: Setup
               pay_in_advance: false
               prorated: false
               min_amount_cents: 0
@@ -6345,6 +6416,7 @@ components:
               created_at: '2023-06-27T19:43:42Z'
               charge_model: percentage
               invoiceable: false
+              invoice_display_name: Setup
               pay_in_advance: true
               prorated: false
               min_amount_cents: 0

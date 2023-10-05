@@ -19,6 +19,10 @@ properties:
     type: string
     description: The name of the plan.
     example: 'Startup'
+  invoice_display_name:
+    type: string
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
+    example: 'Startup plan'
   created_at:
     type: string
     format: 'date-time'
@@ -83,6 +87,7 @@ properties:
         created_at: '2023-06-27T19:43:42Z'
         charge_model: 'package'
         invoiceable: true
+        invoice_display_name: 'Setup'
         pay_in_advance: false
         prorated: false
         min_amount_cents: 3000
@@ -97,6 +102,7 @@ properties:
         created_at: '2023-06-27T19:43:42Z'
         charge_model: 'graduated'
         invoiceable: true
+        invoice_display_name: 'Setup'
         pay_in_advance: false
         prorated: false
         min_amount_cents: 0
@@ -117,18 +123,22 @@ properties:
         created_at: '2023-06-27T19:43:42Z'
         charge_model: 'standard'
         invoiceable: true
+        invoice_display_name: 'Setup'
         pay_in_advance: true
         prorated: false
         min_amount_cents: 0
         properties: {}
         group_properties:
           - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a01'
+            invoice_display_name: 'Europe'
             values:
               amount: '10'
           - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a02'
+            invoice_display_name: 'USA'
             values:
               amount: '5'
           - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a03'
+            invoice_display_name: 'Africa'
             values:
               amount: '8'
       - lago_id: '1a901a90-1a90-1a90-1a90-1a901a901a94'
@@ -137,6 +147,7 @@ properties:
         created_at: '2023-06-27T19:43:42Z'
         charge_model: 'volume'
         invoiceable: true
+        invoice_display_name: 'Setup'
         pay_in_advance: false
         prorated: false
         min_amount_cents: 0
@@ -157,6 +168,7 @@ properties:
         created_at: '2023-06-27T19:43:42Z'
         charge_model: 'percentage'
         invoiceable: false
+        invoice_display_name: 'Setup'
         pay_in_advance: true
         prorated: false
         min_amount_cents: 0

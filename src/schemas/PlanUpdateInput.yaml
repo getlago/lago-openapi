@@ -9,6 +9,10 @@ properties:
         type: string
         example: 'Startup'
         description: The name of the plan.
+      invoice_display_name:
+        type: string
+        example: 'Startup plan'
+        description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
       code:
         type: string
         example: 'startup'
@@ -89,6 +93,10 @@ properties:
               type: boolean
               description: This field specifies whether the charge should be included in a proper invoice. If set to false, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.
               example: true
+            invoice_display_name:
+              type: string
+              description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+              example: 'Setup'
             prorated:
               type: boolean
               example: false
@@ -133,6 +141,7 @@ properties:
           - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a91'
             charge_model: 'package'
             invoiceable: true
+            invoice_display_name: 'Setup'
             pay_in_advance: false
             prorated: false
             min_amount_cents: 3000
@@ -145,6 +154,7 @@ properties:
           - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a92'
             charge_model: 'graduated'
             invoiceable: true
+            invoice_display_name: 'Setup'
             pay_in_advance: false
             prorated: false
             min_amount_cents: 0
@@ -162,23 +172,28 @@ properties:
           - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a93'
             charge_model: 'standard'
             invoiceable: true
+            invoice_display_name: 'Setup'
             pay_in_advance: true
             prorated: false
             min_amount_cents: 0
             properties: {}
             group_properties:
               - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a01'
+                invoice_display_name: 'Europe'
                 values:
                   amount: '10'
               - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a02'
+                invoice_display_name: 'USA'
                 values:
                   amount: '5'
               - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a03'
+                invoice_display_name: 'Africa'
                 values:
                   amount: '8'
           - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a94'
             charge_model: 'volume'
             invoiceable: true
+            invoice_display_name: 'Setup'
             pay_in_advance: false
             prorated: false
             min_amount_cents: 0
@@ -196,6 +211,7 @@ properties:
           - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a95'
             charge_model: 'percentage'
             invoiceable: false
+            invoice_display_name: 'Setup'
             pay_in_advance: true
             prorated: false
             min_amount_cents: 0

@@ -20,6 +20,10 @@ properties:
     type: string
     description: Unique code identifying a billable metric.
     example: 'requests'
+  invoice_display_name:
+    type: string
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+    example: 'Setup'
   created_at:
     type: string
     format: 'date-time'
