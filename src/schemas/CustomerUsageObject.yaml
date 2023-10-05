@@ -23,6 +23,12 @@ properties:
     format: 'date-time'
     description: The date of creation of the invoice.
     example: '2022-08-01T23:59:59Z'
+  lago_invoice_id:
+    type: string
+    format: 'uuid'
+    nullable: true
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    description: A unique identifier associated with the invoice related to this particular usage record.
   currency:
     allOf:
       - $ref: './Currency.yaml'

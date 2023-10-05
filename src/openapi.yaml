@@ -126,6 +126,8 @@ paths:
     $ref: './resources/customer_portal_url.yaml'
   /customers/{external_customer_id}/current_usage:
     $ref: './resources/customer_current_usage.yaml'
+  /customers/{external_customer_id}/past_usage:
+    $ref: './resources/customer_past_usage.yaml'
   /events:
     $ref: './resources/events.yaml'
   /events/batch:

@@ -1,6 +1,7 @@
 type: object
 required:
   - units
+  - events_count
   - amount_cents
   - amount_currency
   - charge
@@ -12,6 +13,10 @@ properties:
     pattern: '^[0-9]+.?[0-9]*$'
     example: '1.0'
     description: The number of units consumed by the customer for a specific charge item.
+  events_count:
+    type: integer
+    example: 10
+    description: The quantity of usage events that have been recorded for a particular charge during the specified time period. These events may also be referred to as the number of transactions in some contexts.
   amount_cents:
     type: integer
     example: 123
@@ -79,9 +84,9 @@ properties:
     description: Array of group object, representing multiple dimensions for a charge item.
     required:
       - lago_id
-
       - value
       - units
+      - events_count
       - amount_cents
     items:
       type: object
@@ -105,6 +110,10 @@ properties:
           pattern: '^[0-9]+.?[0-9]*$'
           example: '0.9'
           description: The number of units consumed for a specific group related to a charge item.
+        events_count:
+          type: integer
+          example: 10
+          description: The quantity of usage events that have been recorded for a particular charge during the specified time period. These events may also be referred to as the number of transactions in some contexts.
         amount_cents:
           type: integer
           example: 1000

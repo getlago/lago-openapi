@@ -1,0 +1,11 @@
+type: object
+required:
+  - usage_periods
+  - meta
+properties:
+  usage_periods:
+    type: array
+    items:
+      $ref: './CustomerUsage.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
