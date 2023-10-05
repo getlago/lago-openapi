@@ -930,6 +930,7 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
   /events/batch:
     post:
+      deprecated: true
       tags:
         - events
       summary: Batch multiple events
