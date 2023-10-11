@@ -6578,6 +6578,84 @@ components:
               format: date-time
               example: '2022-08-08T00:00:00Z'
               description: 'The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
+            plan_overrides:
+              type: object
+              description: Based plan overrides.
+              properties:
+                amount_cents:
+                  type: integer
+                  description: 'The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.'
+                  example: 10000
+                amount_currency:
+                  allOf:
+                    - $ref: '#/components/schemas/Currency'
+                    - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+                      example: USD
+                description:
+                  type: string
+                  description: The description on the plan.
+                  example: Plan for early stage startups.
+                invoice_display_name:
+                  type: string
+                  example: Startup plan
+                  description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.'
+                name:
+                  type: string
+                  example: Startup
+                  description: The name of the plan.
+                tax_codes:
+                  type: array
+                  items:
+                    type: string
+                  description: List of unique code used to identify the taxes.
+                  example:
+                    - french_standard_vat
+                trial_period:
+                  type: number
+                  description: The duration in days during which the base cost of the plan is offered for free.
+                  example: 5
+                charges:
+                  type: array
+                  description: Additional usage-based charges for this plan.
+                  items:
+                    type: object
+                    properties:
+                      invoice_display_name:
+                        type: string
+                        description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+                        example: Setup
+                      min_amount_cents:
+                        type: integer
+                        description: 'The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.'
+                        example: 0
+                      properties:
+                        allOf:
+                          - $ref: '#/components/schemas/ChargeProperties'
+                          - description: List of all thresholds utilized for calculating the charge.
+                      group_properties:
+                        type: array
+                        description: 'All charge information, sorted by groups.'
+                        items:
+                          type: object
+                          required:
+                            - group_id
+                            - values
+                          properties:
+                            group_id:
+                              type: string
+                              description: 'Unique identifier of a billable metric group, created by Lago.'
+                              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                            values:
+                              allOf:
+                                - $ref: '#/components/schemas/ChargeProperties'
+                                - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+                      tax_codes:
+                        type: array
+                        items:
+                          type: string
+                        description: List of unique code used to identify the taxes.
+                        example:
+                          - french_standard_vat
     SubscriptionUpdateInput:
       type: object
       required:
@@ -6601,6 +6679,84 @@ components:
               format: date-time
               example: '2022-08-08T00:00:00Z'
               description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+            plan_overrides:
+              type: object
+              description: Based plan overrides.
+              properties:
+                amount_cents:
+                  type: integer
+                  description: 'The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.'
+                  example: 10000
+                amount_currency:
+                  allOf:
+                    - $ref: '#/components/schemas/Currency'
+                    - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+                      example: USD
+                description:
+                  type: string
+                  description: The description on the plan.
+                  example: Plan for early stage startups.
+                invoice_display_name:
+                  type: string
+                  example: Startup plan
+                  description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.'
+                name:
+                  type: string
+                  example: Startup
+                  description: The name of the plan.
+                tax_codes:
+                  type: array
+                  items:
+                    type: string
+                  description: List of unique code used to identify the taxes.
+                  example:
+                    - french_standard_vat
+                trial_period:
+                  type: number
+                  description: The duration in days during which the base cost of the plan is offered for free.
+                  example: 5
+                charges:
+                  type: array
+                  description: Additional usage-based charges for this plan.
+                  items:
+                    type: object
+                    properties:
+                      invoice_display_name:
+                        type: string
+                        description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+                        example: Setup
+                      min_amount_cents:
+                        type: integer
+                        description: 'The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.'
+                        example: 0
+                      properties:
+                        allOf:
+                          - $ref: '#/components/schemas/ChargeProperties'
+                          - description: List of all thresholds utilized for calculating the charge.
+                      group_properties:
+                        type: array
+                        description: 'All charge information, sorted by groups.'
+                        items:
+                          type: object
+                          required:
+                            - group_id
+                            - values
+                          properties:
+                            group_id:
+                              type: string
+                              description: 'Unique identifier of a billable metric group, created by Lago.'
+                              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                            values:
+                              allOf:
+                                - $ref: '#/components/schemas/ChargeProperties'
+                                - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+                      tax_codes:
+                        type: array
+                        items:
+                          type: string
+                        description: List of unique code used to identify the taxes.
+                        example:
+                          - french_standard_vat
     SubscriptionObject:
       type: object
       required:
