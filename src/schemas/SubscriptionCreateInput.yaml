@@ -42,3 +42,5 @@ properties:
         format: 'date-time'
         example: '2022-08-08T00:00:00Z'
         description: The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+      plan_overrides:
+        $ref: '../schemas/PlanOverridesObject.yaml'
