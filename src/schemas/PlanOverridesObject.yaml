@@ -38,6 +38,11 @@ properties:
     items:
       type: object
       properties:
+        id:
+          type: string
+          format: 'uuid'
+          description: Unique identifier of the charge created by Lago.
+          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
         invoice_display_name:
           type: string
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
