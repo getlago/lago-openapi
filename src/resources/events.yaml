@@ -13,7 +13,11 @@ post:
     required: true
   responses:
     '200':
-      description: Event received
+      description: Event
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Event.yaml'
     '400':
       $ref: '../responses/BadRequest.yaml'
     '401':
