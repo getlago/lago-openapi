@@ -1,0 +1,6 @@
+allOf:
+  - $ref: './SubscriptionObject.yaml'
+  - type: object
+    properties:
+      plan:
+        $ref: './PlanObject.yaml'
