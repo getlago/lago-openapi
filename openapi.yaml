@@ -6627,7 +6627,7 @@ components:
         - subscription
       properties:
         subscription:
-          $ref: '#/components/schemas/SubscriptionObject'
+          $ref: '#/components/schemas/SubscriptionObjectExtended'
     SubscriptionCreateInput:
       type: object
       required:
@@ -6810,6 +6810,13 @@ components:
           example: null
           description: 'The date when the plan will be downgraded, represented in ISO 8601 date format.'
           nullable: true
+    SubscriptionObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/SubscriptionObject'
+        - type: object
+          properties:
+            plan:
+              $ref: '#/components/schemas/PlanObject'
     SubscriptionsPaginated:
       type: object
       required:
