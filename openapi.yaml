@@ -5116,6 +5116,10 @@ components:
           type: string
           description: The number of units used to charge the customer. This field indicates the quantity or count of units consumed or utilized in the context of the charge. It helps in determining the basis for calculating the fee or cost associated with the usage of the service or product provided to the customer.
           example: '0.32'
+        unit_amount_cents:
+          type: string
+          description: 'The unit amount of the fee per unit, expressed in cents.'
+          example: '312.5'
         total_amount_cents:
           type: integer
           description: 'The cost of this specific fee, including any applicable taxes.'
