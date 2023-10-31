@@ -1,0 +1,25 @@
+post:
+  tags:
+    - credit_notes
+  summary: Estimate amounts for a new credit note
+  description: This endpoint allows you to retrieve amounts for a new credit note creation.
+  requestBody:
+    description: Credit note estimate payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/CreditNoteEstimateInput.yaml'
+  operationId: estimateCreditNote
+  responses:
+    '200':
+      description: Credit note amounts
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CreditNoteEstimated.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
