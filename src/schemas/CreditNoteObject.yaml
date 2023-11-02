@@ -15,7 +15,7 @@ required:
   - taxes_amount_cents
   - taxes_rate
   - sub_total_excluding_taxes_amount_cents
-  - coupons_adjustement_amount_cents
+  - coupons_adjustment_amount_cents
   - created_at
   - updated_at
 properties:
@@ -125,7 +125,7 @@ properties:
     type: integer
     description: The refunded amount of the credit note, expressed in cents.
     example: 0
-  coupons_adjustement_amount_cents:
+  coupons_adjustment_amount_cents:
     type: integer
     description: The pro-rated amount of the coupons applied to the source invoice.
     example: 20
