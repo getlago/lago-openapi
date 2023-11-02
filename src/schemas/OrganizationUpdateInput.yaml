@@ -16,6 +16,11 @@ properties:
         - nullable: true
           description: The country of your organization.
           example: 'US'
+      default_currency:
+        allOf:
+        - $ref: './Currency.yaml'
+        - description: The default currency of an organization.
+          example: 'USD'
       address_line1:
         type: string
         example: '100 Brex Street'
