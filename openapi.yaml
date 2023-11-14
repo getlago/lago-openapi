@@ -5256,23 +5256,23 @@ components:
           type: string
           format: uuid
           nullable: true
-          description: 'Unique identifier assigned to the subscription, created by Lago. This field is specifically displayed when the fee type is charge and the payment for the fee is made in advance (`pay_in_advance` is set to true).'
+          description: 'Unique identifier assigned to the subscription, created by Lago. This field is specifically displayed when the fee type is charge or subscription.'
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_customer_id:
           type: string
           format: uuid
           nullable: true
-          description: 'Unique identifier assigned to the customer, created by Lago. This field is specifically displayed when the fee type is charge and the payment for the fee is made in advance (`pay_in_advance` is set to true).'
+          description: 'Unique identifier assigned to the customer, created by Lago. This field is specifically displayed when the fee type is charge or subscription.'
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_customer_id:
           type: string
           nullable: true
-          description: Unique identifier assigned to the customer in your application. This field is specifically displayed when the fee type is charge and the payment for the fee is made in advance (`pay_in_advance` is set to true).
+          description: Unique identifier assigned to the customer in your application. This field is specifically displayed when the fee type is charge or subscription.
           example: external_id
         external_subscription_id:
           type: string
           nullable: true
-          description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge and the payment for the fee is made in advance (`pay_in_advance` is set to true).
+          description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge or subscription.
           example: external_id
         invoice_display_name:
           type: string
