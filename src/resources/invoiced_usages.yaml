@@ -1,0 +1,26 @@
+get:
+  tags:
+    - analytics
+  summary: List usage revenue
+  description: Reports a monthly analysis focused on the revenue generated from all usage-based fees. It exclusively accounts for revenue that has been formally invoiced. Importantly, this report does not include revenue related to the usage in the current billing period, limiting its scope to previously invoiced amounts.
+  operationId: findAllInvoicedUsages
+  parameters:
+    - name: currency
+      in: query
+      description: The currency of invoiced usage analytics. Format must be ISO 4217.
+      required: false
+      explode: true
+      schema:
+        allOf:
+          - $ref: '../schemas/Currency.yaml'
+          - example: 'USD'
+    - $ref: '../parameters/months.yaml'
+  responses:
+    '200':
+      description: Invoiced usage
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/InvoicedUsages.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

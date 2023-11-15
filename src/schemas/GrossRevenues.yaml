@@ -1,0 +1,8 @@
+type: object
+required:
+  - gross_revenues
+properties:
+  gross_revenues:
+    type: array
+    items:
+      $ref: './GrossRevenueObject.yaml'

@@ -1,0 +1,17 @@
+type: object
+required:
+  - month
+properties:
+  month:
+    type: string
+    description: Identifies the month to analyze revenue.
+    example: '2023-11-01T00:00:00.000Z'
+  amount_cents:
+    type: integer
+    description: The total amount of revenue for a period, expressed in cents.
+    example: 50000
+  currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of revenue analytics. Format must be ISO 4217.
+        example: 'USD'
