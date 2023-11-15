@@ -16,3 +16,50 @@ properties:
         nullable: true
         description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
         example: '2022-07-07T23:59:59Z'
+      recurring_transaction_rules:
+        type: array
+        description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
+        items:
+          type: object
+          description: Object that represents rule for wallet recurring transactions.
+          required:
+            - rule_type
+            - paid_credits
+            - granted_credits
+          properties:
+            lago_id:
+              type: string
+              format: 'uuid'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              description: 'A unique identifier for the recurring transaction rule in the Lago application. Can be used to update a recurring transaction rule.'
+            rule_type:
+              type: string
+              enum:
+                - interval
+                - threshold
+              description: The rule type. Possible values are `interval` or `threshold`.
+              example: 'interval'
+            interval:
+              type: string
+              enum:
+                - weekly
+                - monthly
+                - quarterly
+                - yearly
+              description: "The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly` or `yearly`. Required only when rule type is set to `interval`."
+              example: 'monthly'
+            threshold_credits:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              description: The threshold for recurring top-ups is the value at which an automatic top-up is triggered. For example, if this threshold is set at 10 credits, an automatic top-up will occur whenever the wallet balance falls to or below 10 credits. Required only when rule type is set to `threshold`.
+              example: '20.0'
+            paid_credits:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              description: The number of paid credits. Required only if there is no granted credits.
+              example: '20.0'
+            granted_credits:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              description: The number of free granted credits. Required only if there is no paid credits.
+              example: '10.0'
