@@ -1,0 +1,27 @@
+post:
+  tags:
+    - customers
+  summary: Generate a Customer Payment Provider Checkout URL
+  description: This endpoint regenerates the Payment Provider Checkout URL of a Customer.
+  parameters:
+    - name: external_customer_id
+      in: path
+      description: The customer external unique identifier (provided by your own application).
+      required: true
+      schema:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+  operationId: generateCustomerCheckoutURL
+  responses:
+    '200':
+      description: Customer Checkout URL
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CustomerCheckoutUrl.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

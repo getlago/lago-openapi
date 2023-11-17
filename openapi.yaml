@@ -985,6 +985,52 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  '/customers/{external_customer_id}/checkout_url':
+    post:
+      tags:
+        - customers
+      summary: Generate a Customer Payment Provider Checkout URL
+      description: This endpoint regenerates the Payment Provider Checkout URL of a Customer.
+      parameters:
+        - name: external_customer_id
+          in: path
+          description: The customer external unique identifier (provided by your own application).
+          required: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      operationId: generateCustomerCheckoutURL
+      responses:
+        '200':
+          description: Customer Checkout URL
+          content:
+            application/json:
+              schema:
+                type: object
+                description: .
+                properties:
+                  lago_customer_id:
+                    type: string
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                    description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
+                  external_customer_id:
+                    type: string
+                    example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+                    description: The customer external unique identifier (provided by your own application)
+                  payment_provider:
+                    type: string
+                    example: stripe
+                    description: The Payment Provider name linked to the Customer.
+                  checkout_url:
+                    type: string
+                    example: 'https://foo.bar'
+                    description: The new generated Payment Provider Checkout URL for the Customer.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /events:
     post:
       tags:
