@@ -130,6 +130,8 @@ paths:
     $ref: './resources/customer_current_usage.yaml'
   /customers/{external_customer_id}/past_usage:
     $ref: './resources/customer_past_usage.yaml'
+  /customers/{external_customer_id}/checkout_url:
+    $ref: './resources/customer_checkout_url.yaml'
   /events:
     $ref: './resources/events.yaml'
   /events/batch:
