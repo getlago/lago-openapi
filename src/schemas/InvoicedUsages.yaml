@@ -1,0 +1,8 @@
+type: object
+required:
+  - invoiced_usages
+properties:
+  invoiced_usages:
+    type: array
+    items:
+      $ref: './InvoicedUsageObject.yaml'

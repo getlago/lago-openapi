@@ -1,0 +1,26 @@
+get:
+  tags:
+    - analytics
+  summary: List outstanding invoices
+  description: Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`.
+  operationId: findAllOutstandingInvoices
+  parameters:
+    - name: currency
+      in: query
+      description: The currency of revenue analytics. Format must be ISO 4217.
+      required: false
+      explode: true
+      schema:
+        allOf:
+          - $ref: '../schemas/Currency.yaml'
+          - example: 'USD'
+    - $ref: '../parameters/months.yaml'
+  responses:
+    '200':
+      description: Outstanding invoices
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/OutstandingInvoices.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
