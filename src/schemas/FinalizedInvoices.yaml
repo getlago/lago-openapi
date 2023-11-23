@@ -1,0 +1,8 @@
+type: object
+required:
+  - finalized_invoices
+properties:
+  finalized_invoices:
+    type: array
+    items:
+      $ref: './FinalizedInvoiceObject.yaml'

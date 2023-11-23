@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Lago API documentation
   description: Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 0.51.0-beta
+  version: 0.52.0-beta
   license:
     name: AGPLv3
   contact:
@@ -1672,13 +1672,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /analytics/outstanding_invoices:
+  /analytics/finalized_invoices:
     get:
       tags:
         - analytics
       summary: List outstanding invoices
       description: 'Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`.'
-      operationId: findAllOutstandingInvoices
+      operationId: findAllFinalizedInvoices
       parameters:
         - name: currency
           in: query
@@ -1696,7 +1696,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OutstandingInvoices'
+                $ref: '#/components/schemas/FinalizedInvoices'
         '401':
           $ref: '#/components/responses/Unauthorized'
   /plans:
@@ -6089,7 +6089,7 @@ components:
                     type: string
                     description: The value in the key-value pair of the metadata.
                     example: INV-0123456-98765
-    OutstandingInvoiceObject:
+    FinalizedInvoiceObject:
       type: object
       required:
         - month
@@ -6121,15 +6121,15 @@ components:
             - $ref: '#/components/schemas/Currency'
             - description: The currency of revenue analytics. Format must be ISO 4217.
               example: USD
-    OutstandingInvoices:
+    FinalizedInvoices:
       type: object
       required:
-        - outstanding_invoices
+        - finalized_invoices
       properties:
-        outstanding_invoices:
+        finalized_invoices:
           type: array
           items:
-            $ref: '#/components/schemas/OutstandingInvoiceObject'
+            $ref: '#/components/schemas/FinalizedInvoiceObject'
     Organization:
       type: object
       required:
