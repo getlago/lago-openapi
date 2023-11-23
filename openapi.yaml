@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Lago API documentation
   description: Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 0.51.0-beta
+  version: 0.52.0-beta
   license:
     name: AGPLv3
   contact:
@@ -209,6 +209,135 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /analytics/gross_revenue:
+    get:
+      tags:
+        - analytics
+      summary: List gross revenue
+      description: Gross revenue is the sum of monthly `finalized` invoice payments and fees paid in advance that are not invoiceable. This total is calculated after deducting taxes and discounts.
+      operationId: findAllGrossRevenues
+      parameters:
+        - name: currency
+          in: query
+          description: Currency of revenue analytics. Format must be ISO 4217.
+          required: false
+          explode: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Currency'
+              - example: USD
+        - name: external_customer_id
+          in: query
+          description: The customer external unique identifier (provided by your own application). Use it to filter revenue analytics at the customer level.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
+      responses:
+        '200':
+          description: Gross revenue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrossRevenues'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /analytics/invoice_collection:
+    get:
+      tags:
+        - analytics
+      summary: List of finalized invoices
+      description: 'Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`.'
+      operationId: findAllInvoiceCollections
+      parameters:
+        - name: currency
+          in: query
+          description: The currency of revenue analytics. Format must be ISO 4217.
+          required: false
+          explode: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Currency'
+              - example: USD
+        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
+      responses:
+        '200':
+          description: Finalized invoice collection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceCollections'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /analytics/invoiced_usage:
+    get:
+      tags:
+        - analytics
+      summary: List usage revenue
+      description: 'Reports a monthly analysis focused on the revenue generated from all usage-based fees. It exclusively accounts for revenue that has been formally invoiced. Importantly, this report does not include revenue related to the usage in the current billing period, limiting its scope to previously invoiced amounts.'
+      operationId: findAllInvoicedUsages
+      parameters:
+        - name: currency
+          in: query
+          description: The currency of invoiced usage analytics. Format must be ISO 4217.
+          required: false
+          explode: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Currency'
+              - example: USD
+        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
+      responses:
+        '200':
+          description: Invoiced usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicedUsages'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /analytics/mrr:
+    get:
+      tags:
+        - analytics
+      summary: List MRR
+      description: This endpoint is used to list MRR.
+      operationId: findAllMrrs
+      parameters:
+        - name: currency
+          in: query
+          description: |-
+            Quantifies the revenue generated from `subscription` fees on a monthly basis. This figure is calculated post-application of applicable taxes and prior to the deduction of any applicable discounts. The method of calculation varies based on the subscription billing cycle:
+
+            - Revenue from `monthly` subscription invoices is included in the MRR for the month in which the invoice is issued.
+            - Revenue from `quarterly` subscription invoices is distributed evenly over three months. This distribution applies to fees paid in advance (allocated to the next three months) as well as to fees paid in arrears (allocated to the preceding three months).
+            - Revenue from `yearly` subscription invoices is distributed evenly over twelve months. This allocation is applicable for fees paid in advance (spread over the next twelve months) and for fees paid in arrears (spread over the previous twelve months).
+            - Revenue from `weekly` subscription invoices, the total revenue from all invoices issued within a month is summed up. This total is then divided by the number of invoices issued during that month, and the result is multiplied by 4.33, representing the average number of weeks in a month.
+          required: false
+          explode: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Currency'
+              - example: USD
+        - name: months
+          in: query
+          description: Show data only for given number of months.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 12
+      responses:
+        '200':
+          description: MRR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mrrs'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   /applied_coupons:
     post:
       tags:
@@ -1332,68 +1461,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /analytics/gross_revenue:
-    get:
-      tags:
-        - analytics
-      summary: List gross revenue
-      description: Gross revenue is the sum of monthly `finalized` invoice payments and fees paid in advance that are not invoiceable. This total is calculated after deducting taxes and discounts.
-      operationId: findAllGrossRevenues
-      parameters:
-        - name: currency
-          in: query
-          description: Currency of revenue analytics. Format must be ISO 4217.
-          required: false
-          explode: true
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Currency'
-              - example: USD
-        - name: external_customer_id
-          in: query
-          description: The customer external unique identifier (provided by your own application). Use it to filter revenue analytics at the customer level.
-          required: false
-          explode: true
-          schema:
-            type: string
-            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
-      responses:
-        '200':
-          description: Gross revenue
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GrossRevenues'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  /analytics/invoiced_usage:
-    get:
-      tags:
-        - analytics
-      summary: List usage revenue
-      description: 'Reports a monthly analysis focused on the revenue generated from all usage-based fees. It exclusively accounts for revenue that has been formally invoiced. Importantly, this report does not include revenue related to the usage in the current billing period, limiting its scope to previously invoiced amounts.'
-      operationId: findAllInvoicedUsages
-      parameters:
-        - name: currency
-          in: query
-          description: The currency of invoiced usage analytics. Format must be ISO 4217.
-          required: false
-          explode: true
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Currency'
-              - example: USD
-        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
-      responses:
-        '200':
-          description: Invoiced usage
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InvoicedUsages'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
   /invoices:
     post:
       tags:
@@ -1605,46 +1672,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
-  /analytics/mrr:
-    get:
-      tags:
-        - analytics
-      summary: List MRR
-      description: This endpoint is used to list MRR.
-      operationId: findAllMrrs
-      parameters:
-        - name: currency
-          in: query
-          description: |-
-            Quantifies the revenue generated from `subscription` fees on a monthly basis. This figure is calculated post-application of applicable taxes and prior to the deduction of any applicable discounts. The method of calculation varies based on the subscription billing cycle:
-
-            - Revenue from `monthly` subscription invoices is included in the MRR for the month in which the invoice is issued.
-            - Revenue from `quarterly` subscription invoices is distributed evenly over three months. This distribution applies to fees paid in advance (allocated to the next three months) as well as to fees paid in arrears (allocated to the preceding three months).
-            - Revenue from `yearly` subscription invoices is distributed evenly over twelve months. This allocation is applicable for fees paid in advance (spread over the next twelve months) and for fees paid in arrears (spread over the previous twelve months).
-            - Revenue from `weekly` subscription invoices, the total revenue from all invoices issued within a month is summed up. This total is then divided by the number of invoices issued during that month, and the result is multiplied by 4.33, representing the average number of weeks in a month.
-          required: false
-          explode: true
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Currency'
-              - example: USD
-        - name: months
-          in: query
-          description: Show data only for given number of months.
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 12
-      responses:
-        '200':
-          description: MRR
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Mrrs'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
   /organizations:
     put:
       tags:
@@ -1672,33 +1699,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /analytics/outstanding_invoices:
-    get:
-      tags:
-        - analytics
-      summary: List outstanding invoices
-      description: 'Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`.'
-      operationId: findAllOutstandingInvoices
-      parameters:
-        - name: currency
-          in: query
-          description: The currency of revenue analytics. Format must be ISO 4217.
-          required: false
-          explode: true
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/Currency'
-              - example: USD
-        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
-      responses:
-        '200':
-          description: Outstanding invoices
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OutstandingInvoices'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
   /plans:
     post:
       tags:
@@ -5768,6 +5768,47 @@ components:
           type: integer
           description: Fees total amount on which the tax is applied
           example: 20000
+    InvoiceCollectionObject:
+      type: object
+      required:
+        - month
+        - invoices_count
+        - amount_cents
+      properties:
+        month:
+          type: string
+          description: Identifies the month to analyze revenue.
+          example: '2023-11-01T00:00:00.000Z'
+        payment_status:
+          type: string
+          enum:
+            - pending
+            - succeeded
+            - failed
+          description: The payment status of the invoices.
+          example: succeeded
+        invoices_count:
+          type: integer
+          description: Contains invoices count.
+          example: 10
+        amount_cents:
+          type: integer
+          description: 'The total amount of revenue for a period, expressed in cents.'
+          example: 50000
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of revenue analytics. Format must be ISO 4217.
+              example: USD
+    InvoiceCollections:
+      type: object
+      required:
+        - invoice_collections
+      properties:
+        invoice_collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceCollectionObject'
     InvoicedUsageObject:
       type: object
       required:
@@ -6089,47 +6130,6 @@ components:
                     type: string
                     description: The value in the key-value pair of the metadata.
                     example: INV-0123456-98765
-    OutstandingInvoiceObject:
-      type: object
-      required:
-        - month
-        - invoices_count
-        - amount_cents
-      properties:
-        month:
-          type: string
-          description: Identifies the month to analyze revenue.
-          example: '2023-11-01T00:00:00.000Z'
-        payment_status:
-          type: string
-          enum:
-            - pending
-            - succeeded
-            - failed
-          description: The payment status of the invoices.
-          example: succeeded
-        invoices_count:
-          type: integer
-          description: Contains invoices count.
-          example: 10
-        amount_cents:
-          type: integer
-          description: 'The total amount of revenue for a period, expressed in cents.'
-          example: 50000
-        currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of revenue analytics. Format must be ISO 4217.
-              example: USD
-    OutstandingInvoices:
-      type: object
-      required:
-        - outstanding_invoices
-      properties:
-        outstanding_invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutstandingInvoiceObject'
     Organization:
       type: object
       required:
