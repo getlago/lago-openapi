@@ -98,6 +98,14 @@ paths:
     $ref: './resources/add_ons.yaml'
   /add_ons/{code}:
     $ref: './resources/add_on.yaml'
+  /analytics/gross_revenue:
+    $ref: './resources/gross_revenues.yaml'
+  /analytics/invoice_collection:
+    $ref: './resources/invoice_collections.yaml'
+  /analytics/invoiced_usage:
+    $ref: './resources/invoiced_usages.yaml'
+  /analytics/mrr:
+    $ref: './resources/mrrs.yaml'
   /applied_coupons:
     $ref: './resources/applied_coupons.yaml'
   /billable_metrics:
@@ -146,10 +154,6 @@ paths:
     $ref: './resources/fees.yaml'
   /fees/{lago_id}:
     $ref: './resources/fee.yaml'
-  /analytics/gross_revenue:
-    $ref: './resources/gross_revenues.yaml'
-  /analytics/invoiced_usage:
-    $ref: './resources/invoiced_usages.yaml'
   /invoices:
     $ref: './resources/invoices.yaml'
   /invoices/{lago_id}:
@@ -162,12 +166,8 @@ paths:
     $ref: './resources/invoice_refresh.yaml'
   /invoices/{lago_id}/retry_payment:
     $ref: './resources/invoice_retry_payment.yaml'
-  /analytics/mrr:
-    $ref: './resources/mrrs.yaml'
   /organizations:
     $ref: './resources/organizations.yaml'
-  /analytics/outstanding_invoices:
-    $ref: './resources/outstanding_invoices.yaml'
   /plans:
     $ref: './resources/plans.yaml'
   /plans/{code}:

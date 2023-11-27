@@ -1,9 +1,9 @@
 get:
   tags:
     - analytics
-  summary: List outstanding invoices
+  summary: List of finalized invoices
   description: Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`.
-  operationId: findAllOutstandingInvoices
+  operationId: findAllInvoiceCollections
   parameters:
     - name: currency
       in: query
@@ -17,10 +17,10 @@ get:
     - $ref: '../parameters/months.yaml'
   responses:
     '200':
-      description: Outstanding invoices
+      description: Finalized invoice collection
       content:
         application/json:
           schema:
-            $ref: '../schemas/OutstandingInvoices.yaml'
+            $ref: '../schemas/InvoiceCollections.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'

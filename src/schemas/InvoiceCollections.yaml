@@ -1,0 +1,8 @@
+type: object
+required:
+  - invoice_collections
+properties:
+  invoice_collections:
+    type: array
+    items:
+      $ref: './InvoiceCollectionObject.yaml'
