@@ -165,6 +165,10 @@ properties:
     nullable: true
     description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge` and the payment for the fee is made in advance (`pay_in_advance` is set to `true`).
     example: 'transaction_1234567890'
+  amount_details:
+    allOf:
+      - $ref: './FeeAmountDetails.yaml'
+      - description: List of all unit amount details for calculating the fee.
   item:
     type: object
     description: Item attached to the fee
