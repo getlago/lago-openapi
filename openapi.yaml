@@ -2758,6 +2758,7 @@ components:
               enum:
                 - once
                 - recurring
+                - forever
               nullable: true
               description: |-
                 The type of frequency for the coupon. It can have three possible values: `once`, `recurring` or `forever`.
@@ -2862,6 +2863,7 @@ components:
           enum:
             - once
             - recurring
+            - forever
           description: |-
             The type of frequency for the coupon. It can have three possible values: `once`, `recurring` or `forever`.
 
@@ -3712,6 +3714,7 @@ components:
           enum:
             - once
             - recurring
+            - forever
           description: |-
             The type of frequency for the coupon. It can have three possible values: `once`, `recurring` or `forever`.
 
@@ -3870,6 +3873,7 @@ components:
           enum:
             - once
             - recurring
+            - forever
           example: recurring
         frequency_duration:
           type: integer
