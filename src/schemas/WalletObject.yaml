@@ -90,3 +90,8 @@ properties:
     nullable: true
     description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
     example: '2022-09-14T16:35:31Z'
+  recurring_transaction_rules:
+    description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
+    type: array
+    items:
+      $ref: './WalletRecurringTransactionRule.yaml'
