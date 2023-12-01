@@ -51,8 +51,6 @@ properties:
           description: Object that represents rule for wallet recurring transactions.
           required:
             - rule_type
-            - paid_credits
-            - granted_credits
           properties:
             rule_type:
               type: string
@@ -75,13 +73,3 @@ properties:
               pattern: '^[0-9]+.?[0-9]*$'
               description: The threshold for recurring top-ups is the value at which an automatic top-up is triggered. For example, if this threshold is set at 10 credits, an automatic top-up will occur whenever the wallet balance falls to or below 10 credits. Required only when rule type is set to `threshold`.
               example: '20.0'
-            paid_credits:
-              type: string
-              pattern: '^[0-9]+.?[0-9]*$'
-              description: The number of paid credits. Required only if there is no granted credits.
-              example: '20.0'
-            granted_credits:
-              type: string
-              pattern: '^[0-9]+.?[0-9]*$'
-              description: The number of free granted credits. Required only if there is no paid credits.
-              example: '10.0'
