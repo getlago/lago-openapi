@@ -7363,6 +7363,13 @@ components:
       required:
         - subscription
       properties:
+        status:
+          type: string
+          enum:
+            - active
+            - pending
+          example: active
+          description: 'If the field is not defined and multiple `active` and `pending` subscriptions exists, Lago will update the `active` subscription. However, if you wish to update a `pending` subscription, please ensure that you include the `status` attribute with the `pending` value in your request body.'
         subscription:
           type: object
           properties:
