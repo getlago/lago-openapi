@@ -6420,6 +6420,23 @@ components:
           example: null
           description: The legal number of your organization.
           nullable: true
+        document_numbering:
+          type: string
+          enum:
+            - per_customer
+            - per_organization
+          example: per_customer
+          description: |-
+            This parameter configures the method of incrementing invoice numbers for your customers.
+
+            - `per_customer`: Invoice numbers are incremented individually for each customer. This means every customer will have their own unique sequence of invoice numbers, separate from other customers. It ensures that each customer's invoice numbers follow a distinct and isolated numbering pattern.
+            - `per_organization`: Invoice number incrementation is made across your entire organization. Rather than individual sequences for each customer, all invoices within the organization follow a single, unified numbering system. This creates a continuous and organization-wide sequence for all invoice numbers. Invoices are incremented per month (dynamic value used is YYYYMM), and invoice numbers are reset at the end of each month.
+
+            The default value for `document_numbering` is set to `per_customer`, meaning that, unless changed, invoice numbers will increment uniquely for each customer.
+        document_number_prefix:
+          type: string
+          example: ORG-1234
+          description: 'Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four digits of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.'
         net_payment_term:
           type: integer
           example: 30
@@ -6506,6 +6523,23 @@ components:
               example: null
               description: The legal number of your organization.
               nullable: true
+            document_numbering:
+              type: string
+              enum:
+                - per_customer
+                - per_organization
+              example: per_customer
+              description: |-
+                This parameter configures the method of incrementing invoice numbers for your customers.
+
+                - `per_customer`: Invoice numbers are incremented individually for each customer. This means every customer will have their own unique sequence of invoice numbers, separate from other customers. It ensures that each customer's invoice numbers follow a distinct and isolated numbering pattern.
+                - `per_organization`: Invoice number incrementation is made across your entire organization. Rather than individual sequences for each customer, all invoices within the organization follow a single, unified numbering system. This creates a continuous and organization-wide sequence for all invoice numbers. Invoices are incremented per month (dynamic value used is YYYYMM), and invoice numbers are reset at the end of each month.
+
+                The default value for `document_numbering` is set to `per_customer`, meaning that, unless changed, invoice numbers will increment uniquely for each customer.
+            document_number_prefix:
+              type: string
+              example: ORG-1234
+              description: 'Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four digits of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.'
             net_payment_term:
               type: integer
               example: 30
