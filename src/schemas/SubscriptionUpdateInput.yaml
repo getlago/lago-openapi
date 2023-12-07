@@ -2,23 +2,30 @@ type: object
 required:
   - subscription
 properties:
+  status:
+    type: string
+    enum:
+      - active
+      - pending
+    example: active
+    description: If the field is not defined and multiple `active` and `pending` subscriptions exists, Lago will update the `active` subscription. However, if you wish to update a `pending` subscription, please ensure that you include the `status` attribute with the `pending` value in your request body.
   subscription:
     type: object
     properties:
       name:
         type: string
-        example: 'Repository B'
+        example: "Repository B"
         nullable: true
         description: The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.
       ending_at:
         type: string
-        format: 'date-time'
-        example: '2022-10-08T00:00:00Z'
+        format: "date-time"
+        example: "2022-10-08T00:00:00Z"
         description: The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).
       subscription_at:
         type: string
-        format: 'date-time'
-        example: '2022-08-08T00:00:00Z'
+        format: "date-time"
+        example: "2022-08-08T00:00:00Z"
         description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
       plan_overrides:
-        $ref: '../schemas/PlanOverridesObject.yaml'
+        $ref: "../schemas/PlanOverridesObject.yaml"
