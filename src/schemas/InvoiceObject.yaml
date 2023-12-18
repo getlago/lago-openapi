@@ -59,10 +59,12 @@ properties:
     enum:
       - draft
       - finalized
+      - voided
     description: |-
       The status of the invoice. It indicates the current state of the invoice and can have two possible values:
       - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
       - `finalized`: the invoice has been issued and finalized. In this state, events cannot be ingested or added to the invoice anymore.
+      - `voided`: the invoice has been issued and subsequently voided. In this state, events cannot be ingested or added to the invoice anymore.
     example: finalized
   payment_status:
     type: string
