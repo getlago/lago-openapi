@@ -166,6 +166,8 @@ paths:
     $ref: './resources/invoice_refresh.yaml'
   /invoices/{lago_id}/retry_payment:
     $ref: './resources/invoice_retry_payment.yaml'
+  /invoices/{lago_id}/void:
+    $ref: './resources/invoice_void.yaml'
   /organizations:
     $ref: './resources/organizations.yaml'
   /plans:
