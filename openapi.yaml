@@ -1672,6 +1672,26 @@ paths:
           $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
+  '/invoices/{lago_id}/void':
+    post:
+      tags:
+        - invoices
+      summary: Void an invoice
+      description: 'This endpoint is used for voiding an invoice. You can void an invoice only when it''s in a `finalized` status, and the payment status is not `succeeded`.'
+      parameters:
+        - $ref: '#/components/parameters/lago_invoice_id'
+      operationId: voidInvoice
+      responses:
+        '200':
+          description: Invoice voided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /organizations:
     put:
       tags:

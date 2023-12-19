@@ -1,0 +1,20 @@
+post:
+  tags:
+    - invoices
+  summary: Void an invoice
+  description: This endpoint is used for voiding an invoice. You can void an invoice only when it's in a `finalized` status, and the payment status is not `succeeded`.
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+
+  operationId: voidInvoice
+  responses:
+    '200':
+      description: Invoice voided
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
