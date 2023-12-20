@@ -19,6 +19,10 @@ properties:
       recurring_transaction_rules:
         type: array
         description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
+        required:
+          - rule_type
+          - paid_credits
+          - granted_credits
         items:
           type: object
           description: Object that represents rule for wallet recurring transactions.
