@@ -5632,7 +5632,7 @@ components:
                       - from_value
                       - to_value
                       - flat_unit_amount
-                      - per_unit_amount
+                      - rate
                       - per_unit_total_amount
                       - total_with_flat_amount
                     properties:
@@ -5657,9 +5657,10 @@ components:
                         type: string
                         description: Flat unit amount within a specified tier.
                         example: '1.0'
-                      per_unit_amount:
+                      rate:
                         type: string
-                        description: Amount per unit within a specified tier.
+                        format: '^[0-9]+.?[0-9]*$'
+                        description: Percentage rate applied within a specified tier.
                         example: '1.0'
                       per_unit_total_amount:
                         type: string
@@ -5697,9 +5698,10 @@ components:
                   type: integer
                   example: 10
                   description: Total number of free events allowed for the Percentage charge model.
-                per_unit_amount:
+                rate:
                   type: string
-                  description: Amount per unit for the Percentage charge model.
+                  format: '^[0-9]+.?[0-9]*$'
+                  description: Percentage rate applied for the Percentage charge model.
                   example: '1.0'
                 per_unit_total_amount:
                   type: string
