@@ -11,16 +11,17 @@ properties:
       external_customer_id:
         type: string
         description: The customer external unique identifier (provided by your own application)
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
       coupon_code:
         type: string
         description: Unique code used to identify the coupon.
-        example: 'startup_deal'
+        example: "startup_deal"
       frequency:
         type: string
         enum:
           - once
           - recurring
+          - forever
         nullable: true
         description: |-
           The type of frequency for the coupon. It can have three possible values: `once`, `recurring` or `forever`.
@@ -41,13 +42,13 @@ properties:
         example: 2000
       amount_currency:
         allOf:
-          - $ref: './Currency.yaml'
+          - $ref: "./Currency.yaml"
           - nullable: true
             description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-            example: 'EUR'
+            example: "EUR"
       percentage_rate:
         type: string
-        pattern: '^[0-9]+.?[0-9]*$'
+        pattern: "^[0-9]+.?[0-9]*$"
         nullable: true
         description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
         example: null

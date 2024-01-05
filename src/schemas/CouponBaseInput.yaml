@@ -3,16 +3,16 @@ properties:
   name:
     type: string
     description: The name of the coupon.
-    example: 'Startup Deal'
+    example: "Startup Deal"
   code:
     type: string
     description: Unique code used to identify the coupon.
-    example: 'startup_deal'
+    example: "startup_deal"
   description:
     type: string
     nullable: true
     description: Description of the coupon.
-    example: 'I am a coupon description'
+    example: "I am a coupon description"
   coupon_type:
     type: string
     enum:
@@ -31,17 +31,17 @@ properties:
     example: 5000
   amount_currency:
     allOf:
-      - $ref: './Currency.yaml'
+      - $ref: "./Currency.yaml"
       - description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
         nullable: true
-        example: 'USD'
+        example: "USD"
   reusable:
     type: boolean
     description: Indicates whether the coupon can be reused or not. If set to `true`, the coupon is reusable, meaning it can be applied multiple times to the same customer. If set to `false`, the coupon can only be used once and is not reusable. If not specified, this field is set to `true` by default.
     example: false
   percentage_rate:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
+    pattern: "^[0-9]+.?[0-9]*$"
     nullable: true
     description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
     example: null
@@ -50,13 +50,14 @@ properties:
     enum:
       - once
       - recurring
+      - forever
     description: |-
       The type of frequency for the coupon. It can have three possible values: `once`, `recurring` or `forever`.
 
       - If set to `once`, the coupon is applicable only for a single use.
       - If set to `recurring`, the coupon can be used multiple times for recurring billing periods.
       - If set to `forever`, the coupon has unlimited usage and can be applied indefinitely.
-    example: 'recurring'
+    example: "recurring"
   frequency_duration:
     type: integer
     nullable: true
@@ -75,10 +76,10 @@ properties:
     example: time_limit
   expiration_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: The expiration date and time of the coupon. This field is required only for coupons with `expiration` set to `time_limit`. The expiration date and time should be specified in UTC format according to the ISO 8601 datetime standard. It indicates the exact moment when the coupon will expire and is no longer valid.
-    example: '2022-08-08T23:59:59Z'
+    example: "2022-08-08T23:59:59Z"
   applies_to:
     type: object
     description: Set coupon limitations to plans or specific metrics.
@@ -90,7 +91,7 @@ properties:
         items:
           type: string
         description: An array of plan codes to which the coupon is applicable. By specifying the plan codes in this field, you can restrict the coupon's usage to specific plans only.
-        example: ['startup_plan']
+        example: ["startup_plan"]
       billable_metric_codes:
         type: array
         nullable: true

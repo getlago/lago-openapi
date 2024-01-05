@@ -12,31 +12,31 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier of the applied coupon, created by Lago.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_coupon_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier of the coupon, created by Lago.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   coupon_code:
     type: string
     description: Unique code used to identify the coupon.
-    example: 'startup_deal'
+    example: "startup_deal"
   coupon_name:
     type: string
     description: The name of the coupon.
     example: Startup Deal
   lago_customer_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier of the customer, created by Lago.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   external_customer_id:
     type: string
     description: The customer external unique identifier (provided by your own application)
-    example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
   status:
     type: string
     enum:
@@ -56,13 +56,13 @@ properties:
     example: 50
   amount_currency:
     allOf:
-      - $ref: './Currency.yaml'
+      - $ref: "./Currency.yaml"
       - nullable: true
         description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-        example: 'EUR'
+        example: "EUR"
   percentage_rate:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
+    pattern: "^[0-9]+.?[0-9]*$"
     nullable: true
     description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
     example: null
@@ -71,6 +71,7 @@ properties:
     enum:
       - once
       - recurring
+      - forever
     description: |-
       The type of frequency for the coupon. It can have three possible values: `once`, `recurring` or `forever`.
 
@@ -90,18 +91,18 @@ properties:
     example: 1
   expiration_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: The date and time after which the coupon will stop applying to customer's invoices. Once the expiration date is reached, the coupon will no longer be applicable, and any further invoices generated for the customer will not include the coupon discount.
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
   created_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The date and time when the coupon was assigned to a customer. It is expressed in UTC format according to the ISO 8601 datetime standard.
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
   terminated_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: This field indicates the specific moment when the coupon amount is fully utilized or when the coupon is removed from the customer's coupon list. It is expressed in UTC format according to the ISO 8601 datetime standard.
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
