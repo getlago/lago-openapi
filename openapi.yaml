@@ -4641,6 +4641,10 @@ components:
             - stripe
             - adyen
             - gocardless
+        payment_provider_code:
+          type: string
+          example: stripe-eu-1
+          description: Unique code used to identify a payment provider connection.
         provider_customer_id:
           type: string
           example: cus_12345
