@@ -1195,7 +1195,7 @@ paths:
       tags:
         - events
       summary: Batch multiple events
-      description: This endpoint is used for transmitting a batch of usage measurement events to multiple subscriptions for a single customer.
+      description: This endpoint is used for transmitting a batch of usage measurement.
       operationId: createBatchEvents
       requestBody:
         description: Batch events payload
@@ -5208,52 +5208,12 @@ components:
     EventBatchInput:
       type: object
       required:
-        - event
+        - events
       properties:
-        event:
-          type: object
-          required:
-            - transaction_id
-            - external_subscription_ids
-            - code
-          properties:
-            transaction_id:
-              type: string
-              example: transaction_1234567890
-              description: 'This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.'
-            external_customer_id:
-              type: string
-              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-              description: 'The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_ids`, targeting a specific subscription.'
-            external_subscription_ids:
-              type: array
-              items:
-                type: string
-              description: Array of unique identifiers of the targeted subscriptions within your application.
-              example:
-                - sub_1234567890
-                - sub_0987654321
-            code:
-              type: string
-              example: storage
-              description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
-            timestamp:
-              type: integer
-              example: 1651240791
-              description: 'This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.'
-            properties:
-              type: object
-              description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
-              additionalProperties: true
-              properties:
-                operation_type:
-                  type: string
-                  description: 'The `operation_type` field is only necessary when adding or removing a specific unit when the targeted billable metric adopts a `unique_count_agg` aggregation method. In other cases, the `operation_type` field is not required. The valid values for the `operation_type` field are `add` or `remove`, which indicate whether the unit is being added or removed from the unique count aggregation, respectively.'
-                  enum:
-                    - add
-                    - remove
-              example:
-                gb: 10
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventInput'
     EventEstimateFeesInput:
       type: object
       required:
