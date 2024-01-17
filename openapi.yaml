@@ -5209,8 +5209,7 @@ components:
         events:
           type: array
           items:
-            oneOf:
-              - $ref: '#/components/schemas/EventInput'
+            $ref: '#/components/schemas/EventInput'
     EventEstimateFeesInput:
       type: object
       required:
