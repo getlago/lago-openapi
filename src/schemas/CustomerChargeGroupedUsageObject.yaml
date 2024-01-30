@@ -1,0 +1,31 @@
+type: array
+description: Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.
+required:
+  - amount_cents
+  - events_count
+  - units
+  - grouped_by
+  - groups
+items:
+  type: object
+  properties:
+    amount_cents:
+      type: integer
+      example: 1000
+      description: The amount in cents, tax excluded, consumed for a specific group related to a charge item.
+    events_count:
+      type: integer
+      example: 10
+      description: The quantity of usage events that have been recorded for a particular charge during the specified time period. These events may also be referred to as the number of transactions in some contexts.
+    units:
+      type: string
+      pattern: "^[0-9]+.?[0-9]*$"
+      example: "0.9"
+      description: The number of units consumed for a specific group related to a charge item.
+    grouped_by:
+      type: object
+      description: Key value list of event properties aggregated by the charge model
+      additionalProperties:
+        type: string
+    groups:
+      $ref: "./CustomerChargeGroupsUsageObject.yaml"

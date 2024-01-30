@@ -15,69 +15,69 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     nullable: true
     description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee’s record within the Lago system.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_group_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     nullable: true
     description: Unique identifier assigned to the group that the fee belongs to
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_invoice_id:
     type: string
     format: uuid
     nullable: true
     description: Unique identifier assigned to the invoice that the fee belongs to
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_true_up_fee_id:
     type: string
     format: uuid
     nullable: true
     description: Unique identifier assigned to the true-up fee when a minimum has been set to the charge. This identifier helps to distinguish and manage the true-up fee associated with the charge, which may be applicable when a minimum threshold or limit is set for the charge amount.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_true_up_parent_fee_id:
     type: string
     format: uuid
     nullable: true
     description: Unique identifier assigned to the parent fee on which the true-up fee is assigned. This identifier establishes the relationship between the parent fee and the associated true-up fee.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_subscription_id:
     type: string
     format: uuid
     nullable: true
     description: Unique identifier assigned to the subscription, created by Lago. This field is specifically displayed when the fee type is charge or subscription.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_customer_id:
     type: string
     format: uuid
     nullable: true
     description: Unique identifier assigned to the customer, created by Lago. This field is specifically displayed when the fee type is charge or subscription.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   external_customer_id:
     type: string
     nullable: true
     description: Unique identifier assigned to the customer in your application. This field is specifically displayed when the fee type is charge or subscription.
-    example: 'external_id'
+    example: "external_id"
   external_subscription_id:
     type: string
     nullable: true
     description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge or subscription.
-    example: 'external_id'
+    example: "external_id"
   invoice_display_name:
     type: string
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-    example: 'Setup Fee (SF1)'
+    example: "Setup Fee (SF1)"
   amount_cents:
     type: integer
     description: The cost of this specific fee, excluding any applicable taxes.
     example: 100
   amount_currency:
     allOf:
-      - $ref: './Currency.yaml'
+      - $ref: "./Currency.yaml"
       - description: The currency of this specific fee. It indicates the monetary unit in which the fee’s cost is expressed.
-        example: 'EUR'
+        example: "EUR"
   taxes_amount_cents:
     type: integer
     description: The cost of the tax associated with this specific fee.
@@ -89,20 +89,20 @@ properties:
   units:
     type: string
     description: The number of units used to charge the customer. This field indicates the quantity or count of units consumed or utilized in the context of the charge. It helps in determining the basis for calculating the fee or cost associated with the usage of the service or product provided to the customer.
-    example: '0.32'
+    example: "0.32"
   precise_unit_amount:
     type: string
     description: The unit amount of the fee per unit, with precision.
-    example: '312.5'
+    example: "312.5"
   total_amount_cents:
     type: integer
     description: The cost of this specific fee, including any applicable taxes.
     example: 120
   total_amount_currency:
     allOf:
-      - $ref: './Currency.yaml'
+      - $ref: "./Currency.yaml"
       - description: The currency of this specific fee, including any applicable taxes.
-        example: 'EUR'
+        example: "EUR"
   events_count:
     type: integer
     description: The number of events that have been sent and used to charge the customer. This field indicates the count or quantity of events that have been processed and considered in the charging process.
@@ -117,16 +117,16 @@ properties:
     example: true
   from_date:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: The beginning date of the period that the fee covers. It is applicable only to `subscription` and `charge` fees. This field indicates the start date of the billing period or subscription period associated with the fee.
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
   to_date:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: The ending date of the period that the fee covers. It is applicable only to `subscription` and `charge` fees. This field indicates the end date of the billing period or subscription period associated with the fee.
-    example: '2022-05-29T08:59:51Z'
+    example: "2022-05-29T08:59:51Z"
   payment_status:
     type: string
     enum:
@@ -135,39 +135,39 @@ properties:
       - failed
       - refunded
     description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and `refunded`.
-    example: 'pending'
+    example: "pending"
   created_at:
     type: string
     format: date-time
     nullable: true
     description: The date and time when the fee was created. It is provided in Coordinated Universal Time (UTC) format.
-    example: '2022-08-24T14:58:59Z'
+    example: "2022-08-24T14:58:59Z"
   succeeded_at:
     type: string
     format: date-time
     nullable: true
     description: The date and time when the payment for the fee was successfully processed. It is provided in Coordinated Universal Time (UTC) format.
-    example: '2022-08-24T14:58:59Z'
+    example: "2022-08-24T14:58:59Z"
   failed_at:
     type: string
     format: date-time
     nullable: true
     description: The date and time when the payment for the fee failed to process. It is provided in Coordinated Universal Time (UTC) format.
-    example: '2022-08-24T14:58:59Z'
+    example: "2022-08-24T14:58:59Z"
   refunded_at:
     type: string
     format: date-time
     nullable: true
     description: The date and time when the payment for the fee was refunded. It is provided in Coordinated Universal Time (UTC) format
-    example: '2022-08-24T14:58:59Z'
+    example: "2022-08-24T14:58:59Z"
   event_transaction_id:
     type: string
     nullable: true
     description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge` and the payment for the fee is made in advance (`pay_in_advance` is set to `true`).
-    example: 'transaction_1234567890'
+    example: "transaction_1234567890"
   amount_details:
     allOf:
-      - $ref: './FeeAmountDetails.yaml'
+      - $ref: "./FeeAmountDetails.yaml"
       - description: List of all unit amount details for calculating the fee.
   item:
     type: object
@@ -191,22 +191,22 @@ properties:
       code:
         type: string
         description: The code of the fee item. It can be the code of the `add-o`n, the code of the `charge`, the code of the `credit` or the code of the `subscription`.
-        example: 'startup'
+        example: "startup"
       name:
         type: string
         description: The name of the fee item. It can be the name of the `add-on`, the name of the `charge`, the name of the `credit` or the name of the `subscription`.
-        example: 'Startup'
+        example: "Startup"
       invoice_display_name:
         type: string
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-        example: 'Setup Fee (SF1)'
+        example: "Setup Fee (SF1)"
       group_invoice_display_name:
         type: string
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-        example: 'Transactions - ACH'
+        example: "Transactions - ACH"
       lago_item_id:
         type: string
-        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
         description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add-on`, the identifier of the `charge`, the identifier of the `credit` or the identifier of the `subscription`.
         format: uuid
       item_type:
@@ -218,8 +218,13 @@ properties:
           - WalletTransaction
         description: The type of the fee item. Possible values are `AddOn`, `BillableMetric`, `WalletTransaction` or `Subscription`.
         example: Subscription
+      grouped_by:
+        type: object
+        description: Key value list of event properties aggregated by the charge model
+        additionalProperties:
+          type: string
   applied_taxes:
     type: array
     description: List of fee applied taxes
     items:
-      $ref: './FeeAppliedTaxObject.yaml'
+      $ref: "./FeeAppliedTaxObject.yaml"
