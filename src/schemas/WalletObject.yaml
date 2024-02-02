@@ -11,6 +11,10 @@ required:
   - balance_cents
   - consumed_credits
   - created_at
+  - ongoing_balance_cents
+  - ongoing_usage_balance_cents
+  - credits_ongoing_balance
+  - credits_ongoing_usage_balance
 properties:
   lago_id:
     type: string
@@ -95,3 +99,21 @@ properties:
     type: array
     items:
       $ref: './WalletRecurringTransactionRule.yaml'
+  ongoing_balance_cents:
+    type: integer
+    description: The wallet ongoing balance expressed in cents.
+    example: 800
+  ongoing_usage_balance_cents:
+    type: integer
+    description: The wallet ongoing usage balance expressed in cents.
+    example: 200
+  credits_ongoing_balance:
+    type: string
+    pattern: '^[0-9]+.?[0-9]*$'
+    description: The wallet ongoing balance expressed in credits.
+    example: '8.0'
+  credits_ongoing_usage_balance:
+    type: string
+    pattern: '^[0-9]+.?[0-9]*$'
+    description: The wallet ongoing usage balance expressed in credits.
+    example: '2.0'
