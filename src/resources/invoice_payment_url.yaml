@@ -1,0 +1,21 @@
+post:
+  tags:
+    - invoices
+  summary: Generate a Invoice Payment URL
+  description: This endpoint generates the Payment URL of a Invoice.
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+  operationId: invoicePaymentUrl
+  responses:
+    '200':
+      description: Payment URL has been generated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/InvoicePaymentUrl.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

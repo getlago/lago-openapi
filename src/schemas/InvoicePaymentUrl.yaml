@@ -1,0 +1,26 @@
+type: object
+description: .
+properties:
+  invoice_payment_details:
+    type: object
+    properties:
+      lago_customer_id:
+        type: string
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
+      lago_invoice_id:
+        type: string
+        example: 1e501a90-1a90-1a90-1a90-1a901a901a80
+        description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system
+      external_customer_id:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        description: 'The customer external unique identifier (provided by your own application)'
+      payment_provider:
+        type: string
+        example: 'stripe'
+        description: The Payment Provider name linked to the Customer.
+      payment_url:
+        type: string
+        example: 'https://foo.bar'
+        description: The generated Payment URL for the Invoice.
