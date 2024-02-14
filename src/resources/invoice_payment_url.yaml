@@ -1,8 +1,8 @@
 post:
   tags:
     - invoices
-  summary: Generate a Invoice Payment URL
-  description: This endpoint generates the Payment URL of a Invoice.
+  summary: Generate a payment URL
+  description: This endpoint generates a checkout link for a specific invoice.
   parameters:
     - $ref: '../parameters/lago_invoice_id.yaml'
   operationId: invoicePaymentUrl
