@@ -836,8 +836,8 @@ paths:
     put:
       tags:
         - credit_notes
-      summary: Void a credit note
-      description: This endpoint voids an existing credit note.
+      summary: Void available credit
+      description: This endpoint voids the available credit linked to a specific credit note.
       parameters:
         - name: lago_id
           in: path
@@ -1197,7 +1197,7 @@ paths:
       tags:
         - events
       summary: Batch multiple events
-      description: This endpoint is used to send a batch of usage records.
+      description: This endpoint can be used to send a batch of usage records. Each request may include up to 100 events.
       operationId: createBatchEvents
       requestBody:
         description: Batch events payload
@@ -1660,8 +1660,8 @@ paths:
     post:
       tags:
         - invoices
-      summary: Generate a Invoice Payment URL
-      description: This endpoint generates the Payment URL of a Invoice.
+      summary: Generate a payment URL
+      description: This endpoint generates a checkout link for a specific invoice.
       parameters:
         - $ref: '#/components/parameters/lago_invoice_id'
       operationId: invoicePaymentUrl
