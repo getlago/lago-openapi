@@ -11,6 +11,8 @@ properties:
     description: If the field is not defined and multiple `active` and `pending` subscriptions exists, Lago will update the `active` subscription. However, if you wish to update a `pending` subscription, please ensure that you include the `status` attribute with the `pending` value in your request body.
   subscription:
     type: object
+    required:
+      - ending_at
     properties:
       name:
         type: string
@@ -21,6 +23,7 @@ properties:
         type: string
         format: "date-time"
         example: "2022-10-08T00:00:00Z"
+        nullable: true
         description: The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).
       subscription_at:
         type: string
