@@ -16,6 +16,7 @@ properties:
         type: string
         example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
         description: The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
+        deprecated: true
       external_subscription_id:
         type: string
         example: 'sub_1234567890'

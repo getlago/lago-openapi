@@ -5324,6 +5324,7 @@ components:
               type: string
               example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
               description: 'The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.'
+              deprecated: true
             external_subscription_id:
               type: string
               example: sub_1234567890
@@ -5350,6 +5351,7 @@ components:
               type: string
               example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
               description: 'The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.'
+              deprecated: true
             external_subscription_id:
               type: string
               example: sub_1234567890
@@ -5406,7 +5408,10 @@ components:
           type: string
           nullable: true
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-          description: 'The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.'
+          description: |
+            The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
+            This field is deprecated and is no longer supported or maintained. Please use the `external_subscription_id` instead.
+          deprecated: true
         code:
           type: string
           example: storage
