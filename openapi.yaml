@@ -3313,6 +3313,56 @@ components:
             $ref: '#/components/schemas/BillableMetricObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    ChargeFilterInput:
+      type: object
+      description: Values used to apply differentiated pricing based on additional event properties.
+      properties:
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name.'
+          example: AWS
+          nullable: true
+        properties:
+          allOf:
+            - $ref: '#/components/schemas/ChargeProperties'
+            - description: List of all thresholds utilized for calculating the charge.
+        values:
+          type: object
+          description: List of possible filter values. The key and values must match one of the billable metric filters.
+          additionalProperties:
+            type: string
+          example:
+            region: us-east-1
+    ChargeFilterObject:
+      type: object
+      description: Values used to apply differentiated pricing based on additional event properties.
+      required:
+        - lago_id
+        - invoice_display_name
+        - properties
+        - values
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier of the charge filter created by Lago.
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name.'
+          example: AWS
+          nullable: true
+        properties:
+          allOf:
+            - $ref: '#/components/schemas/ChargeProperties'
+            - description: List of all thresholds utilized for calculating the charge.
+        values:
+          type: object
+          description: List of possible filter values. The key and values must match one of the billable metric filters.
+          additionalProperties:
+            type: string
+          example:
+            region: us-east-1
     ChargeObject:
       type: object
       required:
@@ -3380,6 +3430,11 @@ components:
           allOf:
             - $ref: '#/components/schemas/ChargeProperties'
             - description: List of all thresholds utilized for calculating the charge.
+        filters:
+          type: array
+          description: List of filters used to apply differentiated pricing based on additional event properties.
+          items:
+            $ref: '#/components/schemas/ChargeFilterObject'
         group_properties:
           type: array
           description: 'All charge information, sorted by groups.'
@@ -6980,6 +7035,11 @@ components:
                           allOf:
                             - $ref: '#/components/schemas/ChargeProperties'
                             - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+                  filters:
+                    type: array
+                    description: List of filters used to apply differentiated pricing based on additional event properties.
+                    items:
+                      $ref: '#/components/schemas/ChargeFilterInput'
                   tax_codes:
                     type: array
                     items:
@@ -7299,6 +7359,11 @@ components:
                           allOf:
                             - $ref: '#/components/schemas/ChargeProperties'
                             - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+                  filters:
+                    type: array
+                    description: List of filters used to apply differentiated pricing based on additional event properties.
+                    items:
+                      $ref: '#/components/schemas/ChargeFilterInput'
                   tax_codes:
                     type: array
                     items:
