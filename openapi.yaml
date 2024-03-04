@@ -4851,6 +4851,47 @@ components:
           example:
             - card
             - sepa_debit
+    CustomerChargeFiltersUsageObject:
+      type: array
+      description: 'Array of filter object, representing multiple dimensions for a charge item.'
+      required:
+        - lago_id
+        - values
+        - units
+        - events_count
+        - amount_cents
+      items:
+        type: object
+        properties:
+          lago_id:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            description: Unique identifier assigned to the charge filter within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge filter record within the Lago system.
+          units:
+            type: string
+            pattern: '^[0-9]+.?[0-9]*$'
+            example: '0.9'
+            description: The number of units consumed for a specific charge filter related to a charge item.
+          amount_cents:
+            type: integer
+            example: 1000
+            description: 'The amount in cents, tax excluded, consumed for a specific charge filter related to a charge item.'
+          events_count:
+            type: integer
+            example: 10
+            description: The quantity of usage events that have been recorded for a particular charge filter during the specified time period. These events may also be referred to as the number of transactions in some contexts.
+          invoice_display_name:
+            type: string
+            description: Specifies the name that will be displayed on an invoice.
+            example: AWS eu-east-1
+          values:
+            type: object
+            description: List of filter values applied to the usage.
+            additionalProperties:
+              type: string
+            example:
+              region: us-east-1
     CustomerChargeGroupedUsageObject:
       type: array
       description: 'Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.'
@@ -4881,6 +4922,8 @@ components:
             description: Key value list of event properties aggregated by the charge model
             additionalProperties:
               type: string
+          filters:
+            $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
           groups:
             $ref: '#/components/schemas/CustomerChargeGroupsUsageObject'
     CustomerChargeGroupsUsageObject:
@@ -5008,6 +5051,8 @@ components:
                 - max_agg
                 - unique_count_agg
               example: sum_agg
+        filters:
+          $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
         groups:
           $ref: '#/components/schemas/CustomerChargeGroupsUsageObject'
         grouped_usage:
@@ -5625,6 +5670,12 @@ components:
           nullable: true
           description: Unique identifier assigned to the group that the fee belongs to
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_charge_filter_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Unique identifier assigned to the charge filter that the fee belongs to
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_invoice_id:
           type: string
           format: uuid
@@ -5974,6 +6025,10 @@ components:
               type: string
               description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
               example: Setup Fee (SF1)
+            filter_invoice_display_name:
+              type: string
+              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the actual charge filter values will be used as the default display name.'
+              example: AWS eu-east-1
             group_invoice_display_name:
               type: string
               description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
