@@ -12,21 +12,21 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    description: 'Unique identifier of the billable metric created by Lago.'
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    description: "Unique identifier of the billable metric created by Lago."
   name:
     type: string
-    example: 'Storage'
-    description: 'Name of the billable metric.'
+    example: "Storage"
+    description: "Name of the billable metric."
   code:
     type: string
-    example: 'storage'
-    description: 'Unique code used to identify the billable metric associated with the API request. This code associates each event with the correct metric.'
+    example: "storage"
+    description: "Unique code used to identify the billable metric associated with the API request. This code associates each event with the correct metric."
   description:
     type: string
-    example: 'GB of storage used in my application'
-    description: 'Internal description of the billable metric.'
+    example: "GB of storage used in my application"
+    description: "Internal description of the billable metric."
     nullable: true
   recurring:
     type: boolean
@@ -39,18 +39,18 @@ properties:
       - If not defined in the request, default value is `false`.
   created_at:
     type: string
-    format: 'date-time'
-    example: '2022-09-14T16:35:31Z'
-    description: 'Creation date of the billable metric.'
+    format: "date-time"
+    example: "2022-09-14T16:35:31Z"
+    description: "Creation date of the billable metric."
   field_name:
     type: string
-    example: 'gb'
-    description: 'Property of the billable metric used for aggregating usage data. This field is not required for `count_agg`.'
+    example: "gb"
+    description: "Property of the billable metric used for aggregating usage data. This field is not required for `count_agg`."
     nullable: true
   aggregation_type:
     type: string
-    description: 'Aggregation method used to compute usage for this billable metric.'
-    example: 'sum_agg'
+    description: "Aggregation method used to compute usage for this billable metric."
+    example: "sum_agg"
     enum:
       - count_agg
       - sum_agg
@@ -63,19 +63,23 @@ properties:
     enum:
       - seconds
     nullable: true
-    example: 'seconds'
-    description: 'Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.'
+    example: "seconds"
+    description: "Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`."
   group:
-    $ref: './BillableMetricGroup.yaml'
+    $ref: "./BillableMetricGroup.yaml"
+  filters:
+    type: array
+    items:
+      $ref: "./BillableMetricFilterObject.yaml"
   active_subscriptions_count:
     type: integer
     example: 4
-    description: 'Number of active subscriptions using this billable metric.'
+    description: "Number of active subscriptions using this billable metric."
   draft_invoices_count:
     type: integer
     example: 10
-    description: 'Number of draft invoices for which this billable metric is listed as an invoice item.'
+    description: "Number of draft invoices for which this billable metric is listed as an invoice item."
   plans_count:
     type: integer
     example: 4
-    description: 'Number of plans using this billable metric.'
+    description: "Number of plans using this billable metric."

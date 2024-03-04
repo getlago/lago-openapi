@@ -3132,6 +3132,10 @@ components:
           description: 'Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.'
         group:
           $ref: '#/components/schemas/BillableMetricGroup'
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillableMetricFilterObject'
         active_subscriptions_count:
           type: integer
           example: 4
@@ -3194,6 +3198,10 @@ components:
           description: 'Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.'
         group:
           $ref: '#/components/schemas/BillableMetricGroup'
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillableMetricFilterInput'
     BillableMetricCreateInput:
       type: object
       required:
@@ -3206,6 +3214,46 @@ components:
                 - name
                 - code
                 - aggregation_type
+    BillableMetricFilterInput:
+      type: object
+      description: Values used to apply differentiated pricing based on additional event properties.
+      required:
+        - key
+        - values
+      properties:
+        key:
+          type: string
+          example: region
+          description: Filter key to add to the event properties payload
+        values:
+          type: array
+          items:
+            type: string
+            example: us-east-1
+          description: List of possible filter values
+    BillableMetricFilterObject:
+      type: object
+      description: Values used to apply differentiated pricing based on additional event properties.
+      required:
+        - lago_id
+        - key
+        - values
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier of the billable metric filter created by Lago.
+        key:
+          type: string
+          example: region
+          description: Filter key to add to the event properties payload
+        values:
+          type: array
+          items:
+            type: string
+            example: us-east-1
+          description: List of possible filter values
     BillableMetricUpdateInput:
       type: object
       required:
