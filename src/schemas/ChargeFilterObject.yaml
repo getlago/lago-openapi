@@ -1,16 +1,10 @@
 type: object
 description: "Values used to apply differentiated pricing based on additional event properties."
 required:
-  - lago_id
   - invoice_display_name
   - properties
   - values
 properties:
-  lago_id:
-    type: string
-    format: "uuid"
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-    description: "Unique identifier of the charge filter created by Lago."
   invoice_display_name:
     type: string
     description: "Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name."
