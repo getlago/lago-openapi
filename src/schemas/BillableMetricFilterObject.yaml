@@ -1,15 +1,9 @@
 type: object
 description: "Values used to apply differentiated pricing based on additional event properties."
 required:
-  - lago_id
   - key
   - values
 properties:
-  lago_id:
-    type: string
-    format: "uuid"
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-    description: "Unique identifier of the billable metric filter created by Lago."
   key:
     type: string
     example: "region"

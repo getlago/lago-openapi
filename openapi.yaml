@@ -3235,15 +3235,9 @@ components:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
       required:
-        - lago_id
         - key
         - values
       properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier of the billable metric filter created by Lago.
         key:
           type: string
           example: region
@@ -3337,16 +3331,10 @@ components:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
       required:
-        - lago_id
         - invoice_display_name
         - properties
         - values
       properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier of the charge filter created by Lago.
         invoice_display_name:
           type: string
           description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name.'
@@ -4855,7 +4843,6 @@ components:
       type: array
       description: 'Array of filter object, representing multiple dimensions for a charge item.'
       required:
-        - lago_id
         - values
         - units
         - events_count
@@ -4863,11 +4850,6 @@ components:
       items:
         type: object
         properties:
-          lago_id:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-            description: Unique identifier assigned to the charge filter within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge filter record within the Lago system.
           units:
             type: string
             pattern: '^[0-9]+.?[0-9]*$'
@@ -7270,6 +7252,11 @@ components:
                       allOf:
                         - $ref: '#/components/schemas/ChargeProperties'
                         - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+              filters:
+                type: array
+                description: List of filters used to apply differentiated pricing based on additional event properties.
+                items:
+                  $ref: '#/components/schemas/ChargeFilterInput'
               tax_codes:
                 type: array
                 items:

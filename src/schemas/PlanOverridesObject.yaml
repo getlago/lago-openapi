@@ -7,20 +7,20 @@ properties:
     example: 10000
   amount_currency:
     allOf:
-      - $ref: './Currency.yaml'
+      - $ref: "./Currency.yaml"
       - description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
-        example: 'USD'
+        example: "USD"
   description:
     type: string
     description: The description on the plan.
-    example: 'Plan for early stage startups.'
+    example: "Plan for early stage startups."
   invoice_display_name:
     type: string
-    example: 'Startup plan'
+    example: "Startup plan"
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
   name:
     type: string
-    example: 'Startup'
+    example: "Startup"
     description: The name of the plan.
   tax_codes:
     type: array
@@ -42,25 +42,25 @@ properties:
       properties:
         id:
           type: string
-          format: 'uuid'
+          format: "uuid"
           description: Unique identifier of the charge created by Lago.
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+          example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
         billable_metric_id:
           type: string
-          format: 'uuid'
+          format: "uuid"
           description: Unique identifier of the billable metric created by Lago.
-          example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+          example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
         invoice_display_name:
           type: string
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-          example: 'Setup'
+          example: "Setup"
         min_amount_cents:
           type: integer
           description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
           example: 0
         properties:
           allOf:
-            - $ref: './ChargeProperties.yaml'
+            - $ref: "./ChargeProperties.yaml"
             - description: List of all thresholds utilized for calculating the charge.
         group_properties:
           type: array
@@ -74,11 +74,16 @@ properties:
               group_id:
                 type: string
                 description: Unique identifier of a billable metric group, created by Lago.
-                example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+                example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
               values:
                 allOf:
-                  - $ref: './ChargeProperties.yaml'
+                  - $ref: "./ChargeProperties.yaml"
                   - description: List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.
+        filters:
+          type: array
+          description: List of filters used to apply differentiated pricing based on additional event properties.
+          items:
+            $ref: "./ChargeFilterInput.yaml"
         tax_codes:
           type: array
           items:
