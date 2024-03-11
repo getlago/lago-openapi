@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Lago API documentation
   description: Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 0.57.0-beta
+  version: 1.0.0
   license:
     name: AGPLv3
   contact:
@@ -7506,6 +7506,8 @@ components:
           description: 'If the field is not defined and multiple `active` and `pending` subscriptions exists, Lago will update the `active` subscription. However, if you wish to update a `pending` subscription, please ensure that you include the `status` attribute with the `pending` value in your request body.'
         subscription:
           type: object
+          required:
+            - ending_at
           properties:
             name:
               type: string
@@ -7516,6 +7518,7 @@ components:
               type: string
               format: date-time
               example: '2022-10-08T00:00:00Z'
+              nullable: true
               description: 'The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).'
             subscription_at:
               type: string
