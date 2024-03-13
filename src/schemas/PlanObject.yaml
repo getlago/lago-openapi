@@ -75,6 +75,8 @@ properties:
     type: integer
     description: The number of draft invoices that include a subscription attached to the plan. This field provides valuable information about the impact of deleting the plan. By checking the value of this field, you can determine the number of draft invoices that will be affected if the plan is deleted.
     example: 0
+  minimum_commitment:
+    $ref: './MinimumCommitmentObject.yaml'
   charges:
     type: array
     items:

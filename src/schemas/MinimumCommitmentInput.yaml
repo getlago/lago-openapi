@@ -1,0 +1,22 @@
+type: object
+description: Minimum commitment for this plan.
+nullable: true
+required:
+  - amount_cents
+properties:
+  amount_cents:
+    type: integer
+    description: The amount of the minimum commitment in cents.
+    example: 100000
+  invoice_display_name:
+    type: string
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the default name will be used as the display name.
+    example: "Minimum Commitment (C1)"
+  tax_codes:
+    type: array
+    items:
+      type: string
+    description: List of unique code used to identify the taxes.
+    example: [french_standard_vat]
+
+
