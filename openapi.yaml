@@ -3302,9 +3302,12 @@ components:
           type: object
           description: List of possible filter values. The key and values must match one of the billable metric filters.
           additionalProperties:
-            type: string
+            type: array
+            items:
+              type: string
           example:
-            region: us-east-1
+            region:
+              - us-east-1
     ChargeFilterObject:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
@@ -3326,9 +3329,12 @@ components:
           type: object
           description: List of possible filter values. The key and values must match one of the billable metric filters.
           additionalProperties:
-            type: string
+            type: array
+            items:
+              type: string
           example:
-            region: us-east-1
+            region:
+              - us-east-1
     ChargeObject:
       type: object
       required:
