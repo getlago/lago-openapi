@@ -5992,6 +5992,28 @@ components:
             $ref: '#/components/schemas/GroupObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    MinimumCommitmentInput:
+      type: object
+      description: Minimum commitment for this plan.
+      nullable: true
+      required:
+        - amount_cents
+      properties:
+        amount_cents:
+          type: integer
+          description: The amount of the minimum commitment in cents.
+          example: 100000
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the default name will be used as the display name.'
+          example: Minimum Commitment (C1)
+        tax_codes:
+          type: array
+          items:
+            type: string
+          description: List of unique code used to identify the taxes.
+          example:
+            - french_standard_vat
     MinimumCommitmentObject:
       type: object
       nullable: true
@@ -6815,7 +6837,7 @@ components:
               example:
                 - french_standard_vat
             minimum_commitment:
-              $ref: '#/components/schemas/PlanOverridesObject/properties/minimum_commitment'
+              $ref: '#/components/schemas/MinimumCommitmentInput'
             charges:
               type: array
               description: Additional usage-based charges for this plan.
@@ -7013,27 +7035,7 @@ components:
           description: The duration in days during which the base cost of the plan is offered for free.
           example: 5
         minimum_commitment:
-          type: object
-          description: Minimum commitment for this plan.
-          nullable: true
-          required:
-            - amount_cents
-          properties:
-            amount_cents:
-              type: integer
-              description: The amount of the minimum commitment in cents.
-              example: 100000
-            invoice_display_name:
-              type: string
-              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the default name will be used as the display name.'
-              example: Minimum Commitment (C1)
-            tax_codes:
-              type: array
-              items:
-                type: string
-              description: List of unique code used to identify the taxes.
-              example:
-                - french_standard_vat
+          $ref: '#/components/schemas/MinimumCommitmentObject'
         charges:
           type: array
           description: Additional usage-based charges for this plan.
@@ -7149,7 +7151,7 @@ components:
               example:
                 - french_standard_vat
             minimum_commitment:
-              $ref: '#/components/schemas/PlanOverridesObject/properties/minimum_commitment'
+              $ref: '#/components/schemas/MinimumCommitmentInput'
             charges:
               type: array
               description: Additional usage-based charges for this plan.
