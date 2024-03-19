@@ -58,6 +58,8 @@ properties:
           type: string
         description: List of unique code used to identify the taxes.
         example: [french_standard_vat]
+      minimum_commitment:
+        $ref: './MinimumCommitmentInput.yaml'
       charges:
         type: array
         description: Additional usage-based charges for this plan.

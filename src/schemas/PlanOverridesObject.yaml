@@ -32,6 +32,8 @@ properties:
     type: number
     description: The duration in days during which the base cost of the plan is offered for free.
     example: 5
+  minimum_commitment:
+    $ref: './MinimumCommitmentInput.yaml'
   charges:
     type: array
     description: Additional usage-based charges for this plan.
