@@ -27,5 +27,7 @@ items:
       description: Key value list of event properties aggregated by the charge model
       additionalProperties:
         type: string
+    filters:
+      $ref: "./CustomerChargeFiltersUsageObject.yaml"
     groups:
       $ref: "./CustomerChargeGroupsUsageObject.yaml"

@@ -25,6 +25,12 @@ properties:
     nullable: true
     description: Unique identifier assigned to the group that the fee belongs to
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_charge_filter_id:
+    type: string
+    format: "uuid"
+    nullable: true
+    description: Unique identifier assigned to the charge filter that the fee belongs to
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_invoice_id:
     type: string
     format: uuid
@@ -200,6 +206,10 @@ properties:
         type: string
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
         example: "Setup Fee (SF1)"
+      filter_invoice_display_name:
+        type: string
+        description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the actual charge filter values will be used as the default display name.
+        example: "AWS eu-east-1"
       group_invoice_display_name:
         type: string
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.

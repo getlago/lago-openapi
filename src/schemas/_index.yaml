@@ -42,12 +42,20 @@ BillableMetricBaseInput:
   $ref: "./BillableMetricBaseInput.yaml"
 BillableMetricCreateInput:
   $ref: "./BillableMetricCreateInput.yaml"
+BillableMetricFilterInput:
+  $ref: "./BillableMetricFilterInput.yaml"
+BillableMetricFilterObject:
+  $ref: "./BillableMetricFilterObject.yaml"
 BillableMetricUpdateInput:
   $ref: "./BillableMetricUpdateInput.yaml"
 BillableMetricGroup:
   $ref: "./BillableMetricGroup.yaml"
 BillableMetricsPaginated:
   $ref: "./BillableMetricsPaginated.yaml"
+ChargeFilterInput:
+  $ref: "./ChargeFilterInput.yaml"
+ChargeFilterObject:
+  $ref: "./ChargeFilterObject.yaml"
 ChargeObject:
   $ref: "./ChargeObject.yaml"
 ChargeProperties:
@@ -92,6 +100,8 @@ Customer:
   $ref: "./Customer.yaml"
 CustomerBillingConfiguration:
   $ref: "./CustomerBillingConfiguration.yaml"
+CustomerChargeFiltersUsageObject:
+  $ref: "./CustomerChargeFiltersUsageObject.yaml"
 CustomerChargeGroupedUsageObject:
   $ref: "./CustomerChargeGroupedUsageObject.yaml"
 CustomerChargeGroupsUsageObject:

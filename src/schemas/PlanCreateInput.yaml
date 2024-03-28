@@ -7,19 +7,19 @@ properties:
     properties:
       name:
         type: string
-        example: 'Startup'
+        example: "Startup"
         description: The name of the plan.
       invoice_display_name:
         type: string
-        example: 'Startup plan'
+        example: "Startup plan"
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
       code:
         type: string
-        example: 'startup'
+        example: "startup"
         description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.
       interval:
         type: string
-        description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly`, or `weekly`.'
+        description: "The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly`, or `weekly`."
         example: monthly
         enum:
           - weekly
@@ -29,16 +29,16 @@ properties:
       description:
         type: string
         description: The description on the plan.
-        example: 'Plan for early stage startups.'
+        example: "Plan for early stage startups."
       amount_cents:
         type: integer
         description: The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.
         example: 10000
       amount_currency:
         allOf:
-          - $ref: './Currency.yaml'
+          - $ref: "./Currency.yaml"
           - description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
-            example: 'USD'
+            example: "USD"
       trial_period:
         type: number
         description: The duration in days during which the base cost of the plan is offered for free.
@@ -68,9 +68,9 @@ properties:
           properties:
             billable_metric_id:
               type: string
-              format: 'uuid'
+              format: "uuid"
               description: Unique identifier of the billable metric created by Lago.
-              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             charge_model:
               type: string
               description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage` `package`, `percentage` or `volume`.
@@ -81,7 +81,7 @@ properties:
                 - package
                 - percentage
                 - volume
-              example: 'standard'
+              example: "standard"
             pay_in_advance:
               type: boolean
               example: false
@@ -93,7 +93,7 @@ properties:
             invoice_display_name:
               type: string
               description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-              example: 'Setup'
+              example: "Setup"
             prorated:
               type: boolean
               example: false
@@ -109,7 +109,7 @@ properties:
               example: 0
             properties:
               allOf:
-                - $ref: './ChargeProperties.yaml'
+                - $ref: "./ChargeProperties.yaml"
                 - description: List of all thresholds utilized for calculating the charge.
             group_properties:
               type: array
@@ -123,11 +123,16 @@ properties:
                   group_id:
                     type: string
                     description: Unique identifier of a billable metric group, created by Lago.
-                    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+                    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
                   values:
                     allOf:
-                      - $ref: './ChargeProperties.yaml'
+                      - $ref: "./ChargeProperties.yaml"
                       - description: List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.
+            filters:
+              type: array
+              description: List of filters used to apply differentiated pricing based on additional event properties.
+              items:
+                $ref: "./ChargeFilterInput.yaml"
             tax_codes:
               type: array
               items:
@@ -135,23 +140,23 @@ properties:
               description: List of unique code used to identify the taxes.
               example: [french_standard_vat]
         example:
-          - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a91'
-            charge_model: 'package'
+          - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a91"
+            charge_model: "package"
             invoiceable: true
-            invoice_display_name: 'Setup'
+            invoice_display_name: "Setup"
             pay_in_advance: false
             prorated: false
             min_amount_cents: 3000
             properties:
-              amount: '30'
+              amount: "30"
               free_units: 100
               package_size: 1000
             group_properties: []
             tax_codes: [french_standard_vat]
-          - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a92'
-            charge_model: 'graduated'
+          - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a92"
+            charge_model: "graduated"
             invoiceable: true
-            invoice_display_name: 'Setup'
+            invoice_display_name: "Setup"
             pay_in_advance: false
             prorated: false
             min_amount_cents: 0
@@ -159,38 +164,38 @@ properties:
               graduated_ranges:
                 - to_value: 10
                   from_value: 0
-                  flat_amount: '10'
-                  per_unit_amount: '0.5'
+                  flat_amount: "10"
+                  per_unit_amount: "0.5"
                 - to_value: null
                   from_value: 11
-                  flat_amount: '0'
-                  per_unit_amount: '0.4'
+                  flat_amount: "0"
+                  per_unit_amount: "0.4"
             group_properties: []
-          - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a93'
-            charge_model: 'standard'
+          - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a93"
+            charge_model: "standard"
             invoiceable: true
-            invoice_display_name: 'Setup'
+            invoice_display_name: "Setup"
             pay_in_advance: true
             prorated: false
             min_amount_cents: 0
             properties: {}
             group_properties:
-              - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a01'
-                invoice_display_name: 'Europe'
+              - group_id: "1a901a90-1a90-1a90-1a90-1a901a901a01"
+                invoice_display_name: "Europe"
                 values:
-                  amount: '10'
-              - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a02'
-                invoice_display_name: 'USA'
+                  amount: "10"
+              - group_id: "1a901a90-1a90-1a90-1a90-1a901a901a02"
+                invoice_display_name: "USA"
                 values:
-                  amount: '5'
-              - group_id: '1a901a90-1a90-1a90-1a90-1a901a901a03'
-                invoice_display_name: 'Africa'
+                  amount: "5"
+              - group_id: "1a901a90-1a90-1a90-1a90-1a901a901a03"
+                invoice_display_name: "Africa"
                 values:
-                  amount: '8'
-          - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a94'
-            charge_model: 'volume'
+                  amount: "8"
+          - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a94"
+            charge_model: "volume"
             invoiceable: true
-            invoice_display_name: 'Setup'
+            invoice_display_name: "Setup"
             pay_in_advance: false
             prorated: false
             min_amount_cents: 0
@@ -198,23 +203,23 @@ properties:
               volume_ranges:
                 - from_value: 0
                   to_value: 100
-                  flat_amount: '0'
-                  per_unit_amount: '0'
+                  flat_amount: "0"
+                  per_unit_amount: "0"
                 - from_value: 101
                   to_value: null
-                  flat_amount: '0'
-                  per_unit_amount: '0.5'
+                  flat_amount: "0"
+                  per_unit_amount: "0.5"
             group_properties: []
-          - billable_metric_id: '1a901a90-1a90-1a90-1a90-1a901a901a95'
-            charge_model: 'percentage'
+          - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a95"
+            charge_model: "percentage"
             invoiceable: false
-            invoice_display_name: 'Setup'
+            invoice_display_name: "Setup"
             pay_in_advance: true
             prorated: false
             min_amount_cents: 0
             properties:
-              rate: '1'
-              fixed_amount: '0.5'
+              rate: "1"
+              fixed_amount: "0.5"
               free_units_per_events: 5
-              free_units_per_total_aggregation: '500'
+              free_units_per_total_aggregation: "500"
             group_properties: []

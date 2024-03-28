@@ -8,27 +8,27 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier of charge, created by Lago.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_billable_metric_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier of the billable metric created by Lago.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   billable_metric_code:
     type: string
     description: Unique code identifying a billable metric.
-    example: 'requests'
+    example: "requests"
   invoice_display_name:
     type: string
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-    example: 'Setup'
+    example: "Setup"
   created_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The date and time when the charge was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
-    example: '2022-09-14T16:35:31Z'
+    example: "2022-09-14T16:35:31Z"
   charge_model:
     type: string
     description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage`, `package`, `percentage` or `volume`.
@@ -62,15 +62,20 @@ properties:
     example: 1200
   properties:
     allOf:
-      - $ref: './ChargeProperties.yaml'
+      - $ref: "./ChargeProperties.yaml"
       - description: List of all thresholds utilized for calculating the charge.
+  filters:
+    type: array
+    description: List of filters used to apply differentiated pricing based on additional event properties.
+    items:
+      $ref: "./ChargeFilterObject.yaml"
   group_properties:
     type: array
     description: All charge information, sorted by groups.
     items:
-      $ref: './GroupPropertiesObject.yaml'
+      $ref: "./GroupPropertiesObject.yaml"
   taxes:
     type: array
     description: All taxes applied to the charge.
     items:
-      $ref: './TaxObject.yaml'
+      $ref: "./TaxObject.yaml"
