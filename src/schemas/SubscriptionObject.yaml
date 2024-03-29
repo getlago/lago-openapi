@@ -107,3 +107,9 @@ properties:
     example: '2022-04-30'
     description: The date when the plan will be downgraded, represented in ISO 8601 date format.
     nullable: true
+  trial_ended_at:
+    type: string
+    format: 'date-time'
+    example: '2022-08-08T00:00:00Z'
+    description: The date when the free trial is ended, represented in ISO 8601 date format.
+    nullable: true
