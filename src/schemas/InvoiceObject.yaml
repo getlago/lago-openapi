@@ -35,6 +35,11 @@ properties:
     format: 'date'
     description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
     example: '2022-04-30'
+  payment_dispute_lost_at:
+    type: string
+    format: 'date-time'
+    description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
+    example: '2022-09-14T16:35:31Z'
   payment_due_date:
     type: string
     format: 'date'

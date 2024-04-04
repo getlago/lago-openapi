@@ -1636,6 +1636,28 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  '/invoices/{lago_id}/lose_dispute':
+    post:
+      tags:
+        - invoices
+      summary: Mark an invoice payment dispute as lost
+      description: This endpoint is used for setting invoice's payment dispute as lost.
+      parameters:
+        - $ref: '#/components/parameters/lago_invoice_id'
+      operationId: loseDisputeInvoice
+      responses:
+        '200':
+          description: Invoice payment dispute lost
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   '/invoices/{lago_id}/refresh':
     put:
       tags:
@@ -6244,6 +6266,11 @@ components:
           format: date
           description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
           example: '2022-04-30'
+        payment_dispute_lost_at:
+          type: string
+          format: date-time
+          description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
+          example: '2022-09-14T16:35:31Z'
         payment_due_date:
           type: string
           format: date
