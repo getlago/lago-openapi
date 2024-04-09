@@ -33,7 +33,7 @@ properties:
     description: The duration in days during which the base cost of the plan is offered for free.
     example: 5
   minimum_commitment:
-    $ref: './MinimumCommitmentObject.yaml'
+    $ref: "./MinimumCommitmentObject.yaml"
   charges:
     type: array
     description: Additional usage-based charges for this plan.
@@ -65,6 +65,7 @@ properties:
         group_properties:
           type: array
           description: All charge information, sorted by groups.
+          deprecated: true
           items:
             type: object
             required:
