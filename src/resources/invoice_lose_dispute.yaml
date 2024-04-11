@@ -1,0 +1,22 @@
+post:
+  tags:
+    - invoices
+  summary: Mark an invoice payment dispute as lost
+  description: This endpoint is used for setting invoice's payment dispute as lost.
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+
+  operationId: loseDisputeInvoice
+  responses:
+    '200':
+      description: Invoice payment dispute lost
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'
