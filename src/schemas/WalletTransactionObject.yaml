@@ -3,6 +3,7 @@ required:
   - lago_id
   - lago_wallet_id
   - status
+  - transaction_status
   - transaction_type
   - credit_amount
   - amount
@@ -25,6 +26,14 @@ properties:
       - settled
     description: The status of the wallet transaction. Possible values are `pending` or `settled`.
     example: settled
+  transaction_status:
+    type: string
+    enum:
+      - paid
+      - offered
+      - voided
+    description: The transaction status of the wallet transaction. Possible values are `paid` (with pending or settled status), `offered` (settled status but null invoice_id) or `voided` (with outbound transaction type).
+    example: paid
   transaction_type:
     type: string
     enum:
