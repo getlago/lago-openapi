@@ -1,0 +1,16 @@
+type: object
+description: "Values used to apply differentiated pricing based on additional event properties."
+required:
+  - key
+  - values
+properties:
+  key:
+    type: string
+    example: "region"
+    description: "Filter key to add to the event properties payload"
+  values:
+    type: array
+    items:
+      type: string
+      example: "us-east-1"
+    description: "List of possible filter values"

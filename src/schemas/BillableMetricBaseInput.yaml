@@ -2,16 +2,16 @@ type: object
 properties:
   name:
     type: string
-    example: 'Storage'
-    description: 'Name of the billable metric.'
+    example: "Storage"
+    description: "Name of the billable metric."
   code:
     type: string
-    example: 'storage'
-    description: 'Unique code used to identify the billable metric associated with the API request. This code associates each event with the correct metric.'
+    example: "storage"
+    description: "Unique code used to identify the billable metric associated with the API request. This code associates each event with the correct metric."
   description:
     type: string
-    example: 'GB of storage used in my application'
-    description: 'Internal description of the billable metric.'
+    example: "GB of storage used in my application"
+    description: "Internal description of the billable metric."
     nullable: true
   recurring:
     type: boolean
@@ -24,13 +24,13 @@ properties:
       - If not defined in the request, default value is `false`.
   field_name:
     type: string
-    example: 'gb'
-    description: 'Property of the billable metric used for aggregating usage data. This field is not required for `count_agg`.'
+    example: "gb"
+    description: "Property of the billable metric used for aggregating usage data. This field is not required for `count_agg`."
     nullable: true
   aggregation_type:
     type: string
-    example: 'sum_agg'
-    description: 'Aggregation method used to compute usage for this billable metric.'
+    example: "sum_agg"
+    description: "Aggregation method used to compute usage for this billable metric."
     enum:
       - count_agg
       - sum_agg
@@ -43,7 +43,11 @@ properties:
     enum:
       - seconds
     nullable: true
-    example: 'seconds'
-    description: 'Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.'
+    example: "seconds"
+    description: "Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`."
   group:
-    $ref: './BillableMetricGroup.yaml'
+    $ref: "./BillableMetricGroup.yaml"
+  filters:
+    type: array
+    items:
+      $ref: "./BillableMetricFilterInput.yaml"

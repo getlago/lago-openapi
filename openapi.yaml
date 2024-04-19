@@ -526,6 +526,7 @@ paths:
         - billable_metrics
       summary: Find a billable metric's groups
       description: This endpoint retrieves all groups for a billable metric.
+      deprecated: true
       operationId: findAllBillableMetricGroups
       parameters:
         - name: code
@@ -3132,6 +3133,10 @@ components:
           description: 'Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.'
         group:
           $ref: '#/components/schemas/BillableMetricGroup'
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillableMetricFilterObject'
         active_subscriptions_count:
           type: integer
           example: 4
@@ -3194,6 +3199,10 @@ components:
           description: 'Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.'
         group:
           $ref: '#/components/schemas/BillableMetricGroup'
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillableMetricFilterInput'
     BillableMetricCreateInput:
       type: object
       required:
@@ -3206,6 +3215,40 @@ components:
                 - name
                 - code
                 - aggregation_type
+    BillableMetricFilterInput:
+      type: object
+      description: Values used to apply differentiated pricing based on additional event properties.
+      required:
+        - key
+        - values
+      properties:
+        key:
+          type: string
+          example: region
+          description: Filter key to add to the event properties payload
+        values:
+          type: array
+          items:
+            type: string
+            example: us-east-1
+          description: List of possible filter values
+    BillableMetricFilterObject:
+      type: object
+      description: Values used to apply differentiated pricing based on additional event properties.
+      required:
+        - key
+        - values
+      properties:
+        key:
+          type: string
+          example: region
+          description: Filter key to add to the event properties payload
+        values:
+          type: array
+          items:
+            type: string
+            example: us-east-1
+          description: List of possible filter values
     BillableMetricUpdateInput:
       type: object
       required:
@@ -3219,6 +3262,7 @@ components:
       required:
         - key
         - values
+      deprecated: true
       properties:
         key:
           type: string
@@ -3265,6 +3309,56 @@ components:
             $ref: '#/components/schemas/BillableMetricObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    ChargeFilterInput:
+      type: object
+      description: Values used to apply differentiated pricing based on additional event properties.
+      properties:
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name.'
+          example: AWS
+          nullable: true
+        properties:
+          allOf:
+            - $ref: '#/components/schemas/ChargeProperties'
+            - description: List of all thresholds utilized for calculating the charge.
+        values:
+          type: object
+          description: List of possible filter values. The key and values must match one of the billable metric filters.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            region:
+              - us-east-1
+    ChargeFilterObject:
+      type: object
+      description: Values used to apply differentiated pricing based on additional event properties.
+      required:
+        - invoice_display_name
+        - properties
+        - values
+      properties:
+        invoice_display_name:
+          type: string
+          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name.'
+          example: AWS
+          nullable: true
+        properties:
+          allOf:
+            - $ref: '#/components/schemas/ChargeProperties'
+            - description: List of all thresholds utilized for calculating the charge.
+        values:
+          type: object
+          description: List of possible filter values. The key and values must match one of the billable metric filters.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            region:
+              - us-east-1
     ChargeObject:
       type: object
       required:
@@ -3332,9 +3426,15 @@ components:
           allOf:
             - $ref: '#/components/schemas/ChargeProperties'
             - description: List of all thresholds utilized for calculating the charge.
+        filters:
+          type: array
+          description: List of filters used to apply differentiated pricing based on additional event properties.
+          items:
+            $ref: '#/components/schemas/ChargeFilterObject'
         group_properties:
           type: array
           description: 'All charge information, sorted by groups.'
+          deprecated: true
           items:
             $ref: '#/components/schemas/GroupPropertiesObject'
         taxes:
@@ -4748,6 +4848,41 @@ components:
           example:
             - card
             - sepa_debit
+    CustomerChargeFiltersUsageObject:
+      type: array
+      description: 'Array of filter object, representing multiple dimensions for a charge item.'
+      required:
+        - values
+        - units
+        - events_count
+        - amount_cents
+      items:
+        type: object
+        properties:
+          units:
+            type: string
+            pattern: '^[0-9]+.?[0-9]*$'
+            example: '0.9'
+            description: The number of units consumed for a specific charge filter related to a charge item.
+          amount_cents:
+            type: integer
+            example: 1000
+            description: 'The amount in cents, tax excluded, consumed for a specific charge filter related to a charge item.'
+          events_count:
+            type: integer
+            example: 10
+            description: The quantity of usage events that have been recorded for a particular charge filter during the specified time period. These events may also be referred to as the number of transactions in some contexts.
+          invoice_display_name:
+            type: string
+            description: Specifies the name that will be displayed on an invoice.
+            example: AWS eu-east-1
+          values:
+            type: object
+            description: List of filter values applied to the usage.
+            additionalProperties:
+              type: string
+            example:
+              region: us-east-1
     CustomerChargeGroupedUsageObject:
       type: array
       description: 'Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.'
@@ -4778,11 +4913,14 @@ components:
             description: Key value list of event properties aggregated by the charge model
             additionalProperties:
               type: string
+          filters:
+            $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
           groups:
             $ref: '#/components/schemas/CustomerChargeGroupsUsageObject'
     CustomerChargeGroupsUsageObject:
       type: array
       description: 'Array of group object, representing multiple dimensions for a charge item.'
+      deprecated: true
       required:
         - lago_id
         - value
@@ -4905,6 +5043,8 @@ components:
                 - max_agg
                 - unique_count_agg
               example: sum_agg
+        filters:
+          $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
         groups:
           $ref: '#/components/schemas/CustomerChargeGroupsUsageObject'
         grouped_usage:
@@ -5521,6 +5661,13 @@ components:
           format: uuid
           nullable: true
           description: Unique identifier assigned to the group that the fee belongs to
+          deprecated: true
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_charge_filter_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Unique identifier assigned to the charge filter that the fee belongs to
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_invoice_id:
           type: string
@@ -5871,9 +6018,21 @@ components:
               type: string
               description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
               example: Setup Fee (SF1)
+            filter_invoice_display_name:
+              type: string
+              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the actual charge filter values will be used as the default display name.'
+              example: AWS eu-east-1
+            filters:
+              type: object
+              description: Key value list of event properties
+              additionalProperties:
+                type: array
+                items:
+                  type: string
             group_invoice_display_name:
               type: string
               description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
+              deprecated: true
               example: Transactions - ACH
             lago_item_id:
               type: string
@@ -6918,6 +7077,7 @@ components:
                   group_properties:
                     type: array
                     description: 'All charge information, sorted by groups.'
+                    deprecated: true
                     items:
                       type: object
                       required:
@@ -6932,6 +7092,11 @@ components:
                           allOf:
                             - $ref: '#/components/schemas/ChargeProperties'
                             - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+                  filters:
+                    type: array
+                    description: List of filters used to apply differentiated pricing based on additional event properties.
+                    items:
+                      $ref: '#/components/schemas/ChargeFilterInput'
                   tax_codes:
                     type: array
                     items:
@@ -7093,6 +7258,7 @@ components:
               group_properties:
                 type: array
                 description: 'All charge information, sorted by groups.'
+                deprecated: true
                 items:
                   type: object
                   required:
@@ -7107,6 +7273,11 @@ components:
                       allOf:
                         - $ref: '#/components/schemas/ChargeProperties'
                         - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+              filters:
+                type: array
+                description: List of filters used to apply differentiated pricing based on additional event properties.
+                items:
+                  $ref: '#/components/schemas/ChargeFilterInput'
               tax_codes:
                 type: array
                 items:
@@ -7237,6 +7408,7 @@ components:
                   group_properties:
                     type: array
                     description: 'All charge information, sorted by groups.'
+                    deprecated: true
                     items:
                       type: object
                       required:
@@ -7251,6 +7423,11 @@ components:
                           allOf:
                             - $ref: '#/components/schemas/ChargeProperties'
                             - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
+                  filters:
+                    type: array
+                    description: List of filters used to apply differentiated pricing based on additional event properties.
+                    items:
+                      $ref: '#/components/schemas/ChargeFilterInput'
                   tax_codes:
                     type: array
                     items:
@@ -7443,7 +7620,7 @@ components:
                 amount: '30'
                 free_units: 100
                 package_size: 1000
-              group_properties: []
+              filters: []
             - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
               lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
               billable_metric_code: cpu
@@ -7464,7 +7641,7 @@ components:
                     to_value: null
                     flat_amount: '0'
                     per_unit_amount: '0.4'
-              group_properties: []
+              filters: []
             - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
               lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
               billable_metric_code: seats
@@ -7476,19 +7653,25 @@ components:
               prorated: false
               min_amount_cents: 0
               properties: {}
-              group_properties:
-                - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a01
-                  invoice_display_name: Europe
-                  values:
+              filters:
+                - invoice_display_name: Europe
+                  properties:
                     amount: '10'
-                - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a02
-                  invoice_display_name: USA
                   values:
+                    region:
+                      - Europe
+                - invoice_display_name: USA
+                  properties:
                     amount: '5'
-                - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a03
-                  invoice_display_name: Africa
                   values:
+                    region:
+                      - USA
+                - invoice_display_name: Africa
+                  properties:
                     amount: '8'
+                  values:
+                    region:
+                      - Africa
             - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
               lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
               billable_metric_code: storage
@@ -7509,7 +7692,7 @@ components:
                     to_value: null
                     flat_amount: '0'
                     per_unit_amount: '0.5'
-              group_properties: []
+              filters: []
             - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
               lago_billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
               billable_metric_code: payments
@@ -7525,7 +7708,7 @@ components:
                 fixed_amount: '0.5'
                 free_units_per_events: 5
                 free_units_per_total_aggregation: '500'
-              group_properties: []
+              filters: []
         taxes:
           type: array
           description: All taxes applied to the plan.
