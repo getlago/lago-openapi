@@ -23,6 +23,14 @@ get:
       schema:
         type: string
         example: 'pending'
+    - name: transaction_status
+      in: query
+      description: The transaction status of the wallet transaction. Possible values are `paid` (with pending or settled status), `offered` (settled status but null invoice_id) or `voided` (with outbound transaction type).
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'paid'
     - name: transaction_type
       in: query
       description: The transaction type of the wallet transaction. Possible values are `inbound` (increasing the wallet balance) or `outbound` (decreasing the wallet balance).

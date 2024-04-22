@@ -2393,6 +2393,14 @@ paths:
           schema:
             type: string
             example: pending
+        - name: transaction_status
+          in: query
+          description: 'The transaction status of the wallet transaction. Possible values are `paid` (with pending or settled status), `offered` (settled status but null invoice_id) or `voided` (with outbound transaction type).'
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: paid
         - name: transaction_type
           in: query
           description: The transaction type of the wallet transaction. Possible values are `inbound` (increasing the wallet balance) or `outbound` (decreasing the wallet balance).
@@ -8505,6 +8513,7 @@ components:
         - lago_id
         - lago_wallet_id
         - status
+        - transaction_status
         - transaction_type
         - credit_amount
         - amount
@@ -8527,6 +8536,14 @@ components:
             - settled
           description: The status of the wallet transaction. Possible values are `pending` or `settled`.
           example: settled
+        transaction_status:
+          type: string
+          enum:
+            - paid
+            - offered
+            - voided
+          description: 'The transaction status of the wallet transaction. Possible values are `paid` (with pending or settled status), `offered` (settled status but null invoice_id) or `voided` (with outbound transaction type).'
+          example: paid
         transaction_type:
           type: string
           enum:
