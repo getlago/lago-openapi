@@ -2395,12 +2395,12 @@ paths:
             example: pending
         - name: transaction_status
           in: query
-          description: 'The transaction status of the wallet transaction. Possible values are `paid` (with pending or settled status), `offered` (settled status but null invoice_id) or `voided` (with outbound transaction type).'
+          description: 'The transaction status of the wallet transaction. Possible values are `purchased` (with pending or settled status), `granted` (without invoice_id) or `voided` (with outbound transaction type).'
           required: false
           explode: true
           schema:
             type: string
-            example: paid
+            example: purchased
         - name: transaction_type
           in: query
           description: The transaction type of the wallet transaction. Possible values are `inbound` (increasing the wallet balance) or `outbound` (decreasing the wallet balance).
@@ -8539,11 +8539,11 @@ components:
         transaction_status:
           type: string
           enum:
-            - paid
-            - offered
+            - purchased
+            - granted
             - voided
-          description: 'The transaction status of the wallet transaction. Possible values are `paid` (with pending or settled status), `offered` (settled status but null invoice_id) or `voided` (with outbound transaction type).'
-          example: paid
+          description: 'The transaction status of the wallet transaction. Possible values are `purchased` (with pending or settled status), `granted` (without invoice_id) or `voided` (with outbound transaction type).'
+          example: purchased
         transaction_type:
           type: string
           enum:
