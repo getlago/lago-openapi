@@ -234,7 +234,7 @@ paths:
           schema:
             type: string
             example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
+        - $ref: '#/components/parameters/months'
       responses:
         '200':
           description: Gross revenue
@@ -261,7 +261,7 @@ paths:
             allOf:
               - $ref: '#/components/schemas/Currency'
               - example: USD
-        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
+        - $ref: '#/components/parameters/months'
       responses:
         '200':
           description: Finalized invoice collection
@@ -288,7 +288,7 @@ paths:
             allOf:
               - $ref: '#/components/schemas/Currency'
               - example: USD
-        - $ref: '#/paths/~1analytics~1mrr/get/parameters/1'
+        - $ref: '#/components/parameters/months'
       responses:
         '200':
           description: Invoiced usage
@@ -321,14 +321,7 @@ paths:
             allOf:
               - $ref: '#/components/schemas/Currency'
               - example: USD
-        - name: months
-          in: query
-          description: Show data only for given number of months.
-          required: false
-          explode: true
-          schema:
-            type: integer
-            example: 12
+        - $ref: '#/components/parameters/months'
       responses:
         '200':
           description: MRR
@@ -2585,6 +2578,15 @@ components:
         type: string
         format: uuid
         example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    months:
+      name: months
+      in: query
+      description: Show data only for given number of months.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 12
     page:
       name: page
       in: query
