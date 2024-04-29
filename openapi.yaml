@@ -8500,13 +8500,18 @@ components:
             paid_credits:
               type: string
               pattern: '^[0-9]+.?[0-9]*$'
-              description: The number of paid credits. Required only if there is no granted credits.
+              description: The number of paid credits.
               example: '20.0'
             granted_credits:
               type: string
               pattern: '^[0-9]+.?[0-9]*$'
-              description: The number of free granted credits. Required only if there is no paid credits.
+              description: The number of free granted credits.
               example: '10.0'
+            voided_credits:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              description: The number of voided credits.
+              example: '5.0'
     WalletTransactionObject:
       type: object
       required:
