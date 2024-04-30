@@ -2395,7 +2395,7 @@ paths:
             example: pending
         - name: transaction_status
           in: query
-          description: 'The transaction status of the wallet transaction. Possible values are `purchased` (with pending or settled status), `granted` (without invoice_id) or `voided` (with outbound transaction type).'
+          description: 'The transaction status of the wallet transaction. Possible values are `purchased` (with pending or settled status), `granted` (without invoice_id), `voided` or `invoiced`.'
           required: false
           explode: true
           schema:
@@ -8547,7 +8547,8 @@ components:
             - purchased
             - granted
             - voided
-          description: 'The transaction status of the wallet transaction. Possible values are `purchased` (with pending or settled status), `granted` (without invoice_id) or `voided` (with outbound transaction type).'
+            - invoiced
+          description: 'The transaction status of the wallet transaction. Possible values are `purchased` (with pending or settled status), `granted` (without invoice_id), `voided` or `invoiced`.'
           example: purchased
         transaction_type:
           type: string
