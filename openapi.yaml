@@ -1249,7 +1249,7 @@ paths:
     parameters:
       - name: transaction_id
         in: path
-        description: This field represents the unique identifier sent for this specific event.
+        description: This field represents the unique identifier sent for this specific event (must be URL encoded).
         required: true
         schema:
           type: string
