@@ -8282,6 +8282,18 @@ components:
                 required:
                   - trigger
                 properties:
+                  paid_credits:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    nullable: true
+                    description: The number of paid credits used for recurring top-up.
+                    example: '20.0'
+                  granted_credits:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    nullable: true
+                    description: The number of free granted credits used for recurring top-up.
+                    example: '10.0'
                   trigger:
                     type: string
                     enum:
