@@ -64,6 +64,13 @@ properties:
               nullable: true
               description: The number of free granted credits used for recurring top-up.
               example: '10.0'
+            method:
+              type: string
+              enum:
+                - fixed
+                - target
+              description: The method used for recurring top-up. Possible values are `fixed` or `target`.
+              example: 'target'
             trigger:
               type: string
               enum:

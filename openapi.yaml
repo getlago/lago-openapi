@@ -8294,6 +8294,13 @@ components:
                     nullable: true
                     description: The number of free granted credits used for recurring top-up.
                     example: '10.0'
+                  method:
+                    type: string
+                    enum:
+                      - fixed
+                      - target
+                    description: The method used for recurring top-up. Possible values are `fixed` or `target`.
+                    example: target
                   trigger:
                     type: string
                     enum:
@@ -8421,6 +8428,7 @@ components:
             required:
               - lago_id
               - trigger
+              - method
               - paid_credits
               - granted_credits
               - created_at
@@ -8437,6 +8445,13 @@ components:
                   - threshold
                 description: The trigger. Possible values are `interval` or `threshold`.
                 example: interval
+              method:
+                type: string
+                enum:
+                  - fixed
+                  - target
+                description: The method used for recurring top-up. Possible values are `fixed` or `target`.
+                example: target
               interval:
                 type: string
                 enum:
@@ -8651,6 +8666,13 @@ components:
                       - threshold
                     description: The trigger. Possible values are `interval` or `threshold`.
                     example: interval
+                  method:
+                    type: string
+                    enum:
+                      - fixed
+                      - target
+                    description: The method used for recurring top-up. Possible values are `fixed` or `target`.
+                    example: target
                   interval:
                     type: string
                     enum:

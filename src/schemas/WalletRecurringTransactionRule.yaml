@@ -3,6 +3,7 @@ description: Object that represents rule for wallet recurring transactions.
 required:
   - lago_id
   - trigger
+  - method
   - paid_credits
   - granted_credits
   - created_at
@@ -19,6 +20,13 @@ properties:
       - threshold
     description: The trigger. Possible values are `interval` or `threshold`.
     example: 'interval'
+  method:
+    type: string
+    enum:
+      - fixed
+      - target
+    description: The method used for recurring top-up. Possible values are `fixed` or `target`.
+    example: 'target'
   interval:
     type: string
     enum:
