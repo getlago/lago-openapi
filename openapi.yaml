@@ -8322,6 +8322,11 @@ components:
                     pattern: '^[0-9]+.?[0-9]*$'
                     description: 'The threshold for recurring top-ups is the value at which an automatic top-up is triggered. For example, if this threshold is set at 10 credits, an automatic top-up will occur whenever the wallet balance falls to or below 10 credits. Required only when trigger is set to `threshold`.'
                     example: '20.0'
+                  target_ongoing_balance:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
+                    example: '200.0'
     WalletObject:
       type: object
       required:
@@ -8427,10 +8432,13 @@ components:
             description: Object that represents rule for wallet recurring transactions.
             required:
               - lago_id
+              - interval
               - trigger
               - method
               - paid_credits
               - granted_credits
+              - threshold_credits
+              - target_ongoing_balance
               - created_at
             properties:
               lago_id:
@@ -8476,6 +8484,11 @@ components:
                 pattern: '^[0-9]+.?[0-9]*$'
                 description: The number of free granted credits. Required only if there is no paid credits.
                 example: '10.0'
+              target_ongoing_balance:
+                type: string
+                pattern: '^[0-9]+.?[0-9]*$'
+                description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
+                example: '200.0'
               created_at:
                 type: string
                 format: date-time
@@ -8697,6 +8710,11 @@ components:
                     pattern: '^[0-9]+.?[0-9]*$'
                     description: The number of free granted credits. Required only if there is no paid credits.
                     example: '10.0'
+                  target_ongoing_balance:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
+                    example: '200.0'
     WebhookEndpoint:
       type: object
       required:

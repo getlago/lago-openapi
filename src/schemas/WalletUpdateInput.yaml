@@ -70,3 +70,8 @@ properties:
               pattern: '^[0-9]+.?[0-9]*$'
               description: The number of free granted credits. Required only if there is no paid credits.
               example: '10.0'
+            target_ongoing_balance:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
+              example: '200.0'
