@@ -1278,7 +1278,7 @@ paths:
         - $ref: '#/components/parameters/external_subscription_id'
         - name: currency
           in: query
-          description: Filter results by fee’s currency.
+          description: Filter results by fee's currency.
           required: false
           explode: true
           schema:
@@ -1407,7 +1407,7 @@ paths:
     parameters:
       - name: lago_id
         in: path
-        description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee’s record within the Lago system.
+        description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
         required: true
         schema:
           type: string
@@ -2263,7 +2263,7 @@ paths:
     parameters:
       - name: lago_id
         in: path
-        description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+        description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
         required: true
         schema:
           type: string
@@ -2370,7 +2370,7 @@ paths:
       parameters:
         - name: lago_id
           in: path
-          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
           required: true
           schema:
             type: string
@@ -4168,7 +4168,7 @@ components:
                     type: integer
                     description: 'The amount of the credit note item, expressed in cents.'
                     example: 10
-              description: The list of credit note’s items.
+              description: The list of credit note's items.
               example:
                 - fee_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   amount_cents: 10
@@ -4241,15 +4241,15 @@ components:
                 properties:
                   amount_cents:
                     type: integer
-                    description: 'The credit note’s item amount, expressed in cents.'
+                    description: 'The credit note''s item amount, expressed in cents.'
                     example: 100
                   lago_fee_id:
                     type: string
                     format: uuid
                     nullable: true
-                    description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee’s record within the Lago system.
+                    description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: Array of credit note’s items.
+              description: Array of credit note's items.
             applied_taxes:
               type: array
               items:
@@ -4301,7 +4301,7 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the credit within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the credit’s item record within the Lago system.
+          description: Unique identifier assigned to the credit within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the credit's item record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         amount_cents:
           type: integer
@@ -4393,16 +4393,16 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: 'The credit note’s item unique identifier, created by Lago.'
+          description: 'The credit note''s item unique identifier, created by Lago.'
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         amount_cents:
           type: integer
-          description: 'The credit note’s item amount, expressed in cents.'
+          description: 'The credit note''s item amount, expressed in cents.'
           example: 100
         amount_currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
-            - description: The credit note’s item currency.
+            - description: The credit note's item currency.
               example: EUR
         fee:
           allOf:
@@ -4559,7 +4559,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreditNoteItemObject'
-          description: Array of credit note’s items.
+          description: Array of credit note's items.
         applied_taxes:
           type: array
           items:
@@ -4634,7 +4634,7 @@ components:
                     type: integer
                     description: 'The amount of the credit note item, expressed in cents.'
                     example: 10
-              description: The list of credit note’s items.
+              description: The list of credit note's items.
               example:
                 - fee_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   amount_cents: 10
@@ -5007,7 +5007,7 @@ components:
               type: string
               format: uuid
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: Unique identifier assigned to the charge within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge’s record within the Lago system.
+              description: Unique identifier assigned to the charge within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge's record within the Lago system.
             charge_model:
               type: string
               description: 'The pricing model applied to this charge. Possible values are standard, `graduated`, `percentage`, `package` or `volume`.'
@@ -5035,7 +5035,7 @@ components:
               type: string
               format: uuid
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: Unique identifier assigned to the billable metric within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the billable metric’s record within the Lago system.
+              description: Unique identifier assigned to the billable metric within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the billable metric's record within the Lago system.
             name:
               type: string
               example: Storage
@@ -5443,7 +5443,7 @@ components:
         currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
-            - description: The currency of the customer’s current usage.
+            - description: The currency of the customer's current usage.
               example: EUR
         amount_cents:
           type: integer
@@ -5616,7 +5616,7 @@ components:
           format: uuid
           nullable: true
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription’s record within the Lago system
+          description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription's record within the Lago system
         external_subscription_id:
           type: string
           nullable: true
@@ -5664,7 +5664,7 @@ components:
           type: string
           format: uuid
           nullable: true
-          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee’s record within the Lago system.
+          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_group_id:
           type: string
@@ -5730,7 +5730,7 @@ components:
         amount_currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
-            - description: The currency of this specific fee. It indicates the monetary unit in which the fee’s cost is expressed.
+            - description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
               example: EUR
         taxes_amount_cents:
           type: integer
@@ -6386,11 +6386,11 @@ components:
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         key:
           type: string
-          description: Represents the key of the metadata’s key-value pair.
+          description: Represents the key of the metadata's key-value pair.
           example: digital_ref_id
         value:
           type: string
-          description: Represents the value of the metadata’s key-value pair.
+          description: Represents the value of the metadata's key-value pair.
           example: INV-0123456-98765
         created_at:
           type: string
@@ -6420,7 +6420,7 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee’s record within the Lago system.
+          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         sequential_id:
           type: integer
@@ -6689,7 +6689,7 @@ components:
         invoice_grace_period:
           type: integer
           example: 3
-          description: 'The grace period, expressed in days, for finalizing the invoice. This period refers to the additional time granted to your customers beyond the invoice due date to adjust usage and line items. Can be overwritten by the customer’s grace period.'
+          description: 'The grace period, expressed in days, for finalizing the invoice. This period refers to the additional time granted to your customers beyond the invoice due date to adjust usage and line items. Can be overwritten by the customer''s grace period.'
         document_locale:
           type: string
           example: en
@@ -6748,22 +6748,22 @@ components:
         address_line1:
           type: string
           example: 100 Brex Street
-          description: The first line of your organization’s billing address.
+          description: The first line of your organization's billing address.
           nullable: true
         address_line2:
           type: string
           example: null
-          description: The second line of your organization’s billing address.
+          description: The second line of your organization's billing address.
           nullable: true
         state:
           type: string
           example: NYC
-          description: The state of your organization’s billing address.
+          description: The state of your organization's billing address.
           nullable: true
         zipcode:
           type: string
           example: '10000'
-          description: The zipcode of your organization’s billing address.
+          description: The zipcode of your organization's billing address.
           nullable: true
         email:
           type: string
@@ -6774,7 +6774,7 @@ components:
         city:
           type: string
           example: New York
-          description: The city of your organization’s billing address.
+          description: The city of your organization's billing address.
           nullable: true
         legal_name:
           type: string
@@ -6815,7 +6815,7 @@ components:
         timezone:
           allOf:
             - $ref: '#/components/schemas/Timezone'
-            - description: 'Your organization’s timezone, used for billing purposes in your own local time. Can be overwritten by the customer’s timezone.'
+            - description: 'Your organization''s timezone, used for billing purposes in your own local time. Can be overwritten by the customer''s timezone.'
               example: America/New_York
         billing_configuration:
           $ref: '#/components/schemas/OrganizationBillingConfiguration'
@@ -6851,22 +6851,22 @@ components:
             address_line1:
               type: string
               example: 100 Brex Street
-              description: The first line of your organization’s billing address.
+              description: The first line of your organization's billing address.
               nullable: true
             address_line2:
               type: string
               example: null
-              description: The second line of your organization’s billing address.
+              description: The second line of your organization's billing address.
               nullable: true
             state:
               type: string
               example: NYC
-              description: The state of your organization’s billing address.
+              description: The state of your organization's billing address.
               nullable: true
             zipcode:
               type: string
               example: '10000'
-              description: The zipcode of your organization’s billing address.
+              description: The zipcode of your organization's billing address.
               nullable: true
             email:
               type: string
@@ -6877,7 +6877,7 @@ components:
             city:
               type: string
               example: New York
-              description: The city of your organization’s billing address.
+              description: The city of your organization's billing address.
               nullable: true
             legal_name:
               type: string
@@ -6918,7 +6918,7 @@ components:
             timezone:
               allOf:
                 - $ref: '#/components/schemas/Timezone'
-                - description: 'Your organization’s timezone, used for billing purposes in your own local time. Can be overwritten by the customer’s timezone.'
+                - description: 'Your organization''s timezone, used for billing purposes in your own local time. Can be overwritten by the customer''s timezone.'
                   example: America/New_York
             email_settings:
               type: array
@@ -7021,7 +7021,7 @@ components:
               example: true
             bill_charges_monthly:
               type: boolean
-              description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.'
+              description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan''s interval is `yearly`.'
               nullable: true
               example: null
             tax_codes:
@@ -7347,7 +7347,7 @@ components:
               example: true
             bill_charges_monthly:
               type: boolean
-              description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.'
+              description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan''s interval is `yearly`.'
               nullable: true
               example: null
             tax_codes:
@@ -7598,7 +7598,7 @@ components:
         bill_charges_monthly:
           type: boolean
           nullable: true
-          description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan’s interval is `yearly`.'
+          description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan''s interval is `yearly`.'
           example: null
         active_subscriptions_count:
           type: integer
@@ -7842,7 +7842,7 @@ components:
           type: string
           format: uuid
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription’s record within the Lago system
+          description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription's record within the Lago system
         external_id:
           type: string
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
@@ -8325,12 +8325,12 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_customer_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer’s record within the Lago system.
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_customer_id:
           type: string
@@ -8497,7 +8497,7 @@ components:
             wallet_id:
               type: string
               format: uuid
-              description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+              description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
             paid_credits:
               type: string
@@ -8529,12 +8529,12 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction’s record within the Lago system.
+          description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_wallet_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet’s record within the Lago system.
+          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         status:
           type: string
@@ -8706,7 +8706,7 @@ components:
         lago_organization_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the organization attached to the webhook endpoint within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the organization’s record within the Lago system.
+          description: Unique identifier assigned to the organization attached to the webhook endpoint within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the organization's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         webhook_url:
           type: string
