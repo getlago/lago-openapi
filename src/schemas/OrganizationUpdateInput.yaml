@@ -24,22 +24,22 @@ properties:
       address_line1:
         type: string
         example: '100 Brex Street'
-        description: The first line of your organization’s billing address.
+        description: The first line of your organization's billing address.
         nullable: true
       address_line2:
         type: string
         example: null
-        description: The second line of your organization’s billing address.
+        description: The second line of your organization's billing address.
         nullable: true
       state:
         type: string
         example: 'NYC'
-        description: The state of your organization’s billing address.
+        description: The state of your organization's billing address.
         nullable: true
       zipcode:
         type: string
         example: '10000'
-        description: The zipcode of your organization’s billing address.
+        description: The zipcode of your organization's billing address.
         nullable: true
       email:
         type: string
@@ -50,7 +50,7 @@ properties:
       city:
         type: string
         example: 'New York'
-        description: The city of your organization’s billing address.
+        description: The city of your organization's billing address.
         nullable: true
       legal_name:
         type: string
@@ -91,7 +91,7 @@ properties:
       timezone:
         allOf:
           - $ref: './Timezone.yaml'
-          - description: Your organization’s timezone, used for billing purposes in your own local time. Can be overwritten by the customer’s timezone.
+          - description: Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone.
             example: 'America/New_York'
       email_settings:
         type: array

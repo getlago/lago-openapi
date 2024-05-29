@@ -17,7 +17,7 @@ properties:
     type: string
     format: "uuid"
     nullable: true
-    description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee’s record within the Lago system.
+    description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_group_id:
     type: string
@@ -83,7 +83,7 @@ properties:
   amount_currency:
     allOf:
       - $ref: "./Currency.yaml"
-      - description: The currency of this specific fee. It indicates the monetary unit in which the fee’s cost is expressed.
+      - description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
         example: "EUR"
   taxes_amount_cents:
     type: integer
