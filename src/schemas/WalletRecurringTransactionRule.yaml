@@ -2,9 +2,13 @@ type: object
 description: Object that represents rule for wallet recurring transactions.
 required:
   - lago_id
+  - interval
   - trigger
+  - method
   - paid_credits
   - granted_credits
+  - threshold_credits
+  - target_ongoing_balance
   - created_at
 properties:
   lago_id:
@@ -19,6 +23,13 @@ properties:
       - threshold
     description: The trigger. Possible values are `interval` or `threshold`.
     example: 'interval'
+  method:
+    type: string
+    enum:
+      - fixed
+      - target
+    description: The method used for recurring top-up. Possible values are `fixed` or `target`.
+    example: 'target'
   interval:
     type: string
     enum:
@@ -43,6 +54,16 @@ properties:
     pattern: '^[0-9]+.?[0-9]*$'
     description: The number of free granted credits. Required only if there is no paid credits.
     example: '10.0'
+  started_at:
+    type: string
+    format: date-time
+    example: "2022-08-08T00:00:00Z"
+    description: The effective start date for recurring top-ups. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+  target_ongoing_balance:
+    type: string
+    pattern: '^[0-9]+.?[0-9]*$'
+    description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
+    example: '200.0'
   created_at:
     type: string
     format: 'date-time'
