@@ -3,7 +3,7 @@ description: Configuration specific to the accounting and tax integrations. This
 properties:
   integration_type:
     type: string
-    example: netsuite
+    example: 'netsuite'
     description: |-
       The integration type used for accounting and tax syncs.
       Accepted values: `netsuite`.
@@ -11,7 +11,7 @@ properties:
       - netsuite
   integration_code:
     type: string
-    example: netsuite-eu-1
+    example: 'netsuite-eu-1'
     description: Unique code used to identify an integration connection.
   external_customer_id:
     type: string
@@ -23,5 +23,5 @@ properties:
     description: Set this field to `true` if you want to create a customer record in the integration's system. This option is applicable only when the `external_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
   subsidiary_id:
     type: string
-    example: 2
+    example: '2'
     description: This optional field is needed only when working with `netsuite` connection.
