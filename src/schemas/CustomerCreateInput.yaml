@@ -106,6 +106,8 @@ properties:
         nullable: true
       billing_configuration:
         $ref: './CustomerBillingConfiguration.yaml'
+      integration_customer:
+        $ref: './IntegrationCustomer.yaml'
       metadata:
         type: array
         description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format

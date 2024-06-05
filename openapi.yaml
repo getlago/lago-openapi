@@ -4858,6 +4858,34 @@ components:
           example:
             - card
             - sepa_debit
+    IntegrationCustomer:
+      type: object
+      description: Configuration specific to the accounting and tax integrations. This object contains settings and parameters necessary for syncing documents and payments.
+      properties:
+        integration_type:
+          type: string
+          example: netsuite
+          description: |-
+            The integration type used for accounting and tax syncs.
+            Accepted values: `netsuite`.
+          enum:
+            - netsuite
+        integration_code:
+          type: string
+          example: netsuite-eu-1
+          description: Unique code used to identify an integration connection.
+        external_customer_id:
+          type: string
+          example: cus_12345
+          description: 'The customer ID within the integration''s system. If this field is not provided, Lago has the option to create a new customer record within the integration''s system on behalf of the customer.'
+        sync_with_provider:
+          type: boolean
+          example: true
+          description: 'Set this field to `true` if you want to create a customer record in the integration''s system. This option is applicable only when the `external_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`'
+        subsidiary_id:
+          type: string
+          example: '2'
+          description: This optional field is needed only when working with `netsuite` connection.
     CustomerChargeFiltersUsageObject:
       type: array
       description: 'Array of filter object, representing multiple dimensions for a charge item.'
@@ -5169,6 +5197,8 @@ components:
               nullable: true
             billing_configuration:
               $ref: '#/components/schemas/CustomerBillingConfiguration'
+            integration_customer:
+              $ref: '#/components/schemas/IntegrationCustomer'
             metadata:
               type: array
               description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
@@ -5359,6 +5389,8 @@ components:
           description: 'The date of the customer update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the customer object was updated'
         billing_configuration:
           $ref: '#/components/schemas/CustomerBillingConfiguration'
+        integration_customer:
+          $ref: '#/components/schemas/IntegrationCustomer'
         metadata:
           type: array
           items:
