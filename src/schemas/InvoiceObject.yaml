@@ -45,6 +45,10 @@ properties:
     format: 'date'
     description: The payment due date for the invoice, specified in the ISO 8601 date format.
     example: '2022-04-30'
+  payment_overdue:
+    type: boolean
+    description: Specifies if the payment is considered as overdue.
+    example: true
   net_payment_term:
     type: integer
     example: 30
