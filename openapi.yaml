@@ -5080,6 +5080,8 @@ components:
                 - sum_agg
                 - max_agg
                 - unique_count_agg
+                - weighted_sum_agg
+                - latest_agg
               example: sum_agg
         filters:
           $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
