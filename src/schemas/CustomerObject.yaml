@@ -128,8 +128,10 @@ properties:
     description: The date of the customer update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the customer object was updated
   billing_configuration:
     $ref: './CustomerBillingConfiguration.yaml'
-  integration_customer:
-    $ref: './IntegrationCustomer.yaml'
+  integration_customers:
+    type: array
+    items:
+      $ref: './IntegrationCustomer.yaml'
   metadata:
     type: array
     items:

@@ -5197,8 +5197,10 @@ components:
               nullable: true
             billing_configuration:
               $ref: '#/components/schemas/CustomerBillingConfiguration'
-            integration_customer:
-              $ref: '#/components/schemas/IntegrationCustomer'
+            integration_customers:
+              type: array
+              items:
+                $ref: '#/components/schemas/IntegrationCustomer'
             metadata:
               type: array
               description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
@@ -5389,8 +5391,10 @@ components:
           description: 'The date of the customer update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the customer object was updated'
         billing_configuration:
           $ref: '#/components/schemas/CustomerBillingConfiguration'
-        integration_customer:
-          $ref: '#/components/schemas/IntegrationCustomer'
+        integration_customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationCustomer'
         metadata:
           type: array
           items:
