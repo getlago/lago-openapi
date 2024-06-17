@@ -73,6 +73,14 @@ get:
           - pending
           - failed
           - succeeded
+    - name: payment_overdue
+      in: query
+      description: Filter invoices by payment_overdue. Possible values are `true` or `false`.
+      required: false
+      explode: true
+      schema:
+        type: boolean
+        example: true
   responses:
     '200':
       description: Invoices
