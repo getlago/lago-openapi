@@ -11,7 +11,13 @@ externalDocs:
   description: Lago Github
   url: 'https://github.com/getlago'
 servers:
-  - url: 'https://api.getlago.com/api/v1'
+  - url: 'https://{region}.getlago.com/api/v1'
+    variables:
+      region:
+        default: api
+        enum:
+          - api
+          - api.eu
 security:
   - bearerAuth: []
 tags:
