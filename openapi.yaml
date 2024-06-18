@@ -1533,6 +1533,14 @@ paths:
               - pending
               - failed
               - succeeded
+        - name: payment_overdue
+          in: query
+          description: Filter invoices by payment_overdue. Possible values are `true` or `false`.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
       responses:
         '200':
           description: Invoices
@@ -6487,6 +6495,10 @@ components:
           format: date
           description: 'The payment due date for the invoice, specified in the ISO 8601 date format.'
           example: '2022-04-30'
+        payment_overdue:
+          type: boolean
+          description: Specifies if the payment is considered as overdue.
+          example: true
         net_payment_term:
           type: integer
           example: 30
