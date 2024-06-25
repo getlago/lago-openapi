@@ -1,7 +1,12 @@
 type: object
 description: Configuration specific to the accounting and tax integrations. This object contains settings and parameters necessary for syncing documents and payments.
 properties:
-  integration_type:
+  lago_id:
+    type: string
+    format: 'uuid'
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    description: 'A unique identifier for the integration customer object in the Lago application.'
+  type:
     type: string
     example: 'netsuite'
     description: |-
