@@ -1,6 +1,9 @@
 type: object
 required:
   - month
+  - amount_cents
+  - currency
+  - invoices_count
 properties:
   month:
     type: string
@@ -15,3 +18,7 @@ properties:
       - $ref: './Currency.yaml'
       - description: The currency of revenue analytics. Format must be ISO 4217.
         example: 'USD'
+  invoices_count:
+    type: integer
+    description: Contains invoices count.
+    example: 10
