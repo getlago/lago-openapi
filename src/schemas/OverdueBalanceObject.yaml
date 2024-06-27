@@ -1,0 +1,27 @@
+type: object
+required:
+  - month
+  - amount_cents
+  - currency
+  - lago_invoice_ids
+properties:
+  month:
+    type: string
+    description: Identifies the month to analyze overdue balance.
+    example: '2023-11-01T00:00:00.000Z'
+  amount_cents:
+    type: integer
+    description: The total amount of overdue balance for a period, expressed in cents.
+    example: 50000
+  currency:
+    allOf:
+      - $ref: './Currency.yaml'
+      - description: The currency of overdue balance analytics. Format must be ISO 4217.
+        example: 'USD'
+  lago_invoice_ids:
+    type: array
+    items:
+      type: string
+      format: uuid
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    description: List of impacted invoice ids.
