@@ -4825,6 +4825,41 @@ components:
       properties:
         customer:
           $ref: '#/components/schemas/CustomerObjectExtended'
+    Address:
+      type: object
+      description: 'Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.'
+      properties:
+        address_line1:
+          type: string
+          example: 5230 Penfield Ave
+          description: The first line of the billing address
+          nullable: true
+        address_line2:
+          type: string
+          example: null
+          description: The second line of the billing address
+          nullable: true
+        city:
+          type: string
+          example: Woodland Hills
+          description: The city of the customer's billing address
+          nullable: true
+        country:
+          allOf:
+            - $ref: '#/components/schemas/Country'
+            - nullable: true
+              description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+              example: US
+        state:
+          type: string
+          example: CA
+          description: The state of the customer's billing address
+          nullable: true
+        zipcode:
+          type: string
+          example: '91364'
+          description: The zipcode of the customer's billing address
+          nullable: true
     CustomerBillingConfiguration:
       type: object
       description: 'Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.'
@@ -5216,6 +5251,8 @@ components:
               nullable: true
             billing_configuration:
               $ref: '#/components/schemas/CustomerBillingConfiguration'
+            shipping_address:
+              $ref: '#/components/schemas/Address'
             integration_customers:
               type: array
               items:
@@ -5440,6 +5477,8 @@ components:
           description: 'The date of the customer update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the customer object was updated'
         billing_configuration:
           $ref: '#/components/schemas/CustomerBillingConfiguration'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
         integration_customers:
           type: array
           items:

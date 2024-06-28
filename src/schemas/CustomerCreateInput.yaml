@@ -106,6 +106,8 @@ properties:
         nullable: true
       billing_configuration:
         $ref: './CustomerBillingConfiguration.yaml'
+      shipping_address:
+        $ref: './Address.yaml'
       integration_customers:
         type: array
         items:
