@@ -1756,7 +1756,7 @@ paths:
       tags:
         - invoices
       summary: Void an invoice
-      description: 'This endpoint is used for voiding an invoice. You can void an invoice only when it''s in a `finalized` status, and the payment status is not `succeeded`.'
+      description: "This endpoint is used for voiding an invoice. You can void an invoice only when it's in a `finalized` status, and the payment status is not `succeeded`."
       parameters:
         - $ref: '#/components/parameters/lago_invoice_id'
       operationId: voidInvoice
@@ -3001,7 +3001,7 @@ components:
           type: string
           format: date-time
           nullable: true
-          description: 'The date and time after which the coupon will stop applying to customer''s invoices. Once the expiration date is reached, the coupon will no longer be applicable, and any further invoices generated for the customer will not include the coupon discount.'
+          description: "The date and time after which the coupon will stop applying to customer's invoices. Once the expiration date is reached, the coupon will no longer be applicable, and any further invoices generated for the customer will not include the coupon discount."
           example: '2022-04-29T08:59:51Z'
         created_at:
           type: string
@@ -3976,7 +3976,7 @@ components:
               nullable: true
               items:
                 type: string
-              description: 'An array of plan codes to which the coupon is applicable. By specifying the plan codes in this field, you can restrict the coupon''s usage to specific plans only.'
+              description: "An array of plan codes to which the coupon is applicable. By specifying the plan codes in this field, you can restrict the coupon's usage to specific plans only."
               example:
                 - startup_plan
             billable_metric_codes:
@@ -3984,7 +3984,7 @@ components:
               nullable: true
               items:
                 type: string
-              description: 'An array of billable metric codes to which the coupon is applicable. By specifying the billable metric codes in this field, you can restrict the coupon''s usage to specific metrics only.'
+              description: "An array of billable metric codes to which the coupon is applicable. By specifying the billable metric codes in this field, you can restrict the coupon's usage to specific metrics only."
               example: []
     CouponCreateInput:
       type: object
@@ -4063,7 +4063,7 @@ components:
           example: true
         plan_codes:
           type: array
-          description: 'An array of plan codes to which the coupon is applicable. By specifying the plan codes in this field, you can restrict the coupon''s usage to specific plans only.'
+          description: "An array of plan codes to which the coupon is applicable. By specifying the plan codes in this field, you can restrict the coupon's usage to specific plans only."
           items:
             type: string
           example:
@@ -4074,7 +4074,7 @@ components:
           example: false
         billable_metric_codes:
           type: array
-          description: 'An array of billable metric codes to which the coupon is applicable. By specifying the billable metric codes in this field, you can restrict the coupon''s usage to specific metrics only.'
+          description: "An array of billable metric codes to which the coupon is applicable. By specifying the billable metric codes in this field, you can restrict the coupon's usage to specific metrics only."
           items:
             type: string
           example: []
@@ -4127,7 +4127,7 @@ components:
         terminated_at:
           type: string
           format: date-time
-          description: 'This field indicates if the coupon has been terminated and is no longer usable. If it''s not null, it won''t be removed for existing customers using it, but it prevents the coupon from being applied in the future.'
+          description: "This field indicates if the coupon has been terminated and is no longer usable. If it's not null, it won't be removed for existing customers using it, but it prevents the coupon from being applied in the future."
           example: '2022-08-08T23:59:59Z'
     CouponsPaginated:
       type: object
@@ -4255,7 +4255,7 @@ components:
                 properties:
                   amount_cents:
                     type: integer
-                    description: 'The credit note''s item amount, expressed in cents.'
+                    description: "The credit note's item amount, expressed in cents."
                     example: 100
                   lago_fee_id:
                     type: string
@@ -4407,11 +4407,11 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: 'The credit note''s item unique identifier, created by Lago.'
+          description: "The credit note's item unique identifier, created by Lago."
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         amount_cents:
           type: integer
-          description: 'The credit note''s item amount, expressed in cents.'
+          description: "The credit note's item amount, expressed in cents."
           example: 100
         amount_currency:
           allOf:
@@ -4885,7 +4885,7 @@ components:
         provider_customer_id:
           type: string
           example: cus_12345
-          description: 'The customer ID within the payment provider''s system. If this field is not provided, Lago has the option to create a new customer record within the payment provider''s system on behalf of the customer'
+          description: "The customer ID within the payment provider's system. If this field is not provided, Lago has the option to create a new customer record within the payment provider's system on behalf of the customer"
         sync:
           type: boolean
           example: true
@@ -4893,7 +4893,7 @@ components:
         sync_with_provider:
           type: boolean
           example: true
-          description: 'Set this field to `true` if you want to create a customer record in the payment provider''s system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`'
+          description: "Set this field to `true` if you want to create a customer record in the payment provider's system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`"
         document_locale:
           type: string
           example: fr
@@ -4903,7 +4903,7 @@ components:
           nullable: true
           items:
             type: string
-          description: 'Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, all the payment methods are selected. For now, possible values are `card` and `sepa_debit`.'
+          description: 'Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, all the payment methods are selected. For now, possible values are `card`, `sepa_debit`, `bacs_debit` and `us_bank_account`.'
           example:
             - card
             - sepa_debit
@@ -4931,11 +4931,11 @@ components:
         external_customer_id:
           type: string
           example: cus_12345
-          description: 'The customer ID within the integration''s system. If this field is not provided, Lago has the option to create a new customer record within the integration''s system on behalf of the customer.'
+          description: "The customer ID within the integration's system. If this field is not provided, Lago has the option to create a new customer record within the integration's system on behalf of the customer."
         sync_with_provider:
           type: boolean
           example: true
-          description: 'Set this field to `true` if you want to create a customer record in the integration''s system. This option is applicable only when the `external_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`'
+          description: "Set this field to `true` if you want to create a customer record in the integration's system. This option is applicable only when the `external_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`"
         subsidiary_id:
           type: string
           example: '2'
@@ -5232,7 +5232,7 @@ components:
             timezone:
               allOf:
                 - $ref: '#/components/schemas/Timezone'
-                - description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
+                - description: "The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone"
                   nullable: true
             url:
               type: string
@@ -5278,11 +5278,11 @@ components:
                   external_customer_id:
                     type: string
                     example: cus_12345
-                    description: 'The customer ID within the integration''s system. If this field is not provided, Lago has the option to create a new customer record within the integration''s system on behalf of the customer.'
+                    description: "The customer ID within the integration's system. If this field is not provided, Lago has the option to create a new customer record within the integration's system on behalf of the customer."
                   sync_with_provider:
                     type: boolean
                     example: true
-                    description: 'Set this field to `true` if you want to create a customer record in the integration''s system. This option is applicable only when the `external_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`'
+                    description: "Set this field to `true` if you want to create a customer record in the integration's system. This option is applicable only when the `external_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`"
                   subsidiary_id:
                     type: string
                     example: '2'
@@ -5364,11 +5364,11 @@ components:
         sequential_id:
           type: integer
           example: 1
-          description: 'The unique identifier assigned to the customer within the organization''s scope. This identifier is used to track and reference the customer''s order of creation within the organization''s system. It ensures that each customer has a distinct `sequential_id`` associated with them, allowing for easy identification and sorting based on the order of creation'
+          description: "The unique identifier assigned to the customer within the organization's scope. This identifier is used to track and reference the customer's order of creation within the organization's system. It ensures that each customer has a distinct `sequential_id`` associated with them, allowing for easy identification and sorting based on the order of creation"
         slug:
           type: string
           example: LAG-1234-001
-          description: 'A concise and unique identifier for the customer, formed by combining the Organization''s `name`, `id`, and customer''s `sequential_id`'
+          description: "A concise and unique identifier for the customer, formed by combining the Organization's `name`, `id`, and customer's `sequential_id`"
         external_id:
           type: string
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
@@ -5386,7 +5386,7 @@ components:
         applicable_timezone:
           allOf:
             - $ref: '#/components/schemas/Timezone'
-            - description: 'The customer''s applicable timezone, used for billing purposes in their local time.'
+            - description: "The customer's applicable timezone, used for billing purposes in their local time."
         city:
           type: string
           example: Woodland Hills
@@ -5448,7 +5448,7 @@ components:
         timezone:
           allOf:
             - $ref: '#/components/schemas/Timezone'
-            - description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
+            - description: "The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone"
               nullable: true
         url:
           type: string
@@ -5756,7 +5756,7 @@ components:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: 'The creation date of the event''s record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event''s record was created within the Lago application'
+          description: "The creation date of the event's record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application"
     Fee:
       type: object
       required:
@@ -6554,7 +6554,7 @@ components:
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         sequential_id:
           type: integer
-          description: 'This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer''s context.'
+          description: "This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context."
           example: 2
         number:
           type: string
@@ -6823,7 +6823,7 @@ components:
         invoice_grace_period:
           type: integer
           example: 3
-          description: 'The grace period, expressed in days, for finalizing the invoice. This period refers to the additional time granted to your customers beyond the invoice due date to adjust usage and line items. Can be overwritten by the customer''s grace period.'
+          description: "The grace period, expressed in days, for finalizing the invoice. This period refers to the additional time granted to your customers beyond the invoice due date to adjust usage and line items. Can be overwritten by the customer's grace period."
         document_locale:
           type: string
           example: en
@@ -6949,7 +6949,7 @@ components:
         timezone:
           allOf:
             - $ref: '#/components/schemas/Timezone'
-            - description: 'Your organization''s timezone, used for billing purposes in your own local time. Can be overwritten by the customer''s timezone.'
+            - description: "Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone."
               example: America/New_York
         billing_configuration:
           $ref: '#/components/schemas/OrganizationBillingConfiguration'
@@ -7052,7 +7052,7 @@ components:
             timezone:
               allOf:
                 - $ref: '#/components/schemas/Timezone'
-                - description: 'Your organization''s timezone, used for billing purposes in your own local time. Can be overwritten by the customer''s timezone.'
+                - description: "Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone."
                   example: America/New_York
             email_settings:
               type: array
@@ -7143,7 +7143,7 @@ components:
             amount_currency:
               allOf:
                 - $ref: '#/components/schemas/Currency'
-                - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+                - description: "The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed."
                   example: USD
             trial_period:
               type: number
@@ -7155,7 +7155,7 @@ components:
               example: true
             bill_charges_monthly:
               type: boolean
-              description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan''s interval is `yearly`.'
+              description: "This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`."
               nullable: true
               example: null
             tax_codes:
@@ -7344,7 +7344,7 @@ components:
         amount_currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
-            - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+            - description: "The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed."
               example: USD
         description:
           type: string
@@ -7469,7 +7469,7 @@ components:
             amount_currency:
               allOf:
                 - $ref: '#/components/schemas/Currency'
-                - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+                - description: "The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed."
                   example: USD
             trial_period:
               type: number
@@ -7481,7 +7481,7 @@ components:
               example: true
             bill_charges_monthly:
               type: boolean
-              description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan''s interval is `yearly`.'
+              description: "This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`."
               nullable: true
               example: null
             tax_codes:
@@ -7719,7 +7719,7 @@ components:
         amount_currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
-            - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+            - description: "The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed."
               example: USD
         trial_period:
           type: number
@@ -7732,7 +7732,7 @@ components:
         bill_charges_monthly:
           type: boolean
           nullable: true
-          description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan''s interval is `yearly`.'
+          description: "This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`."
           example: null
         active_subscriptions_count:
           type: integer
@@ -7900,7 +7900,7 @@ components:
             name:
               type: string
               example: Repository A
-              description: 'The display name of the subscription on an invoice. This field allows for customization of the subscription''s name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.'
+              description: "The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan."
             external_id:
               type: string
               example: my_sub_1234567890
@@ -7945,7 +7945,7 @@ components:
               type: string
               example: Repository B
               nullable: true
-              description: 'The display name of the subscription on an invoice. This field allows for customization of the subscription''s name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.'
+              description: "The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan."
             ending_at:
               type: string
               format: date-time
@@ -8000,7 +8000,7 @@ components:
         name:
           type: string
           example: Repository A
-          description: 'The display name of the subscription on an invoice. This field allows for customization of the subscription''s name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.'
+          description: "The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan."
           nullable: true
         plan_code:
           type: string
