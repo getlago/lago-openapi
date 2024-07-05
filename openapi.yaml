@@ -1547,6 +1547,43 @@ paths:
           schema:
             type: boolean
             example: true
+        - name: search_term
+          in: query
+          description: 'Search invoices by id, number, customer name, customer external_id or customer email.'
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: Jane
+        - name: currency
+          in: query
+          description: Filter invoices by currency in. Possible values ISO 4217 currency codes.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: EUR
+        - name: payment_dispute_lost
+          in: query
+          description: Filter invoices with a payment dispute lost. Possible values are `true` or `false`.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+        - name: invoice_type
+          in: query
+          description: 'Filter invoices by invoice type. Possible values are `subscription`, `add_on`, `credit`, `one_off` or `advance_charges`'
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - subscription
+              - add_on
+              - credit
+              - one_off
+              - advance_charges
       responses:
         '200':
           description: Invoices
