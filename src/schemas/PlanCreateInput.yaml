@@ -111,24 +111,6 @@ properties:
               allOf:
                 - $ref: "./ChargeProperties.yaml"
                 - description: List of all thresholds utilized for calculating the charge.
-            group_properties:
-              type: array
-              description: All charge information, sorted by groups.
-              deprecated: true
-              items:
-                type: object
-                required:
-                  - group_id
-                  - values
-                properties:
-                  group_id:
-                    type: string
-                    description: Unique identifier of a billable metric group, created by Lago.
-                    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-                  values:
-                    allOf:
-                      - $ref: "./ChargeProperties.yaml"
-                      - description: List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.
             filters:
               type: array
               description: List of filters used to apply differentiated pricing based on additional event properties.
@@ -152,7 +134,6 @@ properties:
               amount: "30"
               free_units: 100
               package_size: 1000
-            group_properties: []
             tax_codes: [french_standard_vat]
           - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a92"
             charge_model: "graduated"
@@ -171,7 +152,6 @@ properties:
                   from_value: 11
                   flat_amount: "0"
                   per_unit_amount: "0.4"
-            group_properties: []
           - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a93"
             charge_model: "standard"
             invoiceable: true
@@ -180,19 +160,6 @@ properties:
             prorated: false
             min_amount_cents: 0
             properties: {}
-            group_properties:
-              - group_id: "1a901a90-1a90-1a90-1a90-1a901a901a01"
-                invoice_display_name: "Europe"
-                values:
-                  amount: "10"
-              - group_id: "1a901a90-1a90-1a90-1a90-1a901a901a02"
-                invoice_display_name: "USA"
-                values:
-                  amount: "5"
-              - group_id: "1a901a90-1a90-1a90-1a90-1a901a901a03"
-                invoice_display_name: "Africa"
-                values:
-                  amount: "8"
           - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a94"
             charge_model: "volume"
             invoiceable: true
@@ -210,7 +177,6 @@ properties:
                   to_value: null
                   flat_amount: "0"
                   per_unit_amount: "0.5"
-            group_properties: []
           - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a95"
             charge_model: "percentage"
             invoiceable: false
@@ -223,4 +189,3 @@ properties:
               fixed_amount: "0.5"
               free_units_per_events: 5
               free_units_per_total_aggregation: "500"
-            group_properties: []

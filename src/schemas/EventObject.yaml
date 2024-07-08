@@ -3,7 +3,6 @@ required:
   - lago_id
   - transaction_id
   - lago_customer_id
-  - external_customer_id
   - code
   - timestamp
   - lago_subscription_id
@@ -25,14 +24,6 @@ properties:
     nullable: true
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
-  external_customer_id:
-    type: string
-    nullable: true
-    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
-    description: |
-      The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
-      This field is deprecated and is no longer supported or maintained. Please use the `external_subscription_id` instead.
-    deprecated: true
   code:
     type: string
     example: "storage"
@@ -67,7 +58,6 @@ properties:
     description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription's record within the Lago system
   external_subscription_id:
     type: string
-    nullable: true
     example: "sub_1234567890"
     description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
   created_at:

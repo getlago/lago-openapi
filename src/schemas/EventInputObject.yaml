@@ -7,13 +7,6 @@ properties:
     type: string
     example: "transaction_1234567890"
     description: This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.
-  external_customer_id:
-    type: string
-    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
-    description: |
-      The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
-      This field is deprecated and is no longer supported or maintained. Please use the `external_subscription_id` instead.
-    deprecated: true
   external_subscription_id:
     type: string
     example: "sub_1234567890"
