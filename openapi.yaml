@@ -5638,7 +5638,49 @@ components:
         events:
           type: array
           items:
-            $ref: '#/components/schemas/EventInput'
+            type: object
+            required:
+              - transaction_id
+              - code
+            properties:
+              transaction_id:
+                type: string
+                example: transaction_1234567890
+                description: 'This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.'
+              external_customer_id:
+                type: string
+                example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+                description: |
+                  The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
+                  This field is deprecated and is no longer supported or maintained. Please use the `external_subscription_id` instead.
+                deprecated: true
+              external_subscription_id:
+                type: string
+                example: sub_1234567890
+                description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
+              code:
+                type: string
+                example: storage
+                description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
+              timestamp:
+                anyOf:
+                  - type: integer
+                  - type: string
+                example: '1651240791.123'
+                description: |
+                  This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
+                  If this timestamp is not provided, the API will automatically set it to the time of event reception.
+                  You can also provide miliseconds precision by appending decimals to the timestamp.
+              properties:
+                type: object
+                description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
+                additionalProperties:
+                  oneOf:
+                    - type: string
+                    - type: integer
+                    - type: number
+                example:
+                  gb: 10
     EventEstimateFeesInput:
       type: object
       required:
@@ -5673,49 +5715,8 @@ components:
         - event
       properties:
         event:
-          type: object
-          required:
-            - transaction_id
-            - code
-          properties:
-            transaction_id:
-              type: string
-              example: transaction_1234567890
-              description: 'This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.'
-            external_customer_id:
-              type: string
-              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-              description: |
-                The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
-                This field is deprecated and is no longer supported or maintained. Please use the `external_subscription_id` instead.
-              deprecated: true
-            external_subscription_id:
-              type: string
-              example: sub_1234567890
-              description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
-            code:
-              type: string
-              example: storage
-              description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
-            timestamp:
-              anyOf:
-                - type: integer
-                - type: string
-              example: '1651240791.123'
-              description: |
-                This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
-                If this timestamp is not provided, the API will automatically set it to the time of event reception.
-                You can also provide miliseconds precision by appending decimals to the timestamp.
-            properties:
-              type: object
-              description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
-              additionalProperties:
-                oneOf:
-                  - type: string
-                  - type: integer
-                  - type: number
-              example:
-                gb: 10
+          allOf:
+            - $ref: '#/components/schemas/EventBatchInput/properties/events/items'
     EventObject:
       type: object
       required:
