@@ -51,6 +51,8 @@ put:
       $ref: '../responses/NotFound.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'
 delete:
   tags:
     - fees
