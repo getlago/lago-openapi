@@ -1461,8 +1461,29 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - fees
+      summary: Delete a fee
+      description: This endpoint is used for deleting a specific fee that has not yet been invoiced
+      operationId: deleteFee
+      responses:
+        '200':
+          description: Fee deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fee'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   /invoices:
     post:
       tags:
