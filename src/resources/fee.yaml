@@ -51,3 +51,20 @@ put:
       $ref: '../responses/NotFound.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - fees
+  summary: Delete a fee
+  description: This endpoint is used for deleting a specific fee that has not yet been invoiced
+  operationId: deleteFee
+  responses:
+    '200':
+      description: Fee deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Fee.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
