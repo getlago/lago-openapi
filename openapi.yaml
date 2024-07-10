@@ -1467,7 +1467,7 @@ paths:
       tags:
         - fees
       summary: Delete a fee
-      description: This endpoint is used for deleting a specific fee that has been invoiced.
+      description: This endpoint is used for deleting a specific fee that has not yet been invoiced
       operationId: deleteFee
       responses:
         '200':
@@ -1480,6 +1480,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   /invoices:
     post:
       tags:
