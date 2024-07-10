@@ -3470,6 +3470,19 @@ components:
           type: boolean
           description: 'This field specifies whether the charge should be included in a proper invoice. If set to `false`, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.'
           example: true
+        regroup_paid_fees:
+          type: string
+          nullable: true
+          enum:
+            - null
+            - invoice
+          description: |-
+            This setting can only be configured if `pay_in_advance` is `true` and `invoiceable` is `false`.
+            This field determines whether and when the charge fee should be included in
+            the invoice. If `null`, no invoice will be issued for this charge fee.
+            If `invoice`, an invoice will be generated at the end of the period,
+            consolidating all charge fees with a succeeded payment status.
+          example: invoice
         prorated:
           type: boolean
           example: false
@@ -7235,6 +7248,19 @@ components:
                     type: boolean
                     description: 'This field specifies whether the charge should be included in a proper invoice. If set to false, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.'
                     example: true
+                  regroup_paid_fees:
+                    type: string
+                    nullable: true
+                    enum:
+                      - null
+                      - invoice
+                    description: |-
+                      This setting can only be configured if `pay_in_advance` is `true` and `invoiceable` is `false`.
+                      This field determines whether and when the charge fee should be included in
+                      the invoice. If `null`, no invoice will be issued for this charge fee.
+                      If `invoice`, an invoice will be generated at the end of the period,
+                      consolidating all charge fees with a succeeded payment status.
+                    example: invoice
                   invoice_display_name:
                     type: string
                     description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
@@ -7292,6 +7318,7 @@ components:
                   invoiceable: true
                   invoice_display_name: Setup
                   pay_in_advance: false
+                  regroup_paid_fees: null
                   prorated: false
                   min_amount_cents: 3000
                   properties:
@@ -7363,6 +7390,7 @@ components:
                   invoiceable: false
                   invoice_display_name: Setup
                   pay_in_advance: true
+                  regroup_paid_fees: invoice
                   prorated: false
                   min_amount_cents: 0
                   properties:
@@ -7566,6 +7594,19 @@ components:
                     type: boolean
                     description: 'This field specifies whether the charge should be included in a proper invoice. If set to false, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.'
                     example: true
+                  regroup_paid_fees:
+                    type: string
+                    nullable: true
+                    enum:
+                      - null
+                      - invoice
+                    description: |-
+                      This setting can only be configured if `pay_in_advance` is `true` and `invoiceable` is `false`.
+                      This field determines whether and when the charge fee should be included in
+                      the invoice. If `null`, no invoice will be issued for this charge fee.
+                      If `invoice`, an invoice will be generated at the end of the period,
+                      consolidating all charge fees with a succeeded payment status.
+                    example: invoice
                   invoice_display_name:
                     type: string
                     description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
@@ -7655,6 +7696,7 @@ components:
                   invoiceable: true
                   invoice_display_name: Setup
                   pay_in_advance: true
+                  regroup_paid_fees: null
                   prorated: false
                   min_amount_cents: 0
                   properties: {}
@@ -7694,6 +7736,7 @@ components:
                   invoiceable: false
                   invoice_display_name: Setup
                   pay_in_advance: true
+                  regroup_paid_fees: invoice
                   prorated: false
                   min_amount_cents: 0
                   properties:
@@ -7796,6 +7839,7 @@ components:
               invoiceable: true
               invoice_display_name: Setup
               pay_in_advance: false
+              regroup_paid_fees: null
               prorated: false
               min_amount_cents: 3000
               properties:
@@ -7883,6 +7927,7 @@ components:
               invoiceable: false
               invoice_display_name: Setup
               pay_in_advance: true
+              regroup_paid_fees: invoice
               prorated: false
               min_amount_cents: 0
               properties:
