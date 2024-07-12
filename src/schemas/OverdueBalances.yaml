@@ -1,0 +1,8 @@
+type: object
+required:
+  - overdue_balances
+properties:
+  overdue_balances:
+    type: array
+    items:
+      $ref: './OverdueBalanceObject.yaml'
