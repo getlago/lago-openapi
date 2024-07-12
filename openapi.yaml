@@ -6298,6 +6298,9 @@ components:
       type: object
       required:
         - month
+        - amount_cents
+        - currency
+        - invoices_count
       properties:
         month:
           type: string
@@ -6500,7 +6503,6 @@ components:
       required:
         - month
         - invoices_count
-        - amount_cents
       properties:
         month:
           type: string
