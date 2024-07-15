@@ -19,13 +19,6 @@ properties:
     nullable: true
     description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-  lago_group_id:
-    type: string
-    format: "uuid"
-    nullable: true
-    description: Unique identifier assigned to the group that the fee belongs to
-    deprecated: true
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_charge_filter_id:
     type: string
     format: "uuid"
@@ -218,11 +211,6 @@ properties:
           type: array
           items:
             type: string
-      group_invoice_display_name:
-        type: string
-        description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-        deprecated: true
-        example: "Transactions - ACH"
       lago_item_id:
         type: string
         example: "1a901a90-1a90-1a90-1a90-1a901a901a90"

@@ -519,50 +519,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/billable_metrics/{code}/groups':
-    get:
-      tags:
-        - billable_metrics
-      summary: Find a billable metric's groups
-      description: This endpoint retrieves all groups for a billable metric.
-      deprecated: true
-      operationId: findAllBillableMetricGroups
-      parameters:
-        - name: code
-          in: path
-          description: Code of the existing billable metric.
-          required: true
-          schema:
-            type: string
-            example: example_code
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
-      responses:
-        '200':
-          description: List of billable metric's groups
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GroupsPaginated'
-              example:
-                groups:
-                  - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                    key: region
-                    value: us-east-1
-                  - lago_id: 1a901a90-1a90-1a90-1a90-1a901a288d80
-                    key: region
-                    value: us-east-2
-                  - lago_id: 3b288a90-1a20-1a90-1a90-1a921d921a90
-                    key: region
-                    value: eu-west-1
-                meta:
-                  current_page: 1
-                  next_page: null
-                  prev_page: null
-                  total_pages: 1
-                  total_count: 2
-        '401':
-          $ref: '#/components/responses/Unauthorized'
   /coupons:
     post:
       tags:
@@ -3213,8 +3169,6 @@ components:
           nullable: true
           example: seconds
           description: 'Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.'
-        group:
-          $ref: '#/components/schemas/BillableMetricGroup'
         filters:
           type: array
           items:
@@ -3279,8 +3233,6 @@ components:
           nullable: true
           example: seconds
           description: 'Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.'
-        group:
-          $ref: '#/components/schemas/BillableMetricGroup'
         filters:
           type: array
           items:
@@ -3338,47 +3290,6 @@ components:
       properties:
         billable_metric:
           $ref: '#/components/schemas/BillableMetricBaseInput'
-    BillableMetricGroup:
-      type: object
-      description: 'Group with one or two dimensions, used to apply differentiated pricing based on additional properties of the billable metric.'
-      required:
-        - key
-        - values
-      deprecated: true
-      properties:
-        key:
-          type: string
-          description: Name of the event property used to group values.
-          example: region
-        values:
-          type: array
-          description: Array of strings or objects representing all possible values.
-          example:
-            - us-east-1
-            - us-east-2
-            - eu-west-1
-          items:
-            oneOf:
-              - type: string
-              - type: object
-                description: Second dimension of group.
-                required:
-                  - key
-                  - values
-                properties:
-                  key:
-                    type: string
-                    description: Name of the event property used to group values.
-                    example: region
-                  values:
-                    type: array
-                    description: Array of strings representing all possible values.
-                    example:
-                      - us-east-1
-                      - us-east-2
-                      - eu-west-1
-                    items:
-                      type: string
     BillableMetricsPaginated:
       type: object
       required:
@@ -3513,12 +3424,6 @@ components:
           description: List of filters used to apply differentiated pricing based on additional event properties.
           items:
             $ref: '#/components/schemas/ChargeFilterObject'
-        group_properties:
-          type: array
-          description: 'All charge information, sorted by groups.'
-          deprecated: true
-          items:
-            $ref: '#/components/schemas/GroupPropertiesObject'
         taxes:
           type: array
           description: All taxes applied to the charge.
@@ -5065,48 +4970,6 @@ components:
               type: string
           filters:
             $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
-          groups:
-            $ref: '#/components/schemas/CustomerChargeGroupsUsageObject'
-    CustomerChargeGroupsUsageObject:
-      type: array
-      description: 'Array of group object, representing multiple dimensions for a charge item.'
-      deprecated: true
-      required:
-        - lago_id
-        - value
-        - units
-        - events_count
-        - amount_cents
-      items:
-        type: object
-        properties:
-          lago_id:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-            description: Unique identifier assigned to the group within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the group record within the Lago system.
-          key:
-            type: string
-            example: null
-            description: 'The group key, only returned for groups with two dimensions.'
-            nullable: true
-          value:
-            type: string
-            example: europe
-            description: The group value.
-          units:
-            type: string
-            pattern: '^[0-9]+.?[0-9]*$'
-            example: '0.9'
-            description: The number of units consumed for a specific group related to a charge item.
-          events_count:
-            type: integer
-            example: 10
-            description: The quantity of usage events that have been recorded for a particular charge during the specified time period. These events may also be referred to as the number of transactions in some contexts.
-          amount_cents:
-            type: integer
-            example: 1000
-            description: 'The amount in cents, tax excluded, consumed for a specific group related to a charge item.'
     CustomerChargeUsageObject:
       type: object
       required:
@@ -5197,8 +5060,6 @@ components:
               example: sum_agg
         filters:
           $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
-        groups:
-          $ref: '#/components/schemas/CustomerChargeGroupsUsageObject'
         grouped_usage:
           $ref: '#/components/schemas/CustomerChargeGroupedUsageObject'
     CustomerCreateInput:
@@ -5670,13 +5531,6 @@ components:
                 type: string
                 example: transaction_1234567890
                 description: 'This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.'
-              external_customer_id:
-                type: string
-                example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-                description: |
-                  The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
-                  This field is deprecated and is no longer supported or maintained. Please use the `external_subscription_id` instead.
-                deprecated: true
               external_subscription_id:
                 type: string
                 example: sub_1234567890
@@ -5713,22 +5567,16 @@ components:
           type: object
           required:
             - code
+            - external_subscription_id
           properties:
             code:
               type: string
               example: storage
               description: 'The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.'
-            external_customer_id:
-              type: string
-              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-              description: |
-                The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
-                This field is deprecated and is no longer supported or maintained. Please use the `external_subscription_id` instead.
-              deprecated: true
             external_subscription_id:
               type: string
               example: sub_1234567890
-              description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
+              description: The unique identifier of the subscription within your application.
             properties:
               type: object
               description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
@@ -5746,7 +5594,6 @@ components:
         - lago_id
         - transaction_id
         - lago_customer_id
-        - external_customer_id
         - code
         - timestamp
         - lago_subscription_id
@@ -5768,14 +5615,6 @@ components:
           nullable: true
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
           description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
-        external_customer_id:
-          type: string
-          nullable: true
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-          description: |
-            The customer external unique identifier (provided by your own application). This field is optional if you send the `external_subscription_id`, targeting a specific subscription.
-            This field is deprecated and is no longer supported or maintained. Please use the `external_subscription_id` instead.
-          deprecated: true
         code:
           type: string
           example: storage
@@ -5810,7 +5649,6 @@ components:
           description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription's record within the Lago system
         external_subscription_id:
           type: string
-          nullable: true
           example: sub_1234567890
           description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
         created_at:
@@ -5856,13 +5694,6 @@ components:
           format: uuid
           nullable: true
           description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_group_id:
-          type: string
-          format: uuid
-          nullable: true
-          description: Unique identifier assigned to the group that the fee belongs to
-          deprecated: true
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_charge_filter_id:
           type: string
@@ -6230,11 +6061,6 @@ components:
                 type: array
                 items:
                   type: string
-            group_invoice_display_name:
-              type: string
-              description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.'
-              deprecated: true
-              example: Transactions - ACH
             lago_item_id:
               type: string
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
@@ -6330,57 +6156,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GrossRevenueObject'
-    GroupObject:
-      type: object
-      required:
-        - lago_id
-        - key
-        - value
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier of a specific group associated with the billable metric.
-        key:
-          type: string
-          example: region
-          description: Key of a specific group associated with the billable metric.
-        value:
-          type: string
-          example: us-east-1
-          description: One of the values for a specific group associated with the billable metric.
-    GroupPropertiesObject:
-      type: object
-      required:
-        - group_id
-        - values
-      properties:
-        group_id:
-          type: string
-          format: uuid
-          description: 'Unique identifier of a billable metric group, created by Lago.'
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        invoice_display_name:
-          type: string
-          description: 'Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual group will be used as the default display name.'
-          example: AWS
-        values:
-          allOf:
-            - $ref: '#/components/schemas/ChargeProperties'
-            - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
-    GroupsPaginated:
-      type: object
-      required:
-        - groups
-        - meta
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/GroupObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     MinimumCommitmentInput:
       type: object
       description: Minimum commitment for this plan.
@@ -7323,24 +7098,6 @@ components:
                     allOf:
                       - $ref: '#/components/schemas/ChargeProperties'
                       - description: List of all thresholds utilized for calculating the charge.
-                  group_properties:
-                    type: array
-                    description: 'All charge information, sorted by groups.'
-                    deprecated: true
-                    items:
-                      type: object
-                      required:
-                        - group_id
-                        - values
-                      properties:
-                        group_id:
-                          type: string
-                          description: 'Unique identifier of a billable metric group, created by Lago.'
-                          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                        values:
-                          allOf:
-                            - $ref: '#/components/schemas/ChargeProperties'
-                            - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
                   filters:
                     type: array
                     description: List of filters used to apply differentiated pricing based on additional event properties.
@@ -7365,7 +7122,6 @@ components:
                     amount: '30'
                     free_units: 100
                     package_size: 1000
-                  group_properties: []
                   tax_codes:
                     - french_standard_vat
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
@@ -7385,7 +7141,6 @@ components:
                         from_value: 11
                         flat_amount: '0'
                         per_unit_amount: '0.4'
-                  group_properties: []
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
                   charge_model: standard
                   invoiceable: true
@@ -7394,19 +7149,6 @@ components:
                   prorated: false
                   min_amount_cents: 0
                   properties: {}
-                  group_properties:
-                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a01
-                      invoice_display_name: Europe
-                      values:
-                        amount: '10'
-                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a02
-                      invoice_display_name: USA
-                      values:
-                        amount: '5'
-                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a03
-                      invoice_display_name: Africa
-                      values:
-                        amount: '8'
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
                   charge_model: volume
                   invoiceable: true
@@ -7424,7 +7166,6 @@ components:
                         to_value: null
                         flat_amount: '0'
                         per_unit_amount: '0.5'
-                  group_properties: []
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
                   charge_model: percentage
                   invoiceable: false
@@ -7437,7 +7178,6 @@ components:
                     fixed_amount: '0.5'
                     free_units_per_events: 5
                     free_units_per_total_aggregation: '500'
-                  group_properties: []
     PlanOverridesObject:
       type: object
       description: Based plan overrides.
@@ -7504,24 +7244,6 @@ components:
                 allOf:
                   - $ref: '#/components/schemas/ChargeProperties'
                   - description: List of all thresholds utilized for calculating the charge.
-              group_properties:
-                type: array
-                description: 'All charge information, sorted by groups.'
-                deprecated: true
-                items:
-                  type: object
-                  required:
-                    - group_id
-                    - values
-                  properties:
-                    group_id:
-                      type: string
-                      description: 'Unique identifier of a billable metric group, created by Lago.'
-                      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                    values:
-                      allOf:
-                        - $ref: '#/components/schemas/ChargeProperties'
-                        - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
               filters:
                 type: array
                 description: List of filters used to apply differentiated pricing based on additional event properties.
@@ -7654,24 +7376,6 @@ components:
                     allOf:
                       - $ref: '#/components/schemas/ChargeProperties'
                       - description: List of all thresholds utilized for calculating the charge.
-                  group_properties:
-                    type: array
-                    description: 'All charge information, sorted by groups.'
-                    deprecated: true
-                    items:
-                      type: object
-                      required:
-                        - group_id
-                        - values
-                      properties:
-                        group_id:
-                          type: string
-                          description: 'Unique identifier of a billable metric group, created by Lago.'
-                          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                        values:
-                          allOf:
-                            - $ref: '#/components/schemas/ChargeProperties'
-                            - description: 'List of all thresholds utilized for calculating a charge, scoped by groups used as dimensions for a single charge.'
                   filters:
                     type: array
                     description: List of filters used to apply differentiated pricing based on additional event properties.
@@ -7696,7 +7400,6 @@ components:
                     amount: '30'
                     free_units: 100
                     package_size: 1000
-                  group_properties: []
                   tax_codes:
                     - french_standard_vat
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
@@ -7716,7 +7419,6 @@ components:
                         from_value: 11
                         flat_amount: '0'
                         per_unit_amount: '0.4'
-                  group_properties: []
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a93
                   charge_model: standard
                   invoiceable: true
@@ -7725,19 +7427,6 @@ components:
                   prorated: false
                   min_amount_cents: 0
                   properties: {}
-                  group_properties:
-                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a01
-                      invoice_display_name: Europe
-                      values:
-                        amount: '10'
-                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a02
-                      invoice_display_name: USA
-                      values:
-                        amount: '5'
-                    - group_id: 1a901a90-1a90-1a90-1a90-1a901a901a03
-                      invoice_display_name: Africa
-                      values:
-                        amount: '8'
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a94
                   charge_model: volume
                   invoiceable: true
@@ -7755,7 +7444,6 @@ components:
                         to_value: null
                         flat_amount: '0'
                         per_unit_amount: '0.5'
-                  group_properties: []
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
                   charge_model: percentage
                   invoiceable: false
@@ -7768,7 +7456,6 @@ components:
                     fixed_amount: '0.5'
                     free_units_per_events: 5
                     free_units_per_total_aggregation: '500'
-                  group_properties: []
     PlanObject:
       type: object
       required:

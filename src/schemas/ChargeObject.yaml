@@ -69,12 +69,6 @@ properties:
     description: List of filters used to apply differentiated pricing based on additional event properties.
     items:
       $ref: "./ChargeFilterObject.yaml"
-  group_properties:
-    type: array
-    description: All charge information, sorted by groups.
-    deprecated: true
-    items:
-      $ref: "./GroupPropertiesObject.yaml"
   taxes:
     type: array
     description: All taxes applied to the charge.

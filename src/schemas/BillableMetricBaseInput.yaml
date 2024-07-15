@@ -45,8 +45,6 @@ properties:
     nullable: true
     example: "seconds"
     description: "Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`."
-  group:
-    $ref: "./BillableMetricGroup.yaml"
   filters:
     type: array
     items:
