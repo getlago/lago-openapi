@@ -1,0 +1,34 @@
+get:
+  tags:
+    - analytics
+  summary: List overdue balance
+  description: Overdue balance is the total amount associated with overdue invoices (invoices with pending or failed payments which are past their due dates).
+  operationId: findAllOverdueBalances
+  parameters:
+    - name: currency
+      in: query
+      description: Currency of revenue analytics. Format must be ISO 4217.
+      required: false
+      explode: true
+      schema:
+        allOf:
+          - $ref: '../schemas/Currency.yaml'
+          - example: 'USD'
+    - name: external_customer_id
+      in: query
+      description: The customer external unique identifier (provided by your own application). Use it to filter revenue analytics at the customer level.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    - $ref: '../parameters/months.yaml'
+  responses:
+    '200':
+      description: Overdue balance
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/OverdueBalances.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

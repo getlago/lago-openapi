@@ -6300,6 +6300,9 @@ components:
       type: object
       required:
         - month
+        - amount_cents
+        - currency
+        - invoices_count
       properties:
         month:
           type: string
@@ -6314,6 +6317,10 @@ components:
             - $ref: '#/components/schemas/Currency'
             - description: The currency of revenue analytics. Format must be ISO 4217.
               example: USD
+        invoices_count:
+          type: integer
+          description: Contains invoices count.
+          example: 10
     GrossRevenues:
       type: object
       required:
@@ -6498,7 +6505,6 @@ components:
       required:
         - month
         - invoices_count
-        - amount_cents
       properties:
         month:
           type: string
@@ -7128,6 +7134,44 @@ components:
                   - credit_note.created
             billing_configuration:
               $ref: '#/components/schemas/OrganizationBillingConfiguration'
+    OverdueBalanceObject:
+      type: object
+      required:
+        - month
+        - amount_cents
+        - currency
+        - lago_invoice_ids
+      properties:
+        month:
+          type: string
+          description: Identifies the month to analyze revenue.
+          example: '2023-11-01T00:00:00.000Z'
+        amount_cents:
+          type: integer
+          description: 'The total amount of revenue for a period, expressed in cents.'
+          example: 50000
+        currency:
+          allOf:
+            - $ref: '#/components/schemas/Currency'
+            - description: The currency of revenue analytics. Format must be ISO 4217.
+              example: USD
+        lago_invoice_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: The Lago invoice IDs associated with the revenue.
+          example:
+            - 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    OverdueBalances:
+      type: object
+      required:
+        - overdue_balances
+      properties:
+        overdue_balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/OverdueBalanceObject'
     PaginationMeta:
       type: object
       required:

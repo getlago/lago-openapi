@@ -3,7 +3,7 @@ required:
   - month
   - amount_cents
   - currency
-  - invoices_count
+  - lago_invoice_ids
 properties:
   month:
     type: string
@@ -18,7 +18,10 @@ properties:
       - $ref: './Currency.yaml'
       - description: The currency of revenue analytics. Format must be ISO 4217.
         example: 'USD'
-  invoices_count:
-    type: integer
-    description: Contains invoices count.
-    example: 10
+  lago_invoice_ids:
+    type: array
+    items:
+      type: string
+      format: uuid
+    description: The Lago invoice IDs associated with the revenue.
+    example: ['5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba']
