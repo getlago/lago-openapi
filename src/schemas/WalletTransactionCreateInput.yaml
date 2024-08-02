@@ -27,3 +27,7 @@ properties:
         pattern: '^[0-9]+.?[0-9]*$'
         description: The number of voided credits.
         example: '5.0'
+      invoice_require_successful_payment:
+        type: boolean
+        description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
+        example: false
