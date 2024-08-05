@@ -94,6 +94,10 @@ properties:
     nullable: true
     description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
     example: '2022-09-14T16:35:31Z'
+  invoice_requires_successful_payment:
+    type: boolean
+    description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
+    example: false
   recurring_transaction_rules:
     description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
     type: array

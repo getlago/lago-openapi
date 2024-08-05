@@ -43,6 +43,10 @@ properties:
         nullable: true
         description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
         example: '2022-07-07T23:59:59Z'
+      invoice_requires_successful_payment:
+        type: boolean
+        description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
+        example: false
       recurring_transaction_rules:
         type: array
         description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
@@ -102,3 +106,7 @@ properties:
               pattern: '^[0-9]+.?[0-9]*$'
               description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
               example: '200.0'
+            invoice_requires_successful_payment:
+              type: boolean
+              description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
+              example: false
