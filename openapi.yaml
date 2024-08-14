@@ -8282,6 +8282,23 @@ components:
               type: boolean
               description: 'A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.'
               example: false
+            transaction_metadata:
+              type: array
+              description: This optional field allows you to store a list of key-value pairs that provide additional information or custom attributes. These key-value pairs will be included in the metadata of wallet transactions generated during the wallet creation process.
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: The unique identifier for the attribute.
+                  value:
+                    type: string
+                    description: The corresponding value for the key.
+              example:
+                - key: example_key
+                  value: example_value
+                - key: another_key
+                  value: another_value
             recurring_transaction_rules:
               type: array
               description: 'List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.'
@@ -8345,6 +8362,23 @@ components:
                     type: boolean
                     description: 'A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.'
                     example: false
+                  transaction_metadata:
+                    type: array
+                    description: This optional field allows you to store a list of key-value pairs containing additional information or custom attributes. These key-value pairs will populate the metadata of the wallet transactions triggered by this rule.
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          description: The unique identifier for the attribute.
+                        value:
+                          type: string
+                          description: The value associated with the key.
+                    example:
+                      - key: example_key
+                        value: example_value
+                      - key: another_key
+                        value: another_value
     WalletObject:
       type: object
       required:
@@ -8525,6 +8559,23 @@ components:
                 type: boolean
                 description: 'A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.'
                 example: false
+              transaction_metadata:
+                type: array
+                description: This field allows you to store a list of key-value pairs containing additional information or custom attributes. These key-value pairs will populate the metadata of the wallet transactions triggered by this rule.
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      description: The unique identifier for the attribute.
+                    value:
+                      type: string
+                      description: The value associated with the key.
+                example:
+                  - key: example_key
+                    value: example_value
+                  - key: another_key
+                    value: another_value
         ongoing_balance_cents:
           type: integer
           description: The wallet ongoing balance expressed in cents.
@@ -8589,6 +8640,23 @@ components:
               type: boolean
               description: 'A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.'
               example: false
+            metadata:
+              type: array
+              description: This optional field allows you to store a list of key-value pairs that hold additional information or custom attributes related to the data.
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: The unique identifier for the attribute.
+                  value:
+                    type: string
+                    description: The value associated with the key.
+              example:
+                - key: example key
+                  value: example value
+                - key: another key
+                  value: another value
     WalletTransactionObject:
       type: object
       required:
@@ -8648,6 +8716,23 @@ components:
           type: boolean
           description: 'A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.'
           example: false
+        metadata:
+          type: array
+          description: This field allows you to store a list of key-value pairs that hold additional information or custom attributes related to the data.
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                description: The unique identifier for the attribute.
+              value:
+                type: string
+                description: The value associated with the key.
+          example:
+            - key: example key
+              value: example value
+            - key: another key
+              value: another value
         settled_at:
           type: string
           format: date-time
@@ -8767,6 +8852,23 @@ components:
                     type: boolean
                     description: 'A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.'
                     example: false
+                  transaction_metadata:
+                    type: array
+                    description: This optional field allows you to store a list of key-value pairs containing additional information or custom attributes. These key-value pairs will populate the metadata of the wallet transactions triggered by this rule.
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          description: The unique identifier for the attribute.
+                        value:
+                          type: string
+                          description: The value associated with the key.
+                    example:
+                      - key: example_key
+                        value: example_value
+                      - key: another_key
+                        value: another_value
     WebhookEndpoint:
       type: object
       required:
