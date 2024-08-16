@@ -26,6 +26,14 @@ properties:
       - settled
     description: The status of the wallet transaction. Possible values are `pending` or `settled`.
     example: settled
+  source:
+    type: string
+    enum:
+      - manual
+      - interval
+      - threshold
+    description: The source field represents the origin or trigger of the wallet transaction. Possible values are `manual`, `interval`. `threshold`
+    example: manual
   transaction_status:
     type: string
     enum:
@@ -56,6 +64,23 @@ properties:
     type: boolean
     description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
     example: false
+  metadata:
+    type: array
+    description: This field allows you to store a list of key-value pairs that hold additional information or custom attributes related to the data.
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The unique identifier for the attribute.
+        value:
+          type: string
+          description: The value associated with the key.
+    example:
+      - key: "example key"
+        value: "example value"
+      - key: "another key"
+        value: "another value"
   settled_at:
     type: string
     format: 'date-time'
