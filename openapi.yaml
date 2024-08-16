@@ -8686,6 +8686,14 @@ components:
             - settled
           description: The status of the wallet transaction. Possible values are `pending` or `settled`.
           example: settled
+        source:
+          type: string
+          enum:
+            - manual
+            - interval
+            - threshold
+          description: 'The source field represents the origin or trigger of the wallet transaction. Possible values are `manual`, `interval`. `threshold`'
+          example: manual
         transaction_status:
           type: string
           enum:
