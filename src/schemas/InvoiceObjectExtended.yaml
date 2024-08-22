@@ -14,3 +14,7 @@ allOf:
         type: array
         items:
           $ref: './SubscriptionObject.yaml'
+      error_details:
+        type: array
+        items:
+          $ref: './ErrorDetailObject.yaml'

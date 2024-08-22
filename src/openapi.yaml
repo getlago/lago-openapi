@@ -173,6 +173,8 @@ paths:
     $ref: "./resources/invoice_lose_dispute.yaml"
   /invoices/{lago_id}/refresh:
     $ref: "./resources/invoice_refresh.yaml"
+  /invoices/{lago_id}/retry:
+    $ref: "./resources/invoice_retry.yaml"
   /invoices/{lago_id}/payment_url:
     $ref: "./resources/invoice_payment_url.yaml"
   /invoices/{lago_id}/retry_payment:
