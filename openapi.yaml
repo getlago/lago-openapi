@@ -1737,7 +1737,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
   '/invoices/{lago_id}/retry':
-    put:
+    post:
       tags:
         - invoices
       summary: Retry generation of a failed invoice
