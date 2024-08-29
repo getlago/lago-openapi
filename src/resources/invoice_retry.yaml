@@ -1,0 +1,20 @@
+post:
+  tags:
+    - invoices
+  summary: Retry generation of a failed invoice
+  description: This endpoint is used for retrying to generate a failed invoice.
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+
+  operationId: retryInvoice
+  responses:
+    '200':
+      description: Invoice generation has been retried
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

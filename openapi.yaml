@@ -1736,6 +1736,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  '/invoices/{lago_id}/retry':
+    post:
+      tags:
+        - invoices
+      summary: Retry generation of a failed invoice
+      description: This endpoint is used for retrying to generate a failed invoice.
+      parameters:
+        - $ref: '#/components/parameters/lago_invoice_id'
+      operationId: retryInvoice
+      responses:
+        '200':
+          description: Invoice generation has been retried
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   '/invoices/{lago_id}/payment_url':
     post:
       tags:
@@ -6488,11 +6508,13 @@ components:
             - draft
             - finalized
             - voided
+            - failed
           description: |-
             The status of the invoice. It indicates the current state of the invoice and can have two possible values:
             - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
             - `finalized`: the invoice has been issued and finalized. In this state, events cannot be ingested or added to the invoice anymore.
             - `voided`: the invoice has been issued and subsequently voided. In this state, events cannot be ingested or added to the invoice anymore.
+            - `failed`: during an attempt of finalization of the invoice, an error happened. This invoice will have an array of error_details, explaining, in which part of the system an error happened and how it's possible to fix it. This invoice can't be edited or updated, only retried. This action will discard current error_details and will create new ones if the finalization failed again.
           example: finalized
         payment_status:
           type: string
@@ -6590,6 +6612,30 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/SubscriptionObject'
+            error_details:
+              type: array
+              items:
+                type: object
+                required:
+                  - lago_id
+                  - error_code
+                  - details
+                properties:
+                  lago_id:
+                    type: string
+                    format: uuid
+                    nullable: true
+                    description: Unique identifier assigned to the error_detail within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the error's record within the Lago system.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  error_code:
+                    type: string
+                    description: 'Code that specifies part of the application / connection, where the error originally happened'
+                    example: tax_error
+                  details:
+                    type: object
+                    description: 'Key value list of more elaborated error detail, where by the key of error_code an external service error details are stored'
+                    example:
+                      tax_error: taxDateTooFarInFuture
     InvoiceOneOffCreateInput:
       type: object
       required:
