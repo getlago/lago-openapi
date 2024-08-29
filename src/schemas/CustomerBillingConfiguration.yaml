@@ -21,7 +21,7 @@ properties:
     description: Unique code used to identify a payment provider connection.
   provider_customer_id:
     type: string
-    example: 'cus_12345'
+    example: "cus_12345"
     description: The customer ID within the payment provider's system. If this field is not provided, Lago has the option to create a new customer record within the payment provider's system on behalf of the customer
   sync:
     type: boolean
@@ -40,7 +40,7 @@ properties:
     nullable: true
     items:
       type: string
-    description: Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, the payment methods will be set to `[card]`. For now, possible values are `card`, `sepa_debit`, `us_bank_account`, `bacs_debit` and `link`. Note that when `link` is selected, `card` should also be provided in the array.
+    description: Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, the payment methods will be set to `card`. For now, possible values are `card`, `sepa_debit`, `us_bank_account`, `bacs_debit` and `link`. Note that when `link` is selected, `card` should also be provided in the array.
     example:
       - card
       - sepa_debit

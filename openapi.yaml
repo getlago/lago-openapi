@@ -4361,15 +4361,16 @@ components:
               enum:
                 - coupon
                 - credit_note
-              description: The type of credit applied. Possible values are `coupon` or `credit_note`.
+                - invoice
+              description: 'The type of credit applied. Possible values are `coupon`, `credit_note` or `invoice` (for `progressive_billing` invoice).'
               example: coupon
             code:
               type: string
-              description: The code of the credit applied. It can be the code of the coupon attached to the credit or the credit note's number.
+              description: 'The code of the credit applied. It can be the code of the coupon attached to the credit, the credit note''s number or the `progressive_billing` invoice number.'
               example: startup_deal
             name:
               type: string
-              description: The name of the credit applied. It can be the name of the coupon attached to the credit or the initial invoice's number linked to the credit note.
+              description: 'The name of the credit applied. It can be the name of the coupon attached to the credit, the initial invoice''s number linked to the credit note or the `progressive_billing` invoice number.'
               example: Startup Deal
         invoice:
           type: object
@@ -4915,7 +4916,7 @@ components:
           nullable: true
           items:
             type: string
-          description: 'Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, the payment methods will be set to `[card]`. For now, possible values are `card`, `sepa_debit`, `us_bank_account`, `bacs_debit` and `link`. Note that when `link` is selected, `card` should also be provided in the array.'
+          description: 'Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, the payment methods will be set to `card`. For now, possible values are `card`, `sepa_debit`, `us_bank_account`, `bacs_debit` and `link`. Note that when `link` is selected, `card` should also be provided in the array.'
           example:
             - card
             - sepa_debit
@@ -6434,6 +6435,7 @@ components:
         - taxes_amount_cents
         - sub_total_including_taxes_amount_cents
         - prepaid_credit_amount_cents
+        - progressive_billing_credit_amount_cents
         - total_amount_cents
         - version_number
       properties:
@@ -6480,7 +6482,8 @@ components:
             - add_on
             - credit
             - one_off
-          description: 'The type of invoice issued. Possible values are `subscription`, `one-off` or `credit`.'
+            - progressive_billing
+          description: 'The type of invoice issued. Possible values are `subscription`, `one-off`, `credit` or `progressive_billing`.'
           example: subscription
         status:
           type: string
@@ -6530,7 +6533,7 @@ components:
             This field depends on the version number. Here are the definitions based on the version:
             - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
             - Version 2: is equal to the `fees_amount_cents`.
-            - Version 3: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
+            - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
           example: 100
         taxes_amount_cents:
           type: integer
@@ -6543,11 +6546,15 @@ components:
             This field depends on the version number. Here are the definitions based on the version:
             - Version 1: is equal to the `total_amount_cents`.
             - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
-            - Version 3: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
+            - Version 3 & 4: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
           example: 120
         prepaid_credit_amount_cents:
           type: integer
           description: 'The total sum of all prepaid credits discounted on the invoice. It calculates the cumulative discount amount applied by prepaid credits, expressed in cents.'
+          example: 0
+        progressive_billing_credit_amount_cents:
+          type: integer
+          description: The usage already billed in previous invoices. Only apply to `progressive_billing` and `subscription` invoices.
           example: 0
         total_amount_cents:
           type: integer
@@ -7241,6 +7248,11 @@ components:
                     fixed_amount: '0.5'
                     free_units_per_events: 5
                     free_units_per_total_aggregation: '500'
+            usage_thresholds:
+              type: array
+              description: List of usage thresholds to apply to the plan.
+              items:
+                $ref: '#/components/schemas/UsageThresholdInput'
     PlanOverridesObject:
       type: object
       description: Based plan overrides.
@@ -7319,6 +7331,11 @@ components:
                 description: List of unique code used to identify the taxes.
                 example:
                   - french_standard_vat
+        usage_thresholds:
+          type: array
+          description: List of usage thresholds applied to the subscription.
+          items:
+            $ref: '#/components/schemas/UsageThresholdObject'
     PlanUpdateInput:
       type: object
       required:
@@ -7534,6 +7551,11 @@ components:
                     fixed_amount: '0.5'
                     free_units_per_events: 5
                     free_units_per_total_aggregation: '500'
+            usage_thresholds:
+              type: array
+              description: List of usage thresholds to apply to the plan.
+              items:
+                $ref: '#/components/schemas/UsageThresholdInput'
     PlanObject:
       type: object
       required:
@@ -7730,6 +7752,11 @@ components:
           description: All taxes applied to the plan.
           items:
             $ref: '#/components/schemas/TaxObject'
+        usage_thresholds:
+          type: array
+          description: List of usage thresholds applied to the plan.
+          items:
+            $ref: '#/components/schemas/UsageThresholdObject'
     PlansPaginated:
       type: object
       required:
@@ -8226,6 +8253,65 @@ components:
         - Pacific/Pago_Pago
         - Pacific/Port_Moresby
         - Pacific/Tongatapu
+    UsageThresholdInput:
+      type: object
+      required:
+        - amount_cents
+        - recurring
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the usage threshold created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        threshold_display_name:
+          type: string
+          description: The display name of the usage threshold.
+          example: Threshold 1
+        amount_cents:
+          type: integer
+          description: The amount to reach to trigger a `progressive_billing` invoice.
+          example: 10000
+        recurring:
+          type: boolean
+          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
+          example: true
+    UsageThresholdObject:
+      type: object
+      required:
+        - lago_id
+        - amount_cents
+        - recurring
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the usage threshold created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        threshold_display_name:
+          type: string
+          description: The display name of the usage threshold.
+          example: Threshold 1
+        amount_cents:
+          type: integer
+          description: The amount to reach to trigger a `progressive_billing` invoice.
+          example: 10000
+        recurring:
+          type: boolean
+          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the usage threshold was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2023-06-27T19:43:42Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the usage threshold was last updated. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2023-06-27T19:43:42Z'
     Wallet:
       type: object
       required:

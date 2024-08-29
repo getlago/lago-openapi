@@ -204,3 +204,8 @@ properties:
               fixed_amount: "0.5"
               free_units_per_events: 5
               free_units_per_total_aggregation: "500"
+      usage_thresholds:
+        type: array
+        description: List of usage thresholds to apply to the plan.
+        items:
+          $ref: "./UsageThresholdInput.yaml"
