@@ -6,10 +6,12 @@ properties:
   id:
     type: string
     format: uuid
+    nullable: true
     description: Unique identifier of the usage threshold created by Lago.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   threshold_display_name:
     type: string
+    nullable: true
     description: The display name of the usage threshold.
     example: "Threshold 1"
   amount_cents:

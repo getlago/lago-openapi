@@ -159,3 +159,8 @@ properties:
     type: array
     items:
       $ref: "./InvoiceAppliedTaxObject.yaml"
+  applied_usage_thresholds:
+    type: array
+    nullable: true
+    items:
+      $ref: "./AppliedUsageThresholdObject.yaml"
