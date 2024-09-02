@@ -1,0 +1,36 @@
+type: object
+required:
+  - lago_id
+  - amount_cents
+  - recurring
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the usage threshold created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  threshold_display_name:
+    type: string
+    nullable: true
+    description: The display name of the usage threshold.
+    example: "Threshold 1"
+  amount_cents:
+    type: integer
+    description: The amount to reach to trigger a `progressive_billing` invoice.
+    example: 10000
+  recurring:
+    type: boolean
+    description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
+    example: true
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the usage threshold was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
+    example: "2023-06-27T19:43:42Z"
+  updated_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the usage threshold was last updated. It is expressed in UTC format according to the ISO 8601 datetime standard.
+    example: "2023-06-27T19:43:42Z"

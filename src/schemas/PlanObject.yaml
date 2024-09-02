@@ -190,3 +190,8 @@ properties:
     description: All taxes applied to the plan.
     items:
       $ref: "./TaxObject.yaml"
+  usage_thresholds:
+    type: array
+    description: List of usage thresholds applied to the plan.
+    items:
+      $ref: "./UsageThresholdObject.yaml"

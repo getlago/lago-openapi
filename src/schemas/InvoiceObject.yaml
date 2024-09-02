@@ -14,14 +14,15 @@ required:
   - taxes_amount_cents
   - sub_total_including_taxes_amount_cents
   - prepaid_credit_amount_cents
+  - progressive_billing_credit_amount_cents
   - total_amount_cents
   - version_number
 properties:
   lago_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   sequential_id:
     type: integer
     description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
@@ -29,22 +30,22 @@ properties:
   number:
     type: string
     description: The unique number assigned to the invoice. This number serves as a distinct identifier for the invoice and helps in differentiating it from other invoices in the system.
-    example: 'LAG-1234-001-002'
+    example: "LAG-1234-001-002"
   issuing_date:
     type: string
-    format: 'date'
+    format: "date"
     description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
-    example: '2022-04-30'
+    example: "2022-04-30"
   payment_dispute_lost_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
-    example: '2022-09-14T16:35:31Z'
+    example: "2022-09-14T16:35:31Z"
   payment_due_date:
     type: string
-    format: 'date'
+    format: "date"
     description: The payment due date for the invoice, specified in the ISO 8601 date format.
-    example: '2022-04-30'
+    example: "2022-04-30"
   payment_overdue:
     type: boolean
     description: Specifies if the payment is considered as overdue.
@@ -60,7 +61,8 @@ properties:
       - add_on
       - credit
       - one_off
-    description: The type of invoice issued. Possible values are `subscription`, `one-off` or `credit`.
+      - progressive_billing
+    description: The type of invoice issued. Possible values are `subscription`, `one-off`, `credit` or `progressive_billing`.
     example: subscription
   status:
     type: string
@@ -90,9 +92,9 @@ properties:
     example: succeeded
   currency:
     allOf:
-      - $ref: './Currency.yaml'
+      - $ref: "./Currency.yaml"
       - description: The currency of the invoice issued.
-        example: 'EUR'
+        example: "EUR"
   fees_amount_cents:
     type: integer
     description: The total sum of fees amount in cents. It calculates the cumulative amount of all the fees associated with the invoice, providing a consolidated value.
@@ -112,7 +114,7 @@ properties:
       This field depends on the version number. Here are the definitions based on the version:
       - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
       - Version 2: is equal to the `fees_amount_cents`.
-      - Version 3: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
+      - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
     example: 100
   taxes_amount_cents:
     type: integer
@@ -125,11 +127,15 @@ properties:
       This field depends on the version number. Here are the definitions based on the version:
       - Version 1: is equal to the `total_amount_cents`.
       - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
-      - Version 3: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
+      - Version 3 & 4: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
     example: 120
   prepaid_credit_amount_cents:
     type: integer
     description: The total sum of all prepaid credits discounted on the invoice. It calculates the cumulative discount amount applied by prepaid credits, expressed in cents.
+    example: 0
+  progressive_billing_credit_amount_cents:
+    type: integer
+    description: The usage already billed in previous invoices. Only apply to `progressive_billing` and `subscription` invoices.
     example: 0
   total_amount_cents:
     type: integer
@@ -142,16 +148,21 @@ properties:
     type: string
     format: uri
     description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
-    example: 'https://getlago.com/invoice/file'
+    example: "https://getlago.com/invoice/file"
   customer:
     allOf:
-      - $ref: './CustomerObject.yaml'
+      - $ref: "./CustomerObject.yaml"
       - description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
   metadata:
     type: array
     items:
-      $ref: './InvoiceMetadataObject.yaml'
+      $ref: "./InvoiceMetadataObject.yaml"
   applied_taxes:
     type: array
     items:
-      $ref: './InvoiceAppliedTaxObject.yaml'
+      $ref: "./InvoiceAppliedTaxObject.yaml"
+  applied_usage_thresholds:
+    type: array
+    nullable: true
+    items:
+      $ref: "./AppliedUsageThresholdObject.yaml"

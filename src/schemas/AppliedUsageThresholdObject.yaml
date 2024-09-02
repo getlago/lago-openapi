@@ -1,0 +1,16 @@
+type: object
+required:
+  - lifetime_usage_amount_cents
+  - created_at
+  - usage_threshold
+properties:
+  lifetime_usage_amount_cents:
+    type: integer
+    description: The amount of usage in cents that has been accumulated over the lifetime of the subscription.
+    example: 2000
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the lifetime usage was computed. It is expressed in UTC format according to the ISO 8601 datetime standard.
+  usage_threshold:
+    $ref: "./UsageThresholdObject.yaml"
