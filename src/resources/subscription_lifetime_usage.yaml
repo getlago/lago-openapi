@@ -1,0 +1,53 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription
+    required: true
+    schema:
+      type: string
+      example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+get:
+  tags:
+    - subscriptions
+  summary: Retrive subscription lifetime usage
+  description: This endpoint enables the retrieval of the lifetime usage of a subscription.
+  operationId: getSubscriptionLifetimeUsage
+  responses:
+    "200":
+      description: Subscription lifetime usage
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/LifetimeUsage.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+put:
+  tags:
+    - subscriptions
+  summary: Update a subscription lifetime usage
+  description: This endpoint allows you to update the lifetime usage of a subscription.
+  operationId: updateSubscriptionLifetimeUsage
+  requestBody:
+    description: Update the lifetime usage of a subscription
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/LifetimeUsageInput.yaml"
+    required: true
+  responses:
+    "200":
+      description: Subscription lifetime usage updated
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/LifetimeUsage.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

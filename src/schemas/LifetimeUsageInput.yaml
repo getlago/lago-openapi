@@ -1,0 +1,13 @@
+type: object
+required:
+  - lifetime_usage
+properties:
+  lifetime_usage:
+    type: object
+    required:
+      - external_historical_usage_amount_cents
+    properties:
+      external_historical_usage_amount_cents:
+        type: integer
+        example: 100
+        description: The historical usage amount in cents for the subscription (provided by your own application).
