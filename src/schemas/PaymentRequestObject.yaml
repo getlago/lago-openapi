@@ -1,0 +1,54 @@
+type: object
+required:
+  - lago_id
+  - email
+  - amount_cents
+  - amount_currency
+  - payment_status
+  - created_at
+  - customer
+  - invoices
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the payment request, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  email:
+    type: string
+    format: "email"
+    example: "dinesh@piedpiper.test"
+    description: The customer's email address used for sending dunning notifications
+  amount_cents:
+    type: integer
+    description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.
+    example: 100
+  amount_currency:
+    allOf:
+      - $ref: "./Currency.yaml"
+      - description: The currency of the payment request.
+        example: "EUR"
+  payment_status:
+    type: string
+    enum:
+      - pending
+      - succeeded
+      - failed
+    description: |-
+      The status of the payment associated with the payment request. It can have one of the following values:
+      - `pending`: the payment is pending, waiting for payment processing in the payment provider or when the invoice is emitted but users have not updated the payment status through the endpoint.
+      - `succeeded`: the payment of the payment request has been successfully processed.
+      - `failed`: the payment of the payment request has failed or encountered an error during processing.
+    example: succeeded
+  created_at:
+    type: string
+    format: date-time
+    description: The date and time when the payment request was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the payment request was initially created.
+    example: "2022-04-29T08:59:51Z"
+  customer:
+    $ref: "./CustomerObject.yaml"
+    description: The customer on which the payment request applies. It refers to the customer account or entity associated with the payment request.
+  invoices:
+    type: array
+    items:
+      $ref: "./InvoiceObject.yaml"

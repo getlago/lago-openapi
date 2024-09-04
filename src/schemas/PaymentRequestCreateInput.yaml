@@ -1,0 +1,27 @@
+type: object
+required:
+  - payment_request
+properties:
+  payment_request:
+    type: object
+    - required:
+      - email
+      - external_customer_id
+      - lago_invoice_ids
+  properties:
+      customer_external_id:
+        type: string
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+        description: The customer external unique identifier (provided by your own application)
+      email:
+        type: string
+        format: "email"
+        example: "dinesh@piedpiper.test"
+        description: The customer's email address used for sending dunning notifications
+      lago_invoice_ids:
+        type: array
+        description: A list of Lago IDs for the customer's overdue invoices to start the dunning process
+        items:
+          type: string
+          example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+          description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
