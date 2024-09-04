@@ -99,6 +99,11 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/webhook_endpoints/webhook-endpoint-object'
+  - name: payment_requests
+    description: Everything about PaymentRequests
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/payment_requests/payment_request-object'
 paths:
   /add_ons:
     post:
@@ -1868,6 +1873,146 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /payment_requests:
+    post:
+      tags:
+        - payment_requests
+      summary: Create a payment request
+      description: This endpoint is used to create a payment request to collect payments of overdue invoices of a given customer
+      operationId: createPaymentRequest
+      requestBody:
+        description: PaymentRequest payload
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - payment_request
+              properties:
+                payment_request:
+                  type: object
+                  required:
+                    - email
+                    - external_customer_id
+                    - lago_invoice_ids
+                properties:
+                  customer_external_id:
+                    type: string
+                    example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+                    description: The customer external unique identifier (provided by your own application)
+                  email:
+                    type: string
+                    format: email
+                    example: dinesh@piedpiper.test
+                    description: The customer's email address used for sending dunning notifications
+                  lago_invoice_ids:
+                    type: array
+                    description: A list of Lago IDs for the customer's overdue invoices to start the dunning process
+                    items:
+                      type: string
+                      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                      description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+        required: true
+      responses:
+        '200':
+          description: PaymentRequest created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - payment_request
+                properties:
+                  payment_request:
+                    type: object
+                    required:
+                      - lago_id
+                      - email
+                      - amount_cents
+                      - amount_currency
+                      - payment_status
+                      - created_at
+                      - customer
+                      - invoices
+                    properties:
+                      lago_id:
+                        type: string
+                        format: uuid
+                        description: 'Unique identifier of the payment request, created by Lago.'
+                        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                      email:
+                        type: string
+                        format: email
+                        example: dinesh@piedpiper.test
+                        description: The customer's email address used for sending dunning notifications
+                      amount_cents:
+                        type: integer
+                        description: 'The sum of the total amounts of all the invoices included in the payment request, expressed in cents.'
+                        example: 100
+                      amount_currency:
+                        allOf:
+                          - $ref: '#/components/schemas/Currency'
+                          - description: The currency of the payment request.
+                            example: EUR
+                      payment_status:
+                        type: string
+                        enum:
+                          - pending
+                          - succeeded
+                          - failed
+                        description: |-
+                          The status of the payment associated with the payment request. It can have one of the following values:
+                          - `pending`: the payment is pending, waiting for payment processing in the payment provider or when the invoice is emitted but users have not updated the payment status through the endpoint.
+                          - `succeeded`: the payment of the payment request has been successfully processed.
+                          - `failed`: the payment of the payment request has failed or encountered an error during processing.
+                        example: succeeded
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: The date and time when the payment request was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the payment request was initially created.
+                        example: '2022-04-29T08:59:51Z'
+                      customer:
+                        $ref: '#/components/schemas/CustomerObject'
+                        description: The customer on which the payment request applies. It refers to the customer account or entity associated with the payment request.
+                      invoices:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/InvoiceObject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - payment_requests
+      summary: List all payment requests
+      description: This endpoint is used to list all existing payment requests.
+      operationId: findAllPaymentRequests
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/external_customer_id'
+      responses:
+        '200':
+          description: PaymentRequests
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - payment_requests
+                  - meta
+                properties:
+                  payment_requests:
+                    type: array
+                    items:
+                      $ref: '#/paths/~1payment_requests/post/responses/200/content/application~1json/schema/properties/payment_request'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   /plans:
     post:
       tags:

@@ -1,0 +1,11 @@
+type: object
+required:
+  - payment_requests
+  - meta
+properties:
+  payment_requests:
+    type: array
+    items:
+      $ref: './PaymentRequestObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
