@@ -5983,6 +5983,14 @@ components:
           type: integer
           description: 'The cost of this specific fee, excluding any applicable taxes.'
           example: 100
+        precise_amount:
+          type: string
+          description: 'The cost of this specific fee, excluding any applicable taxes, with precision.'
+          example: '1.0001'
+        precise_total_amount:
+          type: string
+          description: 'The cost of this specific fee, including any applicable taxes, with precision.'
+          example: '1.0212'
         amount_currency:
           allOf:
             - $ref: '#/components/schemas/Currency'
@@ -5992,6 +6000,10 @@ components:
           type: integer
           description: The cost of the tax associated with this specific fee.
           example: 20
+        taxes_precise_amount:
+          type: string
+          description: 'The cost of the tax associated with this specific fee, with precision.'
+          example: '0.20123'
         taxes_rate:
           type: number
           description: The tax rate associated with this specific fee.
