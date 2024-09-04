@@ -100,6 +100,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/webhook_endpoints/webhook-endpoint-object
+  - name: payment_requests
+    description: Everything about PaymentRequests
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/payment_requests/payment_request-object
 paths:
   /add_ons:
     $ref: "./resources/add_ons.yaml"
@@ -183,6 +188,8 @@ paths:
     $ref: "./resources/invoice_void.yaml"
   /organizations:
     $ref: "./resources/organizations.yaml"
+  /payment_requests:
+    $ref: "./resources/payment_requests.yaml"
   /plans:
     $ref: "./resources/plans.yaml"
   /plans/{code}:
