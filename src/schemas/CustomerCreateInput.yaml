@@ -113,6 +113,11 @@ properties:
         items:
           type: object
           properties:
+            id:
+              type: string
+              format: 'uuid'
+              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              description: 'A unique identifier for the integration customer object in the Lago application.'
             integration_type:
               type: string
               example: 'netsuite'
