@@ -1,168 +1,21 @@
-type: object
-required:
-  - lago_id
-  - number
-  - issuing_date
-  - invoice_type
-  - status
-  - payment_status
-  - currency
-  - fees_amount_cents
-  - coupons_amount_cents
-  - credit_notes_amount_cents
-  - sub_total_excluding_taxes_amount_cents
-  - taxes_amount_cents
-  - sub_total_including_taxes_amount_cents
-  - prepaid_credit_amount_cents
-  - progressive_billing_credit_amount_cents
-  - total_amount_cents
-  - version_number
-properties:
-  lago_id:
-    type: string
-    format: "uuid"
-    description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-  sequential_id:
-    type: integer
-    description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
-    example: 2
-  number:
-    type: string
-    description: The unique number assigned to the invoice. This number serves as a distinct identifier for the invoice and helps in differentiating it from other invoices in the system.
-    example: "LAG-1234-001-002"
-  issuing_date:
-    type: string
-    format: "date"
-    description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
-    example: "2022-04-30"
-  payment_dispute_lost_at:
-    type: string
-    format: "date-time"
-    description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
-    example: "2022-09-14T16:35:31Z"
-  payment_due_date:
-    type: string
-    format: "date"
-    description: The payment due date for the invoice, specified in the ISO 8601 date format.
-    example: "2022-04-30"
-  payment_overdue:
-    type: boolean
-    description: Specifies if the payment is considered as overdue.
-    example: true
-  net_payment_term:
-    type: integer
-    example: 30
-    description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
-  invoice_type:
-    type: string
-    enum:
-      - subscription
-      - add_on
-      - credit
-      - one_off
-      - progressive_billing
-    description: The type of invoice issued. Possible values are `subscription`, `one-off`, `credit` or `progressive_billing`.
-    example: subscription
-  status:
-    type: string
-    enum:
-      - draft
-      - finalized
-      - voided
-      - failed
-    description: |-
-      The status of the invoice. It indicates the current state of the invoice and can have two possible values:
-      - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
-      - `finalized`: the invoice has been issued and finalized. In this state, events cannot be ingested or added to the invoice anymore.
-      - `voided`: the invoice has been issued and subsequently voided. In this state, events cannot be ingested or added to the invoice anymore.
-      - `failed`: during an attempt of finalization of the invoice, an error happened. This invoice will have an array of error_details, explaining, in which part of the system an error happened and how it's possible to fix it. This invoice can't be edited or updated, only retried. This action will discard current error_details and will create new ones if the finalization failed again.
-    example: finalized
-  payment_status:
-    type: string
-    enum:
-      - pending
-      - succeeded
-      - failed
-    description: |-
-      The status of the payment associated with the invoice. It can have one of the following values:
-      - `pending`: the payment is pending, waiting for payment processing in Stripe or when the invoice is emitted but users have not updated the payment status through the endpoint.
-      - `succeeded`: the payment of the invoice has been successfully processed.
-      - `failed`: the payment of the invoice has failed or encountered an error during processing.
-    example: succeeded
-  currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of the invoice issued.
-        example: "EUR"
-  fees_amount_cents:
-    type: integer
-    description: The total sum of fees amount in cents. It calculates the cumulative amount of all the fees associated with the invoice, providing a consolidated value.
-    example: 100
-  coupons_amount_cents:
-    type: integer
-    description: The total sum of all coupons discounted on the invoice. It calculates the cumulative discount amount applied by coupons, expressed in cents.
-    example: 10
-  credit_notes_amount_cents:
-    type: integer
-    description: The total sum of all credit notes discounted on the invoice. It calculates the cumulative discount amount applied by credit notes, expressed in cents.
-    example: 10
-  sub_total_excluding_taxes_amount_cents:
-    type: integer
-    description: |-
-      Subtotal amount, excluding taxes, expressed in cents.
-      This field depends on the version number. Here are the definitions based on the version:
-      - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
-      - Version 2: is equal to the `fees_amount_cents`.
-      - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
-    example: 100
-  taxes_amount_cents:
-    type: integer
-    description: The sum of tax amount associated with the invoice, expressed in cents.
-    example: 20
-  sub_total_including_taxes_amount_cents:
-    type: integer
-    description: |-
-      Subtotal amount, including taxes, expressed in cents.
-      This field depends on the version number. Here are the definitions based on the version:
-      - Version 1: is equal to the `total_amount_cents`.
-      - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
-      - Version 3 & 4: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
-    example: 120
-  prepaid_credit_amount_cents:
-    type: integer
-    description: The total sum of all prepaid credits discounted on the invoice. It calculates the cumulative discount amount applied by prepaid credits, expressed in cents.
-    example: 0
-  progressive_billing_credit_amount_cents:
-    type: integer
-    description: The usage already billed in previous invoices. Only apply to `progressive_billing` and `subscription` invoices.
-    example: 0
-  total_amount_cents:
-    type: integer
-    description: The sum of the amount and taxes amount on the invoice, expressed in cents. It calculates the total financial value of the invoice, including both the original amount and any applicable taxes.
-    example: 100
-  version_number:
-    type: integer
-    example: 3
-  file_url:
-    type: string
-    format: uri
-    description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
-    example: "https://getlago.com/invoice/file"
-  customer:
-    allOf:
-      - $ref: "./CustomerObject.yaml"
-      - description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
-  metadata:
-    type: array
-    items:
-      $ref: "./InvoiceMetadataObject.yaml"
-  applied_taxes:
-    type: array
-    items:
-      $ref: "./InvoiceAppliedTaxObject.yaml"
-  applied_usage_thresholds:
-    type: array
-    nullable: true
-    items:
-      $ref: "./AppliedUsageThresholdObject.yaml"
+allOf:
+  - $ref: './InvoiceBaseObject.yaml'
+  - type: object
+    properties:
+      customer:
+        allOf:
+          - $ref: "./CustomerObject.yaml"
+          - description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
+      metadata:
+        type: array
+        items:
+          $ref: "./InvoiceMetadataObject.yaml"
+      applied_taxes:
+        type: array
+        items:
+          $ref: "./InvoiceAppliedTaxObject.yaml"
+      applied_usage_thresholds:
+        type: array
+        nullable: true
+        items:
+          $ref: "./AppliedUsageThresholdObject.yaml"

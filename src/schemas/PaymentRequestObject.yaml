@@ -46,9 +46,9 @@ properties:
     description: The date and time when the payment request was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the payment request was initially created.
     example: "2022-04-29T08:59:51Z"
   customer:
-    $ref: "./CustomerObject.yaml"
+    $ref: "./CustomerBaseObject.yaml"
     description: The customer on which the payment request applies. It refers to the customer account or entity associated with the payment request.
   invoices:
     type: array
     items:
-      $ref: "./InvoiceObject.yaml"
+      $ref: "./InvoiceBaseObject.yaml"
