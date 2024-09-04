@@ -104,6 +104,18 @@ properties:
         example: 30
         description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
         nullable: true
+      finalize_zero_amount_invoice:
+        type: string
+        enum:
+          - inherit
+          - skip
+          - finalize
+        example: 'inherit'
+        description: |-
+          Specifies how invoices with a zero total amount should be handled:
+          - `inherit`: (Default) Follows the organization-level configuration.
+          - `finalize`: Invoices are issued and finalized even if the total amount is $0.
+          - `skip`: Invoices with a total amount of $0 are not finalized.
       billing_configuration:
         $ref: './CustomerBillingConfiguration.yaml'
       shipping_address:
