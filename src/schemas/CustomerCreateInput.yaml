@@ -123,9 +123,10 @@ properties:
               example: 'netsuite'
               description: |-
                 The integration type used for accounting and tax syncs.
-                Accepted values: `netsuite`.
+                Accepted values: `netsuite, anrok`.
               enum:
                 - netsuite
+                - anrok
             integration_code:
               type: string
               example: 'netsuite-eu-1'
