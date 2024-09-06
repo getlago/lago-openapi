@@ -5403,6 +5403,18 @@ components:
               example: 30
               description: 'The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.'
               nullable: true
+            finalize_zero_amount_invoice:
+              type: string
+              enum:
+                - inherit
+                - skip
+                - finalize
+              example: inherit
+              description: |-
+                Specifies how invoices with a zero total amount should be handled:
+                - `inherit`: (Default) Follows the organization-level configuration.
+                - `finalize`: Invoices are issued and finalized even if the total amount is zero.
+                - `skip`: Invoices with a total amount of zero are not finalized.
             billing_configuration:
               $ref: '#/components/schemas/CustomerBillingConfiguration'
             shipping_address:
@@ -5632,6 +5644,18 @@ components:
               format: date-time
               example: '2022-04-29T08:59:51Z'
               description: 'The date of the customer update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the customer object was updated'
+            finalize_zero_amount_invoice:
+              type: string
+              enum:
+                - inherit
+                - skip
+                - finalize
+              example: inherit
+              description: |-
+                Specifies how invoices with a zero total amount should be handled:
+                - `inherit`: (Default) Follows the organization-level configuration.
+                - `finalize`: Invoices are issued and finalized even if the total amount is zero.
+                - `skip`: Invoices with a total amount of zero are not finalized.
             billing_configuration:
               $ref: '#/components/schemas/CustomerBillingConfiguration'
             shipping_address:
@@ -7089,6 +7113,10 @@ components:
           description: List of default organization taxes
           items:
             $ref: '#/components/schemas/TaxObject'
+        finalize_zero_amount_invoice:
+          type: boolean
+          example: false
+          description: 'Indicates whether invoices with a zero total amount should be finalized. If set to true, zero amount invoices will be finalized. If set to false, zero amount invoices will not be finalized.'
     OrganizationUpdateInput:
       type: object
       required:
@@ -7198,6 +7226,10 @@ components:
                   - credit_note.created
             billing_configuration:
               $ref: '#/components/schemas/OrganizationBillingConfiguration'
+            finalize_zero_amount_invoice:
+              type: boolean
+              example: false
+              description: 'Determines whether invoices with a zero total amount should be finalized. If set to true, zero amount invoices will be finalized. If set to false, zero amount invoices will not be finalized.'
     OverdueBalanceObject:
       type: object
       required:
