@@ -63,6 +63,26 @@ properties:
         example: 'Gavin Belson'
         description: 'The full name of the customer'
         nullable: true
+      firstname:
+        type: string
+        example: 'Gavin'
+        description: 'First name of the customer'
+        nullable: true
+      lastname:
+        type: string
+        example: 'Belson'
+        description: 'Last name of the customer'
+        nullable: true
+      customer_type:
+        type: string
+        enum:
+          - company
+          - individual
+        nullable: true
+        description: |-
+          The type of the customer. It can have one of the following values:
+          - `company`: the customer is a company.
+          - `individual`: the customer is an individual.
       phone:
         type: string
         example: '1-171-883-3711 x245'
