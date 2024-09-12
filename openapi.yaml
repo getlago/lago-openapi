@@ -1021,8 +1021,6 @@ paths:
                         description: An embeddable link for displaying a customer portal
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   '/customers/{external_customer_id}/current_usage':
