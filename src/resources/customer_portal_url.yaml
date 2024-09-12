@@ -13,10 +13,10 @@ get:
       required: true
       schema:
         type: string
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
   operationId: getCustomerPortalUrl
   responses:
-    '200':
+    "200":
       description: Portal URL
       content:
         application/json:
@@ -32,11 +32,9 @@ get:
                 properties:
                   portal_url:
                     type: string
-                    example: 'https://app.lago.com/customer-portal/1234567890'
+                    example: "https://app.lago.com/customer-portal/1234567890"
                     description: An embeddable link for displaying a customer portal
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '403':
-      $ref: '../responses/Forbidden.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
