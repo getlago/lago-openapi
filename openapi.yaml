@@ -8982,7 +8982,7 @@ components:
         credits_ongoing_balance:
           type: string
           pattern: '^[0-9]+.?[0-9]*$'
-          description: 'The ongoing wallet balance expressed in credits. This represents the `credit_balance` minus the `credits_ongoing_usage_balance`, showing the real time balance after accounting for current usage including taxes.'
+          description: 'The ongoing wallet balance expressed in credits. This represents the `credits_balance` minus the `credits_ongoing_usage_balance`, showing the real time balance after accounting for current usage including taxes.'
           example: '8.0'
         credits_ongoing_usage_balance:
           type: string
