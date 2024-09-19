@@ -8831,11 +8831,11 @@ components:
         credits_balance:
           type: string
           pattern: '^[0-9]+.?[0-9]*$'
-          description: The current wallet balance expressed in credits.
+          description: The current wallet balance expressed in credits. This reflects the available balance after all transactions are settled.
           example: '28.0'
         balance_cents:
           type: integer
-          description: The current wallet balance expressed in cents.
+          description: The current wallet balance expressed in cents. This reflects the available balance after all transactions are settled.
           example: 1000
         consumed_credits:
           type: string
@@ -8973,21 +8973,21 @@ components:
                     value: another_value
         ongoing_balance_cents:
           type: integer
-          description: The wallet ongoing balance expressed in cents.
+          description: 'The ongoing wallet balance expressed in cents. This represents the `balance_cents` minus the `ongoing_usage_balance_cents`, showing the real time balance after accounting for current usage including taxes.'
           example: 800
         ongoing_usage_balance_cents:
           type: integer
-          description: The wallet ongoing usage balance expressed in cents.
+          description: 'The ongoing usage balance of the wallet, expressed in cents. This reflects all current usage including taxes.'
           example: 200
         credits_ongoing_balance:
           type: string
           pattern: '^[0-9]+.?[0-9]*$'
-          description: The wallet ongoing balance expressed in credits.
+          description: 'The ongoing wallet balance expressed in credits. This represents the `credit_balance` minus the `credits_ongoing_usage_balance`, showing the real time balance after accounting for current usage including taxes.'
           example: '8.0'
         credits_ongoing_usage_balance:
           type: string
           pattern: '^[0-9]+.?[0-9]*$'
-          description: The wallet ongoing usage balance expressed in credits.
+          description: 'The ongoing usage balance of the wallet, expressed in credits. This reflects all current usage including taxes.'
           example: '2.0'
     WalletsPaginated:
       type: object

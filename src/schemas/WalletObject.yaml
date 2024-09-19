@@ -18,82 +18,82 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_customer_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   external_customer_id:
     type: string
     description: The customer external unique identifier (provided by your own application)
-    example: 'hooli_1234'
+    example: "hooli_1234"
   status:
     type: string
     enum:
       - active
       - terminated
     description: The status of the wallet. Possible values are `active` or `terminated`.
-    example: 'active'
+    example: "active"
   currency:
     allOf:
-      - $ref: './Currency.yaml'
+      - $ref: "./Currency.yaml"
       - description: The currency of the wallet.
-        example: 'USD'
+        example: "USD"
   name:
     type: string
     description: The name of the wallet.
-    example: 'Prepaid'
+    example: "Prepaid"
   rate_amount:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
+    pattern: "^[0-9]+.?[0-9]*$"
     description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
-    example: '1.5'
+    example: "1.5"
   credits_balance:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
-    description: The current wallet balance expressed in credits.
-    example: '28.0'
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: The current wallet balance expressed in credits. This reflects the available balance after all transactions are settled.
+    example: "28.0"
   balance_cents:
     type: integer
-    description: The current wallet balance expressed in cents.
+    description: The current wallet balance expressed in cents. This reflects the available balance after all transactions are settled.
     example: 1000
   consumed_credits:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
+    pattern: "^[0-9]+.?[0-9]*$"
     description: The number of consumed credits.
-    example: '2.0'
+    example: "2.0"
   created_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The date of the wallet creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
   expiration_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
     example: null
   last_balance_sync_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: The date and time of the last balance top-up. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
   last_consumed_credit_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: The date and time of the last credits consumption. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
   terminated_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     nullable: true
     description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-    example: '2022-09-14T16:35:31Z'
+    example: "2022-09-14T16:35:31Z"
   invoice_requires_successful_payment:
     type: boolean
     description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
@@ -102,22 +102,22 @@ properties:
     description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
     type: array
     items:
-      $ref: './WalletRecurringTransactionRule.yaml'
+      $ref: "./WalletRecurringTransactionRule.yaml"
   ongoing_balance_cents:
     type: integer
-    description: The wallet ongoing balance expressed in cents.
+    description: The ongoing wallet balance expressed in cents. This represents the `balance_cents` minus the `ongoing_usage_balance_cents`, showing the real time balance after accounting for current usage including taxes.
     example: 800
   ongoing_usage_balance_cents:
     type: integer
-    description: The wallet ongoing usage balance expressed in cents.
+    description: The ongoing usage balance of the wallet, expressed in cents. This reflects all current usage including taxes.
     example: 200
   credits_ongoing_balance:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
-    description: The wallet ongoing balance expressed in credits.
-    example: '8.0'
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: The ongoing wallet balance expressed in credits. This represents the `credit_balance` minus the `credits_ongoing_usage_balance`, showing the real time balance after accounting for current usage including taxes.
+    example: "8.0"
   credits_ongoing_usage_balance:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
-    description: The wallet ongoing usage balance expressed in credits.
-    example: '2.0'
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: The ongoing usage balance of the wallet, expressed in credits. This reflects all current usage including taxes.
+    example: "2.0"
