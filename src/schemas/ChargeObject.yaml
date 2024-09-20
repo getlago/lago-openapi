@@ -31,7 +31,7 @@ properties:
     example: "2022-09-14T16:35:31Z"
   charge_model:
     type: string
-    description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage`, `package`, `percentage` or `volume`.
+    description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage`, `package`, `percentage`, `volume` or `dynamic`.
     enum:
       - standard
       - graduated
@@ -39,6 +39,7 @@ properties:
       - package
       - percentage
       - volume
+      - dynamic
   pay_in_advance:
     type: boolean
     description: This field determines the billing timing for this specific usage-based charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to `false`, the charge is due and invoiced at the end of each billing period.
