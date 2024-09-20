@@ -5869,6 +5869,11 @@ components:
                 This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
                 If this timestamp is not provided, the API will automatically set it to the time of event reception.
                 You can also provide miliseconds precision by appending decimals to the timestamp.
+            precise_total_amount_cents:
+              type: string
+              nullable: true
+              example: '1234.56'
+              description: The precise total amount in cents with precision used by the `dynamic` pricing model to compute the usage amount.
             properties:
               type: object
               description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
@@ -5915,6 +5920,11 @@ components:
           format: date-time
           example: '2022-04-29T08:59:51.123Z'
           description: 'This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.'
+        precise_total_amount_cents:
+          type: string
+          nullable: true
+          example: '1234.56'
+          description: The precise total amount that was sent in the event payload. This filed is used by the `dynamic` pricing model.
         properties:
           type: object
           description: 'This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.'
