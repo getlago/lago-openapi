@@ -1,0 +1,20 @@
+type: object
+required:
+  - amount_cents
+  - completion_ratio
+  - reached_at
+properties:
+  amount_cents:
+    type: integer
+    description: The usage threshold amount in cents.
+    example: 100
+  completion_ratio:
+    type: number
+    description: The completion ratio of the usage threshold.
+    example: 0.5
+  reached_at:
+    type: string
+    format: date-time
+    description: The date and time when the usage threshold was reached. The date and time must be in ISO 8601 format.
+    example: "2024-01-01T00:00:00Z"
+    nullable: true

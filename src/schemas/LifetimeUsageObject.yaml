@@ -1,0 +1,52 @@
+type: object
+required:
+  - lago_id
+  - lago_subscription_id
+  - external_subscription_id
+  - external_historical_usage_amount_cents
+  - invoiced_usage_amount_cents
+  - current_usage_amount_cents
+  - from_datetime
+  - to_datetime
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    description: Unique identifier assigned to the lifetime usage record within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the lifetime usage record within the Lago system
+  lago_subscription_id:
+    type: string
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    description: Unique identifier assigned to the subscription record within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription record within the Lago system
+  external_subscription_id:
+    type: string
+    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+    description: The subscription external unique identifier (provided by your own application).
+  external_historical_usage_amount_cents:
+    type: integer
+    example: 100
+    description: The historical usage amount in cents for the subscription (provided by your own application).
+  invoiced_usage_amount_cents:
+    type: integer
+    example: 100
+    description: The total invoiced usage amount in cents for the subscription.
+  current_usage_amount_cents:
+    type: integer
+    example: 100
+    description: The current usage amount in cents for the subscription on the current billing period.
+  from_datetime:
+    type: string
+    format: date-time
+    example: "2024-01-01T00:00:00Z"
+    description: The recording start date and time of the subscription lifetime usage. The date and time must be in ISO 8601 format.
+  to_datetime:
+    type: string
+    format: date-time
+    example: "2024-12-31T23:59:59Z"
+    description: The recording end date and time of the subscription lifetime usage. The date and time must be in ISO 8601 format.
+  usage_thresholds:
+    type: array
+    description: Array of usage thresholds attached to the subscription's plan.
+    items:
+      $ref: "./LifetimeUsageThresholdObject.yaml"

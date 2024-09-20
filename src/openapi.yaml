@@ -198,6 +198,8 @@ paths:
     $ref: "./resources/subscriptions.yaml"
   /subscriptions/{external_id}:
     $ref: "./resources/subscription.yaml"
+  /subscriptions/{external_id}/lifetime_usage:
+    $ref: "./resources/subscription_lifetime_usage.yaml"
   /taxes:
     $ref: "./resources/taxes.yaml"
   /taxes/{code}:
