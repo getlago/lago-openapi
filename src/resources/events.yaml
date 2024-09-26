@@ -9,21 +9,21 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/EventInput.yaml'
+          $ref: "../schemas/EventInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Event
       content:
         application/json:
           schema:
-            $ref: '../schemas/Event.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/Event.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
 
 get:
   tags:
@@ -32,9 +32,9 @@ get:
   description: This endpoint is used for retrievign all events.
   operationId: findAllEvents
   parameters:
-    - $ref: '../parameters/page.yaml'
-    - $ref: '../parameters/per_page.yaml'
-    - $ref: '../parameters/external_subscription_id.yaml'
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - $ref: "../parameters/external_subscription_id.yaml"
     - name: code
       in: query
       description: Filter events by its code.
@@ -62,11 +62,11 @@ get:
         format: "date-time"
         example: "2022-08-08T00:00:00Z"
   responses:
-    '200':
+    "200":
       description: Events
       content:
         application/json:
           schema:
-            $ref: '../schemas/EventsPaginated.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
+            $ref: "../schemas/EventsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
