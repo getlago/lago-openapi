@@ -1,0 +1,11 @@
+type: object
+required:
+  - events
+  - meta
+properties:
+  events:
+    type: array
+    items:
+      $ref: './EventObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

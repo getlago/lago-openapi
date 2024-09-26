@@ -24,3 +24,49 @@ post:
       $ref: '../responses/Unauthorized.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
+
+get:
+  tags:
+    - events 
+  summary: List all events
+  description: This endpoint is used for retrievign all events.
+  operationId: findAllEvents
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - $ref: '../parameters/external_subscription_id.yaml'
+    - name: code
+      in: query
+      description: Filter events by its code.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "event-123"
+    - name: timestamp_from
+      in: query
+      description: Filter events by timestamp starting from a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2022-08-08T00:00:00Z"
+    - name: timestamp_to
+      in: query
+      description: Filter events by timestamp up to a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2022-08-08T00:00:00Z"
+  responses:
+    '200':
+      description: Events
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/EventsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
