@@ -5846,6 +5846,7 @@ components:
           type: object
           required:
             - transaction_id
+            - external_subscription_id
             - code
           properties:
             transaction_id:
@@ -5855,7 +5856,7 @@ components:
             external_subscription_id:
               type: string
               example: sub_1234567890
-              description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
+              description: The unique identifier of the subscription in your application. This field is mandatory in order to link events to the correct customer subscription.
             code:
               type: string
               example: storage
