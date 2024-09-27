@@ -4,6 +4,12 @@ Open API specification for Lago project
 
 [![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-purple)](https://github.com/getlago/lago-openapi/blob/main/LICENSE)
 
+## Current Releases
+
+| Project            | Release Badge                                                                                       |
+|--------------------|-----------------------------------------------------------------------------------------------------|
+| **Lago**           | [![Lago Release](https://img.shields.io/github/v/release/getlago/lago)](https://github.com/getlago/lago/releases) |
+| **Lago OpenAPI**     | [![Lago OpenAPI Release](https://img.shields.io/github/v/release/getlago/lago-openapi)](https://github.com/getlago/lago-openapi/releases) |
 
 ## Usage
 
