@@ -78,7 +78,7 @@ properties:
               example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             charge_model:
               type: string
-              description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage`, `package`, `percentage` or `volume`.
+              description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage`, `package`, `percentage`, `volume` or `dynamic`.
               enum:
                 - standard
                 - graduated
@@ -86,6 +86,7 @@ properties:
                 - package
                 - percentage
                 - volume
+                - dynamic
               example: "standard"
             pay_in_advance:
               type: boolean
