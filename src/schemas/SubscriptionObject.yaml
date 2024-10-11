@@ -12,21 +12,21 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription's record within the Lago system
   external_id:
     type: string
-    example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
     description: The subscription external unique identifier (provided by your own application).
   lago_customer_id:
     type: string
-    format: 'uuid'
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
   external_customer_id:
     type: string
-    example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
     description: The customer external unique identifier (provided by your own application).
   billing_time:
     type: string
@@ -37,12 +37,12 @@ properties:
       - anniversary
   name:
     type: string
-    example: 'Repository A'
+    example: "Repository A"
     description: The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.
     nullable: true
   plan_code:
     type: string
-    example: 'premium'
+    example: "premium"
     description: The unique code representing the plan to be attached to the customer. This code must correspond to the `code` property of one of the active plans.
   status:
     type: string
@@ -60,35 +60,35 @@ properties:
       - canceled
   created_at:
     type: string
-    format: 'date-time'
-    example: '2022-08-08T00:00:00Z'
+    format: "date-time"
+    example: "2022-08-08T00:00:00Z"
     description: The creation date of the subscription, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). This date provides a timestamp indicating when the subscription was initially created.
   canceled_at:
     type: string
-    format: 'date-time'
-    example: '2022-09-14T16:35:31Z'
+    format: "date-time"
+    example: "2022-09-14T16:35:31Z"
     description: The cancellation date of the subscription. This field is not null when the subscription is `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
     nullable: true
   started_at:
     type: string
-    format: 'date-time'
-    example: '2022-08-08T00:00:00Z'
+    format: "date-time"
+    example: "2022-08-08T00:00:00Z"
     description: The effective start date of the subscription. This field can be null if the subscription is `pending` or `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
     nullable: true
   ending_at:
     type: string
-    format: 'date-time'
-    example: '2022-10-08T00:00:00Z'
+    format: "date-time"
+    example: "2022-10-08T00:00:00Z"
     description: The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).
   subscription_at:
     type: string
-    format: 'date-time'
-    example: '2022-08-08T00:00:00Z'
+    format: "date-time"
+    example: "2022-08-08T00:00:00Z"
     description: The anniversary date and time of the initial subscription. This date serves as the basis for billing subscriptions with `anniversary` billing time. The `anniversary_date` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
   terminated_at:
     type: string
-    format: 'date-time'
-    example: '2022-09-14T16:35:31Z'
+    format: "date-time"
+    example: "2022-09-14T16:35:31Z"
     description: The termination date of the subscription. This field is not null when the subscription is `terminated`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC)
     nullable: true
   previous_plan_code:
@@ -103,13 +103,25 @@ properties:
     nullable: true
   downgrade_plan_date:
     type: string
-    format: 'date'
-    example: '2022-04-30'
+    format: "date"
+    example: "2022-04-30"
     description: The date when the plan will be downgraded, represented in ISO 8601 date format.
     nullable: true
   trial_ended_at:
     type: string
-    format: 'date-time'
-    example: '2022-08-08T00:00:00Z'
+    format: "date-time"
+    example: "2022-08-08T00:00:00Z"
     description: The date when the free trial is ended, represented in ISO 8601 date format.
+    nullable: true
+  current_billing_period_started_at:
+    type: string
+    format: "date-time"
+    example: "2022-08-08T00:00:00Z"
+    description: The date and time when the current billing period started, represented in ISO 8601 date format.
+    nullable: true
+  current_billing_period_ending_at:
+    type: string
+    format: "date-time"
+    example: "2022-09-08T00:00:00Z"
+    description: The date and time when the current billing period ends, represented in ISO 8601 date format.
     nullable: true

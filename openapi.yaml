@@ -8501,6 +8501,18 @@ components:
           example: '2022-08-08T00:00:00Z'
           description: 'The date when the free trial is ended, represented in ISO 8601 date format.'
           nullable: true
+        current_billing_period_started_at:
+          type: string
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: 'The date and time when the current billing period started, represented in ISO 8601 date format.'
+          nullable: true
+        current_billing_period_ending_at:
+          type: string
+          format: date-time
+          example: '2022-09-08T00:00:00Z'
+          description: 'The date and time when the current billing period ends, represented in ISO 8601 date format.'
+          nullable: true
     SubscriptionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
