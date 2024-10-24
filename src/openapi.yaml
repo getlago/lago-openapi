@@ -16,9 +16,9 @@ servers:
   - url: https://api.{region}getlago.com/api/v1
     variables:
       region:
-        default: ''
+        default: ""
         enum:
-          - ''
+          - ""
           - eu.
 security:
   - bearerAuth: []
@@ -124,6 +124,8 @@ paths:
     $ref: "./resources/applied_coupons.yaml"
   /billable_metrics:
     $ref: "./resources/billable_metrics.yaml"
+  /billable_metrics/evaluate_expression:
+    $ref: "./resources/billable_metric_evaluate_expression.yaml"
   /billable_metrics/{code}:
     $ref: "./resources/billable_metric.yaml"
   /coupons:

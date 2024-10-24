@@ -489,6 +489,33 @@ paths:
                 $ref: '#/components/schemas/BillableMetricsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /billable_metrics/evaluate_expression:
+    post:
+      tags:
+        - billable_metrics
+      summary: Evaluate an expression for a billable metric
+      description: Evaluate an expression for a billable metric creation by providing the expression and test data
+      operationId: evaluateBillableMetricExpression
+      requestBody:
+        description: Billable metric expression evaluation payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillableMetricEvaluateExpressionInput'
+        required: true
+      responses:
+        '200':
+          description: Billable metric expression evaluation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetricEvaluateExpressionResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   '/billable_metrics/{code}':
     parameters:
       - name: code
@@ -3520,6 +3547,60 @@ components:
                 - name
                 - code
                 - aggregation_type
+    BillableMetricEvaluateExpressionInput:
+      type: object
+      required:
+        - expression
+        - event
+      properties:
+        expression:
+          type: string
+          example: round((ended_at - started_at) * units)
+          description: Expression used to calculate the event units. The expression is evalutated using the provided event.
+        event:
+          type: object
+          required:
+            - code
+            - properties
+          properties:
+            code:
+              type: string
+              example: storage
+              description: The code that identifies a targeted billable metric.
+            timestamp:
+              anyOf:
+                - type: integer
+                - type: string
+              example: '1651240791'
+              description: |
+                This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
+                If this timestamp is not provided, the API will automatically set it to the time of event reception.
+            properties:
+              type: object
+              description: This field represents additional properties associated with the event. They can be used when evaluating the expression.
+              additionalProperties:
+                oneOf:
+                  - type: string
+                  - type: integer
+                  - type: number
+              example:
+                gb: 10
+    BillableMetricEvaluateExpressionResult:
+      type: object
+      required:
+        - expression_result
+      properties:
+        expression_result:
+          type: object
+          required:
+            - value
+          properties:
+            value:
+              anyOf:
+                - type: string
+                - type: number
+              example: 1
+              description: Result of evaluating the expression
     BillableMetricFilterInput:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.

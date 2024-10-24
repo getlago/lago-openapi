@@ -1,0 +1,15 @@
+type: object
+required:
+  - expression_result
+properties:
+  expression_result:
+    type: object
+    required:
+      - value
+    properties:
+      value:
+        anyOf:
+          - type: string
+          - type: number
+        example: 1.0
+        description: "Result of evaluating the expression"
