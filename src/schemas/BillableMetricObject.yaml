@@ -42,6 +42,10 @@ properties:
     format: "date-time"
     example: "2022-09-14T16:35:31Z"
     description: "Creation date of the billable metric."
+  expression:
+    type: string
+    example: "round((ended_at - started_at) * units)"
+    description: "Expression used to calculate the event units. The expression is evalutated for each event and the result is then used to calculate the total aggregated units."
   field_name:
     type: string
     example: "gb"
