@@ -25,7 +25,10 @@ properties:
   expression:
     type: string
     example: "round((ended_at - started_at) * units)"
-    description: "Expression used to calculate the event units. The expression is evalutated for each event and the result is then used to calculate the total aggregated units."
+    description: |
+      Expression used to calculate the event units. The expression is evalutated for each event and the result is then used to calculate the total aggregated units.
+      Accepted function are `ceil`, `concat` and `round` as well as `+`, `-`, `\` and `*` operations.
+      Round is accepting an optional second parameter to specify the number of decimal.
     nullable: true
   field_name:
     type: string

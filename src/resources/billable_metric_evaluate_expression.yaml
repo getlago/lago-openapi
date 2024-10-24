@@ -1,0 +1,26 @@
+post:
+  tags:
+    - billable_metrics
+  summary: Evaluate an expression for a billable metric
+  description: Evaluate an expression for a billable metric creation by providing the expression and test data
+  operationId: evaluateBillableMetricExpression
+  requestBody:
+    description: Billable metric expression evaluation payload
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/BillableMetricEvaluateExpressionInput.yaml"
+    required: true
+  responses:
+    "200":
+      description: Billable metric expression evaluation result
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/BillableMetricEvaluateExpressionResult.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
