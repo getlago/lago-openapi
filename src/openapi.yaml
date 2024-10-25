@@ -13,13 +13,10 @@ externalDocs:
   description: Lago Github
   url: https://github.com/getlago
 servers:
-  - url: https://api{region}getlago.com/api/v1
-    variables:
-      region:
-        default: .
-        enum:
-          - .
-          - .eu.
+  - url: https://api.getlago.com/api/v1
+    description: US Lago cluster
+  - url: https://api.eu.getlago.com/api/v1
+    description: EU Lagos cluster
 security:
   - bearerAuth: []
 tags:
