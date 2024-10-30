@@ -8086,6 +8086,10 @@ components:
               description: List of usage thresholds to apply to the plan.
               items:
                 $ref: '#/components/schemas/UsageThresholdInput'
+            cascade_updates:
+              type: boolean
+              description: "This field determines whether the changes made to the plan should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself."
+              example: true
     PlanObject:
       type: object
       required:
