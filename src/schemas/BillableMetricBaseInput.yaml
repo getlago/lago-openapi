@@ -30,6 +30,20 @@ properties:
       Accepted function are `ceil`, `concat` and `round` as well as `+`, `-`, `\` and `*` operations.
       Round is accepting an optional second parameter to specify the number of decimal.
     nullable: true
+  rounding_function:
+    type: string
+    enum:
+      - ceil
+      - floor
+      - round
+    nullable: true
+    example: "round"
+    description: "Refers to the numeric value or mathematical expression that will be rounded based on the calculated number of billing units. Possible values are `round`, `ceil` and `floor`."
+  rounding_precision:
+    type: integer
+    example: 2
+    nullable: true
+    description: "Specifies the number of decimal places to which the `rounding_function` will be rounded. It can be a positive or negative value."
   field_name:
     type: string
     example: "gb"
