@@ -24,10 +24,9 @@ properties:
     description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.
     example: 100
   amount_currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of the payment request.
-        example: "EUR"
+    $ref: "./Currency.yaml"
+    description: The currency of the payment request.
+    example: "EUR"
   payment_status:
     type: string
     enum:

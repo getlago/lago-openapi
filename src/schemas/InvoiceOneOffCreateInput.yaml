@@ -13,10 +13,9 @@ properties:
         description: Unique identifier assigned to the customer in your application.
         example: 'hooli_1234'
       currency:
-        allOf:
-          - $ref: './Currency.yaml'
-          - description: The currency of the invoice.
-            example: 'EUR'
+        $ref: './Currency.yaml'
+        description: The currency of the invoice.
+        example: 'EUR'
       fees:
         type: array
         items:

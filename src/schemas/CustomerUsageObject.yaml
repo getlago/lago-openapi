@@ -30,10 +30,9 @@ properties:
     example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
     description: A unique identifier associated with the invoice related to this particular usage record.
   currency:
-    allOf:
-      - $ref: './Currency.yaml'
-      - description: The currency of the customer's current usage.
-        example: 'EUR'
+    $ref: './Currency.yaml'
+    description: The currency of the customer's current usage.
+    example: 'EUR'
   amount_cents:
     type: integer
     description: The amount in cents, tax excluded.

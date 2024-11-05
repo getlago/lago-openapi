@@ -38,10 +38,9 @@ properties:
     description: The status of the wallet. Possible values are `active` or `terminated`.
     example: "active"
   currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of the wallet.
-        example: "USD"
+    $ref: "./Currency.yaml"
+    description: The currency of the wallet.
+    example: "USD"
   name:
     type: string
     description: The name of the wallet.

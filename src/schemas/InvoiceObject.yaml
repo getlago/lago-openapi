@@ -3,9 +3,8 @@ allOf:
   - type: object
     properties:
       customer:
-        allOf:
-          - $ref: "./CustomerObject.yaml"
-          - description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
+        $ref: "./CustomerObject.yaml"
+        description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
       metadata:
         type: array
         items:

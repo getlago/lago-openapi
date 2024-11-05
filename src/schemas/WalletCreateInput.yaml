@@ -17,10 +17,9 @@ properties:
         description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
         example: '1.5'
       currency:
-        allOf:
-          - $ref: './Currency.yaml'
-          - description: The currency of the wallet.
-            example: 'USD'
+        $ref: './Currency.yaml'
+        description: The currency of the wallet.
+        example: 'USD'
       paid_credits:
         type: string
         pattern: '^[0-9]+.?[0-9]*$'

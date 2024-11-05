@@ -3,9 +3,8 @@ required:
   - coupon
 properties:
   coupon:
-    allOf:
-    - $ref: './CouponBaseInput.yaml'
-    - required:
+    $ref: './CouponBaseInput.yaml'
+    required:
       - name
       - code
       - coupon_type

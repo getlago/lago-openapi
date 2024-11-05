@@ -17,11 +17,10 @@ properties:
     description: The city of the customer's billing address
     nullable: true
   country:
-    allOf:
-    - $ref: './Country.yaml'
-    - nullable: true
-      description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-      example: 'US'
+    $ref: './Country.yaml'
+    nullable: true
+    description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+    example: 'US'
   state:
     type: string
     example: 'CA'

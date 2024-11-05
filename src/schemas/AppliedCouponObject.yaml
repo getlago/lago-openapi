@@ -55,11 +55,10 @@ properties:
     description: The remaining amount in cents for a `fixed_amount` coupon with a frequency set to `once`. This field indicates the remaining balance or value that can still be utilized from the coupon.
     example: 50
   amount_currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - nullable: true
-        description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-        example: "EUR"
+    $ref: "./Currency.yaml"
+    nullable: true
+    description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+    example: "EUR"
   percentage_rate:
     type: string
     pattern: "^[0-9]+.?[0-9]*$"

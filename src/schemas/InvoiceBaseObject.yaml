@@ -91,10 +91,9 @@ properties:
       - `failed`: the payment of the invoice has failed or encountered an error during processing.
     example: succeeded
   currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of the invoice issued.
-        example: "EUR"
+    $ref: "./Currency.yaml"
+    description: The currency of the invoice issued.
+    example: "EUR"
   fees_amount_cents:
     type: integer
     description: The total sum of fees amount in cents. It calculates the cumulative amount of all the fees associated with the invoice, providing a consolidated value.

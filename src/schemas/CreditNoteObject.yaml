@@ -93,10 +93,9 @@ properties:
     description: The description of the credit note.
     example: 'Free text'
   currency:
-    allOf:
-      - $ref: './Currency.yaml'
-      - description: The currency of the credit note.
-        example: 'EUR'
+    $ref: './Currency.yaml'
+    description: The currency of the credit note.
+    example: 'EUR'
   total_amount_cents:
     type: integer
     description: The total amount of the credit note, expressed in cents.
