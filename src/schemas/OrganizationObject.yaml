@@ -38,16 +38,14 @@ properties:
     description: The array containing your webhooks URLs.
     nullable: true
   country:
-    allOf:
-    - $ref: './Country.yaml'
-    - nullable: true
-      description: The country of your organization.
-      example: 'US'
+    $ref: './Country.yaml'
+    nullable: true
+    description: The country of your organization.
+    example: 'US'
   default_currency:
-    allOf:
-    - $ref: './Currency.yaml'
-    - description: The default currency of an organization.
-      example: 'USD'
+    $ref: './Currency.yaml'
+    description: The default currency of an organization.
+    example: 'USD'
   address_line1:
     type: string
     example: '100 Brex Street'
@@ -116,10 +114,9 @@ properties:
     description: The tax identification number of your organization.
     nullable: true
   timezone:
-    allOf:
-      - $ref: './Timezone.yaml'
-      - description: Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone.
-        example: 'America/New_York'
+    $ref: './Timezone.yaml'
+    description: Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone.
+    example: 'America/New_York'
   billing_configuration:
     $ref: './OrganizationBillingConfiguration.yaml'
   taxes:

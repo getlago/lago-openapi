@@ -22,10 +22,9 @@ properties:
     example: 123
     description: The amount in cents, tax excluded, consumed by the customer for a specific charge item.
   amount_currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of a usage item consumed by the customer.
-        example: "EUR"
+    $ref: "./Currency.yaml"
+    description: The currency of a usage item consumed by the customer.
+    example: "EUR"
   charge:
     type: object
     description: Object listing all the properties for a specific charge item.

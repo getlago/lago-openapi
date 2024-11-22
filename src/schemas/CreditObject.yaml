@@ -17,10 +17,9 @@ properties:
     description: The amount of credit associated with the invoice, expressed in cents.
     example: 1200
   amount_currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of the credit.
-        example: "EUR"
+    $ref: "./Currency.yaml"
+    description: The currency of the credit.
+    example: "EUR"
   before_taxes:
     type: boolean
     description: Indicates whether the credit is applied on the amount before taxes (coupons) or after taxes (credit notes). This flag helps determine the order in which credits are applied to the invoice calculation

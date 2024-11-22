@@ -27,16 +27,14 @@ properties:
         description: The city of the customer's billing address
         nullable: true
       country:
-        allOf:
-        - $ref: './Country.yaml'
-        - nullable: true
-          description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-          example: 'US'
+        $ref: './Country.yaml'
+        nullable: true
+        description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+        example: 'US'
       currency:
-        allOf:
-          - $ref: './Currency.yaml'
-          - description: Currency of the customer. Format must be ISO 4217
-            nullable: true
+        $ref: './Currency.yaml'
+        description: Currency of the customer. Format must be ISO 4217
+        nullable: true
       email:
         type: string
         format: 'email'
@@ -105,10 +103,9 @@ properties:
         description: The tax identification number of the customer
         nullable: true
       timezone:
-        allOf:
-          - $ref: './Timezone.yaml'
-          - description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
-            nullable: true
+        $ref: './Timezone.yaml'
+        description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
+        nullable: true
       url:
         type: string
         example: 'http://hooli.com'

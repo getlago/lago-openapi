@@ -24,7 +24,6 @@ properties:
     description: The total amount of revenue for a period, expressed in cents.
     example: 50000
   currency:
-    allOf:
-      - $ref: './Currency.yaml'
-      - description: The currency of revenue analytics. Format must be ISO 4217.
-        example: 'USD'
+    $ref: './Currency.yaml'
+    description: The currency of revenue analytics. Format must be ISO 4217.
+    example: 'USD'

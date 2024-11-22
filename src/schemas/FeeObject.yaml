@@ -88,10 +88,9 @@ properties:
     description: The cost of this specific fee, including any applicable taxes, with precision.
     example: "1.0212"
   amount_currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
-        example: "EUR"
+    $ref: "./Currency.yaml"
+    description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
+    example: "EUR"
   taxes_amount_cents:
     type: integer
     description: The cost of the tax associated with this specific fee.
@@ -117,10 +116,9 @@ properties:
     description: The cost of this specific fee, including any applicable taxes.
     example: 120
   total_amount_currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of this specific fee, including any applicable taxes.
-        example: "EUR"
+    $ref: "./Currency.yaml"
+    description: The currency of this specific fee, including any applicable taxes.
+    example: "EUR"
   events_count:
     type: integer
     description: The number of events that have been sent and used to charge the customer. This field indicates the count or quantity of events that have been processed and considered in the charging process.
@@ -184,9 +182,8 @@ properties:
     description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge` and the payment for the fee is made in advance (`pay_in_advance` is set to `true`).
     example: "transaction_1234567890"
   amount_details:
-    allOf:
-      - $ref: "./FeeAmountDetails.yaml"
-      - description: List of all unit amount details for calculating the fee.
+    $ref: "./FeeAmountDetails.yaml"
+    description: List of all unit amount details for calculating the fee.
   item:
     type: object
     description: Item attached to the fee

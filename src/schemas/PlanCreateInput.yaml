@@ -35,10 +35,9 @@ properties:
         description: The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.
         example: 10000
       amount_currency:
-        allOf:
-          - $ref: "./Currency.yaml"
-          - description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
-            example: "USD"
+        $ref: "./Currency.yaml"
+        description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
+        example: "USD"
       trial_period:
         type: number
         description: The duration in days during which the base cost of the plan is offered for free.
@@ -122,9 +121,8 @@ properties:
               description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
               example: 0
             properties:
-              allOf:
-                - $ref: "./ChargeProperties.yaml"
-                - description: List of all thresholds utilized for calculating the charge.
+              $ref: "./ChargeProperties.yaml"
+              description: List of all thresholds utilized for calculating the charge.
             filters:
               type: array
               description: List of filters used to apply differentiated pricing based on additional event properties.

@@ -15,11 +15,9 @@ properties:
     description: The credit note's item amount, expressed in cents.
     example: 100
   amount_currency:
-    allOf:
-      - $ref: './Currency.yaml'
-      - description: The credit note's item currency.
-        example: 'EUR'
+    $ref: './Currency.yaml'
+    description: The credit note's item currency.
+    example: 'EUR'
   fee:
-    allOf:
-      - $ref: './FeeObject.yaml'
-      - description: The fee object related to the credit note item.
+    $ref: './FeeObject.yaml'
+    description: The fee object related to the credit note item.

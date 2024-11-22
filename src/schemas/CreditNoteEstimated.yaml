@@ -26,10 +26,9 @@ properties:
         description: The invoice unique number, related to the credit note.
         example: 'LAG-1234'
       currency:
-        allOf:
-          - $ref: './Currency.yaml'
-          - description: The currency of the credit note.
-            example: 'EUR'
+        $ref: './Currency.yaml'
+        description: The currency of the credit note.
+        example: 'EUR'
       taxes_amount_cents:
         type: integer
         description: The tax amount of the credit note, expressed in cents.
@@ -107,7 +106,6 @@ properties:
               description: Amount of the tax
               example: 2000
             amount_currency:
-              allOf:
-                - $ref: './Currency.yaml'
-                - description: Currency of the tax
-                  example: 'USD'
+              $ref: './Currency.yaml'
+              description: Currency of the tax
+              example: 'USD'

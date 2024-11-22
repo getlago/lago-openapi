@@ -2923,10 +2923,9 @@ components:
           description: 'The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.'
           example: 50000
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the add-on.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the add-on.
+          example: USD
         description:
           type: string
           nullable: true
@@ -2945,13 +2944,12 @@ components:
         - add_on
       properties:
         add_on:
-          allOf:
-            - $ref: '#/components/schemas/AddOnBaseInput'
-            - required:
-                - name
-                - code
-                - amount_cents
-                - amount_currency
+          $ref: '#/components/schemas/AddOnBaseInput'
+          required:
+            - name
+            - code
+            - amount_cents
+            - amount_currency
     AddOnObject:
       type: object
       required:
@@ -2984,10 +2982,9 @@ components:
           description: 'The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.'
           example: 50000
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the add-on.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the add-on.
+          example: USD
         description:
           type: string
           nullable: true
@@ -3177,11 +3174,10 @@ components:
               description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
               example: 2000
             amount_currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - nullable: true
-                  description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-                  example: EUR
+              $ref: '#/components/schemas/Currency'
+              nullable: true
+              description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+              example: EUR
             percentage_rate:
               type: string
               pattern: '^[0-9]+.?[0-9]*$'
@@ -3246,11 +3242,10 @@ components:
           description: The remaining amount in cents for a `fixed_amount` coupon with a frequency set to `once`. This field indicates the remaining balance or value that can still be utilized from the coupon.
           example: 50
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - nullable: true
-              description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          nullable: true
+          description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+          example: EUR
         percentage_rate:
           type: string
           pattern: '^[0-9]+.?[0-9]*$'
@@ -3371,10 +3366,9 @@ components:
           description: Amount of the tax
           example: 2000
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: Currency of the tax
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: Currency of the tax
+          example: USD
         created_at:
           type: string
           format: date-time
@@ -3589,12 +3583,11 @@ components:
         - billable_metric
       properties:
         billable_metric:
-          allOf:
-            - $ref: '#/components/schemas/BillableMetricBaseInput'
-            - required:
-                - name
-                - code
-                - aggregation_type
+          $ref: '#/components/schemas/BillableMetricBaseInput'
+          required:
+            - name
+            - code
+            - aggregation_type
     BillableMetricEvaluateExpressionInput:
       type: object
       required:
@@ -3715,9 +3708,8 @@ components:
           example: AWS
           nullable: true
         properties:
-          allOf:
-            - $ref: '#/components/schemas/ChargeProperties'
-            - description: List of all thresholds utilized for calculating the charge.
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the charge.
         values:
           type: object
           description: List of possible filter values. The key and values must match one of the billable metric filters.
@@ -3742,9 +3734,8 @@ components:
           example: AWS
           nullable: true
         properties:
-          allOf:
-            - $ref: '#/components/schemas/ChargeProperties'
-            - description: List of all thresholds utilized for calculating the charge.
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the charge.
         values:
           type: object
           description: List of possible filter values. The key and values must match one of the billable metric filters.
@@ -3833,9 +3824,8 @@ components:
           description: 'The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.'
           example: 1200
         properties:
-          allOf:
-            - $ref: '#/components/schemas/ChargeProperties'
-            - description: List of all thresholds utilized for calculating the charge.
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the charge.
         filters:
           type: array
           description: List of filters used to apply differentiated pricing based on additional event properties.
@@ -4296,11 +4286,10 @@ components:
           description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
           example: 5000
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-              nullable: true
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+          nullable: true
+          example: USD
         reusable:
           type: boolean
           description: 'Indicates whether the coupon can be reused or not. If set to `true`, the coupon is reusable, meaning it can be applied multiple times to the same customer. If set to `false`, the coupon can only be used once and is not reusable. If not specified, this field is set to `true` by default.'
@@ -4372,14 +4361,13 @@ components:
         - coupon
       properties:
         coupon:
-          allOf:
-            - $ref: '#/components/schemas/CouponBaseInput'
-            - required:
-                - name
-                - code
-                - coupon_type
-                - frequency
-                - expiration
+          $ref: '#/components/schemas/CouponBaseInput'
+          required:
+            - name
+            - code
+            - coupon_type
+            - frequency
+            - expiration
     CouponObject:
       type: object
       required:
@@ -4429,11 +4417,10 @@ components:
           description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
           example: 5000
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - nullable: true
-              description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          nullable: true
+          description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+          example: USD
         reusable:
           type: boolean
           description: 'Indicates whether the coupon can be reused or not. If set to `true`, the coupon is reusable, meaning it can be applied multiple times to the same customer. If set to `false`, the coupon can only be used once and is not reusable. If not specified, this field is set to `true` by default.'
@@ -4528,8 +4515,7 @@ components:
         - coupon
       properties:
         coupon:
-          allOf:
-            - $ref: '#/components/schemas/CouponBaseInput'
+          $ref: '#/components/schemas/CouponBaseInput'
     CreditNoteEstimateInput:
       type: object
       required:
@@ -4598,10 +4584,9 @@ components:
               description: 'The invoice unique number, related to the credit note.'
               example: LAG-1234
             currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - description: The currency of the credit note.
-                  example: EUR
+              $ref: '#/components/schemas/Currency'
+              description: The currency of the credit note.
+              example: EUR
             taxes_amount_cents:
               type: integer
               description: 'The tax amount of the credit note, expressed in cents.'
@@ -4679,10 +4664,9 @@ components:
                     description: Amount of the tax
                     example: 2000
                   amount_currency:
-                    allOf:
-                      - $ref: '#/components/schemas/Currency'
-                      - description: Currency of the tax
-                        example: USD
+                    $ref: '#/components/schemas/Currency'
+                    description: Currency of the tax
+                    example: USD
     CreditObject:
       type: object
       required:
@@ -4703,10 +4687,9 @@ components:
           description: 'The amount of credit associated with the invoice, expressed in cents.'
           example: 1200
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the credit.
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the credit.
+          example: EUR
         before_taxes:
           type: boolean
           description: Indicates whether the credit is applied on the amount before taxes (coupons) or after taxes (credit notes). This flag helps determine the order in which credits are applied to the invoice calculation
@@ -4796,14 +4779,12 @@ components:
           description: 'The credit note''s item amount, expressed in cents.'
           example: 100
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The credit note's item currency.
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          description: The credit note's item currency.
+          example: EUR
         fee:
-          allOf:
-            - $ref: '#/components/schemas/FeeObject'
-            - description: The fee object related to the credit note item.
+          $ref: '#/components/schemas/FeeObject'
+          description: The fee object related to the credit note item.
     CreditNoteObject:
       type: object
       required:
@@ -4900,10 +4881,9 @@ components:
           description: The description of the credit note.
           example: Free text
         currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the credit note.
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the credit note.
+          example: EUR
         total_amount_cents:
           type: integer
           description: 'The total amount of the credit note, expressed in cents.'
@@ -5227,11 +5207,10 @@ components:
           description: The city of the customer's billing address
           nullable: true
         country:
-          allOf:
-            - $ref: '#/components/schemas/Country'
-            - nullable: true
-              description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-              example: US
+          $ref: '#/components/schemas/Country'
+          nullable: true
+          description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+          example: US
         state:
           type: string
           example: CA
@@ -5415,10 +5394,9 @@ components:
           example: 123
           description: 'The amount in cents, tax excluded, consumed by the customer for a specific charge item.'
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of a usage item consumed by the customer.
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          description: The currency of a usage item consumed by the customer.
+          example: EUR
         charge:
           type: object
           description: Object listing all the properties for a specific charge item.
@@ -5512,16 +5490,14 @@ components:
               description: The city of the customer's billing address
               nullable: true
             country:
-              allOf:
-                - $ref: '#/components/schemas/Country'
-                - nullable: true
-                  description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-                  example: US
+              $ref: '#/components/schemas/Country'
+              nullable: true
+              description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+              example: US
             currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - description: Currency of the customer. Format must be ISO 4217
-                  nullable: true
+              $ref: '#/components/schemas/Currency'
+              description: Currency of the customer. Format must be ISO 4217
+              nullable: true
             email:
               type: string
               format: email
@@ -5591,10 +5567,9 @@ components:
               description: The tax identification number of the customer
               nullable: true
             timezone:
-              allOf:
-                - $ref: '#/components/schemas/Timezone'
-                - description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
-                  nullable: true
+              $ref: '#/components/schemas/Timezone'
+              description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
+              nullable: true
             url:
               type: string
               example: 'http://hooli.com'
@@ -5760,26 +5735,23 @@ components:
               description: The second line of the billing address
               nullable: true
             applicable_timezone:
-              allOf:
-                - $ref: '#/components/schemas/Timezone'
-                - description: 'The customer''s applicable timezone, used for billing purposes in their local time.'
+              $ref: '#/components/schemas/Timezone'
+              description: 'The customer''s applicable timezone, used for billing purposes in their local time.'
             city:
               type: string
               example: Woodland Hills
               description: The city of the customer's billing address
               nullable: true
             country:
-              allOf:
-                - $ref: '#/components/schemas/Country'
-                - nullable: true
-                  description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-                  example: US
+              $ref: '#/components/schemas/Country'
+              nullable: true
+              description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+              example: US
             currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - example: USD
-                  description: Currency of the customer. Format must be ISO 4217
-                  nullable: true
+              $ref: '#/components/schemas/Currency'
+              example: USD
+              description: Currency of the customer. Format must be ISO 4217
+              nullable: true
             email:
               type: string
               format: email
@@ -5842,10 +5814,9 @@ components:
               description: The tax identification number of the customer
               nullable: true
             timezone:
-              allOf:
-                - $ref: '#/components/schemas/Timezone'
-                - description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
-                  nullable: true
+              $ref: '#/components/schemas/Timezone'
+              description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
+              nullable: true
             url:
               type: string
               example: 'http://hooli.com'
@@ -5975,10 +5946,9 @@ components:
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
           description: A unique identifier associated with the invoice related to this particular usage record.
         currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the customer's current usage.
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the customer's current usage.
+          example: EUR
         amount_cents:
           type: integer
           description: 'The amount in cents, tax excluded.'
@@ -6263,10 +6233,9 @@ components:
           description: 'The cost of this specific fee, including any applicable taxes, with precision.'
           example: '1.0212'
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
+          example: EUR
         taxes_amount_cents:
           type: integer
           description: The cost of the tax associated with this specific fee.
@@ -6292,10 +6261,9 @@ components:
           description: 'The cost of this specific fee, including any applicable taxes.'
           example: 120
         total_amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: 'The currency of this specific fee, including any applicable taxes.'
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          description: 'The currency of this specific fee, including any applicable taxes.'
+          example: EUR
         events_count:
           type: integer
           description: The number of events that have been sent and used to charge the customer. This field indicates the count or quantity of events that have been processed and considered in the charging process.
@@ -6359,183 +6327,182 @@ components:
           description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge` and the payment for the fee is made in advance (`pay_in_advance` is set to `true`).
           example: transaction_1234567890
         amount_details:
-          allOf:
-            - type: object
-              properties:
-                graduated_ranges:
-                  type: array
-                  description: 'Graduated ranges, used for a `graduated` charge model.'
-                  items:
-                    type: object
-                    required:
-                      - units
-                      - from_value
-                      - to_value
-                      - flat_unit_amount
-                      - per_unit_amount
-                      - per_unit_total_amount
-                      - total_with_flat_amount
-                    properties:
-                      units:
-                        type: string
-                        pattern: '^[0-9]+.?[0-9]*$'
-                        example: '10.0'
-                        description: Total units received in Lago.
-                      from_value:
-                        type: integer
-                        description: Lower value of a tier. It is either 0 or the previous range's `to_value + 1`.
-                        example: 0
-                      to_value:
-                        type: integer
-                        description: |-
-                          Highest value of a tier.
-                          - This value is higher than the from_value of the same tier.
-                          - This value is null for the last tier.
-                        nullable: true
-                        example: 10
-                      flat_unit_amount:
-                        type: string
-                        description: Flat unit amount within a specified tier.
-                        example: '1.0'
-                      per_unit_amount:
-                        type: string
-                        description: Amount per unit within a specified tier.
-                        example: '1.0'
-                      per_unit_total_amount:
-                        type: string
-                        description: Total amount of received units to be charged within a specified tier.
-                        example: '10.0'
-                      total_with_flat_amount:
-                        type: string
-                        description: 'Total amount to be charged for a specific tier, taking into account the flat_unit_amount and the per_unit_total_amount.'
-                        example: '11.0'
-                graduated_percentage_ranges:
-                  type: array
-                  description: 'Graduated percentage ranges, used for a `graduated_percentage` charge model.'
-                  items:
-                    type: object
-                    required:
-                      - units
-                      - from_value
-                      - to_value
-                      - flat_unit_amount
-                      - rate
-                      - per_unit_total_amount
-                      - total_with_flat_amount
-                    properties:
-                      units:
-                        type: string
-                        pattern: '^[0-9]+.?[0-9]*$'
-                        example: '10.0'
-                        description: Total units received in Lago.
-                      from_value:
-                        type: integer
-                        description: Lower value of a tier. It is either 0 or the previous range's `to_value + 1`.
-                        example: 0
-                      to_value:
-                        type: integer
-                        description: |-
-                          Highest value of a tier.
-                          - This value is higher than the from_value of the same tier.
-                          - This value is null for the last tier.
-                        nullable: true
-                        example: 10
-                      flat_unit_amount:
-                        type: string
-                        description: Flat unit amount within a specified tier.
-                        example: '1.0'
-                      rate:
-                        type: string
-                        format: '^[0-9]+.?[0-9]*$'
-                        description: Percentage rate applied within a specified tier.
-                        example: '1.0'
-                      per_unit_total_amount:
-                        type: string
-                        description: Total amount of received units to be charged within a specified tier.
-                        example: '10.0'
-                      total_with_flat_amount:
-                        type: string
-                        description: 'Total amount to be charged for a specific tier, taking into account the flat_unit_amount and the per_unit_total_amount.'
-                        example: '11.0'
-                free_units:
-                  type: string
-                  pattern: '^[0-9]+.?[0-9]*$'
-                  example: '10.0'
-                  description: The quantity of units that are provided free of charge for each billing period in a `package` charge model.
-                paid_units:
-                  type: string
-                  pattern: '^[0-9]+.?[0-9]*$'
-                  example: '40.0'
-                  description: The quantity of units that are not provided free of charge for each billing period in a `package` charge model.
-                per_package_size:
-                  type: integer
-                  description: 'The quantity of units included, defined for Package or Percentage charge model.'
-                  example: 1000
-                per_package_unit_amount:
-                  type: string
-                  pattern: '^[0-9]+.?[0-9]*$'
-                  description: 'Total amount to charge for received paid_units, defined for Package or Percentage charge model.'
-                  example: '0.5'
-                units:
-                  type: string
-                  pattern: '^[0-9]+.?[0-9]*$'
-                  example: '20.0'
-                  description: The total units received in Lago for the Percentage charge model.
-                free_events:
-                  type: integer
-                  example: 10
-                  description: Total number of free events allowed for the Percentage charge model.
-                rate:
-                  type: string
-                  format: '^[0-9]+.?[0-9]*$'
-                  description: Percentage rate applied for the Percentage charge model.
-                  example: '1.0'
-                per_unit_total_amount:
-                  type: string
-                  description: Total amount of received units to be charged for the Percentage charge model.
-                  example: '10.0'
-                paid_events:
-                  type: integer
-                  example: 20
-                  description: Total number of paid events for the Percentage charge model.
-                fixed_fee_unit_amount:
-                  type: string
-                  description: Fixed fee unit price per received paid_event for the Percentage charge model.
-                  example: '1.0'
-                fixed_fee_total_amount:
-                  type: string
-                  description: Total amount to charge for received paid_events for the Percentage charge model.
-                  example: '20.0'
-                min_max_adjustment_total_amount:
-                  type: string
-                  description: Total adjustment amount linked to minimum and maximum spending per transaction for the Percentage charge model.
-                  example: '20.0'
-                volume_ranges:
-                  type: array
-                  description: 'Volume ranges, used for a `volume` charge model.'
-                  items:
-                    type: object
-                    required:
-                      - per_unit_amount
-                      - flat_unit_amount
-                      - per_unit_total_amount
-                    properties:
-                      per_unit_amount:
-                        type: string
-                        pattern: '^[0-9]+.?[0-9]*$'
-                        description: 'The flat amount for a whole tier, excluding tax, for a `volume` charge model.'
-                        example: '0.5'
-                      flat_unit_amount:
-                        type: string
-                        pattern: '^[0-9]+.?[0-9]*$'
-                        description: 'The unit price, excluding tax, for a specific tier of a `volume` charge model.'
-                        example: '10.0'
-                      per_unit_total_amount:
-                        type: string
-                        pattern: '^[0-9]+.?[0-9]*$'
-                        description: Total amount of received units to be charged.
-                        example: '10.0'
-            - description: List of all unit amount details for calculating the fee.
+          description: List of all unit amount details for calculating the fee.
+          type: object
+          properties:
+            graduated_ranges:
+              type: array
+              description: 'Graduated ranges, used for a `graduated` charge model.'
+              items:
+                type: object
+                required:
+                  - units
+                  - from_value
+                  - to_value
+                  - flat_unit_amount
+                  - per_unit_amount
+                  - per_unit_total_amount
+                  - total_with_flat_amount
+                properties:
+                  units:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    example: '10.0'
+                    description: Total units received in Lago.
+                  from_value:
+                    type: integer
+                    description: Lower value of a tier. It is either 0 or the previous range's `to_value + 1`.
+                    example: 0
+                  to_value:
+                    type: integer
+                    description: |-
+                      Highest value of a tier.
+                      - This value is higher than the from_value of the same tier.
+                      - This value is null for the last tier.
+                    nullable: true
+                    example: 10
+                  flat_unit_amount:
+                    type: string
+                    description: Flat unit amount within a specified tier.
+                    example: '1.0'
+                  per_unit_amount:
+                    type: string
+                    description: Amount per unit within a specified tier.
+                    example: '1.0'
+                  per_unit_total_amount:
+                    type: string
+                    description: Total amount of received units to be charged within a specified tier.
+                    example: '10.0'
+                  total_with_flat_amount:
+                    type: string
+                    description: 'Total amount to be charged for a specific tier, taking into account the flat_unit_amount and the per_unit_total_amount.'
+                    example: '11.0'
+            graduated_percentage_ranges:
+              type: array
+              description: 'Graduated percentage ranges, used for a `graduated_percentage` charge model.'
+              items:
+                type: object
+                required:
+                  - units
+                  - from_value
+                  - to_value
+                  - flat_unit_amount
+                  - rate
+                  - per_unit_total_amount
+                  - total_with_flat_amount
+                properties:
+                  units:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    example: '10.0'
+                    description: Total units received in Lago.
+                  from_value:
+                    type: integer
+                    description: Lower value of a tier. It is either 0 or the previous range's `to_value + 1`.
+                    example: 0
+                  to_value:
+                    type: integer
+                    description: |-
+                      Highest value of a tier.
+                      - This value is higher than the from_value of the same tier.
+                      - This value is null for the last tier.
+                    nullable: true
+                    example: 10
+                  flat_unit_amount:
+                    type: string
+                    description: Flat unit amount within a specified tier.
+                    example: '1.0'
+                  rate:
+                    type: string
+                    format: '^[0-9]+.?[0-9]*$'
+                    description: Percentage rate applied within a specified tier.
+                    example: '1.0'
+                  per_unit_total_amount:
+                    type: string
+                    description: Total amount of received units to be charged within a specified tier.
+                    example: '10.0'
+                  total_with_flat_amount:
+                    type: string
+                    description: 'Total amount to be charged for a specific tier, taking into account the flat_unit_amount and the per_unit_total_amount.'
+                    example: '11.0'
+            free_units:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              example: '10.0'
+              description: The quantity of units that are provided free of charge for each billing period in a `package` charge model.
+            paid_units:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              example: '40.0'
+              description: The quantity of units that are not provided free of charge for each billing period in a `package` charge model.
+            per_package_size:
+              type: integer
+              description: 'The quantity of units included, defined for Package or Percentage charge model.'
+              example: 1000
+            per_package_unit_amount:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              description: 'Total amount to charge for received paid_units, defined for Package or Percentage charge model.'
+              example: '0.5'
+            units:
+              type: string
+              pattern: '^[0-9]+.?[0-9]*$'
+              example: '20.0'
+              description: The total units received in Lago for the Percentage charge model.
+            free_events:
+              type: integer
+              example: 10
+              description: Total number of free events allowed for the Percentage charge model.
+            rate:
+              type: string
+              format: '^[0-9]+.?[0-9]*$'
+              description: Percentage rate applied for the Percentage charge model.
+              example: '1.0'
+            per_unit_total_amount:
+              type: string
+              description: Total amount of received units to be charged for the Percentage charge model.
+              example: '10.0'
+            paid_events:
+              type: integer
+              example: 20
+              description: Total number of paid events for the Percentage charge model.
+            fixed_fee_unit_amount:
+              type: string
+              description: Fixed fee unit price per received paid_event for the Percentage charge model.
+              example: '1.0'
+            fixed_fee_total_amount:
+              type: string
+              description: Total amount to charge for received paid_events for the Percentage charge model.
+              example: '20.0'
+            min_max_adjustment_total_amount:
+              type: string
+              description: Total adjustment amount linked to minimum and maximum spending per transaction for the Percentage charge model.
+              example: '20.0'
+            volume_ranges:
+              type: array
+              description: 'Volume ranges, used for a `volume` charge model.'
+              items:
+                type: object
+                required:
+                  - per_unit_amount
+                  - flat_unit_amount
+                  - per_unit_total_amount
+                properties:
+                  per_unit_amount:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    description: 'The flat amount for a whole tier, excluding tax, for a `volume` charge model.'
+                    example: '0.5'
+                  flat_unit_amount:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    description: 'The unit price, excluding tax, for a specific tier of a `volume` charge model.'
+                    example: '10.0'
+                  per_unit_total_amount:
+                    type: string
+                    pattern: '^[0-9]+.?[0-9]*$'
+                    description: Total amount of received units to be charged.
+                    example: '10.0'
         item:
           type: object
           description: Item attached to the fee
@@ -6656,10 +6623,9 @@ components:
           description: 'The total amount of revenue for a period, expressed in cents.'
           example: 50000
         currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of revenue analytics. Format must be ISO 4217.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of revenue analytics. Format must be ISO 4217.
+          example: USD
         invoices_count:
           type: integer
           description: Contains invoices count.
@@ -6853,10 +6819,9 @@ components:
           description: 'The total amount of MRR, expressed in cents.'
           example: 50000
         currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of MRR analytics. Format must be ISO 4217.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of MRR analytics. Format must be ISO 4217.
+          example: USD
     Mrrs:
       type: object
       required:
@@ -6914,10 +6879,9 @@ components:
           description: 'The total amount of revenue for a period, expressed in cents.'
           example: 50000
         currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of revenue analytics. Format must be ISO 4217.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of revenue analytics. Format must be ISO 4217.
+          example: USD
     InvoiceCollections:
       type: object
       required:
@@ -6947,10 +6911,9 @@ components:
           description: 'The total amount of revenue for a period, expressed in cents.'
           example: 50000
         currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of revenue analytics. Format must be ISO 4217.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of revenue analytics. Format must be ISO 4217.
+          example: USD
     InvoicedUsages:
       type: object
       required:
@@ -7076,10 +7039,9 @@ components:
                 - `failed`: the payment of the invoice has failed or encountered an error during processing.
               example: succeeded
             currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - description: The currency of the invoice issued.
-                  example: EUR
+              $ref: '#/components/schemas/Currency'
+              description: The currency of the invoice issued.
+              example: EUR
             fees_amount_cents:
               type: integer
               description: 'The total sum of fees amount in cents. It calculates the cumulative amount of all the fees associated with the invoice, providing a consolidated value.'
@@ -7137,9 +7099,8 @@ components:
         - type: object
           properties:
             customer:
-              allOf:
-                - $ref: '#/components/schemas/CustomerObject'
-                - description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
+              $ref: '#/components/schemas/CustomerObject'
+              description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
             metadata:
               type: array
               items:
@@ -7210,10 +7171,9 @@ components:
               description: Unique identifier assigned to the customer in your application.
               example: hooli_1234
             currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - description: The currency of the invoice.
-                  example: EUR
+              $ref: '#/components/schemas/Currency'
+              description: The currency of the invoice.
+              example: EUR
             fees:
               type: array
               items:
@@ -7363,16 +7323,14 @@ components:
           description: The array containing your webhooks URLs.
           nullable: true
         country:
-          allOf:
-            - $ref: '#/components/schemas/Country'
-            - nullable: true
-              description: The country of your organization.
-              example: US
+          $ref: '#/components/schemas/Country'
+          nullable: true
+          description: The country of your organization.
+          example: US
         default_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The default currency of an organization.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The default currency of an organization.
+          example: USD
         address_line1:
           type: string
           example: 100 Brex Street
@@ -7441,10 +7399,9 @@ components:
           description: The tax identification number of your organization.
           nullable: true
         timezone:
-          allOf:
-            - $ref: '#/components/schemas/Timezone'
-            - description: 'Your organization''s timezone, used for billing purposes in your own local time. Can be overwritten by the customer''s timezone.'
-              example: America/New_York
+          $ref: '#/components/schemas/Timezone'
+          description: 'Your organization''s timezone, used for billing purposes in your own local time. Can be overwritten by the customer''s timezone.'
+          example: America/New_York
         billing_configuration:
           $ref: '#/components/schemas/OrganizationBillingConfiguration'
         taxes:
@@ -7470,16 +7427,14 @@ components:
               description: 'The URL of your newest updated webhook endpoint. This URL allows your organization to receive important messages, notifications, or data from the Lago system. By configuring your webhook endpoint to this URL, you can ensure that your organization stays informed and receives relevant information in a timely manner.'
               nullable: true
             country:
-              allOf:
-                - $ref: '#/components/schemas/Country'
-                - nullable: true
-                  description: The country of your organization.
-                  example: US
+              $ref: '#/components/schemas/Country'
+              nullable: true
+              description: The country of your organization.
+              example: US
             default_currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - description: The default currency of an organization.
-                  example: USD
+              $ref: '#/components/schemas/Currency'
+              description: The default currency of an organization.
+              example: USD
             address_line1:
               type: string
               example: 100 Brex Street
@@ -7548,10 +7503,9 @@ components:
               description: The tax identification number of your organization.
               nullable: true
             timezone:
-              allOf:
-                - $ref: '#/components/schemas/Timezone'
-                - description: 'Your organization''s timezone, used for billing purposes in your own local time. Can be overwritten by the customer''s timezone.'
-                  example: America/New_York
+              $ref: '#/components/schemas/Timezone'
+              description: 'Your organization''s timezone, used for billing purposes in your own local time. Can be overwritten by the customer''s timezone.'
+              example: America/New_York
             email_settings:
               type: array
               description: 'Represents the email settings of the organization. It allows you to define which documents are sent by email. The field value determines the types of documents that trigger email notifications. Possible values for are `invoice.finalized` and `credit_note.created`. By configuring this field, you can specify whether invoices, credit notes, or both should be sent to recipients via email.'
@@ -7586,10 +7540,9 @@ components:
           description: 'The total amount of revenue for a period, expressed in cents.'
           example: 50000
         currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of revenue analytics. Format must be ISO 4217.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of revenue analytics. Format must be ISO 4217.
+          example: USD
         lago_invoice_ids:
           type: array
           items:
@@ -7663,10 +7616,9 @@ components:
           description: 'The sum of the total amounts of all the invoices included in the payment request, expressed in cents.'
           example: 100
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the payment request.
-              example: EUR
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the payment request.
+          example: EUR
         payment_status:
           type: string
           enum:
@@ -7748,10 +7700,9 @@ components:
               description: 'The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.'
               example: 10000
             amount_currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
-                  example: USD
+              $ref: '#/components/schemas/Currency'
+              description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+              example: USD
             trial_period:
               type: number
               description: The duration in days during which the base cost of the plan is offered for free.
@@ -7836,9 +7787,8 @@ components:
                     description: 'The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.'
                     example: 0
                   properties:
-                    allOf:
-                      - $ref: '#/components/schemas/ChargeProperties'
-                      - description: List of all thresholds utilized for calculating the charge.
+                    $ref: '#/components/schemas/ChargeProperties'
+                    description: List of all thresholds utilized for calculating the charge.
                   filters:
                     type: array
                     description: List of filters used to apply differentiated pricing based on additional event properties.
@@ -7935,10 +7885,9 @@ components:
           description: 'The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.'
           example: 10000
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+          example: USD
         description:
           type: string
           description: The description on the plan.
@@ -7989,9 +7938,8 @@ components:
                 description: 'The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.'
                 example: 0
               properties:
-                allOf:
-                  - $ref: '#/components/schemas/ChargeProperties'
-                  - description: List of all thresholds utilized for calculating the charge.
+                $ref: '#/components/schemas/ChargeProperties'
+                description: List of all thresholds utilized for calculating the charge.
               filters:
                 type: array
                 description: List of filters used to apply differentiated pricing based on additional event properties.
@@ -8047,10 +7995,9 @@ components:
               description: 'The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.'
               example: 10000
             amount_currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
-                  example: USD
+              $ref: '#/components/schemas/Currency'
+              description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+              example: USD
             trial_period:
               type: number
               description: The duration in days during which the base cost of the plan is offered for free.
@@ -8140,9 +8087,8 @@ components:
                     description: 'The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.'
                     example: 0
                   properties:
-                    allOf:
-                      - $ref: '#/components/schemas/ChargeProperties'
-                      - description: List of all thresholds utilized for calculating the charge.
+                    $ref: '#/components/schemas/ChargeProperties'
+                    description: List of all thresholds utilized for calculating the charge.
                   filters:
                     type: array
                     description: List of filters used to apply differentiated pricing based on additional event properties.
@@ -8287,10 +8233,9 @@ components:
           description: 'The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.'
           example: 10000
         amount_currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: 'The currency of the plan. It indicates the monetary unit in which the plan''s cost, including taxes and usage-based charges, is expressed.'
+          example: USD
         trial_period:
           type: number
           description: The duration in days during which the base cost of the plan is offered for free.
@@ -8721,12 +8666,11 @@ components:
         - tax
       properties:
         tax:
-          allOf:
-            - $ref: '#/components/schemas/TaxBaseInput'
-            - required:
-                - name
-                - code
-                - rate
+          $ref: '#/components/schemas/TaxBaseInput'
+          required:
+            - name
+            - code
+            - rate
     TaxesPaginated:
       type: object
       required:
@@ -8802,8 +8746,7 @@ components:
         - tax
       properties:
         tax:
-          allOf:
-            - $ref: '#/components/schemas/TaxBaseInput'
+          $ref: '#/components/schemas/TaxBaseInput'
     Timezone:
       type: string
       example: America/Los_Angeles
@@ -9032,10 +8975,9 @@ components:
               description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
               example: '1.5'
             currency:
-              allOf:
-                - $ref: '#/components/schemas/Currency'
-                - description: The currency of the wallet.
-                  example: USD
+              $ref: '#/components/schemas/Currency'
+              description: The currency of the wallet.
+              example: USD
             paid_credits:
               type: string
               pattern: '^[0-9]+.?[0-9]*$'
@@ -9200,10 +9142,9 @@ components:
           description: The status of the wallet. Possible values are `active` or `terminated`.
           example: active
         currency:
-          allOf:
-            - $ref: '#/components/schemas/Currency'
-            - description: The currency of the wallet.
-              example: USD
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the wallet.
+          example: USD
         name:
           type: string
           description: The name of the wallet.

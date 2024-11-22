@@ -46,11 +46,10 @@ properties:
     description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
     example: 5000
   amount_currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - nullable: true
-        description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-        example: "USD"
+     $ref: "./Currency.yaml"
+     nullable: true
+     description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+     example: "USD"
   reusable:
     type: boolean
     description: Indicates whether the coupon can be reused or not. If set to `true`, the coupon is reusable, meaning it can be applied multiple times to the same customer. If set to `false`, the coupon can only be used once and is not reusable. If not specified, this field is set to `true` by default.

@@ -3,9 +3,8 @@ required:
   - tax
 properties:
   tax:
-    allOf:
-      - $ref: './TaxBaseInput.yaml'
-      - required:
+    $ref: './TaxBaseInput.yaml'
+    required:
         - name
         - code
         - rate

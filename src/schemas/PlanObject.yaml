@@ -50,10 +50,9 @@ properties:
     description: The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.
     example: 10000
   amount_currency:
-    allOf:
-      - $ref: "./Currency.yaml"
-      - description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
-        example: "USD"
+    $ref: "./Currency.yaml"
+    description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
+    example: "USD"
   trial_period:
     type: number
     description: The duration in days during which the base cost of the plan is offered for free.
