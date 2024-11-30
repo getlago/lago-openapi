@@ -3380,7 +3380,7 @@ components:
         - billable_metric
       properties:
         billable_metric:
-          $ref: '#/components/schemas/BillableMetricObjectExtended'
+          $ref: '#/components/schemas/BillableMetricObject'
     BillableMetricObject:
       type: object
       required:
@@ -3390,9 +3390,6 @@ components:
         - aggregation_type
         - recurring
         - created_at
-        - active_subscriptions_count
-        - draft_invoices_count
-        - plans_count
       properties:
         lago_id:
           type: string
@@ -3471,38 +3468,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BillableMetricFilterObject'
-        active_subscriptions_count:
-          type: integer
-          example: 4
-          description: Number of active subscriptions using this billable metric.
-          deprecated: true
-        draft_invoices_count:
-          type: integer
-          example: 10
-          description: Number of draft invoices for which this billable metric is listed as an invoice item.
-          deprecated: true
-        plans_count:
-          type: integer
-          example: 4
-          description: Number of plans using this billable metric.
-          deprecated: true
-    BillableMetricObjectExtended:
-      allOf:
-        - $ref: '#/components/schemas/BillableMetricObject'
-        - type: object
-          properties:
-            active_subscriptions_count:
-              type: integer
-              example: 4
-              description: Number of active subscriptions using this billable metric.
-            draft_invoices_count:
-              type: integer
-              example: 10
-              description: Number of draft invoices for which this billable metric is listed as an invoice item.
-            plans_count:
-              type: integer
-              example: 4
-              description: Number of plans using this billable metric.
     BillableMetricBaseInput:
       type: object
       properties:
@@ -8190,8 +8155,6 @@ components:
         - interval
         - amount_cents
         - amount_currency
-        - active_subscriptions_count
-        - draft_invoices_count
       properties:
         lago_id:
           type: string
@@ -8249,14 +8212,6 @@ components:
           nullable: true
           description: 'This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan''s interval is `yearly`.'
           example: null
-        active_subscriptions_count:
-          type: integer
-          description: 'The count of active subscriptions that are currently associated with the plan. This field provides valuable information regarding the impact of deleting the plan. By checking the value of this field, you can determine the number of subscriptions that will be affected if the plan is deleted.'
-          example: 0
-        draft_invoices_count:
-          type: integer
-          description: 'The number of draft invoices that include a subscription attached to the plan. This field provides valuable information about the impact of deleting the plan. By checking the value of this field, you can determine the number of draft invoices that will be affected if the plan is deleted.'
-          example: 0
         minimum_commitment:
           $ref: '#/components/schemas/MinimumCommitmentObject'
         charges:
@@ -8719,22 +8674,6 @@ components:
           type: boolean
           description: Set to `true` if the tax is used as one of the organization's default
           example: true
-        add_ons_count:
-          type: integer
-          description: Number of add-ons this tax is applied to.
-          example: 0
-        charges_count:
-          type: integer
-          description: Number of charges this tax is applied to.
-          example: 0
-        customers_count:
-          type: integer
-          description: Number of customers this tax is applied to (directly or via the organization's default).
-          example: 0
-        plans_count:
-          type: integer
-          description: Number of plans this tax is applied to.
-          example: 0
         created_at:
           type: string
           format: date-time

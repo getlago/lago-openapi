@@ -6,9 +6,6 @@ required:
   - aggregation_type
   - recurring
   - created_at
-  - active_subscriptions_count
-  - draft_invoices_count
-  - plans_count
 properties:
   lago_id:
     type: string
@@ -87,18 +84,3 @@ properties:
     type: array
     items:
       $ref: "./BillableMetricFilterObject.yaml"
-  active_subscriptions_count:
-    type: integer
-    example: 4
-    description: "Number of active subscriptions using this billable metric."
-    deprecated: true
-  draft_invoices_count:
-    type: integer
-    example: 10
-    description: "Number of draft invoices for which this billable metric is listed as an invoice item."
-    deprecated: true
-  plans_count:
-    type: integer
-    example: 4
-    description: "Number of plans using this billable metric."
-    deprecated: true
