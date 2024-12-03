@@ -3,7 +3,7 @@ info:
   title: Lago API documentation
   description: |-
     Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 1.16.0
+  version: 1.17.0
   license:
     name: AGPLv3
     identifier: AGPLv3
@@ -104,126 +104,126 @@ tags:
       url: https://doc.getlago.com/docs/api/payment_requests/payment_request-object
 paths:
   /add_ons:
-    $ref: './resources/add_ons.yaml'
+    $ref: "./resources/add_ons.yaml"
   /add_ons/{code}:
-    $ref: './resources/add_on.yaml'
+    $ref: "./resources/add_on.yaml"
   /analytics/gross_revenue:
-    $ref: './resources/gross_revenues.yaml'
+    $ref: "./resources/gross_revenues.yaml"
   /analytics/invoice_collection:
-    $ref: './resources/invoice_collections.yaml'
+    $ref: "./resources/invoice_collections.yaml"
   /analytics/invoiced_usage:
-    $ref: './resources/invoiced_usages.yaml'
+    $ref: "./resources/invoiced_usages.yaml"
   /analytics/mrr:
-    $ref: './resources/mrrs.yaml'
+    $ref: "./resources/mrrs.yaml"
   /analytics/overdue_balance:
-    $ref: './resources/overdue_balances.yaml'
+    $ref: "./resources/overdue_balances.yaml"
   /applied_coupons:
-    $ref: './resources/applied_coupons.yaml'
+    $ref: "./resources/applied_coupons.yaml"
   /billable_metrics:
-    $ref: './resources/billable_metrics.yaml'
+    $ref: "./resources/billable_metrics.yaml"
   /billable_metrics/evaluate_expression:
-    $ref: './resources/billable_metric_evaluate_expression.yaml'
+    $ref: "./resources/billable_metric_evaluate_expression.yaml"
   /billable_metrics/{code}:
-    $ref: './resources/billable_metric.yaml'
+    $ref: "./resources/billable_metric.yaml"
   /coupons:
-    $ref: './resources/coupons.yaml'
+    $ref: "./resources/coupons.yaml"
   /coupons/{code}:
-    $ref: './resources/coupon.yaml'
+    $ref: "./resources/coupon.yaml"
   /credit_notes:
-    $ref: './resources/credit_notes.yaml'
+    $ref: "./resources/credit_notes.yaml"
   /credit_notes/{lago_id}:
-    $ref: './resources/credit_note.yaml'
+    $ref: "./resources/credit_note.yaml"
   /credit_notes/{lago_id}/download:
-    $ref: './resources/credit_note_download.yaml'
+    $ref: "./resources/credit_note_download.yaml"
   /credit_notes/estimate:
-    $ref: './resources/credit_note_estimate.yaml'
+    $ref: "./resources/credit_note_estimate.yaml"
   /credit_notes/{lago_id}/void:
-    $ref: './resources/credit_note_void.yaml'
+    $ref: "./resources/credit_note_void.yaml"
   /customers:
-    $ref: './resources/customers.yaml'
+    $ref: "./resources/customers.yaml"
   /customers/{external_id}:
-    $ref: './resources/customer.yaml'
+    $ref: "./resources/customer.yaml"
   /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
-    $ref: './resources/customer_applied_coupon.yaml'
+    $ref: "./resources/customer_applied_coupon.yaml"
   /customers/{external_customer_id}/portal_url:
-    $ref: './resources/customer_portal_url.yaml'
+    $ref: "./resources/customer_portal_url.yaml"
   /customers/{external_customer_id}/current_usage:
-    $ref: './resources/customer_current_usage.yaml'
+    $ref: "./resources/customer_current_usage.yaml"
   /customers/{external_customer_id}/past_usage:
-    $ref: './resources/customer_past_usage.yaml'
+    $ref: "./resources/customer_past_usage.yaml"
   /customers/{external_customer_id}/checkout_url:
-    $ref: './resources/customer_checkout_url.yaml'
+    $ref: "./resources/customer_checkout_url.yaml"
   /events:
-    $ref: './resources/events.yaml'
+    $ref: "./resources/events.yaml"
   /events/batch:
-    $ref: './resources/events_batch.yaml'
+    $ref: "./resources/events_batch.yaml"
   /events/estimate_fees:
-    $ref: './resources/event_estimate_fees.yaml'
+    $ref: "./resources/event_estimate_fees.yaml"
   /events/{transaction_id}:
-    $ref: './resources/event.yaml'
+    $ref: "./resources/event.yaml"
   /fees:
-    $ref: './resources/fees.yaml'
+    $ref: "./resources/fees.yaml"
   /fees/{lago_id}:
-    $ref: './resources/fee.yaml'
+    $ref: "./resources/fee.yaml"
   /invoices:
-    $ref: './resources/invoices.yaml'
+    $ref: "./resources/invoices.yaml"
   /invoices/{lago_id}:
-    $ref: './resources/invoice.yaml'
+    $ref: "./resources/invoice.yaml"
   /invoices/{lago_id}/download:
-    $ref: './resources/invoice_download.yaml'
+    $ref: "./resources/invoice_download.yaml"
   /invoices/{lago_id}/finalize:
-    $ref: './resources/invoice_finalize.yaml'
+    $ref: "./resources/invoice_finalize.yaml"
   /invoices/{lago_id}/lose_dispute:
-    $ref: './resources/invoice_lose_dispute.yaml'
+    $ref: "./resources/invoice_lose_dispute.yaml"
   /invoices/{lago_id}/refresh:
-    $ref: './resources/invoice_refresh.yaml'
+    $ref: "./resources/invoice_refresh.yaml"
   /invoices/{lago_id}/retry:
-    $ref: './resources/invoice_retry.yaml'
+    $ref: "./resources/invoice_retry.yaml"
   /invoices/{lago_id}/payment_url:
-    $ref: './resources/invoice_payment_url.yaml'
+    $ref: "./resources/invoice_payment_url.yaml"
   /invoices/{lago_id}/retry_payment:
-    $ref: './resources/invoice_retry_payment.yaml'
+    $ref: "./resources/invoice_retry_payment.yaml"
   /invoices/{lago_id}/void:
-    $ref: './resources/invoice_void.yaml'
+    $ref: "./resources/invoice_void.yaml"
   /organizations:
-    $ref: './resources/organizations.yaml'
+    $ref: "./resources/organizations.yaml"
   /payment_requests:
-    $ref: './resources/payment_requests.yaml'
+    $ref: "./resources/payment_requests.yaml"
   /plans:
-    $ref: './resources/plans.yaml'
+    $ref: "./resources/plans.yaml"
   /plans/{code}:
-    $ref: './resources/plan.yaml'
+    $ref: "./resources/plan.yaml"
   /subscriptions:
-    $ref: './resources/subscriptions.yaml'
+    $ref: "./resources/subscriptions.yaml"
   /subscriptions/{external_id}:
-    $ref: './resources/subscription.yaml'
+    $ref: "./resources/subscription.yaml"
   /subscriptions/{external_id}/lifetime_usage:
-    $ref: './resources/subscription_lifetime_usage.yaml'
+    $ref: "./resources/subscription_lifetime_usage.yaml"
   /taxes:
-    $ref: './resources/taxes.yaml'
+    $ref: "./resources/taxes.yaml"
   /taxes/{code}:
-    $ref: './resources/tax.yaml'
+    $ref: "./resources/tax.yaml"
   /wallets:
-    $ref: './resources/wallets.yaml'
+    $ref: "./resources/wallets.yaml"
   /wallets/{lago_id}:
-    $ref: './resources/wallet.yaml'
+    $ref: "./resources/wallet.yaml"
   /wallet_transactions:
-    $ref: './resources/wallet_top_up.yaml'
+    $ref: "./resources/wallet_top_up.yaml"
   /wallets/{lago_id}/wallet_transactions:
-    $ref: './resources/wallet_transactions.yaml'
+    $ref: "./resources/wallet_transactions.yaml"
   /webhooks/public_key:
-    $ref: './resources/webhook_public_key.yaml'
+    $ref: "./resources/webhook_public_key.yaml"
   /webhook_endpoints:
-    $ref: './resources/webhook_endpoints.yaml'
+    $ref: "./resources/webhook_endpoints.yaml"
   /webhook_endpoints/{lago_id}:
-    $ref: './resources/webhook_endpoint.yaml'
+    $ref: "./resources/webhook_endpoint.yaml"
 components:
   parameters:
-    $ref: './parameters/_index.yaml'
+    $ref: "./parameters/_index.yaml"
   schemas:
-    $ref: './schemas/_index.yaml'
+    $ref: "./schemas/_index.yaml"
   responses:
-    $ref: './responses/_index.yaml'
+    $ref: "./responses/_index.yaml"
   securitySchemes:
     bearerAuth:
       type: http
