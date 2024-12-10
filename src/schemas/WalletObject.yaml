@@ -108,7 +108,7 @@ properties:
     example: 800
   ongoing_usage_balance_cents:
     type: integer
-    description: The ongoing usage balance of the wallet, expressed in cents. This reflects all current usage including taxes.
+    description: The ongoing usage balance of the wallet, expressed in cents. This reflects all current usage and draft invoices including taxes.
     example: 200
   credits_ongoing_balance:
     type: string
@@ -118,5 +118,5 @@ properties:
   credits_ongoing_usage_balance:
     type: string
     pattern: "^[0-9]+.?[0-9]*$"
-    description: The ongoing usage balance of the wallet, expressed in credits. This reflects all current usage including taxes.
+    description: The ongoing usage balance of the wallet, expressed in credits. This reflects all current usage and draft invoices including taxes.
     example: "2.0"
