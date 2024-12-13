@@ -17,6 +17,8 @@ required:
   - progressive_billing_credit_amount_cents
   - total_amount_cents
   - version_number
+  - created_at
+  - updated_at
 properties:
   lago_id:
     type: string
@@ -148,3 +150,13 @@ properties:
     format: uri
     description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
     example: "https://getlago.com/invoice/file"
+  created_at:
+    type: string
+    format: "date-time"
+    example: "2022-04-29T08:59:51Z"
+    description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the invoice object was created
+  updated_at:
+    type: string
+    format: "date-time"
+    example: "2022-04-29T08:59:51Z"
+    description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
