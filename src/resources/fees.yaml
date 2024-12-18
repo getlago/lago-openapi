@@ -9,6 +9,14 @@ get:
     - $ref: '../parameters/per_page.yaml'
     - $ref: '../parameters/external_customer_id.yaml'
     - $ref: '../parameters/external_subscription_id.yaml'
+    - name: event_transaction_id
+      in: query
+      description: Filter results by event transaction ID
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'et_12345678'
     - name: currency
       in: query
       description: Filter results by fee's currency.
