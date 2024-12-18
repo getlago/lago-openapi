@@ -4460,6 +4460,7 @@ components:
         terminated_at:
           type: string
           format: date-time
+          nullable: true
           description: 'This field indicates if the coupon has been terminated and is no longer usable. If it''s not null, it won''t be removed for existing customers using it, but it prevents the coupon from being applied in the future.'
           example: '2022-08-08T23:59:59Z'
     CouponsPaginated:
