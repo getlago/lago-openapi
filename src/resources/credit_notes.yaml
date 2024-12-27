@@ -34,6 +34,100 @@ get:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
     - $ref: '../parameters/external_customer_id.yaml'
+    - name: issuing_date_from
+      in: query
+      description: Filter credit notes starting from a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: 'date'
+        example: '2022-07-08'
+    - name: issuing_date_to
+      in: query
+      description: Filter credit notes up to a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: 'date'
+        example: '2022-08-09'
+    - name: search_term
+      in: query
+      description: Search credit notes by id, number, customer name, customer external_id or customer email.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "Jane"
+    - name: currency
+      in: query
+      description: Filter credit notes by currency. Possible values ISO 4217 currency codes.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "EUR"
+    - name: reason
+      in: query
+      description: Filter credit notes by reasons. Possible values are `product_unsatisfactory`, `order_change`, `order_cancellation`, `fraudulent_charge`, `duplicated_charge` or `other`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - product_unsatisfactory
+          - order_change
+          - order_cancellation
+          - fraudulent_charge
+          - duplicated_charge
+          - other
+    - name: credit_status
+      in: query
+      description: Filter credit notes by credit status. Possible values are `available`, `consumed`  or `voided`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - available
+          - consumed
+          - voided
+    - name: refund_status
+      in: query
+      description: Filter credit notes by refund status. Possible values are `pending`, `succeeded`  or `failed`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - pending
+          - succeeded
+          - failed
+    - name: invoice_number
+      in: query
+      description: Filter credit notes by their related invoice number.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "INV-001-002"
+    - name: amount_from
+      in: query
+      description: Filter credit notes of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 9000
+    - name: amount_to
+      in: query
+      description: Filter credit notes up to a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 100000
   responses:
     '200':
       description: Credit notes
