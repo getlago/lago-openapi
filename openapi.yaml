@@ -6995,11 +6995,13 @@ components:
                 - finalized
                 - voided
                 - failed
+                - pending
               description: |-
-                The status of the invoice. It indicates the current state of the invoice and can have two possible values:
+                The status of the invoice. It indicates the current state of the invoice and can have following values:
                 - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
                 - `finalized`: the invoice has been issued and finalized. In this state, events cannot be ingested or added to the invoice anymore.
                 - `voided`: the invoice has been issued and subsequently voided. In this state, events cannot be ingested or added to the invoice anymore.
+                - `pending`: the invoice remains pending until the taxes are fetched from the external provider.
                 - `failed`: during an attempt of finalization of the invoice, an error happened. This invoice will have an array of error_details, explaining, in which part of the system an error happened and how it's possible to fix it. This invoice can't be edited or updated, only retried. This action will discard current error_details and will create new ones if the finalization failed again.
               example: finalized
             payment_status:
