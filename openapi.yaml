@@ -8636,6 +8636,7 @@ components:
           format: date-time
           example: '2022-10-08T00:00:00Z'
           description: 'The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).'
+          nullable: true
         subscription_at:
           type: string
           format: date-time
