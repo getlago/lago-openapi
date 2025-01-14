@@ -1,15 +1,11 @@
 type: object
 required:
-  - lago_credit_note_id
   - lago_customer_id
   - external_customer_id
   - payment_provider
+  - payment_provider_code
+  - provider_error
 properties:
-  lago_credit_note_id:
-    type: string
-    format: "uuid"
-    description: Unique identifier assigned to the credit note within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the credit note record within the Lago system.
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_customer_id:
     type: string
     format: "uuid"
@@ -19,10 +15,6 @@ properties:
     type: string
     description: The customer external unique identifier (provided by your own application)
     example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
-  provider_customer_id:
-    type: string
-    description: Unique identifier of the customer within the payment provider
-    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
   payment_provider:
     type: string
     enum:
@@ -30,7 +22,7 @@ properties:
       - cashfree
       - gocardless
       - stripe
-    description: The type of payment provider code
+    description: The type of payment provider
     example: "stripe"
   payment_provider_code:
     type: string

@@ -1,7 +1,7 @@
 post:
-  description: A new invoice has been emitted
+  description: An error was encountered while processing data on an integration
   requestBody:
-    description: Details of the new invoice
+    description: Details of the integration and of the integration error
     content:
       application/json:
         schema:
@@ -9,18 +9,18 @@ post:
           required:
             - webhook_type
             - object_type
-            - invoice
+            - provider_error
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.created
+                - integration.provider_error
             object_type:
               type: string
               enum:
-                - invoice
-            invoice:
-              $ref: "../schemas/InvoiceObjectExtended.yaml"
+                - provider_error
+            provider_error:
+              $ref: "../schemas/IntegrationProviderErrorObject.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully

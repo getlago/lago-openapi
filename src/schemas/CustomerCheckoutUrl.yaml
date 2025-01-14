@@ -1,12 +1,12 @@
 type: object
 description: .
-required:
-  - lago_customer_id
-  - external_customer_id
-  - payment_provider
 properties:
   customer:
     type: object
+    required:
+      - lago_customer_id
+      - external_customer_id
+      - payment_provider
     properties:
       lago_customer_id:
         type: string

@@ -1,7 +1,7 @@
 post:
-  description: A new invoice has been emitted
+  description: A usage threshold has been reached by a subscription
   requestBody:
-    description: Details of the new invoice
+    description: Details of the subscription and of the reached threshold
     content:
       application/json:
         schema:
@@ -9,18 +9,18 @@ post:
           required:
             - webhook_type
             - object_type
-            - invoice
+            - subscription
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.created
+                - subscription.usage_threshold_reached
             object_type:
               type: string
               enum:
-                - invoice
-            invoice:
-              $ref: "../schemas/InvoiceObjectExtended.yaml"
+                - subscription
+            subscription:
+              $ref: "../schemas/SubscriptionWithThresholdObject.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully

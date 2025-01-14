@@ -1,7 +1,7 @@
 post:
-  description: A new invoice has been emitted
+  description: A payment dispute has been lost for an invoice payment
   requestBody:
-    description: Details of the new invoice
+    description: Details of the invoice and of the payment dispute
     content:
       application/json:
         schema:
@@ -9,17 +9,17 @@ post:
           required:
             - webhook_type
             - object_type
-            - invoice
+            - payment_dispute_lost
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.created
+                - invoice.payment_dispute_lost
             object_type:
               type: string
               enum:
-                - invoice
-            invoice:
+                - payment_dispute_lost
+            payment_dispute_lost:
               $ref: "../schemas/InvoiceObjectExtended.yaml"
   responses:
     "200":

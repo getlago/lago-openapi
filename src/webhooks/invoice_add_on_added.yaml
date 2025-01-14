@@ -1,5 +1,5 @@
 post:
-  description: A new invoice has been emitted
+  description: A new add on invoice has been emitted
   requestBody:
     description: Details of the new invoice
     content:
@@ -14,7 +14,7 @@ post:
             webhook_type:
               type: string
               enum:
-                - invoice.created
+                - invoice.add_on_added
             object_type:
               type: string
               enum:

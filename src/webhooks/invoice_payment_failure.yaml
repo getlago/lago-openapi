@@ -1,7 +1,7 @@
 post:
-  description: A new invoice has been emitted
+  description: A payment attempt for an invoice has failed on a payment provider
   requestBody:
-    description: Details of the new invoice
+    description: Details of the invoice and of the payment provider error
     content:
       application/json:
         schema:
@@ -9,18 +9,18 @@ post:
           required:
             - webhook_type
             - object_type
-            - invoice
+            - payment_provider_invoice_payment_error
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.created
+                - invoice.payment_failure
             object_type:
               type: string
               enum:
-                - invoice
-            invoice:
-              $ref: "../schemas/InvoiceObjectExtended.yaml"
+                - payment_provider_invoice_payment_error
+            payment_provider_invoice_payment_error:
+              $ref: "../schemas/InvoicePaymentFailureObject.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully

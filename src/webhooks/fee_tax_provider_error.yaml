@@ -1,7 +1,7 @@
 post:
-  description: A new invoice has been emitted
+  description: An error was encountered while fetching taxes for a fee on a tax provider
   requestBody:
-    description: Details of the new invoice
+    description: Details of the fee and of the tax provider error
     content:
       application/json:
         schema:
@@ -9,18 +9,18 @@ post:
           required:
             - webhook_type
             - object_type
-            - invoice
+            - tax_provider_fee_error
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.created
+                - fee.tax_provider_error
             object_type:
               type: string
               enum:
-                - invoice
-            invoice:
-              $ref: "../schemas/InvoiceObjectExtended.yaml"
+                - tax_provider_fee_error
+            tax_provider_fee_error:
+              $ref: "../schemas/FeeTaxProviderErrorObject.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully

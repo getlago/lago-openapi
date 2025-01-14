@@ -98,6 +98,10 @@ CreditNoteCreateInput:
   $ref: "./CreditNoteCreateInput.yaml"
 CreditNoteUpdateInput:
   $ref: "./CreditNoteUpdateInput.yaml"
+CreditNoteExtendedObject:
+  $ref: "./CreditNoteExtendedObject.yaml"
+CreditNotePaymentProviderRefundError:
+  $ref: "./CreditNotePaymentProviderRefundError.yaml"
 Currency:
   $ref: "./Currency.yaml"
 Customer:
@@ -108,6 +112,8 @@ CustomerBillingConfiguration:
   $ref: "./CustomerBillingConfiguration.yaml"
 IntegrationCustomer:
   $ref: "./IntegrationCustomer.yaml"
+IntegrationProviderErrorObject:
+  $ref: "./IntegrationProviderErrorObject.yaml"
 CustomerChargeFiltersUsageObject:
   $ref: "./CustomerChargeFiltersUsageObject.yaml"
 CustomerChargeGroupedUsageObject:
@@ -116,6 +122,8 @@ CustomerChargeUsageObject:
   $ref: "./CustomerChargeUsageObject.yaml"
 CustomerCreateInput:
   $ref: "./CustomerCreateInput.yaml"
+CustomerIntegratrionErrorObject:
+  $ref: "./CustomerIntegratrionErrorObject.yaml"
 CustomerMetadata:
   $ref: "./CustomerMetadata.yaml"
 CustomerObject:
@@ -124,12 +132,18 @@ CustomerObjectExtended:
   $ref: "./CustomerObjectExtended.yaml"
 CustomerPastUsage:
   $ref: "./CustomerPastUsage.yaml"
+CustomerPaymentProvidernErrorObject:
+  $ref: "./CustomerPaymentProviderErrorObject.yaml"
 CustomersPaginated:
   $ref: "./CustomersPaginated.yaml"
+CustomerTaxProviderErrorObject:
+  $ref: "./CustomerTaxProviderErrorObject.yaml"
 CustomerUsage:
   $ref: "./CustomerUsage.yaml"
 CustomerUsageObject:
   $ref: "./CustomerUsageObject.yaml"
+CustomerViesCheckObject:
+  $ref: "./CustomerViesCheckObject.yaml"
 Event:
   $ref: "./Event.yaml"
 EventBatchInput:
@@ -140,6 +154,10 @@ EventInput:
   $ref: "./EventInput.yaml"
 EventObject:
   $ref: "./EventObject.yaml"
+EventErrorsObject:
+  $ref: "./EventErrorsObject.yaml"
+EventsErrorsObject:
+  $ref: "./EventsErrorsObject.yaml"
 Fee:
   $ref: "./Fee.yaml"
 FeeAppliedTaxObject:
@@ -150,6 +168,8 @@ Fees:
   $ref: "./Fees.yaml"
 FeesPaginated:
   $ref: "./FeesPaginated.yaml"
+FeeTaxProviderErrorObject:
+  $ref: "./FeeTaxProviderErrorObject.yaml"
 FeeUpdateInput:
   $ref: "./FeeUpdateInput.yaml"
 GrossRevenueObject:
@@ -192,6 +212,8 @@ InvoiceObjectExtended:
   $ref: "./InvoiceObjectExtended.yaml"
 InvoiceOneOffCreateInput:
   $ref: "./InvoiceOneOffCreateInput.yaml"
+InvoicePaymentFailureObject:
+  $ref: "./InvoicePaymentFailureObject.yaml"
 InvoicesPaginated:
   $ref: "./InvoicesPaginated.yaml"
 InvoiceUpdateInput:
@@ -210,6 +232,10 @@ OverdueBalances:
   $ref: "./OverdueBalances.yaml"
 PaginationMeta:
   $ref: "./PaginationMeta.yaml"
+PaymentObject:
+  $ref: "./PaymentObject.yaml"
+PaymentProviderErrorObject:
+  $ref: "./PaymentProviderErrorObject.yaml"
 PaymentRequestObject:
   $ref: "./PaymentRequestObject.yaml"
 PaymentRequestPaymentFailureObject:
@@ -234,6 +260,10 @@ SubscriptionCreateInput:
   $ref: "./SubscriptionCreateInput.yaml"
 SubscriptionUpdateInput:
   $ref: "./SubscriptionUpdateInput.yaml"
+SubscriptionWithCustomerObject:
+  $ref: "./SubscriptionWithCustomerObject.yaml"
+SubscriptionWithThresholdObject:
+  $ref: "./SubscriptionWithThresholdObject.yaml"
 SubscriptionObject:
   $ref: "./SubscriptionObject.yaml"
 SubscriptionObjectExtended:

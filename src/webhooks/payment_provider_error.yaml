@@ -1,7 +1,7 @@
 post:
-  description: A new invoice has been emitted
+  description: An error was raised by a payment provider
   requestBody:
-    description: Details of the new invoice
+    description: Details of the payment provider and of the error
     content:
       application/json:
         schema:
@@ -9,18 +9,18 @@ post:
           required:
             - webhook_type
             - object_type
-            - invoice
+            - payment_provider_error
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.created
+                - payment_provider.error
             object_type:
               type: string
               enum:
-                - invoice
-            invoice:
-              $ref: "../schemas/InvoiceObjectExtended.yaml"
+                - payment_provider_error
+            payment_provider_error:
+              $ref: "../schemas/PaymentProviderErrorObject.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully

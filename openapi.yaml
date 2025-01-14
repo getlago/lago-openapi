@@ -1255,6 +1255,10 @@ paths:
                 properties:
                   customer:
                     type: object
+                    required:
+                      - lago_customer_id
+                      - external_customer_id
+                      - payment_provider
                     properties:
                       lago_customer_id:
                         type: string
@@ -1268,6 +1272,10 @@ paths:
                         type: string
                         example: stripe
                         description: The Payment Provider name linked to the Customer.
+                      payment_provider_code:
+                        type: string
+                        description: Code of the payment provider
+                        example: Stripe Prod
                       checkout_url:
                         type: string
                         example: 'https://foo.bar'
@@ -2972,6 +2980,1222 @@ paths:
           $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
+webhooks:
+  customer_created:
+    post:
+      description: A new customer has been created
+      requestBody:
+        description: Details of the new customer
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - customer
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.created
+                object_type:
+                  type: string
+                  enum:
+                    - customer
+                customer:
+                  $ref: '#/components/schemas/CustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_updated:
+    post:
+      description: A customer has been updated
+      requestBody:
+        description: Details of the customer
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - customer
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.updated
+                object_type:
+                  type: string
+                  enum:
+                    - customer
+                customer:
+                  $ref: '#/components/schemas/CustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_accounting_provider_created:
+    post:
+      description: A customer was created on an accouting integration
+      requestBody:
+        description: Details of the customer
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - customer
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.accounting_provider_created
+                object_type:
+                  type: string
+                  enum:
+                    - customer
+                customer:
+                  $ref: '#/components/schemas/CustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_accounting_provider_error:
+    post:
+      description: An error was encountered while syncing a customer to an accounting provider
+      requestBody:
+        description: Details of the customer and of the provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - accounting_provider_customer_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.accounting_provider_error
+                object_type:
+                  type: string
+                  enum:
+                    - accounting_provider_customer_error
+                accounting_provider_customer_error:
+                  $ref: '#/components/schemas/CustomerIntegratrionErrorObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_crm_provider_created:
+    post:
+      description: A customer has been created in the CRM provider
+      requestBody:
+        description: Details of the customer
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - customer
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.crm_provider_created
+                object_type:
+                  type: string
+                  enum:
+                    - customer
+                customer:
+                  $ref: '#/components/schemas/CustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_crm_provider_error:
+    post:
+      description: An error was encountered while syncing a customer to a CRM provider
+      requestBody:
+        description: Details of the customer and of the CRM provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - crm_provider_customer_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.crm_provider_error
+                object_type:
+                  type: string
+                  enum:
+                    - crm_provider_customer_error
+                crm_provider_customer_error:
+                  $ref: '#/components/schemas/CustomerIntegratrionErrorObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_payment_provider_created:
+    post:
+      description: A customer has been created on a payment provider
+      requestBody:
+        description: Details of the customer
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - customer
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.payment_provider_created
+                object_type:
+                  type: string
+                  enum:
+                    - customer
+                customer:
+                  $ref: '#/components/schemas/CustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_payment_provider_error:
+    post:
+      description: An error was encountered while syncing a customer to a payment provider
+      requestBody:
+        description: Details of the customer and of the payment provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_provider_customer_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.payment_provider_error
+                object_type:
+                  type: string
+                  enum:
+                    - payment_provider_customer_error
+                payment_provider_customer_error:
+                  $ref: '#/components/schemas/CustomerPaymentProvidernErrorObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_checkout_url_generated:
+    post:
+      description: A checkout URL was generated for a customer
+      requestBody:
+        description: Details of the customer with the generated checkout URL
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_provider_customer_checkout_url
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.checkout_url_generated
+                object_type:
+                  type: string
+                  enum:
+                    - payment_provider_customer_checkout_url
+                payment_provider_customer_checkout_url:
+                  $ref: '#/paths/~1customers~1%7Bexternal_customer_id%7D~1checkout_url/post/responses/200/content/application~1json/schema'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_tax_provider_error:
+    post:
+      description: An error was encountered while fetching taxes for a customer on a tax provider
+      requestBody:
+        description: Details of the customer and of the tax provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - tax_provider_customer_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.tax_provider_error
+                object_type:
+                  type: string
+                  enum:
+                    - tax_provider_customer_error
+                tax_provider_customer_error:
+                  $ref: '#/components/schemas/CustomerTaxProviderErrorObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  customer_vies_check:
+    post:
+      description: VIES VAT number has been checked for a customer
+      requestBody:
+        description: Details of the customer with the VIES VAT check status
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - customer
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - customer.vies_check
+                object_type:
+                  type: string
+                  enum:
+                    - customer
+                customer:
+                  $ref: '#/components/schemas/CustomerViesCheckObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  credit_note_created:
+    post:
+      description: A new credit note has been created
+      requestBody:
+        description: Details of the new credit note
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - credit_note
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - credit_note.created
+                object_type:
+                  type: string
+                  enum:
+                    - credit_note
+                credit_note:
+                  $ref: '#/components/schemas/CreditNoteExtendedObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  credit_note_generated:
+    post:
+      description: A new credit note PDF has been generated
+      requestBody:
+        description: Details of the credit note
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - credit_note
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - credit_note.generated
+                object_type:
+                  type: string
+                  enum:
+                    - credit_note
+                credit_note:
+                  $ref: '#/components/schemas/CreditNoteExtendedObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  credit_note_provider_refund_failure:
+    post:
+      description: The refund of a credit note has failed on a payment provider
+      requestBody:
+        description: Details of the credit note and of the provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - credit_note_payment_provider_refund_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - credit_note.refund_failure
+                object_type:
+                  type: string
+                  enum:
+                    - credit_note_payment_provider_refund_error
+                credit_note_payment_provider_refund_error:
+                  $ref: '#/components/schemas/CreditNotePaymentProviderRefundError'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  event_error:
+    post:
+      description: An error has been detected on an event
+      requestBody:
+        description: Details of the event and of the error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - event_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - event.error
+                object_type:
+                  type: string
+                  enum:
+                    - event_error
+                event_error:
+                  $ref: '#/components/schemas/EventErrorsObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  events_errors:
+    post:
+      description: Errors were encountered while post-processing some events
+      requestBody:
+        description: Details of the events errors
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - events_errors
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - events.errors
+                object_type:
+                  type: string
+                  enum:
+                    - events_errors
+                events_errors:
+                  $ref: '#/components/schemas/EventsErrorsObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  fee_created:
+    post:
+      description: A pay in advance fee has been created
+      requestBody:
+        description: Details of the new fee
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - fee
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - fee.created
+                object_type:
+                  type: string
+                  enum:
+                    - fee
+                fee:
+                  $ref: '#/components/schemas/FeeObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  fee_tax_provider_error:
+    post:
+      description: An error was encountered while fetching taxes for a fee on a tax provider
+      requestBody:
+        description: Details of the fee and of the tax provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - tax_provider_fee_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - fee.tax_provider_error
+                object_type:
+                  type: string
+                  enum:
+                    - tax_provider_fee_error
+                tax_provider_fee_error:
+                  $ref: '#/components/schemas/FeeTaxProviderErrorObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_created:
+    post:
+      description: A new invoice has been emitted
+      requestBody:
+        description: Details of the new invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.created
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_one_off_created:
+    post:
+      description: A new one off invoice has been emitted
+      requestBody:
+        description: Details of the new invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.one_off_created
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_add_on_added:
+    post:
+      description: A new add on invoice has been emitted
+      requestBody:
+        description: Details of the new invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.add_on_added
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_paid_credit_added:
+    post:
+      description: A new prepaid credit invoice has been emitted
+      requestBody:
+        description: Details of the new invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.paid_credit_added
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_generated:
+    post:
+      description: A new invoice PDF has been generated
+      requestBody:
+        description: Details of the invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.generated
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_drafted:
+    post:
+      description: A new draft invoice has been emitted
+      requestBody:
+        description: Details of the new invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.drafted
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_voided:
+    post:
+      description: An invoice has been voided
+      requestBody:
+        description: Details of the invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.voided
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_payment_dispute_lost:
+    post:
+      description: A payment dispute has been lost for an invoice payment
+      requestBody:
+        description: Details of the invoice and of the payment dispute
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_dispute_lost
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.payment_dispute_lost
+                object_type:
+                  type: string
+                  enum:
+                    - payment_dispute_lost
+                payment_dispute_lost:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_payment_status_updated:
+    post:
+      description: The payment status of an invoice has been updated
+      requestBody:
+        description: Details of the invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.payment_status_updated
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_payment_overdue:
+    post:
+      description: An invoice payment is overdue
+      requestBody:
+        description: Details of the invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.payment_overdue
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_payment_failure:
+    post:
+      description: A payment attempt for an invoice has failed on a payment provider
+      requestBody:
+        description: Details of the invoice and of the payment provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_provider_invoice_payment_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.payment_failure
+                object_type:
+                  type: string
+                  enum:
+                    - payment_provider_invoice_payment_error
+                payment_provider_invoice_payment_error:
+                  $ref: '#/components/schemas/InvoicePaymentFailureObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_resynced:
+    post:
+      description: An invoice has been resynced with salesforce
+      requestBody:
+        description: Details of the invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.resynced
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  integration_provider_error:
+    post:
+      description: An error was encountered while processing data on an integration
+      requestBody:
+        description: Details of the integration and of the integration error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - provider_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - integration.provider_error
+                object_type:
+                  type: string
+                  enum:
+                    - provider_error
+                provider_error:
+                  $ref: '#/components/schemas/IntegrationProviderErrorObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  payment_requires_action:
+    post:
+      description: An action is required to process a payment
+      requestBody:
+        description: Details of the payment and of the required action
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment.requires_action
+                object_type:
+                  type: string
+                  enum:
+                    - payment
+                payment:
+                  $ref: '#/components/schemas/PaymentObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  payment_provider_error:
+    post:
+      description: An error was raised by a payment provider
+      requestBody:
+        description: Details of the payment provider and of the error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_provider_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_provider.error
+                object_type:
+                  type: string
+                  enum:
+                    - payment_provider_error
+                payment_provider_error:
+                  $ref: '#/components/schemas/PaymentProviderErrorObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  payment_request_created:
+    post:
+      description: An new payment request has been created
+      requestBody:
+        description: Details of the new payment request
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_request
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_request.created
+                object_type:
+                  type: string
+                  enum:
+                    - payment_request
+                payment_request:
+                  $ref: '#/components/schemas/PaymentRequestObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  payment_request_payment_failure:
+    post:
+      description: A payment attempt for a payment request has failed on a payment provider
+      requestBody:
+        description: Details of the payment request and of the provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_provider_payment_request_payment_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_request.payment_failure
+                object_type:
+                  type: string
+                  enum:
+                    - payment_provider_payment_request_payment_error
+                payment_provider_payment_request_payment_error:
+                  $ref: '#/components/schemas/PaymentRequestPaymentFailureObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  payment_request_payment_status_updated:
+    post:
+      description: The payment status of an invoice has been updated
+      requestBody:
+        description: Details of the payment request
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_request
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_request.payment_status_updated
+                object_type:
+                  type: string
+                  enum:
+                    - payment_request
+                payment_request:
+                  $ref: '#/components/schemas/PaymentRequestObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  subscription_terminated:
+    post:
+      description: A subscription has been terminated
+      requestBody:
+        description: Details of the subscription
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - subscription
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - subscription.terminated
+                object_type:
+                  type: string
+                  enum:
+                    - subscription
+                subscription:
+                  $ref: '#/components/schemas/SubscriptionWithCustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  subscription_started:
+    post:
+      description: An subscription has started
+      requestBody:
+        description: Details of the subscription
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - subscription
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - subscription.started
+                object_type:
+                  type: string
+                  enum:
+                    - subscription
+                subscription:
+                  $ref: '#/components/schemas/SubscriptionWithCustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  subscription_termination_alert:
+    post:
+      description: A subscription will be terminated in the future
+      requestBody:
+        description: Details of the subscription
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - subscription
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - subscription.termination_alert
+                object_type:
+                  type: string
+                  enum:
+                    - subscription
+                subscription:
+                  $ref: '#/components/schemas/SubscriptionWithCustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  subscription_trial_ended:
+    post:
+      description: A subscription trial period has ended
+      requestBody:
+        description: Details of the subscription
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - subscription
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - subscription.trial_ended
+                object_type:
+                  type: string
+                  enum:
+                    - subscription
+                subscription:
+                  $ref: '#/components/schemas/SubscriptionWithCustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  subscription_usage_threshold_reached:
+    post:
+      description: A usage threshold has been reached by a subscription
+      requestBody:
+        description: Details of the subscription and of the reached threshold
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - subscription
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - subscription.usage_threshold_reached
+                object_type:
+                  type: string
+                  enum:
+                    - subscription
+                subscription:
+                  $ref: '#/components/schemas/SubscriptionWithThresholdObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_depleted_ongoing_balance:
+    post:
+      description: The balance of a wallet has been depleted
+      requestBody:
+        description: Details of the wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.depleted_ongoing_balance
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_transaction_created:
+    post:
+      description: A new wallet transaction has been created
+      requestBody:
+        description: Details of the wallet transaction
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - wallet_transaction
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet_transaction.created
+                object_type:
+                  type: string
+                  enum:
+                    - wallet_transaction
+                wallet_transaction:
+                  $ref: '#/components/schemas/WalletTransactionObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_transaction_updated:
+    post:
+      description: A wallet transaction has been updated
+      requestBody:
+        description: Details of the wallet transaction
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - wallet_transaction
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet_transaction.updated
+                object_type:
+                  type: string
+                  enum:
+                    - wallet_transaction
+                wallet_transaction:
+                  $ref: '#/components/schemas/WalletTransactionObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_transaction_payment_failure:
+    post:
+      description: A payment attempt for a wallet transaction has failed on a payment provider
+      requestBody:
+        description: Details of the wallet transaction and of the provider error
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - payment_provider_wallet_transaction_payment_error
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet_transaction.payment_failure
+                object_type:
+                  type: string
+                  enum:
+                    - payment_provider_wallet_transaction_payment_error
+                payment_provider_wallet_transaction_payment_error:
+                  $ref: '#/components/schemas/WalletTransactionPaymentFailureObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
 components:
   parameters:
     external_customer_id:
@@ -5131,6 +6355,57 @@ components:
                 - `succeeded`: this status indicates that the refund has been successfully executed. The refund amount has been processed and returned to the customer or the designated recipient.
                 - `failed`: this status indicates that the refund failed to execute. The refund request encountered an error or unsuccessful processing, and the refund amount could not be returned.
               example: succeeded
+    CreditNoteExtendedObject:
+      allOf:
+        - $ref: '#/components/schemas/CreditNoteObject'
+        - type: object
+          properties:
+            customer:
+              $ref: '#/components/schemas/CustomerObject/allOf/0'
+    CreditNotePaymentProviderRefundError:
+      type: object
+      required:
+        - lago_credit_note_id
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
+      properties:
+        lago_credit_note_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the credit note within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the credit note record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        provider_customer_id:
+          type: string
+          description: Unique identifier of the customer within the payment provider
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        payment_provider:
+          type: string
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+          description: The type of payment provider code
+          example: stripe
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: Stripe Prod
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     Currency:
       type: string
       example: USD
@@ -5394,6 +6669,32 @@ components:
           type: string
           example: '2'
           description: This optional field is needed only when working with `netsuite` connection.
+    IntegrationProviderErrorObject:
+      type: object
+      required:
+        - lago_integration_id
+        - provider
+        - provider_code
+        - provider_error
+      properties:
+        lago_integration_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the integration within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the integration's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        provider:
+          type: string
+          description: The type of integration provider
+          example: netsuite
+        provider_code:
+          type: string
+          example: netsuite-eu-1
+          description: Unique code used to identify an integration connection.
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     CustomerChargeFiltersUsageObject:
       type: array
       description: 'Array of filter object, representing multiple dimensions for a charge item.'
@@ -5767,6 +7068,44 @@ components:
               description: List of unique codes identifying the invoice custom sections.
               example:
                 - eu_bank_details
+    CustomerIntegratrionErrorObject:
+      type: object
+      required:
+        - lago_customer_id
+        - external_customer_id
+        - accounting_provider
+        - accounting_provider_code
+        - provider_error
+      properties:
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        accounting_provider:
+          type: string
+          enum:
+            - anrock
+            - hubspot
+            - netsuite
+            - okta
+            - salesforce
+            - xero
+          description: The type of accounting provider code
+          example: anrock
+        accounting_provider_code:
+          type: string
+          description: Code of the accounting provider
+          example: Netsuite Prod
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     CustomerMetadata:
       type: object
       description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
@@ -6050,6 +7389,42 @@ components:
             $ref: '#/components/schemas/CustomerUsage'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    CustomerPaymentProvidernErrorObject:
+      type: object
+      required:
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
+        - payment_provider_code
+        - provider_error
+      properties:
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        payment_provider:
+          type: string
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+          description: The type of payment provider
+          example: stripe
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: Stripe Prod
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     CustomersPaginated:
       type: object
       required:
@@ -6062,6 +7437,44 @@ components:
             $ref: '#/components/schemas/CustomerObjectExtended'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    CustomerTaxProviderErrorObject:
+      type: object
+      required:
+        - lago_customer_id
+        - external_customer_id
+        - tax_provider
+        - tax_provider_code
+        - provider_error
+      properties:
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        tax_provider:
+          type: string
+          enum:
+            - anrock
+            - hubspot
+            - netsuite
+            - okta
+            - salesforce
+            - xero
+          description: The type of tax provider
+          example: anrock
+        tax_provider_code:
+          type: string
+          description: Code of the tax provider
+          example: Stripe Prod
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     CustomerUsage:
       type: object
       required:
@@ -6122,6 +7535,18 @@ components:
           description: Array of charges that comprise the current usage. It contains detailed information about individual charge items associated with the usage.
           items:
             $ref: '#/components/schemas/CustomerChargeUsageObject'
+    CustomerViesCheckObject:
+      allOf:
+        - $ref: '#/components/schemas/CustomerObject/allOf/0'
+        - type: object
+          properties:
+            vies_check:
+              type: object
+              properties:
+                valid:
+                  type: boolean
+                  description: Whether the VIES check was successful
+                  example: true
     Event:
       type: object
       required:
@@ -6281,6 +7706,57 @@ components:
           format: date-time
           example: '2022-04-29T08:59:51Z'
           description: 'The creation date of the event''s record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event''s record was created within the Lago application'
+    EventErrorsObject:
+      type: object
+      required:
+        - status
+        - error
+        - message
+        - event
+      properties:
+        status:
+          type: integer
+          description: HTTP status code. It will always be 422
+          example: 422
+        error:
+          type: string
+          description: HTTP error description. It will always be "Unprocessable Entity"
+          example: Unprocessable Entity
+        message:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+        event:
+          $ref: '#/components/schemas/EventObject'
+    EventsErrorsObject:
+      type: object
+      required:
+        - invalid_code
+        - missing_aggregation_property
+        - invalid_filter_values
+      properties:
+        invalid_code:
+          type: array
+          items:
+            type: string
+          description: List of event transaction_id with an invalid code
+          example:
+            - transaction_1234567890
+        missing_aggregation_property:
+          type: array
+          items:
+            type: string
+          description: List of event transaction_id with a missing aggregation property
+          example:
+            - transaction_1234567890
+        invalid_filter_values:
+          type: array
+          items:
+            type: string
+          description: List of event transaction_id with invalid filter values
+          example:
+            - transaction_1234567890
     Fee:
       type: object
       required:
@@ -6743,6 +8219,34 @@ components:
           properties:
             meta:
               $ref: '#/components/schemas/PaginationMeta'
+    FeeTaxProviderErrorObject:
+      type: object
+      required:
+        - tax_provider_code
+        - lago_charge_id
+        - event_transaction_id
+        - provider_error
+      properties:
+        tax_provider_code:
+          type: string
+          description: Code of the tax provider
+          example: Stripe Prod
+        lago_charge_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Unique identifier assigned to the charge that the fee belongs to
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        event_transaction_id:
+          type: string
+          nullable: true
+          description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge`.
+          example: transaction_1234567890
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     FeeUpdateInput:
       type: object
       required:
@@ -7440,6 +8944,50 @@ components:
                     description: List of unique code used to identify the taxes.
                     example:
                       - french_standard_vat
+    InvoicePaymentFailureObject:
+      type: object
+      required:
+        - lago_invoice_id
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
+      properties:
+        lago_invoice_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        provider_customer_id:
+          type: string
+          description: Unique identifier of the customer within the payment provider
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        payment_provider:
+          type: string
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+          description: The type of payment provider code
+          example: stripe
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: Stripe Prod
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     InvoicesPaginated:
       type: object
       required:
@@ -7817,6 +9365,99 @@ components:
           type: integer
           description: Total number of records.
           example: 70
+    PaymentObject:
+      type: object
+      required:
+        - lago_payable_id
+        - lago_customer_id
+        - status
+        - external_id
+        - provider_customer_id
+        - payment_provider_type
+        - provider_payment_id
+        - next_action
+      properties:
+        lago_payable_id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the paid resource, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: 'Unique identifier of the customer, created by Lago.'
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        status:
+          type: string
+          description: The status of the payment within the payment provider
+          example: processing
+        external_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The customer external unique identifier (provided by your own application)
+        provider_customer_id:
+          type: string
+          description: Unique identifier of the customer within the payment provider
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: Stripe Prod
+        payment_provider_type:
+          type: string
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+          description: The type of payment provider
+          example: stripe
+        provider_payment_id:
+          type: string
+          description: Unique identifier of the payment within the payment provider
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        next_action:
+          type: object
+          additionalProperties: true
+    PaymentProviderErrorObject:
+      type: object
+      required:
+        - lago_payment_provider_id
+        - payment_provider_name
+        - payment_provider_code
+        - provider_error
+        - source
+      properties:
+        lago_payment_provider_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the payment provider within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the payment provider's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        payment_provider_name:
+          type: string
+          description: The name of payment provider
+          example: Stripe Prod
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: stripe
+        source:
+          type: string
+          enum:
+            - stripe
+          description: The source of the error
+          example: stripe
+        action:
+          type: string
+          enum:
+            - payment_provider.register_webhook
+          description: The action that was being performed when the error occurred
+          example: payment_provider.register_webhook
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     PaymentRequestObject:
       type: object
       required:
@@ -7871,6 +9512,59 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceObject/allOf/0'
+    PaymentRequestPaymentFailureObject:
+      type: object
+      required:
+        - lago_payment_request_id
+        - lago_invoice_ids
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
+      properties:
+        lago_payment_request_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the payment request within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the payment request record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_invoice_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of unique identifiers assigned to the invoices within the Lago application. These IDs are exclusively created by Lago and serve as unique identifiers for the invoices records within the Lago system.
+          example:
+            - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        provider_customer_id:
+          type: string
+          description: Unique identifier of the customer within the payment provider
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        payment_provider:
+          type: string
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+          description: The type of payment provider code
+          example: stripe
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: Stripe Prod
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     PaymentRequestsPaginated:
       type: object
       required:
@@ -8699,6 +10393,26 @@ components:
               description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
             plan_overrides:
               $ref: '#/components/schemas/PlanOverridesObject'
+    SubscriptionWithCustomerObject:
+      allOf:
+        - $ref: '#/components/schemas/SubscriptionObject'
+        - type: object
+          properties:
+            plan:
+              $ref: '#/components/schemas/PlanObject'
+            customer:
+              $ref: '#/components/schemas/CustomerObject'
+    SubscriptionWithThresholdObject:
+      allOf:
+        - $ref: '#/components/schemas/SubscriptionObject'
+        - type: object
+          properties:
+            plan:
+              $ref: '#/components/schemas/PlanObject'
+            customer:
+              $ref: '#/components/schemas/CustomerObject'
+            usage_threshold:
+              $ref: '#/components/schemas/UsageThresholdObject'
     SubscriptionObject:
       type: object
       required:
@@ -9675,6 +11389,50 @@ components:
           format: date-time
           description: 'The date of the wallet transaction creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).'
           example: '2022-04-29T08:59:51Z'
+    WalletTransactionPaymentFailureObject:
+      type: object
+      required:
+        - lago_wallet_transaction_id
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
+      properties:
+        lago_wallet_transaction_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        provider_customer_id:
+          type: string
+          description: Unique identifier of the customer within the payment provider
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        payment_provider:
+          type: string
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+          description: The type of payment provider code
+          example: stripe
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: Stripe Prod
+        provider_error:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: true
     WalletTransactions:
       type: object
       required:

@@ -1,7 +1,7 @@
 post:
-  description: A new invoice has been emitted
+  description: An error was encountered while syncing a customer to an accounting provider
   requestBody:
-    description: Details of the new invoice
+    description: Details of the customer and of the provider error
     content:
       application/json:
         schema:
@@ -9,18 +9,18 @@ post:
           required:
             - webhook_type
             - object_type
-            - invoice
+            - accounting_provider_customer_error
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.created
+                - customer.accounting_provider_error
             object_type:
               type: string
               enum:
-                - invoice
-            invoice:
-              $ref: "../schemas/InvoiceObjectExtended.yaml"
+                - accounting_provider_customer_error
+            accounting_provider_customer_error:
+              $ref: "../schemas/CustomerIntegratrionErrorObject.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully
