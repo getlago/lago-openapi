@@ -1,0 +1,26 @@
+post:
+  description: The refund of a credit note has failed on a payment provider
+  requestBody:
+    description: Details of the credit note and of the provider error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - credit_note_payment_provider_refund_error
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - credit_note.refund_failure
+            object_type:
+              type: string
+              enum:
+                - credit_note_payment_provider_refund_error
+            credit_note_payment_provider_refund_error:
+              $ref: "../schemas/CreditNotePaymentProviderRefundError.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

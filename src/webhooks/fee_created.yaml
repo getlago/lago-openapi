@@ -1,0 +1,26 @@
+post:
+  description: A pay in advance fee has been created
+  requestBody:
+    description: Details of the new fee
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - fee
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - fee.created
+            object_type:
+              type: string
+              enum:
+                - fee
+            fee:
+              $ref: "../schemas/FeeObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

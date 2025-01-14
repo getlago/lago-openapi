@@ -1,0 +1,26 @@
+post:
+  description: A checkout URL was generated for a customer
+  requestBody:
+    description: Details of the customer with the generated checkout URL
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - payment_provider_customer_checkout_url
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - customer.checkout_url_generated
+            object_type:
+              type: string
+              enum:
+                - payment_provider_customer_checkout_url
+            payment_provider_customer_checkout_url:
+              $ref: "../schemas/CustomerCheckoutUrl.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

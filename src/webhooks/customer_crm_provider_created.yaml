@@ -1,0 +1,26 @@
+post:
+  description: A customer has been created in the CRM provider
+  requestBody:
+    description: Details of the customer
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - customer
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - customer.crm_provider_created
+            object_type:
+              type: string
+              enum:
+                - customer
+            customer:
+              $ref: "../schemas/CustomerObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

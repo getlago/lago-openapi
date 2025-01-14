@@ -1,0 +1,11 @@
+allOf:
+  - $ref: "./CustomerBaseObject.yaml"
+  - type: object
+    properties:
+      vies_check:
+        type: object
+        properties:
+          valid:
+            type: boolean
+            description: "Whether the VIES check was successful"
+            example: true
