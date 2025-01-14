@@ -11,3 +11,8 @@ allOf:
         type: array
         items:
           $ref: './TaxObject.yaml'
+      applicable_invoice_custom_sections:
+        description: The customer’s invoice custom section used for generating invoices.
+        type: array
+        items:
+          $ref: './InvoiceCustomSectionObject.yaml'

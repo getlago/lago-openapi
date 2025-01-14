@@ -201,3 +201,14 @@ properties:
               type: boolean
               example: true
               description: Determines whether the item or information should be displayed in the invoice. If set to true, the item or information will be included and visible in the generated invoice. If set to false, the item or information will be excluded and not displayed in the invoice.
+
+      skip_invoice_custom_sections:
+        type: boolean
+        example: false
+        description: Set to `true` to exclude all invoice custom sections from PDF generation for this customer only. Default: false
+      invoice_custom_section_codes:
+        type: array
+        items:
+          type: string
+        description: List of unique codes identifying the invoice custom sections.
+        example: ['eu_bank_details']
