@@ -1697,6 +1697,22 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/external_customer_id'
+        - name: amount_from
+          in: query
+          description: Filter invoices of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 9000
+        - name: amount_to
+          in: query
+          description: Filter invoices up to a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 100000
         - name: issuing_date_from
           in: query
           description: Filter invoices starting from a specific date.
@@ -1781,6 +1797,14 @@ paths:
               - credit
               - one_off
               - advance_charges
+        - name: 'metadata[key]'
+          in: query
+          description: 'Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. For example, `metadata[color]=blue`.'
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: someValue
       responses:
         '200':
           description: Invoices
