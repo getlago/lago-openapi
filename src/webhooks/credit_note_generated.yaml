@@ -1,0 +1,26 @@
+post:
+  description: A new credit note PDF has been generated
+  requestBody:
+    description: Details of the credit note
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - credit_note
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - credit_note.generated
+            object_type:
+              type: string
+              enum:
+                - credit_note
+            credit_note:
+              $ref: "../schemas/CreditNoteExtendedObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

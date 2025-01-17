@@ -217,6 +217,97 @@ paths:
     $ref: "./resources/webhook_endpoints.yaml"
   /webhook_endpoints/{lago_id}:
     $ref: "./resources/webhook_endpoint.yaml"
+webhooks:
+  customer_created:
+    $ref: "./webhooks/customer_created.yaml"
+  customer_updated:
+    $ref: "./webhooks/customer_updated.yaml"
+  customer_accounting_provider_created:
+    $ref: "./webhooks/customer_accounting_provider_created.yaml"
+  customer_accounting_provider_error:
+    $ref: "./webhooks/customer_accounting_provider_error.yaml"
+  customer_crm_provider_created:
+    $ref: "./webhooks/customer_crm_provider_created.yaml"
+  customer_crm_provider_error:
+    $ref: "./webhooks/customer_crm_provider_error.yaml"
+  customer_payment_provider_created:
+    $ref: "./webhooks/customer_payment_provider_created.yaml"
+  customer_payment_provider_error:
+    $ref: "./webhooks/customer_payment_provider_error.yaml"
+  customer_checkout_url_generated:
+    $ref: "./webhooks/customer_checkout_url_generated.yaml"
+  customer_tax_provider_error:
+    $ref: "./webhooks/customer_tax_provider_error.yaml"
+  customer_vies_check:
+    $ref: "./webhooks/customer_vies_check.yaml"
+  credit_note_created:
+    $ref: "./webhooks/credit_note_created.yaml"
+  credit_note_generated:
+    $ref: "./webhooks/credit_note_generated.yaml"
+  credit_note_provider_refund_failure:
+    $ref: "./webhooks/credit_note_provider_refund_failure.yaml"
+  event_error:
+    $ref: "./webhooks/event_error.yaml"
+  events_errors:
+    $ref: "./webhooks/events_errors.yaml"
+  fee_created:
+    $ref: "./webhooks/fee_created.yaml"
+  fee_tax_provider_error:
+    $ref: "./webhooks/fee_tax_provider_error.yaml"
+  invoice_created:
+    $ref: "./webhooks/invoice_created.yaml"
+  invoice_one_off_created:
+    $ref: "./webhooks/invoice_one_off_created.yaml"
+  invoice_add_on_added:
+    $ref: "./webhooks/invoice_add_on_added.yaml"
+  invoice_paid_credit_added:
+    $ref: "./webhooks/invoice_paid_credit_added.yaml"
+  invoice_generated:
+    $ref: "./webhooks/invoice_generated.yaml"
+  invoice_drafted:
+    $ref: "./webhooks/invoice_drafted.yaml"
+  invoice_voided:
+    $ref: "./webhooks/invoice_voided.yaml"
+  invoice_payment_dispute_lost:
+    $ref: "./webhooks/invoice_payment_dispute_lost.yaml"
+  invoice_payment_status_updated:
+    $ref: "./webhooks/invoice_payment_status_updated.yaml"
+  invoice_payment_overdue:
+    $ref: "./webhooks/invoice_payment_overdue.yaml"
+  invoice_payment_failure:
+    $ref: "./webhooks/invoice_payment_failure.yaml"
+  invoice_resynced:
+    $ref: "./webhooks/invoice_resynced.yaml"
+  integration_provider_error:
+    $ref: "./webhooks/integration_provider_error.yaml"
+  payment_requires_action:
+    $ref: "./webhooks/payment_requires_action.yaml"
+  payment_provider_error:
+    $ref: "./webhooks/payment_provider_error.yaml"
+  payment_request_created:
+    $ref: "./webhooks/payment_request_created.yaml"
+  payment_request_payment_failure:
+    $ref: "./webhooks/payment_request_payment_failure.yaml"
+  payment_request_payment_status_updated:
+    $ref: "./webhooks/payment_request_payment_status_updated.yaml"
+  subscription_terminated:
+    $ref: "./webhooks/subscription_terminated.yaml"
+  subscription_started:
+    $ref: "./webhooks/subscription_started.yaml"
+  subscription_termination_alert:
+    $ref: "./webhooks/subscription_termination_alert.yaml"
+  subscription_trial_ended:
+    $ref: "./webhooks/subscription_trial_ended.yaml"
+  subscription_usage_threshold_reached:
+    $ref: "./webhooks/subscription_usage_threshold_reached.yaml"
+  wallet_depleted_ongoing_balance:
+    $ref: "./webhooks/wallet_depleted_ongoing_balance.yaml"
+  wallet_transaction_created:
+    $ref: "./webhooks/wallet_transaction_created.yaml"
+  wallet_transaction_updated:
+    $ref: "./webhooks/wallet_transaction_updated.yaml"
+  wallet_transaction_payment_failure:
+    $ref: "./webhooks/wallet_transaction_payment_failure.yaml"
 components:
   parameters:
     $ref: "./parameters/_index.yaml"

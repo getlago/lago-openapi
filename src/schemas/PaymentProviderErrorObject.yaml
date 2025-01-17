@@ -1,0 +1,38 @@
+type: object
+required:
+  - lago_payment_provider_id
+  - payment_provider_name
+  - payment_provider_code
+  - provider_error
+  - source
+properties:
+  lago_payment_provider_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier assigned to the payment provider within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the payment provider's record within the Lago system.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  payment_provider_name:
+    type: string
+    description: The name of payment provider
+    example: "Stripe Prod"
+  payment_provider_code:
+    type: string
+    description: Code of the payment provider
+    example: "stripe"
+  source:
+    type: string
+    enum:
+      - stripe
+    description: The source of the error
+    example: "stripe"
+  action:
+    type: string
+    enum:
+      - payment_provider.register_webhook
+    description: The action that was being performed when the error occurred
+    example: "payment_provider.register_webhook"
+  provider_error:
+    oneOf:
+      - type: string
+      - type: object
+        additionalProperties: true

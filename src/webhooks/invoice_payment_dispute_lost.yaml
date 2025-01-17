@@ -1,0 +1,26 @@
+post:
+  description: A payment dispute has been lost for an invoice payment
+  requestBody:
+    description: Details of the invoice and of the payment dispute
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - payment_dispute_lost
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - invoice.payment_dispute_lost
+            object_type:
+              type: string
+              enum:
+                - payment_dispute_lost
+            payment_dispute_lost:
+              $ref: "../schemas/InvoiceObjectExtended.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

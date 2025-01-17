@@ -1,0 +1,26 @@
+post:
+  description: A subscription will be terminated in the future
+  requestBody:
+    description: Details of the subscription
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - subscription
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - subscription.termination_alert
+            object_type:
+              type: string
+              enum:
+                - subscription
+            subscription:
+              $ref: "../schemas/SubscriptionWithCustomerObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

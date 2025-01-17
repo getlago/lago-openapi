@@ -1,0 +1,26 @@
+post:
+  description: A payment attempt for a wallet transaction has failed on a payment provider
+  requestBody:
+    description: Details of the wallet transaction and of the provider error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - payment_provider_wallet_transaction_payment_error
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - wallet_transaction.payment_failure
+            object_type:
+              type: string
+              enum:
+                - payment_provider_wallet_transaction_payment_error
+            payment_provider_wallet_transaction_payment_error:
+              $ref: "../schemas/WalletTransactionPaymentFailureObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

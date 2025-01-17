@@ -1,0 +1,26 @@
+post:
+  description: An new payment request has been created
+  requestBody:
+    description: Details of the new payment request
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - payment_request
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - payment_request.created
+            object_type:
+              type: string
+              enum:
+                - payment_request
+            payment_request:
+              $ref: "../schemas/PaymentRequestObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

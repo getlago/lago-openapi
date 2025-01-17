@@ -1,0 +1,22 @@
+type: object
+required:
+  - status
+  - error
+  - message
+  - event
+properties:
+  status:
+    type: integer
+    description: HTTP status code. It will always be 422
+    example: 422
+  error:
+    type: string
+    description: HTTP error description. It will always be "Unprocessable Entity"
+    example: Unprocessable Entity
+  message:
+    oneOf:
+      - type: string
+      - type: object
+        additionalProperties: true
+  event:
+    $ref: "./EventObject.yaml"

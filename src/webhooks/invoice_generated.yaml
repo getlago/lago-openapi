@@ -1,0 +1,26 @@
+post:
+  description: A new invoice PDF has been generated
+  requestBody:
+    description: Details of the invoice
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - invoice
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - invoice.generated
+            object_type:
+              type: string
+              enum:
+                - invoice
+            invoice:
+              $ref: "../schemas/InvoiceObjectExtended.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

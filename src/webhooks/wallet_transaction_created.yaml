@@ -1,0 +1,26 @@
+post:
+  description: A new wallet transaction has been created
+  requestBody:
+    description: Details of the wallet transaction
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - wallet_transaction
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - wallet_transaction.created
+            object_type:
+              type: string
+              enum:
+                - wallet_transaction
+            wallet_transaction:
+              $ref: "../schemas/WalletTransactionObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully
