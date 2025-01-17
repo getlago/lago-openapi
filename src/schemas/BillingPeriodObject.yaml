@@ -1,0 +1,55 @@
+type: object
+required:
+  - lago_subscription_id
+  - external_subscription_id
+  - subscription_from_datetime
+  - subscription_to_datetime
+  - charges_from_datetime
+  - charges_to_datetime
+  - invoicing_reason
+properties:
+  lago_subscription_id:
+    type: string
+    format: uuid
+    description: Unique identifier assigned to the subscription, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  external_subscription_id:
+    type: string
+    description: Unique identifier assigned to the subscription in your application.
+    example: "external_id"
+  lago_plan_id:
+    type: string
+    format: uuid
+    description: Unique identifier assigned to the plan, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  subscription_from_datetime:
+    type: string
+    format: "date-time"
+    description: The beginning date of the subscription billing period. This field indicates the start date of the billing period associated with the subscription fee.
+    example: "2022-04-29T08:59:51Z"
+  subscription_to_datetime:
+    type: string
+    format: "date-time"
+    description: The ending date of the subscription billing period. This field indicates the end date of the billing period associated with the subscription fee.
+    example: "2022-05-29T08:59:51Z"
+  charges_from_datetime:
+    type: string
+    format: "date-time"
+    description: The beginning date of the period that covers the charge fees. It is applicable only to the `charge` fees attached to the subscription. This field indicates the start date of the billing period or subscription period associated with the fees.
+    example: "2022-04-29T08:59:51Z"
+  charges_to_datetime:
+    type: string
+    format: "date-time"
+    description: The ending date of the period that covers the charge fees. It is applicable only to the `charge` fees attached to the subscription. This field indicates the end date of the billing period or subscription period associated with the fees.
+    example: "2022-05-29T08:59:51Z"
+  invoicing_reason:
+    type: string
+    enum:
+      - subscription_starting
+      - subscription_periodic
+      - subscription_terminating
+      - in_advance_charge
+      - in_advance_charge_periodic
+      - progressive_billing
+    description: The reason explaining why this subscription appears on the invoice.
+    example: "subscription_starting"

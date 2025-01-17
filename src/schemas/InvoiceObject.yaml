@@ -1,10 +1,14 @@
 allOf:
-  - $ref: './InvoiceBaseObject.yaml'
+  - $ref: "./InvoiceBaseObject.yaml"
   - type: object
     properties:
       customer:
         $ref: "./CustomerObject.yaml"
         description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
+      billing_period:
+        type: array
+        items:
+          $ref: "./BillingPeriodObject.yaml"
       metadata:
         type: array
         items:
