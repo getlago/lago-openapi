@@ -147,6 +147,10 @@ properties:
   version_number:
     type: integer
     example: 3
+  self_billed:
+    type: boolean
+    example: false
+    description: Indicates if the invoice is self-billed. Self-billing is a process where an organization creates the invoice on behalf of the partner. This field specifies whether the invoice is self-billed or not.
   file_url:
     type: string
     format: uri
