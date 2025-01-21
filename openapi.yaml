@@ -7181,6 +7181,17 @@ components:
               example: Belson
               description: Last name of the customer
               nullable: true
+            account_type:
+              type: string
+              enum:
+                - customer
+                - partner
+              example: customer
+              nullable: true
+              description: |-
+                The type of the account. It can have one of the following values:
+                - `customer`: the account is a customer, default value.
+                - `partner`: the account is a partner.
             customer_type:
               type: string
               enum:
@@ -7484,6 +7495,17 @@ components:
               example: Belson
               description: Last name of the customer
               nullable: true
+            account_type:
+              type: string
+              enum:
+                - customer
+                - partner
+              example: customer
+              nullable: false
+              description: |-
+                The type of the account. It can have one of the following values:
+                - `customer`: the account is a customer.
+                - `partner`: the account is a partner.
             customer_type:
               type: string
               enum:
@@ -9009,6 +9031,10 @@ components:
             version_number:
               type: integer
               example: 3
+            self_billed:
+              type: boolean
+              example: false
+              description: Indicates if the invoice is self-billed. Self-billing is a process where an organization creates the invoice on behalf of the partner. This field specifies whether the invoice is self-billed or not.
             file_url:
               type: string
               format: uri
