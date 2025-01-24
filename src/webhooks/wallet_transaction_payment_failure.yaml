@@ -1,6 +1,10 @@
 post:
   operationId: walletTransactionPaymentFailure
   description: A payment attempt for a wallet transaction has failed on a payment provider
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
   requestBody:
     description: Details of the wallet transaction and of the provider error
     content:

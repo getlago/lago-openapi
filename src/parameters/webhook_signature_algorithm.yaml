@@ -1,0 +1,10 @@
+name: "X-Lago-Signature-Algorithm"
+in: header
+description: Algorithm used to generate the signature
+required: true
+schema:
+  type: string
+  enum:
+    - jwt
+    - hmac
+  example: hmac

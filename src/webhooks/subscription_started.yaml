@@ -1,6 +1,10 @@
 post:
   operationId: subscriptionStarted
   description: An subscription has started
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
   requestBody:
     description: Details of the subscription
     content:
