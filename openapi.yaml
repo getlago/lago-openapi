@@ -1807,7 +1807,7 @@ paths:
               - advance_charges
         - name: 'metadata[key]'
           in: query
-          description: 'Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. For example, `metadata[color]=blue`.'
+          description: 'Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for invoice without given metadata key. For example, `metadata[color]=blue`.'
           required: false
           explode: true
           schema:
