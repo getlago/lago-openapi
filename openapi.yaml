@@ -3361,6 +3361,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   event_error:
     post:
+      deprecated: true
       description: An error has been detected on an event
       requestBody:
         description: Details of the event and of the error
