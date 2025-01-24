@@ -1,0 +1,26 @@
+post:
+  description: Errors were encountered while post-processing some events
+  requestBody:
+    description: Details of the events errors
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - events_errors
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - events.errors
+            object_type:
+              type: string
+              enum:
+                - events_errors
+            events_errors:
+              $ref: "../schemas/EventsErrorsObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

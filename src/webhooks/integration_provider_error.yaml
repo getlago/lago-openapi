@@ -1,0 +1,26 @@
+post:
+  description: An error was encountered while processing data on an integration
+  requestBody:
+    description: Details of the integration and of the integration error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - provider_error
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - integration.provider_error
+            object_type:
+              type: string
+              enum:
+                - provider_error
+            provider_error:
+              $ref: "../schemas/IntegrationProviderErrorObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

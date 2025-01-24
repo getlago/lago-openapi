@@ -1,0 +1,26 @@
+post:
+  description: An error has been detected on an event
+  requestBody:
+    description: Details of the event and of the error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - event_error
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - event.error
+            object_type:
+              type: string
+              enum:
+                - event_error
+            event_error:
+              $ref: "../schemas/EventErrorsObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

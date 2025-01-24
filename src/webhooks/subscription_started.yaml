@@ -1,0 +1,26 @@
+post:
+  description: An subscription has started
+  requestBody:
+    description: Details of the subscription
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - subscription
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - subscription.started
+            object_type:
+              type: string
+              enum:
+                - subscription
+            subscription:
+              $ref: "../schemas/SubscriptionWithCustomerObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

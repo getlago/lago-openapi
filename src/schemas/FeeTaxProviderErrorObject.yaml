@@ -1,0 +1,27 @@
+type: object
+required:
+  - tax_provider_code
+  - lago_charge_id
+  - event_transaction_id
+  - provider_error
+properties:
+  tax_provider_code:
+    type: string
+    description: Code of the tax provider
+    example: "Stripe Prod"
+  lago_charge_id:
+    type: string
+    format: "uuid"
+    nullable: true
+    description: Unique identifier assigned to the charge that the fee belongs to
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  event_transaction_id:
+    type: string
+    nullable: true
+    description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge`.
+    example: "transaction_1234567890"
+  provider_error:
+    oneOf:
+      - type: string
+      - type: object
+        additionalProperties: true

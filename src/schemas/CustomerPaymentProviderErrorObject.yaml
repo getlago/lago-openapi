@@ -1,0 +1,35 @@
+type: object
+required:
+  - lago_customer_id
+  - external_customer_id
+  - payment_provider
+  - payment_provider_code
+  - provider_error
+properties:
+  lago_customer_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  external_customer_id:
+    type: string
+    description: The customer external unique identifier (provided by your own application)
+    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+  payment_provider:
+    type: string
+    enum:
+      - adyen
+      - cashfree
+      - gocardless
+      - stripe
+    description: The type of payment provider
+    example: "stripe"
+  payment_provider_code:
+    type: string
+    description: Code of the payment provider
+    example: "Stripe Prod"
+  provider_error:
+    oneOf:
+      - type: string
+      - type: object
+        additionalProperties: true

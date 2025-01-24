@@ -1,0 +1,26 @@
+post:
+  description: A new add on invoice has been emitted
+  requestBody:
+    description: Details of the new invoice
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - invoice
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - invoice.add_on_added
+            object_type:
+              type: string
+              enum:
+                - invoice
+            invoice:
+              $ref: "../schemas/InvoiceObjectExtended.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

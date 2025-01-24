@@ -1,0 +1,25 @@
+type: object
+required:
+  - lago_integration_id
+  - provider
+  - provider_code
+  - provider_error
+properties:
+  lago_integration_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier assigned to the integration within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the integration's record within the Lago system.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  provider:
+    type: string
+    description: The type of integration provider
+    example: "netsuite"
+  provider_code:
+    type: string
+    example: "netsuite-eu-1"
+    description: Unique code used to identify an integration connection.
+  provider_error:
+    oneOf:
+      - type: string
+      - type: object
+        additionalProperties: true

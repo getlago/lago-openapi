@@ -1,0 +1,26 @@
+post:
+  description: A usage threshold has been reached by a subscription
+  requestBody:
+    description: Details of the subscription and of the reached threshold
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - subscription
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - subscription.usage_threshold_reached
+            object_type:
+              type: string
+              enum:
+                - subscription
+            subscription:
+              $ref: "../schemas/SubscriptionWithThresholdObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

@@ -1,0 +1,26 @@
+post:
+  description: An error was encountered while syncing a customer to a CRM provider
+  requestBody:
+    description: Details of the customer and of the CRM provider error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - crm_provider_customer_error
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - customer.crm_provider_error
+            object_type:
+              type: string
+              enum:
+                - crm_provider_customer_error
+            crm_provider_customer_error:
+              $ref: "../schemas/CustomerIntegratrionErrorObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

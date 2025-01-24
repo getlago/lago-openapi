@@ -1,0 +1,27 @@
+type: object
+required:
+  - invalid_code
+  - missing_aggregation_property
+  - invalid_filter_values
+properties:
+  invalid_code:
+    type: array
+    items:
+      type: string
+    description: List of event transaction_id with an invalid code
+    example:
+      - transaction_1234567890
+  missing_aggregation_property:
+    type: array
+    items:
+      type: string
+    description: List of event transaction_id with a missing aggregation property
+    example:
+      - transaction_1234567890
+  invalid_filter_values:
+    type: array
+    items:
+      type: string
+    description: List of event transaction_id with invalid filter values
+    example:
+      - transaction_1234567890

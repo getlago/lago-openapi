@@ -1,0 +1,26 @@
+post:
+  description: VIES VAT number has been checked for a customer
+  requestBody:
+    description: Details of the customer with the VIES VAT check status
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - customer
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - customer.vies_check
+            object_type:
+              type: string
+              enum:
+                - customer
+            customer:
+              $ref: "../schemas/CustomerViesCheckObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

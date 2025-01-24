@@ -1,0 +1,26 @@
+post:
+  description: An error was raised by a payment provider
+  requestBody:
+    description: Details of the payment provider and of the error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - payment_provider_error
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - payment_provider.error
+            object_type:
+              type: string
+              enum:
+                - payment_provider_error
+            payment_provider_error:
+              $ref: "../schemas/PaymentProviderErrorObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

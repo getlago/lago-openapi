@@ -1,0 +1,26 @@
+post:
+  description: The balance of a wallet has been depleted
+  requestBody:
+    description: Details of the wallet
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - wallet
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - wallet.depleted_ongoing_balance
+            object_type:
+              type: string
+              enum:
+                - wallet
+            wallet:
+              $ref: "../schemas/WalletObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

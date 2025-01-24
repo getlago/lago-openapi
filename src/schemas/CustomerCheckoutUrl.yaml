@@ -3,6 +3,10 @@ description: .
 properties:
   customer:
     type: object
+    required:
+      - lago_customer_id
+      - external_customer_id
+      - payment_provider
     properties:
       lago_customer_id:
         type: string
@@ -10,13 +14,17 @@ properties:
         description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
       external_customer_id:
         type: string
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
-        description: 'The customer external unique identifier (provided by your own application)'
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+        description: "The customer external unique identifier (provided by your own application)"
       payment_provider:
         type: string
-        example: 'stripe'
+        example: "stripe"
         description: The Payment Provider name linked to the Customer.
+      payment_provider_code:
+        type: string
+        description: Code of the payment provider
+        example: "Stripe Prod"
       checkout_url:
         type: string
-        example: 'https://foo.bar'
+        example: "https://foo.bar"
         description: The new generated Payment Provider Checkout URL for the Customer.
