@@ -152,3 +152,7 @@ properties:
     type: array
     items:
       $ref: './CreditNoteAppliedTaxObject.yaml'
+  self_billed:
+    type: boolean
+    example: false
+    description: Indicates if the credit note belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.

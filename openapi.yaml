@@ -831,6 +831,14 @@ paths:
           schema:
             type: integer
             example: 100000
+        - name: self_billed
+          in: query
+          description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
       responses:
         '200':
           description: Credit notes
@@ -1012,6 +1020,21 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - name: account_type
+          in: query
+          description: Filter customers by account type.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - customer
+                - partner
+            example:
+              - customer
+              - partner
       responses:
         '200':
           description: List of customers
@@ -1805,6 +1828,14 @@ paths:
               - credit
               - one_off
               - advance_charges
+        - name: self_billed
+          in: query
+          description: Filter invoices by self billed. Possible values are `true` or `false`.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
         - name: 'metadata[key]'
           in: query
           description: 'Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for invoice without given metadata key. For example, `metadata[color]=blue`.'
@@ -6510,6 +6541,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreditNoteAppliedTaxObject'
+        self_billed:
+          type: boolean
+          example: false
+          description: Indicates if the credit note belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.
     CreditNotes:
       type: object
       required:
@@ -8411,6 +8446,10 @@ components:
                     pattern: '^[0-9]+.?[0-9]*$'
                     description: Total amount of received units to be charged.
                     example: '10.0'
+        self_billed:
+          type: boolean
+          example: false
+          description: Indicates if the fee belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.
         item:
           type: object
           description: Item attached to the fee
