@@ -184,6 +184,10 @@ properties:
   amount_details:
     $ref: "./FeeAmountDetails.yaml"
     description: List of all unit amount details for calculating the fee.
+  self_billed:
+    type: boolean
+    example: false
+    description: Indicates if the fee belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.
   item:
     type: object
     description: Item attached to the fee

@@ -33,6 +33,19 @@ get:
   parameters:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
+    - name: account_type
+      in: query
+      description: Filter customers by account type.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - customer
+            - partner
+        example: [customer, partner]
   responses:
     '200':
       description: List of customers

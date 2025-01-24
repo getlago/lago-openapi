@@ -88,6 +88,17 @@ properties:
     example: 'Belson'
     description: 'Last name of the customer'
     nullable: true
+  account_type:
+    type: string
+    enum:
+      - customer
+      - partner
+    example: 'customer'
+    nullable: false
+    description: |-
+      The type of the account. It can have one of the following values:
+      - `customer`: the account is a customer.
+      - `partner`: the account is a partner.
   customer_type:
     type: string
     enum:

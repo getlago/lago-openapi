@@ -128,6 +128,14 @@ get:
       schema:
         type: integer
         example: 100000
+    - name: self_billed
+      in: query
+      description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
+      required: false
+      explode: true
+      schema:
+        type: boolean
+        example: true
   responses:
     '200':
       description: Credit notes

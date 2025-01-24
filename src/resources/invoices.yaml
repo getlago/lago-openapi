@@ -134,6 +134,14 @@ get:
           - credit
           - one_off
           - advance_charges
+    - name: self_billed
+      in: query
+      description: Filter invoices by self billed. Possible values are `true` or `false`.
+      required: false
+      explode: true
+      schema:
+        type: boolean
+        example: true
     - name: metadata[key]
       in: query
       description: Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for invoice without given metadata key. For example, `metadata[color]=blue`.
