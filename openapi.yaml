@@ -2983,6 +2983,7 @@ paths:
 webhooks:
   customer_created:
     post:
+      operationId: customerCreated
       description: A new customer has been created
       requestBody:
         description: Details of the new customer
@@ -3010,6 +3011,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_updated:
     post:
+      operationId: customerUpdated
       description: A customer has been updated
       requestBody:
         description: Details of the customer
@@ -3037,6 +3039,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_accounting_provider_created:
     post:
+      operationId: customerAccountingProviderCreated
       description: A customer was created on an accouting integration
       requestBody:
         description: Details of the customer
@@ -3064,6 +3067,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_accounting_provider_error:
     post:
+      operationId: customerAccountingProviderError
       description: An error was encountered while syncing a customer to an accounting provider
       requestBody:
         description: Details of the customer and of the provider error
@@ -3091,6 +3095,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_crm_provider_created:
     post:
+      operationId: customerCrmProviderCreated
       description: A customer has been created in the CRM provider
       requestBody:
         description: Details of the customer
@@ -3118,6 +3123,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_crm_provider_error:
     post:
+      operationId: customerCrmProviderError
       description: An error was encountered while syncing a customer to a CRM provider
       requestBody:
         description: Details of the customer and of the CRM provider error
@@ -3145,6 +3151,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_payment_provider_created:
     post:
+      operationId: customerPaymentProviderCreated
       description: A customer has been created on a payment provider
       requestBody:
         description: Details of the customer
@@ -3172,6 +3179,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_payment_provider_error:
     post:
+      operationId: customerPaymentProviderError
       description: An error was encountered while syncing a customer to a payment provider
       requestBody:
         description: Details of the customer and of the payment provider error
@@ -3199,6 +3207,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_checkout_url_generated:
     post:
+      operationId: customerCheckoutUrlGenerated
       description: A checkout URL was generated for a customer
       requestBody:
         description: Details of the customer with the generated checkout URL
@@ -3226,6 +3235,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_tax_provider_error:
     post:
+      operationId: customerTaxProviderError
       description: An error was encountered while fetching taxes for a customer on a tax provider
       requestBody:
         description: Details of the customer and of the tax provider error
@@ -3253,6 +3263,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   customer_vies_check:
     post:
+      operationId: customerViesCheck
       description: VIES VAT number has been checked for a customer
       requestBody:
         description: Details of the customer with the VIES VAT check status
@@ -3280,6 +3291,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   credit_note_created:
     post:
+      operationId: creditNoteCreated
       description: A new credit note has been created
       requestBody:
         description: Details of the new credit note
@@ -3307,6 +3319,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   credit_note_generated:
     post:
+      operationId: creditNoteGenerated
       description: A new credit note PDF has been generated
       requestBody:
         description: Details of the credit note
@@ -3334,6 +3347,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   credit_note_provider_refund_failure:
     post:
+      operationId: creditNoteProviderRefundFailure
       description: The refund of a credit note has failed on a payment provider
       requestBody:
         description: Details of the credit note and of the provider error
@@ -3362,6 +3376,7 @@ webhooks:
   event_error:
     post:
       deprecated: true
+      operationId: eventError
       description: An error has been detected on an event
       requestBody:
         description: Details of the event and of the error
@@ -3389,6 +3404,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   events_errors:
     post:
+      operationId: eventsErrors
       description: Errors were encountered while post-processing some events
       requestBody:
         description: Details of the events errors
@@ -3416,6 +3432,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   fee_created:
     post:
+      operationId: feeCreated
       description: A pay in advance fee has been created
       requestBody:
         description: Details of the new fee
@@ -3443,6 +3460,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   fee_tax_provider_error:
     post:
+      operationId: feeTaxProviderError
       description: An error was encountered while fetching taxes for a fee on a tax provider
       requestBody:
         description: Details of the fee and of the tax provider error
@@ -3470,6 +3488,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_created:
     post:
+      operationId: invoiceCreated
       description: A new invoice has been emitted
       requestBody:
         description: Details of the new invoice
@@ -3497,6 +3516,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_one_off_created:
     post:
+      operationId: invoiceOneOffCreated
       description: A new one off invoice has been emitted
       requestBody:
         description: Details of the new invoice
@@ -3524,6 +3544,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_add_on_added:
     post:
+      operationId: invoiceAddOnAdded
       description: A new add on invoice has been emitted
       requestBody:
         description: Details of the new invoice
@@ -3551,6 +3572,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_paid_credit_added:
     post:
+      operationId: invoicePaidCreditAdded
       description: A new prepaid credit invoice has been emitted
       requestBody:
         description: Details of the new invoice
@@ -3578,6 +3600,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_generated:
     post:
+      operationId: invoiceGenerated
       description: A new invoice PDF has been generated
       requestBody:
         description: Details of the invoice
@@ -3605,6 +3628,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_drafted:
     post:
+      operationId: invoiceDrafted
       description: A new draft invoice has been emitted
       requestBody:
         description: Details of the new invoice
@@ -3632,6 +3656,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_voided:
     post:
+      operationId: invoiceVoided
       description: An invoice has been voided
       requestBody:
         description: Details of the invoice
@@ -3659,6 +3684,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_payment_dispute_lost:
     post:
+      operationId: invoicePaymentDisputeLost
       description: A payment dispute has been lost for an invoice payment
       requestBody:
         description: Details of the invoice and of the payment dispute
@@ -3686,6 +3712,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_payment_status_updated:
     post:
+      operationId: invoicePaymentStatusUpdated
       description: The payment status of an invoice has been updated
       requestBody:
         description: Details of the invoice
@@ -3713,6 +3740,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_payment_overdue:
     post:
+      operationId: invoicePaymentOverdue
       description: An invoice payment is overdue
       requestBody:
         description: Details of the invoice
@@ -3740,6 +3768,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_payment_failure:
     post:
+      operationId: invoicePaymentFailure
       description: A payment attempt for an invoice has failed on a payment provider
       requestBody:
         description: Details of the invoice and of the payment provider error
@@ -3767,6 +3796,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_resynced:
     post:
+      operationId: invoiceResynced
       description: An invoice has been resynced with salesforce
       requestBody:
         description: Details of the invoice
@@ -3794,6 +3824,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   integration_provider_error:
     post:
+      operationId: integrationProviderError
       description: An error was encountered while processing data on an integration
       requestBody:
         description: Details of the integration and of the integration error
@@ -3821,6 +3852,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   payment_requires_action:
     post:
+      operationId: paymentRequiresAction
       description: An action is required to process a payment
       requestBody:
         description: Details of the payment and of the required action
@@ -3848,6 +3880,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   payment_provider_error:
     post:
+      operationId: paymentProviderError
       description: An error was raised by a payment provider
       requestBody:
         description: Details of the payment provider and of the error
@@ -3875,6 +3908,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   payment_request_created:
     post:
+      operationId: paymentRequestCreated
       description: An new payment request has been created
       requestBody:
         description: Details of the new payment request
@@ -3902,6 +3936,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   payment_request_payment_failure:
     post:
+      operationId: paymentRequestPaymentFailure
       description: A payment attempt for a payment request has failed on a payment provider
       requestBody:
         description: Details of the payment request and of the provider error
@@ -3929,6 +3964,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   payment_request_payment_status_updated:
     post:
+      operationId: paymentRequestPaymentStatusUpdated
       description: The payment status of an invoice has been updated
       requestBody:
         description: Details of the payment request
@@ -3956,6 +3992,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   subscription_terminated:
     post:
+      operationId: subscriptionTerminated
       description: A subscription has been terminated
       requestBody:
         description: Details of the subscription
@@ -3983,6 +4020,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   subscription_started:
     post:
+      operationId: subscriptionStarted
       description: An subscription has started
       requestBody:
         description: Details of the subscription
@@ -4010,6 +4048,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   subscription_termination_alert:
     post:
+      operationId: subscriptionTerminationAlert
       description: A subscription will be terminated in the future
       requestBody:
         description: Details of the subscription
@@ -4037,6 +4076,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   subscription_trial_ended:
     post:
+      operationId: subscriptionTrialEnded
       description: A subscription trial period has ended
       requestBody:
         description: Details of the subscription
@@ -4064,6 +4104,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   subscription_usage_threshold_reached:
     post:
+      operationId: subscriptionUsageThresholdReached
       description: A usage threshold has been reached by a subscription
       requestBody:
         description: Details of the subscription and of the reached threshold
@@ -4091,6 +4132,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   wallet_depleted_ongoing_balance:
     post:
+      operationId: walletDepletedOngoingBalance
       description: The balance of a wallet has been depleted
       requestBody:
         description: Details of the wallet
@@ -4118,6 +4160,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   wallet_transaction_created:
     post:
+      operationId: walletTransactionCreated
       description: A new wallet transaction has been created
       requestBody:
         description: Details of the wallet transaction
@@ -4145,6 +4188,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   wallet_transaction_updated:
     post:
+      operationId: walletTransactionUpdated
       description: A wallet transaction has been updated
       requestBody:
         description: Details of the wallet transaction
@@ -4172,6 +4216,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   wallet_transaction_payment_failure:
     post:
+      operationId: walletTransactionPaymentFailure
       description: A payment attempt for a wallet transaction has failed on a payment provider
       requestBody:
         description: Details of the wallet transaction and of the provider error
