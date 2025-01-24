@@ -2984,6 +2984,10 @@ webhooks:
   customer_created:
     post:
       description: A new customer has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new customer
         content:
@@ -3011,6 +3015,10 @@ webhooks:
   customer_updated:
     post:
       description: A customer has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer
         content:
@@ -3038,6 +3046,10 @@ webhooks:
   customer_accounting_provider_created:
     post:
       description: A customer was created on an accouting integration
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer
         content:
@@ -3065,6 +3077,10 @@ webhooks:
   customer_accounting_provider_error:
     post:
       description: An error was encountered while syncing a customer to an accounting provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer and of the provider error
         content:
@@ -3092,6 +3108,10 @@ webhooks:
   customer_crm_provider_created:
     post:
       description: A customer has been created in the CRM provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer
         content:
@@ -3119,6 +3139,10 @@ webhooks:
   customer_crm_provider_error:
     post:
       description: An error was encountered while syncing a customer to a CRM provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer and of the CRM provider error
         content:
@@ -3146,6 +3170,10 @@ webhooks:
   customer_payment_provider_created:
     post:
       description: A customer has been created on a payment provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer
         content:
@@ -3173,6 +3201,10 @@ webhooks:
   customer_payment_provider_error:
     post:
       description: An error was encountered while syncing a customer to a payment provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer and of the payment provider error
         content:
@@ -3200,6 +3232,10 @@ webhooks:
   customer_checkout_url_generated:
     post:
       description: A checkout URL was generated for a customer
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer with the generated checkout URL
         content:
@@ -3227,6 +3263,10 @@ webhooks:
   customer_tax_provider_error:
     post:
       description: An error was encountered while fetching taxes for a customer on a tax provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer and of the tax provider error
         content:
@@ -3254,6 +3294,10 @@ webhooks:
   customer_vies_check:
     post:
       description: VIES VAT number has been checked for a customer
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the customer with the VIES VAT check status
         content:
@@ -3281,6 +3325,10 @@ webhooks:
   credit_note_created:
     post:
       description: A new credit note has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new credit note
         content:
@@ -3308,6 +3356,10 @@ webhooks:
   credit_note_generated:
     post:
       description: A new credit note PDF has been generated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the credit note
         content:
@@ -3335,6 +3387,10 @@ webhooks:
   credit_note_provider_refund_failure:
     post:
       description: The refund of a credit note has failed on a payment provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the credit note and of the provider error
         content:
@@ -3363,6 +3419,10 @@ webhooks:
     post:
       deprecated: true
       description: An error has been detected on an event
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the event and of the error
         content:
@@ -3390,6 +3450,10 @@ webhooks:
   events_errors:
     post:
       description: Errors were encountered while post-processing some events
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the events errors
         content:
@@ -3417,6 +3481,10 @@ webhooks:
   fee_created:
     post:
       description: A pay in advance fee has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new fee
         content:
@@ -3444,6 +3512,10 @@ webhooks:
   fee_tax_provider_error:
     post:
       description: An error was encountered while fetching taxes for a fee on a tax provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the fee and of the tax provider error
         content:
@@ -3471,6 +3543,10 @@ webhooks:
   invoice_created:
     post:
       description: A new invoice has been emitted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new invoice
         content:
@@ -3498,6 +3574,10 @@ webhooks:
   invoice_one_off_created:
     post:
       description: A new one off invoice has been emitted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new invoice
         content:
@@ -3525,6 +3605,10 @@ webhooks:
   invoice_add_on_added:
     post:
       description: A new add on invoice has been emitted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new invoice
         content:
@@ -3552,6 +3636,10 @@ webhooks:
   invoice_paid_credit_added:
     post:
       description: A new prepaid credit invoice has been emitted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new invoice
         content:
@@ -3579,6 +3667,10 @@ webhooks:
   invoice_generated:
     post:
       description: A new invoice PDF has been generated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the invoice
         content:
@@ -3606,6 +3698,10 @@ webhooks:
   invoice_drafted:
     post:
       description: A new draft invoice has been emitted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new invoice
         content:
@@ -3633,6 +3729,10 @@ webhooks:
   invoice_voided:
     post:
       description: An invoice has been voided
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the invoice
         content:
@@ -3660,6 +3760,10 @@ webhooks:
   invoice_payment_dispute_lost:
     post:
       description: A payment dispute has been lost for an invoice payment
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the invoice and of the payment dispute
         content:
@@ -3687,6 +3791,10 @@ webhooks:
   invoice_payment_status_updated:
     post:
       description: The payment status of an invoice has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the invoice
         content:
@@ -3714,6 +3822,10 @@ webhooks:
   invoice_payment_overdue:
     post:
       description: An invoice payment is overdue
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the invoice
         content:
@@ -3741,6 +3853,10 @@ webhooks:
   invoice_payment_failure:
     post:
       description: A payment attempt for an invoice has failed on a payment provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the invoice and of the payment provider error
         content:
@@ -3768,6 +3884,10 @@ webhooks:
   invoice_resynced:
     post:
       description: An invoice has been resynced with salesforce
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the invoice
         content:
@@ -3795,6 +3915,10 @@ webhooks:
   integration_provider_error:
     post:
       description: An error was encountered while processing data on an integration
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the integration and of the integration error
         content:
@@ -3822,6 +3946,10 @@ webhooks:
   payment_requires_action:
     post:
       description: An action is required to process a payment
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the payment and of the required action
         content:
@@ -3849,6 +3977,10 @@ webhooks:
   payment_provider_error:
     post:
       description: An error was raised by a payment provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the payment provider and of the error
         content:
@@ -3876,6 +4008,10 @@ webhooks:
   payment_request_created:
     post:
       description: An new payment request has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the new payment request
         content:
@@ -3903,6 +4039,10 @@ webhooks:
   payment_request_payment_failure:
     post:
       description: A payment attempt for a payment request has failed on a payment provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the payment request and of the provider error
         content:
@@ -3930,6 +4070,10 @@ webhooks:
   payment_request_payment_status_updated:
     post:
       description: The payment status of an invoice has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the payment request
         content:
@@ -3957,6 +4101,10 @@ webhooks:
   subscription_terminated:
     post:
       description: A subscription has been terminated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the subscription
         content:
@@ -3984,6 +4132,10 @@ webhooks:
   subscription_started:
     post:
       description: An subscription has started
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the subscription
         content:
@@ -4011,6 +4163,10 @@ webhooks:
   subscription_termination_alert:
     post:
       description: A subscription will be terminated in the future
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the subscription
         content:
@@ -4038,6 +4194,10 @@ webhooks:
   subscription_trial_ended:
     post:
       description: A subscription trial period has ended
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the subscription
         content:
@@ -4065,6 +4225,10 @@ webhooks:
   subscription_usage_threshold_reached:
     post:
       description: A usage threshold has been reached by a subscription
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the subscription and of the reached threshold
         content:
@@ -4092,6 +4256,10 @@ webhooks:
   wallet_depleted_ongoing_balance:
     post:
       description: The balance of a wallet has been depleted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the wallet
         content:
@@ -4119,6 +4287,10 @@ webhooks:
   wallet_transaction_created:
     post:
       description: A new wallet transaction has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the wallet transaction
         content:
@@ -4146,6 +4318,10 @@ webhooks:
   wallet_transaction_updated:
     post:
       description: A wallet transaction has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the wallet transaction
         content:
@@ -4173,6 +4349,10 @@ webhooks:
   wallet_transaction_payment_failure:
     post:
       description: A payment attempt for a wallet transaction has failed on a payment provider
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
       requestBody:
         description: Details of the wallet transaction and of the provider error
         content:
@@ -4253,6 +4433,34 @@ components:
       schema:
         type: integer
         example: 20
+    webhook_signature:
+      name: X-Lago-Signature
+      in: header
+      description: Signature of the webhook payload
+      required: true
+      schema:
+        type: string
+        example: "Ap¶5É¿\x9D\x9FÎ£6ÐfV£Ä\x15\x15ºõÔõÔ[D\x8BæAâÿüÚ"
+    webhook_signature_algorithm:
+      name: X-Lago-Signature-Algorithm
+      in: header
+      description: Algorithm used to generate the signature
+      required: true
+      schema:
+        type: string
+        enum:
+          - jwt
+          - hmac
+        example: hmac
+    webhook_unique_key:
+      name: X-Lago-Unique-Key
+      in: header
+      description: Unique id of the webhook. It can be used for idempotency
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
   schemas:
     AddOnBaseInput:
       type: object

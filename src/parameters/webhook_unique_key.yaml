@@ -1,0 +1,8 @@
+name: "X-Lago-Unique-Key"
+in: header
+description: Unique id of the webhook. It can be used for idempotency
+required: true
+schema:
+  type: string
+  format: uuid
+  example: "1a901a90-1a90-1a90-1a90-1a901a901a90"

@@ -1,5 +1,9 @@
 post:
   description: A customer has been created on a payment provider
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
   requestBody:
     description: Details of the customer
     content:

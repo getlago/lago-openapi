@@ -1,5 +1,9 @@
 post:
   description: A payment dispute has been lost for an invoice payment
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
   requestBody:
     description: Details of the invoice and of the payment dispute
     content:

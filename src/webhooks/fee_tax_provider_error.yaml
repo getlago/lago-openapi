@@ -1,5 +1,9 @@
 post:
   description: An error was encountered while fetching taxes for a fee on a tax provider
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
   requestBody:
     description: Details of the fee and of the tax provider error
     content:
