@@ -1,0 +1,24 @@
+post:
+  tags:
+    - invoices
+  summary: Create an invoice preview
+  description: This endpoint is used for generating invoice preview.
+  operationId: invoicePreview
+  requestBody:
+    description: Invoice preview payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/InvoicePreviewInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Invoice preview created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
