@@ -181,6 +181,8 @@ paths:
     $ref: "./resources/invoice_retry.yaml"
   /invoices/{lago_id}/payment_url:
     $ref: "./resources/invoice_payment_url.yaml"
+  /invoices/preview:
+    $ref: "./resources/invoice_preview.yaml"
   /invoices/{lago_id}/retry_payment:
     $ref: "./resources/invoice_retry_payment.yaml"
   /invoices/{lago_id}/void:
