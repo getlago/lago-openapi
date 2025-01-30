@@ -1,7 +1,7 @@
 parameters:
-  - name: external_id
+  - name: external_customer_id
     in: path
-    description: External ID of the existing customer
+    description: The customer external unique identifier (provided by your own application)
     required: true
     schema:
       type: string
