@@ -141,7 +141,7 @@ paths:
     $ref: "./resources/credit_note_void.yaml"
   /customers:
     $ref: "./resources/customers.yaml"
-  /customers/{external_id}:
+  /customers/{external_customer_id}:
     $ref: "./resources/customer.yaml"
   /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
     $ref: "./resources/customer_applied_coupon.yaml"
