@@ -1,0 +1,26 @@
+parameters:
+  - name: lago_id
+    in: path
+    description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
+    required: true
+    schema:
+      type: string
+      format: 'uuid'
+      example: 'bb0a27be-51f7-4f4f-aad0-2abc80534c0f'
+get:
+  tags:
+    - wallets
+  summary: Retrieve a wallet transaction
+  description: This endpoint is used to retrieve a specific wallet transactions.
+  operationId: findWalletTransaction
+  responses:
+    '200':
+      description: Wallet transaction
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/WalletTransactionObject.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
