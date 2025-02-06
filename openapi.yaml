@@ -1186,6 +1186,15 @@ paths:
           schema:
             type: string
             example: sub_1234567890
+        - name: apply_taxes
+          in: query
+          description: |
+            Optional flag to determine if taxes should be applied. Defaults to `true` if not provided or if null.
+          required: false
+          schema:
+            type: boolean
+            default: true
+            example: true
       operationId: findCustomerCurrentUsage
       responses:
         '200':
