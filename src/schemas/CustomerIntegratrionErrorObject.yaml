@@ -18,14 +18,14 @@ properties:
   accounting_provider:
     type: string
     enum:
-      - anrock
+      - anrok
       - hubspot
       - netsuite
       - okta
       - salesforce
       - xero
     description: The type of accounting provider code
-    example: "anrock"
+    example: "anrok"
   accounting_provider_code:
     type: string
     description: Code of the accounting provider

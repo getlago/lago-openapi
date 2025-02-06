@@ -40,7 +40,7 @@ properties:
     nullable: true
     items:
       type: string
-    description: Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, the payment methods will be set to `card`. For now, possible values are `card`, `sepa_debit`, `us_bank_account`, `bacs_debit` and `link`. Note that when `link` is selected, `card` should also be provided in the array.
+    description: Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, the payment methods will be set to `card`. For now, possible values are `card`, `sepa_debit`, `us_bank_account`, `bacs_debit`, `boleto` and `link`. Note that when `link` is selected, `card` should also be provided in the array.
     example:
       - card
       - sepa_debit
