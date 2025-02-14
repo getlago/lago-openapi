@@ -1826,7 +1826,7 @@ paths:
             example: true
         - name: invoice_type
           in: query
-          description: 'Filter invoices by invoice type. Possible values are `subscription`, `add_on`, `credit`, `one_off` or `advance_charges`'
+          description: 'Filter invoices by invoice type. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.'
           required: false
           explode: true
           schema:
@@ -1837,6 +1837,7 @@ paths:
               - credit
               - one_off
               - advance_charges
+              - progressive_billing
         - name: self_billed
           in: query
           description: Filter invoices by self billed. Possible values are `true` or `false`.
