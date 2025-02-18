@@ -7080,6 +7080,10 @@ components:
           example:
             - card
             - sepa_debit
+            - us_bank_account
+            - bacs_debit
+            - link
+            - boleto
     IntegrationCustomer:
       type: object
       description: Configuration specific to the accounting and tax integrations. This object contains settings and parameters necessary for syncing documents and payments.
