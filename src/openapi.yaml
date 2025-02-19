@@ -102,6 +102,12 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/payment_requests/payment_request-object
+  - name: payments
+    description: Everything about Payments
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/payments/payment-object
+
 paths:
   /add_ons:
     $ref: "./resources/add_ons.yaml"
@@ -191,6 +197,8 @@ paths:
     $ref: "./resources/organizations.yaml"
   /payment_requests:
     $ref: "./resources/payment_requests.yaml"
+  /payments:
+    $ref: "./resources/payments.yaml"
   /plans:
     $ref: "./resources/plans.yaml"
   /plans/{code}:

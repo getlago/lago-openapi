@@ -101,6 +101,11 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://doc.getlago.com/docs/api/payment_requests/payment_request-object'
+  - name: payments
+    description: Everything about Payments
+    externalDocs:
+      description: Find out more
+      url: 'https://doc.getlago.com/docs/api/payments/payment-object'
 paths:
   /add_ons:
     post:
@@ -2319,6 +2324,147 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaymentRequestsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /payments:
+    post:
+      tags:
+        - payments
+      summary: Create a payment
+      description: This endpoint is used to create a manual payment
+      operationId: createPayment
+      requestBody:
+        description: Payment payload
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - payment
+              properties:
+                payment:
+                  type: object
+                  required:
+                    - invoice_id
+                    - amount_cents
+                    - reference
+                  properties:
+                    invoice_id:
+                      type: string
+                      example: 486b147a-02a1-4ccf-8603-f3541fc25e7a
+                      description: Unique identifier assigned to the invoice
+                    amount_cents:
+                      type: integer
+                      example: 100
+                      description: The payment amount in cents
+                    reference:
+                      type: string
+                      example: ref1
+                      description: Reference for the payment
+                    paid_at:
+                      type: string
+                      format: date
+                      example: '2025-02-20'
+                      description: The date the payment was made
+        required: true
+      responses:
+        '200':
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - payment
+                properties:
+                  payment:
+                    type: object
+                    required:
+                      - payment
+                    properties:
+                      lago_id:
+                        type: string
+                        format: uuid
+                        description: 'The unique identifier of the payment, created by Lago.'
+                        example: 4cf085a7-c196-4f07-a543-97c50ec6e8b2
+                      invoice_ids:
+                        type: array
+                        description: List of invoice IDs associated with the payment.
+                        items:
+                          type: string
+                          format: uuid
+                          example: 486b147a-02a1-4ccf-8603-f3541fc25e7a
+                      amount_cents:
+                        type: integer
+                        description: The amount of the payment in cents.
+                        example: 100
+                      amount_currency:
+                        type: string
+                        description: The currency of the payment amount.
+                        example: USD
+                      payment_status:
+                        type: string
+                        description: The current status of the payment.
+                        example: succeeded
+                      type:
+                        type: string
+                        description: The type of payment.
+                        example: manual
+                      reference:
+                        type: string
+                        description: Reference for the payment.
+                        example: ref1
+                      external_payment_id:
+                        type: string
+                        nullable: true
+                        description: External identifier for the payment (if applicable).
+                        example: null
+                      created_at:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the payment was created.
+                        example: '2025-02-20T00:00:00Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - payments
+      summary: List all payments
+      description: This endpoint is used to list all payments
+      operationId: findAllPayments
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/external_customer_id'
+        - name: lago_invoice_id
+          in: query
+          description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      responses:
+        '200':
+          description: Payments
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - payments
+                  - meta
+                properties:
+                  payments:
+                    type: array
+                    items:
+                      $ref: '#/paths/~1payments/post/responses/200/content/application~1json/schema/properties/payment'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
         '401':
           $ref: '#/components/responses/Unauthorized'
   /plans:
