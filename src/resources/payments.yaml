@@ -1,0 +1,53 @@
+post:
+  tags:
+    - payments
+  summary: Create a payment
+  description: This endpoint is used to create a manual payment
+  operationId: createPayment
+  requestBody:
+    description: Payment payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/PaymentCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Payment created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Payment.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - payments
+  summary: List all payments
+  description: This endpoint is used to list all payments
+  operationId: findAllPayments
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - $ref: '../parameters/external_customer_id.yaml'
+    - name: lago_invoice_id
+      in: query
+      description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  responses:
+    '200':
+      description: Payments
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PaymentsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

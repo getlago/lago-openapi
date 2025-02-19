@@ -1,0 +1,28 @@
+type: object
+required:
+  - payment
+properties:
+  payment:
+    type: object
+    required:
+      - invoice_id
+      - amount_cents
+      - reference
+    properties:
+      invoice_id:
+        type: string
+        example: "486b147a-02a1-4ccf-8603-f3541fc25e7a"
+        description: Unique identifier assigned to the invoice
+      amount_cents:
+        type: integer
+        example: 100
+        description: The payment amount in cents
+      reference:
+        type: string
+        example: "ref1"
+        description: Reference for the payment
+      paid_at:
+        type: string
+        format: date
+        example: "2025-02-20"
+        description: The date the payment was made
