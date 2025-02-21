@@ -2088,20 +2088,16 @@ paths:
                       type: string
                       example: 5230 Penfield Ave
                       description: The first line of the billing address
-                      nullable: true
                     address_line2:
                       type: string
                       example: null
                       description: The second line of the billing address
-                      nullable: true
                     city:
                       type: string
                       example: Woodland Hills
                       description: The city of the customer's billing address
-                      nullable: true
                     country:
                       $ref: '#/components/schemas/Country'
-                      nullable: true
                       description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
                       example: US
                     external_id:
@@ -2122,7 +2118,6 @@ paths:
                       type: string
                       example: CA
                       description: The state of the customer's billing address
-                      nullable: true
                     tax_identification_number:
                       type: string
                       description: The tax identification number of the customer
@@ -7254,7 +7249,7 @@ components:
           nullable: true
           items:
             type: string
-          description: 'Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, the payment methods will be set to `card`. For now, possible values are `card`, `sepa_debit`, `us_bank_account`, `bacs_debit`, `boleto`, `link` and `crypto`. Note that when `link` is selected, `card` should also be provided in the array.'
+          description: 'Specifies the available payment methods that can be used for this customer when `payment_provider` is set to `stripe`. The `provider_payment_methods` field is an array that allows multiple payment options to be defined. If this field is not explicitly set, the payment methods will be set to `card`. For now, possible values are `card`, `sepa_debit`, `us_bank_account`, `bacs_debit`, `boleto`, `link`, `crypto` and `customer_balance`. Note that when `link` is selected, `card` should also be provided in the array. When `customer_balance` is selected, no other payment can be selected.'
           example:
             - card
             - sepa_debit
@@ -7263,6 +7258,7 @@ components:
             - link
             - boleto
             - crypto
+            - customer_balance
     IntegrationCustomer:
       type: object
       description: Configuration specific to the accounting and tax integrations. This object contains settings and parameters necessary for syncing documents and payments.
