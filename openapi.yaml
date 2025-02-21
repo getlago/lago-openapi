@@ -2080,10 +2080,6 @@ paths:
               type: object
               required:
                 - customer
-                - plan_code
-                - subscription_at
-                - billing_time
-                - coupons
               properties:
                 customer:
                   type: object
@@ -2172,6 +2168,17 @@ paths:
                           nullable: true
                           description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
                           example: 6
+                  subscriptions:
+                    type: object
+                    required:
+                      - external_ids
+                    properties:
+                      external_ids:
+                        type: array
+                        items:
+                          type: string
+                          description: External identifiers of the customer's subscription.
+                          example: 441edbe3-9136-4688-a763-e57b6f1dca82
         required: true
       responses:
         '200':
