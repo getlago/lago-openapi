@@ -2084,6 +2084,26 @@ paths:
                 customer:
                   type: object
                   properties:
+                    address_line1:
+                      type: string
+                      example: 5230 Penfield Ave
+                      description: The first line of the billing address
+                      nullable: true
+                    address_line2:
+                      type: string
+                      example: null
+                      description: The second line of the billing address
+                      nullable: true
+                    city:
+                      type: string
+                      example: Woodland Hills
+                      description: The city of the customer's billing address
+                      nullable: true
+                    country:
+                      $ref: '#/components/schemas/Country'
+                      nullable: true
+                      description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+                      example: US
                     external_id:
                       type: string
                       description: Unique identifier assigned to the customer in your application.
@@ -2096,6 +2116,13 @@ paths:
                       $ref: '#/components/schemas/Currency'
                       description: The currency of the invoice.
                       example: EUR
+                    shipping_address:
+                      $ref: '#/components/schemas/Address'
+                    state:
+                      type: string
+                      example: CA
+                      description: The state of the customer's billing address
+                      nullable: true
                     tax_identification_number:
                       type: string
                       description: The tax identification number of the customer
@@ -2103,8 +2130,6 @@ paths:
                     timezone:
                       $ref: '#/components/schemas/Timezone'
                       description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
-                    shipping_address:
-                      $ref: '#/components/schemas/Address'
                   plan_code:
                     type: string
                     description: 'The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.'

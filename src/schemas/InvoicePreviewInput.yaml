@@ -5,6 +5,22 @@ properties:
   customer:
     type: object
     properties:
+      address_line1:
+        type: string
+        example: '5230 Penfield Ave'
+        description: 'The first line of the billing address'
+      address_line2:
+        type: string
+        example: null
+        description: 'The second line of the billing address'
+      city:
+        type: string
+        example: 'Woodland Hills'
+        description: The city of the customer's billing address
+      country:
+        $ref: './Country.yaml'
+        description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+        example: 'US'
       external_id:
         type: string
         description: Unique identifier assigned to the customer in your application.
@@ -17,6 +33,12 @@ properties:
         $ref: './Currency.yaml'
         description: The currency of the invoice.
         example: 'EUR'
+      shipping_address:
+        $ref: './Address.yaml'
+      state:
+        type: string
+        example: 'CA'
+        description: The state of the customer's billing address
       tax_identification_number:
         type: string
         description: The tax identification number of the customer
@@ -24,8 +46,6 @@ properties:
       timezone:
         $ref: './Timezone.yaml'
         description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
-      shipping_address:
-        $ref: './Address.yaml'
     plan_code:
       type: string
       description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.
@@ -99,4 +119,4 @@ properties:
           items:
             type: string
             description: External identifiers of the customer's subscription.
-            example: '441edbe3-9136-4688-a763-e57b6f1dca82'
+            example: 441edbe3-9136-4688-a763-e57b6f1dca82
