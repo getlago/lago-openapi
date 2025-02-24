@@ -8802,15 +8802,15 @@ components:
                 - add_on
                 - subscription
                 - credit
-              description: 'The fee type. Possible values are `add-on`, `charge`, `credit` or `subscription`.'
+              description: 'The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or `commitment`.'
               example: subscription
             code:
               type: string
-              description: 'The code of the fee item. It can be the code of the `add-o`n, the code of the `charge`, the code of the `credit` or the code of the `subscription`.'
+              description: 'The code of the fee item. It can be the code of the `add-on`, the code of the `charge`, the code of the `credit` or the code of the `subscription`.'
               example: startup
             name:
               type: string
-              description: 'The name of the fee item. It can be the name of the `add-on`, the name of the `charge`, the name of the `credit` or the name of the `subscription`.'
+              description: 'The name of the fee item. It can be the name of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.'
               example: Startup
             invoice_display_name:
               type: string
@@ -8830,7 +8830,7 @@ components:
             lago_item_id:
               type: string
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: 'Unique identifier of the fee item, created by Lago. It can be the identifier of the `add-on`, the identifier of the `charge`, the identifier of the `credit` or the identifier of the `subscription`.'
+              description: 'Unique identifier of the fee item, created by Lago. It can be the identifier of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.'
               format: uuid
             item_type:
               type: string
@@ -8839,7 +8839,7 @@ components:
                 - BillableMetric
                 - Subscription
                 - WalletTransaction
-              description: 'The type of the fee item. Possible values are `AddOn`, `BillableMetric`, `WalletTransaction` or `Subscription`.'
+              description: 'The type of the fee item. Possible values are `AddOn`, `BillableMetric`, `WalletTransaction`, `Subscription` or `Commitment`.'
               example: Subscription
             grouped_by:
               type: object
