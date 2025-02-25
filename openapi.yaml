@@ -2104,6 +2104,26 @@ paths:
                       type: string
                       description: Unique identifier assigned to the customer in your application.
                       example: hooli_1234
+                    integration_customers:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - integration_type
+                          - integration_code
+                        properties:
+                          integration_type:
+                            type: string
+                            example: anrok
+                            description: |-
+                              The integration type used for accounting and tax syncs.
+                              Accepted values: `anrok`.
+                            enum:
+                              - anrok
+                          integration_code:
+                            type: string
+                            example: anrok1
+                            description: Unique code used to identify an integration connection.
                     name:
                       type: string
                       description: The full name of the customer
@@ -2125,80 +2145,80 @@ paths:
                     timezone:
                       $ref: '#/components/schemas/Timezone'
                       description: 'The customer''s timezone, used for billing purposes in their local time. Overrides the organization''s timezone'
-                  plan_code:
-                    type: string
-                    description: 'The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.'
-                    example: startup
-                  subscription_at:
-                    type: string
-                    description: The anniversary date and time of the initial subscription. This date serves as the basis for billing subscriptions with `anniversary` billing time. The `anniversary_date` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-                    format: date-time
-                    example: '2022-08-08T00:00:00Z'
-                  billing_time:
-                    type: string
-                    description: 'The billing time for the subscription, which can be set as either `anniversary` or `calendar`. If not explicitly provided, it will default to `calendar`. The billing time determines the timing of recurring billing cycles for the subscription. By specifying `anniversary`, the billing cycle will be based on the specific date the subscription started (billed fully), while `calendar` sets the billing cycle at the first day of the week/month/year (billed with proration).'
-                    example: anniversary
-                    enum:
-                      - calendar
-                      - anniversary
-                  coupons:
-                    type: array
-                    items:
-                      type: object
-                      required:
-                        - code
-                      properties:
-                        name:
-                          type: string
-                          description: The name of the coupon.
-                          example: Startup Deal
-                        code:
-                          type: string
-                          description: Unique code used to identify the coupon.
-                          example: startup_deal
-                        coupon_type:
-                          type: string
-                          enum:
-                            - fixed_amount
-                            - percentage
-                          description: |-
-                            The type of the coupon. It can have two possible values: `fixed_amount` or `percentage`.
-
-                            - If set to `fixed_amount`, the coupon represents a fixed amount discount.
-                            - If set to `percentage`, the coupon represents a percentage-based discount.
-                          example: fixed_amount
-                        amount_cents:
-                          type: integer
-                          nullable: true
-                          description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
-                          example: 5000
-                        amount_currency:
-                          $ref: '#/components/schemas/Currency'
-                          nullable: true
-                          description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
-                          example: USD
-                        percentage_rate:
-                          type: string
-                          pattern: '^[0-9]+.?[0-9]*$'
-                          nullable: true
-                          description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
-                          example: null
-                        frequency_duration:
-                          type: integer
-                          nullable: true
-                          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
-                          example: 6
-                  subscriptions:
+                plan_code:
+                  type: string
+                  description: 'The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.'
+                  example: startup
+                subscription_at:
+                  type: string
+                  description: The anniversary date and time of the initial subscription. This date serves as the basis for billing subscriptions with `anniversary` billing time. The `anniversary_date` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+                  format: date-time
+                  example: '2022-08-08T00:00:00Z'
+                billing_time:
+                  type: string
+                  description: 'The billing time for the subscription, which can be set as either `anniversary` or `calendar`. If not explicitly provided, it will default to `calendar`. The billing time determines the timing of recurring billing cycles for the subscription. By specifying `anniversary`, the billing cycle will be based on the specific date the subscription started (billed fully), while `calendar` sets the billing cycle at the first day of the week/month/year (billed with proration).'
+                  example: anniversary
+                  enum:
+                    - calendar
+                    - anniversary
+                coupons:
+                  type: array
+                  items:
                     type: object
                     required:
-                      - external_ids
+                      - code
                     properties:
-                      external_ids:
-                        type: array
-                        items:
-                          type: string
-                          description: External identifiers of the customer's subscription.
-                          example: 441edbe3-9136-4688-a763-e57b6f1dca82
+                      name:
+                        type: string
+                        description: The name of the coupon.
+                        example: Startup Deal
+                      code:
+                        type: string
+                        description: Unique code used to identify the coupon.
+                        example: startup_deal
+                      coupon_type:
+                        type: string
+                        enum:
+                          - fixed_amount
+                          - percentage
+                        description: |-
+                          The type of the coupon. It can have two possible values: `fixed_amount` or `percentage`.
+
+                          - If set to `fixed_amount`, the coupon represents a fixed amount discount.
+                          - If set to `percentage`, the coupon represents a percentage-based discount.
+                        example: fixed_amount
+                      amount_cents:
+                        type: integer
+                        nullable: true
+                        description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
+                        example: 5000
+                      amount_currency:
+                        $ref: '#/components/schemas/Currency'
+                        nullable: true
+                        description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+                        example: USD
+                      percentage_rate:
+                        type: string
+                        pattern: '^[0-9]+.?[0-9]*$'
+                        nullable: true
+                        description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
+                        example: null
+                      frequency_duration:
+                        type: integer
+                        nullable: true
+                        description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
+                        example: 6
+                subscriptions:
+                  type: object
+                  required:
+                    - external_ids
+                  properties:
+                    external_ids:
+                      type: array
+                      items:
+                        type: string
+                        description: External identifiers of the customer's subscription.
+                        example: 441edbe3-9136-4688-a763-e57b6f1dca82
         required: true
       responses:
         '200':
