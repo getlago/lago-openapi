@@ -17,12 +17,13 @@ properties:
           description: Specifies the lower value of a tier for a `graduated` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
           example: 0
         to_value:
-          type: integer
+          type:
+            - integer
+            - "null"
           description: |-
             Specifies the highest value of a tier for a `graduated` charge model.
             - This value must be higher than the from_value of the same tier.
             - This value must be null for the last tier.
-          nullable: true
           example: 10
         flat_amount:
           type: string
@@ -52,12 +53,13 @@ properties:
           description: Specifies the lower value of a tier for a `graduated_percentage` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
           example: 0
         to_value:
-          type: integer
+          type:
+            - integer
+            - "null"
           description: |-
             Specifies the highest value of a tier for a `graduated_percentage` charge model.
             - This value must be higher than the from_value of the same tier.
             - This value must be null for the last tier.
-          nullable: true
           example: 10
         rate:
           type: string
@@ -101,27 +103,31 @@ properties:
     description: The fixed fee that is applied to each transaction for a `percentage` charge model. It is expressed as a decimal value.
     example: "0.5"
   free_units_per_events:
-    type: integer
+    type:
+      - integer
+      - "null"
     description: The count of transactions that are not impacted by the `percentage` rate and fixed fee in a percentage charge model. This field indicates the number of transactions that are exempt from the calculation of charges based on the specified percentage rate and fixed fee.
-    nullable: true
     example: 5
   free_units_per_total_aggregation:
-    type: string
+    type:
+      - string
+      - "null"
     pattern: "^[0-9]+.?[0-9]*$"
     description: The transaction amount that is not impacted by the `percentage` rate and fixed fee in a percentage charge model. This field indicates the portion of the transaction amount that is exempt from the calculation of charges based on the specified percentage rate and fixed fee.
-    nullable: true
     example: "500"
   per_transaction_max_amount:
-    type: string
+    type:
+      - string
+      - "null"
     format: "^[0-9]+.?[0-9]*$"
     description: Specifies the maximum allowable spending for a single transaction. Working as a transaction cap.
-    nullable: true
     example: "3.75"
   per_transaction_min_amount:
-    type: string
+    type:
+      - string
+      - "null"
     format: "^[0-9]+.?[0-9]*$"
     description: Specifies the minimum allowable spending for a single transaction. Working as a transaction floor.
-    nullable: true
     example: "1.75"
 
   # Standard only charge model
@@ -149,12 +155,13 @@ properties:
           description: Specifies the lower value of a tier for a `volume` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
           example: 0
         to_value:
-          type: integer
+          type:
+            - integer
+            - "null"
           description: |-
             Specifies the highest value of a tier for a `volume` charge model.
             - This value must be higher than the `from_value` of the same tier.
             - This value must be `null` for the last tier.
-          nullable: true
           example: 10
         flat_amount:
           type: string

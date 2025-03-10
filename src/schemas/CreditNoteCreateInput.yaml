@@ -10,11 +10,13 @@ properties:
     properties:
       invoice_id:
         type: string
-        format: 'uuid'
+        format: "uuid"
         description: The invoice unique identifier, created by Lago.
-        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
       reason:
-        type: string
+        type:
+          - string
+          - "null"
         enum:
           - duplicated_charge
           - product_unsatisfactory
@@ -22,7 +24,7 @@ properties:
           - order_cancellation
           - fraudulent_charge
           - other
-        nullable: true
+          - null
         description: |-
           The reason of the credit note creation.
           Possible values are `duplicated_charge`, `product_unsatisfactory`, `order_change`, `order_cancellation`, `fraudulent_charge` or `other`.
@@ -30,15 +32,17 @@ properties:
       description:
         type: string
         description: The description of the credit note.
-        example: 'description'
+        example: "description"
       credit_amount_cents:
-        type: integer
-        nullable: true
+        type:
+          - integer
+          - "null"
         description: The total amount to be credited on the customer balance.
         example: 10
       refund_amount_cents:
-        type: integer
-        nullable: true
+        type:
+          - integer
+          - "null"
         description: The total amount to be refunded to the customer.
         example: 5
       items:
@@ -51,16 +55,16 @@ properties:
           properties:
             fee_id:
               type: string
-              format: 'uuid'
+              format: "uuid"
               description: The fee unique identifier, created by Lago.
-              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             amount_cents:
               type: integer
               description: The amount of the credit note item, expressed in cents.
               example: 10
         description: The list of credit note's items.
         example:
-          - fee_id: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+          - fee_id: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             amount_cents: 10
-          - fee_id: '1a901a90-1a90-1a90-1a90-1a901a901a91'
+          - fee_id: "1a901a90-1a90-1a90-1a90-1a901a901a91"
             amount_cents: 5

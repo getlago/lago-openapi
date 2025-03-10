@@ -60,8 +60,9 @@ properties:
     description: This field determines the billing timing for the plan. When set to `true`, the base cost of the plan is due at the beginning of each billing period. Conversely, when set to `false`, the base cost of the plan is due at the end of each billing period.
     example: true
   bill_charges_monthly:
-    type: boolean
-    nullable: true
+    type:
+      - boolean
+      - "null"
     description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`.
     example: null
   minimum_commitment:

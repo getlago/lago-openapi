@@ -10,29 +10,30 @@ required:
 properties:
   from_datetime:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The lower bound of the billing period, expressed in the ISO 8601 datetime format in Coordinated Universal Time (UTC).
-    example: '2022-07-01T00:00:00Z'
+    example: "2022-07-01T00:00:00Z"
   to_datetime:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The upper bound of the billing period, expressed in the ISO 8601 datetime format in Coordinated Universal Time (UTC).
-    example: '2022-07-31T23:59:59Z'
+    example: "2022-07-31T23:59:59Z"
   issuing_date:
     type: string
-    format: 'date'
+    format: "date"
     description: The date of creation of the invoice.
-    example: '2022-08-01'
+    example: "2022-08-01"
   lago_invoice_id:
-    type: string
-    format: 'uuid'
-    nullable: true
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: A unique identifier associated with the invoice related to this particular usage record.
   currency:
-    $ref: './Currency.yaml'
+    $ref: "./Currency.yaml"
     description: The currency of the customer's current usage.
-    example: 'EUR'
+    example: "EUR"
   amount_cents:
     type: integer
     description: The amount in cents, tax excluded.
@@ -49,4 +50,4 @@ properties:
     type: array
     description: Array of charges that comprise the current usage. It contains detailed information about individual charge items associated with the usage.
     items:
-      $ref: './CustomerChargeUsageObject.yaml'
+      $ref: "./CustomerChargeUsageObject.yaml"

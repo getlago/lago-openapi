@@ -14,61 +14,71 @@ required:
   - payment_status
 properties:
   lago_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: "uuid"
-    nullable: true
     description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_charge_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: "uuid"
-    nullable: true
     description: Unique identifier assigned to the charge that the fee belongs to
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_charge_filter_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: "uuid"
-    nullable: true
     description: Unique identifier assigned to the charge filter that the fee belongs to
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_invoice_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: uuid
-    nullable: true
     description: Unique identifier assigned to the invoice that the fee belongs to
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_true_up_fee_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: uuid
-    nullable: true
     description: Unique identifier assigned to the true-up fee when a minimum has been set to the charge. This identifier helps to distinguish and manage the true-up fee associated with the charge, which may be applicable when a minimum threshold or limit is set for the charge amount.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_true_up_parent_fee_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: uuid
-    nullable: true
     description: Unique identifier assigned to the parent fee on which the true-up fee is assigned. This identifier establishes the relationship between the parent fee and the associated true-up fee.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_subscription_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: uuid
-    nullable: true
     description: Unique identifier assigned to the subscription, created by Lago. This field is specifically displayed when the fee type is charge or subscription.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_customer_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: uuid
-    nullable: true
     description: Unique identifier assigned to the customer, created by Lago. This field is specifically displayed when the fee type is charge or subscription.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   external_customer_id:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     description: Unique identifier assigned to the customer in your application. This field is specifically displayed when the fee type is charge or subscription.
     example: "external_id"
   external_subscription_id:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge or subscription.
     example: "external_id"
   invoice_display_name:
@@ -132,15 +142,17 @@ properties:
     description: Flag that indicates whether the fee was included on the invoice. It serves as a boolean value, where `true` represents that the fee was included on the invoice, and `false` indicates that the fee was not included on the invoice.
     example: true
   from_date:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    nullable: true
     description: The beginning date of the period that the fee covers. It is applicable only to `subscription` and `charge` fees. This field indicates the start date of the billing period or subscription period associated with the fee.
     example: "2022-04-29T08:59:51Z"
   to_date:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    nullable: true
     description: The ending date of the period that the fee covers. It is applicable only to `subscription` and `charge` fees. This field indicates the end date of the billing period or subscription period associated with the fee.
     example: "2022-05-29T08:59:51Z"
   payment_status:
@@ -153,32 +165,37 @@ properties:
     description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and `refunded`.
     example: "pending"
   created_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
-    nullable: true
     description: The date and time when the fee was created. It is provided in Coordinated Universal Time (UTC) format.
     example: "2022-08-24T14:58:59Z"
   succeeded_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
-    nullable: true
     description: The date and time when the payment for the fee was successfully processed. It is provided in Coordinated Universal Time (UTC) format.
     example: "2022-08-24T14:58:59Z"
   failed_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
-    nullable: true
     description: The date and time when the payment for the fee failed to process. It is provided in Coordinated Universal Time (UTC) format.
     example: "2022-08-24T14:58:59Z"
   refunded_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
-    nullable: true
     description: The date and time when the payment for the fee was refunded. It is provided in Coordinated Universal Time (UTC) format
     example: "2022-08-24T14:58:59Z"
   event_transaction_id:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge` and the payment for the fee is made in advance (`pay_in_advance` is set to `true`).
     example: "transaction_1234567890"
   amount_details:

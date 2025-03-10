@@ -45,24 +45,26 @@ properties:
     description: The status of the coupon. Can be either `active` or `terminated`.
     example: active
   amount_cents:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"
     description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
     example: 2000
   amount_cents_remaining:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"
     description: The remaining amount in cents for a `fixed_amount` coupon with a frequency set to `once`. This field indicates the remaining balance or value that can still be utilized from the coupon.
     example: 50
   amount_currency:
-    $ref: "./Currency.yaml"
-    nullable: true
+    $ref: "./CurrencyOrNull.yaml"
     description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
     example: "EUR"
   percentage_rate:
-    type: string
+    type:
+      - string
+      - "null"
     pattern: "^[0-9]+.?[0-9]*$"
-    nullable: true
     description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
     example: null
   frequency:
@@ -79,19 +81,22 @@ properties:
       - If set to `forever`, the coupon has unlimited usage and can be applied indefinitely.
     example: recurring
   frequency_duration:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"
     description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
     example: 3
   frequency_duration_remaining:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"
     description: The remaining number of billing periods to which the coupon is applicable. This field determines the remaining usage or availability of the coupon based on the remaining billing periods.
     example: 1
   expiration_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    nullable: true
     description: The date and time after which the coupon will stop applying to customer's invoices. Once the expiration date is reached, the coupon will no longer be applicable, and any further invoices generated for the customer will not include the coupon discount.
     example: "2022-04-29T08:59:51Z"
   created_at:
@@ -100,8 +105,9 @@ properties:
     description: The date and time when the coupon was assigned to a customer. It is expressed in UTC format according to the ISO 8601 datetime standard.
     example: "2022-04-29T08:59:51Z"
   terminated_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    nullable: true
     description: This field indicates the specific moment when the coupon amount is fully utilized or when the coupon is removed from the customer's coupon list. It is expressed in UTC format according to the ISO 8601 datetime standard.
     example: "2022-04-29T08:59:51Z"

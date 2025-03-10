@@ -4,8 +4,8 @@
   "description": "Open API specification for Lago project.",
   "main": "index.js",
   "scripts": {
-    "build": "swagger-cli bundle src/openapi.yaml --outfile openapi.yaml --type yaml",
-    "test": "npm run build && spectral lint openapi.yaml",
+    "build": "redocly bundle src/openapi.yaml --output openapi.yaml --ext yaml",
+    "test": "npm run build && redocly lint openapi.yaml",
     "clean": "rm -r _build"
   },
   "repository": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/getlago/lago-openapi#README",
   "dependencies": {
-    "@apidevtools/swagger-cli": "^4.0.4",
+    "@redocly/cli": "^1.33.0",
     "@stoplight/spectral-cli": "^6.11.1"
   }
 }

@@ -18,7 +18,8 @@ allOf:
         items:
           $ref: "./InvoiceAppliedTaxObject.yaml"
       applied_usage_thresholds:
-        type: array
-        nullable: true
+        type:
+          - array
+          - "null"
         items:
           $ref: "./AppliedUsageThresholdObject.yaml"

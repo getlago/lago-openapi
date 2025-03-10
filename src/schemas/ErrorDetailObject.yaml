@@ -5,9 +5,10 @@ required:
   - details
 properties:
   lago_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: "uuid"
-    nullable: true
     description: Unique identifier assigned to the error_detail within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the error's record within the Lago system.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   error_code:
@@ -17,4 +18,4 @@ properties:
   details:
     type: object
     description: Key value list of more elaborated error detail, where by the key of error_code an external service error details are stored
-    example: { tax_error: 'taxDateTooFarInFuture' }
+    example: { tax_error: "taxDateTooFarInFuture" }

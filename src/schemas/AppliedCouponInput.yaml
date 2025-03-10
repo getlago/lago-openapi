@@ -17,12 +17,14 @@ properties:
         description: Unique code used to identify the coupon.
         example: "startup_deal"
       frequency:
-        type: string
+        type:
+          - string
+          - "null"
         enum:
           - once
           - recurring
           - forever
-        nullable: true
+          - null
         description: |-
           The type of frequency for the coupon. It can have three possible values: `once`, `recurring` or `forever`.
 
@@ -31,23 +33,25 @@ properties:
           - If set to `forever`, the coupon has unlimited usage and can be applied indefinitely.
         example: recurring
       frequency_duration:
-        type: integer
-        nullable: true
+        type:
+          - integer
+          - "null"
         description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
         example: 3
       amount_cents:
-        type: integer
-        nullable: true
+        type:
+          - integer
+          - "null"
         description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
         example: 2000
       amount_currency:
-        $ref: "./Currency.yaml"
-        nullable: true
+        $ref: "./CurrencyOrNull.yaml"
         description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
         example: "EUR"
       percentage_rate:
-        type: string
+        type:
+          - string
+          - "null"
         pattern: "^[0-9]+.?[0-9]*$"
-        nullable: true
         description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
         example: null

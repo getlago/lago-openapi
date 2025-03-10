@@ -3,28 +3,29 @@ properties:
   name:
     type: string
     description: The name of the add-on.
-    example: 'Setup Fee'
+    example: "Setup Fee"
   invoice_display_name:
     type: string
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-    example: 'Setup Fee (SF1)'
+    example: "Setup Fee (SF1)"
   code:
     type: string
     description: Unique code used to identify the add-on.
-    example: 'setup_fee'
+    example: "setup_fee"
   amount_cents:
     type: integer
     description: The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.
     example: 50000
   amount_currency:
-    $ref: './Currency.yaml'
+    $ref: "./Currency.yaml"
     description: The currency of the add-on.
-    example: 'USD'
+    example: "USD"
   description:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     description: The description of the add-on.
-    example: 'Implementation fee for new customers.'
+    example: "Implementation fee for new customers."
   tax_codes:
     type: array
     items:

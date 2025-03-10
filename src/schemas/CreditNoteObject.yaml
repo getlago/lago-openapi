@@ -21,9 +21,9 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: The credit note unique identifier, created by Lago.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   sequential_id:
     type: integer
     description: The sequential identifier of the credit note, specifically scoped on the associated invoice. It provides a unique numerical identifier for the credit note within the context of the invoice.
@@ -31,28 +31,30 @@ properties:
   number:
     type: string
     description: The credit note unique number.
-    example: 'LAG-1234-CN2'
+    example: "LAG-1234-CN2"
   lago_invoice_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier assigned to the invoice that the credit note belongs to
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   invoice_number:
     type: string
     description: The invoice unique number, related to the credit note.
-    example: 'LAG-1234'
+    example: "LAG-1234"
   issuing_date:
     type: string
-    format: 'date'
+    format: "date"
     description: The date of creation of the credit note. It follows the ISO 8601 date format and provides the specific date when the credit note was created.
-    example: '2022-12-06'
+    example: "2022-12-06"
   credit_status:
-    type: string
+    type:
+      - string
+      - "null"
     enum:
       - available
       - consumed
       - voided
-    nullable: true
+      - null
     description: |-
       The status of the credit portion of the credit note. It indicates the current state or condition of the credit amount associated with the credit note. The possible values for this field are:
 
@@ -61,12 +63,14 @@ properties:
       - `voided`: this status indicates that the remaining amount of the credit cannot be used any further. The credit has been voided and is no longer available for application or redemption.
     example: available
   refund_status:
-    type: string
+    type:
+      - string
+      - "null"
     enum:
       - pending
       - succeeded
       - failed
-    nullable: true
+      - null
     description: |-
       The status of the refund portion of the credit note. It indicates the current state or condition of the refund associated with the credit note. The possible values for this field are:
 
@@ -88,14 +92,15 @@ properties:
       Possible values are `duplicated_charge`, `product_unsatisfactory`, `order_change`, `order_cancellation`, `fraudulent_charge` or `other`.
     example: other
   description:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     description: The description of the credit note.
-    example: 'Free text'
+    example: "Free text"
   currency:
-    $ref: './Currency.yaml'
+    $ref: "./Currency.yaml"
     description: The currency of the credit note.
-    example: 'EUR'
+    example: "EUR"
   total_amount_cents:
     type: integer
     description: The total amount of the credit note, expressed in cents.
@@ -130,28 +135,29 @@ properties:
     example: 20
   created_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The date when the credit note was created. It is expressed in Coordinated Universal Time (UTC).
-    example: '2022-09-14T16:35:31Z'
+    example: "2022-09-14T16:35:31Z"
   updated_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The date when the credit note was last updated. It is expressed in Coordinated Universal Time (UTC).
-    example: '2022-09-14T16:35:31Z'
+    example: "2022-09-14T16:35:31Z"
   file_url:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     description: The PDF file of the credit note.
-    example: 'https://getlago.com/credit_note/file'
+    example: "https://getlago.com/credit_note/file"
   items:
     type: array
     items:
-      $ref: './CreditNoteItemObject.yaml'
+      $ref: "./CreditNoteItemObject.yaml"
     description: Array of credit note's items.
   applied_taxes:
     type: array
     items:
-      $ref: './CreditNoteAppliedTaxObject.yaml'
+      $ref: "./CreditNoteAppliedTaxObject.yaml"
   self_billed:
     type: boolean
     example: false

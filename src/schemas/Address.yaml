@@ -2,32 +2,36 @@ type: object
 description: Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.
 properties:
   address_line1:
-    type: string
-    example: '5230 Penfield Ave'
-    description: 'The first line of the billing address'
-    nullable: true
+    type:
+      - string
+      - "null"
+    example: "5230 Penfield Ave"
+    description: "The first line of the billing address"
   address_line2:
-    type: string
+    type:
+      - string
+      - "null"
     example: null
-    description: 'The second line of the billing address'
-    nullable: true
+    description: "The second line of the billing address"
   city:
-    type: string
-    example: 'Woodland Hills'
+    type:
+      - string
+      - "null"
+    example: "Woodland Hills"
     description: The city of the customer's billing address
-    nullable: true
   country:
-    $ref: './Country.yaml'
-    nullable: true
+    $ref: "./CountryOrNull.yaml"
     description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-    example: 'US'
+    example: "US"
   state:
-    type: string
-    example: 'CA'
+    type:
+      - string
+      - "null"
+    example: "CA"
     description: The state of the customer's billing address
-    nullable: true
   zipcode:
-    type: string
-    example: '91364'
+    type:
+      - string
+      - "null"
+    example: "91364"
     description: The zipcode of the customer's billing address
-    nullable: true
