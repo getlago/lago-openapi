@@ -9,99 +9,113 @@ properties:
     properties:
       external_id:
         type: string
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
         description: The customer external unique identifier (provided by your own application)
       address_line1:
-        type: string
-        example: '5230 Penfield Ave'
+        type:
+          - string
+          - "null"
+        example: "5230 Penfield Ave"
         description: The first line of the billing address
-        nullable: true
       address_line2:
-        type: string
-        example: ''
+        type:
+          - string
+          - "null"
+        example: ""
         description: The second line of the billing address
-        nullable: true
       city:
-        type: string
-        example: 'Woodland Hills'
+        type:
+          - string
+          - "null"
+        example: "Woodland Hills"
         description: The city of the customer's billing address
-        nullable: true
       country:
-        $ref: './Country.yaml'
-        nullable: true
+        $ref: "./CountryOrNull.yaml"
         description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-        example: 'US'
+        example: "US"
       currency:
-        $ref: './Currency.yaml'
+        $ref: "./CurrencyOrNull.yaml"
         description: Currency of the customer. Format must be ISO 4217
-        nullable: true
       email:
-        type: string
-        format: 'email'
-        example: 'dinesh@piedpiper.test'
+        type:
+          - string
+          - "null"
+        format: "email"
+        example: "dinesh@piedpiper.test"
         description: The email of the customer
-        nullable: true
       legal_name:
-        type: string
-        example: 'Coleman-Blair'
+        type:
+          - string
+          - "null"
+        example: "Coleman-Blair"
         description: The legal company name of the customer
-        nullable: true
       legal_number:
-        type: string
-        example: '49-008-2965'
+        type:
+          - string
+          - "null"
+        example: "49-008-2965"
         description: The legal company number of the customer
-        nullable: true
       logo_url:
-        type: string
-        example: 'http://hooli.com/logo.png'
+        type:
+          - string
+          - "null"
+        example: "http://hooli.com/logo.png"
         description: The logo URL of the customer
-        nullable: true
       name:
-        type: string
-        example: 'Gavin Belson'
-        description: 'The full name of the customer'
-        nullable: true
+        type:
+          - string
+          - "null"
+        example: "Gavin Belson"
+        description: "The full name of the customer"
       firstname:
-        type: string
-        example: 'Gavin'
-        description: 'First name of the customer'
-        nullable: true
+        type:
+          - string
+          - "null"
+        example: "Gavin"
+        description: "First name of the customer"
       lastname:
-        type: string
-        example: 'Belson'
-        description: 'Last name of the customer'
-        nullable: true
+        type:
+          - string
+          - "null"
+        example: "Belson"
+        description: "Last name of the customer"
       account_type:
-        type: string
+        type:
+          - string
+          - "null"
         enum:
           - customer
           - partner
-        example: 'customer'
-        nullable: true
+          - null
+        example: "customer"
         description: |-
           The type of the account. It can have one of the following values:
           - `customer`: the account is a customer, default value.
           - `partner`: the account is a partner.
       customer_type:
-        type: string
+        type:
+          - string
+          - "null"
         enum:
           - company
           - individual
-        nullable: true
+          - null
         description: |-
           The type of the customer. It can have one of the following values:
           - `company`: the customer is a company.
           - `individual`: the customer is an individual.
       phone:
-        type: string
-        example: '1-171-883-3711 x245'
+        type:
+          - string
+          - "null"
+        example: "1-171-883-3711 x245"
         description: The phone number of the customer
-        nullable: true
       state:
-        type: string
-        example: 'CA'
+        type:
+          - string
+          - "null"
+        example: "CA"
         description: The state of the customer's billing address
-        nullable: true
       tax_codes:
         type: array
         items:
@@ -109,45 +123,48 @@ properties:
         description: List of unique code used to identify the taxes.
         example: [french_standard_vat]
       tax_identification_number:
-        type: string
-        example: 'EU123456789'
+        type:
+          - string
+          - "null"
+        example: "EU123456789"
         description: The tax identification number of the customer
-        nullable: true
       timezone:
-        $ref: './Timezone.yaml'
+        $ref: "./TimezoneOrNull.yaml"
         description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
-        nullable: true
       url:
-        type: string
-        example: 'http://hooli.com'
+        type:
+          - string
+          - "null"
+        example: "http://hooli.com"
         description: The custom website URL of the customer
-        nullable: true
       zipcode:
-        type: string
-        example: '91364'
+        type:
+          - string
+          - "null"
+        example: "91364"
         description: The zipcode of the customer's billing address
-        nullable: true
       net_payment_term:
-        type: integer
+        type:
+          - integer
+          - "null"
         example: 30
         description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
-        nullable: true
       finalize_zero_amount_invoice:
         type: string
         enum:
           - inherit
           - skip
           - finalize
-        example: 'inherit'
+        example: "inherit"
         description: |-
           Specifies how invoices with a zero total amount should be handled:
           - `inherit`: (Default) Follows the organization-level configuration.
           - `finalize`: Invoices are issued and finalized even if the total amount is zero.
           - `skip`: Invoices with a total amount of zero are not finalized.
       billing_configuration:
-        $ref: './CustomerBillingConfiguration.yaml'
+        $ref: "./CustomerBillingConfiguration.yaml"
       shipping_address:
-        $ref: './Address.yaml'
+        $ref: "./Address.yaml"
       integration_customers:
         type: array
         items:
@@ -155,12 +172,12 @@ properties:
           properties:
             id:
               type: string
-              format: 'uuid'
-              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-              description: 'A unique identifier for the integration customer object in the Lago application.'
+              format: "uuid"
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+              description: "A unique identifier for the integration customer object in the Lago application."
             integration_type:
               type: string
-              example: 'netsuite'
+              example: "netsuite"
               description: |-
                 The integration type used for accounting and tax syncs.
                 Accepted values: `netsuite, anrok, xero`.
@@ -170,11 +187,11 @@ properties:
                 - xero
             integration_code:
               type: string
-              example: 'netsuite-eu-1'
+              example: "netsuite-eu-1"
               description: Unique code used to identify an integration connection.
             external_customer_id:
               type: string
-              example: 'cus_12345'
+              example: "cus_12345"
               description: The customer ID within the integration's system. If this field is not provided, Lago has the option to create a new customer record within the integration's system on behalf of the customer.
             sync_with_provider:
               type: boolean
@@ -182,7 +199,7 @@ properties:
               description: Set this field to `true` if you want to create a customer record in the integration's system. This option is applicable only when the `external_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
             subsidiary_id:
               type: string
-              example: '2'
+              example: "2"
               description: This optional field is needed only when working with `netsuite` connection.
 
       metadata:
@@ -197,16 +214,16 @@ properties:
           properties:
             id:
               type: string
-              format: 'uuid'
-              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              format: "uuid"
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
               description: Identifier for the metadata object, only required when updating a key-value pair
             key:
               type: string
-              example: 'Purchase Order'
+              example: "Purchase Order"
               description: The metadata object key
             value:
               type: string
-              example: '123456789'
+              example: "123456789"
               description: The metadata object value
             display_in_invoice:
               type: boolean
@@ -222,4 +239,4 @@ properties:
         items:
           type: string
         description: List of unique codes identifying the invoice custom sections.
-        example: ['eu_bank_details']
+        example: ["eu_bank_details"]

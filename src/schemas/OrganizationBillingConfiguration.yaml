@@ -2,10 +2,11 @@ type: object
 description: The custom billing settings for your organization.
 properties:
   invoice_footer:
-    type: string
-    example: 'This is my customer footer'
+    type:
+      - string
+      - "null"
+    example: "This is my customer footer"
     description: The customer invoice message that appears at the bottom of each billing documents.
-    nullable: true
   invoice_grace_period:
     type: integer
     example: 3

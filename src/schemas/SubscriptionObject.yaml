@@ -36,10 +36,11 @@ properties:
       - calendar
       - anniversary
   name:
-    type: string
+    type:
+      - string
+      - "null"
     example: "Repository A"
     description: The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.
-    nullable: true
   plan_code:
     type: string
     example: "premium"
@@ -64,65 +65,75 @@ properties:
     example: "2022-08-08T00:00:00Z"
     description: The creation date of the subscription, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). This date provides a timestamp indicating when the subscription was initially created.
   canceled_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
     example: "2022-09-14T16:35:31Z"
     description: The cancellation date of the subscription. This field is not null when the subscription is `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-    nullable: true
   started_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
     example: "2022-08-08T00:00:00Z"
     description: The effective start date of the subscription. This field can be null if the subscription is `pending` or `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-    nullable: true
   ending_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
     example: "2022-10-08T00:00:00Z"
     description: The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).
-    nullable: true
   subscription_at:
     type: string
     format: "date-time"
     example: "2022-08-08T00:00:00Z"
     description: The anniversary date and time of the initial subscription. This date serves as the basis for billing subscriptions with `anniversary` billing time. The `anniversary_date` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
   terminated_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
     example: "2022-09-14T16:35:31Z"
     description: The termination date of the subscription. This field is not null when the subscription is `terminated`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC)
-    nullable: true
   previous_plan_code:
-    type: string
+    type:
+      - string
+      - "null"
     example: null
     description: The code identifying the previous plan associated with this subscription.
-    nullable: true
   next_plan_code:
-    type: string
+    type:
+      - string
+      - "null"
     example: null
     description: The code identifying the next plan in the case of a downgrade.
-    nullable: true
   downgrade_plan_date:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date"
     example: "2022-04-30"
     description: The date when the plan will be downgraded, represented in ISO 8601 date format.
-    nullable: true
   trial_ended_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
     example: "2022-08-08T00:00:00Z"
     description: The date when the free trial is ended, represented in ISO 8601 date format.
-    nullable: true
   current_billing_period_started_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
     example: "2022-08-08T00:00:00Z"
     description: The date and time when the current billing period started, represented in ISO 8601 date format.
-    nullable: true
   current_billing_period_ending_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
     example: "2022-09-08T00:00:00Z"
     description: The date and time when the current billing period ends, represented in ISO 8601 date format.
-    nullable: true

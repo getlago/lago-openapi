@@ -49,8 +49,9 @@ properties:
     description: This field specifies whether the charge should be included in a proper invoice. If set to `false`, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.
     example: true
   regroup_paid_fees:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     enum:
       - null
       - invoice

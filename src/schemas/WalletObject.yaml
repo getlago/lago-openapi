@@ -70,27 +70,31 @@ properties:
     description: The date of the wallet creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
     example: "2022-04-29T08:59:51Z"
   expiration_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    nullable: true
     description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
     example: null
   last_balance_sync_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    nullable: true
     description: The date and time of the last balance top-up. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
     example: "2022-04-29T08:59:51Z"
   last_consumed_credit_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    nullable: true
     description: The date and time of the last credits consumption. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
     example: "2022-04-29T08:59:51Z"
   terminated_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    nullable: true
     description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
     example: "2022-09-14T16:35:31Z"
   invoice_requires_successful_payment:

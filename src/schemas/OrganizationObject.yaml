@@ -10,120 +10,131 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: Unique identifier assigned to the organization within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the organization's record within the Lago system
   name:
     type: string
-    example: 'Name1'
+    example: "Name1"
     description: The name of your organization.
   created_at:
-    type: string
-    format: 'date-time'
-    example: '2022-05-02T13:04:09Z'
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    example: "2022-05-02T13:04:09Z"
     description: The date of creation of your organization, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-    nullable: true
   webhook_url:
-    type: string
-    example: 'https://webhook.brex.com'
+    type:
+      - string
+      - "null"
+    example: "https://webhook.brex.com"
     description: The URL of your newest updated webhook endpoint. This URL allows your organization to receive important messages, notifications, or data from the Lago system. By configuring your webhook endpoint to this URL, you can ensure that your organization stays informed and receives relevant information in a timely manner.
-    nullable: true
   webhook_urls:
-    type: array
+    type:
+      - array
+      - "null"
     items:
       type: string
     example:
       - https://webhook.brex.com
       - https://webhook2.brex.com
     description: The array containing your webhooks URLs.
-    nullable: true
   country:
-    $ref: './Country.yaml'
-    nullable: true
+    $ref: "./CountryOrNull.yaml"
     description: The country of your organization.
-    example: 'US'
+    example: "US"
   default_currency:
-    $ref: './Currency.yaml'
+    $ref: "./Currency.yaml"
     description: The default currency of an organization.
-    example: 'USD'
+    example: "USD"
   address_line1:
-    type: string
-    example: '100 Brex Street'
+    type:
+      - string
+      - "null"
+    example: "100 Brex Street"
     description: The first line of your organization's billing address.
-    nullable: true
   address_line2:
-    type: string
+    type:
+      - string
+      - "null"
     example: null
     description: The second line of your organization's billing address.
-    nullable: true
   state:
-    type: string
-    example: 'NYC'
+    type:
+      - string
+      - "null"
+    example: "NYC"
     description: The state of your organization's billing address.
-    nullable: true
   zipcode:
-    type: string
-    example: '10000'
+    type:
+      - string
+      - "null"
+    example: "10000"
     description: The zipcode of your organization's billing address.
-    nullable: true
   email:
-    type: string
-    format: 'email'
-    example: 'brex@brex.com'
+    type:
+      - string
+      - "null"
+    format: "email"
+    example: "brex@brex.com"
     description: The email address of your organization used to bill your customers.
-    nullable: true
   city:
-    type: string
-    example: 'New York'
+    type:
+      - string
+      - "null"
+    example: "New York"
     description: The city of your organization's billing address.
-    nullable: true
   legal_name:
-    type: string
+    type:
+      - string
+      - "null"
     example: null
     description: The legal name of your organization.
-    nullable: true
   legal_number:
-    type: string
+    type:
+      - string
+      - "null"
     example: null
     description: The legal number of your organization.
-    nullable: true
   document_numbering:
     type: string
     enum:
       - per_customer
       - per_organization
-    example: 'per_customer'
+    example: "per_customer"
     description: |-
       This parameter configures the method of incrementing invoice numbers for your customers.
-      
+
       - `per_customer`: Invoice numbers are incremented individually for each customer. This means every customer will have their own unique sequence of invoice numbers, separate from other customers. It ensures that each customer's invoice numbers follow a distinct and isolated numbering pattern.
       - `per_organization`: Invoice number incrementation is made across your entire organization. Rather than individual sequences for each customer, all invoices within the organization follow a single, unified numbering system. This creates a continuous and organization-wide sequence for all invoice numbers. Invoices are incremented per month (dynamic value used is YYYYMM), and invoice numbers are reset at the end of each month.
-      
+
       The default value for `document_numbering` is set to `per_customer`, meaning that, unless changed, invoice numbers will increment uniquely for each customer.
   document_number_prefix:
     type: string
-    example: 'ORG-1234'
+    example: "ORG-1234"
     description: Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four digits of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.
   net_payment_term:
     type: integer
     example: 30
     description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
   tax_identification_number:
-    type: string
-    example: 'US123456789'
+    type:
+      - string
+      - "null"
+    example: "US123456789"
     description: The tax identification number of your organization.
-    nullable: true
   timezone:
-    $ref: './Timezone.yaml'
+    $ref: "./Timezone.yaml"
     description: Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone.
-    example: 'America/New_York'
+    example: "America/New_York"
   billing_configuration:
-    $ref: './OrganizationBillingConfiguration.yaml'
+    $ref: "./OrganizationBillingConfiguration.yaml"
   taxes:
     type: array
     description: List of default organization taxes
     items:
-      $ref: './TaxObject.yaml'
+      $ref: "./TaxObject.yaml"
   finalize_zero_amount_invoice:
     type: boolean
     example: false

@@ -3,21 +3,22 @@ properties:
   name:
     type: string
     description: Name of the tax.
-    example: 'TVA'
+    example: "TVA"
   code:
     type: string
     description: Unique code used to identify the tax associated with the API request.
-    example: 'french_standard_vat'
+    example: "french_standard_vat"
   rate:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
+    pattern: "^[0-9]+.?[0-9]*$"
     description: The percentage rate of the tax
-    example: '20.0'
+    example: "20.0"
   description:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     description: Internal description of the taxe
-    example: 'French standard VAT'
+    example: "French standard VAT"
   applied_to_organization:
     type: boolean
     description: Set to `true` if the tax is used as one of the organization's default

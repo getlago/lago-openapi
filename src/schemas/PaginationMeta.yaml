@@ -9,15 +9,17 @@ properties:
     description: Current page.
     example: 2
   next_page:
-    type: integer
+    type:
+      - integer
+      - "null"
     description: Next page.
     example: 3
-    nullable: true
   prev_page:
-    type: integer
+    type:
+      - integer
+      - "null"
     description: Previous page.
     example: 1
-    nullable: true
   total_pages:
     type: integer
     description: Total number of pages.

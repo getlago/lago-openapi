@@ -1,6 +1,7 @@
-type: object
+type:
+  - object
+  - "null"
 description: Minimum commitment for this plan.
-nullable: true
 required:
   - amount_cents
 properties:
@@ -18,5 +19,3 @@ properties:
       type: string
     description: List of unique code used to identify the taxes.
     example: [french_standard_vat]
-
-

@@ -9,8 +9,8 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
   sequential_id:
     type: integer
@@ -18,140 +18,154 @@ properties:
     description: The unique identifier assigned to the customer within the organization's scope. This identifier is used to track and reference the customer's order of creation within the organization's system. It ensures that each customer has a distinct `sequential_id`` associated with them, allowing for easy identification and sorting based on the order of creation
   slug:
     type: string
-    example: 'LAG-1234-001'
+    example: "LAG-1234-001"
     description: A concise and unique identifier for the customer, formed by combining the Organization's `name`, `id`, and customer's `sequential_id`
   external_id:
     type: string
-    example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
-    description: 'The customer external unique identifier (provided by your own application)'
+    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+    description: "The customer external unique identifier (provided by your own application)"
   address_line1:
-    type: string
-    example: '5230 Penfield Ave'
-    description: 'The first line of the billing address'
-    nullable: true
+    type:
+      - string
+      - "null"
+    example: "5230 Penfield Ave"
+    description: "The first line of the billing address"
   address_line2:
-    type: string
+    type:
+      - string
+      - "null"
     example: null
-    description: 'The second line of the billing address'
-    nullable: true
+    description: "The second line of the billing address"
   applicable_timezone:
-    $ref: './Timezone.yaml'
+    $ref: "./Timezone.yaml"
     description: The customer's applicable timezone, used for billing purposes in their local time.
   city:
-    type: string
-    example: 'Woodland Hills'
+    type:
+      - string
+      - "null"
+    example: "Woodland Hills"
     description: The city of the customer's billing address
-    nullable: true
   country:
-    $ref: './Country.yaml'
-    nullable: true
+    $ref: "./CountryOrNull.yaml"
     description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-    example: 'US'
+    example: "US"
   currency:
-    $ref: './Currency.yaml'
-    example: 'USD'
+    $ref: "./CurrencyOrNull.yaml"
+    example: "USD"
     description: Currency of the customer. Format must be ISO 4217
-    nullable: true
   email:
-    type: string
-    format: 'email'
-    example: 'dinesh@piedpiper.test'
-    description: 'The email of the customer'
-    nullable: true
+    type:
+      - string
+      - "null"
+    format: "email"
+    example: "dinesh@piedpiper.test"
+    description: "The email of the customer"
   legal_name:
-    type: string
-    example: 'Coleman-Blair'
-    description: 'The legal company name of the customer'
-    nullable: true
+    type:
+      - string
+      - "null"
+    example: "Coleman-Blair"
+    description: "The legal company name of the customer"
   legal_number:
-    type: string
-    example: '49-008-2965'
-    description: 'The legal company number of the customer'
-    nullable: true
+    type:
+      - string
+      - "null"
+    example: "49-008-2965"
+    description: "The legal company number of the customer"
   logo_url:
-    type: string
-    example: 'http://hooli.com/logo.png'
-    description: 'The logo URL of the customer'
-    nullable: true
+    type:
+      - string
+      - "null"
+    example: "http://hooli.com/logo.png"
+    description: "The logo URL of the customer"
   name:
-    type: string
-    example: 'Gavin Belson'
-    description: 'The full name of the customer'
-    nullable: true
+    type:
+      - string
+      - "null"
+    example: "Gavin Belson"
+    description: "The full name of the customer"
   firstname:
-    type: string
-    example: 'Gavin'
-    description: 'First name of the customer'
-    nullable: true
+    type:
+      - string
+      - "null"
+    example: "Gavin"
+    description: "First name of the customer"
   lastname:
-    type: string
-    example: 'Belson'
-    description: 'Last name of the customer'
-    nullable: true
+    type:
+      - string
+      - "null"
+    example: "Belson"
+    description: "Last name of the customer"
   account_type:
     type: string
     enum:
       - customer
       - partner
-    example: 'customer'
-    nullable: false
+    example: "customer"
     description: |-
       The type of the account. It can have one of the following values:
       - `customer`: the account is a customer.
       - `partner`: the account is a partner.
   customer_type:
-    type: string
+    type:
+      - string
+      - "null"
     enum:
       - company
       - individual
-    nullable: true
+      - null
     description: |-
       The type of the customer. It can have one of the following values:
       - `company`: the customer is a company.
       - `individual`: the customer is an individual.
   phone:
-    type: string
-    example: '1-171-883-3711 x245'
+    type:
+      - string
+      - "null"
+    example: "1-171-883-3711 x245"
     description: The phone number of the customer
-    nullable: true
   state:
-    type: string
-    example: 'CA'
+    type:
+      - string
+      - "null"
+    example: "CA"
     description: The state of the customer's billing address
-    nullable: true
   tax_identification_number:
-    type: string
-    example: 'EU123456789'
+    type:
+      - string
+      - "null"
+    example: "EU123456789"
     description: The tax identification number of the customer
-    nullable: true
   timezone:
-    $ref: './Timezone.yaml'
+    $ref: "./TimezoneOrNull.yaml"
     description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
-    nullable: true
   url:
-    type: string
-    example: 'http://hooli.com'
+    type:
+      - string
+      - "null"
+    example: "http://hooli.com"
     description: The custom website URL of the customer
-    nullable: true
   zipcode:
-    type: string
-    example: '91364'
+    type:
+      - string
+      - "null"
+    example: "91364"
     description: The zipcode of the customer's billing address
-    nullable: true
   net_payment_term:
-    type: integer
+    type:
+      - integer
+      - "null"
     example: 30
     description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
-    nullable: true
   created_at:
     type: string
-    format: 'date-time'
-    example: '2022-04-29T08:59:51Z'
+    format: "date-time"
+    example: "2022-04-29T08:59:51Z"
     description: The date of the customer creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the customer object was created
   updated_at:
     type: string
-    format: 'date-time'
-    example: '2022-04-29T08:59:51Z'
+    format: "date-time"
+    example: "2022-04-29T08:59:51Z"
     description: The date of the customer update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the customer object was updated
   finalize_zero_amount_invoice:
     type: string
@@ -159,7 +173,7 @@ properties:
       - inherit
       - skip
       - finalize
-    example: 'inherit'
+    example: "inherit"
     description: |-
       Specifies how invoices with a zero total amount should be handled:
       - `inherit`: (Default) Follows the organization-level configuration.
@@ -170,10 +184,10 @@ properties:
     example: false
     description: Set to true to exclude all invoice custom sections from PDF generation for this customer only.
   billing_configuration:
-    $ref: './CustomerBillingConfiguration.yaml'
+    $ref: "./CustomerBillingConfiguration.yaml"
   shipping_address:
-    $ref: './Address.yaml'
+    $ref: "./Address.yaml"
   metadata:
     type: array
     items:
-      $ref: './CustomerMetadata.yaml'
+      $ref: "./CustomerMetadata.yaml"

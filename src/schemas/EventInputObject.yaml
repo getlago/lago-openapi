@@ -26,8 +26,9 @@ properties:
       If this timestamp is not provided, the API will automatically set it to the time of event reception.
       You can also provide miliseconds precision by appending decimals to the timestamp.
   precise_total_amount_cents:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     example: "1234.56"
     description: The precise total amount in cents with precision used by the `dynamic` pricing model to compute the usage amount.
   properties:

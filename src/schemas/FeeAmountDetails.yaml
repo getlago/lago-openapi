@@ -17,37 +17,38 @@ properties:
       properties:
         units:
           type: string
-          pattern: '^[0-9]+.?[0-9]*$'
-          example: '10.0'
+          pattern: "^[0-9]+.?[0-9]*$"
+          example: "10.0"
           description: Total units received in Lago.
         from_value:
           type: integer
           description: Lower value of a tier. It is either 0 or the previous range's `to_value + 1`.
           example: 0
         to_value:
-          type: integer
+          type:
+            - integer
+            - "null"
           description: |-
             Highest value of a tier.
             - This value is higher than the from_value of the same tier.
             - This value is null for the last tier.
-          nullable: true
           example: 10
         flat_unit_amount:
           type: string
           description: Flat unit amount within a specified tier.
-          example: '1.0'
+          example: "1.0"
         per_unit_amount:
           type: string
           description: Amount per unit within a specified tier.
-          example: '1.0'
+          example: "1.0"
         per_unit_total_amount:
           type: string
           description: Total amount of received units to be charged within a specified tier.
-          example: '10.0'
+          example: "10.0"
         total_with_flat_amount:
           type: string
           description: Total amount to be charged for a specific tier, taking into account the flat_unit_amount and the per_unit_total_amount.
-          example: '11.0'
+          example: "11.0"
 
   # Graduated percentage charge model
   graduated_percentage_ranges:
@@ -66,67 +67,68 @@ properties:
       properties:
         units:
           type: string
-          pattern: '^[0-9]+.?[0-9]*$'
-          example: '10.0'
+          pattern: "^[0-9]+.?[0-9]*$"
+          example: "10.0"
           description: Total units received in Lago.
         from_value:
           type: integer
           description: Lower value of a tier. It is either 0 or the previous range's `to_value + 1`.
           example: 0
         to_value:
-          type: integer
+          type:
+            - integer
+            - "null"
           description: |-
             Highest value of a tier.
             - This value is higher than the from_value of the same tier.
             - This value is null for the last tier.
-          nullable: true
           example: 10
         flat_unit_amount:
           type: string
           description: Flat unit amount within a specified tier.
-          example: '1.0'
+          example: "1.0"
         rate:
           type: string
-          format: '^[0-9]+.?[0-9]*$'
+          format: "^[0-9]+.?[0-9]*$"
           description: Percentage rate applied within a specified tier.
-          example: '1.0'
+          example: "1.0"
         per_unit_total_amount:
           type: string
           description: Total amount of received units to be charged within a specified tier.
-          example: '10.0'
+          example: "10.0"
         total_with_flat_amount:
           type: string
           description: Total amount to be charged for a specific tier, taking into account the flat_unit_amount and the per_unit_total_amount.
-          example: '11.0'
+          example: "11.0"
 
   # Shared for Package & Percentage charge models
   free_units:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
-    example: '10.0'
+    pattern: "^[0-9]+.?[0-9]*$"
+    example: "10.0"
     description: The quantity of units that are provided free of charge for each billing period in a `package` charge model.
   paid_units:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
-    example: '40.0'
+    pattern: "^[0-9]+.?[0-9]*$"
+    example: "40.0"
     description: The quantity of units that are not provided free of charge for each billing period in a `package` charge model.
 
   # Package charge model
-  per_package_size:  
+  per_package_size:
     type: integer
     description: The quantity of units included, defined for Package or Percentage charge model.
     example: 1000
   per_package_unit_amount:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
+    pattern: "^[0-9]+.?[0-9]*$"
     description: Total amount to charge for received paid_units, defined for Package or Percentage charge model.
-    example: '0.5'
+    example: "0.5"
 
   # Percentage charge model
   units:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
-    example: '20.0'
+    pattern: "^[0-9]+.?[0-9]*$"
+    example: "20.0"
     description: The total units received in Lago for the Percentage charge model.
   free_events:
     type: integer
@@ -134,13 +136,13 @@ properties:
     description: Total number of free events allowed for the Percentage charge model.
   rate:
     type: string
-    format: '^[0-9]+.?[0-9]*$'
+    format: "^[0-9]+.?[0-9]*$"
     description: Percentage rate applied for the Percentage charge model.
-    example: '1.0'
+    example: "1.0"
   per_unit_total_amount:
     type: string
     description: Total amount of received units to be charged for the Percentage charge model.
-    example: '10.0'
+    example: "10.0"
   paid_events:
     type: integer
     example: 20
@@ -148,15 +150,15 @@ properties:
   fixed_fee_unit_amount:
     type: string
     description: Fixed fee unit price per received paid_event for the Percentage charge model.
-    example: '1.0'
+    example: "1.0"
   fixed_fee_total_amount:
     type: string
     description: Total amount to charge for received paid_events for the Percentage charge model.
-    example: '20.0'
+    example: "20.0"
   min_max_adjustment_total_amount:
     type: string
     description: Total adjustment amount linked to minimum and maximum spending per transaction for the Percentage charge model.
-    example: '20.0'
+    example: "20.0"
 
   # Volume charge model
   volume_ranges:
@@ -171,16 +173,16 @@ properties:
       properties:
         per_unit_amount:
           type: string
-          pattern: '^[0-9]+.?[0-9]*$'
+          pattern: "^[0-9]+.?[0-9]*$"
           description: The flat amount for a whole tier, excluding tax, for a `volume` charge model.
-          example: '0.5'
+          example: "0.5"
         flat_unit_amount:
           type: string
-          pattern: '^[0-9]+.?[0-9]*$'
+          pattern: "^[0-9]+.?[0-9]*$"
           description: The unit price, excluding tax, for a specific tier of a `volume` charge model.
-          example: '10.0'
+          example: "10.0"
         per_unit_total_amount:
           type: string
-          pattern: '^[0-9]+.?[0-9]*$'
+          pattern: "^[0-9]+.?[0-9]*$"
           description: Total amount of received units to be charged.
-          example: '10.0'
+          example: "10.0"

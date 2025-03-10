@@ -13,8 +13,9 @@ properties:
     description: The completion ratio of the usage threshold.
     example: 0.5
   reached_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
     description: The date and time when the usage threshold was reached. The date and time must be in ISO 8601 format.
     example: "2024-01-01T00:00:00Z"
-    nullable: true

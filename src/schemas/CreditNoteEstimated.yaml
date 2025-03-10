@@ -18,17 +18,17 @@ properties:
     properties:
       lago_invoice_id:
         type: string
-        format: 'uuid'
+        format: "uuid"
         description: Unique identifier assigned to the invoice that the credit note belongs to
-        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
       invoice_number:
         type: string
         description: The invoice unique number, related to the credit note.
-        example: 'LAG-1234'
+        example: "LAG-1234"
       currency:
-        $ref: './Currency.yaml'
+        $ref: "./Currency.yaml"
         description: The currency of the credit note.
-        example: 'EUR'
+        example: "EUR"
       taxes_amount_cents:
         type: integer
         description: The tax amount of the credit note, expressed in cents.
@@ -66,11 +66,12 @@ properties:
               description: The credit note's item amount, expressed in cents.
               example: 100
             lago_fee_id:
-              type: string
-              format: 'uuid'
-              nullable: true
+              type:
+                - string
+                - "null"
+              format: "uuid"
               description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
-              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
         description: Array of credit note's items.
       applied_taxes:
         type: array
@@ -79,17 +80,17 @@ properties:
           properties:
             lago_tax_id:
               type: string
-              format: 'uuid'
+              format: "uuid"
               description: Unique identifier of the tax, created by Lago.
-              example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             tax_name:
               type: string
               description: Name of the tax.
-              example: 'TVA'
+              example: "TVA"
             tax_code:
               type: string
               description: Unique code used to identify the tax associated with the API request.
-              example: 'french_standard_vat'
+              example: "french_standard_vat"
             tax_rate:
               type: number
               description: The percentage rate of the tax
@@ -97,7 +98,7 @@ properties:
             tax_description:
               type: string
               description: Internal description of the taxe
-              example: 'French standard VAT'
+              example: "French standard VAT"
             base_amount_cents:
               type: integer
               example: 100
@@ -106,6 +107,6 @@ properties:
               description: Amount of the tax
               example: 2000
             amount_currency:
-              $ref: './Currency.yaml'
+              $ref: "./Currency.yaml"
               description: Currency of the tax
-              example: 'USD'
+              example: "USD"

@@ -7,25 +7,26 @@ properties:
     properties:
       address_line1:
         type: string
-        example: '5230 Penfield Ave'
-        description: 'The first line of the billing address'
+        example: "5230 Penfield Ave"
+        description: "The first line of the billing address"
       address_line2:
-        type: string
+        type:
+          - string
+          - "null"
         example: null
-        nullable: true
-        description: 'The second line of the billing address'
+        description: "The second line of the billing address"
       city:
         type: string
-        example: 'Woodland Hills'
+        example: "Woodland Hills"
         description: The city of the customer's billing address
       country:
-        $ref: './Country.yaml'
+        $ref: "./Country.yaml"
         description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
-        example: 'US'
+        example: "US"
       external_id:
         type: string
         description: Unique identifier assigned to the customer in your application.
-        example: 'hooli_1234'
+        example: "hooli_1234"
       integration_customers:
         type: array
         items:
@@ -36,7 +37,7 @@ properties:
           properties:
             integration_type:
               type: string
-              example: 'anrok'
+              example: "anrok"
               description: |-
                 The integration type used for accounting and tax syncs.
                 Accepted values: `anrok`.
@@ -44,28 +45,28 @@ properties:
                 - anrok
             integration_code:
               type: string
-              example: 'anrok1'
+              example: "anrok1"
               description: Unique code used to identify an integration connection.
       name:
         type: string
         description: The full name of the customer
-        example: 'Gavin Belson'
+        example: "Gavin Belson"
       currency:
-        $ref: './Currency.yaml'
+        $ref: "./Currency.yaml"
         description: The currency of the invoice.
-        example: 'EUR'
+        example: "EUR"
       shipping_address:
-        $ref: './Address.yaml'
+        $ref: "./Address.yaml"
       state:
         type: string
-        example: 'CA'
+        example: "CA"
         description: The state of the customer's billing address
       tax_identification_number:
         type: string
         description: The tax identification number of the customer
-        example: 'EU123456789'
+        example: "EU123456789"
       timezone:
-        $ref: './Timezone.yaml'
+        $ref: "./Timezone.yaml"
         description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
   plan_code:
     type: string
@@ -110,24 +111,25 @@ properties:
             - If set to `percentage`, the coupon represents a percentage-based discount.
           example: fixed_amount
         amount_cents:
-          type: integer
-          nullable: true
+          type:
+            - integer
+            - "null"
           description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
           example: 5000
         amount_currency:
-          $ref: "./Currency.yaml"
-          nullable: true
+          $ref: "./CurrencyOrNull.yaml"
           description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
           example: "USD"
         percentage_rate:
-          type: string
+          type:
+            - string
+            - "null"
           pattern: "^[0-9]+.?[0-9]*$"
-          nullable: true
           description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
-          example: null
         frequency_duration:
-          type: integer
-          nullable: true
+          type:
+            - integer
+            - "null"
           description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
           example: 6
   subscriptions:

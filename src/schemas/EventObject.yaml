@@ -19,9 +19,10 @@ properties:
     example: "transaction_1234567890"
     description: This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.
   lago_customer_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: "uuid"
-    nullable: true
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
   code:
@@ -34,8 +35,9 @@ properties:
     example: "2022-04-29T08:59:51.123Z"
     description: This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.
   precise_total_amount_cents:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     example: "1234.56"
     description: The precise total amount that was sent in the event payload. This filed is used by the `dynamic` pricing model.
   properties:
@@ -56,9 +58,10 @@ properties:
     example:
       gb: 10
   lago_subscription_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: "uuid"
-    nullable: true
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription's record within the Lago system
   external_subscription_id:

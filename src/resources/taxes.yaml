@@ -9,21 +9,21 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/TaxCreateInput.yaml'
+          $ref: "../schemas/TaxCreateInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Tax created
       content:
         application/json:
           schema:
-            $ref: '../schemas/Tax.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/Tax.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
 get:
   tags:
     - taxes
@@ -31,15 +31,15 @@ get:
   description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either the organization or a specific customer.
   operationId: findAllTaxes
   parameters:
-    - $ref: '../parameters/page.yaml'
-    - $ref: '../parameters/per_page.yaml'
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
   responses:
-    '200':
+    "200":
       description: Taxes
       content:
         application/json:
           schema:
-            $ref: '../schemas/TaxesPaginated.yaml'
+            $ref: "../schemas/TaxesPaginated.yaml"
           example:
             taxes:
               - lago_id: "41190609-391a-4368-9549-d4348a85a8cd"
@@ -48,7 +48,6 @@ get:
                 description: "French standard VAT"
                 rate: 20.0
                 applied_to_organization: true
-                customers_count: 0
                 created_at: "2023-07-06T14:35:58Z"
               - lago_id: "2e034a10-6652-4daf-a600-b085184f93ad"
                 name: "TVA"
@@ -56,7 +55,6 @@ get:
                 description: "French reduce VAT"
                 rate: 5.0
                 applied_to_organization: false
-                customers_count: 0
                 created_at: "2023-07-06T14:45:23Z"
             meta:
               current_page: 1
@@ -64,5 +62,5 @@ get:
               prev_page: null
               total_pages: 1
               total_count: 2
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
+    "401":
+      $ref: "../responses/Unauthorized.yaml"

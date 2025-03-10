@@ -35,8 +35,9 @@ properties:
     description: "Reference for the payment."
     example: "ref1"
   external_payment_id:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     description: "External identifier for the payment (if applicable)."
     example: null
   created_at:
