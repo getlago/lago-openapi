@@ -24,7 +24,8 @@ properties:
     enum:
       - pending
       - settled
-    description: The status of the wallet transaction. Possible values are `pending` or `settled`.
+      - failed
+    description: The status of the wallet transaction. Possible values are `pending`, `settled` or `failed`.
     example: settled
   source:
     type: string
@@ -85,6 +86,11 @@ properties:
     type: string
     format: 'date-time'
     description: The date when wallet transaction is settled, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    example: '2022-04-29T08:59:51Z'
+  failed_at:
+    type: string
+    format: 'date-time'
+    description: The date when the wallet transaction failed, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
     example: '2022-04-29T08:59:51Z'
   created_at:
     type: string
