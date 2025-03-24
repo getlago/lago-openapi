@@ -9938,6 +9938,15 @@ components:
                 type: string
                 description: External identifiers of the customer's subscription.
                 example: 441edbe3-9136-4688-a763-e57b6f1dca82
+            plan_code:
+              type: string
+              description: The code of the plan. It serves as a unique identifier associated with the new plan to which the customer is upgrading or downgrading.
+              example: new_code
+            terminated_at:
+              type: string
+              description: The date and time when the subscription is terminated. It should defined in the future.
+              format: date-time
+              example: '2022-08-08T00:00:00Z'
     OrganizationBillingConfiguration:
       type: object
       description: The custom billing settings for your organization.
