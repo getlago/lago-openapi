@@ -3,7 +3,7 @@ info:
   title: Lago API documentation
   description: |-
     Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 1.22.0
+  version: 1.25.0
   license:
     name: AGPLv3
     identifier: AGPLv3
@@ -20,6 +20,11 @@ servers:
 security:
   - bearerAuth: []
 tags:
+  - name: billing_entities
+    description: Everything about Billing Entities
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/billing_entities/billing-entity-object
   - name: analytics
     description: Everything about Analytics
   - name: billable_metrics
@@ -109,6 +114,10 @@ tags:
       url: https://doc.getlago.com/docs/api/payments/payment-object
 
 paths:
+  /billing_entities:
+    $ref: "./resources/billing_entities.yaml"
+  /billing_entities/{id}:
+    $ref: "./resources/billing_entity.yaml"
   /add_ons:
     $ref: "./resources/add_ons.yaml"
   /add_ons/{code}:

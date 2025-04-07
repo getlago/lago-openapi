@@ -1,0 +1,151 @@
+type: object
+description: Billing entity object
+required:
+  - lago_id
+  - code
+  - name
+  - default_currency
+  - document_locale
+  - document_numbering
+  - finalize_zero_amount_invoice
+  - invoice_grace_period
+  - net_payment_term
+  - timezone
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: uuid
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    description: A unique identifier for the billing entity in the Lago application
+  code:
+    type: string
+    example: "acme_corp"
+    description: The unique code of the billing entity
+  name:
+    type: string
+    example: "Acme Corp"
+    description: The name of the billing entity
+  default_currency:
+    $ref: './Currency.yaml'
+    description: The default currency of the billing entity
+    example: "USD"
+  document_locale:
+    type: string
+    example: "en"
+    description: The language of the documents generated for this billing entity
+  document_numbering:
+    type: string
+    enum:
+      - per_customer
+      - per_billing_entity
+    description: |-
+      The type of document numbering for this billing entity:
+      - `per_customer`: document numbers are unique per customer
+      - `per_billing_entity`: document numbers are unique per billing entity
+    example: "per_customer"
+  document_number_prefix:
+    type: string
+    example: "ABC-123"
+    description: The prefix used in document numbers for this billing entity
+    nullable: true
+  finalize_zero_amount_invoice:
+    type: boolean
+    example: true
+    description: Whether to finalize invoices with zero amount for this billing entity
+  invoice_footer:
+    type: string
+    example: "Thank you for your business"
+    description: The footer text to be displayed on invoices for this billing entity
+    nullable: true
+  invoice_grace_period:
+    type: integer
+    example: 0
+    description: The grace period (in days) for invoice finalization
+  net_payment_term:
+    type: integer
+    example: 0
+    description: The net payment term (in days) for this billing entity
+  address_line1:
+    type: string
+    example: "5230 Penfield Ave"
+    description: The first line of the billing address
+    nullable: true
+  address_line2:
+    type: string
+    example: "Suite 100"
+    description: The second line of the billing address
+    nullable: true
+  city:
+    type: string
+    example: "Woodland Hills"
+    description: The city of the billing address
+    nullable: true
+  state:
+    type: string
+    example: "CA"
+    description: The state of the billing address
+    nullable: true
+  country:
+    $ref: './Country.yaml'
+    description: The country code of the billing address
+    nullable: true
+  zipcode:
+    type: string
+    example: "91364"
+    description: The zipcode of the billing address
+    nullable: true
+  email:
+    type: string
+    format: email
+    example: "billing@acme.com"
+    description: The email address of the billing entity
+    nullable: true
+  legal_name:
+    type: string
+    example: "Acme Corporation"
+    description: The legal name of the billing entity
+    nullable: true
+  legal_number:
+    type: string
+    example: "US123456789"
+    description: The legal registration number of the billing entity
+    nullable: true
+  tax_identification_number:
+    type: string
+    example: "EU123456789"
+    description: The tax identification number of the billing entity
+    nullable: true
+  timezone:
+    $ref: './Timezone.yaml'
+    description: The timezone of the billing entity
+    example: "UTC"
+  email_settings:
+    type: array
+    items:
+      type: string
+      enum:
+        - invoice.finalized
+        - credit_note.created
+    description: The email notification settings for this billing entity
+  eu_tax_management:
+    type: boolean
+    example: false
+    description: Whether EU tax management is enabled for this billing entity
+  logo_url:
+    type: string
+    format: uri
+    example: "https://getlago.com/logo.png"
+    description: The URL of the billing entity's logo
+    nullable: true
+  created_at:
+    type: string
+    format: date-time
+    example: "2022-04-29T08:59:51Z"
+    description: The date and time when the billing entity was created
+  updated_at:
+    type: string
+    format: date-time
+    example: "2022-04-29T08:59:51Z"
+    description: The date and time when the billing entity was last updated

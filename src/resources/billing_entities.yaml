@@ -1,0 +1,24 @@
+get:
+  tags:
+    - billing_entities
+  summary: List all billing entities
+  description: This endpoint returns a list of all billing entities in the organization
+  operationId: listBillingEntities
+  responses:
+    '200':
+      description: List of billing entities
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - billing_entities
+            properties:
+              billing_entities:
+                type: array
+                items:
+                  $ref: '../schemas/BillingEntityObject.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

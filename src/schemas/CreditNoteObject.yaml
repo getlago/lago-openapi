@@ -24,6 +24,11 @@ properties:
     format: "uuid"
     description: The credit note unique identifier, created by Lago.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  billing_entity_code:
+    type: string
+    example: "acme_corp"
+    description: The unique code of the billing entity associated with the credit note
+    nullable: true
   sequential_id:
     type: integer
     description: The sequential identifier of the credit note, specifically scoped on the associated invoice. It provides a unique numerical identifier for the credit note within the context of the invoice.
