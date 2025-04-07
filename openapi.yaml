@@ -20,7 +20,7 @@ tags:
     description: Everything about Billing Entities
     externalDocs:
       description: Find out more
-      url: 'https://doc.getlago.com/docs/api/billing_entities/billing-entity-object'
+      url: https://doc.getlago.com/docs/api/billing_entities/billing-entity-object
   - name: analytics
     description: Everything about Analytics
   - name: billable_metrics
@@ -137,7 +137,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  '/billing_entities/{id}':
+  /billing_entities/{id}:
     parameters:
       - name: id
         in: path
