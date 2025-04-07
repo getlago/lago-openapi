@@ -63,6 +63,10 @@ properties:
     type: integer
     example: 0
     description: The grace period (in days) for invoice finalization
+  is_default:
+    type: boolean
+    example: false
+    description: Whether this billing entity is the default billing entity for the organization. Default billing entity will be used as fallback in services if no billing entity is specified when billing_entity is not provided. Default billing entity is the billing entity that will be used to generate invoices if no billing entity is specified when invoice is created. is the oldest active billing entity and this flag cannot be changed
   net_payment_term:
     type: integer
     example: 0

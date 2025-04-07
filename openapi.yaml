@@ -4811,6 +4811,604 @@ components:
         - YER
         - ZAR
         - ZMW
+    Country:
+      type: string
+      example: US
+      enum:
+        - AD
+        - AE
+        - AF
+        - AG
+        - AI
+        - AL
+        - AM
+        - AO
+        - AQ
+        - AR
+        - AS
+        - AT
+        - AU
+        - AW
+        - AX
+        - AZ
+        - BA
+        - BB
+        - BD
+        - BE
+        - BF
+        - BG
+        - BH
+        - BI
+        - BJ
+        - BL
+        - BM
+        - BN
+        - BO
+        - BQ
+        - BR
+        - BS
+        - BT
+        - BV
+        - BW
+        - BY
+        - BZ
+        - CA
+        - CC
+        - CD
+        - CF
+        - CG
+        - CH
+        - CI
+        - CK
+        - CL
+        - CM
+        - CN
+        - CO
+        - CR
+        - CU
+        - CV
+        - CW
+        - CX
+        - CY
+        - CZ
+        - DE
+        - DJ
+        - DK
+        - DM
+        - DO
+        - DZ
+        - EC
+        - EE
+        - EG
+        - EH
+        - ER
+        - ES
+        - ET
+        - FI
+        - FJ
+        - FK
+        - FM
+        - FO
+        - FR
+        - GA
+        - GB
+        - GD
+        - GE
+        - GF
+        - GG
+        - GH
+        - GI
+        - GL
+        - GM
+        - GN
+        - GP
+        - GQ
+        - GR
+        - GS
+        - GT
+        - GU
+        - GW
+        - GY
+        - HK
+        - HM
+        - HN
+        - HR
+        - HT
+        - HU
+        - ID
+        - IE
+        - IL
+        - IM
+        - IN
+        - IO
+        - IQ
+        - IR
+        - IS
+        - IT
+        - JE
+        - JM
+        - JO
+        - JP
+        - KE
+        - KG
+        - KH
+        - KI
+        - KM
+        - KN
+        - KP
+        - KR
+        - KW
+        - KY
+        - KZ
+        - LA
+        - LB
+        - LC
+        - LI
+        - LK
+        - LR
+        - LS
+        - LT
+        - LU
+        - LV
+        - LY
+        - MA
+        - MC
+        - MD
+        - ME
+        - MF
+        - MG
+        - MH
+        - MK
+        - ML
+        - MM
+        - MN
+        - MO
+        - MP
+        - MQ
+        - MR
+        - MS
+        - MT
+        - MU
+        - MV
+        - MW
+        - MX
+        - MY
+        - MZ
+        - NA
+        - NC
+        - NE
+        - NF
+        - NG
+        - NI
+        - NL
+        - 'NO'
+        - NP
+        - NR
+        - NU
+        - NZ
+        - OM
+        - PA
+        - PE
+        - PF
+        - PG
+        - PH
+        - PK
+        - PL
+        - PM
+        - PN
+        - PR
+        - PS
+        - PT
+        - PW
+        - PY
+        - QA
+        - RE
+        - RO
+        - RS
+        - RU
+        - RW
+        - SA
+        - SB
+        - SC
+        - SD
+        - SE
+        - SG
+        - SH
+        - SI
+        - SJ
+        - SK
+        - SL
+        - SM
+        - SN
+        - SO
+        - SR
+        - SS
+        - ST
+        - SV
+        - SX
+        - SY
+        - SZ
+        - TC
+        - TD
+        - TF
+        - TG
+        - TH
+        - TJ
+        - TK
+        - TL
+        - TM
+        - TN
+        - TO
+        - TR
+        - TT
+        - TV
+        - TW
+        - TZ
+        - UA
+        - UG
+        - UM
+        - US
+        - UY
+        - UZ
+        - VA
+        - VC
+        - VE
+        - VG
+        - VI
+        - VN
+        - VU
+        - WF
+        - WS
+        - YE
+        - YT
+        - ZA
+        - ZM
+        - ZW
+    Timezone:
+      type: string
+      example: America/Los_Angeles
+      enum:
+        - UTC
+        - Africa/Algiers
+        - Africa/Cairo
+        - Africa/Casablanca
+        - Africa/Harare
+        - Africa/Johannesburg
+        - Africa/Monrovia
+        - Africa/Nairobi
+        - America/Argentina/Buenos_Aires
+        - America/Bogota
+        - America/Caracas
+        - America/Chicago
+        - America/Chihuahua
+        - America/Denver
+        - America/Godthab
+        - America/Guatemala
+        - America/Guyana
+        - America/Halifax
+        - America/Indiana/Indianapolis
+        - America/Juneau
+        - America/La_Paz
+        - America/Lima
+        - America/Los_Angeles
+        - America/Mazatlan
+        - America/Mexico_City
+        - America/Monterrey
+        - America/Montevideo
+        - America/New_York
+        - America/Phoenix
+        - America/Puerto_Rico
+        - America/Regina
+        - America/Santiago
+        - America/Sao_Paulo
+        - America/St_Johns
+        - America/Tijuana
+        - Asia/Almaty
+        - Asia/Baghdad
+        - Asia/Baku
+        - Asia/Bangkok
+        - Asia/Chongqing
+        - Asia/Colombo
+        - Asia/Dhaka
+        - Asia/Hong_Kong
+        - Asia/Irkutsk
+        - Asia/Jakarta
+        - Asia/Jerusalem
+        - Asia/Kabul
+        - Asia/Kamchatka
+        - Asia/Karachi
+        - Asia/Kathmandu
+        - Asia/Kolkata
+        - Asia/Krasnoyarsk
+        - Asia/Kuala_Lumpur
+        - Asia/Kuwait
+        - Asia/Magadan
+        - Asia/Muscat
+        - Asia/Novosibirsk
+        - Asia/Rangoon
+        - Asia/Riyadh
+        - Asia/Seoul
+        - Asia/Shanghai
+        - Asia/Singapore
+        - Asia/Srednekolymsk
+        - Asia/Taipei
+        - Asia/Tashkent
+        - Asia/Tbilisi
+        - Asia/Tehran
+        - Asia/Tokyo
+        - Asia/Ulaanbaatar
+        - Asia/Urumqi
+        - Asia/Vladivostok
+        - Asia/Yakutsk
+        - Asia/Yekaterinburg
+        - Asia/Yerevan
+        - Atlantic/Azores
+        - Atlantic/Cape_Verde
+        - Atlantic/South_Georgia
+        - Australia/Adelaide
+        - Australia/Brisbane
+        - Australia/Darwin
+        - Australia/Hobart
+        - Australia/Melbourne
+        - Australia/Perth
+        - Australia/Sydney
+        - Europe/Amsterdam
+        - Europe/Athens
+        - Europe/Belgrade
+        - Europe/Berlin
+        - Europe/Bratislava
+        - Europe/Brussels
+        - Europe/Bucharest
+        - Europe/Budapest
+        - Europe/Copenhagen
+        - Europe/Dublin
+        - Europe/Helsinki
+        - Europe/Istanbul
+        - Europe/Kaliningrad
+        - Europe/Kiev
+        - Europe/Lisbon
+        - Europe/Ljubljana
+        - Europe/London
+        - Europe/Madrid
+        - Europe/Minsk
+        - Europe/Moscow
+        - Europe/Paris
+        - Europe/Prague
+        - Europe/Riga
+        - Europe/Rome
+        - Europe/Samara
+        - Europe/Sarajevo
+        - Europe/Skopje
+        - Europe/Sofia
+        - Europe/Stockholm
+        - Europe/Tallinn
+        - Europe/Vienna
+        - Europe/Vilnius
+        - Europe/Volgograd
+        - Europe/Warsaw
+        - Europe/Zagreb
+        - Europe/Zurich
+        - GMT+12
+        - Pacific/Apia
+        - Pacific/Auckland
+        - Pacific/Chatham
+        - Pacific/Fakaofo
+        - Pacific/Fiji
+        - Pacific/Guadalcanal
+        - Pacific/Guam
+        - Pacific/Honolulu
+        - Pacific/Majuro
+        - Pacific/Midway
+        - Pacific/Noumea
+        - Pacific/Pago_Pago
+        - Pacific/Port_Moresby
+        - Pacific/Tongatapu
+    BillingEntityObject:
+      type: object
+      description: Billing entity object
+      required:
+        - lago_id
+        - code
+        - name
+        - default_currency
+        - document_locale
+        - document_numbering
+        - finalize_zero_amount_invoice
+        - invoice_grace_period
+        - net_payment_term
+        - timezone
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: A unique identifier for the billing entity in the Lago application
+        code:
+          type: string
+          example: acme_corp
+          description: The unique code of the billing entity
+        name:
+          type: string
+          example: Acme Corp
+          description: The name of the billing entity
+        default_currency:
+          $ref: '#/components/schemas/Currency'
+          description: The default currency of the billing entity
+          example: USD
+        document_locale:
+          type: string
+          example: en
+          description: The language of the documents generated for this billing entity
+        document_numbering:
+          type: string
+          enum:
+            - per_customer
+            - per_billing_entity
+          description: |-
+            The type of document numbering for this billing entity:
+            - `per_customer`: document numbers are unique per customer
+            - `per_billing_entity`: document numbers are unique per billing entity
+          example: per_customer
+        document_number_prefix:
+          type: string
+          example: ABC-123
+          description: The prefix used in document numbers for this billing entity
+          nullable: true
+        finalize_zero_amount_invoice:
+          type: boolean
+          example: true
+          description: Whether to finalize invoices with zero amount for this billing entity
+        invoice_footer:
+          type: string
+          example: Thank you for your business
+          description: The footer text to be displayed on invoices for this billing entity
+          nullable: true
+        invoice_grace_period:
+          type: integer
+          example: 0
+          description: The grace period (in days) for invoice finalization
+        is_default:
+          type: boolean
+          example: false
+          description: Whether this billing entity is the default billing entity for the organization. Default billing entity will be used as fallback in services if no billing entity is specified when billing_entity is not provided. Default billing entity is the billing entity that will be used to generate invoices if no billing entity is specified when invoice is created. is the oldest active billing entity and this flag cannot be changed
+        net_payment_term:
+          type: integer
+          example: 0
+          description: The net payment term (in days) for this billing entity
+        address_line1:
+          type: string
+          example: 5230 Penfield Ave
+          description: The first line of the billing address
+          nullable: true
+        address_line2:
+          type: string
+          example: Suite 100
+          description: The second line of the billing address
+          nullable: true
+        city:
+          type: string
+          example: Woodland Hills
+          description: The city of the billing address
+          nullable: true
+        state:
+          type: string
+          example: CA
+          description: The state of the billing address
+          nullable: true
+        country:
+          $ref: '#/components/schemas/Country'
+          description: The country code of the billing address
+          nullable: true
+        zipcode:
+          type: string
+          example: '91364'
+          description: The zipcode of the billing address
+          nullable: true
+        email:
+          type: string
+          format: email
+          example: billing@acme.com
+          description: The email address of the billing entity
+          nullable: true
+        legal_name:
+          type: string
+          example: Acme Corporation
+          description: The legal name of the billing entity
+          nullable: true
+        legal_number:
+          type: string
+          example: US123456789
+          description: The legal registration number of the billing entity
+          nullable: true
+        tax_identification_number:
+          type: string
+          example: EU123456789
+          description: The tax identification number of the billing entity
+          nullable: true
+        timezone:
+          $ref: '#/components/schemas/Timezone'
+          description: The timezone of the billing entity
+          example: UTC
+        email_settings:
+          type: array
+          items:
+            type: string
+            enum:
+              - invoice.finalized
+              - credit_note.created
+          description: The email notification settings for this billing entity
+        eu_tax_management:
+          type: boolean
+          example: false
+          description: Whether EU tax management is enabled for this billing entity
+        logo_url:
+          type: string
+          format: uri
+          example: https://getlago.com/logo.png
+          description: The URL of the billing entity's logo
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: The date and time when the billing entity was created
+        updated_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: The date and time when the billing entity was last updated
+    ApiErrorUnauthorized:
+      type: object
+      required:
+        - status
+        - error
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+    ApiErrorUnprocessableEntity:
+      type: object
+      required:
+        - status
+        - error
+        - code
+        - error_details
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 422
+        error:
+          type: string
+          example: Unprocessable entity
+        code:
+          type: string
+          example: validation_errors
+        error_details:
+          type: object
+    ApiErrorNotFound:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        code:
+          type: string
+          example: object_not_found
     TaxObject:
       type: object
       required:
@@ -4945,19 +5543,6 @@ components:
             $ref: '#/components/schemas/AddOnObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    ApiErrorUnauthorized:
-      type: object
-      required:
-        - status
-        - error
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 401
-        error:
-          type: string
-          example: Unauthorized
     AddOnBaseInput:
       type: object
       properties:
@@ -5026,43 +5611,6 @@ components:
         error:
           type: string
           example: Bad request
-    ApiErrorUnprocessableEntity:
-      type: object
-      required:
-        - status
-        - error
-        - code
-        - error_details
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 422
-        error:
-          type: string
-          example: Unprocessable entity
-        code:
-          type: string
-          example: validation_errors
-        error_details:
-          type: object
-    ApiErrorNotFound:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        code:
-          type: string
-          example: object_not_found
     AddOnUpdateInput:
       type: object
       required:
@@ -7234,145 +7782,6 @@ components:
         code:
           type: string
           example: not_allowed
-    Timezone:
-      type: string
-      example: America/Los_Angeles
-      enum:
-        - UTC
-        - Africa/Algiers
-        - Africa/Cairo
-        - Africa/Casablanca
-        - Africa/Harare
-        - Africa/Johannesburg
-        - Africa/Monrovia
-        - Africa/Nairobi
-        - America/Argentina/Buenos_Aires
-        - America/Bogota
-        - America/Caracas
-        - America/Chicago
-        - America/Chihuahua
-        - America/Denver
-        - America/Godthab
-        - America/Guatemala
-        - America/Guyana
-        - America/Halifax
-        - America/Indiana/Indianapolis
-        - America/Juneau
-        - America/La_Paz
-        - America/Lima
-        - America/Los_Angeles
-        - America/Mazatlan
-        - America/Mexico_City
-        - America/Monterrey
-        - America/Montevideo
-        - America/New_York
-        - America/Phoenix
-        - America/Puerto_Rico
-        - America/Regina
-        - America/Santiago
-        - America/Sao_Paulo
-        - America/St_Johns
-        - America/Tijuana
-        - Asia/Almaty
-        - Asia/Baghdad
-        - Asia/Baku
-        - Asia/Bangkok
-        - Asia/Chongqing
-        - Asia/Colombo
-        - Asia/Dhaka
-        - Asia/Hong_Kong
-        - Asia/Irkutsk
-        - Asia/Jakarta
-        - Asia/Jerusalem
-        - Asia/Kabul
-        - Asia/Kamchatka
-        - Asia/Karachi
-        - Asia/Kathmandu
-        - Asia/Kolkata
-        - Asia/Krasnoyarsk
-        - Asia/Kuala_Lumpur
-        - Asia/Kuwait
-        - Asia/Magadan
-        - Asia/Muscat
-        - Asia/Novosibirsk
-        - Asia/Rangoon
-        - Asia/Riyadh
-        - Asia/Seoul
-        - Asia/Shanghai
-        - Asia/Singapore
-        - Asia/Srednekolymsk
-        - Asia/Taipei
-        - Asia/Tashkent
-        - Asia/Tbilisi
-        - Asia/Tehran
-        - Asia/Tokyo
-        - Asia/Ulaanbaatar
-        - Asia/Urumqi
-        - Asia/Vladivostok
-        - Asia/Yakutsk
-        - Asia/Yekaterinburg
-        - Asia/Yerevan
-        - Atlantic/Azores
-        - Atlantic/Cape_Verde
-        - Atlantic/South_Georgia
-        - Australia/Adelaide
-        - Australia/Brisbane
-        - Australia/Darwin
-        - Australia/Hobart
-        - Australia/Melbourne
-        - Australia/Perth
-        - Australia/Sydney
-        - Europe/Amsterdam
-        - Europe/Athens
-        - Europe/Belgrade
-        - Europe/Berlin
-        - Europe/Bratislava
-        - Europe/Brussels
-        - Europe/Bucharest
-        - Europe/Budapest
-        - Europe/Copenhagen
-        - Europe/Dublin
-        - Europe/Helsinki
-        - Europe/Istanbul
-        - Europe/Kaliningrad
-        - Europe/Kiev
-        - Europe/Lisbon
-        - Europe/Ljubljana
-        - Europe/London
-        - Europe/Madrid
-        - Europe/Minsk
-        - Europe/Moscow
-        - Europe/Paris
-        - Europe/Prague
-        - Europe/Riga
-        - Europe/Rome
-        - Europe/Samara
-        - Europe/Sarajevo
-        - Europe/Skopje
-        - Europe/Sofia
-        - Europe/Stockholm
-        - Europe/Tallinn
-        - Europe/Vienna
-        - Europe/Vilnius
-        - Europe/Volgograd
-        - Europe/Warsaw
-        - Europe/Zagreb
-        - Europe/Zurich
-        - GMT+12
-        - Pacific/Apia
-        - Pacific/Auckland
-        - Pacific/Chatham
-        - Pacific/Fakaofo
-        - Pacific/Fiji
-        - Pacific/Guadalcanal
-        - Pacific/Guam
-        - Pacific/Honolulu
-        - Pacific/Majuro
-        - Pacific/Midway
-        - Pacific/Noumea
-        - Pacific/Pago_Pago
-        - Pacific/Port_Moresby
-        - Pacific/Tongatapu
     CountryOrNull:
       type:
         - string
@@ -8223,6 +8632,11 @@ components:
               type: string
               example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
               description: The customer external unique identifier (provided by your own application)
+            billing_entity_code:
+              type: string
+              example: acme_corp
+              description: The unique code of the billing entity to associate with the customer
+              nullable: true
             address_line1:
               type:
                 - string
@@ -8819,7 +9233,13 @@ components:
         transaction_id:
           type: string
           example: transaction_1234567890
-          description: This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.
+          description: |
+            This field represents a unique identifier for the event.
+            It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.
+
+            WARNING: If the Lago organization is configured to use the new Clickhouse-based event pipeline (designed for high-volume processing), the idempotency logic is handled differently.
+            Event uniqueness is maintained with both `transaction_id` and `timestamp` fields.
+            If a new event arrives with identical values for these two fields as an existing event, the new one will overwrite the previous event rather than being rejected.
         external_subscription_id:
           type: string
           example: sub_1234567890
@@ -8970,6 +9390,11 @@ components:
           format: uuid
           description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        billing_entity_code:
+          type: string
+          example: acme_corp
+          description: The unique code of the billing entity associated with the invoice
+          nullable: true
         sequential_id:
           type: integer
           description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
@@ -9607,259 +10032,6 @@ components:
               type: string
               example: https://foo.bar
               description: The generated Payment URL for the Invoice.
-    Country:
-      type: string
-      example: US
-      enum:
-        - AD
-        - AE
-        - AF
-        - AG
-        - AI
-        - AL
-        - AM
-        - AO
-        - AQ
-        - AR
-        - AS
-        - AT
-        - AU
-        - AW
-        - AX
-        - AZ
-        - BA
-        - BB
-        - BD
-        - BE
-        - BF
-        - BG
-        - BH
-        - BI
-        - BJ
-        - BL
-        - BM
-        - BN
-        - BO
-        - BQ
-        - BR
-        - BS
-        - BT
-        - BV
-        - BW
-        - BY
-        - BZ
-        - CA
-        - CC
-        - CD
-        - CF
-        - CG
-        - CH
-        - CI
-        - CK
-        - CL
-        - CM
-        - CN
-        - CO
-        - CR
-        - CU
-        - CV
-        - CW
-        - CX
-        - CY
-        - CZ
-        - DE
-        - DJ
-        - DK
-        - DM
-        - DO
-        - DZ
-        - EC
-        - EE
-        - EG
-        - EH
-        - ER
-        - ES
-        - ET
-        - FI
-        - FJ
-        - FK
-        - FM
-        - FO
-        - FR
-        - GA
-        - GB
-        - GD
-        - GE
-        - GF
-        - GG
-        - GH
-        - GI
-        - GL
-        - GM
-        - GN
-        - GP
-        - GQ
-        - GR
-        - GS
-        - GT
-        - GU
-        - GW
-        - GY
-        - HK
-        - HM
-        - HN
-        - HR
-        - HT
-        - HU
-        - ID
-        - IE
-        - IL
-        - IM
-        - IN
-        - IO
-        - IQ
-        - IR
-        - IS
-        - IT
-        - JE
-        - JM
-        - JO
-        - JP
-        - KE
-        - KG
-        - KH
-        - KI
-        - KM
-        - KN
-        - KP
-        - KR
-        - KW
-        - KY
-        - KZ
-        - LA
-        - LB
-        - LC
-        - LI
-        - LK
-        - LR
-        - LS
-        - LT
-        - LU
-        - LV
-        - LY
-        - MA
-        - MC
-        - MD
-        - ME
-        - MF
-        - MG
-        - MH
-        - MK
-        - ML
-        - MM
-        - MN
-        - MO
-        - MP
-        - MQ
-        - MR
-        - MS
-        - MT
-        - MU
-        - MV
-        - MW
-        - MX
-        - MY
-        - MZ
-        - NA
-        - NC
-        - NE
-        - NF
-        - NG
-        - NI
-        - NL
-        - 'NO'
-        - NP
-        - NR
-        - NU
-        - NZ
-        - OM
-        - PA
-        - PE
-        - PF
-        - PG
-        - PH
-        - PK
-        - PL
-        - PM
-        - PN
-        - PR
-        - PS
-        - PT
-        - PW
-        - PY
-        - QA
-        - RE
-        - RO
-        - RS
-        - RU
-        - RW
-        - SA
-        - SB
-        - SC
-        - SD
-        - SE
-        - SG
-        - SH
-        - SI
-        - SJ
-        - SK
-        - SL
-        - SM
-        - SN
-        - SO
-        - SR
-        - SS
-        - ST
-        - SV
-        - SX
-        - SY
-        - SZ
-        - TC
-        - TD
-        - TF
-        - TG
-        - TH
-        - TJ
-        - TK
-        - TL
-        - TM
-        - TN
-        - TO
-        - TR
-        - TT
-        - TV
-        - TW
-        - TZ
-        - UA
-        - UG
-        - UM
-        - US
-        - UY
-        - UZ
-        - VA
-        - VC
-        - VE
-        - VG
-        - VI
-        - VN
-        - VU
-        - WF
-        - WS
-        - YE
-        - YT
-        - ZA
-        - ZM
-        - ZW
     InvoicePreviewInput:
       type: object
       required:
@@ -13247,6 +13419,266 @@ components:
         code:
           type: string
           example: feature_unavailable
+    BillingEntityCreateInput:
+      type: object
+      description: Billing entity create input
+      required:
+        - billing_entity
+      properties:
+        billing_entity:
+          type: object
+          required:
+            - code
+            - name
+          properties:
+            code:
+              type: string
+              example: acme_corp
+              description: The unique code of the billing entity
+            name:
+              type: string
+              example: Acme Corp
+              description: The name of the billing entity
+            default_currency:
+              $ref: '#/components/schemas/Currency'
+              description: The default currency of the billing entity
+              example: USD
+            document_numbering:
+              type: string
+              enum:
+                - per_customer
+                - per_billing_entity
+              description: |-
+                The type of document numbering for this billing entity:
+                - `per_customer`: document numbers are unique per customer
+                - `per_billing_entity`: document numbers are unique per billing entity
+            document_number_prefix:
+              type: string
+              example: ABC-123
+              description: The prefix used in document numbers for this billing entity
+              nullable: true
+            finalize_zero_amount_invoice:
+              type: boolean
+              example: true
+              description: Whether to finalize invoices with zero amount for this billing entity
+            billing_configuration:
+              type: object
+              properties:
+                invoice_footer:
+                  type: string
+                  example: Thank you for your business
+                  description: The footer text to be displayed on invoices for this billing entity
+                document_locale:
+                  type: string
+                  example: en
+                  description: The language of the documents generated for this billing entity
+                invoice_grace_period:
+                  type: integer
+                  example: 0
+                  description: The grace period (in days) for invoice finalization
+            net_payment_term:
+              type: integer
+              example: 0
+              description: The net payment term (in days) for this billing entity
+            address_line1:
+              type: string
+              example: 5230 Penfield Ave
+              description: The first line of the billing address
+              nullable: true
+            address_line2:
+              type: string
+              example: Suite 100
+              description: The second line of the billing address
+              nullable: true
+            city:
+              type: string
+              example: Woodland Hills
+              description: The city of the billing address
+              nullable: true
+            state:
+              type: string
+              example: CA
+              description: The state of the billing address
+              nullable: true
+            country:
+              $ref: '#/components/schemas/Country'
+              description: The country code of the billing address
+              nullable: true
+            zipcode:
+              type: string
+              example: '91364'
+              description: The zipcode of the billing address
+              nullable: true
+            email:
+              type: string
+              format: email
+              example: billing@acme.com
+              description: The email address of the billing entity
+              nullable: true
+            legal_name:
+              type: string
+              example: Acme Corporation
+              description: The legal name of the billing entity
+              nullable: true
+            legal_number:
+              type: string
+              example: US123456789
+              description: The legal registration number of the billing entity
+              nullable: true
+            tax_identification_number:
+              type: string
+              example: EU123456789
+              description: The tax identification number of the billing entity
+              nullable: true
+            timezone:
+              $ref: '#/components/schemas/Timezone'
+              description: The timezone of the billing entity
+              example: UTC
+            email_settings:
+              type: array
+              items:
+                type: string
+                enum:
+                  - invoice.finalized
+                  - credit_note.created
+              description: The email notification settings for this billing entity
+            eu_tax_management:
+              type: boolean
+              example: false
+              description: Whether EU tax management is enabled for this billing entity
+            logo:
+              type: string
+              format: uri
+              example: data:image/png;base64,...
+              description: The base64 encoded logo image for the billing entity
+              nullable: true
+    BillingEntityUpdateInput:
+      type: object
+      description: Billing entity update input
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          example: acme_corp
+          description: The unique code of the billing entity
+        name:
+          type: string
+          example: Acme Corp
+          description: The name of the billing entity
+        default_currency:
+          $ref: '#/components/schemas/Currency'
+          description: The default currency of the billing entity
+          example: USD
+        document_numbering:
+          type: string
+          enum:
+            - per_customer
+            - per_billing_entity
+          description: |-
+            The type of document numbering for this billing entity:
+            - `per_customer`: document numbers are unique per customer
+            - `per_billing_entity`: document numbers are unique per billing entity
+        document_number_prefix:
+          type: string
+          example: ABC-123
+          description: The prefix used in document numbers for this billing entity
+          nullable: true
+        finalize_zero_amount_invoice:
+          type: boolean
+          example: true
+          description: Whether to finalize invoices with zero amount for this billing entity
+        billing_configuration:
+          type: object
+          properties:
+            invoice_footer:
+              type: string
+              example: Thank you for your business
+              description: The footer text to be displayed on invoices for this billing entity
+            document_locale:
+              type: string
+              example: en
+              description: The language of the documents generated for this billing entity
+            invoice_grace_period:
+              type: integer
+              example: 0
+              description: The grace period (in days) for invoice finalization
+        net_payment_term:
+          type: integer
+          example: 0
+          description: The net payment term (in days) for this billing entity
+        address_line1:
+          type: string
+          example: 5230 Penfield Ave
+          description: The first line of the billing address
+          nullable: true
+        address_line2:
+          type: string
+          example: Suite 100
+          description: The second line of the billing address
+          nullable: true
+        city:
+          type: string
+          example: Woodland Hills
+          description: The city of the billing address
+          nullable: true
+        state:
+          type: string
+          example: CA
+          description: The state of the billing address
+          nullable: true
+        country:
+          $ref: '#/components/schemas/Country'
+          description: The country code of the billing address
+          nullable: true
+        zipcode:
+          type: string
+          example: '91364'
+          description: The zipcode of the billing address
+          nullable: true
+        email:
+          type: string
+          format: email
+          example: billing@acme.com
+          description: The email address of the billing entity
+          nullable: true
+        legal_name:
+          type: string
+          example: Acme Corporation
+          description: The legal name of the billing entity
+          nullable: true
+        legal_number:
+          type: string
+          example: US123456789
+          description: The legal registration number of the billing entity
+          nullable: true
+        tax_identification_number:
+          type: string
+          example: EU123456789
+          description: The tax identification number of the billing entity
+          nullable: true
+        timezone:
+          $ref: '#/components/schemas/Timezone'
+          description: The timezone of the billing entity
+          example: UTC
+        email_settings:
+          type: array
+          items:
+            type: string
+            enum:
+              - invoice.finalized
+              - credit_note.created
+          description: The email notification settings for this billing entity
+        eu_tax_management:
+          type: boolean
+          example: false
+          description: Whether EU tax management is enabled for this billing entity
+        logo:
+          type: string
+          format: uri
+          example: data:image/png;base64,...
+          description: The base64 encoded logo image for the billing entity
+          nullable: true
     CustomerPaymentProvidernErrorObject:
       $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
   responses:
@@ -13256,12 +13688,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorUnauthorized'
-    BadRequest:
-      description: Bad Request error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorBadRequest'
     UnprocessableEntity:
       description: Unprocessable entity error
       content:
@@ -13274,6 +13700,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorNotFound'
+    BadRequest:
+      description: Bad Request error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorBadRequest'
     NotAllowed:
       description: Not Allowed error
       content:
