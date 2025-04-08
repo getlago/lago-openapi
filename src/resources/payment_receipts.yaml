@@ -1,0 +1,26 @@
+get:
+  tags:
+    - payment_receipts
+  summary: List all payment receipts
+  description: This endpoint is used to list all existing payment receipts.
+  operationId: findAllPaymentReceipts
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - name: invoice_id
+      in: query
+      description: Filter payment receipts by invoice id.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  responses:
+    '200':
+      description: PaymentReceipts
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PaymentReceiptsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
