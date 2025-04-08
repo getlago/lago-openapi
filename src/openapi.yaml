@@ -230,6 +230,8 @@ paths:
     $ref: "./resources/wallet_top_up.yaml"
   /wallet_transactions/{lago_id}:
     $ref: "./resources/wallet_transaction.yaml"
+  /wallet_transactions/{lago_id}/payment_url:
+    $ref: "./resources/wallet_transaction_payment_url.yaml"
   /wallets/{lago_id}/wallet_transactions:
     $ref: "./resources/wallet_transactions.yaml"
   /webhooks/public_key:
