@@ -2904,6 +2904,35 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /wallet_transactions/{lago_id}/payment_url:
+    post:
+      tags:
+        - wallets
+      summary: Generate a payment URL
+      description: This endpoint generates a checkout link for a specific wallet transaction.
+      parameters:
+        - name: lago_id
+          in: path
+          description: ID of the wallet transaction.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      operationId: walletTransactionPaymentUrl
+      responses:
+        '200':
+          description: Payment URL has been generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletTransactionPaymentUrl'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /wallets/{lago_id}/wallet_transactions:
     get:
       tags:
@@ -12681,6 +12710,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WalletTransactionObject'
+    WalletTransactionPaymentUrl:
+      type: object
+      description: .
+      properties:
+        wallet_transaction_payment_details:
+          type: object
+          properties:
+            lago_customer_id:
+              type: string
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
+            lago_wallet_transaction_id:
+              type: string
+              example: 1e501a90-1a90-1a90-1a90-1a901a901a80
+              description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction's record within the Lago system
+            external_customer_id:
+              type: string
+              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+              description: The customer external unique identifier (provided by your own application)
+            payment_provider:
+              type: string
+              example: stripe
+              description: The Payment Provider name linked to the Customer.
+            payment_url:
+              type: string
+              example: https://foo.bar
+              description: The generated Payment URL for the Wallet transaction.
     WalletTransactionsPaginated:
       allOf:
         - $ref: '#/components/schemas/WalletTransactions'
