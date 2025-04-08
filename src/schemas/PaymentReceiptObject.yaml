@@ -1,0 +1,23 @@
+type: object
+required:
+  - lago_id
+  - created_at
+  - number
+  - payment
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the payment receipt, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  created_at:
+    type: string
+    format: date-time
+    description: The date and time when the payment receipt was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the payment receipt was initially created.
+    example: "2022-04-29T08:59:51Z"
+  number:
+    type: string
+    description: The unique number assigned to the payment receipt.
+    example: "LAG-1234-001-002"
+  payment:
+    $ref: './PaymentObject.yaml'

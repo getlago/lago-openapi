@@ -93,6 +93,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/webhook_endpoints/webhook-endpoint-object
+  - name: payment_receipts
+    description: Everything about Payment receipts
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/payment_receipts/payment_receipt-object
   - name: payment_requests
     description: Everything about PaymentRequests
     externalDocs:
@@ -2091,6 +2096,59 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /payment_receipts:
+    get:
+      tags:
+        - payment_receipts
+      summary: List all payment receipts
+      description: This endpoint is used to list all existing payment receipts.
+      operationId: findAllPaymentReceipts
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: invoice_id
+          in: query
+          description: Filter payment receipts by invoice id.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      responses:
+        '200':
+          description: PaymentReceipts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReceiptsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /payment_receipts/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        description: Payment receipt ID
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    get:
+      tags:
+        - payment_receipts
+      summary: Retrieve a payment receipt
+      description: This endpoint retrieves a specific payment receipt.
+      operationId: findPaymentReceipt
+      responses:
+        '200':
+          description: Payment receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReceipt'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /payment_requests:
     post:
       tags:
@@ -8751,7 +8809,13 @@ components:
         transaction_id:
           type: string
           example: transaction_1234567890
-          description: This field represents a unique identifier for the event. It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.
+          description: |
+            This field represents a unique identifier for the event.
+            It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.
+
+            WARNING: If the Lago organization is configured to use the new Clickhouse-based event pipeline (designed for high-volume processing), the idempotency logic is handled differently.
+            Event uniqueness is maintained with both `transaction_id` and `timestamp` fields.
+            If a new event arrives with identical values for these two fields as an existing event, the new one will overwrite the previous event rather than being rejected.
         external_subscription_id:
           type: string
           example: sub_1234567890
@@ -10233,6 +10297,103 @@ components:
       properties:
         organization:
           $ref: '#/components/schemas/OrganizationObject'
+    PaymentObject:
+      type: object
+      required:
+        - lago_payable_id
+        - lago_customer_id
+        - status
+        - external_id
+        - provider_customer_id
+        - payment_provider_type
+        - provider_payment_id
+        - next_action
+      properties:
+        lago_payable_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the paid resource, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        status:
+          type: string
+          description: The status of the payment within the payment provider
+          example: processing
+        external_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The customer external unique identifier (provided by your own application)
+        provider_customer_id:
+          type: string
+          description: Unique identifier of the customer within the payment provider
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: Stripe Prod
+        payment_provider_type:
+          type: string
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+          description: The type of payment provider
+          example: stripe
+        provider_payment_id:
+          type: string
+          description: Unique identifier of the payment within the payment provider
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        next_action:
+          type: object
+          additionalProperties: true
+    PaymentReceiptObject:
+      type: object
+      required:
+        - lago_id
+        - created_at
+        - number
+        - payment
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the payment receipt, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the payment receipt was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the payment receipt was initially created.
+          example: '2022-04-29T08:59:51Z'
+        number:
+          type: string
+          description: The unique number assigned to the payment receipt.
+          example: LAG-1234-001-002
+        payment:
+          $ref: '#/components/schemas/PaymentObject'
+    PaymentReceiptsPaginated:
+      type: object
+      required:
+        - payment_receipts
+        - meta
+      properties:
+        payment_receipts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentReceiptObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaymentReceipt:
+      type: object
+      required:
+        - payment_receipt
+      properties:
+        payment_receipt:
+          $ref: '#/components/schemas/PaymentReceiptObject'
     PaymentRequestObject:
       type: object
       required:
@@ -12952,60 +13113,6 @@ components:
             - type: string
             - type: object
               additionalProperties: true
-    PaymentObject:
-      type: object
-      required:
-        - lago_payable_id
-        - lago_customer_id
-        - status
-        - external_id
-        - provider_customer_id
-        - payment_provider_type
-        - provider_payment_id
-        - next_action
-      properties:
-        lago_payable_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the paid resource, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the customer, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        status:
-          type: string
-          description: The status of the payment within the payment provider
-          example: processing
-        external_id:
-          type: string
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-          description: The customer external unique identifier (provided by your own application)
-        provider_customer_id:
-          type: string
-          description: Unique identifier of the customer within the payment provider
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-        payment_provider_code:
-          type: string
-          description: Code of the payment provider
-          example: Stripe Prod
-        payment_provider_type:
-          type: string
-          enum:
-            - adyen
-            - cashfree
-            - gocardless
-            - stripe
-          description: The type of payment provider
-          example: stripe
-        provider_payment_id:
-          type: string
-          description: Unique identifier of the payment within the payment provider
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-        next_action:
-          type: object
-          additionalProperties: true
     PaymentProviderErrorObject:
       type: object
       required:

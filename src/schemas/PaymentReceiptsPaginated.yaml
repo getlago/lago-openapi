@@ -1,0 +1,11 @@
+type: object
+required:
+  - payment_receipts
+  - meta
+properties:
+  payment_receipts:
+    type: array
+    items:
+      $ref: './PaymentReceiptObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
