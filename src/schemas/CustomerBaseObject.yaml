@@ -24,6 +24,10 @@ properties:
     type: string
     example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
     description: "The customer external unique identifier (provided by your own application)"
+  billing_entity_code:
+    type: string
+    example: "acme_corp"
+    description: The unique code of the billing entity associated with the customer.
   address_line1:
     type:
       - string

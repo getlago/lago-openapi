@@ -20,11 +20,6 @@ servers:
 security:
   - bearerAuth: []
 tags:
-  - name: billing_entities
-    description: Everything about Billing Entities
-    externalDocs:
-      description: Find out more
-      url: https://doc.getlago.com/docs/api/billing_entities/billing-entity-object
   - name: analytics
     description: Everything about Analytics
   - name: billable_metrics
@@ -32,6 +27,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/docs/api/billable_metrics/billable-metric-object
+  - name: billing_entities
+    description: Everything about Billing Entities
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/docs/api/billing_entities/billing-entity-object
   - name: customers
     description: Everything about Customer collection
     externalDocs:
