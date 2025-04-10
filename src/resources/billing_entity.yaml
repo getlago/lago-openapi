@@ -1,5 +1,5 @@
 parameters:
-  - name: id
+  - name: code
     in: path
     required: true
     schema:
@@ -10,7 +10,7 @@ get:
   tags:
     - billing_entities
   summary: Retrieve a billing entity
-  description: This endpoint returns a specific billing entity by its ID
+  description: This endpoint returns a specific billing entity by its code
   operationId: getBillingEntity
   responses:
     '200':

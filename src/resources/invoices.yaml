@@ -143,6 +143,18 @@ get:
       schema:
         type: boolean
         example: true
+    - name: billing_entity_codes
+      in: query
+      description: Filter invoices by billing entity codes. Possible values are the billing entity codes you have created.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - acme_corp
+          - foo_bar
     - name: metadata[key]
       in: query
       description: Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for invoice without given metadata key. For example, `metadata[color]=blue`.

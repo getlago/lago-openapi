@@ -137,9 +137,9 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /billing_entities/{id}:
+  /billing_entities/{code}:
     parameters:
-      - name: id
+      - name: code
         in: path
         required: true
         schema:
@@ -150,7 +150,7 @@ paths:
       tags:
         - billing_entities
       summary: Retrieve a billing entity
-      description: This endpoint returns a specific billing entity by its ID
+      description: This endpoint returns a specific billing entity by its code
       operationId: getBillingEntity
       responses:
         '200':
@@ -907,6 +907,18 @@ paths:
           schema:
             type: boolean
             example: true
+        - name: billing_entity_codes
+          in: query
+          description: Filter credit notes by billing entity codes.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - billing_entity_code_1
+              - billing_entity_code_2
       responses:
         '200':
           description: Credit notes
@@ -1103,6 +1115,18 @@ paths:
             example:
               - customer
               - partner
+        - name: billing_entity_codes
+          in: query
+          description: Filter customers by billing entity codes.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - billing_entity_code_1
+              - billing_entity_code_2
       responses:
         '200':
           description: List of customers
@@ -1875,6 +1899,18 @@ paths:
           schema:
             type: boolean
             example: true
+        - name: billing_entity_codes
+          in: query
+          description: Filter invoices by billing entity codes. Possible values are the billing entity codes you have created.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - acme_corp
+              - foo_bar
         - name: metadata[key]
           in: query
           description: Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for invoice without given metadata key. For example, `metadata[color]=blue`.
@@ -5338,6 +5374,7 @@ components:
             enum:
               - invoice.finalized
               - credit_note.created
+              - payment_receipt.created
           description: The email notification settings for this billing entity
         eu_tax_management:
           type: boolean
@@ -7338,6 +7375,7 @@ components:
       required:
         - lago_id
         - sequential_id
+        - billing_entity_code
         - number
         - lago_invoice_id
         - invoice_number
@@ -9369,6 +9407,7 @@ components:
       type: object
       required:
         - lago_id
+        - billing_entity_code
         - number
         - issuing_date
         - invoice_type
@@ -10190,6 +10229,10 @@ components:
               description: The date and time when the subscription is terminated. It should defined in the future.
               format: date-time
               example: '2022-08-08T00:00:00Z'
+        billing_entity_code:
+          type: string
+          description: The code of the billing entity to which will be associated a customer if the external_id is not provided. If billing_entity_code is not provided, default billing_entity of organization will be used.
+          example: acme_corp
     OrganizationBillingConfiguration:
       type: object
       description: The custom billing settings for your organization.

@@ -152,3 +152,7 @@ properties:
         description: The date and time when the subscription is terminated. It should defined in the future.
         format: "date-time"
         example: "2022-08-08T00:00:00Z"
+  billing_entity_code:
+    type: string
+    description: The code of the billing entity to which will be associated a customer if the external_id is not provided. If billing_entity_code is not provided, default billing_entity of organization will be used.
+    example: "acme_corp"
