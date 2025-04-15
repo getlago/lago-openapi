@@ -208,6 +208,8 @@ paths:
     $ref: "./resources/payment_requests.yaml"
   /payments:
     $ref: "./resources/payments.yaml"
+  /payments/{lago_id}:
+    $ref: "./resources/payment.yaml"
   /plans:
     $ref: "./resources/plans.yaml"
   /plans/{code}:

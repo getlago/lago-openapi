@@ -2249,6 +2249,33 @@ paths:
                 $ref: '#/components/schemas/PaymentsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /payments/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        description: Unique identifier of the payment.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: f4a842d6-4bde-11ec-81d3-0242ac130003
+    get:
+      tags:
+        - payments
+      summary: Retrieve a payment
+      description: This endpoint retrieves a specific payment by its ID.
+      operationId: findPayment
+      responses:
+        '200':
+          description: Payment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentManualObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /plans:
     post:
       tags:
