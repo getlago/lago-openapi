@@ -168,7 +168,7 @@ paths:
                   - billing_entity
                 properties:
                   billing_entity:
-                    $ref: '#/components/schemas/BillingEntityObject'
+                    $ref: '#/components/schemas/BillingEntityObjectExtended'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -5555,23 +5555,6 @@ components:
           example: validation_errors
         error_details:
           type: object
-    ApiErrorNotFound:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        code:
-          type: string
-          example: object_not_found
     TaxObject:
       type: object
       required:
@@ -5612,6 +5595,32 @@ components:
           format: date-time
           description: Creation date of the tax.
           example: '2023-07-06T14:35:58Z'
+    BillingEntityObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/BillingEntityObject'
+        - type: object
+          properties:
+            taxes:
+              type: array
+              items:
+                $ref: '#/components/schemas/TaxObject'
+    ApiErrorNotFound:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        code:
+          type: string
+          example: object_not_found
     AddOnObject:
       type: object
       required:
@@ -8800,10 +8809,11 @@ components:
               example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
               description: The customer external unique identifier (provided by your own application)
             billing_entity_code:
-              type: string
+              type:
+                - string
+                - 'null'
               example: acme_corp
               description: The unique code of the billing entity to associate with the customer. If not provided, the default billing entity will be used.
-              nullable: true
             address_line1:
               type:
                 - string
@@ -9559,10 +9569,11 @@ components:
           description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         billing_entity_code:
-          type: string
+          type:
+            - string
+            - 'null'
           example: acme_corp
           description: The unique code of the billing entity associated with the invoice
-          nullable: true
         sequential_id:
           type: integer
           description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
@@ -12710,9 +12721,10 @@ components:
                     example: '2022-08-08T00:00:00Z'
                     description: The effective start date for recurring top-ups. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
                   expiration_at:
-                    type: string
+                    type:
+                      - string
+                      - 'null'
                     format: date-time
-                    nullable: true
                     description: The expiration date and time for this specific recurring transaction rule. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
                     example: '2023-09-30T23:59:59Z'
                   threshold_credits:
@@ -12838,9 +12850,10 @@ components:
                     example: '2022-08-08T00:00:00Z'
                     description: The effective start date for recurring top-ups. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
                   expiration_at:
-                    type: string
+                    type:
+                      - string
+                      - 'null'
                     format: date-time
-                    nullable: true
                     description: The expiration date and time for this specific recurring transaction rule. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
                     example: '2023-09-30T23:59:59Z'
                   target_ongoing_balance:
@@ -13695,10 +13708,11 @@ components:
                 - `per_customer`: document numbers are unique per customer
                 - `per_billing_entity`: document numbers are unique per billing entity
             document_number_prefix:
-              type: string
+              type:
+                - string
+                - 'null'
               example: ABC-123
               description: The prefix used in document numbers for this billing entity
-              nullable: true
             finalize_zero_amount_invoice:
               type: boolean
               example: true
@@ -13723,55 +13737,64 @@ components:
               example: 0
               description: The net payment term (in days) for this billing entity
             address_line1:
-              type: string
+              type:
+                - string
+                - 'null'
               example: 5230 Penfield Ave
               description: The first line of the billing address
-              nullable: true
             address_line2:
-              type: string
+              type:
+                - string
+                - 'null'
               example: Suite 100
               description: The second line of the billing address
-              nullable: true
             city:
-              type: string
+              type:
+                - string
+                - 'null'
               example: Woodland Hills
               description: The city of the billing address
-              nullable: true
             state:
-              type: string
+              type:
+                - string
+                - 'null'
               example: CA
               description: The state of the billing address
-              nullable: true
             country:
               $ref: '#/components/schemas/Country'
               description: The country code of the billing address
               nullable: true
             zipcode:
-              type: string
+              type:
+                - string
+                - 'null'
               example: '91364'
               description: The zipcode of the billing address
-              nullable: true
             email:
-              type: string
+              type:
+                - string
+                - 'null'
               format: email
               example: billing@acme.com
               description: The email address of the billing entity
-              nullable: true
             legal_name:
-              type: string
+              type:
+                - string
+                - 'null'
               example: Acme Corporation
               description: The legal name of the billing entity
-              nullable: true
             legal_number:
-              type: string
+              type:
+                - string
+                - 'null'
               example: US123456789
               description: The legal registration number of the billing entity
-              nullable: true
             tax_identification_number:
-              type: string
+              type:
+                - string
+                - 'null'
               example: EU123456789
               description: The tax identification number of the billing entity
-              nullable: true
             timezone:
               $ref: '#/components/schemas/Timezone'
               description: The timezone of the billing entity
@@ -13789,11 +13812,12 @@ components:
               example: false
               description: Whether EU tax management is enabled for this billing entity
             logo:
-              type: string
+              type:
+                - string
+                - 'null'
               format: uri
               example: data:image/png;base64,...
               description: The base64 encoded logo image for the billing entity
-              nullable: true
     BillingEntityUpdateInput:
       type: object
       description: Billing entity update input
@@ -13822,10 +13846,11 @@ components:
             - `per_customer`: document numbers are unique per customer
             - `per_billing_entity`: document numbers are unique per billing entity
         document_number_prefix:
-          type: string
+          type:
+            - string
+            - 'null'
           example: ABC-123
           description: The prefix used in document numbers for this billing entity
-          nullable: true
         finalize_zero_amount_invoice:
           type: boolean
           example: true
@@ -13850,55 +13875,64 @@ components:
           example: 0
           description: The net payment term (in days) for this billing entity
         address_line1:
-          type: string
+          type:
+            - string
+            - 'null'
           example: 5230 Penfield Ave
           description: The first line of the billing address
-          nullable: true
         address_line2:
-          type: string
+          type:
+            - string
+            - 'null'
           example: Suite 100
           description: The second line of the billing address
-          nullable: true
         city:
-          type: string
+          type:
+            - string
+            - 'null'
           example: Woodland Hills
           description: The city of the billing address
-          nullable: true
         state:
-          type: string
+          type:
+            - string
+            - 'null'
           example: CA
           description: The state of the billing address
-          nullable: true
         country:
           $ref: '#/components/schemas/Country'
           description: The country code of the billing address
           nullable: true
         zipcode:
-          type: string
+          type:
+            - string
+            - 'null'
           example: '91364'
           description: The zipcode of the billing address
-          nullable: true
         email:
-          type: string
+          type:
+            - string
+            - 'null'
           format: email
           example: billing@acme.com
           description: The email address of the billing entity
-          nullable: true
         legal_name:
-          type: string
+          type:
+            - string
+            - 'null'
           example: Acme Corporation
           description: The legal name of the billing entity
-          nullable: true
         legal_number:
-          type: string
+          type:
+            - string
+            - 'null'
           example: US123456789
           description: The legal registration number of the billing entity
-          nullable: true
         tax_identification_number:
-          type: string
+          type:
+            - string
+            - 'null'
           example: EU123456789
           description: The tax identification number of the billing entity
-          nullable: true
         timezone:
           $ref: '#/components/schemas/Timezone'
           description: The timezone of the billing entity
@@ -13916,11 +13950,12 @@ components:
           example: false
           description: Whether EU tax management is enabled for this billing entity
         logo:
-          type: string
+          type:
+            - string
+            - 'null'
           format: uri
           example: data:image/png;base64,...
           description: The base64 encoded logo image for the billing entity
-          nullable: true
     CustomerPaymentProvidernErrorObject:
       $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
   responses:

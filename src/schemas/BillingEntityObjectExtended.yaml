@@ -1,0 +1,8 @@
+allOf:
+  - $ref: './BillingEntityObject.yaml'
+  - type: object
+    properties:
+      taxes:
+        type: array
+        items:
+          $ref: './TaxObject.yaml'
