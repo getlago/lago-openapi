@@ -1,0 +1,32 @@
+parameters:
+  - name: code
+    in: path
+    required: true
+    schema:
+      type: string
+      format: uuid
+    description: The ID of the billing entity
+get:
+  tags:
+    - billing_entities
+  summary: Retrieve a billing entity
+  description: This endpoint returns a specific billing entity by its code
+  operationId: getBillingEntity
+  responses:
+    '200':
+      description: Billing entity details
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - billing_entity
+            properties:
+              billing_entity:
+                $ref: '../schemas/BillingEntityObject.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml' 
