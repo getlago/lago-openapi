@@ -5402,19 +5402,21 @@ components:
             - `per_billing_entity`: document numbers are unique per billing entity
           example: per_customer
         document_number_prefix:
-          type: string
+          type:
+            - string
+            - 'null'
           example: ABC-123
           description: The prefix used in document numbers for this billing entity
-          nullable: true
         finalize_zero_amount_invoice:
           type: boolean
           example: true
           description: Whether to finalize invoices with zero amount for this billing entity
         invoice_footer:
-          type: string
+          type:
+            - string
+            - 'null'
           example: Thank you for your business
           description: The footer text to be displayed on invoices for this billing entity
-          nullable: true
         invoice_grace_period:
           type: integer
           example: 0
@@ -5428,55 +5430,64 @@ components:
           example: 0
           description: The net payment term (in days) for this billing entity
         address_line1:
-          type: string
+          type:
+            - string
+            - 'null'
           example: 5230 Penfield Ave
           description: The first line of the billing address
-          nullable: true
         address_line2:
-          type: string
+          type:
+            - string
+            - 'null'
           example: Suite 100
           description: The second line of the billing address
-          nullable: true
         city:
-          type: string
+          type:
+            - string
+            - 'null'
           example: Woodland Hills
           description: The city of the billing address
-          nullable: true
         state:
-          type: string
+          type:
+            - string
+            - 'null'
           example: CA
           description: The state of the billing address
-          nullable: true
         country:
           $ref: '#/components/schemas/Country'
           description: The country code of the billing address
           nullable: true
         zipcode:
-          type: string
+          type:
+            - string
+            - 'null'
           example: '91364'
           description: The zipcode of the billing address
-          nullable: true
         email:
-          type: string
+          type:
+            - string
+            - 'null'
           format: email
           example: billing@acme.com
           description: The email address of the billing entity
-          nullable: true
         legal_name:
-          type: string
+          type:
+            - string
+            - 'null'
           example: Acme Corporation
           description: The legal name of the billing entity
-          nullable: true
         legal_number:
-          type: string
+          type:
+            - string
+            - 'null'
           example: US123456789
           description: The legal registration number of the billing entity
-          nullable: true
         tax_identification_number:
-          type: string
+          type:
+            - string
+            - 'null'
           example: EU123456789
           description: The tax identification number of the billing entity
-          nullable: true
         timezone:
           $ref: '#/components/schemas/Timezone'
           description: The timezone of the billing entity
@@ -5495,11 +5506,12 @@ components:
           example: false
           description: Whether EU tax management is enabled for this billing entity
         logo_url:
-          type: string
+          type:
+            - string
+            - 'null'
           format: uri
           example: https://getlago.com/logo.png
           description: The URL of the billing entity's logo
-          nullable: true
         created_at:
           type: string
           format: date-time
