@@ -23,7 +23,7 @@ get:
               - billing_entity
             properties:
               billing_entity:
-                $ref: '../schemas/BillingEntityObject.yaml'
+                $ref: '../schemas/BillingEntityObjectExtended.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
     '404':

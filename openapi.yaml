@@ -168,7 +168,7 @@ paths:
                   - billing_entity
                 properties:
                   billing_entity:
-                    $ref: '#/components/schemas/BillingEntityObject'
+                    $ref: '#/components/schemas/BillingEntityObjectExtended'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -5555,23 +5555,6 @@ components:
           example: validation_errors
         error_details:
           type: object
-    ApiErrorNotFound:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        code:
-          type: string
-          example: object_not_found
     TaxObject:
       type: object
       required:
@@ -5612,6 +5595,32 @@ components:
           format: date-time
           description: Creation date of the tax.
           example: '2023-07-06T14:35:58Z'
+    BillingEntityObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/BillingEntityObject'
+        - type: object
+          properties:
+            taxes:
+              type: array
+              items:
+                $ref: '#/components/schemas/TaxObject'
+    ApiErrorNotFound:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        code:
+          type: string
+          example: object_not_found
     AddOnObject:
       type: object
       required:
