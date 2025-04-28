@@ -27,10 +27,11 @@ properties:
     description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   billing_entity_code:
-    type: string
+    type:
+      - string
+      - "null"
     example: "acme_corp"
     description: The unique code of the billing entity associated with the invoice
-    nullable: true
   sequential_id:
     type: integer
     description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
