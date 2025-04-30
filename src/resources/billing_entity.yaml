@@ -29,4 +29,31 @@ get:
     '404':
       $ref: '../responses/NotFound.yaml'
     '422':
-      $ref: '../responses/UnprocessableEntity.yaml' 
+      $ref: '../responses/UnprocessableEntity.yaml'
+put:
+  tags:
+    - billing_entities
+  summary: Update a billing entity
+  description: This endpoint is used to update an existing billing entity
+  operationId: updateBillingEntity
+  requestBody:
+    description: The billing entity update payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/BillingEntityUpdateInput.yaml'
+  responses:
+    '200':
+      description: Billing entity updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillingEntityObjectExtended.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

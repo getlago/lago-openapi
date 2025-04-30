@@ -22,3 +22,31 @@ get:
       $ref: '../responses/Unauthorized.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
+post:
+  tags:
+    - billing_entities
+  summary: Create a billing entity
+  description: This endpoint is used to create a new billing entity
+  operationId: createBillingEntity
+  requestBody:
+    description: The billing entity payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/BillingEntityCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Billing entity created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/BillingEntityObject.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
