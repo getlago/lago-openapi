@@ -123,6 +123,8 @@ paths:
     $ref: "./resources/billing_entities.yaml"
   /billing_entities/{code}:
     $ref: "./resources/billing_entity.yaml"
+  /activity_logs/{activity_id}:
+    $ref: "./resources/activity_log.yml"
   /add_ons:
     $ref: "./resources/add_ons.yaml"
   /add_ons/{code}:

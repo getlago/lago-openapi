@@ -230,6 +230,32 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /activity_logs/{activity_id}:
+    parameters:
+      - name: activity_id
+        in: path
+        description: The Activity Id of the existing activity log.
+        required: true
+        schema:
+          type: string
+          example: bdc0eda6-ea52-4f72-a46a-94f47a89b546
+    get:
+      tags:
+        - activity_logs
+      summary: Retrieve an activity log
+      description: This endpoint retrieves an existing activity log that represents an action performed on some resource. The activity log is identified by its unique activity_id.
+      operationId: findActivityLog
+      responses:
+        '200':
+          description: Activity Log
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLog'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /add_ons:
     post:
       tags:
@@ -6122,6 +6148,98 @@ components:
           format: uri
           example: data:image/png;base64,...
           description: The base64 encoded logo image for the billing entity
+    ActivityLogObject:
+      type: object
+      required:
+        - activity_id
+        - activity_source
+        - activity_type
+        - logged_at
+        - resource_id
+        - resource_type
+        - organization_id
+        - created_at
+      properties:
+        activity_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the activity log within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the activity log record within the Lago system
+        user_email:
+          type:
+            - string
+            - 'null'
+          format: email
+          example: dinesh@piedpiper.test
+          description: The email of the user who performed the activity
+        activity_type:
+          type: string
+          example: billing_metric.created
+          description: This field stores the actitivy action that was performed to the activity_object.
+        activity_source:
+          type: string
+          example: api
+          enum:
+            - api
+            - front
+            - system
+          description: This field represents the source of the activity log, the interaction source that triggered the action.
+        activity_object:
+          type:
+            - string
+            - 'null'
+          format: object
+          example: '{ "id": "dad68bc7-c01a-4ad8-a87b-13e78693a5bc", "plan_id": "b9155544-e261-4e92-b54e-f65d7609294c", ... }'
+          description: This field represents the final state of the object that the action was applied.
+        activity_object_changes:
+          type:
+            - string
+            - 'null'
+          format: object
+          example: '{ "plan_id": [null, "b9155544-e261-4e92-b54e-f65d7609294c"], ... }'
+        external_customer_id:
+          type:
+            - string
+            - 'null'
+          description: The customer external unique identifier (provided by your own application)
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        external_subscription_id:
+          type:
+            - string
+            - 'null'
+          description: Unique identifier assigned to the subscription in your application.
+          example: external_id
+        resource_id:
+          type: string
+          description: The resource id of the object that the action was applied.
+          format: uuid
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        resource_type:
+          type: string
+          description: The resource type of the resource_id record.
+          example: BillableMetric
+        organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier for the organization associated with the activity log.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        logged_at:
+          type: string
+          format: date-time
+          example: '2025-03-31T12:31:44Z'
+          description: The logged date of the activity, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: The creation date of the activity record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+    ActivityLog:
+      type: object
+      required:
+        - activity_log
+      properties:
+        activity_log:
+          $ref: '#/components/schemas/ActivityLogObject'
     AddOnObject:
       type: object
       required:

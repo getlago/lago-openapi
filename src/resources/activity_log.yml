@@ -1,0 +1,25 @@
+parameters:
+  - name: activity_id
+    in: path
+    description: The Activity Id of the existing activity log.
+    required: true
+    schema:
+      type: string
+      example: 'bdc0eda6-ea52-4f72-a46a-94f47a89b546'
+get:
+  tags:
+    - activity_logs
+  summary: Retrieve an activity log
+  description: This endpoint retrieves an existing activity log that represents an action performed on some resource. The activity log is identified by its unique activity_id.
+  operationId: findActivityLog
+  responses:
+    '200':
+      description: Activity Log
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ActivityLog.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
