@@ -230,6 +230,110 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /activity_logs:
+    get:
+      tags:
+        - activity_logs
+      summary: List all activity logs
+      description: This endpoint retrieves all existing activity logs that represent actions performed on application resources.
+      operationId: findAllActivityLogs
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: from_date
+          in: query
+          description: Filter activity logs from an specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2022-08-09'
+        - name: to_date
+          in: query
+          description: Filter activity logs up to an specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2022-08-09'
+        - name: activity_types
+          in: query
+          description: Filter results by activity types
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - billing_metric.created
+              - billing_metric.updated
+        - name: activity_sources
+          in: query
+          description: Filter results by activity sources
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - api
+                - front
+                - system
+            example:
+              - api
+              - front
+        - name: user_emails
+          in: query
+          description: Filter results by user emails
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - dinesh@piedpiper.test
+              - brex@brex.com
+        - $ref: '#/components/parameters/external_customer_id'
+        - $ref: '#/components/parameters/external_subscription_id'
+        - name: resource_ids
+          in: query
+          description: Filter results by resources unique identifiers
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example:
+              - 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+              - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: resource_types
+          in: query
+          description: Filter results by resource class types
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - BillableMetric
+              - Invoice
+      responses:
+        '200':
+          description: List of activity logs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLogsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   /activity_logs/{activity_id}:
     parameters:
       - name: activity_id
@@ -4968,15 +5072,6 @@ components:
       schema:
         type: integer
         example: 20
-    months:
-      name: months
-      in: query
-      description: Show data only for given number of months.
-      required: false
-      explode: true
-      schema:
-        type: integer
-        example: 12
     external_customer_id:
       name: external_customer_id
       in: query
@@ -4995,6 +5090,15 @@ components:
       schema:
         type: string
         example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    months:
+      name: months
+      in: query
+      description: Show data only for given number of months.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 12
     lago_invoice_id:
       name: lago_id
       in: path
@@ -6233,6 +6337,49 @@ components:
           format: date-time
           example: '2022-04-29T08:59:51Z'
           description: The creation date of the activity record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+    PaginationMeta:
+      type: object
+      required:
+        - current_page
+        - total_pages
+        - total_count
+      properties:
+        current_page:
+          type: integer
+          description: Current page.
+          example: 2
+        next_page:
+          type:
+            - integer
+            - 'null'
+          description: Next page.
+          example: 3
+        prev_page:
+          type:
+            - integer
+            - 'null'
+          description: Previous page.
+          example: 1
+        total_pages:
+          type: integer
+          description: Total number of pages.
+          example: 4
+        total_count:
+          type: integer
+          description: Total number of records.
+          example: 70
+    ActivityLogsPaginated:
+      type: object
+      required:
+        - activity_logs
+        - meta
+      properties:
+        activity_logs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityLogObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     ActivityLog:
       type: object
       required:
@@ -6291,37 +6438,6 @@ components:
           description: All taxes applied to the add-on.
           items:
             $ref: '#/components/schemas/TaxObject'
-    PaginationMeta:
-      type: object
-      required:
-        - current_page
-        - total_pages
-        - total_count
-      properties:
-        current_page:
-          type: integer
-          description: Current page.
-          example: 2
-        next_page:
-          type:
-            - integer
-            - 'null'
-          description: Next page.
-          example: 3
-        prev_page:
-          type:
-            - integer
-            - 'null'
-          description: Previous page.
-          example: 1
-        total_pages:
-          type: integer
-          description: Total number of pages.
-          example: 4
-        total_count:
-          type: integer
-          description: Total number of records.
-          example: 70
     AddOnsPaginated:
       type: object
       required:
