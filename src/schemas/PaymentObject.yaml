@@ -1,5 +1,6 @@
 type: object
 required:
+  - lago_id
   - lago_payable_id
   - lago_customer_id
   - status
@@ -9,6 +10,11 @@ required:
   - provider_payment_id
   - next_action
 properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: "Unique identifier of the payment, created by Lago."
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_payable_id:
     type: string
     format: uuid
