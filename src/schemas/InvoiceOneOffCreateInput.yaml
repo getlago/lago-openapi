@@ -56,3 +56,10 @@ properties:
                 type: string
               description: List of unique code used to identify the taxes.
               example: [french_standard_vat]
+            skip_psp:
+              type:
+                - boolean
+                - "null"
+              description: If true, the invoice will be created but not sent to the payment provider.
+              example: true
+              default: false
