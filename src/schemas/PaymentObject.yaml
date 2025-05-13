@@ -57,3 +57,11 @@ properties:
   next_action:
     type: object
     additionalProperties: true
+  amount_cents:
+    type: integer
+    description: "The amount of the payment in cents"
+    example: 1000
+  amount_currency:
+    type: string
+    description: "The currency of the payment"
+    example: "EUR"
