@@ -1,0 +1,47 @@
+parameters:
+  - name: code
+    in: path
+    required: true
+    schema:
+      type: string
+      format: uuid
+    description: The ID of the billing entity
+post:
+  tags:
+    - billing_entities
+  summary: Saves a new set of applied taxes on billing entity
+  description: This endpoint accepts an array of tax_codes that should be applied on billing entity
+  operationId: BillingEntityManageTaxes
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - tax_codes
+          properties:
+            tax_codes:
+              type: array
+              items:
+                type: string
+              description: List of unique code used to identify the taxes.
+              example: [french_standard_vat]
+  responses:
+    '200':
+      description: Billing entity details
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - billing_entity
+            properties:
+              billing_entity:
+                $ref: '../schemas/BillingEntityObjectExtended.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
