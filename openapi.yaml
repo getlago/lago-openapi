@@ -142,6 +142,34 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - billing_entities
+      summary: Create a billing entity
+      description: This endpoint is used to create a new billing entity
+      operationId: createBillingEntity
+      requestBody:
+        description: The billing entity payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingEntityCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Billing entity created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingEntityObject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /billing_entities/{code}:
     parameters:
       - name: code
@@ -169,6 +197,33 @@ paths:
                 properties:
                   billing_entity:
                     $ref: '#/components/schemas/BillingEntityObjectExtended'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    put:
+      tags:
+        - billing_entities
+      summary: Update a billing entity
+      description: This endpoint is used to update an existing billing entity
+      operationId: updateBillingEntity
+      requestBody:
+        description: The billing entity update payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingEntityUpdateInput'
+      responses:
+        '200':
+          description: Billing entity updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingEntityObjectExtended'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -5555,6 +5610,180 @@ components:
           example: validation_errors
         error_details:
           type: object
+    BillingEntityCreateInput:
+      type: object
+      description: Billing entity create input
+      required:
+        - billing_entity
+      properties:
+        billing_entity:
+          type: object
+          required:
+            - code
+            - name
+          properties:
+            code:
+              type: string
+              example: acme_corp
+              description: The unique code of the billing entity
+            name:
+              type: string
+              example: Acme Corp
+              description: The name of the billing entity
+            default_currency:
+              $ref: '#/components/schemas/Currency'
+              description: The default currency of the billing entity
+              example: USD
+            document_numbering:
+              type: string
+              enum:
+                - per_customer
+                - per_billing_entity
+              description: |-
+                The type of document numbering for this billing entity:
+                - `per_customer`: document numbers are unique per customer
+                - `per_billing_entity`: document numbers are unique per billing entity
+            document_number_prefix:
+              type:
+                - string
+                - 'null'
+              example: ABC-123
+              description: The prefix used in document numbers for this billing entity
+            finalize_zero_amount_invoice:
+              type: boolean
+              example: true
+              description: Whether to finalize invoices with zero amount for this billing entity
+            billing_configuration:
+              type: object
+              properties:
+                invoice_footer:
+                  type: string
+                  example: Thank you for your business
+                  description: The footer text to be displayed on invoices for this billing entity
+                document_locale:
+                  type: string
+                  example: en
+                  description: The language of the documents generated for this billing entity
+                invoice_grace_period:
+                  type: integer
+                  example: 0
+                  description: The grace period (in days) for invoice finalization
+            net_payment_term:
+              type: integer
+              example: 0
+              description: The net payment term (in days) for this billing entity
+            address_line1:
+              type:
+                - string
+                - 'null'
+              example: 5230 Penfield Ave
+              description: The first line of the billing address
+            address_line2:
+              type:
+                - string
+                - 'null'
+              example: Suite 100
+              description: The second line of the billing address
+            city:
+              type:
+                - string
+                - 'null'
+              example: Woodland Hills
+              description: The city of the billing address
+            state:
+              type:
+                - string
+                - 'null'
+              example: CA
+              description: The state of the billing address
+            country:
+              $ref: '#/components/schemas/Country'
+              description: The country code of the billing address
+              nullable: true
+            zipcode:
+              type:
+                - string
+                - 'null'
+              example: '91364'
+              description: The zipcode of the billing address
+            email:
+              type:
+                - string
+                - 'null'
+              format: email
+              example: billing@acme.com
+              description: The email address of the billing entity
+            legal_name:
+              type:
+                - string
+                - 'null'
+              example: Acme Corporation
+              description: The legal name of the billing entity
+            legal_number:
+              type:
+                - string
+                - 'null'
+              example: US123456789
+              description: The legal registration number of the billing entity
+            tax_identification_number:
+              type:
+                - string
+                - 'null'
+              example: EU123456789
+              description: The tax identification number of the billing entity
+            timezone:
+              $ref: '#/components/schemas/Timezone'
+              description: The timezone of the billing entity
+              example: UTC
+            email_settings:
+              type: array
+              items:
+                type: string
+                enum:
+                  - invoice.finalized
+                  - credit_note.created
+              description: The email notification settings for this billing entity
+            eu_tax_management:
+              type: boolean
+              example: false
+              description: Whether EU tax management is enabled for this billing entity
+            logo:
+              type:
+                - string
+                - 'null'
+              format: uri
+              example: data:image/png;base64,...
+              description: The base64 encoded logo image for the billing entity
+    ApiErrorBadRequest:
+      type: object
+      required:
+        - status
+        - error
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 400
+        error:
+          type: string
+          example: Bad request
+    ApiErrorForbidden:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        code:
+          type: string
+          example: feature_unavailable
     TaxObject:
       type: object
       required:
@@ -5621,6 +5850,138 @@ components:
         code:
           type: string
           example: object_not_found
+    BillingEntityUpdateInput:
+      type: object
+      description: Billing entity update input
+      properties:
+        name:
+          type: string
+          example: Acme Corp
+          description: The name of the billing entity
+        default_currency:
+          $ref: '#/components/schemas/Currency'
+          description: The default currency of the billing entity
+          example: USD
+        document_numbering:
+          type: string
+          enum:
+            - per_customer
+            - per_billing_entity
+          description: |-
+            The type of document numbering for this billing entity:
+            - `per_customer`: document numbers are unique per customer
+            - `per_billing_entity`: document numbers are unique per billing entity
+        document_number_prefix:
+          type:
+            - string
+            - 'null'
+          example: ABC-123
+          description: The prefix used in document numbers for this billing entity
+        finalize_zero_amount_invoice:
+          type: boolean
+          example: true
+          description: Whether to finalize invoices with zero amount for this billing entity
+        billing_configuration:
+          type: object
+          properties:
+            invoice_footer:
+              type: string
+              example: Thank you for your business
+              description: The footer text to be displayed on invoices for this billing entity
+            document_locale:
+              type: string
+              example: en
+              description: The language of the documents generated for this billing entity
+            invoice_grace_period:
+              type: integer
+              example: 0
+              description: The grace period (in days) for invoice finalization
+        net_payment_term:
+          type: integer
+          example: 0
+          description: The net payment term (in days) for this billing entity
+        address_line1:
+          type:
+            - string
+            - 'null'
+          example: 5230 Penfield Ave
+          description: The first line of the billing address
+        address_line2:
+          type:
+            - string
+            - 'null'
+          example: Suite 100
+          description: The second line of the billing address
+        city:
+          type:
+            - string
+            - 'null'
+          example: Woodland Hills
+          description: The city of the billing address
+        state:
+          type:
+            - string
+            - 'null'
+          example: CA
+          description: The state of the billing address
+        country:
+          $ref: '#/components/schemas/Country'
+          description: The country code of the billing address
+          nullable: true
+        zipcode:
+          type:
+            - string
+            - 'null'
+          example: '91364'
+          description: The zipcode of the billing address
+        email:
+          type:
+            - string
+            - 'null'
+          format: email
+          example: billing@acme.com
+          description: The email address of the billing entity
+        legal_name:
+          type:
+            - string
+            - 'null'
+          example: Acme Corporation
+          description: The legal name of the billing entity
+        legal_number:
+          type:
+            - string
+            - 'null'
+          example: US123456789
+          description: The legal registration number of the billing entity
+        tax_identification_number:
+          type:
+            - string
+            - 'null'
+          example: EU123456789
+          description: The tax identification number of the billing entity
+        timezone:
+          $ref: '#/components/schemas/Timezone'
+          description: The timezone of the billing entity
+          example: UTC
+        email_settings:
+          type: array
+          items:
+            type: string
+            enum:
+              - invoice.finalized
+              - credit_note.created
+          description: The email notification settings for this billing entity
+        eu_tax_management:
+          type: boolean
+          example: false
+          description: Whether EU tax management is enabled for this billing entity
+        logo:
+          type:
+            - string
+            - 'null'
+          format: uri
+          example: data:image/png;base64,...
+          description: The base64 encoded logo image for the billing entity
     AddOnObject:
       type: object
       required:
@@ -5770,19 +6131,6 @@ components:
       properties:
         add_on:
           $ref: '#/components/schemas/AddOnObject'
-    ApiErrorBadRequest:
-      type: object
-      required:
-        - status
-        - error
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 400
-        error:
-          type: string
-          example: Bad request
     AddOnUpdateInput:
       type: object
       required:
@@ -13678,305 +14026,6 @@ components:
             - type: string
             - type: object
               additionalProperties: true
-    ApiErrorForbidden:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 403
-        error:
-          type: string
-          example: Forbidden
-        code:
-          type: string
-          example: feature_unavailable
-    BillingEntityCreateInput:
-      type: object
-      description: Billing entity create input
-      required:
-        - billing_entity
-      properties:
-        billing_entity:
-          type: object
-          required:
-            - code
-            - name
-          properties:
-            code:
-              type: string
-              example: acme_corp
-              description: The unique code of the billing entity
-            name:
-              type: string
-              example: Acme Corp
-              description: The name of the billing entity
-            default_currency:
-              $ref: '#/components/schemas/Currency'
-              description: The default currency of the billing entity
-              example: USD
-            document_numbering:
-              type: string
-              enum:
-                - per_customer
-                - per_billing_entity
-              description: |-
-                The type of document numbering for this billing entity:
-                - `per_customer`: document numbers are unique per customer
-                - `per_billing_entity`: document numbers are unique per billing entity
-            document_number_prefix:
-              type:
-                - string
-                - 'null'
-              example: ABC-123
-              description: The prefix used in document numbers for this billing entity
-            finalize_zero_amount_invoice:
-              type: boolean
-              example: true
-              description: Whether to finalize invoices with zero amount for this billing entity
-            billing_configuration:
-              type: object
-              properties:
-                invoice_footer:
-                  type: string
-                  example: Thank you for your business
-                  description: The footer text to be displayed on invoices for this billing entity
-                document_locale:
-                  type: string
-                  example: en
-                  description: The language of the documents generated for this billing entity
-                invoice_grace_period:
-                  type: integer
-                  example: 0
-                  description: The grace period (in days) for invoice finalization
-            net_payment_term:
-              type: integer
-              example: 0
-              description: The net payment term (in days) for this billing entity
-            address_line1:
-              type:
-                - string
-                - 'null'
-              example: 5230 Penfield Ave
-              description: The first line of the billing address
-            address_line2:
-              type:
-                - string
-                - 'null'
-              example: Suite 100
-              description: The second line of the billing address
-            city:
-              type:
-                - string
-                - 'null'
-              example: Woodland Hills
-              description: The city of the billing address
-            state:
-              type:
-                - string
-                - 'null'
-              example: CA
-              description: The state of the billing address
-            country:
-              $ref: '#/components/schemas/Country'
-              description: The country code of the billing address
-              nullable: true
-            zipcode:
-              type:
-                - string
-                - 'null'
-              example: '91364'
-              description: The zipcode of the billing address
-            email:
-              type:
-                - string
-                - 'null'
-              format: email
-              example: billing@acme.com
-              description: The email address of the billing entity
-            legal_name:
-              type:
-                - string
-                - 'null'
-              example: Acme Corporation
-              description: The legal name of the billing entity
-            legal_number:
-              type:
-                - string
-                - 'null'
-              example: US123456789
-              description: The legal registration number of the billing entity
-            tax_identification_number:
-              type:
-                - string
-                - 'null'
-              example: EU123456789
-              description: The tax identification number of the billing entity
-            timezone:
-              $ref: '#/components/schemas/Timezone'
-              description: The timezone of the billing entity
-              example: UTC
-            email_settings:
-              type: array
-              items:
-                type: string
-                enum:
-                  - invoice.finalized
-                  - credit_note.created
-              description: The email notification settings for this billing entity
-            eu_tax_management:
-              type: boolean
-              example: false
-              description: Whether EU tax management is enabled for this billing entity
-            logo:
-              type:
-                - string
-                - 'null'
-              format: uri
-              example: data:image/png;base64,...
-              description: The base64 encoded logo image for the billing entity
-    BillingEntityUpdateInput:
-      type: object
-      description: Billing entity update input
-      required:
-        - code
-      properties:
-        code:
-          type: string
-          example: acme_corp
-          description: The unique code of the billing entity
-        name:
-          type: string
-          example: Acme Corp
-          description: The name of the billing entity
-        default_currency:
-          $ref: '#/components/schemas/Currency'
-          description: The default currency of the billing entity
-          example: USD
-        document_numbering:
-          type: string
-          enum:
-            - per_customer
-            - per_billing_entity
-          description: |-
-            The type of document numbering for this billing entity:
-            - `per_customer`: document numbers are unique per customer
-            - `per_billing_entity`: document numbers are unique per billing entity
-        document_number_prefix:
-          type:
-            - string
-            - 'null'
-          example: ABC-123
-          description: The prefix used in document numbers for this billing entity
-        finalize_zero_amount_invoice:
-          type: boolean
-          example: true
-          description: Whether to finalize invoices with zero amount for this billing entity
-        billing_configuration:
-          type: object
-          properties:
-            invoice_footer:
-              type: string
-              example: Thank you for your business
-              description: The footer text to be displayed on invoices for this billing entity
-            document_locale:
-              type: string
-              example: en
-              description: The language of the documents generated for this billing entity
-            invoice_grace_period:
-              type: integer
-              example: 0
-              description: The grace period (in days) for invoice finalization
-        net_payment_term:
-          type: integer
-          example: 0
-          description: The net payment term (in days) for this billing entity
-        address_line1:
-          type:
-            - string
-            - 'null'
-          example: 5230 Penfield Ave
-          description: The first line of the billing address
-        address_line2:
-          type:
-            - string
-            - 'null'
-          example: Suite 100
-          description: The second line of the billing address
-        city:
-          type:
-            - string
-            - 'null'
-          example: Woodland Hills
-          description: The city of the billing address
-        state:
-          type:
-            - string
-            - 'null'
-          example: CA
-          description: The state of the billing address
-        country:
-          $ref: '#/components/schemas/Country'
-          description: The country code of the billing address
-          nullable: true
-        zipcode:
-          type:
-            - string
-            - 'null'
-          example: '91364'
-          description: The zipcode of the billing address
-        email:
-          type:
-            - string
-            - 'null'
-          format: email
-          example: billing@acme.com
-          description: The email address of the billing entity
-        legal_name:
-          type:
-            - string
-            - 'null'
-          example: Acme Corporation
-          description: The legal name of the billing entity
-        legal_number:
-          type:
-            - string
-            - 'null'
-          example: US123456789
-          description: The legal registration number of the billing entity
-        tax_identification_number:
-          type:
-            - string
-            - 'null'
-          example: EU123456789
-          description: The tax identification number of the billing entity
-        timezone:
-          $ref: '#/components/schemas/Timezone'
-          description: The timezone of the billing entity
-          example: UTC
-        email_settings:
-          type: array
-          items:
-            type: string
-            enum:
-              - invoice.finalized
-              - credit_note.created
-          description: The email notification settings for this billing entity
-        eu_tax_management:
-          type: boolean
-          example: false
-          description: Whether EU tax management is enabled for this billing entity
-        logo:
-          type:
-            - string
-            - 'null'
-          format: uri
-          example: data:image/png;base64,...
-          description: The base64 encoded logo image for the billing entity
     CustomerPaymentProvidernErrorObject:
       $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
   responses:
@@ -13992,30 +14041,30 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
-    NotFound:
-      description: Not Found error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorNotFound'
     BadRequest:
       description: Bad Request error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorBadRequest'
-    NotAllowed:
-      description: Not Allowed error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorNotAllowed'
     Forbidden:
       description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorForbidden'
+    NotFound:
+      description: Not Found error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorNotFound'
+    NotAllowed:
+      description: Not Allowed error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorNotAllowed'
   securitySchemes:
     bearerAuth:
       type: http
