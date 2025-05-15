@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Lago API documentation
   description: Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 1.26.0
+  version: 1.28.1
   license:
     name: AGPLv3
     identifier: AGPLv3
@@ -5963,6 +5963,13 @@ components:
           $ref: '#/components/schemas/Timezone'
           description: The timezone of the billing entity
           example: UTC
+        tax_codes:
+          type: array
+          items:
+            type: string
+          example:
+            - french_standard_vat
+          description: The tax codes that should be associated with this billing entity
         email_settings:
           type: array
           items:
@@ -12698,7 +12705,7 @@ components:
           example: French standard VAT
         applied_to_organization:
           type: boolean
-          description: Set to `true` if the tax is used as one of the organization's default
+          description: Set to `true` if the tax is used as one of the organization's default. Also this tax will be applied to the default entity of the organization. This field is deprecated and will be removed in a future version. Please use `billing_entity/:code/manage_taxes` endpoint instead
           example: true
     TaxCreateInput:
       type: object
