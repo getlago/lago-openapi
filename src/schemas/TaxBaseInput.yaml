@@ -21,5 +21,6 @@ properties:
     example: "French standard VAT"
   applied_to_organization:
     type: boolean
-    description: Set to `true` if the tax is used as one of the organization's default. Also this tax will be applied to the default entity of the organization. This field is deprecated and will be removed in a future version. Please use `billing_entity/:code/manage_taxes` endpoint instead
+    deprecated: true
+    description: This field is deprecated and will be removed in a future version. When set to true, it applies the tax to the organization's default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entity/:code` endpoint instead.
     example: true
