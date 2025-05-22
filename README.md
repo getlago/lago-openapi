@@ -31,20 +31,27 @@ Read more [here](https://www.getlago.com/blog/open-source-licensing-and-why-lago
 
 ## Local development
 
-### Install dependencies
+#### Install dependencies
 
 ```
 npm install
 ```
 
-### Build openapi.yaml
+#### Build openapi.yaml
 
 ```
 npm run build
 ```
 
-### Lint
+#### Lint
 
 ```
 npm run test
+```
+
+#### Running swagger in Docker to preview
+
+```sh
+docker pull docker.swagger.io/swaggerapi/swagger-ui
+npm run build && docker run -p 8080:8080 -e SWAGGER_JSON=/swagger/openapi.yaml -v "$HOME/Lago/openapi:/swagger" swaggerapi/swagger-ui
 ```
