@@ -229,6 +229,10 @@ paths:
     $ref: "./resources/subscription.yaml"
   /subscriptions/{external_id}/lifetime_usage:
     $ref: "./resources/subscription_lifetime_usage.yaml"
+  /subscriptions/{external_id}/alerts:
+    $ref: "./resources/subscription_alerts.yaml"
+  /subscriptions/{external_id}/alerts/{code}:
+    $ref: "./resources/subscription_alert.yaml"
   /taxes:
     $ref: "./resources/taxes.yaml"
   /taxes/{code}:

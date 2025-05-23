@@ -1,0 +1,77 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription
+    required: true
+    schema:
+      type: string
+      example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+  - name: code
+    in: path
+    description: Unique code of the alert
+    required: true
+    schema:
+      type: string
+      example: "storage_threshold_alert"
+get:
+  tags:
+    - subscriptions
+  summary: Retrieve a subscription alert
+  description: This endpoint enables the retrieval of a specific alert for a subscription.
+  operationId: getSubscriptionAlert
+  responses:
+    "200":
+      description: Subscription alert
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Alert.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+put:
+  tags:
+    - subscriptions
+  summary: Update a subscription alert
+  description: This endpoint allows you to update an existing alert for a subscription.
+  operationId: updateSubscriptionAlert
+  requestBody:
+    description: Update an existing alert for a subscription
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/AlertUpdateInput.yaml"
+    required: true
+  responses:
+    "200":
+      description: Subscription alert updated
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Alert.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
+delete:
+  tags:
+    - subscriptions
+  summary: Delete a subscription alert
+  description: This endpoint allows you to delete an existing alert for a subscription.
+  operationId: deleteSubscriptionAlert
+  responses:
+    "200":
+      description: Subscription alert deleted
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Alert.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

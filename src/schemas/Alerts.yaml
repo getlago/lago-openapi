@@ -1,0 +1,10 @@
+type: object
+required:
+  - alerts
+properties:
+  alerts:
+    type: array
+    items:
+      $ref: "./AlertObject.yaml"
+  meta:
+    $ref: "./PaginationMeta.yaml"
