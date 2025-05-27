@@ -1,0 +1,116 @@
+get:
+  tags:
+    - analytics
+  summary: List usage
+  description: Returns usages.
+  operationId: findAllUsages
+  parameters:
+    - name: time_granularity
+      in: query
+      description: The time granularity of usage analytics. Possible values are 'day', 'week', 'month', 'year'.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - day
+          - week
+          - month
+          - year
+        example: month
+    - name: currency
+      in: query
+      description: The currency of usage analytics. Format must be ISO 4217.
+      required: false
+      explode: true
+      schema:
+        allOf:
+          - $ref: '../schemas/Currency.yaml'
+          - example: 'USD'
+    - name: from_date
+      in: query
+      description: The start date of the period for which the usage analytics is calculated.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: date
+        example: '2023-11-01'
+    - name: to_date
+      in: query
+      description: The end date of the period for which the usage analytics is calculated.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: date
+        example: '2023-11-30'
+    - name: customer_type
+      in: query
+      description: The type of customer for which the usage analytics is calculated. Possible values are 'individual', 'company'.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - individual
+          - company
+        example: individual
+    - name: external_customer_id
+      in: query
+      description: The external identifier of the customer for which the usage analytics is calculated.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'ext-customer-123'
+    - name: customer_country
+      in: query
+      description: The country of the customer for which the usage analytics is calculated.
+      required: false
+      explode: true
+      schema:
+        allOf:
+          - $ref: '../schemas/Country.yaml'
+          - example: 'USD'
+    - name: external_subscription_id
+      in: query
+      description: The external identifier of the subscription for which the usage analytics is calculated.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'ext-subscription-123'
+    - name: is_billable_metric_recurring
+      in: query
+      description: Indicates whether the billable metric associated with the usage is recurring.
+      required: false
+      explode: true
+      schema:
+        type: boolean
+        example: true
+    - name: plan_code
+      in: query
+      description: The code of the plan for which the usage analytics is calculated.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'plan-code-123'
+    - name: billable_metric_code
+      in: query
+      description: The code of the usage-based billable metrics for which the usage analytics is calculated.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'code1'
+  responses:
+    '200':
+      description: Usage
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Usages.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

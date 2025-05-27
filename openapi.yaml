@@ -773,6 +773,123 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+  /analytics/usage:
+    get:
+      tags:
+        - analytics
+      summary: List usage
+      description: Returns usages.
+      operationId: findAllUsages
+      parameters:
+        - name: time_granularity
+          in: query
+          description: The time granularity of usage analytics. Possible values are 'day', 'week', 'month', 'year'.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - day
+              - week
+              - month
+              - year
+            example: month
+        - name: currency
+          in: query
+          description: The currency of usage analytics. Format must be ISO 4217.
+          required: false
+          explode: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Currency'
+              - example: USD
+        - name: from_date
+          in: query
+          description: The start date of the period for which the usage analytics is calculated.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2023-11-01'
+        - name: to_date
+          in: query
+          description: The end date of the period for which the usage analytics is calculated.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2023-11-30'
+        - name: customer_type
+          in: query
+          description: The type of customer for which the usage analytics is calculated. Possible values are 'individual', 'company'.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - individual
+              - company
+            example: individual
+        - name: external_customer_id
+          in: query
+          description: The external identifier of the customer for which the usage analytics is calculated.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: ext-customer-123
+        - name: customer_country
+          in: query
+          description: The country of the customer for which the usage analytics is calculated.
+          required: false
+          explode: true
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Country'
+              - example: USD
+        - name: external_subscription_id
+          in: query
+          description: The external identifier of the subscription for which the usage analytics is calculated.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: ext-subscription-123
+        - name: is_billable_metric_recurring
+          in: query
+          description: Indicates whether the billable metric associated with the usage is recurring.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+        - name: plan_code
+          in: query
+          description: The code of the plan for which the usage analytics is calculated.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: plan-code-123
+        - name: billable_metric_code
+          in: query
+          description: The code of the usage-based billable metrics for which the usage analytics is calculated.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: code1
+      responses:
+        '200':
+          description: Usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usages'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   /applied_coupons:
     post:
       tags:
@@ -7317,6 +7434,58 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OverdueBalanceObject'
+    UsageObject:
+      type: object
+      required:
+        - organization_id
+        - amount_cents
+        - amount_currency
+      properties:
+        organization_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the organization for which the usage analytics is calculated.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        start_of_period_dt:
+          type: string
+          format: date
+          description: The start date of the period for which the usage analytics is calculated.
+          example: '2023-11-01'
+        end_of_period_dt:
+          type: string
+          format: date
+          description: The end date of the period for which the usage analytics is calculated.
+          example: '2023-11-30'
+        amount_currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of usage analytics. Format must be ISO 4217.
+          example: USD
+        amount_cents:
+          type: integer
+          description: The total amount for usages for a period, expressed in cents.
+          example: 50000
+        billable_metric_code:
+          type: string
+          description: The code of the usage-based billable metrics.
+          example: code1
+        units:
+          type: string
+          description: The total number of units for the usage-based billable metrics.
+          pattern: ^[0-9]+.?[0-9]*$
+          example: '1.0'
+        is_billable_metric_deleted:
+          type: boolean
+          description: Indicates whether the billable metric associated with the usage is deleted.
+          example: false
+    Usages:
+      type: object
+      required:
+        - usages
+      properties:
+        usages:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageObject'
     CurrencyOrNull:
       type:
         - string
