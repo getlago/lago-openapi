@@ -12,7 +12,7 @@ servers:
   - url: https://api.getlago.com/api/v1
     description: US Lago cluster
   - url: https://api.eu.getlago.com/api/v1
-    description: EU Lagos cluster
+    description: EU Lago cluster
 security:
   - bearerAuth: []
 tags:
@@ -11534,12 +11534,12 @@ components:
               flat_amount:
                 type: string
                 pattern: ^[0-9]+.?[0-9]*$
-                description: The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.
+                description: The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.
                 example: '10'
               per_unit_amount:
                 type: string
                 pattern: ^[0-9]+.?[0-9]*$
-                description: The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.
+                description: The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.
                 example: '0.5'
     ChargeFilterObject:
       type: object
