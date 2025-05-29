@@ -1,0 +1,13 @@
+allOf:
+  - $ref: "./AlertThresholdBaseObject.yaml"
+type: object
+required:
+  - code
+  - value
+  - recurring
+properties:
+  value:
+    type: string
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: A value that should trigger this alert, formatted as a BigDecimal.
+    example: "99.0"
