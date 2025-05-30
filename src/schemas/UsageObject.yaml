@@ -1,0 +1,43 @@
+type: object
+required:
+  - organization_id
+  - amount_cents
+  - amount_currency
+properties:
+  organization_id:
+    type: string
+    format: 'uuid'
+    description: The unique identifier of the organization for which the usage analytics is calculated.
+    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  start_of_period_dt:
+    type: string
+    format: 'date'
+    description: The start date of the period for which the usage analytics is calculated.
+    example: '2023-11-01'
+  end_of_period_dt:
+    type: string
+    format: 'date'
+    description: The end date of the period for which the usage analytics is calculated.
+    example: '2023-11-30'
+  amount_currency:
+    $ref: './Currency.yaml'
+    description: The currency of usage analytics. Format must be ISO 4217.
+    example: 'USD'
+  amount_cents:
+    type: integer
+    description: The total amount for usages for a period, expressed in cents.
+    example: 50000
+  billable_metric_code:
+    type: string
+    description: The code of the usage-based billable metrics.
+    example: 'code1'
+  units:
+    type: string
+    description: The total number of units for the usage-based billable metrics.
+    pattern: "^[0-9]+.?[0-9]*$"
+    example: "1.0"
+  is_billable_metric_deleted:
+    type: boolean
+    description: Indicates whether the billable metric associated with the usage is deleted.
+    example: false
+
