@@ -1,12 +1,12 @@
 allOf:
   - $ref: "./AlertThresholdBaseObject.yaml"
-type: object
-required:
-  - value
-properties:
-  value:
-    type:
-      - integer
-      - string
-    description: A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
-    example: 99
+  - type: object
+    required:
+      - value
+    properties:
+      value:
+        type:
+          - integer
+          - string
+        description: A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
+        example: 99

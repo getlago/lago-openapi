@@ -36,11 +36,11 @@ properties:
     type: string
     description: The type of alert.
     enum:
-      - usage_amount
-      - billable_metric_usage_amount
-      - billable_metric_usage_units
+      - current_usage_amount
+      - billable_metric_current_usage_amount
+      - billable_metric_current_usage_units
       - lifetime_usage_amount
-    example: "billable_metric_usage_amount"
+    example: "billable_metric_current_usage_amount"
   code:
     type: string
     description: Unique code used to identify the alert.

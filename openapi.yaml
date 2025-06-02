@@ -6135,7 +6135,7 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: TTOTOESOTOSESOEOTSEO Unique identifier of the add-on, created by Lago.
+          description: Unique identifier of the add-on, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         name:
           type: string
@@ -12821,17 +12821,17 @@ components:
     AlertThresholdObject:
       allOf:
         - $ref: '#/components/schemas/AlertThresholdBaseObject'
-      type: object
-      required:
-        - code
-        - value
-        - recurring
-      properties:
-        value:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: A value that should trigger this alert, formatted as a BigDecimal.
-          example: '99.0'
+        - type: object
+          required:
+            - code
+            - value
+            - recurring
+          properties:
+            value:
+              type: string
+              pattern: ^[0-9]+.?[0-9]*$
+              description: A value that should trigger this alert, formatted as a BigDecimal.
+              example: '99.0'
     AlertObject:
       type: object
       required:
@@ -12846,7 +12846,6 @@ components:
         - last_processed_at
         - thresholds
         - created_at
-        - updated_at
       properties:
         lago_id:
           type: string
@@ -12872,11 +12871,11 @@ components:
           type: string
           description: The type of alert.
           enum:
-            - usage_amount
-            - billable_metric_usage_amount
-            - billable_metric_usage_units
+            - current_usage_amount
+            - billable_metric_current_usage_amount
+            - billable_metric_current_usage_units
             - lifetime_usage_amount
-          example: billable_metric_usage_amount
+          example: billable_metric_current_usage_amount
         code:
           type: string
           description: Unique code used to identify the alert.
@@ -12908,11 +12907,6 @@ components:
           format: date-time
           description: The date and time in UTC (ISO 8601) when the alert was created.
           example: '2025-03-20T10:00:00Z'
-        updated_at:
-          type: string
-          format: date-time
-          description: The date and time in UTC (ISO 8601) when the alert was last updated.
-          example: '2025-03-20T10:00:00Z'
     Alerts:
       type: object
       required:
@@ -12927,16 +12921,16 @@ components:
     AlertThresholdInput:
       allOf:
         - $ref: '#/components/schemas/AlertThresholdBaseObject'
-      type: object
-      required:
-        - value
-      properties:
-        value:
-          type:
-            - integer
-            - string
-          description: A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
-          example: 99
+        - type: object
+          required:
+            - value
+          properties:
+            value:
+              type:
+                - integer
+                - string
+              description: A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
+              example: 99
     AlertBaseInput:
       type: object
       properties:
@@ -12969,25 +12963,25 @@ components:
         alert:
           allOf:
             - $ref: '#/components/schemas/AlertBaseInput'
-          type: object
-          required:
-            - alert_type
-            - code
-            - thresholds
-          properties:
-            alert_type:
-              type: string
-              description: The type of alert.
-              enum:
-                - usage_amount
-                - billable_metric_usage_amount
-                - billable_metric_usage_units
-                - lifetime_usage_amount
-              example: billable_metric_usage_amount
-            code:
-              type: string
-              description: Unique code used to identify the alert.
-              example: storage_threshold_alert
+            - type: object
+              required:
+                - alert_type
+                - code
+                - thresholds
+              properties:
+                alert_type:
+                  type: string
+                  description: The type of alert.
+                  enum:
+                    - current_usage_amount
+                    - billable_metric_current_usage_amount
+                    - billable_metric_current_usage_units
+                    - lifetime_usage_amount
+                  example: billable_metric_current_usage_amount
+                code:
+                  type: string
+                  description: Unique code used to identify the alert.
+                  example: storage_threshold_alert
     Alert:
       type: object
       required:
