@@ -152,6 +152,6 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/CreditNotes.yaml'
+            $ref: '../schemas/CreditNotesPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
