@@ -985,7 +985,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreditNotes'
+                $ref: '#/components/schemas/CreditNotesPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
   /credit_notes/{lago_id}:
@@ -8031,15 +8031,18 @@ components:
           type: boolean
           example: false
           description: Indicates if the credit note belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.
-    CreditNotes:
+    CreditNotesPaginated:
       type: object
       required:
         - credit_notes
+        - meta
       properties:
         credit_notes:
           type: array
           items:
             $ref: '#/components/schemas/CreditNoteObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     CreditNoteCreateInput:
       type: object
       required:
@@ -14035,6 +14038,15 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    CreditNotes:
+      type: object
+      required:
+        - credit_notes
+      properties:
+        credit_notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditNoteObject'
     CustomerPaymentProvidernErrorObject:
       $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
   responses:

@@ -1,0 +1,11 @@
+type: object
+required:
+  - credit_notes
+  - meta
+properties:
+  credit_notes:
+    type: array
+    items:
+      $ref: './CreditNoteObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
