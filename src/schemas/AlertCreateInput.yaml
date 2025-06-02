@@ -1,0 +1,26 @@
+type: object
+required:
+  - alert
+properties:
+  alert:
+    allOf:
+      - $ref: './AlertBaseInput.yaml'
+      - type: object
+        required:
+          - alert_type
+          - code
+          - thresholds
+        properties:
+          alert_type:
+            type: string
+            description: The type of alert.
+            enum:
+              - current_usage_amount
+              - billable_metric_current_usage_amount
+              - billable_metric_current_usage_units
+              - lifetime_usage_amount
+            example: "billable_metric_current_usage_amount"
+          code:
+            type: string
+            description: Unique code used to identify the alert.
+            example: "storage_threshold_alert"

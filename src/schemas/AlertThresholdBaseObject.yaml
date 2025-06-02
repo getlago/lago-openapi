@@ -1,0 +1,15 @@
+type: object
+required:
+  - value
+properties:
+  code:
+    type:
+      - string
+      - "null"
+    description: Unique identifier of the usage threshold created by Lago.
+    example: "warn"
+  recurring:
+    type: boolean
+    default: false
+    description: This field when set to `true` indicates that the alert will be retrigger when this threshold is reached after the last non-recurring threshold. Only one recurring threshold per alert allowed.
+    example: false

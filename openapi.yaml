@@ -2766,6 +2766,138 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /subscriptions/{external_id}/alerts:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    get:
+      tags:
+        - subscriptions
+      summary: List subscription alerts
+      description: This endpoint enables the retrieval of all alerts for a subscription.
+      operationId: getSubscriptionAlerts
+      responses:
+        '200':
+          description: Subscription alerts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alerts'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      tags:
+        - subscriptions
+      summary: Create a subscription alert
+      description: This endpoint allows you to create a new alert for a subscription.
+      operationId: createSubscriptionAlert
+      requestBody:
+        description: Create a new alert for a subscription
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Subscription alert created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /subscriptions/{external_id}/alerts/{code}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - name: code
+        in: path
+        description: Unique code of the alert
+        required: true
+        schema:
+          type: string
+          example: storage_threshold_alert
+    get:
+      tags:
+        - subscriptions
+      summary: Retrieve a subscription alert
+      description: This endpoint enables the retrieval of a specific alert for a subscription.
+      operationId: getSubscriptionAlert
+      responses:
+        '200':
+          description: Subscription alert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - subscriptions
+      summary: Update a subscription alert
+      description: This endpoint allows you to update an existing alert for a subscription.
+      operationId: updateSubscriptionAlert
+      requestBody:
+        description: Update an existing alert for a subscription
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Subscription alert updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - subscriptions
+      summary: Delete a subscription alert
+      description: This endpoint allows you to delete an existing alert for a subscription.
+      operationId: deleteSubscriptionAlert
+      responses:
+        '200':
+          description: Subscription alert deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /taxes:
     post:
       tags:
@@ -12673,6 +12805,200 @@ components:
               type: integer
               example: 100
               description: The historical usage amount in cents for the subscription (provided by your own application).
+    AlertThresholdBaseObject:
+      type: object
+      required:
+        - value
+      properties:
+        code:
+          type:
+            - string
+            - 'null'
+          description: Unique identifier of the usage threshold created by Lago.
+          example: warn
+        recurring:
+          type: boolean
+          default: false
+          description: This field when set to `true` indicates that the alert will be retrigger when this threshold is reached after the last non-recurring threshold. Only one recurring threshold per alert allowed.
+          example: false
+    AlertThresholdObject:
+      allOf:
+        - $ref: '#/components/schemas/AlertThresholdBaseObject'
+        - type: object
+          required:
+            - code
+            - value
+            - recurring
+          properties:
+            value:
+              type: string
+              pattern: ^[0-9]+.?[0-9]*$
+              description: A value that should trigger this alert, formatted as a BigDecimal.
+              example: '99.0'
+    AlertObject:
+      type: object
+      required:
+        - lago_id
+        - lago_organization_id
+        - subscription_external_id
+        - billable_metric_code
+        - alert_type
+        - code
+        - name
+        - previous_value
+        - last_processed_at
+        - thresholds
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the alert, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        subscription_external_id:
+          type: string
+          description: The subscription external unique identifier (provided by your own application).
+          example: sub_1234567890
+        billable_metric_code:
+          type:
+            - string
+            - 'null'
+          description: The code of the billable metric associated with the alert. Only for alerts based on a billable metric.
+          example: storage_usage
+        alert_type:
+          type: string
+          description: The type of alert.
+          enum:
+            - current_usage_amount
+            - billable_metric_current_usage_amount
+            - billable_metric_current_usage_units
+            - lifetime_usage_amount
+          example: billable_metric_current_usage_amount
+        code:
+          type: string
+          description: Unique code used to identify the alert.
+          example: storage_threshold_alert
+        name:
+          type:
+            - string
+            - 'null'
+          description: The name of the alert.
+          example: Storage Usage Alert
+        previous_value:
+          type: number
+          description: When the system checked if this alert should be triggered, this value was retrived and checked against the thresholds.
+          example: 1000
+        last_processed_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the system checked if this alert should be triggered. Null until it's processed for the first time.
+          example: '2025-05-19T10:04:21Z'
+        thresholds:
+          type: array
+          description: Array of thresholds associated with the alert.
+          items:
+            $ref: '#/components/schemas/AlertThresholdObject'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the alert was created.
+          example: '2025-03-20T10:00:00Z'
+    Alerts:
+      type: object
+      required:
+        - alerts
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    AlertThresholdInput:
+      allOf:
+        - $ref: '#/components/schemas/AlertThresholdBaseObject'
+        - type: object
+          required:
+            - value
+          properties:
+            value:
+              type:
+                - integer
+                - string
+              description: A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
+              example: 99
+    AlertBaseInput:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Unique code used to identify the alert.
+          example: storage_threshold_alert
+        billable_metric_code:
+          type:
+            - string
+            - 'null'
+          description: The code of the billable metric associated with the alert. Only for alerts based on a billable metric.
+          example: storage_usage
+        name:
+          type:
+            - string
+            - 'null'
+          description: The name of the alert.
+          example: Storage Usage Alert
+        thresholds:
+          type: array
+          description: Array of thresholds associated with the alert.
+          items:
+            $ref: '#/components/schemas/AlertThresholdInput'
+    AlertCreateInput:
+      type: object
+      required:
+        - alert
+      properties:
+        alert:
+          allOf:
+            - $ref: '#/components/schemas/AlertBaseInput'
+            - type: object
+              required:
+                - alert_type
+                - code
+                - thresholds
+              properties:
+                alert_type:
+                  type: string
+                  description: The type of alert.
+                  enum:
+                    - current_usage_amount
+                    - billable_metric_current_usage_amount
+                    - billable_metric_current_usage_units
+                    - lifetime_usage_amount
+                  example: billable_metric_current_usage_amount
+                code:
+                  type: string
+                  description: Unique code used to identify the alert.
+                  example: storage_threshold_alert
+    Alert:
+      type: object
+      required:
+        - alert
+      properties:
+        alert:
+          $ref: '#/components/schemas/AlertObject'
+    AlertUpdateInput:
+      type: object
+      required:
+        - alert
+      properties:
+        alert:
+          $ref: '#/components/schemas/AlertBaseInput'
     TaxesPaginated:
       type: object
       required:
