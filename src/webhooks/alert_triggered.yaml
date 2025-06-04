@@ -1,0 +1,32 @@
+post:
+  operationId: alertTriggered
+  summary: A new alert was triggered
+  description: One or more thresholds defined in the alert were crossed
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the triggered alert
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - triggered_alert
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - alert.triggered
+            object_type:
+              type: string
+              enum:
+                - triggered_alert
+            triggered_alert:
+              $ref: "../schemas/TriggeredAlertObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

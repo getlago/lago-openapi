@@ -256,6 +256,8 @@ paths:
   /webhook_endpoints/{lago_id}:
     $ref: "./resources/webhook_endpoint.yaml"
 webhooks:
+  alert_triggered:
+    $ref: "./webhooks/alert_triggered.yaml"
   customer_created:
     $ref: "./webhooks/customer_created.yaml"
   customer_updated:
