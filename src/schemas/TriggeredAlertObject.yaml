@@ -2,15 +2,17 @@ type: object
 required:
   - lago_id
   - lago_organization_id
+  - lago_alert_id
+  - lago_subscription_id
   - subscription_external_id
   - billable_metric_code
   - alert_type
-  - code
-  - name
+  - alert_code
+  - alert_name
+  - current_value
   - previous_value
-  - last_processed_at
-  - thresholds
-  - created_at
+  - triggered_at
+  - crossed_thresholds
 properties:
   lago_id:
     type: string
@@ -21,6 +23,16 @@ properties:
     type: string
     format: uuid
     description: Unique identifier of the organization, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_alert_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the alert, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_subscription_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the subscription, created by Lago.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   subscription_external_id:
     type: string
@@ -34,41 +46,40 @@ properties:
     example: "storage_usage"
   alert_type:
     type: string
-    description: The type of alert.
+    description: The type of alert triggered.
     enum:
       - current_usage_amount
       - billable_metric_current_usage_amount
       - billable_metric_current_usage_units
       - lifetime_usage_amount
     example: "billable_metric_current_usage_amount"
-  code:
+  alert_code:
     type: string
-    description: Unique code used to identify the alert.
+    description: Unique code used to identify the alert triggered.
     example: "storage_threshold_alert"
-  name:
+  alert_name:
     type:
       - string
       - "null"
-    description: The name of the alert.
+    description: The name of the alert triggered.
     example: "Storage Usage Alert"
+  current_value:
+    type: number
+    description: When the system checked if this alert should be triggered, this value was retrieved and checked if any threshold were crossed between this value and previous value.
+    example: 1200
   previous_value:
     type: number
-    description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds.
-    example: 1000
-  last_processed_at:
+    description: During the previous run, this value was retrieved.
+    example: 900
+  triggered_at:
     type:
       - string
       - "null"
     format: "date-time"
-    description: The date and time in UTC (ISO 8601) when the system checked if this alert should be triggered. Null until it's processed for the first time.
+    description: The date and time in UTC (ISO 8601) when the system triggered the alert.
     example: "2025-05-19T10:04:21Z"
-  thresholds:
+  crossed_thresholds:
     type: array
-    description: Array of thresholds associated with the alert.
+    description: Array of thresholds crossed. All the recurring threshold values are present.
     items:
       $ref: "./AlertThresholdObject.yaml"
-  created_at:
-    type: string
-    format: "date-time"
-    description: The date and time in UTC (ISO 8601) when the alert was created.
-    example: "2025-03-20T10:00:00Z"
