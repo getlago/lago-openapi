@@ -1,0 +1,11 @@
+type: object
+required:
+  - activity_logs
+  - meta
+properties:
+  activity_logs:
+    type: array
+    items:
+      $ref: './ActivityLogObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
