@@ -54,6 +54,16 @@ get:
       schema:
         type: string
         example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+    - name: coupon_code[]
+      in: query
+      description: The code of the coupon applied to the customer. Use it to filter applied coupons by their code.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example: ['BLACK_FRIDAY_2024', 'CHRISTMAS_2024']
   responses:
     '200':
       description: Applied Coupons
