@@ -3,7 +3,7 @@ required:
   - lago_id
   - lago_organization_id
   - subscription_external_id
-  - billable_metric_code
+  - billable_metric
   - alert_type
   - code
   - name
@@ -26,12 +26,9 @@ properties:
     type: string
     description: The subscription external unique identifier (provided by your own application).
     example: "sub_1234567890"
-  billable_metric_code:
-    type:
-      - string
-      - "null"
-    description: The code of the billable metric associated with the alert. Only for alerts based on a billable metric.
-    example: "storage_usage"
+  billable_metric:
+    $ref: "./BillableMetricObject.yaml"
+    description: The billable metric associated with the alert. Only for alerts based on a billable metric.
   alert_type:
     type: string
     description: The type of alert.

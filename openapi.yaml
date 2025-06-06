@@ -242,7 +242,7 @@ paths:
         - $ref: '#/components/parameters/per_page'
         - name: from_date
           in: query
-          description: Filter activity logs from an specific date.
+          description: Filter activity logs from a specific date.
           required: false
           explode: true
           schema:
@@ -251,7 +251,7 @@ paths:
             example: '2022-08-09'
         - name: to_date
           in: query
-          description: Filter activity logs up to an specific date.
+          description: Filter activity logs up to a specific date.
           required: false
           explode: true
           schema:
@@ -297,7 +297,6 @@ paths:
               type: string
             example:
               - dinesh@piedpiper.test
-              - brex@brex.com
         - $ref: '#/components/parameters/external_customer_id'
         - $ref: '#/components/parameters/external_subscription_id'
         - name: resource_ids
@@ -13074,8 +13073,6 @@ components:
               description: The historical usage amount in cents for the subscription (provided by your own application).
     AlertThresholdBaseObject:
       type: object
-      required:
-        - value
       properties:
         code:
           type:
@@ -13108,7 +13105,7 @@ components:
         - lago_id
         - lago_organization_id
         - subscription_external_id
-        - billable_metric_code
+        - billable_metric
         - alert_type
         - code
         - name
@@ -13131,12 +13128,9 @@ components:
           type: string
           description: The subscription external unique identifier (provided by your own application).
           example: sub_1234567890
-        billable_metric_code:
-          type:
-            - string
-            - 'null'
-          description: The code of the billable metric associated with the alert. Only for alerts based on a billable metric.
-          example: storage_usage
+        billable_metric:
+          $ref: '#/components/schemas/BillableMetricObject'
+          description: The billable metric associated with the alert. Only for alerts based on a billable metric.
         alert_type:
           type: string
           description: The type of alert.
