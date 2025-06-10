@@ -6,10 +6,10 @@ Open API specification for Lago project
 
 ## Current Releases
 
-| Project            | Release Badge                                                                                       |
-|--------------------|-----------------------------------------------------------------------------------------------------|
-| **Lago**           | [![Lago Release](https://img.shields.io/github/v/release/getlago/lago)](https://github.com/getlago/lago/releases) |
-| **Lago OpenAPI**     | [![Lago OpenAPI Release](https://img.shields.io/github/v/release/getlago/lago-openapi)](https://github.com/getlago/lago-openapi/releases) |
+| Project          | Release Badge                                                                                                                             |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Lago**         | [![Lago Release](https://img.shields.io/github/v/release/getlago/lago)](https://github.com/getlago/lago/releases)                         |
+| **Lago OpenAPI** | [![Lago OpenAPI Release](https://img.shields.io/github/v/release/getlago/lago-openapi)](https://github.com/getlago/lago-openapi/releases) |
 
 ## Usage
 
@@ -31,27 +31,44 @@ Read more [here](https://www.getlago.com/blog/open-source-licensing-and-why-lago
 
 ## Local development
 
-#### Install dependencies
+### Install dependencies
 
 ```
 npm install
 ```
 
-#### Build openapi.yaml
+You may also need Docker to run some commands.
+
+### Build openapi.yaml
 
 ```
 npm run build
 ```
 
-#### Lint
+### Lint
 
 ```
 npm run test
 ```
 
-#### Running swagger in Docker to preview
+### Preview using Redoc
+
+To preview the OpenAPI specification using Redoc, you can use the following command:
 
 ```sh
-docker pull docker.swagger.io/swaggerapi/swagger-ui
-npm run build && docker run -p 8080:8080 -e SWAGGER_JSON=/swagger/openapi.yaml -v "$HOME/Lago/openapi:/swagger" swaggerapi/swagger-ui
+npm run preview:redocly
 ```
+
+This will watch for changes in the OpenAPI specification files and automatically rebuild and reload them.
+
+The Redoc documentation will be available at `http://localhost:8080/`.
+
+### Preview using Swagger UI
+
+To preview the OpenAPI specification using Swagger UI, as on <https://swagger.getlago.com>, you can use the following command:
+
+```sh
+npm run preview:swagger
+```
+
+The Swagger UI will be available at `http://localhost:8080/`.
