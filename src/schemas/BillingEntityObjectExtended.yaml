@@ -6,4 +6,8 @@ allOf:
         type: array
         items:
           $ref: './TaxObject.yaml'
+      selected_invoice_custom_sections:
+        type: array
+        items:
+          $ref: './InvoiceCustomSectionObject.yaml'
 

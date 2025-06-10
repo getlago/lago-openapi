@@ -31,7 +31,8 @@ properties:
     example: "Bank Details:"
   applied_to_organization:
     type: boolean
-    description: Set to true if the invoice custom section is a default for the organization.
+    deprecated: true
+    description: This field is deprecated and will be removed in a future version. When set to true, it applies the invoice custom section to the organization's default billing entity. To apply or remove an invoice custom section from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.
     example: true
   organization_id:
     type: string
