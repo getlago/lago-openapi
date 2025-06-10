@@ -22,5 +22,5 @@ properties:
   applied_to_organization:
     type: boolean
     deprecated: true
-    description: This field is deprecated and will be removed in a future version. When set to true, it applies the tax to the organization's default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entity/:code` endpoint instead.
+    description: This field is deprecated and will be removed in a future version. When set to true, it applies the tax to the organization's default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.
     example: true

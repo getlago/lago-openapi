@@ -135,3 +135,9 @@ properties:
     format: uri
     example: "data:image/png;base64,..."
     description: The base64 encoded logo image for the billing entity
+  invoice_custom_section_codes:
+    type: array
+    items:
+      type: string
+    example: [custom_section_1, custom_section_2]
+    description: The codes of the invoice custom section that should be associated with this billing entity
