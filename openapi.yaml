@@ -2774,6 +2774,22 @@ paths:
       summary: Retrieve a subscription
       description: This endpoint retrieves a specific subscription.
       operationId: findSubscription
+      parameters:
+        - name: status
+          in: query
+          description: |
+            By default, this endpoint only return `active` subscriptions. If you want to retrieve a subscription with a different `status`, you can specify it here.
+
+            _Note: As there may exists multiple `canceled` or `terminated` subscribtions for the same `external_id`, it is recommended to use the "List all subscriptions" endpoint to retrieve those subscriptions._
+          required: false
+          schema:
+            type: string
+            enum:
+              - active
+              - terminated
+              - pending
+              - canceled
+            example: active
       responses:
         '200':
           description: Subscription
