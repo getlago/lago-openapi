@@ -13146,6 +13146,7 @@ components:
         - lago_id
         - lago_organization_id
         - subscription_external_id
+        - customer_external_id
         - billable_metric
         - alert_type
         - code
@@ -13169,6 +13170,10 @@ components:
           type: string
           description: The subscription external unique identifier (provided by your own application).
           example: sub_1234567890
+        customer_external_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application).
+          example: cus_0987654321
         billable_metric:
           $ref: '#/components/schemas/BillableMetricObject'
           description: The billable metric associated with the alert. Only for alerts based on a billable metric.
