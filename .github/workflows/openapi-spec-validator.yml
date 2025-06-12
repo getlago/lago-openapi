@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
@@ -21,6 +21,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install "openapi-spec-validator"
+      - name: Ensure ./openapi.yaml is up-to-date
+        run: |
+          cp openapi.yaml openapi-before.yaml
+          npm install
+          npm run build
+          diff openapi.yaml openapi-before.yaml
+
       - name: Run tests
         run: |
           python -m openapi_spec_validator "openapi.yaml"
