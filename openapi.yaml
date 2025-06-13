@@ -788,16 +788,14 @@ paths:
           schema:
             type: string
             enum:
-              - dayly
+              - daily
               - weekly
               - monthly
-              - yearly
             example: monthly
         - name: currency
           in: query
           description: The currency of usage analytics. Format must be ISO 4217.
           required: false
-          explode: true
           schema:
             allOf:
               - $ref: '#/components/schemas/Currency'
@@ -839,7 +837,6 @@ paths:
           in: query
           description: The country of the customer for which the usage analytics is calculated.
           required: false
-          explode: true
           schema:
             allOf:
               - $ref: '#/components/schemas/Country'
