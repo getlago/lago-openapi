@@ -34,7 +34,7 @@ get:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
     - $ref: '../parameters/external_customer_id.yaml'
-    - name: lago_invoice_id
+    - name: invoice_id
       in: query
       description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
       required: false
