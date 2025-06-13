@@ -7,17 +7,16 @@ get:
   parameters:
     - name: time_granularity
       in: query
-      description: The time granularity of usage analytics. Possible values are 'day', 'week', 'month', 'year'.
+      description: The time granularity of usage analytics. Possible values are 'daily', 'weekly', 'monthly', 'yearly'.
       required: false
-      explode: true
       schema:
         type: string
         enum:
-          - day
-          - week
-          - month
-          - year
-        example: month
+          - dayly
+          - weekly
+          - monthly
+          - yearly
+        example: monthly
     - name: currency
       in: query
       description: The currency of usage analytics. Format must be ISO 4217.
@@ -31,7 +30,6 @@ get:
       in: query
       description: The start date of the period for which the usage analytics is calculated.
       required: false
-      explode: true
       schema:
         type: string
         format: date
@@ -40,7 +38,6 @@ get:
       in: query
       description: The end date of the period for which the usage analytics is calculated.
       required: false
-      explode: true
       schema:
         type: string
         format: date
@@ -49,7 +46,6 @@ get:
       in: query
       description: The type of customer for which the usage analytics is calculated. Possible values are 'individual', 'company'.
       required: false
-      explode: true
       schema:
         type: string
         enum:
@@ -60,7 +56,6 @@ get:
       in: query
       description: The external identifier of the customer for which the usage analytics is calculated.
       required: false
-      explode: true
       schema:
         type: string
         example: 'ext-customer-123'
@@ -72,12 +67,11 @@ get:
       schema:
         allOf:
           - $ref: '../schemas/Country.yaml'
-          - example: 'USD'
+          - example: 'US'
     - name: external_subscription_id
       in: query
       description: The external identifier of the subscription for which the usage analytics is calculated.
       required: false
-      explode: true
       schema:
         type: string
         example: 'ext-subscription-123'
@@ -85,7 +79,6 @@ get:
       in: query
       description: Indicates whether the billable metric associated with the usage is recurring.
       required: false
-      explode: true
       schema:
         type: boolean
         example: true
@@ -93,7 +86,6 @@ get:
       in: query
       description: The code of the plan for which the usage analytics is calculated.
       required: false
-      explode: true
       schema:
         type: string
         example: 'plan-code-123'
@@ -101,7 +93,6 @@ get:
       in: query
       description: The code of the usage-based billable metrics for which the usage analytics is calculated.
       required: false
-      explode: true
       schema:
         type: string
         example: 'code1'
