@@ -13589,6 +13589,21 @@ components:
           type: boolean
           description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
           example: false
+        applies_to:
+          type:
+            - object
+            - 'null'
+          description: Set wallet limitations to fee types.
+          properties:
+            fee_types:
+              type:
+                - array
+                - 'null'
+              items:
+                type: string
+              description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
+              example:
+                - charge
         recurring_transaction_rules:
           description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
           type: array
@@ -13693,6 +13708,21 @@ components:
                   value: example_value
                 - key: another_key
                   value: another_value
+            applies_to:
+              type:
+                - object
+                - 'null'
+              description: Set wallet limitations to fee types.
+              properties:
+                fee_types:
+                  type:
+                    - array
+                    - 'null'
+                  items:
+                    type: string
+                  description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
+                  example:
+                    - charge
             recurring_transaction_rules:
               type: array
               description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
@@ -13906,6 +13936,21 @@ components:
                         value: example_value
                       - key: another_key
                         value: another_value
+            applies_to:
+              type:
+                - object
+                - 'null'
+              description: Set wallet limitations to fee types.
+              properties:
+                fee_types:
+                  type:
+                    - array
+                    - 'null'
+                  items:
+                    type: string
+                  description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
+                  example:
+                    - charge
     WalletTransactionCreateInput:
       type: object
       required:
