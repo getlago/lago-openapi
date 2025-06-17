@@ -1,5 +1,22 @@
 type: object
 properties:
+  # Common attributes
+  grouped_by:
+    type: array
+    description: |-
+      The list of event properties that are used to group the events on the invoice for a `standard` charge model.
+      **DEPRECATED** Replaced by `pricing_group_keys`.
+    items:
+      type: string
+    example: ["agent_name"]
+    deprecated: true
+  pricing_group_keys:
+    type: array
+    description: The list of event properties that are used to group the events on the invoice.
+    items:
+      type: string
+    example: ["agent_name"]
+
   # Graduated charge model
   graduated_ranges:
     type: array
@@ -129,14 +146,6 @@ properties:
     format: "^[0-9]+.?[0-9]*$"
     description: Specifies the minimum allowable spending for a single transaction. Working as a transaction floor.
     example: "1.75"
-
-  # Standard only charge model
-  grouped_by:
-    type: array
-    description: The list of event properties that are used to group the events on the invoice for a `standard` charge model.
-    items:
-      type: string
-    example: ["agent_name"]
 
   # Volume charge model
   volume_ranges:
