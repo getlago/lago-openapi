@@ -114,3 +114,21 @@ properties:
                   value: "example_value"
                 - key: "another_key"
                   value: "another_value"
+      applies_to:
+        type:
+          - object
+          - "null"
+        description: Set wallet limitations to fee types.
+        properties:
+          fee_types:
+            type:
+              - array
+              - "null"
+            items:
+              type: string
+              enum:
+                - charge
+                - subscription
+                - commitment
+            description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
+            example: ["charge"]
