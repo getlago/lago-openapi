@@ -10667,7 +10667,7 @@ components:
             customer:
               $ref: '#/components/schemas/CustomerObject'
               description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
-            billing_period:
+            billing_periods:
               type: array
               items:
                 $ref: '#/components/schemas/BillingPeriodObject'
