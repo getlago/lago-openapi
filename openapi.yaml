@@ -2349,9 +2349,19 @@ paths:
       tags:
         - invoices
       summary: Void an invoice
-      description: This endpoint is used for voiding an invoice. You can void an invoice only when it's in a `finalized` status, and the payment status is not `succeeded`.
+      description: |-
+        Void an invoice.
+
+        Supplying `generate_credit_note` (optionally with `refund_amount` and/or `credit_amount`) forces the void and creates a credit note. If the specified refund/credit amounts do not cover the full invoice total, the remainder is issued on a second credit note that is created and immediately voided.
       parameters:
         - $ref: '#/components/parameters/lago_invoice_id'
+      requestBody:
+        description: Void invoice payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceVoidInput'
+        required: false
       operationId: voidInvoice
       responses:
         '200':
@@ -11175,6 +11185,25 @@ components:
           type: string
           description: The code of the billing entity to which will be associated a customer if the external_id is not provided. If billing_entity_code is not provided, default billing_entity of organization will be used.
           example: acme_corp
+    InvoiceVoidInput:
+      type: object
+      properties:
+        generate_credit_note:
+          type: boolean
+          description: Set to `true` to force voiding the invoice and generate a credit note.
+          example: true
+        refund_amount:
+          type: integer
+          description: Portion of the invoice amount (in cents) to be refunded to the customer in the generated credit note.
+          example: 2000
+          minimum: 0
+        credit_amount:
+          type: integer
+          description: Portion of the invoice amount (in cents) to be credited to the customer's balance in the generated credit note.
+          example: 1150
+          minimum: 0
+      required: []
+      description: Parameters available when voiding an invoice that optionally generate credit notes.
     OrganizationBillingConfiguration:
       type: object
       description: The custom billing settings for your organization.
