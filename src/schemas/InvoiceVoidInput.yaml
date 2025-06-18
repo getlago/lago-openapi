@@ -1,0 +1,18 @@
+type: object
+properties:
+  generate_credit_note:
+    type: boolean
+    description: Set to `true` to force voiding the invoice and generate a credit note.
+    example: true
+  refund_amount:
+    type: integer
+    description: Portion of the invoice amount (in cents) to be refunded to the customer in the generated credit note.
+    example: 2000
+    minimum: 0
+  credit_amount:
+    type: integer
+    description: Portion of the invoice amount (in cents) to be credited to the customer's balance in the generated credit note.
+    example: 1150
+    minimum: 0
+required: []
+description: Parameters available when voiding an invoice that optionally generate credit notes.
