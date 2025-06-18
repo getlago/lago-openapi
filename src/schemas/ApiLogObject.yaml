@@ -1,0 +1,64 @@
+type: object
+required:
+  - api_version
+  - client
+  - http_method
+  - http_status
+  - logged_at
+  - request_body
+  - request_origin
+  - request_path
+  - created_at
+  - request_id
+properties:
+  api_version:
+    type: string
+    example: "v1"
+    description: Lago API version used in the request.
+  client:
+    type: string
+    example: "Lago Ruby v1.26.0"
+    description: The client used to make the request to the API.
+  http_method:
+    type: string
+    example: "post"
+    enum:
+      - post
+      - put
+      - delete
+    description: This field represents the HTTP method of the request.
+  http_status:
+    type: integer
+    example: 200
+    description: This field represents the HTTP status of the requests.
+  logged_at:
+    type: string
+    format: "date-time"
+    example: "2025-03-31T12:31:44Z"
+    description: The logged date of the api log, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+  request_body:
+    type: string
+    format: object
+    example: '{ "billable_metric": { "name": "Storage", "code": "storage" } }'
+  request_origin:
+    type: string
+    description: This field represents the API origin of the requested URL
+    example: "https://app.lago.dev/"
+  request_path:
+    type: string
+    description: This field represents the API path of the requested URL
+    example: "/billable_metrics"
+  created_at:
+    type: string
+    format: "date-time"
+    example: "2022-04-29T08:59:51Z"
+    description: The creation date of the api log record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+  request_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier for the api log.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  request_response:
+    type: string
+    format: object
+    example: '{ "lago_id": "b9155544-e261-4e92-b54e-f65d7609294c", ... }'
