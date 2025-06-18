@@ -3,9 +3,9 @@ post:
     - invoices
   summary: Void an invoice
   description: |-
-    Void an invoice.
-
-    Supplying `generate_credit_note` (optionally with `refund_amount` and/or `credit_amount`) forces the void and creates a credit note. If the specified refund/credit amounts do not cover the full invoice total, the remainder is issued on a second credit note that is created and immediately voided.
+    This endpoint is used for voiding an invoice.
+    • When no body parameters are provided, the invoice can be voided only if it is in a `finalized` status and its payment status is NOT `succeeded`.
+    • When `generate_credit_note` is provided (optionally with `refund_amount` and/or `credit_amount`), this validation is bypassed: the invoice is forcibly voided and a credit note is generated. If the specified refund/credit amounts do not cover the full invoice total, the remainder is issued on a second credit note that is created and immediately voided.
   parameters:
     - $ref: '../parameters/lago_invoice_id.yaml'
   requestBody:
