@@ -1,0 +1,11 @@
+type: object
+required:
+  - api_logs
+  - meta
+properties:
+  api_logs:
+    type: array
+    items:
+      $ref: './ApiLogObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

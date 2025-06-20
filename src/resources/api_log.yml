@@ -1,0 +1,25 @@
+parameters:
+  - name: request_id
+    in: path
+    description: The Request Id of the existing api log.
+    required: true
+    schema:
+      type: string
+      example: 'bdc0eda6-ea52-4f72-a46a-94f47a89b546'
+get:
+  tags:
+    - api_logs
+  summary: Retrieve an api log
+  description: This endpoint retrieves an existing api log that represents a request made to the API. The api log is identified by its unique request_id.
+  operationId: findApiLog
+  responses:
+    '200':
+      description: Api Log
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ApiLog.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
