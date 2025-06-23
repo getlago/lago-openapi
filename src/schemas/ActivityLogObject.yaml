@@ -35,17 +35,17 @@ properties:
     description: This field represents the source of the activity log, the interaction source that triggered the action.
   activity_object:
     type: 
-      - string
+      - object
       - "null"
     format: object
-    example: '{ "id": "dad68bc7-c01a-4ad8-a87b-13e78693a5bc", "plan_id": "b9155544-e261-4e92-b54e-f65d7609294c", ... }'
+    example: { "lago_id": "dad68bc7-c01a-4ad8-a87b-13e78693a5bc", "plan_id": "b9155544-e261-4e92-b54e-f65d7609294c" }
     description: This field represents the final state of the object that the action was applied.
   activity_object_changes:
     type:
-      - string
+      - object
       - "null"
     format: object
-    example: '{ "plan_id": [null, "b9155544-e261-4e92-b54e-f65d7609294c"], ... }'
+    example: { "plan_id": [null, "b9155544-e261-4e92-b54e-f65d7609294c"] }
   external_customer_id:
     type:
       - string
