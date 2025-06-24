@@ -33,7 +33,7 @@ get:
   parameters:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
-    - name: account_type
+    - name: account_type[]
       in: query
       description: Filter customers by account type.
       required: false
@@ -46,7 +46,7 @@ get:
             - customer
             - partner
         example: [customer, partner]
-    - name: billing_entity_codes
+    - name: billing_entity_codes[]
       in: query
       description: Filter customers by billing entity codes.
       required: false

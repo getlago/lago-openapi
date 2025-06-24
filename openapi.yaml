@@ -1301,7 +1301,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - name: account_type
+        - name: account_type[]
           in: query
           description: Filter customers by account type.
           required: false
@@ -1316,7 +1316,7 @@ paths:
             example:
               - customer
               - partner
-        - name: billing_entity_codes
+        - name: billing_entity_codes[]
           in: query
           description: Filter customers by billing entity codes.
           required: false
