@@ -131,6 +131,10 @@ paths:
     $ref: "./resources/add_ons.yaml"
   /add_ons/{code}:
     $ref: "./resources/add_on.yaml"
+  /api_logs:
+    $ref: "./resources/api_logs.yml"
+  /api_logs/{request_id}:
+    $ref: "./resources/api_log.yml"
   /analytics/gross_revenue:
     $ref: "./resources/gross_revenues.yaml"
   /analytics/invoice_collection:
