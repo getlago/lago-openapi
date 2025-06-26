@@ -25,7 +25,7 @@ get:
         type: string
         format: 'date'
         example: '2022-08-09'
-    - name: activity_types
+    - name: activity_types[]
       in: query
       description: Filter results by activity types
       required: false
@@ -35,7 +35,7 @@ get:
         items:
           type: string
         example: [billing_metric.created, billing_metric.updated]
-    - name: activity_sources
+    - name: activity_sources[]
       in: query
       description: Filter results by activity sources
       required: false
@@ -49,7 +49,7 @@ get:
             - front
             - system
         example: [api, front]
-    - name: user_emails
+    - name: user_emails[]
       in: query
       description: Filter results by user emails
       required: false
@@ -61,7 +61,7 @@ get:
         example: [dinesh@piedpiper.test]
     - $ref: "../parameters/external_customer_id.yaml"
     - $ref: "../parameters/external_subscription_id.yaml"
-    - name: resource_ids
+    - name: resource_ids[]
       in: query
       description: Filter results by resources unique identifiers
       required: false
@@ -72,7 +72,7 @@ get:
           type: string
           format: uuid
         example: [5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba, 1a901a90-1a90-1a90-1a90-1a901a901a90]
-    - name: resource_types
+    - name: resource_types[]
       in: query
       description: Filter results by resource class types
       required: false

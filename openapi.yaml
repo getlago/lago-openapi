@@ -258,7 +258,7 @@ paths:
             type: string
             format: date
             example: '2022-08-09'
-        - name: activity_types
+        - name: activity_types[]
           in: query
           description: Filter results by activity types
           required: false
@@ -270,7 +270,7 @@ paths:
             example:
               - billing_metric.created
               - billing_metric.updated
-        - name: activity_sources
+        - name: activity_sources[]
           in: query
           description: Filter results by activity sources
           required: false
@@ -286,7 +286,7 @@ paths:
             example:
               - api
               - front
-        - name: user_emails
+        - name: user_emails[]
           in: query
           description: Filter results by user emails
           required: false
@@ -299,7 +299,7 @@ paths:
               - dinesh@piedpiper.test
         - $ref: '#/components/parameters/external_customer_id'
         - $ref: '#/components/parameters/external_subscription_id'
-        - name: resource_ids
+        - name: resource_ids[]
           in: query
           description: Filter results by resources unique identifiers
           required: false
@@ -312,7 +312,7 @@ paths:
             example:
               - 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
               - 1a901a90-1a90-1a90-1a90-1a901a901a90
-        - name: resource_types
+        - name: resource_types[]
           in: query
           description: Filter results by resource class types
           required: false
@@ -503,7 +503,7 @@ paths:
             type: string
             format: date
             example: '2022-08-09'
-        - name: http_methods
+        - name: http_methods[]
           in: query
           description: Filter results by HTTP methods
           required: false
@@ -519,7 +519,7 @@ paths:
             example:
               - post
               - put
-        - name: http_statuses
+        - name: http_statuses[]
           in: query
           description: Filter results by HTTP status or by generic request status
           required: false
@@ -539,7 +539,7 @@ paths:
               - failed
               - succeeded
               - 404
-        - name: api_version
+        - name: api_version[]
           in: query
           description: Filter results by API version
           required: false
@@ -1226,7 +1226,7 @@ paths:
           schema:
             type: boolean
             example: true
-        - name: billing_entity_codes
+        - name: billing_entity_codes[]
           in: query
           description: Filter credit notes by billing entity codes.
           required: false
@@ -2218,7 +2218,7 @@ paths:
           schema:
             type: boolean
             example: true
-        - name: billing_entity_codes
+        - name: billing_entity_codes[]
           in: query
           description: Filter invoices by billing entity codes. Possible values are the billing entity codes you have created.
           required: false

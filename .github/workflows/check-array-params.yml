@@ -1,0 +1,26 @@
+name: Check Array Parameters
+on:
+  pull_request:
+    paths:
+      - 'src/resources/*.yaml'
+      - '.github/workflows/check-array-params.yml'
+      - 'scripts/check_array_params.rb'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/resources/*.yaml'
+      - '.github/workflows/check-array-params.yml'
+      - 'scripts/check_array_params.rb'
+
+jobs:
+  check-array-params:
+    name: Check Array Parameters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check array parameters
+        run: ./scripts/check_array_params.rb src/resources
