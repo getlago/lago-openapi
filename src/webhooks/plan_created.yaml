@@ -1,0 +1,32 @@
+post:
+  operationId: planCreated
+  summary: A new plan has been created
+  description: A new plan has been created
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the new plan
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - plan
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - plan.created
+            object_type:
+              type: string
+              enum:
+                - plan
+            plan:
+              $ref: "../schemas/PlanObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully 
