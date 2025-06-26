@@ -136,7 +136,7 @@ get:
       schema:
         type: boolean
         example: true
-    - name: billing_entity_codes
+    - name: billing_entity_codes[]
       in: query
       description: Filter credit notes by billing entity codes.
       required: false

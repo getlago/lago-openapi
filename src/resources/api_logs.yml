@@ -25,7 +25,7 @@ get:
         type: string
         format: 'date'
         example: '2022-08-09'
-    - name: http_methods
+    - name: http_methods[]
       in: query
       description: Filter results by HTTP methods
       required: false
@@ -39,7 +39,7 @@ get:
              - put
              - delete
         example: [post, put]
-    - name: http_statuses
+    - name: http_statuses[]
       in: query
       description: Filter results by HTTP status or by generic request status
       required: false
@@ -56,7 +56,7 @@ get:
               minimum: 100
               maximum: 599
         example: [failed, succeeded, 404]
-    - name: api_version
+    - name: api_version[]
       in: query
       description: Filter results by API version
       required: false
