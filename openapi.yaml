@@ -4943,6 +4943,105 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  plan_created:
+    post:
+      operationId: planCreated
+      summary: A new plan has been created
+      description: A new plan has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new plan
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - plan
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - plan.created
+                object_type:
+                  type: string
+                  enum:
+                    - plan
+                plan:
+                  $ref: '#/components/schemas/PlanObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  plan_updated:
+    post:
+      operationId: planUpdated
+      summary: A plan has been updated
+      description: A plan has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the plan
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - plan
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - plan.updated
+                object_type:
+                  type: string
+                  enum:
+                    - plan
+                plan:
+                  $ref: '#/components/schemas/PlanObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  plan_deleted:
+    post:
+      operationId: planDeleted
+      summary: A plan has been deleted
+      description: A plan has been deleted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the plan
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - plan
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - plan.deleted
+                object_type:
+                  type: string
+                  enum:
+                    - plan
+                plan:
+                  $ref: '#/components/schemas/PlanObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   subscription_terminated:
     post:
       operationId: subscriptionTerminated

@@ -338,6 +338,12 @@ webhooks:
     $ref: "./webhooks/payment_request_payment_failure.yaml"
   payment_request_payment_status_updated:
     $ref: "./webhooks/payment_request_payment_status_updated.yaml"
+  plan_created:
+    $ref: "./webhooks/plan_created.yaml"
+  plan_updated:
+    $ref: "./webhooks/plan_updated.yaml"
+  plan_deleted:
+    $ref: "./webhooks/plan_deleted.yaml"
   subscription_terminated:
     $ref: "./webhooks/subscription_terminated.yaml"
   subscription_started:
