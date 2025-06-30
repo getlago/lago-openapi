@@ -9,14 +9,18 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/EventBatchInput.yaml'
+          $ref: "../schemas/EventBatchInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Event received
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/EventsCreated.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

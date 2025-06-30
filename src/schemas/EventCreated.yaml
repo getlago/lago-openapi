@@ -1,0 +1,13 @@
+type: object
+required:
+  - event
+properties:
+  event:
+    allOf:
+      - $ref: "./EventObject.yaml"
+    type: object
+    properties:
+      lago_customer_id:
+        type:
+          - "null"
+        description: The value will always be null in this response as the event processing is done asynchronously

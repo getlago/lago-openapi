@@ -1724,7 +1724,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Event'
+                $ref: '#/components/schemas/EventCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1793,6 +1793,10 @@ paths:
       responses:
         '200':
           description: Event received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -10576,13 +10580,20 @@ components:
       properties:
         event:
           $ref: '#/components/schemas/EventInputObject'
-    Event:
+    EventCreated:
       type: object
       required:
         - event
       properties:
         event:
-          $ref: '#/components/schemas/EventObject'
+          allOf:
+            - $ref: '#/components/schemas/EventObject'
+          type: object
+          properties:
+            lago_customer_id:
+              type:
+                - 'null'
+              description: The value will always be null in this response as the event processing is done asynchronously
     EventBatchInput:
       type: object
       required:
@@ -10592,6 +10603,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EventInputObject'
+    EventsCreated:
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/EventObject'
+                type: object
+                properties:
+                  lago_customer_id:
+                    type:
+                      - 'null'
+                    description: The value will always be null in this response as the event processing is done asynchronously
     EventEstimateFeesInput:
       type: object
       required:
@@ -10623,6 +10650,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FeeObject'
+    Event:
+      type: object
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/EventObject'
     FeesPaginated:
       allOf:
         - $ref: '#/components/schemas/Fees'
