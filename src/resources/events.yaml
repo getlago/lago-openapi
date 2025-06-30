@@ -17,7 +17,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Event.yaml"
+            $ref: "../schemas/EventCreated.yaml"
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":
@@ -27,7 +27,7 @@ post:
 
 get:
   tags:
-    - events 
+    - events
   summary: List all events
   description: This endpoint is used for retrieving all events.
   operationId: findAllEvents
