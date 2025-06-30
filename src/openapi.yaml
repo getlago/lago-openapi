@@ -20,8 +20,12 @@ servers:
 security:
   - bearerAuth: []
 tags:
+  - name: activity_logs
+    description: Everything about Activity logs
   - name: analytics
     description: Everything about Analytics
+  - name: api_logs
+    description: Everything about API logs
   - name: billable_metrics
     description: Everything about Billable metric collection
     externalDocs:
