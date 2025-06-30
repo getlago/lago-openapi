@@ -10588,12 +10588,12 @@ components:
         event:
           allOf:
             - $ref: '#/components/schemas/EventObject'
-          type: object
-          properties:
-            lago_customer_id:
-              type:
-                - 'null'
-              description: The value will always be null in this response as the event processing is done asynchronously
+            - type: object
+              properties:
+                lago_customer_id:
+                  type: 'null'
+                  description: The value will always be null in this response as the event processing is done asynchronously
+                  example: null
     EventBatchInput:
       type: object
       required:
@@ -10613,12 +10613,12 @@ components:
           items:
             allOf:
               - $ref: '#/components/schemas/EventObject'
-                type: object
+              - type: object
                 properties:
                   lago_customer_id:
-                    type:
-                      - 'null'
+                    type: 'null'
                     description: The value will always be null in this response as the event processing is done asynchronously
+                    example: null
     EventEstimateFeesInput:
       type: object
       required:
