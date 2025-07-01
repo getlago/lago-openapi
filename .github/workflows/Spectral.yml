@@ -3,18 +3,18 @@ name: Validate OpenAPI schema - Spectral
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+      - run: npm install
       - name: Validate OpenAPI definition
         uses: stoplightio/spectral-action@latest
         with:
-          file_glob: 'openapi.yaml'
+          file_glob: "openapi.yaml"
