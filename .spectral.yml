@@ -1,1 +1,21 @@
 extends: ["spectral:oas"]
+functions: [plural]
+rules:
+  array-params-brackets:
+    message: "Array parameter {{value}} should end with square brackets: {{value}}[]"
+    description: Array parameters should end with square brackets.
+    severity: error
+    given: "$.paths.*.*.parameters[?(@.in == 'query' && @.schema.type == 'array')]"
+    then:
+      - field: name
+        function: pattern
+        functionOptions:
+          match: "^[a-z][a-z_]+\\[\\]$"
+  array-params-plural:
+    message: "Array parameter {{value}} should be plural"
+    description: Array parameters should be plural.
+    severity: warn
+    given: "$.paths.*.*.parameters[?(@.in == 'query' && @.schema.type == 'array')]"
+    then:
+      - field: name
+        function: plural
