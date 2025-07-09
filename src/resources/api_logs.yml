@@ -56,16 +56,14 @@ get:
               minimum: 100
               maximum: 599
         example: [failed, succeeded, 404]
-    - name: api_version[]
+    - name: api_version
       in: query
       description: Filter results by API version
       required: false
       explode: true
       schema:
-        type: array
-        items:
-          type: string
-        example: [v1]
+        type: string
+        example: v1
     - name: request_paths
       in: query
       description: Filter results by the path of the request
