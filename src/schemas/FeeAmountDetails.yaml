@@ -1,5 +1,10 @@
 type: object
 properties:
+  plan_amount_cents:
+    type: integer
+    description: The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.
+    example: 10000
+
   # Graduated charge model
   graduated_ranges:
     type: array
