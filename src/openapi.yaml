@@ -233,6 +233,8 @@ paths:
     $ref: "./resources/payment_receipt.yaml"
   /payment_requests:
     $ref: "./resources/payment_requests.yaml"
+  /payment_requests/{lago_id}:
+    $ref: "./resources/payment_request.yaml"
   /payments:
     $ref: "./resources/payments.yaml"
   /payments/{lago_id}:
