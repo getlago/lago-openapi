@@ -1,0 +1,12 @@
+name: payment_status
+in: query
+description: Filter by payment status. Possible values are `pending`, `failed` or `succeeded`.
+required: false
+explode: true
+schema:
+  type: string
+  enum:
+    - pending
+    - failed
+    - succeeded
+  example: pending
