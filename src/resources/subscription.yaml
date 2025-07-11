@@ -82,6 +82,16 @@ delete:
       schema:
         type: string
         example: 'pending'
+    - name: on_termination_credit_note
+      in: query
+      description: Defines the behavior for handling subscription fees when a pay-in-advance subscription is terminated before the end of its billing period. This field is only applicable to pay-in-advance plans and determines whether a credit note should be generated for unused subscription time.
+      required: false
+      schema:
+        type: string
+        enum:
+          - credit
+          - omit
+        example: "credit"
   responses:
     '200':
       description: Subscription terminated
