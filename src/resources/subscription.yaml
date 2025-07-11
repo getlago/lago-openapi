@@ -82,6 +82,23 @@ delete:
       schema:
         type: string
         example: 'pending'
+    - name: on_termination_credit_note
+      in: query
+      description: |
+        When a pay-in-advance subscription is terminated before the end of its billing period, we generate a credit note for the unused subscription time by default.
+        This field allows you to control the behavior of the credit note generation:
+
+        - `credit`: A credit note is generated for the unused subscription time.
+        - `skip`: No credit note is generated for the unused subscription time.
+
+        _Note: This field is only applicable to pay-in-advance plans and is ignored for pay-in-arrears plans._
+      required: false
+      schema:
+        type: string
+        enum:
+          - credit
+          - skip
+        example: "credit"
   responses:
     '200':
       description: Subscription terminated

@@ -137,3 +137,19 @@ properties:
     format: "date-time"
     example: "2022-09-08T00:00:00Z"
     description: The date and time when the current billing period ends, represented in ISO 8601 date format.
+  on_termination_credit_note:
+    type:
+      - string
+      - "null"
+    description: |
+      When a pay-in-advance subscription is terminated before the end of its billing period, we generate a credit note for the unused subscription time by default.
+      This field allows you to control the behavior of the credit note generation:
+
+      - `credit`: A credit note is generated for the unused subscription time.
+      - `skip`: No credit note is generated for the unused subscription time.
+
+      _Note: This field is only applicable to pay-in-advance plans and will be `null` for pay-in-arrears plans._
+    example: "credit"
+    enum:
+      - credit
+      - skip
