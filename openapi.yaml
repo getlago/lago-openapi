@@ -2620,6 +2620,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/external_customer_id'
+        - $ref: '#/components/parameters/payment_status'
       responses:
         '200':
           description: PaymentRequests
@@ -5406,6 +5407,19 @@ components:
         type: string
         format: uuid
         example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    payment_status:
+      name: payment_status
+      in: query
+      description: Filter by payment status. Possible values are `pending`, `failed` or `succeeded`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - pending
+          - failed
+          - succeeded
+        example: pending
     webhook_signature:
       name: X-Lago-Signature
       in: header
