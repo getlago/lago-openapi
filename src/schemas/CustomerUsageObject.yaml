@@ -4,6 +4,7 @@ required:
   - to_datetime
   - issuing_date
   - amount_cents
+  - projected_amount_cents
   - taxes_amount_cents
   - total_amount_cents
   - charges_usage
@@ -38,6 +39,10 @@ properties:
     type: integer
     description: The amount in cents, tax excluded.
     example: 123
+  projected_amount_cents:
+    type: integer
+    description: The projected amount in cents, tax excluded.
+    example: 256
   taxes_amount_cents:
     type: integer
     description: The tax amount in cents.

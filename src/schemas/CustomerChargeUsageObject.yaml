@@ -1,8 +1,10 @@
 type: object
 required:
   - units
+  - projected_units
   - events_count
   - amount_cents
+  - projected_amount_cents
   - amount_currency
   - charge
   - billable_metric
@@ -13,6 +15,11 @@ properties:
     pattern: "^[0-9]+.?[0-9]*$"
     example: "1.0"
     description: The number of units consumed by the customer for a specific charge item.
+  projected_units:
+    type: string
+    pattern: "^[0-9]+.?[0-9]*$"
+    example: "2.0"
+    description: The projected number of units that can be consumed by the customer for a specific charge item.
   events_count:
     type: integer
     example: 10
@@ -21,6 +28,10 @@ properties:
     type: integer
     example: 123
     description: The amount in cents, tax excluded, consumed by the customer for a specific charge item.
+  projected_amount_cents:
+    type: integer
+    example: 256
+    description: The projected amount in cents, tax excluded, that can be consumed by the customer for a specific charge item.
   amount_currency:
     $ref: "./Currency.yaml"
     description: The currency of a usage item consumed by the customer.
