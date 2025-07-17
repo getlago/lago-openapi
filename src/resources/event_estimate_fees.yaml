@@ -9,20 +9,22 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/EventEstimateFeesInput.yaml'
+          $ref: "../schemas/EventEstimateFeesInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Fees estimate
       content:
         application/json:
           schema:
-            $ref: '../schemas/Fees.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/Fees.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

@@ -1732,6 +1732,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -1779,6 +1781,10 @@ paths:
                 $ref: '#/components/schemas/EventsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /events/batch:
     post:
       tags:
@@ -1804,6 +1810,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /events/estimate_fees:
@@ -1831,6 +1839,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -1859,6 +1869,8 @@ paths:
                 $ref: '#/components/schemas/Event'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /fees:
@@ -10500,7 +10512,9 @@ components:
           description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
           properties:
             operation_type:
-              type: string
+              type:
+                - string
+                - 'null'
               description: The `operation_type` field is only necessary when adding or removing a specific unit when the targeted billable metric adopts a `unique_count_agg` aggregation method. In other cases, the `operation_type` field is not required. The valid values for the `operation_type` field are `add` or `remove`, which indicate whether the unit is being added or removed from the unique count aggregation, respectively.
               enum:
                 - add
@@ -10566,9 +10580,9 @@ components:
           example: storage
           description: The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.
         timestamp:
-          anyOf:
-            - type: integer
-            - type: string
+          type:
+            - integer
+            - string
           example: '1651240791.123'
           description: |
             This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
@@ -10581,7 +10595,9 @@ components:
           example: '1234.56'
           description: The precise total amount in cents with precision used by the `dynamic` pricing model to compute the usage amount.
         properties:
-          type: object
+          type:
+            - object
+            - 'null'
           description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
           additionalProperties:
             oneOf:
@@ -14922,8 +14938,8 @@ components:
           example: 422
         error:
           type: string
-          description: HTTP error description. It will always be "Unprocessable Entity"
-          example: Unprocessable Entity
+          description: HTTP error description. It will always be "Unprocessable entity"
+          example: Unprocessable entity
         message:
           oneOf:
             - type: string
@@ -14937,6 +14953,7 @@ components:
         - invalid_code
         - missing_aggregation_property
         - invalid_filter_values
+        - missing_group_key
       properties:
         invalid_code:
           type: array
@@ -14959,6 +14976,11 @@ components:
           description: List of event transaction_id with invalid filter values
           example:
             - transaction_1234567890
+        missing_group_key:
+          type: array
+          items:
+            type: string
+          deprecated: true
     FeeTaxProviderErrorObject:
       type: object
       required:
@@ -15215,15 +15237,6 @@ components:
             - type: string
             - type: object
               additionalProperties: true
-    CreditNotes:
-      type: object
-      required:
-        - credit_notes
-      properties:
-        credit_notes:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditNoteObject'
     CustomerPaymentProvidernErrorObject:
       $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
   responses:
