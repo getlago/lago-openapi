@@ -645,6 +645,8 @@ paths:
                 $ref: '#/components/schemas/GrossRevenues'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /analytics/invoice_collection:
     get:
       tags:
@@ -732,6 +734,8 @@ paths:
                 $ref: '#/components/schemas/Mrrs'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /analytics/overdue_balance:
     get:
       tags:
@@ -7171,6 +7175,8 @@ components:
       type: object
       required:
         - month
+        - amount_cents
+        - currency
       properties:
         month:
           type: string

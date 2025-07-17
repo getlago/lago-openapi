@@ -18,15 +18,17 @@ get:
       explode: true
       schema:
         allOf:
-          - $ref: '../schemas/Currency.yaml'
-          - example: 'USD'
-    - $ref: '../parameters/months.yaml'
+          - $ref: "../schemas/Currency.yaml"
+          - example: "USD"
+    - $ref: "../parameters/months.yaml"
   responses:
-    '200':
+    "200":
       description: MRR
       content:
         application/json:
           schema:
-            $ref: '../schemas/Mrrs.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
+            $ref: "../schemas/Mrrs.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
