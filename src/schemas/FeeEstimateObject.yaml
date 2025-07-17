@@ -1,0 +1,198 @@
+type: object
+required:
+  - item
+  - amount_cents
+  - amount_currency
+  - taxes_amount_cents
+  - taxes_rate
+  - total_amount_cents
+  - total_amount_currency
+  - pay_in_advance
+  - invoiceable
+  - units
+  - precise_unit_amount
+  - payment_status
+properties:
+  lago_id:
+    type: "null"
+  lago_charge_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier assigned to the charge that the fee belongs to
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_charge_filter_id:
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    description: Unique identifier assigned to the charge filter that the fee belongs to
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_invoice_id:
+    type: "null"
+  lago_true_up_fee_id:
+    type: "null"
+  lago_true_up_parent_fee_id:
+    type: "null"
+  lago_subscription_id:
+    type: string
+    format: uuid
+    description: Unique identifier assigned to the subscription, created by Lago. This field is specifically displayed when the fee type is charge or subscription.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_customer_id:
+    type: string
+    format: uuid
+    description: Unique identifier assigned to the customer, created by Lago. This field is specifically displayed when the fee type is charge or subscription.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  external_customer_id:
+    type: string
+    description: Unique identifier assigned to the customer in your application. This field is specifically displayed when the fee type is charge or subscription.
+    example: "external_id"
+  external_subscription_id:
+    type: string
+    description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge or subscription.
+    example: "external_id"
+  amount_cents:
+    type: integer
+    description: The cost of this specific fee, excluding any applicable taxes.
+    example: 100
+  precise_amount:
+    type: number
+    description: The cost of this specific fee, excluding any applicable taxes, with precision.
+    example: 1.0001
+  precise_total_amount:
+    type: number
+    description: The cost of this specific fee, including any applicable taxes, with precision.
+    example: 1.0212
+  amount_currency:
+    $ref: "./Currency.yaml"
+    description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
+    example: "EUR"
+  taxes_amount_cents:
+    type: integer
+    description: The cost of the tax associated with this specific fee.
+    example: 0
+  taxes_precise_amount:
+    type: number
+    description: The cost of the tax associated with this specific fee, with precision.
+    example: 0
+  taxes_rate:
+    type: number
+    description: The tax rate associated with this specific fee.
+    example: 20.0
+  units:
+    type: string
+    description: The number of units used to charge the customer. This field indicates the quantity or count of units consumed or utilized in the context of the charge. It helps in determining the basis for calculating the fee or cost associated with the usage of the service or product provided to the customer.
+    example: "0.32"
+  description:
+    type: "null"
+  precise_unit_amount:
+    type: number
+    description: The unit amount of the fee per unit, with precision.
+    example: 312.5
+  precise_coupons_amount_cents:
+    type: string
+    description: The coupon amount applied to the estimated instant fee. It will always returns 0
+    example: "0.0"
+  total_amount_cents:
+    type: integer
+    description: The cost of this specific fee, including any applicable taxes.
+    example: 120
+  total_amount_currency:
+    $ref: "./Currency.yaml"
+    description: The currency of this specific fee, including any applicable taxes.
+    example: "EUR"
+  events_count:
+    type: integer
+    description: The number of events that have been sent and used to charge the customer. This field indicates the count or quantity of events that have been processed and considered in the charging process.
+    example: 1
+  pay_in_advance:
+    type: boolean
+    description: Flag that indicates whether the fee was paid in advance. It serves as a boolean value, where `true` represents that the fee was paid in advance (straightaway), and `false` indicates that the fee was not paid in arrears (at the end of the period).
+    example: true
+  invoiceable:
+    type: boolean
+    description: Flag that indicates whether the fee was included on the invoice. It serves as a boolean value, where `true` represents that the fee was included on the invoice, and `false` indicates that the fee was not included on the invoice.
+    example: true
+  payment_status:
+    type: string
+    enum:
+      - pending
+    description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The value will always `pending`.
+    example: "pending"
+  created_at:
+    type: "null"
+  succeeded_at:
+    type: "null"
+  failed_at:
+    type: "null"
+  refunded_at:
+    type: "null"
+  event_transaction_id:
+    type: string
+    description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge` and the payment for the fee is made in advance (`pay_in_advance` is set to `true`).
+    example: "transaction_1234567890"
+  amount_details:
+    type: "null"
+  item:
+    type: object
+    description: Item attached to the fee
+    required:
+      - type
+      - code
+      - name
+      - lago_item_id
+      - item_type
+    properties:
+      type:
+        type: string
+        enum:
+          - charge
+        description: The fee type. The value will be `charge`.
+        example: charge
+      code:
+        type: string
+        description: The code of the fee item. It will be the code of the `billable_metric`.
+        example: "startup"
+      name:
+        type: string
+        description: The name of the fee item. It will be the name of the `billable_metric`.
+        example: "Startup"
+      description:
+        type: string
+        description: The description of the fee item. It will be the name of the `billable_metric`.
+        example: "Startup description"
+      invoice_display_name:
+        type: string
+        description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+        example: "Setup Fee (SF1)"
+      filter_invoice_display_name:
+        type:
+          - string
+          - "null"
+        description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the actual charge filter values will be used as the default display name.
+        example: "AWS eu-east-1"
+      filters:
+        type:
+          - object
+          - "null"
+        description: Key value list of event properties
+        additionalProperties:
+          type: array
+          items:
+            type: string
+      lago_item_id:
+        type: string
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+        description: Unique identifier of the fee item, created by Lago. It will be the identifier of the `billable_metric`.
+        format: uuid
+      item_type:
+        type: string
+        enum:
+          - BillableMetric
+        description: The type of the fee item. Values is `BillableMetric`.
+        example: BillableMetric
+      grouped_by:
+        type: object
+        description: Key value list of event properties aggregated by the charge model
+        additionalProperties:
+          type: string

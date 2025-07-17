@@ -1,0 +1,8 @@
+type: object
+required:
+  - fees
+properties:
+  fees:
+    type: array
+    items:
+      $ref: "./FeeEstimateObject.yaml"

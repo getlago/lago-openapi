@@ -1,0 +1,30 @@
+post:
+  tags:
+    - events
+  summary: Estimate instant fees for a pay in advance charge
+  description: Estimate the fees that would be created after reception of an event for a billable metric attached to one or multiple pay in advance standard or percentage charges
+  operationId: eventEstimateInstantFees
+  requestBody:
+    description: Event estimate instant payload
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/EventEstimateInstantFeesInput.yaml"
+    required: true
+  responses:
+    "200":
+      description: Fees estimate
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/FeesEstimate.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
