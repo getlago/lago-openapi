@@ -197,6 +197,10 @@ paths:
     $ref: "./resources/events_batch.yaml"
   /events/estimate_fees:
     $ref: "./resources/event_estimate_fees.yaml"
+  /events/estimate_instant_fees:
+    $ref: "./resources/event_estimate_instant_fees.yaml"
+  /events/batch_estimate_instant_fees:
+    $ref: "./resources/events_batch_estimate_instant_fees.yaml"
   /events/{transaction_id}:
     $ref: "./resources/event.yaml"
   /fees:
