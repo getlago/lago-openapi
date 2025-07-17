@@ -12,8 +12,8 @@ get:
       explode: true
       schema:
         allOf:
-          - $ref: '../schemas/Currency.yaml'
-          - example: 'USD'
+          - $ref: "../schemas/Currency.yaml"
+          - example: "USD"
     - name: external_customer_id
       in: query
       description: The customer external unique identifier (provided by your own application). Use it to filter revenue analytics at the customer level.
@@ -21,14 +21,16 @@ get:
       explode: true
       schema:
         type: string
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
-    - $ref: '../parameters/months.yaml'
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+    - $ref: "../parameters/months.yaml"
   responses:
-    '200':
+    "200":
       description: Overdue balance
       content:
         application/json:
           schema:
-            $ref: '../schemas/OverdueBalances.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
+            $ref: "../schemas/OverdueBalances.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
