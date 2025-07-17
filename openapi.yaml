@@ -394,6 +394,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -414,6 +416,8 @@ paths:
                 $ref: '#/components/schemas/AddOnsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /add_ons/{code}:
     parameters:
       - name: code
@@ -447,6 +451,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -466,6 +472,8 @@ paths:
                 $ref: '#/components/schemas/AddOn'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     delete:
@@ -483,6 +491,8 @@ paths:
                 $ref: '#/components/schemas/AddOn'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /api_logs:
@@ -6843,9 +6853,11 @@ components:
       required:
         - lago_id
         - name
+        - invoice_display_name
         - code
         - amount_cents
         - amount_currency
+        - description
         - created_at
       properties:
         lago_id:
@@ -6858,7 +6870,9 @@ components:
           description: The name of the add-on.
           example: Setup Fee
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
           example: Setup Fee (SF1)
         code:
@@ -6909,7 +6923,9 @@ components:
           description: The name of the add-on.
           example: Setup Fee
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
           example: Setup Fee (SF1)
         code:

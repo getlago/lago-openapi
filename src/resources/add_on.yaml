@@ -5,7 +5,7 @@ parameters:
     required: true
     schema:
       type: string
-      example: 'setup_fee'
+      example: "setup_fee"
 put:
   tags:
     - add_ons
@@ -17,23 +17,25 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/AddOnUpdateInput.yaml'
+          $ref: "../schemas/AddOnUpdateInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Add-on updated
       content:
         application/json:
           schema:
-            $ref: '../schemas/AddOn.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/AddOn.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
 get:
   tags:
     - add_ons
@@ -41,16 +43,18 @@ get:
   description: This endpoint is used to retrieve a specific add-on.
   operationId: findAddOn
   responses:
-    '200':
+    "200":
       description: Add-on
       content:
         application/json:
           schema:
-            $ref: '../schemas/AddOn.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
+            $ref: "../schemas/AddOn.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
 delete:
   tags:
     - add_ons
@@ -58,13 +62,15 @@ delete:
   description: This endpoint is used to delete an existing add-on.
   operationId: destroyAddOn
   responses:
-    '200':
+    "200":
       description: Add-on deleted
       content:
         application/json:
           schema:
-            $ref: '../schemas/AddOn.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
+            $ref: "../schemas/AddOn.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
