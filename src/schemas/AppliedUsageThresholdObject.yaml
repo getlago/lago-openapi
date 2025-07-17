@@ -12,5 +12,6 @@ properties:
     type: string
     format: "date-time"
     description: The date and time when the lifetime usage was computed. It is expressed in UTC format according to the ISO 8601 datetime standard.
+    example: "2025-03-31T12:31:44Z"
   usage_threshold:
     $ref: "./UsageThresholdObject.yaml"

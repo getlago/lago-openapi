@@ -11229,6 +11229,7 @@ components:
       required:
         - lago_subscription_id
         - external_subscription_id
+        - lago_plan_id
         - subscription_from_datetime
         - subscription_to_datetime
         - charges_from_datetime
@@ -11319,6 +11320,7 @@ components:
       type: object
       required:
         - lago_id
+        - threshold_display_name
         - amount_cents
         - recurring
         - created_at
@@ -11368,6 +11370,7 @@ components:
           type: string
           format: date-time
           description: The date and time when the lifetime usage was computed. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2025-03-31T12:31:44Z'
         usage_threshold:
           $ref: '#/components/schemas/UsageThresholdObject'
     InvoiceObject:
@@ -11391,9 +11394,7 @@ components:
               items:
                 $ref: '#/components/schemas/InvoiceAppliedTaxObject'
             applied_usage_thresholds:
-              type:
-                - array
-                - 'null'
+              type: array
               items:
                 $ref: '#/components/schemas/AppliedUsageThresholdObject'
     InvoicesPaginated:
@@ -12755,9 +12756,17 @@ components:
       required:
         - lago_id
         - lago_billable_metric_id
+        - invoice_display_name
         - billable_metric_code
         - created_at
         - charge_model
+        - invoiceable
+        - regroup_paid_fees
+        - pay_in_advance
+        - prorated
+        - min_amount_cents
+        - properties
+        - filters
       properties:
         lago_id:
           type: string
@@ -12774,7 +12783,9 @@ components:
           description: Unique code identifying a billable metric.
           example: requests
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
           example: Setup
         created_at:
@@ -12941,6 +12952,7 @@ components:
               invoiceable: true
               invoice_display_name: Setup
               pay_in_advance: false
+              regroup_paid_fees: null
               prorated: false
               min_amount_cents: 0
               properties:
@@ -12962,6 +12974,7 @@ components:
               invoiceable: true
               invoice_display_name: Setup
               pay_in_advance: true
+              regroup_paid_fees: null
               prorated: false
               min_amount_cents: 0
               properties: {}
@@ -12992,6 +13005,7 @@ components:
               invoiceable: true
               invoice_display_name: Setup
               pay_in_advance: false
+              regroup_paid_fees: null
               prorated: false
               min_amount_cents: 0
               properties:
@@ -13070,6 +13084,9 @@ components:
     ChargeFilterInput:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
+      required:
+        - properties
+        - values
       properties:
         invoice_display_name:
           type:
