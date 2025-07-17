@@ -22,6 +22,8 @@ post:
       $ref: "../responses/BadRequest.yaml"
     "401":
       $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
     "422":
       $ref: "../responses/UnprocessableEntity.yaml"
 
@@ -70,3 +72,7 @@ get:
             $ref: "../schemas/EventsPaginated.yaml"
     "401":
       $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
