@@ -10,19 +10,21 @@ post:
       required: true
       schema:
         type: string
-        format: 'uuid'
-        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        format: "uuid"
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   operationId: walletTransactionPaymentUrl
   responses:
-    '200':
+    "200":
       description: Payment URL has been generated
       content:
         application/json:
           schema:
-            $ref: '../schemas/WalletTransactionPaymentUrl.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/WalletTransactionPaymentUrl.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

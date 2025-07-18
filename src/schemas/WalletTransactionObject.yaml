@@ -3,6 +3,7 @@ required:
   - lago_id
   - lago_wallet_id
   - status
+  - source
   - transaction_status
   - transaction_type
   - credit_amount
@@ -11,14 +12,14 @@ required:
 properties:
   lago_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction's record within the Lago system.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_wallet_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   status:
     type: string
     enum:
@@ -33,7 +34,7 @@ properties:
       - manual
       - interval
       - threshold
-    description: The source field represents the origin or trigger of the wallet transaction. Possible values are `manual`, `interval`. `threshold`
+    description: The source field represents the origin or trigger of the wallet transaction. Possible values are `manual`, `interval`, `threshold`
     example: manual
   transaction_status:
     type: string
@@ -53,14 +54,14 @@ properties:
     example: inbound
   amount:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
+    pattern: "^[0-9]+.?[0-9]*$"
     description: The amount of credits based on the rate and the currency.
-    example: '10.0'
+    example: "10.0"
   credit_amount:
     type: string
-    pattern: '^[0-9]+.?[0-9]*$'
+    pattern: "^[0-9]+.?[0-9]*$"
     description: The number of credits used in the wallet transaction.
-    example: '100.0'
+    example: "100.0"
   invoice_requires_successful_payment:
     type: boolean
     description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
@@ -83,17 +84,21 @@ properties:
       - key: "another key"
         value: "another value"
   settled_at:
-    type: string
-    format: 'date-time'
+    type:
+      - string
+      - "null"
+    format: "date-time"
     description: The date when wallet transaction is settled, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
   failed_at:
-    type: string
-    format: 'date-time'
+    type:
+      - string
+      - "null"
+    format: "date-time"
     description: The date when the wallet transaction failed, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"
   created_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The date of the wallet transaction creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-    example: '2022-04-29T08:59:51Z'
+    example: "2022-04-29T08:59:51Z"

@@ -11,10 +11,10 @@ get:
       required: true
       schema:
         type: string
-        format: 'uuid'
-        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
-    - $ref: '../parameters/page.yaml'
-    - $ref: '../parameters/per_page.yaml'
+        format: "uuid"
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
     - name: status
       in: query
       description: The status of the wallet transaction. Possible values are `pending` or `settled`.
@@ -22,7 +22,7 @@ get:
       explode: true
       schema:
         type: string
-        example: 'pending'
+        example: "pending"
     - name: transaction_status
       in: query
       description: The transaction status of the wallet transaction. Possible values are `purchased` (with pending or settled status), `granted` (without invoice_id), `voided` or `invoiced`.
@@ -30,7 +30,7 @@ get:
       explode: true
       schema:
         type: string
-        example: 'purchased'
+        example: "purchased"
     - name: transaction_type
       in: query
       description: The transaction type of the wallet transaction. Possible values are `inbound` (increasing the wallet balance) or `outbound` (decreasing the wallet balance).
@@ -38,15 +38,17 @@ get:
       explode: true
       schema:
         type: string
-        example: 'inbound'
+        example: "inbound"
   responses:
-    '200':
+    "200":
       description: Wallet transactions
       content:
         application/json:
           schema:
-            $ref: '../schemas/WalletTransactionsPaginated.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
+            $ref: "../schemas/WalletTransactionsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

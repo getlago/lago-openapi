@@ -12,6 +12,7 @@ required:
   - consumed_credits
   - created_at
   - ongoing_balance_cents
+  - invoice_requires_successful_payment
   - ongoing_usage_balance_cents
   - credits_ongoing_balance
   - credits_ongoing_usage_balance
@@ -42,7 +43,9 @@ properties:
     description: The currency of the wallet.
     example: "USD"
   name:
-    type: string
+    type:
+      - string
+      - "null"
     description: The name of the wallet.
     example: "Prepaid"
   rate_amount:
@@ -102,15 +105,11 @@ properties:
     description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
     example: false
   applies_to:
-    type:
-      - object
-      - "null"
+    type: object
     description: Set wallet limitations to fee types.
     properties:
       fee_types:
-        type:
-          - array
-          - "null"
+        type: array
         items:
           type: string
           enum:
