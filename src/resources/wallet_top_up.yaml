@@ -9,18 +9,20 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/WalletTransactionCreateInput.yaml'
+          $ref: "../schemas/WalletTransactionCreateInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Wallet transaction created
       content:
         application/json:
           schema:
-            $ref: '../schemas/WalletTransactions.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/WalletTransactions.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

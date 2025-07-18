@@ -3465,6 +3465,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -3493,6 +3495,8 @@ paths:
                 $ref: '#/components/schemas/WalletsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /wallets/{lago_id}:
     parameters:
       - name: lago_id
@@ -3527,6 +3531,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -3546,6 +3552,8 @@ paths:
                 $ref: '#/components/schemas/Wallet'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     delete:
@@ -3563,10 +3571,12 @@ paths:
                 $ref: '#/components/schemas/Wallet'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-        '405':
-          $ref: '#/components/responses/NotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /wallet_transactions:
     post:
       tags:
@@ -3592,6 +3602,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /wallet_transactions/{lago_id}:
@@ -3619,6 +3631,8 @@ paths:
                 $ref: '#/components/schemas/WalletTransactionObject'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /wallet_transactions/{lago_id}/payment_url:
@@ -3646,6 +3660,8 @@ paths:
                 $ref: '#/components/schemas/WalletTransactionPaymentUrl'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -3701,6 +3717,8 @@ paths:
                 $ref: '#/components/schemas/WalletTransactionsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /webhooks/public_key:
@@ -14255,12 +14273,16 @@ components:
           description: The number of free granted credits. Required only if there is no paid credits.
           example: '10.0'
         started_at:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
           example: '2022-08-08T00:00:00Z'
           description: The effective start date for recurring top-ups. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
         target_ongoing_balance:
-          type: string
+          type:
+            - string
+            - 'null'
           pattern: ^[0-9]+.?[0-9]*$
           description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
           example: '200.0'
@@ -14270,7 +14292,9 @@ components:
           example: '2022-04-29T08:59:51Z'
           description: The date of the metadata object creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the metadata object was created
         expiration_at:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
           description: The expiration date and time for this specific recurring transaction rule. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
           example: '2023-09-30T23:59:59Z'
@@ -14340,7 +14364,9 @@ components:
           description: The currency of the wallet.
           example: USD
         name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: The name of the wallet.
           example: Prepaid
         rate_amount:
@@ -14400,15 +14426,11 @@ components:
           description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
           example: false
         applies_to:
-          type:
-            - object
-            - 'null'
+          type: object
           description: Set wallet limitations to fee types.
           properties:
             fee_types:
-              type:
-                - array
-                - 'null'
+              type: array
               items:
                 type: string
                 enum:
@@ -14464,7 +14486,9 @@ components:
             - external_customer_id
           properties:
             name:
-              type: string
+              type:
+                - string
+                - 'null'
               description: The name of the wallet.
               example: Prepaid
             rate_amount:
@@ -14506,7 +14530,9 @@ components:
               description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
               example: false
             transaction_metadata:
-              type: array
+              type:
+                - array
+                - 'null'
               description: This optional field allows you to store a list of key-value pairs that provide additional information or custom attributes. These key-value pairs will be included in the metadata of wallet transactions generated during the wallet creation process.
               items:
                 type: object
@@ -14542,7 +14568,9 @@ components:
                   example:
                     - charge
             recurring_transaction_rules:
-              type: array
+              type:
+                - array
+                - 'null'
               description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
               items:
                 type: object
@@ -14588,7 +14616,9 @@ components:
                     description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly` or `yearly`. Required only when trigger is `interval`.'
                     example: monthly
                   started_at:
-                    type: string
+                    type:
+                      - string
+                      - 'null'
                     format: date-time
                     example: '2022-08-08T00:00:00Z'
                     description: The effective start date for recurring top-ups. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
@@ -14667,8 +14697,6 @@ components:
               description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
               required:
                 - trigger
-                - paid_credits
-                - granted_credits
               items:
                 type: object
                 description: Object that represents rule for wallet recurring transactions.
@@ -14707,17 +14735,23 @@ components:
                     description: The threshold for recurring top-ups is the value at which an automatic top-up is triggered. For example, if this threshold is set at 10 credits, an automatic top-up will occur whenever the wallet balance falls to or below 10 credits. Required only when trigger is set to `threshold`.
                     example: '20.0'
                   paid_credits:
-                    type: string
+                    type:
+                      - string
+                      - 'null'
                     pattern: ^[0-9]+.?[0-9]*$
                     description: The number of paid credits. Required only if there is no granted credits.
                     example: '20.0'
                   granted_credits:
-                    type: string
+                    type:
+                      - string
+                      - 'null'
                     pattern: ^[0-9]+.?[0-9]*$
                     description: The number of free granted credits. Required only if there is no paid credits.
                     example: '10.0'
                   started_at:
-                    type: string
+                    type:
+                      - string
+                      - 'null'
                     format: date-time
                     example: '2022-08-08T00:00:00Z'
                     description: The effective start date for recurring top-ups. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
@@ -14789,17 +14823,23 @@ components:
               description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
             paid_credits:
-              type: string
+              type:
+                - string
+                - 'null'
               pattern: ^[0-9]+.?[0-9]*$
               description: The number of paid credits.
               example: '20.0'
             granted_credits:
-              type: string
+              type:
+                - string
+                - 'null'
               pattern: ^[0-9]+.?[0-9]*$
               description: The number of free granted credits.
               example: '10.0'
             voided_credits:
-              type: string
+              type:
+                - string
+                - 'null'
               pattern: ^[0-9]+.?[0-9]*$
               description: The number of voided credits.
               example: '5.0'
@@ -14808,7 +14848,9 @@ components:
               description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
               example: false
             metadata:
-              type: array
+              type:
+                - array
+                - 'null'
               description: This optional field allows you to store a list of key-value pairs that hold additional information or custom attributes related to the data.
               items:
                 type: object
@@ -14830,6 +14872,7 @@ components:
         - lago_id
         - lago_wallet_id
         - status
+        - source
         - transaction_status
         - transaction_type
         - credit_amount
@@ -14860,7 +14903,7 @@ components:
             - manual
             - interval
             - threshold
-          description: The source field represents the origin or trigger of the wallet transaction. Possible values are `manual`, `interval`. `threshold`
+          description: The source field represents the origin or trigger of the wallet transaction. Possible values are `manual`, `interval`, `threshold`
           example: manual
         transaction_status:
           type: string
@@ -14910,12 +14953,16 @@ components:
             - key: another key
               value: another value
         settled_at:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
           description: The date when wallet transaction is settled, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
           example: '2022-04-29T08:59:51Z'
         failed_at:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
           description: The date when the wallet transaction failed, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
           example: '2022-04-29T08:59:51Z'
@@ -14935,6 +14982,11 @@ components:
             $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactionPaymentUrl:
       type: object
+      required:
+        - lago_wallet_transaction_id
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
       description: .
       properties:
         wallet_transaction_payment_details:

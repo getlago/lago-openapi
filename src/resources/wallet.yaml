@@ -5,8 +5,8 @@ parameters:
     required: true
     schema:
       type: string
-      format: 'uuid'
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+      format: "uuid"
+      example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
 put:
   tags:
     - wallets
@@ -18,23 +18,25 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/WalletUpdateInput.yaml'
+          $ref: "../schemas/WalletUpdateInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Wallet updated
       content:
         application/json:
           schema:
-            $ref: '../schemas/Wallet.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/Wallet.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
 get:
   tags:
     - wallets
@@ -42,16 +44,18 @@ get:
   description: This endpoint is used to retrieve an existing wallet with prepaid credits.
   operationId: findWallet
   responses:
-    '200':
+    "200":
       description: Wallet
       content:
         application/json:
           schema:
-            $ref: '../schemas/Wallet.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
+            $ref: "../schemas/Wallet.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
 delete:
   tags:
     - wallets
@@ -59,15 +63,17 @@ delete:
   description: This endpoint is used to terminate an existing wallet with prepaid credits.
   operationId: destroyWallet
   responses:
-    '200':
+    "200":
       description: Wallet terminated
       content:
         application/json:
           schema:
-            $ref: '../schemas/Wallet.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
-    '405':
-      $ref: '../responses/NotAllowed.yaml'
+            $ref: "../schemas/Wallet.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
