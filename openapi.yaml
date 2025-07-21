@@ -8821,6 +8821,30 @@ components:
         base_amount_cents:
           type: integer
           example: 100
+    CreditNoteErrorDetailsObject:
+      type: object
+      required:
+        - lago_id
+        - error_code
+        - details
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: The credit note error details unique identifier, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        error_code:
+          type: string
+          enum:
+            - not_provided
+            - tax_error
+            - tax_voiding_error
+            - invoice_generation_error
+          description: The type of the error.
+          example: tax_error
+        details:
+          type: object
+          description: The details of the error.
     CreditNoteObject:
       type: object
       required:
@@ -8991,6 +9015,12 @@ components:
           type: boolean
           example: false
           description: Indicates if the credit note belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.
+        error_details:
+          type:
+            - array
+            - 'null'
+          items:
+            $ref: '#/components/schemas/CreditNoteErrorDetailsObject'
     CreditNotesPaginated:
       type: object
       required:
@@ -9155,10 +9185,12 @@ components:
             - invoice_number
             - currency
             - taxes_amount_cents
+            - precise_taxes_amount_cents
             - sub_total_excluding_taxes_amount_cents
             - max_creditable_amount_cents
             - max_refundable_amount_cents
             - coupons_adjustment_amount_cents
+            - precise_coupons_adjustment_amount_cents
             - taxes_rate
             - items
           properties:
@@ -9179,6 +9211,10 @@ components:
               type: integer
               description: The tax amount of the credit note, expressed in cents.
               example: 20
+            precise_taxes_amount_cents:
+              type: number
+              description: The precise tax amount of the credit note, expressed in cents with decimal precision.
+              example: 20.1
             taxes_rate:
               type: number
               description: The tax rate associated with this specific credit note.
@@ -9199,6 +9235,10 @@ components:
               type: integer
               description: The pro-rated amount of the coupons applied to the source invoice.
               example: 20
+            precise_coupons_adjustment_amount_cents:
+              type: number
+              description: The precise pro-rated amount with decimal precision of the coupons applied to the source invoice.
+              example: 20.1
             items:
               type: array
               items:
