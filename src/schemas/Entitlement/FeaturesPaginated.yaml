@@ -1,0 +1,11 @@
+type: object
+required:
+  - features
+  - meta
+properties:
+  features:
+    type: array
+    items:
+      $ref: "./FeatureObject.yaml"
+  meta:
+    $ref: "../PaginationMeta.yaml" 

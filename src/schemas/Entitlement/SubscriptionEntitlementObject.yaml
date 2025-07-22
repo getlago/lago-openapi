@@ -1,0 +1,56 @@
+type: object
+required:
+  - code
+  - name
+  - description
+  - privileges
+  - overrides
+properties:
+  code:
+    type: string
+    example: "seats"
+    description: "Unique code used to identify the feature. Max 255 characters."
+  name:
+    type:
+      - string
+      - "null"
+    example: "Number of seats"
+    description: "Name of the feature. Max 255 characters."
+  description:
+    type:
+      - string
+      - "null"
+    example: "Number of users of the account"
+    description: "Description of the feature. Max 600 characters."
+  privileges:
+    type: array
+    items:
+      $ref: "./SubscriptionEntitlementPrivilegeObject.yaml"
+    example:
+      - code: "max"
+        name: "Maximum"
+        value_type: "integer"
+        value: 15
+        plan_value: 10
+        override_value: 15
+      - code: "max_admins"
+        name: "Max Admins"
+        value_type: "integer"
+        value: 5
+        plan_value: 5
+        override_value:
+      - code: "root"
+        name: "Allow root user"
+        value_type: "boolean"
+        value: true
+        plan_value: true
+        override_value:
+      - code: "provider"
+        name: "SSO Provider"
+        value_type: "select"
+        value: "okta"
+        plan_value: "google"
+        override_value: "okta"
+        config:
+          select_options: ["google", "okta"]
+    description: "Privileges associated with this feature. Each privilege shows the plan value and any subscription override."

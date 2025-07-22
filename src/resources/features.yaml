@@ -1,0 +1,44 @@
+post:
+  tags:
+    - features
+  summary: Create a feature
+  description: This endpoint creates a new feature representing an entitlement component of your application.
+  operationId: createFeature
+  requestBody:
+    description: Feature payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/Entitlement/FeatureCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Feature created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/Feature.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - features
+  summary: List all features
+  description: This endpoint retrieves all existing features that represent entitlement components of your application.
+  operationId: findAllFeatures
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+  responses:
+    '200':
+      description: List of features
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/FeaturesPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml' 

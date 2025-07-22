@@ -1,0 +1,53 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription
+    required: true
+    schema:
+      type: string
+      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+get:
+  tags:
+    - entitlements
+  summary: List all subscription entitlements
+  description: This endpoint retrieves all entitlements for a specific subscription, including both plan entitlements and any subscription-specific overrides.
+  operationId: findAllSubscriptionEntitlements
+  responses:
+    '200':
+      description: List of subscription entitlements
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/SubscriptionEntitlements.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+patch:
+  tags:
+    - entitlements
+  summary: Update subscription entitlements
+  description: This endpoint allows partial updates to subscription entitlements. New entitlements are added, provided values are overridden, but entitlements not included in the payload are ignored.
+  operationId: updateSubscriptionEntitlements
+  requestBody:
+    description: Subscription entitlements payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/Entitlement/EntitlementUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Subscription entitlements updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/SubscriptionEntitlements.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

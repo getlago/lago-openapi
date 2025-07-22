@@ -1,0 +1,39 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+  - name: feature_code
+    in: path
+    description: Code of the existing feature.
+    required: true
+    schema:
+      type: string
+      example: 'seats'
+  - name: privilege_code
+    in: path
+    description: Code of the privilege to remove from the entitlement.
+    required: true
+    schema:
+      type: string
+      example: "max_admins"
+delete:
+  tags:
+    - entitlements
+  summary: Remove a privilege from an entitlement
+  description: This endpoint removes a specific privilege and its value from an entitlement. The privilege remains untouched on the original feature.
+  operationId: removeEntitlementPrivilege
+  responses:
+    '200':
+      description: Entitlement with privilege removed
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/PlanEntitlement.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

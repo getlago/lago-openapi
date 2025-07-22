@@ -188,3 +188,8 @@ properties:
     description: List of usage thresholds applied to the plan.
     items:
       $ref: "./UsageThresholdObject.yaml"
+  entitlements:
+    type: array
+    description: List of all feature entitlements and their privileges available for this plan.
+    items:
+      $ref: "./Entitlement/PlanEntitlement.yaml"

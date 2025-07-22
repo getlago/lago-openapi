@@ -1,0 +1,32 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing feature.
+    required: true
+    schema:
+      type: string
+      example: 'seats'
+  - name: privilege_code
+    in: path
+    description: Code of the existing privilege.
+    required: true
+    schema:
+      type: string
+      example: "max_admins"
+delete:
+  tags:
+    - features
+  summary: Delete a privilege. Deleting a privilege removes it it from all plans and subscriptions.
+  description: Delete privilege from feature. Deleting a privilege removes it it from all plans and subscriptions.
+  operationId: deleteFeaturePrivilege
+  responses:
+    '200':
+      description: Feature with deleted privilege.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/Feature.yaml'
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

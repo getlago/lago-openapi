@@ -1,0 +1,46 @@
+type: object
+required:
+  - code
+  - created_at
+properties:
+  code:
+    type: string
+    example: "seats"
+    description: "Unique code used to identify the feature. Max 255 characters."
+  name:
+    type:
+      - string
+      - "null"
+    example: "Number of seats"
+    description: "Name of the feature. Max 255 characters."
+  description:
+    type:
+      - string
+      - "null"
+    example: "Number of users of the account"
+    description: "Description of the feature. Max 600 characters."
+  privileges:
+    type: array
+    items:
+      $ref: "./FeaturePrivilegeObject.yaml"
+    example:
+      - code: "max"
+        name: "Maximum"
+        value_type: "integer"
+      - code: "max_admins"
+        name: "Max Admins"
+        value_type: "integer"
+      - code: "root"
+        name: "Allow root user"
+        value_type: "boolean"
+      - code: "provider"
+        name: "SSO Provider"
+        value_type: "select"
+        config:
+          select_options: ["google", "okta"]
+    description: "Privileges associated with this feature. Can be empty."
+  created_at:
+    type: string
+    format: "date-time"
+    example: "2025-07-17T12:34:35Z"
+    description: "Creation date of the feature."

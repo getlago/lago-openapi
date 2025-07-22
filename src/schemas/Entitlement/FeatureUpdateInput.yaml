@@ -1,0 +1,56 @@
+type: object
+properties:
+  name:
+    type:
+      - string
+      - "null"
+    example: "Number of seats"
+    description: "Name of the feature."
+  description:
+    type:
+      - string
+      - "null"
+    example: "Number of users of the account"
+    description: "Description of the feature."
+  privileges:
+    type: array
+    items:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "max"
+          description: "Code of the privilege to update or create."
+        name:
+          type: string
+          example: "Maximum"
+          description: "Display name for the privilege."
+        value_type:
+          type: string
+          enum:
+            - integer
+            - boolean
+            - string
+            - select
+          example: "integer"
+          description: "Data type of the privilege value. Value_type cannot be modified for existing privilege but can be set for new privileges."
+        config:
+          type: object
+          properties:
+            select_options:
+              type: array
+              items:
+                type: string
+              example: [ "ms" ]
+              description: "Array of new string to add to existing options. Options cannot be deleted. Only used only when value_type is `select`."
+    example:
+      - code: "max"
+        name: "Maximum"
+      - code: "new_extra"
+        name: "Extra"
+        value_type: "string"
+      - code: "providers"
+        value_type: "select"
+        config:
+          select_options: ["ms"]
+    description: "Existing privilege names can be updated or new privilege created."

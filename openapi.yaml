@@ -33,6 +33,16 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/api-reference/billable-metrics/object
+  - name: features
+    description: Everything about Feature collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/api-reference/features/object
+  - name: entitlements
+    description: Everything about Entitlement collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/api-reference/entitlements/object
   - name: billing_entities
     description: Everything about Billing Entities
     externalDocs:
@@ -990,6 +1000,155 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BillableMetric'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /features:
+    post:
+      tags:
+        - features
+      summary: Create a feature
+      description: This endpoint creates a new feature representing an entitlement component of your application.
+      operationId: createFeature
+      requestBody:
+        description: Feature payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Feature created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - features
+      summary: List all features
+      description: This endpoint retrieves all existing features that represent entitlement components of your application.
+      operationId: findAllFeatures
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: List of features
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeaturesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /features/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing feature.
+        required: true
+        schema:
+          type: string
+          example: seats
+    put:
+      tags:
+        - features
+      summary: Update a feature
+      description: This endpoint updates an existing feature representing an entitlement component of your application.
+      operationId: updateFeature
+      requestBody:
+        description: Feature payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Feature updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - features
+      summary: Delete a feature
+      description: This endpoint deletes an existing feature representing an entitlement component of your application. Deleting a feature will remove it from all plans and subscriptions.
+      operationId: destroyFeature
+      responses:
+        '200':
+          description: Feature deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      tags:
+        - features
+      summary: Retrieve a feature
+      description: This endpoint retrieves an existing feature that represents an entitlement component of your application. The feature is identified by its unique code.
+      operationId: findFeature
+      responses:
+        '200':
+          description: Feature
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /features/{code}/privileges/{privilege_code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing feature.
+        required: true
+        schema:
+          type: string
+          example: seats
+      - name: privilege_code
+        in: path
+        description: Code of the existing privilege.
+        required: true
+        schema:
+          type: string
+          example: max_admins
+    delete:
+      tags:
+        - features
+      summary: Delete a privilege. Deleting a privilege removes it it from all plans and subscriptions.
+      description: Delete privilege from feature. Deleting a privilege removes it it from all plans and subscriptions.
+      operationId: deleteFeaturePrivilege
+      responses:
+        '200':
+          description: Feature with deleted privilege.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -2919,6 +3078,178 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /plans/{code}/entitlements:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+    post:
+      tags:
+        - entitlements
+      summary: Create an entitlement
+      description: This endpoint creates a new entitlement by adding a feature to a plan. The feature must exist and all privileges must be valid for the feature.
+      operationId: createEntitlement
+      requestBody:
+        description: Entitlement payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntitlementUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Entitlement created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanEntitlement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - entitlements
+      summary: List all entitlements
+      description: This endpoint retrieves all entitlements for a specific plan.
+      operationId: findAllEntitlements
+      responses:
+        '200':
+          description: List of entitlements
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanEntitlements'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /plans/{code}/entitlements/{feature_code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+      - name: feature_code
+        in: path
+        description: Code of the existing feature.
+        required: true
+        schema:
+          type: string
+          example: seats
+    get:
+      tags:
+        - entitlements
+      summary: Retrieve an entitlement
+      description: This endpoint retrieves a specific entitlement for a plan.
+      operationId: findEntitlement
+      responses:
+        '200':
+          description: Entitlement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanEntitlement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+        - entitlements
+      summary: Partial update of an entitlement
+      description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All feature and privileges not part of the payload are ignored. To remove privileges or feature, use the delete endpoints. All privileges must be valid for the feature.
+      operationId: updateEntitlement
+      requestBody:
+        description: Entitlement payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntitlementUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Entitlement updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanEntitlement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - entitlements
+      summary: Delete an entitlement
+      description: This endpoint deletes an existing entitlement by removing the feature from the plan.
+      operationId: destroyEntitlement
+      responses:
+        '200':
+          description: Entitlement deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanEntitlement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /plans/{code}/entitlements/{feature_code}/privileges/{privilege_code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+      - name: feature_code
+        in: path
+        description: Code of the existing feature.
+        required: true
+        schema:
+          type: string
+          example: seats
+      - name: privilege_code
+        in: path
+        description: Code of the privilege to remove from the entitlement.
+        required: true
+        schema:
+          type: string
+          example: max_admins
+    delete:
+      tags:
+        - entitlements
+      summary: Remove a privilege from an entitlement
+      description: This endpoint removes a specific privilege and its value from an entitlement. The privilege remains untouched on the original feature.
+      operationId: removeEntitlementPrivilege
+      responses:
+        '200':
+          description: Entitlement with privilege removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanEntitlement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /subscriptions:
     post:
       tags:
@@ -3313,6 +3644,205 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Alert'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/entitlements:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    get:
+      tags:
+        - entitlements
+      summary: List all subscription entitlements
+      description: This endpoint retrieves all entitlements for a specific subscription, including both plan entitlements and any subscription-specific overrides.
+      operationId: findAllSubscriptionEntitlements
+      responses:
+        '200':
+          description: List of subscription entitlements
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionEntitlements'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+        - entitlements
+      summary: Update subscription entitlements
+      description: This endpoint allows partial updates to subscription entitlements. New entitlements are added, provided values are overridden, but entitlements not included in the payload are ignored.
+      operationId: updateSubscriptionEntitlements
+      requestBody:
+        description: Subscription entitlements payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntitlementUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Subscription entitlements updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionEntitlements'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /subscriptions/{external_id}/entitlements/{feature_code}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - name: feature_code
+        in: path
+        description: Code of the existing feature
+        required: true
+        schema:
+          type: string
+          example: seats
+    delete:
+      tags:
+        - entitlements
+      summary: Remove an entitlement from a subscription
+      description: This endpoint removes a specific entitlement from a subscription by removing the feature override. The entitlement remains available from the plan.
+      operationId: destroySubscriptionEntitlement
+      responses:
+        '200':
+          description: Subscription entitlement removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionEntitlement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/entitlements/{feature_code}/privileges/{privilege_code}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - name: feature_code
+        in: path
+        description: Code of the existing feature.
+        required: true
+        schema:
+          type: string
+          example: seats
+      - name: privilege_code
+        in: path
+        description: Code of the privilege to remove from the subscription entitlement override.
+        required: true
+        schema:
+          type: string
+          example: max_admins
+    delete:
+      tags:
+        - entitlements
+      summary: Remove a privilege from a subscription entitlement override
+      description: This endpoint removes a specific privilege override from a subscription entitlement. This only works with privileges that are part of a feature specifically added to this subscription as an override. You cannot remove privileges from plan entitlements - only subscription-specific overrides can be removed.
+      operationId: removeSubscriptionEntitlementPrivilege
+      responses:
+        '200':
+          description: Subscription entitlement with privilege override removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionEntitlement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/entitlements/{feature_code}/remove:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - name: feature_code
+        in: path
+        description: Code of the existing feature to remove from the subscription.
+        required: true
+        schema:
+          type: string
+          example: seats
+    post:
+      tags:
+        - entitlements
+      summary: Remove a feature from a subscription
+      description: This endpoint removes a feature from a subscription by creating a removal override. The feature remains available in the plan but is not accessible to this subscription. This is useful when you want to disable a feature that is included in the plan for a specific subscription.
+      operationId: removeSubscriptionEntitlement
+      responses:
+        '200':
+          description: Feature removed from subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionEntitlement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/entitlements/{feature_code}/restore:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - name: feature_code
+        in: path
+        description: Code of the existing feature to restore to the subscription.
+        required: true
+        schema:
+          type: string
+          example: seats
+    post:
+      tags:
+        - entitlements
+      summary: Restore a feature to a subscription
+      description: This endpoint restores a feature to a subscription by removing the removal override. The feature becomes available again to this subscription with the original plan values. This is useful when you want to re-enable a feature that was previously removed from a subscription.
+      operationId: restoreSubscriptionEntitlement
+      responses:
+        '200':
+          description: Feature restored to subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionEntitlement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -8012,6 +8542,244 @@ components:
       properties:
         billable_metric:
           $ref: '#/components/schemas/BillableMetricBaseInput'
+    FeaturePrivilegeObject:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          example: max
+          description: Unique code for the privilege.
+        name:
+          type:
+            - string
+            - 'null'
+          example: Maximum
+          description: Display name for the privilege.
+        value_type:
+          type: string
+          enum:
+            - integer
+            - boolean
+            - string
+            - select
+          example: integer
+          description: 'Data type of the privilege value. Default: string'
+        config:
+          type: object
+          properties:
+            select_options:
+              type: array
+              items:
+                type: string
+              example:
+                - google
+                - okta
+              description: Array of string, required only when value_type is `select`.
+    FeatureObject:
+      type: object
+      required:
+        - code
+        - created_at
+      properties:
+        code:
+          type: string
+          example: seats
+          description: Unique code used to identify the feature. Max 255 characters.
+        name:
+          type:
+            - string
+            - 'null'
+          example: Number of seats
+          description: Name of the feature. Max 255 characters.
+        description:
+          type:
+            - string
+            - 'null'
+          example: Number of users of the account
+          description: Description of the feature. Max 600 characters.
+        privileges:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeaturePrivilegeObject'
+          example:
+            - code: max
+              name: Maximum
+              value_type: integer
+            - code: max_admins
+              name: Max Admins
+              value_type: integer
+            - code: root
+              name: Allow root user
+              value_type: boolean
+            - code: provider
+              name: SSO Provider
+              value_type: select
+              config:
+                select_options:
+                  - google
+                  - okta
+          description: Privileges associated with this feature. Can be empty.
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-07-17T12:34:35Z'
+          description: Creation date of the feature.
+    FeaturesPaginated:
+      type: object
+      required:
+        - features
+        - meta
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    FeatureCreateInput:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          example: seats
+          description: Unique code used to identify the feature.
+        name:
+          type:
+            - string
+            - 'null'
+          example: Number of seats
+          description: Name of the feature.
+        description:
+          type:
+            - string
+            - 'null'
+          example: Number of users of the account
+          description: Internal description of the feature.
+        privileges:
+          type: array
+          items:
+            type: object
+            required:
+              - code
+            properties:
+              code:
+                type: string
+                example: max
+                description: Unique code for the privilege.
+              name:
+                type:
+                  - string
+                  - 'null'
+                example: Maximum
+                description: Display name for the privilege.
+              value_type:
+                type: string
+                enum:
+                  - integer
+                  - boolean
+                  - string
+                  - select
+                example: integer
+                description: 'Data type of the privilege value. Default: string'
+              config:
+                type: object
+                properties:
+                  select_options:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - google
+                      - okta
+                    description: Array of string, required only when value_type is `select`.
+          example:
+            - code: max
+              name: Maximum
+              value_type: integer
+            - code: max_admins
+              name: Max Admins
+              value_type: integer
+            - code: root
+              name: Allow root user
+              value_type: boolean
+            - code: provider
+              name: SSO Provider
+              value_type: select
+              config:
+                select_options:
+                  - google
+                  - okta
+          description: Privileges associated with this feature. Can be empty.
+    Feature:
+      type: object
+      required:
+        - feature
+      properties:
+        feature:
+          $ref: '#/components/schemas/FeatureObject'
+    FeatureUpdateInput:
+      type: object
+      properties:
+        name:
+          type:
+            - string
+            - 'null'
+          example: Number of seats
+          description: Name of the feature.
+        description:
+          type:
+            - string
+            - 'null'
+          example: Number of users of the account
+          description: Description of the feature.
+        privileges:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                example: max
+                description: Code of the privilege to update or create.
+              name:
+                type: string
+                example: Maximum
+                description: Display name for the privilege.
+              value_type:
+                type: string
+                enum:
+                  - integer
+                  - boolean
+                  - string
+                  - select
+                example: integer
+                description: Data type of the privilege value. Value_type cannot be modified for existing privilege but can be set for new privileges.
+              config:
+                type: object
+                properties:
+                  select_options:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - ms
+                    description: Array of new string to add to existing options. Options cannot be deleted. Only used only when value_type is `select`.
+          example:
+            - code: max
+              name: Maximum
+            - code: new_extra
+              name: Extra
+              value_type: string
+            - code: providers
+              value_type: select
+              config:
+                select_options:
+                  - ms
+          description: Existing privilege names can be updated or new privilege created.
     CouponObject:
       type: object
       required:
@@ -13104,6 +13872,80 @@ components:
               type: string
               description: The conversion rate from pricing units to the plan's currency.
               example: '0.5'
+    PlanEntitlementPrivilegeObject:
+      allOf:
+        - $ref: '#/components/schemas/FeaturePrivilegeObject'
+        - type: object
+          required:
+            - value
+          properties:
+            value:
+              oneOf:
+                - type: integer
+                  description: Value for integer type privileges
+                - type: boolean
+                  description: Value for boolean type privileges
+                - type: string
+                  description: Value for string or select type privileges
+              example: 10
+              description: Value assigned to this privilege in the entitlement. Type depends on the privilege's value_type.
+    PlanEntitlementObject:
+      type: object
+      required:
+        - code
+        - name
+        - description
+        - privileges
+      properties:
+        code:
+          type: string
+          example: seats
+          description: Unique code used to identify the feature. Max 255 characters.
+        name:
+          type:
+            - string
+            - 'null'
+          example: Number of seats
+          description: Name of the feature. Max 255 characters.
+        description:
+          type:
+            - string
+            - 'null'
+          example: Number of users of the account
+          description: Description of the feature. Max 600 characters.
+        privileges:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanEntitlementPrivilegeObject'
+          example:
+            - code: max
+              name: Maximum
+              value_type: integer
+              value: 10
+            - code: max_admins
+              name: Max Admins
+              value_type: integer
+              value: 5
+            - code: root
+              name: Allow root user
+              value_type: boolean
+              value: true
+            - code: provider
+              name: SSO Provider
+              value_type: select
+              value: google
+              config:
+                select_options:
+                  - google
+                  - okta
+          description: Privileges associated with this feature. Each privilege must have a value assigned.
+    PlanEntitlement:
+      type: object
+      required:
+        - entitlement
+      properties:
+        entitlement:
+          $ref: '#/components/schemas/PlanEntitlementObject'
     PlanObject:
       type: object
       required:
@@ -13298,6 +14140,11 @@ components:
           description: List of usage thresholds applied to the plan.
           items:
             $ref: '#/components/schemas/UsageThresholdObject'
+        entitlements:
+          type: array
+          description: List of all feature entitlements and their privileges available for this plan.
+          items:
+            $ref: '#/components/schemas/PlanEntitlement'
     PlansPaginated:
       type: object
       required:
@@ -13860,6 +14707,33 @@ components:
               type: boolean
               description: This field determines whether the changes made to the plan should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
               example: true
+    PlanEntitlements:
+      type: object
+      required:
+        - entitlements
+      properties:
+        entitlements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanEntitlementObject'
+    EntitlementUpdateInput:
+      type: object
+      additionalProperties:
+        type: object
+        additionalProperties:
+          oneOf:
+            - type: integer
+            - type: boolean
+            - type: string
+        description: Privilege values for this feature. All privileges must exist on the feature.
+      example:
+        seats:
+          max: 20
+          max_admins: 10
+          root: false
+        sso:
+          provider: okta
+      description: Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values.
     SubscriptionsPaginated:
       type: object
       required:
@@ -14352,6 +15226,122 @@ components:
       properties:
         alert:
           $ref: '#/components/schemas/AlertBaseInput'
+    SubscriptionEntitlementPrivilegeObject:
+      allOf:
+        - $ref: '#/components/schemas/FeaturePrivilegeObject'
+        - type: object
+          required:
+            - value
+            - plan_value
+            - override_value
+          properties:
+            value:
+              oneOf:
+                - type: integer
+                  description: Value for integer type privileges
+                - type: boolean
+                  description: Value for boolean type privileges
+                - type: string
+                  description: Value for string or select type privileges
+              example: 10
+              description: Applicable value this this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type.
+            plan_value:
+              oneOf:
+                - type: integer
+                  description: Value for integer type privileges
+                - type: boolean
+                  description: Value for boolean type privileges
+                - type: string
+                  description: Value for string or select type privileges
+              example: 10
+              description: Value assigned to this privilege in the plan. Type depends on the privilege's value_type.
+            override_value:
+              oneOf:
+                - type: integer
+                  description: Value for integer type privileges
+                - type: boolean
+                  description: Value for boolean type privileges
+                - type: string
+                  description: Value for string or select type privileges
+                - type: 'null'
+                  description: No override value set
+              example: 10
+              description: Value assigned to this subscription specifically. Type depends on the privilege's value_type. Null if no override is set.
+    SubscriptionEntitlementObject:
+      type: object
+      required:
+        - code
+        - name
+        - description
+        - privileges
+        - overrides
+      properties:
+        code:
+          type: string
+          example: seats
+          description: Unique code used to identify the feature. Max 255 characters.
+        name:
+          type:
+            - string
+            - 'null'
+          example: Number of seats
+          description: Name of the feature. Max 255 characters.
+        description:
+          type:
+            - string
+            - 'null'
+          example: Number of users of the account
+          description: Description of the feature. Max 600 characters.
+        privileges:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionEntitlementPrivilegeObject'
+          example:
+            - code: max
+              name: Maximum
+              value_type: integer
+              value: 15
+              plan_value: 10
+              override_value: 15
+            - code: max_admins
+              name: Max Admins
+              value_type: integer
+              value: 5
+              plan_value: 5
+              override_value: null
+            - code: root
+              name: Allow root user
+              value_type: boolean
+              value: true
+              plan_value: true
+              override_value: null
+            - code: provider
+              name: SSO Provider
+              value_type: select
+              value: okta
+              plan_value: google
+              override_value: okta
+              config:
+                select_options:
+                  - google
+                  - okta
+          description: Privileges associated with this feature. Each privilege shows the plan value and any subscription override.
+    SubscriptionEntitlements:
+      type: object
+      required:
+        - entitlements
+      properties:
+        entitlements:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionEntitlementObject'
+    SubscriptionEntitlement:
+      type: object
+      required:
+        - entitlement
+      properties:
+        entitlement:
+          $ref: '#/components/schemas/SubscriptionEntitlementObject'
     TaxesPaginated:
       type: object
       required:
@@ -15903,6 +16893,8 @@ components:
               additionalProperties: true
     CustomerPaymentProvidernErrorObject:
       $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
+    PrivilegeObject:
+      $ref: '#/components/schemas/FeaturePrivilegeObject'
   responses:
     Unauthorized:
       description: Unauthorized error
