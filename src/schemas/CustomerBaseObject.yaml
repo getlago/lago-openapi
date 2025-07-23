@@ -191,6 +191,10 @@ properties:
     $ref: "./CustomerBillingConfiguration.yaml"
   shipping_address:
     $ref: "./Address.yaml"
+  external_salesforce_id:
+    type: string
+    description: Salesforce ID of this customer.
+    example: "0035g00000ABCdEAA1"
   metadata:
     type: array
     items:

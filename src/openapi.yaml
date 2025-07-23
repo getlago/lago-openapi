@@ -179,17 +179,17 @@ paths:
     $ref: "./resources/credit_note_void.yaml"
   /customers:
     $ref: "./resources/customers.yaml"
-  /customers/{external_customer_id}:
+  /customers/{external_id}:
     $ref: "./resources/customer.yaml"
-  /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
+  /customers/{external_customer_id}/applied_coupons/{id}:
     $ref: "./resources/customer_applied_coupon.yaml"
-  /customers/{external_customer_id}/portal_url:
+  /customers/{customer_external_id}/portal_url:
     $ref: "./resources/customer_portal_url.yaml"
-  /customers/{external_customer_id}/current_usage:
+  /customers/{customer_external_id}/current_usage:
     $ref: "./resources/customer_current_usage.yaml"
-  /customers/{external_customer_id}/past_usage:
+  /customers/{customer_external_id}/past_usage:
     $ref: "./resources/customer_past_usage.yaml"
-  /customers/{external_customer_id}/checkout_url:
+  /customers/{customer_external_id}/checkout_url:
     $ref: "./resources/customer_checkout_url.yaml"
   /events:
     $ref: "./resources/events.yaml"
