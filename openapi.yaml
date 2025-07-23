@@ -8510,6 +8510,51 @@ components:
           format: uuid
           description: Unique identifier of the fee, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    PricingUnitDetailsObject:
+      type: object
+      required:
+        - lago_pricing_unit_id
+        - pricing_unit_code
+        - short_name
+        - amount_cents
+        - precise_amount_cents
+        - unit_amount_cents
+        - precise_unit_amount
+        - conversion_rate
+      properties:
+        lago_pricing_unit_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the pricing unit, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        pricing_unit_code:
+          type: string
+          description: The code of the pricing unit.
+          example: credits
+        short_name:
+          type: string
+          description: The short name of the pricing unit. Will be used as currency name in the UI and PDFs.
+          example: CR
+        amount_cents:
+          type: integer
+          description: The amount in cents in the pricing unit.
+          example: 200
+        precise_amount_cents:
+          type: string
+          description: The precise amount in cents in the pricing unit.
+          example: '200.0'
+        unit_amount_cents:
+          type: integer
+          description: The unit amount in cents in the pricing unit.
+          example: 100
+        precise_unit_amount:
+          type: string
+          description: The precise unit amount in the pricing unit.
+          example: '100.0'
+        conversion_rate:
+          type: string
+          description: The conversion rate from pricing units to the plan's currency.
+          example: '0.5'
     FeeObject:
       type: object
       required:
@@ -8784,6 +8829,12 @@ components:
           description: List of fee applied taxes
           items:
             $ref: '#/components/schemas/FeeAppliedTaxObject'
+        pricing_unit_details:
+          type:
+            - object
+            - 'null'
+          description: Details about the pricing unit used and amounts for this fee.
+          $ref: '#/components/schemas/PricingUnitDetailsObject'
     CreditNoteItemObject:
       type: object
       required:
@@ -10413,6 +10464,24 @@ components:
             type: string
             description: Specifies the name that will be displayed on an invoice.
             example: AWS eu-east-1
+          pricing_unit_details:
+            type:
+              - object
+              - 'null'
+            description: Details about the pricing unit used for this charge usage filter.
+            properties:
+              amount_cents:
+                type: integer
+                example: 200
+                description: The amount in cents in the pricing unit.
+              short_name:
+                type: string
+                example: CR
+                description: The short name of the pricing unit.
+              conversion_rate:
+                type: string
+                example: '0.5'
+                description: The conversion rate from pricing units to the plan's currency.
           values:
             type: object
             description: List of filter values applied to the usage.
@@ -10445,6 +10514,24 @@ components:
             pattern: ^[0-9]+.?[0-9]*$
             example: '0.9'
             description: The number of units consumed for a specific group related to a charge item.
+          pricing_unit_details:
+            type:
+              - object
+              - 'null'
+            description: Details about the pricing unit used for this charge usage group.
+            properties:
+              amount_cents:
+                type: integer
+                example: 200
+                description: The amount in cents in the pricing unit.
+              short_name:
+                type: string
+                example: CR
+                description: The short name of the pricing unit.
+              conversion_rate:
+                type: string
+                example: '0.5'
+                description: The conversion rate from pricing units to the plan's currency.
           grouped_by:
             type: object
             description: Key value list of event properties aggregated by the charge model
@@ -10480,6 +10567,24 @@ components:
           $ref: '#/components/schemas/Currency'
           description: The currency of a usage item consumed by the customer.
           example: EUR
+        pricing_unit_details:
+          type:
+            - object
+            - 'null'
+          description: Details about the pricing unit used for this charge usage.
+          properties:
+            amount_cents:
+              type: integer
+              example: 200
+              description: The amount in cents in the pricing unit.
+            short_name:
+              type: string
+              example: CR
+              description: The short name of the pricing unit.
+            conversion_rate:
+              type: string
+              example: '0.5'
+              description: The conversion rate from pricing units to the plan's currency.
         charge:
           type: object
           description: Object listing all the properties for a specific charge item.
@@ -12973,6 +13078,20 @@ components:
           description: All taxes applied to the charge.
           items:
             $ref: '#/components/schemas/TaxObject'
+        applied_pricing_unit:
+          type:
+            - object
+            - 'null'
+          description: The pricing unit applied to the charge.
+          properties:
+            code:
+              type: string
+              description: The code of the pricing unit.
+              example: unit_code
+            conversion_rate:
+              type: string
+              description: The conversion rate from pricing units to the plan's currency.
+              example: '0.5'
     PlanObject:
       type: object
       required:
@@ -13396,6 +13515,21 @@ components:
                     description: List of unique code used to identify the taxes.
                     example:
                       - french_standard_vat
+                  applied_pricing_unit:
+                    type: object
+                    description: The pricing unit to apply to the charge.
+                    properties:
+                      code:
+                        type: string
+                        description: The code of the pricing unit.
+                        example: credits
+                      conversion_rate:
+                        type: string
+                        description: |-
+                          The conversion rate from pricing units to the plan's currency.
+                          This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
+                          For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50.
+                        example: '0.5'
               example:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
@@ -13624,6 +13758,17 @@ components:
                     description: List of unique code used to identify the taxes.
                     example:
                       - french_standard_vat
+                  applied_pricing_unit:
+                    type: object
+                    description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
+                    properties:
+                      conversion_rate:
+                        type: string
+                        description: |-
+                          The conversion rate from pricing units to the plan's currency.
+                          This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
+                          For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50 USD.
+                        example: '0.5'
               example:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
@@ -13791,6 +13936,17 @@ components:
                 description: List of unique code used to identify the taxes.
                 example:
                   - french_standard_vat
+              applied_pricing_unit:
+                type: object
+                description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
+                properties:
+                  conversion_rate:
+                    type: string
+                    description: |-
+                      The conversion rate from pricing units to the plan's currency.
+                      This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
+                      For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50 USD.
+                    example: '0.5'
         usage_thresholds:
           type: array
           description: List of usage thresholds applied to the subscription.

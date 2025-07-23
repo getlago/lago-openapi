@@ -25,6 +25,24 @@ properties:
     $ref: "./Currency.yaml"
     description: The currency of a usage item consumed by the customer.
     example: "EUR"
+  pricing_unit_details:
+    type:
+      - object
+      - "null"
+    description: Details about the pricing unit used for this charge usage.
+    properties:
+      amount_cents:
+        type: integer
+        example: 200
+        description: The amount in cents in the pricing unit.
+      short_name:
+        type: string
+        example: "CR"
+        description: The short name of the pricing unit.
+      conversion_rate:
+        type: string
+        example: "0.5"
+        description: The conversion rate from pricing units to the plan's currency.
   charge:
     type: object
     description: Object listing all the properties for a specific charge item.
