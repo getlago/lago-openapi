@@ -1,0 +1,26 @@
+parameters:
+  - name: lago_id
+    in: path
+    description: Unique identifier of the payment request.
+    required: true
+    schema:
+      type: string
+      format: uuid
+      example: 'f4a842d6-4bde-11ec-81d3-0242ac130003'
+get:
+  tags:
+    - payment_requests
+  summary: Retrieve a payment request
+  description: This endpoint retrieves a specific payment request by its ID.
+  operationId: findPaymentRequest
+  responses:
+    '200':
+      description: Payment request details
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PaymentRequestObject.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
