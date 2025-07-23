@@ -147,13 +147,15 @@ properties:
       When a pay-in-advance subscription is terminated before the end of its billing period, we generate a credit note for the unused subscription time by default.
       This field allows you to control the behavior of the credit note generation:
 
-      - `credit`: A credit note is generated for the unused subscription time. The unused amount is credited to the credit note wallet.
+      - `credit`: A credit note is generated for the unused subscription time. The unused amount is credited back to the customer.
+      - `refund`: A credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is credited back to the customer.
       - `skip`: No credit note is generated for the unused subscription time.
 
       _Note: This field is only applicable to pay-in-advance plans and will be `null` for pay-in-arrears plans._
     example: "credit"
     enum:
       - credit
+      - refund
       - skip
   on_termination_invoice:
     type:
