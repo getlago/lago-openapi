@@ -148,12 +148,14 @@ properties:
       This field allows you to control the behavior of the credit note generation:
 
       - `credit`: A credit note is generated for the unused subscription time. The unused amount is credited to the credit note wallet.
+      - `refund`: A credit note is generated for the unused subscription time. If the customer already paid, the credit note might include a refund for any excess amount.
       - `skip`: No credit note is generated for the unused subscription time.
 
       _Note: This field is only applicable to pay-in-advance plans and will be `null` for pay-in-arrears plans._
     example: "credit"
     enum:
       - credit
+      - refund
       - skip
   on_termination_invoice:
     type:
