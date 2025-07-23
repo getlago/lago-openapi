@@ -3103,6 +3103,21 @@ paths:
               - credit
               - skip
             example: credit
+        - name: on_termination_invoice
+          in: query
+          description: |
+            When a subscription is terminated before the end of its billing period, we generate an invoice for the unbilled usage.
+            This field allows you to control the behavior of the invoice generation:
+
+            - `generate`: An invoice is generated for the unbilled usage.
+            - `skip`: No invoice is generated for the unbilled usage.
+          required: false
+          schema:
+            type: string
+            enum:
+              - generate
+              - skip
+            example: generate
       responses:
         '200':
           description: Subscription terminated
@@ -11593,6 +11608,8 @@ components:
         - plan_code
         - external_id
         - status
+        - on_termination_credit_note
+        - on_termination_invoice
       properties:
         lago_id:
           type: string
@@ -11729,7 +11746,7 @@ components:
             When a pay-in-advance subscription is terminated before the end of its billing period, we generate a credit note for the unused subscription time by default.
             This field allows you to control the behavior of the credit note generation:
 
-            - `credit`: A credit note is generated for the unused subscription time.
+            - `credit`: A credit note is generated for the unused subscription time. The unused amount is credited to the credit note wallet.
             - `skip`: No credit note is generated for the unused subscription time.
 
             _Note: This field is only applicable to pay-in-advance plans and will be `null` for pay-in-arrears plans._
@@ -11737,6 +11754,20 @@ components:
           enum:
             - credit
             - skip
+        on_termination_invoice:
+          type:
+            - string
+          example: generate
+          enum:
+            - generate
+            - skip
+          default: generate
+          description: |
+            When a subscription is terminated before the end of its billing period, we generate an invoice for the unbilled usage.
+            This field allows you to control the behavior of the invoice generation:
+
+            - `generate`: An invoice is generated for the unbilled usage.
+            - `skip`: No invoice is generated for the unbilled usage.
     ErrorDetailObject:
       type: object
       required:
