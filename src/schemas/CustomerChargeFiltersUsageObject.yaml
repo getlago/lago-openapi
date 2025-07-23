@@ -25,6 +25,8 @@ items:
       type: string
       description: Specifies the name that will be displayed on an invoice.
       example: "AWS eu-east-1"
+    pricing_unit_details:
+      $ref: "./UsagePricingUnitDetailsObject.yaml"
     values:
       type: object
       description: "List of filter values applied to the usage."

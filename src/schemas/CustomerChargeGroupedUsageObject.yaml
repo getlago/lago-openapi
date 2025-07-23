@@ -22,6 +22,8 @@ items:
       pattern: "^[0-9]+.?[0-9]*$"
       example: "0.9"
       description: The number of units consumed for a specific group related to a charge item.
+    pricing_unit_details:
+      $ref: "./UsagePricingUnitDetailsObject.yaml"
     grouped_by:
       type: object
       description: Key value list of event properties aggregated by the charge model

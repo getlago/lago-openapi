@@ -271,3 +271,9 @@ properties:
     description: List of fee applied taxes
     items:
       $ref: "./FeeAppliedTaxObject.yaml"
+  pricing_unit_details:
+    type:
+      - object
+      - "null"
+    description: Details about the pricing unit used and amounts for this fee.
+    $ref: "./PricingUnitDetailsObject.yaml"

@@ -71,6 +71,17 @@ properties:
             type: string
           description: List of unique code used to identify the taxes.
           example: [french_standard_vat]
+        applied_pricing_unit:
+          type: object
+          description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
+          properties:
+            conversion_rate:
+              type: string
+              description: |-
+                The conversion rate from pricing units to the plan's currency.
+                This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
+                For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50 USD.
+              example: "0.5"
   usage_thresholds:
     type: array
     description: List of usage thresholds applied to the subscription.

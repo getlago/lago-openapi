@@ -98,3 +98,20 @@ properties:
     description: All taxes applied to the charge.
     items:
       $ref: "./TaxObject.yaml"
+  applied_pricing_unit:
+    type:
+      - object
+      - "null"
+    required:
+      - code
+      - conversion_rate
+    description: The pricing unit applied to the charge.
+    properties:
+      code:
+        type: string
+        description: The code of the pricing unit.
+        example: "unit_code"
+      conversion_rate:
+        type: string
+        description: The conversion rate from pricing units to the plan's currency.
+        example: "0.5"

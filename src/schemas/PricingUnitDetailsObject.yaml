@@ -1,0 +1,44 @@
+type: object
+required:
+  - lago_pricing_unit_id
+  - pricing_unit_code
+  - short_name
+  - amount_cents
+  - precise_amount_cents
+  - unit_amount_cents
+  - precise_unit_amount
+  - conversion_rate
+properties:
+  lago_pricing_unit_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the pricing unit, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  pricing_unit_code:
+    type: string
+    description: The code of the pricing unit.
+    example: "credits"
+  short_name:
+    type: string
+    description: The short name of the pricing unit. Will be used as currency name in the UI and PDFs.
+    example: "CR"
+  amount_cents:
+    type: integer
+    description: The amount in cents in the pricing unit.
+    example: 200
+  precise_amount_cents:
+    type: string
+    description: The precise amount in cents in the pricing unit.
+    example: "200.0"
+  unit_amount_cents:
+    type: integer
+    description: The unit amount in cents in the pricing unit.
+    example: 100
+  precise_unit_amount:
+    type: string
+    description: The precise unit amount in the pricing unit.
+    example: "100.0"
+  conversion_rate:
+    type: string
+    description: The conversion rate from pricing units to the plan's currency.
+    example: "0.5"
