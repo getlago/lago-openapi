@@ -88,6 +88,14 @@ properties:
                 - commitment
             description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
             example: ["charge"]
+          billable_metric_codes:
+            type:
+              - array
+              - "null"
+            items:
+              type: string
+            description: An array of billable metric codes to which the wallet is applicable. By specifying the billable metric codes in this field, you can restrict the wallet's usage to specific metrics only.
+            example: []
       recurring_transaction_rules:
         type:
           - array
