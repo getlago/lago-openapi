@@ -344,6 +344,12 @@ webhooks:
     $ref: "./webhooks/event_error.yaml"
   events_errors:
     $ref: "./webhooks/events_errors.yaml"
+  feature.created:
+    $ref: "./webhooks/feature_created.yaml"
+  feature.updated:
+    $ref: "./webhooks/feature_updated.yaml"
+  feature.deleted:
+    $ref: "./webhooks/feature_deleted.yaml"
   fee_created:
     $ref: "./webhooks/fee_created.yaml"
   fee_tax_provider_error:
