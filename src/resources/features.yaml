@@ -33,6 +33,13 @@ get:
   parameters:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
+    - name: search_term
+      in: query
+      description: Search in name, code and description.
+      required: false
+      explode: true
+      schema:
+        type: string
   responses:
     '200':
       description: List of features
@@ -41,4 +48,4 @@ get:
           schema:
             $ref: '../schemas/Entitlement/FeaturesPaginated.yaml'
     '401':
-      $ref: '../responses/Unauthorized.yaml' 
+      $ref: '../responses/Unauthorized.yaml'
