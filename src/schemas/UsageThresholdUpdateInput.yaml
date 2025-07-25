@@ -1,0 +1,10 @@
+allOf:
+  - $ref: "./UsageThresholdInput.yaml"
+  - type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the usage threshold created by Lago.

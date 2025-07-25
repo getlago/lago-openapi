@@ -36,7 +36,9 @@ properties:
     example: 100
     description: The current usage amount in cents for the subscription on the current billing period.
   from_datetime:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
     example: "2024-01-01T00:00:00Z"
     description: The recording start date and time of the subscription lifetime usage. The date and time must be in ISO 8601 format.
