@@ -28,6 +28,7 @@ get:
           - pending
           - canceled
         example: active
+        default: active
   responses:
     "200":
       description: Subscription
@@ -52,6 +53,19 @@ put:
         schema:
           $ref: "../schemas/SubscriptionUpdateInput.yaml"
     required: true
+  parameters:
+    - name: status
+      in: query
+      description: |
+        By default, this endpoint only return `active` subscriptions. If you want to update a subscription with a different `status`, you can specify it here.
+      required: false
+      schema:
+        type: string
+        enum:
+          - active
+          - pending
+        example: active
+        default: active
   responses:
     "200":
       description: Subscription updated
@@ -127,5 +141,5 @@ delete:
       $ref: "../responses/Unauthorized.yaml"
     "404":
       $ref: "../responses/NotFound.yaml"
-    "405":
-      $ref: "../responses/NotAllowed.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

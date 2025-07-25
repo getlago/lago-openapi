@@ -1,16 +1,27 @@
 type: object
 required:
-  - lago_id
-  - lago_customer_id
   - billing_time
-  - external_customer_id
+  - canceled_at
   - created_at
-  - subscription_at
-  - plan_code
+  - current_billing_period_ending_at
+  - current_billing_period_started_at
+  - downgrade_plan_date
+  - ending_at
+  - external_customer_id
   - external_id
-  - status
+  - lago_customer_id
+  - lago_id
+  - name
+  - next_plan_code
   - on_termination_credit_note
   - on_termination_invoice
+  - plan_code
+  - previous_plan_code
+  - started_at
+  - status
+  - subscription_at
+  - terminated_at
+  - trial_ended_at
 properties:
   lago_id:
     type: string
@@ -51,16 +62,16 @@ properties:
     type: string
     description: |-
       The status of the subscription, which can have the following values:
-      - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
       - `active`: the subscription is currently active and applied to the customer.
-      - `terminated`: the subscription is no longer active.
       - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer or when a subscription with a pending status is terminated.
+      - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
+      - `terminated`: the subscription is no longer active.
     example: active
     enum:
       - active
+      - canceled
       - pending
       - terminated
-      - canceled
   created_at:
     type: string
     format: "date-time"
