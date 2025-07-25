@@ -1,6 +1,9 @@
 allOf:
   - $ref: "./SubscriptionObject.yaml"
   - type: object
+    required:
+      - plan
+      - customer
     properties:
       plan:
         $ref: "./PlanObject.yaml"

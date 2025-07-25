@@ -39,7 +39,6 @@ get:
       in: query
       description: The customer external unique identifier (provided by your own application)
       required: false
-      explode: true
       schema:
         type: string
         example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
@@ -47,7 +46,6 @@ get:
       in: query
       description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
       required: false
-      explode: true
       schema:
         type: string
         example: 'premium'
@@ -61,10 +59,10 @@ get:
         items:
           type: string
           enum:
-            - pending
-            - canceled
-            - terminated
             - active
+            - canceled
+            - pending
+            - terminated
         example: [active,pending]
 
   responses:
@@ -76,5 +74,3 @@ get:
             $ref: '../schemas/SubscriptionsPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
