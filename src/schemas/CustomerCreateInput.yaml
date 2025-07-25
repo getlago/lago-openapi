@@ -123,11 +123,7 @@ properties:
         example: "CA"
         description: The state of the customer's billing address
       tax_codes:
-        type: array
-        items:
-          type: string
-        description: List of unique code used to identify the taxes.
-        example: [french_standard_vat]
+        $ref: "./TaxCodes.yaml"
       tax_identification_number:
         type:
           - string
