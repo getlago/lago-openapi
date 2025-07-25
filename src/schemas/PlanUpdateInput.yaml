@@ -53,11 +53,7 @@ properties:
         description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`.
         example: null
       tax_codes:
-        type: array
-        items:
-          type: string
-        description: List of unique code used to identify the taxes.
-        example: [french_standard_vat]
+        $ref: "./TaxCodes.yaml"
       minimum_commitment:
         $ref: "./MinimumCommitmentInput.yaml"
       charges:
@@ -136,11 +132,7 @@ properties:
               items:
                 $ref: "./ChargeFilterInput.yaml"
             tax_codes:
-              type: array
-              items:
-                type: string
-              description: List of unique code used to identify the taxes.
-              example: [french_standard_vat]
+              $ref: "./TaxCodes.yaml"
             applied_pricing_unit:
               type: object
               description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.

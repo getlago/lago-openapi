@@ -6831,6 +6831,13 @@ components:
         code:
           type: string
           example: object_not_found
+    TaxCodes:
+      type: array
+      items:
+        type: string
+      description: List of unique code used to identify the taxes.
+      example:
+        - french_standard_vat
     BillingEntityUpdateInput:
       type: object
       description: Billing entity update input
@@ -6945,11 +6952,7 @@ components:
           description: The timezone of the billing entity
           example: UTC
         tax_codes:
-          type: array
-          items:
-            type: string
-          example:
-            - french_standard_vat
+          $ref: '#/components/schemas/TaxCodes'
           description: The tax codes that should be associated with this billing entity
         email_settings:
           type: array
@@ -7217,12 +7220,7 @@ components:
           description: The description of the add-on.
           example: Implementation fee for new customers.
         tax_codes:
-          type: array
-          items:
-            type: string
-          description: List of unique code used to identify the taxes.
-          example:
-            - french_standard_vat
+          $ref: '#/components/schemas/TaxCodes'
     AddOnCreateInput:
       type: object
       required:
@@ -10610,12 +10608,7 @@ components:
               example: CA
               description: The state of the customer's billing address
             tax_codes:
-              type: array
-              items:
-                type: string
-              description: List of unique code used to identify the taxes.
-              example:
-                - french_standard_vat
+              $ref: '#/components/schemas/TaxCodes'
             tax_identification_number:
               type:
                 - string
@@ -12033,12 +12026,7 @@ components:
                     format: date-time
                     example: '2022-08-08T00:00:00Z'
                   tax_codes:
-                    type: array
-                    items:
-                      type: string
-                    description: List of unique code used to identify the taxes.
-                    example:
-                      - french_standard_vat
+                    $ref: '#/components/schemas/TaxCodes'
                   skip_psp:
                     type:
                       - boolean
@@ -13696,12 +13684,7 @@ components:
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the default name will be used as the display name.
           example: Minimum Commitment (C1)
         tax_codes:
-          type: array
-          items:
-            type: string
-          description: List of unique code used to identify the taxes.
-          example:
-            - french_standard_vat
+          $ref: '#/components/schemas/TaxCodes'
     ChargeFilterInput:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
@@ -13811,12 +13794,7 @@ components:
               description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`.
               example: null
             tax_codes:
-              type: array
-              items:
-                type: string
-              description: List of unique code used to identify the taxes.
-              example:
-                - french_standard_vat
+              $ref: '#/components/schemas/TaxCodes'
             minimum_commitment:
               $ref: '#/components/schemas/MinimumCommitmentInput'
             charges:
@@ -13890,12 +13868,7 @@ components:
                     items:
                       $ref: '#/components/schemas/ChargeFilterInput'
                   tax_codes:
-                    type: array
-                    items:
-                      type: string
-                    description: List of unique code used to identify the taxes.
-                    example:
-                      - french_standard_vat
+                    $ref: '#/components/schemas/TaxCodes'
                   applied_pricing_unit:
                     type: object
                     description: The pricing unit to apply to the charge.
@@ -14049,12 +14022,7 @@ components:
               description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`.
               example: null
             tax_codes:
-              type: array
-              items:
-                type: string
-              description: List of unique code used to identify the taxes.
-              example:
-                - french_standard_vat
+              $ref: '#/components/schemas/TaxCodes'
             minimum_commitment:
               $ref: '#/components/schemas/MinimumCommitmentInput'
             charges:
@@ -14133,12 +14101,7 @@ components:
                     items:
                       $ref: '#/components/schemas/ChargeFilterInput'
                   tax_codes:
-                    type: array
-                    items:
-                      type: string
-                    description: List of unique code used to identify the taxes.
-                    example:
-                      - french_standard_vat
+                    $ref: '#/components/schemas/TaxCodes'
                   applied_pricing_unit:
                     type: object
                     description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
@@ -14266,12 +14229,7 @@ components:
           example: Startup
           description: The name of the plan.
         tax_codes:
-          type: array
-          items:
-            type: string
-          description: List of unique code used to identify the taxes.
-          example:
-            - french_standard_vat
+          $ref: '#/components/schemas/TaxCodes'
         trial_period:
           type: number
           description: The duration in days during which the base cost of the plan is offered for free.
@@ -14311,12 +14269,7 @@ components:
                 items:
                   $ref: '#/components/schemas/ChargeFilterInput'
               tax_codes:
-                type: array
-                items:
-                  type: string
-                description: List of unique code used to identify the taxes.
-                example:
-                  - french_standard_vat
+                $ref: '#/components/schemas/TaxCodes'
               applied_pricing_unit:
                 type: object
                 description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
