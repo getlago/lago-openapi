@@ -1,0 +1,71 @@
+type: object
+required:
+  - code
+properties:
+  code:
+    type: string
+    example: "seats"
+    description: "Unique code used to identify the feature."
+  name:
+    type:
+      - string
+      - "null"
+    example: "Number of seats"
+    description: "Name of the feature."
+  description:
+    type:
+      - string
+      - "null"
+    example: "Number of users of the account"
+    description: "Internal description of the feature."
+  privileges:
+    type: array
+    items:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          example: "max"
+          description: "Unique code for the privilege."
+        name:
+          type:
+            - string
+            - "null"
+          example: "Maximum"
+          description: "Display name for the privilege."
+        value_type:
+          type: string
+          enum:
+            - integer
+            - boolean
+            - string
+            - select
+          example: "integer"
+          description: "Data type of the privilege value. Default: string"
+        config:
+          type: object
+          properties:
+            select_options:
+              type: array
+              items:
+                type: string
+              example: [ "google", "okta" ]
+              description: "Array of string, required only when value_type is `select`."
+    example:
+      - code: "max"
+        name: "Maximum"
+        value_type: "integer"
+      - code: "max_admins"
+        name: "Max Admins"
+        value_type: "integer"
+      - code: "root"
+        name: "Allow root user"
+        value_type: "boolean"
+      - code: "provider"
+        name: "SSO Provider"
+        value_type: "select"
+        config:
+          select_options: [ "google", "okta" ]
+    description: "Privileges associated with this feature. Can be empty."

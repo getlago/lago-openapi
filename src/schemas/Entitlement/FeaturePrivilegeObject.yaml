@@ -1,0 +1,32 @@
+type: object
+required:
+  - code
+properties:
+  code:
+    type: string
+    example: "max"
+    description: "Unique code for the privilege."
+  name:
+    type:
+      - string
+      - "null"
+    example: "Maximum"
+    description: "Display name for the privilege."
+  value_type:
+    type: string
+    enum:
+      - integer
+      - boolean
+      - string
+      - select
+    example: "integer"
+    description: "Data type of the privilege value. Default: string"
+  config:
+    type: object
+    properties:
+      select_options:
+        type: array
+        items:
+          type: string
+        example: ["google", "okta"]
+        description: "Array of string, required only when value_type is `select`."

@@ -346,3 +346,33 @@ WebhookEndpointsPaginated:
   $ref: "./WebhookEndpointsPaginated.yaml"
 WebhookEndpointUpdateInput:
   $ref: "./WebhookEndpointUpdateInput.yaml"
+Feature:
+  $ref: "./Entitlement/Feature.yaml"
+FeatureObject:
+  $ref: "./Entitlement/FeatureObject.yaml"
+PrivilegeObject:
+  $ref: "./Entitlement/FeaturePrivilegeObject.yaml"
+FeatureCreateInput:
+  $ref: "./Entitlement/FeatureCreateInput.yaml"
+FeatureUpdateInput:
+  $ref: "./Entitlement/FeatureUpdateInput.yaml"
+FeaturesPaginated:
+  $ref: "./Entitlement/FeaturesPaginated.yaml"
+EntitlementUpdateInput:
+  $ref: "./Entitlement/EntitlementUpdateInput.yaml"
+PlanEntitlement:
+  $ref: "./Entitlement/PlanEntitlement.yaml"
+PlanEntitlementObject:
+  $ref: "./Entitlement/PlanEntitlementObject.yaml"
+PlanEntitlements:
+  $ref: "./Entitlement/PlanEntitlements.yaml"
+PlanEntitlementPrivilegeObject:
+  $ref: "./Entitlement/PlanEntitlementPrivilegeObject.yaml"
+SubscriptionEntitlement:
+  $ref: "./Entitlement/SubscriptionEntitlement.yaml"
+SubscriptionEntitlementObject:
+  $ref: "./Entitlement/SubscriptionEntitlementObject.yaml"
+SubscriptionEntitlements:
+  $ref: "./Entitlement/SubscriptionEntitlements.yaml"
+SubscriptionEntitlementPrivilegeObject:
+  $ref: "./Entitlement/SubscriptionEntitlementPrivilegeObject.yaml"
