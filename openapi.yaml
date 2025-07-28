@@ -1478,9 +1478,9 @@ paths:
                 $ref: '#/components/schemas/CustomersPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  /customers/{external_customer_id}:
+  /customers/{external_id}:
     parameters:
-      - name: external_customer_id
+      - name: external_id
         in: path
         description: The customer external unique identifier (provided by your own application)
         required: true
@@ -1521,7 +1521,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
+  /customers/{external_customer_id}/applied_coupons/{id}:
     delete:
       tags:
         - coupons
@@ -1536,7 +1536,7 @@ paths:
           schema:
             type: string
             example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-        - name: applied_coupon_id
+        - name: id
           in: path
           description: Unique identifier of the applied coupon, created by Lago.
           required: true
@@ -1557,7 +1557,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /customers/{external_customer_id}/portal_url:
+  /customers/{customer_external_id}/portal_url:
     get:
       tags:
         - customers
@@ -1567,7 +1567,7 @@ paths:
 
         This endpoint allows you to fetch the URL that can be embedded to provide customers access to a dedicated portal
       parameters:
-        - name: external_customer_id
+        - name: customer_external_id
           in: path
           description: External ID of the existing customer
           required: true
@@ -1598,14 +1598,14 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /customers/{external_customer_id}/current_usage:
+  /customers/{customer_external_id}/current_usage:
     get:
       tags:
         - customers
       summary: Retrieve customer current usage
       description: This endpoint enables the retrieval of the usage-based billing data for a customer within the current period.
       parameters:
-        - name: external_customer_id
+        - name: customer_external_id
           in: path
           description: The customer external unique identifier (provided by your own application).
           required: true
@@ -1641,7 +1641,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /customers/{external_customer_id}/past_usage:
+  /customers/{customer_external_id}/past_usage:
     get:
       tags:
         - customers
@@ -1650,7 +1650,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - name: external_customer_id
+        - name: customer_external_id
           in: path
           description: The customer external unique identifier (provided by your own application).
           required: true
@@ -1695,14 +1695,14 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-  /customers/{external_customer_id}/checkout_url:
+  /customers/{customer_external_id}/checkout_url:
     post:
       tags:
         - customers
       summary: Generate a Customer Payment Provider Checkout URL
       description: This endpoint regenerates the Payment Provider Checkout URL of a Customer.
       parameters:
-        - name: external_customer_id
+        - name: customer_external_id
           in: path
           description: The customer external unique identifier (provided by your own application).
           required: true
@@ -10099,6 +10099,10 @@ components:
           $ref: '#/components/schemas/CustomerBillingConfiguration'
         shipping_address:
           $ref: '#/components/schemas/Address'
+        external_salesforce_id:
+          type: string
+          description: Salesforce ID of this customer.
+          example: 0035g00000ABCdEAA1
         metadata:
           type: array
           items:
@@ -10173,15 +10177,18 @@ components:
         - $ref: '#/components/schemas/CustomerObject'
         - type: object
           properties:
-            metadata:
-              type: array
-              items:
-                $ref: '#/components/schemas/CustomerMetadata'
             taxes:
               description: List of customer taxes
               type: array
               items:
                 $ref: '#/components/schemas/TaxObject'
+            vies_check:
+              type: object
+              properties:
+                valid:
+                  type: boolean
+                  description: Whether the VIES check was successful
+                  example: true
             applicable_invoice_custom_sections:
               description: The customer’s invoice custom section used for generating invoices.
               type: array
@@ -10377,39 +10384,7 @@ components:
             integration_customers:
               type: array
               items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                    description: A unique identifier for the integration customer object in the Lago application.
-                  integration_type:
-                    type: string
-                    example: netsuite
-                    description: |-
-                      The integration type used for accounting and tax syncs.
-                      Accepted values: `netsuite, anrok, xero`.
-                    enum:
-                      - netsuite
-                      - anrok
-                      - xero
-                  integration_code:
-                    type: string
-                    example: netsuite-eu-1
-                    description: Unique code used to identify an integration connection.
-                  external_customer_id:
-                    type: string
-                    example: cus_12345
-                    description: The customer ID within the integration's system. If this field is not provided, Lago has the option to create a new customer record within the integration's system on behalf of the customer.
-                  sync_with_provider:
-                    type: boolean
-                    example: true
-                    description: Set this field to `true` if you want to create a customer record in the integration's system. This option is applicable only when the `external_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
-                  subsidiary_id:
-                    type: string
-                    example: '2'
-                    description: This optional field is needed only when working with `netsuite` connection.
+                $ref: '#/components/schemas/IntegrationCustomer'
             metadata:
               type: array
               description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
@@ -10448,6 +10423,10 @@ components:
               description: List of unique codes identifying the invoice custom sections.
               example:
                 - eu_bank_details
+            external_salesforce_id:
+              type: string
+              description: Salesforce ID of this customer.
+              example: 0035g00000ABCdEAA1
     Customer:
       type: object
       required:
@@ -10716,7 +10695,7 @@ components:
           $ref: '#/components/schemas/PaginationMeta'
     CustomerCheckoutUrl:
       type: object
-      description: .
+      description: A URL that directs the customer to the checkout page for the choosen payment provider.
       properties:
         customer:
           type: object

@@ -2,15 +2,18 @@ allOf:
   - $ref: './CustomerObject.yaml'
   - type: object
     properties:
-      metadata:
-        type: array
-        items:
-          $ref: './CustomerMetadata.yaml'
       taxes:
         description: List of customer taxes
         type: array
         items:
           $ref: './TaxObject.yaml'
+      vies_check:
+        type: object
+        properties:
+          valid:
+            type: boolean
+            description: "Whether the VIES check was successful"
+            example: true
       applicable_invoice_custom_sections:
         description: The customer’s invoice custom section used for generating invoices.
         type: array
