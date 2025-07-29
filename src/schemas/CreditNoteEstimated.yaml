@@ -9,10 +9,12 @@ properties:
       - invoice_number
       - currency
       - taxes_amount_cents
+      - precise_taxes_amount_cents
       - sub_total_excluding_taxes_amount_cents
       - max_creditable_amount_cents
       - max_refundable_amount_cents
       - coupons_adjustment_amount_cents
+      - precise_coupons_adjustment_amount_cents
       - taxes_rate
       - items
     properties:
@@ -33,6 +35,10 @@ properties:
         type: integer
         description: The tax amount of the credit note, expressed in cents.
         example: 20
+      precise_taxes_amount_cents:
+        type: number
+        description: "The precise tax amount of the credit note, expressed in cents with decimal precision."
+        example: 20.1
       taxes_rate:
         type: number
         description: The tax rate associated with this specific credit note.
@@ -53,6 +59,10 @@ properties:
         type: integer
         description: The pro-rated amount of the coupons applied to the source invoice.
         example: 20
+      precise_coupons_adjustment_amount_cents:
+        type: number
+        description: The precise pro-rated amount with decimal precision of the coupons applied to the source invoice.
+        example: 20.1
       items:
         type: array
         items:

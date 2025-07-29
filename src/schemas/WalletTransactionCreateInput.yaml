@@ -9,30 +9,38 @@ properties:
     properties:
       wallet_id:
         type: string
-        format: 'uuid'
+        format: "uuid"
         description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
-        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
       paid_credits:
-        type: string
-        pattern: '^[0-9]+.?[0-9]*$'
+        type:
+          - string
+          - "null"
+        pattern: "^[0-9]+.?[0-9]*$"
         description: The number of paid credits.
-        example: '20.0'
+        example: "20.0"
       granted_credits:
-        type: string
-        pattern: '^[0-9]+.?[0-9]*$'
+        type:
+          - string
+          - "null"
+        pattern: "^[0-9]+.?[0-9]*$"
         description: The number of free granted credits.
-        example: '10.0'
+        example: "10.0"
       voided_credits:
-        type: string
-        pattern: '^[0-9]+.?[0-9]*$'
+        type:
+          - string
+          - "null"
+        pattern: "^[0-9]+.?[0-9]*$"
         description: The number of voided credits.
-        example: '5.0'
+        example: "5.0"
       invoice_requires_successful_payment:
         type: boolean
         description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
         example: false
       metadata:
-        type: array
+        type:
+          - array
+          - "null"
         description: This optional field allows you to store a list of key-value pairs that hold additional information or custom attributes related to the data.
         items:
           type: object

@@ -36,6 +36,8 @@ properties:
     $ref: "./Currency.yaml"
     description: The currency of a usage item consumed by the customer.
     example: "EUR"
+  pricing_unit_details:
+    $ref: "./UsagePricingUnitDetailsObject.yaml"
   charge:
     type: object
     description: Object listing all the properties for a specific charge item.

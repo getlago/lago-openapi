@@ -1,4 +1,9 @@
 type: object
+required:
+  - lago_wallet_transaction_id
+  - lago_customer_id
+  - external_customer_id
+  - payment_provider
 description: .
 properties:
   wallet_transaction_payment_details:
@@ -14,13 +19,13 @@ properties:
         description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction's record within the Lago system
       external_customer_id:
         type: string
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
-        description: 'The customer external unique identifier (provided by your own application)'
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+        description: "The customer external unique identifier (provided by your own application)"
       payment_provider:
         type: string
-        example: 'stripe'
+        example: "stripe"
         description: The Payment Provider name linked to the Customer.
       payment_url:
         type: string
-        example: 'https://foo.bar'
+        example: "https://foo.bar"
         description: The generated Payment URL for the Wallet transaction.

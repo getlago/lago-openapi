@@ -1,0 +1,21 @@
+type:
+  - object
+  - "null"
+required:
+  - amount_cents
+  - short_name
+  - conversion_rate
+description: Details about the pricing unit used for charge usage.
+properties:
+  amount_cents:
+    type: integer
+    example: 200
+    description: The amount in cents in the pricing unit.
+  short_name:
+    type: string
+    example: "CR"
+    description: The short name of the pricing unit.
+  conversion_rate:
+    type: string
+    example: "0.5"
+    description: The conversion rate from pricing units to the plan's currency.

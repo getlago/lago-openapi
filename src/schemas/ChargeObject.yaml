@@ -2,9 +2,17 @@ type: object
 required:
   - lago_id
   - lago_billable_metric_id
+  - invoice_display_name
   - billable_metric_code
   - created_at
   - charge_model
+  - invoiceable
+  - regroup_paid_fees
+  - pay_in_advance
+  - prorated
+  - min_amount_cents
+  - properties
+  - filters
 properties:
   lago_id:
     type: string
@@ -21,7 +29,9 @@ properties:
     description: Unique code identifying a billable metric.
     example: "requests"
   invoice_display_name:
-    type: string
+    type:
+      - string
+      - "null"
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
     example: "Setup"
   created_at:
@@ -88,3 +98,20 @@ properties:
     description: All taxes applied to the charge.
     items:
       $ref: "./TaxObject.yaml"
+  applied_pricing_unit:
+    type:
+      - object
+      - "null"
+    required:
+      - code
+      - conversion_rate
+    description: The pricing unit applied to the charge.
+    properties:
+      code:
+        type: string
+        description: The code of the pricing unit.
+        example: "unit_code"
+      conversion_rate:
+        type: string
+        description: The conversion rate from pricing units to the plan's currency.
+        example: "0.5"

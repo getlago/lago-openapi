@@ -106,10 +106,10 @@ CreditNoteItemObject:
   $ref: "./CreditNoteItemObject.yaml"
 CreditNoteObject:
   $ref: "./CreditNoteObject.yaml"
-CreditNotes:
-  $ref: "./CreditNotes.yaml"
 CreditNoteCreateInput:
   $ref: "./CreditNoteCreateInput.yaml"
+CreditNoteErrorDetailsObject:
+  $ref: "./CreditNoteErrorDetailsObject.yaml"
 CreditNoteUpdateInput:
   $ref: "./CreditNoteUpdateInput.yaml"
 CreditNoteExtendedObject:
@@ -162,12 +162,16 @@ CustomerViesCheckObject:
   $ref: "./CustomerViesCheckObject.yaml"
 Event:
   $ref: "./Event.yaml"
+EventBatchEstimateInstantFeesInput:
+  $ref: "./EventBatchEstimateInstantFeesInput.yaml"
 EventBatchInput:
   $ref: "./EventBatchInput.yaml"
 EventCreated:
   $ref: "./EventCreated.yaml"
 EventEstimateFeesInput:
   $ref: "./EventEstimateFeesInput.yaml"
+EventEstimateInstantFeesInput:
+  $ref: "./EventEstimateInstantFeesInput.yaml"
 EventInput:
   $ref: "./EventInput.yaml"
 EventObject:
@@ -330,6 +334,8 @@ WalletTransactionsPaginated:
   $ref: "./WalletTransactionsPaginated.yaml"
 WalletUpdateInput:
   $ref: "./WalletUpdateInput.yaml"
+PricingUnitDetailsObject:
+  $ref: "./PricingUnitDetailsObject.yaml"
 WebhookEndpoint:
   $ref: "./WebhookEndpoint.yaml"
 WebhookEndpointCreateInput:

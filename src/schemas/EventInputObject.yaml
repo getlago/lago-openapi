@@ -23,9 +23,9 @@ properties:
     example: "storage"
     description: The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.
   timestamp:
-    anyOf:
-      - type: integer
-      - type: string
+    type:
+      - integer
+      - string
     example: "1651240791.123"
     description: |
       This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
@@ -38,7 +38,9 @@ properties:
     example: "1234.56"
     description: The precise total amount in cents with precision used by the `dynamic` pricing model to compute the usage amount.
   properties:
-    type: object
+    type:
+      - object
+      - "null"
     description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
     additionalProperties:
       oneOf:

@@ -5,7 +5,7 @@ parameters:
     required: true
     schema:
       type: string
-      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+      example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
 get:
   tags:
     - subscriptions
@@ -29,16 +29,16 @@ get:
           - canceled
         example: active
   responses:
-    '200':
+    "200":
       description: Subscription
       content:
         application/json:
           schema:
-            $ref: '../schemas/Subscription.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
+            $ref: "../schemas/Subscription.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
 put:
   tags:
     - subscriptions
@@ -50,23 +50,23 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/SubscriptionUpdateInput.yaml'
+          $ref: "../schemas/SubscriptionUpdateInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Subscription updated
       content:
         application/json:
           schema:
-            $ref: '../schemas/Subscription.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/Subscription.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
 delete:
   tags:
     - subscriptions
@@ -81,17 +81,49 @@ delete:
       explode: true
       schema:
         type: string
-        example: 'pending'
+        example: "pending"
+    - name: on_termination_credit_note
+      in: query
+      description: |
+        When a pay-in-advance subscription is terminated before the end of its billing period, we generate a credit note for the unused subscription time by default.
+        This field allows you to control the behavior of the credit note generation:
+
+        - `credit`: A credit note is generated for the unused subscription time.
+        - `skip`: No credit note is generated for the unused subscription time.
+
+        _Note: This field is only applicable to pay-in-advance plans and is ignored for pay-in-arrears plans._
+      required: false
+      schema:
+        type: string
+        enum:
+          - credit
+          - skip
+        example: "credit"
+    - name: on_termination_invoice
+      in: query
+      description: |
+        When a subscription is terminated before the end of its billing period, we generate an invoice for the unbilled usage.
+        This field allows you to control the behavior of the invoice generation:
+
+        - `generate`: An invoice is generated for the unbilled usage.
+        - `skip`: No invoice is generated for the unbilled usage.
+      required: false
+      schema:
+        type: string
+        enum:
+          - generate
+          - skip
+        example: "generate"
   responses:
-    '200':
+    "200":
       description: Subscription terminated
       content:
         application/json:
           schema:
-            $ref: '../schemas/Subscription.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
-    '405':
-      $ref: '../responses/NotAllowed.yaml'
+            $ref: "../schemas/Subscription.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "405":
+      $ref: "../responses/NotAllowed.yaml"

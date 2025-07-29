@@ -5,8 +5,8 @@ parameters:
     required: true
     schema:
       type: string
-      format: 'uuid'
-      example: 'bb0a27be-51f7-4f4f-aad0-2abc80534c0f'
+      format: "uuid"
+      example: "bb0a27be-51f7-4f4f-aad0-2abc80534c0f"
 get:
   tags:
     - wallets
@@ -14,13 +14,15 @@ get:
   description: This endpoint is used to retrieve a specific wallet transactions.
   operationId: findWalletTransaction
   responses:
-    '200':
+    "200":
       description: Wallet transaction
       content:
         application/json:
           schema:
-            $ref: '../schemas/WalletTransactionObject.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
+            $ref: "../schemas/WalletTransactionObject.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

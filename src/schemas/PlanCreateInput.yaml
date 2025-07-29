@@ -136,6 +136,21 @@ properties:
                 type: string
               description: List of unique code used to identify the taxes.
               example: [french_standard_vat]
+            applied_pricing_unit:
+              type: object
+              description: The pricing unit to apply to the charge.
+              properties:
+                code:
+                  type: string
+                  description: The code of the pricing unit.
+                  example: "credits"
+                conversion_rate:
+                  type: string
+                  description: |-
+                    The conversion rate from pricing units to the plan's currency.
+                    This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
+                    For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50.
+                  example: "0.5"
         example:
           - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a91"
             charge_model: "package"

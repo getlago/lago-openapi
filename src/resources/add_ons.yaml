@@ -9,21 +9,23 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/AddOnCreateInput.yaml'
+          $ref: "../schemas/AddOnCreateInput.yaml"
     required: true
   responses:
-    '200':
+    "200":
       description: Add-on created
       content:
         application/json:
           schema:
-            $ref: '../schemas/AddOn.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/AddOn.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
 get:
   tags:
     - add_ons
@@ -31,14 +33,16 @@ get:
   description: This endpoint is used to list all existing add-ons.
   operationId: findAllAddOns
   parameters:
-    - $ref: '../parameters/page.yaml'
-    - $ref: '../parameters/per_page.yaml'
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
   responses:
-    '200':
+    "200":
       description: Add-ons
       content:
         application/json:
           schema:
-            $ref: '../schemas/AddOnsPaginated.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
+            $ref: "../schemas/AddOnsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"

@@ -3,6 +3,7 @@ required:
   - invalid_code
   - missing_aggregation_property
   - invalid_filter_values
+  - missing_group_key
 properties:
   invalid_code:
     type: array
@@ -25,3 +26,8 @@ properties:
     description: List of event transaction_id with invalid filter values
     example:
       - transaction_1234567890
+  missing_group_key:
+    type: array
+    items:
+      type: string
+    deprecated: true

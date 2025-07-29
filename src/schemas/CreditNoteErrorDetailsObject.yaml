@@ -1,0 +1,23 @@
+type: object
+required:
+  - lago_id
+  - error_code
+  - details
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: The credit note error details unique identifier, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  error_code:
+    type: string
+    enum:
+      - not_provided
+      - tax_error
+      - tax_voiding_error
+      - invoice_generation_error
+    description: The type of the error.
+    example: tax_error
+  details:
+    type: object
+    description: The details of the error.
