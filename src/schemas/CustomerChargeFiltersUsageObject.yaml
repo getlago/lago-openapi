@@ -31,6 +31,9 @@ items:
       type: object
       description: "List of filter values applied to the usage."
       additionalProperties:
-        type: string
+        type: array
+        items:
+          type: string
       example:
-        region: us-east-1
+        region: 
+          - us-east-1
