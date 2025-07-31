@@ -1,0 +1,53 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+post:
+  tags:
+    - entitlements
+  summary: Create an entitlement
+  description: This endpoint creates a new entitlement by adding a feature to a plan. The feature must exist and all privileges must be valid for the feature.
+  operationId: createEntitlement
+  requestBody:
+    description: Entitlement payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/Entitlement/EntitlementUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Entitlement created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/PlanEntitlement.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - entitlements
+  summary: List all entitlements
+  description: This endpoint retrieves all entitlements for a specific plan.
+  operationId: findAllEntitlements
+  responses:
+    '200':
+      description: List of entitlements
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/PlanEntitlements.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

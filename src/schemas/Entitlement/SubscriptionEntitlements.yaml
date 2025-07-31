@@ -1,0 +1,8 @@
+type: object
+required:
+  - entitlements
+properties:
+  entitlements:
+    type: array
+    items:
+      $ref: "./SubscriptionEntitlementObject.yaml" 

@@ -1,0 +1,77 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+  - name: feature_code
+    in: path
+    description: Code of the existing feature.
+    required: true
+    schema:
+      type: string
+      example: 'seats'
+get:
+  tags:
+    - entitlements
+  summary: Retrieve an entitlement
+  description: This endpoint retrieves a specific entitlement for a plan.
+  operationId: findEntitlement
+  responses:
+    '200':
+      description: Entitlement
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/PlanEntitlement.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+patch:
+  tags:
+    - entitlements
+  summary: Partial update of an entitlement
+  description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All feature and privileges not part of the payload are ignored. To remove privileges or feature, use the delete endpoints. All privileges must be valid for the feature.
+  operationId: updateEntitlement
+  requestBody:
+    description: Entitlement payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/Entitlement/EntitlementUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Entitlement updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/PlanEntitlement.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - entitlements
+  summary: Delete an entitlement
+  description: This endpoint deletes an existing entitlement by removing the feature from the plan.
+  operationId: destroyEntitlement
+  responses:
+    '200':
+      description: Entitlement deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/PlanEntitlement.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
