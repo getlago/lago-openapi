@@ -248,9 +248,7 @@ properties:
         description: The description of the fee item. It can be the description of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
         example: "Startup"
       invoice_display_name:
-        type:
-          - string
-          - "null"
+        type: string
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
         example: "Setup Fee (SF1)"
       filter_invoice_display_name:
