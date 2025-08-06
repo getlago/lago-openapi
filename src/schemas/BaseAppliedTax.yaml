@@ -1,41 +1,55 @@
 type: object
+required:
+  - lago_id
+  - lago_tax_id
+  - tax_name
+  - tax_code
+  - tax_rate
+  - tax_description
+  - amount_cents
+  - amount_currency
+  - created_at
 properties:
   lago_id:
     type: string
-    format: 'uuid'
+    format: "uuid"
     description: Unique identifier of the applied tax, created by Lago.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_tax_id:
-    type: string
-    format: 'uuid'
+    type:
+      - string
+      - "null"
+    format: "uuid"
     description: Unique identifier of the tax, created by Lago.
-    example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   tax_name:
     type: string
     description: Name of the tax.
-    example: 'TVA'
+    example: "TVA"
   tax_code:
     type: string
     description: Unique code used to identify the tax associated with the API request.
-    example: 'french_standard_vat'
+    example: "french_standard_vat"
   tax_rate:
     type: number
     description: The percentage rate of the tax
     example: 20.0
   tax_description:
-    type: string
-    description: Internal description of the taxe
-    example: 'French standard VAT'
+    type:
+      - string
+      - "null"
+    description: Internal description of the tax
+    example: "French standard VAT"
   amount_cents:
     type: integer
     description: Amount of the tax
     example: 2000
   amount_currency:
-    $ref: './Currency.yaml'
+    $ref: "./Currency.yaml"
     description: Currency of the tax
-    example: 'USD'
+    example: "USD"
   created_at:
     type: string
-    format: 'date-time'
+    format: "date-time"
     description: The date and time when the applied tax was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the applied tax was initially created.
-    example: '2022-09-14T16:35:31Z'
+    example: "2022-09-14T16:35:31Z"

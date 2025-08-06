@@ -1973,7 +1973,7 @@ paths:
             example: et_12345678
         - name: currency
           in: query
-          description: Filter results by fee's currency.
+          description: Filter results by fee"s currency.
           required: false
           explode: true
           schema:
@@ -1982,7 +1982,7 @@ paths:
               - example: USD
         - name: fee_type
           in: query
-          description: The fee type. Possible values are `add-on`, `charge`, `credit` or `subscription`.
+          description: The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or "commitment".
           required: false
           explode: true
           schema:
@@ -1992,7 +1992,7 @@ paths:
               - add_on
               - subscription
               - credit
-              - instant_charge
+              - commitment
             example: charge
         - name: billable_metric_code
           in: query
@@ -6550,8 +6550,10 @@ components:
           description: Unique code used to identify the tax associated with the API request.
           example: french_standard_vat
         description:
-          type: string
-          description: Internal description of the taxe
+          type:
+            - string
+            - 'null'
+          description: Internal description of the tax
           example: French standard VAT
         rate:
           type: number
@@ -8445,6 +8447,11 @@ components:
           pattern: ^[0-9]+.?[0-9]*$
           description: Total amount to charge for received paid_units, defined for Package or Percentage charge model.
           example: '0.5'
+        per_unit_total_amount:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: Total amount of received units to be charged for the Volume or Percentage charge model.
+          example: '10.0'
         units:
           type: string
           pattern: ^[0-9]+.?[0-9]*$
@@ -8459,10 +8466,6 @@ components:
           format: ^[0-9]+.?[0-9]*$
           description: Percentage rate applied for the Percentage charge model.
           example: '1.0'
-        per_unit_total_amount:
-          type: string
-          description: Total amount of received units to be charged for the Percentage charge model.
-          example: '10.0'
         paid_events:
           type: integer
           example: 20
@@ -8479,33 +8482,28 @@ components:
           type: string
           description: Total adjustment amount linked to minimum and maximum spending per transaction for the Percentage charge model.
           example: '20.0'
-        volume_ranges:
-          type: array
-          description: Volume ranges, used for a `volume` charge model.
-          items:
-            type: object
-            required:
-              - per_unit_amount
-              - flat_unit_amount
-              - per_unit_total_amount
-            properties:
-              per_unit_amount:
-                type: string
-                pattern: ^[0-9]+.?[0-9]*$
-                description: The flat amount for a whole tier, excluding tax, for a `volume` charge model.
-                example: '0.5'
-              flat_unit_amount:
-                type: string
-                pattern: ^[0-9]+.?[0-9]*$
-                description: The unit price, excluding tax, for a specific tier of a `volume` charge model.
-                example: '10.0'
-              per_unit_total_amount:
-                type: string
-                pattern: ^[0-9]+.?[0-9]*$
-                description: Total amount of received units to be charged.
-                example: '10.0'
+        per_unit_amount:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The flat amount for a whole tier, excluding tax, for a `volume` charge model.
+          example: '0.5'
+        flat_unit_amount:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The unit price, excluding tax, for a specific tier of a `volume` charge model.
+          example: '10.0'
     BaseAppliedTax:
       type: object
+      required:
+        - lago_id
+        - lago_tax_id
+        - tax_name
+        - tax_code
+        - tax_rate
+        - tax_description
+        - amount_cents
+        - amount_currency
+        - created_at
       properties:
         lago_id:
           type: string
@@ -8513,7 +8511,9 @@ components:
           description: Unique identifier of the applied tax, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_tax_id:
-          type: string
+          type:
+            - string
+            - 'null'
           format: uuid
           description: Unique identifier of the tax, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
@@ -8530,8 +8530,10 @@ components:
           description: The percentage rate of the tax
           example: 20
         tax_description:
-          type: string
-          description: Internal description of the taxe
+          type:
+            - string
+            - 'null'
+          description: Internal description of the tax
           example: French standard VAT
         amount_cents:
           type: integer
@@ -8685,10 +8687,6 @@ components:
             - 'null'
           description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge or subscription.
           example: external_id
-        invoice_display_name:
-          type: string
-          description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-          example: Setup Fee (SF1)
         amount_cents:
           type: integer
           description: The cost of this specific fee, excluding any applicable taxes.
@@ -8734,7 +8732,9 @@ components:
           description: The currency of this specific fee, including any applicable taxes.
           example: EUR
         events_count:
-          type: integer
+          type:
+            - integer
+            - 'null'
           description: The number of events that have been sent and used to charge the customer. This field indicates the count or quantity of events that have been processed and considered in the charging process.
           example: 23
         pay_in_advance:
@@ -8802,6 +8802,16 @@ components:
             - 'null'
           description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge` and the payment for the fee is made in advance (`pay_in_advance` is set to `true`).
           example: transaction_1234567890
+        description:
+          type:
+            - string
+            - 'null'
+          description: The description of the fee.
+          example: Fee description
+        precise_coupons_amount_cents:
+          type: string
+          description: The coupon amount applied to the fee, with precision.
+          example: '0.0'
         amount_details:
           $ref: '#/components/schemas/FeeAmountDetails'
           description: List of all unit amount details for calculating the fee.
@@ -8826,6 +8836,7 @@ components:
                 - add_on
                 - subscription
                 - credit
+                - commitment
               description: The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or `commitment`.
               example: subscription
             code:
@@ -8836,16 +8847,28 @@ components:
               type: string
               description: The name of the fee item. It can be the name of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
               example: Startup
+            description:
+              type:
+                - string
+                - 'null'
+              description: The description of the fee item. It can be the description of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+              example: Startup
             invoice_display_name:
-              type: string
+              type:
+                - string
+                - 'null'
               description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
               example: Setup Fee (SF1)
             filter_invoice_display_name:
-              type: string
+              type:
+                - string
+                - 'null'
               description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the actual charge filter values will be used as the default display name.
               example: AWS eu-east-1
             filters:
-              type: object
+              type:
+                - object
+                - 'null'
               description: Key value list of event properties
               additionalProperties:
                 type: array
@@ -11285,14 +11308,17 @@ components:
         event:
           $ref: '#/components/schemas/EventObject'
     FeesPaginated:
-      allOf:
-        - $ref: '#/components/schemas/Fees'
-        - type: object
-          required:
-            - meta
-          properties:
-            meta:
-              $ref: '#/components/schemas/PaginationMeta'
+      type: object
+      required:
+        - fees
+        - meta
+      properties:
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     Fee:
       type: object
       required:

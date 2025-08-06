@@ -129,6 +129,13 @@ properties:
     description: Total amount to charge for received paid_units, defined for Package or Percentage charge model.
     example: "0.5"
 
+  # Shared for Volume & Percentage charge models
+  per_unit_total_amount:
+    type: string
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: Total amount of received units to be charged for the Volume or Percentage charge model.
+    example: "10.0"
+
   # Percentage charge model
   units:
     type: string
@@ -144,10 +151,6 @@ properties:
     format: "^[0-9]+.?[0-9]*$"
     description: Percentage rate applied for the Percentage charge model.
     example: "1.0"
-  per_unit_total_amount:
-    type: string
-    description: Total amount of received units to be charged for the Percentage charge model.
-    example: "10.0"
   paid_events:
     type: integer
     example: 20
@@ -166,28 +169,13 @@ properties:
     example: "20.0"
 
   # Volume charge model
-  volume_ranges:
-    type: array
-    description: Volume ranges, used for a `volume` charge model.
-    items:
-      type: object
-      required:
-        - per_unit_amount
-        - flat_unit_amount
-        - per_unit_total_amount
-      properties:
-        per_unit_amount:
-          type: string
-          pattern: "^[0-9]+.?[0-9]*$"
-          description: The flat amount for a whole tier, excluding tax, for a `volume` charge model.
-          example: "0.5"
-        flat_unit_amount:
-          type: string
-          pattern: "^[0-9]+.?[0-9]*$"
-          description: The unit price, excluding tax, for a specific tier of a `volume` charge model.
-          example: "10.0"
-        per_unit_total_amount:
-          type: string
-          pattern: "^[0-9]+.?[0-9]*$"
-          description: Total amount of received units to be charged.
-          example: "10.0"
+  per_unit_amount:
+    type: string
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: The flat amount for a whole tier, excluding tax, for a `volume` charge model.
+    example: "0.5"
+  flat_unit_amount:
+    type: string
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: The unit price, excluding tax, for a specific tier of a `volume` charge model.
+    example: "10.0"
