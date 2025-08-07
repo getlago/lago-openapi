@@ -81,10 +81,6 @@ properties:
       - "null"
     description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge or subscription.
     example: "external_id"
-  invoice_display_name:
-    type: string
-    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-    example: "Setup Fee (SF1)"
   amount_cents:
     type: integer
     description: The cost of this specific fee, excluding any applicable taxes.
@@ -130,7 +126,9 @@ properties:
     description: The currency of this specific fee, including any applicable taxes.
     example: "EUR"
   events_count:
-    type: integer
+    type:
+      - integer
+      - "null"
     description: The number of events that have been sent and used to charge the customer. This field indicates the count or quantity of events that have been processed and considered in the charging process.
     example: 23
   pay_in_advance:
@@ -198,6 +196,16 @@ properties:
       - "null"
     description: Unique identifier assigned to the transaction. This field is specifically displayed when the fee type is `charge` and the payment for the fee is made in advance (`pay_in_advance` is set to `true`).
     example: "transaction_1234567890"
+  description:
+    type:
+      - string
+      - "null"
+    description: The description of the fee.
+    example: "Fee description"
+  precise_coupons_amount_cents:
+    type: string
+    description: The coupon amount applied to the fee, with precision.
+    example: "0.0"
   amount_details:
     $ref: "./FeeAmountDetails.yaml"
     description: List of all unit amount details for calculating the fee.
@@ -222,6 +230,7 @@ properties:
           - add_on
           - subscription
           - credit
+          - commitment
         description: The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or `commitment`.
         example: subscription
       code:
@@ -232,16 +241,26 @@ properties:
         type: string
         description: The name of the fee item. It can be the name of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
         example: "Startup"
+      description:
+        type:
+          - string
+          - "null"
+        description: The description of the fee item. It can be the description of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+        example: "Startup"
       invoice_display_name:
         type: string
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
         example: "Setup Fee (SF1)"
       filter_invoice_display_name:
-        type: string
+        type:
+          - string
+          - "null"
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the actual charge filter values will be used as the default display name.
         example: "AWS eu-east-1"
       filters:
-        type: object
+        type:
+          - object
+          - "null"
         description: Key value list of event properties
         additionalProperties:
           type: array

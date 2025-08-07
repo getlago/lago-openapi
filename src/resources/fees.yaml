@@ -5,10 +5,10 @@ get:
   description: This endpoint is used for retrieving all fees that has been issued.
   operationId: findAllFees
   parameters:
-    - $ref: '../parameters/page.yaml'
-    - $ref: '../parameters/per_page.yaml'
-    - $ref: '../parameters/external_customer_id.yaml'
-    - $ref: '../parameters/external_subscription_id.yaml'
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - $ref: "../parameters/external_customer_id.yaml"
+    - $ref: "../parameters/external_subscription_id.yaml"
     - name: event_transaction_id
       in: query
       description: Filter results by event transaction ID
@@ -16,19 +16,19 @@ get:
       explode: true
       schema:
         type: string
-        example: 'et_12345678'
+        example: "et_12345678"
     - name: currency
       in: query
-      description: Filter results by fee's currency.
+      description: Filter results by fee"s currency.
       required: false
       explode: true
       schema:
         allOf:
-          - $ref: '../schemas/Currency.yaml'
-          - example: 'USD'
+          - $ref: "../schemas/Currency.yaml"
+          - example: "USD"
     - name: fee_type
       in: query
-      description: The fee type. Possible values are `add-on`, `charge`, `credit` or `subscription`.
+      description: The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or "commitment".
       required: false
       explode: true
       schema:
@@ -38,8 +38,8 @@ get:
           - add_on
           - subscription
           - credit
-          - instant_charge
-        example: 'charge'
+          - commitment
+        example: "charge"
     - name: billable_metric_code
       in: query
       description: Filter results by the `code` of the billable metric attached to the fee. Only applies to `charge` types.
@@ -47,7 +47,7 @@ get:
       explode: true
       schema:
         type: string
-        example: 'bm_code'
+        example: "bm_code"
     - name: payment_status
       in: query
       description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and refunded`.
@@ -60,7 +60,7 @@ get:
           - succeeded
           - failed
           - refunded
-        example: 'succeeded'
+        example: "succeeded"
     - name: created_at_from
       in: query
       description: Filter results created after creation date and time in UTC.
@@ -68,7 +68,7 @@ get:
       explode: true
       schema:
         type: string
-        example: '2023-03-28T12:21:51Z'
+        example: "2023-03-28T12:21:51Z"
         format: date-time
     - name: created_at_to
       in: query
@@ -77,7 +77,7 @@ get:
       explode: true
       schema:
         type: string
-        example: '2023-03-28T12:21:51Z'
+        example: "2023-03-28T12:21:51Z"
         format: date-time
     - name: succeeded_at_from
       in: query
@@ -86,7 +86,7 @@ get:
       explode: true
       schema:
         type: string
-        example: '2023-03-28T12:21:51Z'
+        example: "2023-03-28T12:21:51Z"
         format: date-time
     - name: succeeded_at_to
       in: query
@@ -95,7 +95,7 @@ get:
       explode: true
       schema:
         type: string
-        example: '2023-03-28T12:21:51Z'
+        example: "2023-03-28T12:21:51Z"
         format: date-time
     - name: failed_at_from
       in: query
@@ -104,7 +104,7 @@ get:
       explode: true
       schema:
         type: string
-        example: '2023-03-28T12:21:51Z'
+        example: "2023-03-28T12:21:51Z"
         format: date-time
     - name: failed_at_to
       in: query
@@ -113,7 +113,7 @@ get:
       explode: true
       schema:
         type: string
-        example: '2023-03-28T12:21:51Z'
+        example: "2023-03-28T12:21:51Z"
         format: date-time
     - name: refunded_at_from
       in: query
@@ -122,7 +122,7 @@ get:
       explode: true
       schema:
         type: string
-        example: '2023-03-28T12:21:51Z'
+        example: "2023-03-28T12:21:51Z"
         format: date-time
     - name: refunded_at_to
       in: query
@@ -131,16 +131,16 @@ get:
       explode: true
       schema:
         type: string
-        example: '2023-03-28T12:21:51Z'
+        example: "2023-03-28T12:21:51Z"
         format: date-time
   responses:
-    '200':
+    "200":
       description: Successful response
       content:
         application/json:
           schema:
-            $ref: '../schemas/FeesPaginated.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
+            $ref: "../schemas/FeesPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
