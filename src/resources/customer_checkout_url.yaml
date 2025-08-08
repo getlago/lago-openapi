@@ -4,7 +4,7 @@ post:
   summary: Generate a Customer Payment Provider Checkout URL
   description: This endpoint regenerates the Payment Provider Checkout URL of a Customer.
   parameters:
-    - name: external_customer_id
+    - name: customer_external_id
       in: path
       description: The customer external unique identifier (provided by your own application).
       required: true

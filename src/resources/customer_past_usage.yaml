@@ -6,7 +6,7 @@ get:
   parameters:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
-    - name: external_customer_id
+    - name: customer_external_id
       in: path
       description: The customer external unique identifier (provided by your own application).
       required: true
