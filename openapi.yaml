@@ -10791,6 +10791,13 @@ components:
       properties:
         customer_usage:
           $ref: '#/components/schemas/CustomerUsageObject'
+    CustomerProjectedUsage:
+      type: object
+      required:
+        - customer_projected_usage
+      properties:
+        customer_projected_usage:
+          $ref: '#/components/schemas/CustomerProjectedUsageObject'
     CustomerPastUsage:
       type: object
       required:
