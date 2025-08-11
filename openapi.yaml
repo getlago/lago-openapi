@@ -1603,7 +1603,7 @@ paths:
       tags:
         - customers
       summary: Retrieve customer current and projected usage
-      description: This endpoint enables the retrieval of the usage-based billing data for a customer within the current period. It also returns the projected usage for the current period based on the current usage.
+      description: This endpoint enables the retrieval of the usage-based billing data for a customer within the current period.
       parameters:
         - name: external_customer_id
           in: path
@@ -10531,10 +10531,8 @@ components:
       required:
         - values
         - units
-        - projected_units
         - events_count
         - amount_cents
-        - projected_amount_cents
       items:
         type: object
         properties:
@@ -10543,19 +10541,10 @@ components:
             pattern: ^[0-9]+.?[0-9]*$
             example: '0.9'
             description: The number of units consumed for a specific charge filter related to a charge item.
-          projected_units:
-            type: string
-            pattern: ^[0-9]+.?[0-9]*$
-            example: '1.8'
-            description: The projected number of units that can be consumed for a specific charge filter related to a charge item.
           amount_cents:
             type: integer
             example: 1000
             description: The amount in cents, tax excluded, consumed for a specific charge filter related to a charge item.
-          projected_amount_cents:
-            type: integer
-            example: 2000
-            description: The projected amount in cents, tax excluded, that can be consumed for a specific charge filter related to a charge item.
           events_count:
             type: integer
             example: 10
@@ -10581,10 +10570,8 @@ components:
       description: Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.
       required:
         - amount_cents
-        - projected_amount_cents
         - events_count
         - units
-        - projected_units
         - grouped_by
         - groups
       items:
@@ -10594,10 +10581,6 @@ components:
             type: integer
             example: 1000
             description: The amount in cents, tax excluded, consumed for a specific group related to a charge item.
-          projected_amount_cents:
-            type: integer
-            example: 2000
-            description: The projected amount in cents, tax excluded, that can be consumed for a specific group related to a charge item.
           events_count:
             type: integer
             example: 10
@@ -10607,11 +10590,6 @@ components:
             pattern: ^[0-9]+.?[0-9]*$
             example: '0.9'
             description: The number of units consumed for a specific group related to a charge item.
-          projected_units:
-            type: string
-            pattern: ^[0-9]+.?[0-9]*$
-            example: '1.8'
-            description: The projected number of units that can be consumed for a specific group related to a charge item.
           pricing_unit_details:
             $ref: '#/components/schemas/UsagePricingUnitDetailsObject'
           grouped_by:
@@ -10625,10 +10603,8 @@ components:
       type: object
       required:
         - units
-        - projected_units
         - events_count
         - amount_cents
-        - projected_amount_cents
         - amount_currency
         - charge
         - billable_metric
@@ -10639,11 +10615,6 @@ components:
           pattern: ^[0-9]+.?[0-9]*$
           example: '1.0'
           description: The number of units consumed by the customer for a specific charge item.
-        projected_units:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          example: '2.0'
-          description: The projected number of units that can be consumed by the customer for a specific charge item.
         events_count:
           type: integer
           example: 10
@@ -10652,10 +10623,6 @@ components:
           type: integer
           example: 123
           description: The amount in cents, tax excluded, consumed by the customer for a specific charge item.
-        projected_amount_cents:
-          type: integer
-          example: 256
-          description: The projected amount in cents, tax excluded, that can be consumed by the customer for a specific charge item.
         amount_currency:
           $ref: '#/components/schemas/Currency'
           description: The currency of a usage item consumed by the customer.
@@ -10732,7 +10699,6 @@ components:
         - to_datetime
         - issuing_date
         - amount_cents
-        - projected_amount_cents
         - taxes_amount_cents
         - total_amount_cents
         - charges_usage
@@ -10767,10 +10733,6 @@ components:
           type: integer
           description: The amount in cents, tax excluded.
           example: 123
-        projected_amount_cents:
-          type: integer
-          description: The projected amount in cents, tax excluded.
-          example: 256
         taxes_amount_cents:
           type: integer
           description: The tax amount in cents.
@@ -10791,13 +10753,6 @@ components:
       properties:
         customer_usage:
           $ref: '#/components/schemas/CustomerUsageObject'
-    CustomerProjectedUsage:
-      type: object
-      required:
-        - customer_projected_usage
-      properties:
-        customer_projected_usage:
-          $ref: '#/components/schemas/CustomerProjectedUsageObject'
     CustomerPastUsage:
       type: object
       required:
