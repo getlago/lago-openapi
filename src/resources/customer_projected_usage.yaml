@@ -2,7 +2,7 @@ get:
   tags:
     - customers
   summary: Retrieve customer current and projected usage
-  description: This endpoint enables the retrieval of the usage-based billing data for a customer within the current period.
+  description: This endpoint enables the retrieval of the usage-based billing data for a customer within the current period. It also returns the projected usage for the current period based on the current usage.
   parameters:
     - name: external_customer_id
       in: path
@@ -29,14 +29,14 @@ get:
         type: boolean
         default: true
         example: true
-  operationId: findCustomerCurrentUsage
+  operationId: findCustomerProjectedUsage
   responses:
     '200':
       description: Customer usage
       content:
         application/json:
           schema:
-            $ref: '../schemas/CustomerUsage.yaml'
+            $ref: '../schemas/CustomerProjectedUsage.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
     '404':
