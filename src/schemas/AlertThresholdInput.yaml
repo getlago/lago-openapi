@@ -5,8 +5,8 @@ allOf:
       - value
     properties:
       value:
-        type:
-          - integer
-          - string
+        oneOf:
+          - type: integer
+          - type: string
         description: A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
         example: 99
