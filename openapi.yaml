@@ -4518,7 +4518,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
-                - dunning_campaign_finished
+                - dunning_campaign
               properties:
                 webhook_type:
                   type: string
@@ -4527,8 +4527,8 @@ webhooks:
                 object_type:
                   type: string
                   enum:
-                    - dunning_campaign_finished
-                dunning_campaign_finished:
+                    - dunning_campaign
+                dunning_campaign:
                   $ref: '#/components/schemas/DunningCampaignFinishedObject'
       responses:
         '200':
