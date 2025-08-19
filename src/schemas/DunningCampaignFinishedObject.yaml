@@ -1,0 +1,23 @@
+type: object
+required:
+  - customer_external_id
+  - dunning_campaign_code
+  - overdue_balance_cents
+  - overdue_balance_currency
+properties:
+  customer_external_id:
+    type: string
+    description: The customer external unique identifier (provided by your own application).
+    example: "cus_0987654321"
+  dunning_campaign_code:
+    type: string
+    description: Identifier of the dunning campaign.
+    example: "dun_code_1234"
+  overdue_balance_cents:
+    type: integer
+    description: The amount of the overdue balance, expressed in cents.
+    example: 120
+  overdue_balance_currency:
+    $ref: "./Currency.yaml"
+    description: The currency of the balance.
+    example: "EUR"

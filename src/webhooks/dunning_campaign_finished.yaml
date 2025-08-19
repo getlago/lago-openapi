@@ -1,0 +1,32 @@
+post:
+  operationId: dunningCampaignFinished
+  summary: A dunning campaign was finished without all payments being collected
+  description: A dunning campaign was finished without all payments being collected
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the finished dunning campaign and the overdue balance
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - dunning_campaign_finished
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - dunning_campaign.finished
+            object_type:
+              type: string
+              enum:
+                - dunning_campaign_finished
+            dunning_campaign_finished:
+              $ref: "../schemas/DunningCampaignFinishedObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully
