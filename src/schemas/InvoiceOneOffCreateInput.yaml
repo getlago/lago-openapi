@@ -50,6 +50,16 @@ properties:
                 - "null"
               example: "The description of the fee line item in the invoice. By default, the description of the add-on is used."
               description: "This is a description"
+            from_datetime:
+              type: string
+              description: The lower boundary of the invoice billing interval. The `from_datetime` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+              format: "date-time"
+              example: "2022-08-08T00:00:00Z"
+            to_datetime:
+              type: string
+              description: The upper boundary of the invoice billing interval. The `to_datetime` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+              format: "date-time"
+              example: "2022-08-08T00:00:00Z"
             tax_codes:
               type: array
               items:
