@@ -23,9 +23,9 @@ properties:
     example: "storage"
     description: The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.
   timestamp:
-    type:
-      - integer
-      - string
+    oneOf:
+      - type: integer
+      - type: string
     example: "1651240791.123"
     description: |
       This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
