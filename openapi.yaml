@@ -4500,6 +4500,39 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  dunning_campaign_finished:
+    post:
+      operationId: dunningCampaignFinished
+      summary: The dunning campaign has been completed for a customer
+      description: The dunning campaign has been completed for a customer
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the finished dunning campaign and the overdue balance
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - dunning_campaign
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - dunning_campaign.finished
+                object_type:
+                  type: string
+                  enum:
+                    - dunning_campaign
+                dunning_campaign:
+                  $ref: '#/components/schemas/DunningCampaignFinishedObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   event_error:
     post:
       deprecated: true
@@ -15832,6 +15865,30 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    DunningCampaignFinishedObject:
+      type: object
+      required:
+        - customer_external_id
+        - dunning_campaign_code
+        - overdue_balance_cents
+        - overdue_balance_currency
+      properties:
+        customer_external_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application).
+          example: cus_0987654321
+        dunning_campaign_code:
+          type: string
+          description: Identifier of the dunning campaign.
+          example: dun_code_1234
+        overdue_balance_cents:
+          type: integer
+          description: The amount of the overdue balance, expressed in cents.
+          example: 120
+        overdue_balance_currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the balance.
+          example: EUR
     EventErrorsObject:
       type: object
       required:
