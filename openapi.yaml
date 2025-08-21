@@ -4503,8 +4503,8 @@ webhooks:
   dunning_campaign_finished:
     post:
       operationId: dunningCampaignFinished
-      summary: A dunning campaign was finished without all payments being collected
-      description: A dunning campaign was finished without all payments being collected
+      summary: The dunning campaign has been completed for a customer
+      description: The dunning campaign has been completed for a customer
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
