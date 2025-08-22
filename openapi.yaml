@@ -1746,6 +1746,51 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/projected_usage:
+    get:
+      tags:
+        - customers
+      summary: Retrieve customer current and projected usage
+      description: This endpoint enables the retrieval of the usage-based billing data for a customer within the current period. It also returns the projected usage for the current period based on the current usage.
+      parameters:
+        - name: external_customer_id
+          in: path
+          description: The customer external unique identifier (provided by your own application).
+          required: true
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - name: external_subscription_id
+          in: query
+          description: The unique identifier of the subscription within your application.
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: sub_1234567890
+        - name: apply_taxes
+          in: query
+          description: |
+            Optional flag to determine if taxes should be applied. Defaults to `true` if not provided or if null.
+          required: false
+          schema:
+            type: boolean
+            default: true
+            example: true
+      operationId: findCustomerProjectedUsage
+      responses:
+        '200':
+          description: Customer usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProjectedUsage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/past_usage:
     get:
       tags:
@@ -10943,6 +10988,72 @@ components:
       properties:
         customer_usage:
           $ref: '#/components/schemas/CustomerUsageObject'
+    CustomerProjectedUsageObject:
+      type: object
+      required:
+        - from_datetime
+        - to_datetime
+        - issuing_date
+        - amount_cents
+        - projected_amount_cents
+        - taxes_amount_cents
+        - total_amount_cents
+        - charges_usage
+      properties:
+        from_datetime:
+          type: string
+          format: date-time
+          description: The lower bound of the billing period, expressed in the ISO 8601 datetime format in Coordinated Universal Time (UTC).
+          example: '2022-07-01T00:00:00Z'
+        to_datetime:
+          type: string
+          format: date-time
+          description: The upper bound of the billing period, expressed in the ISO 8601 datetime format in Coordinated Universal Time (UTC).
+          example: '2022-07-31T23:59:59Z'
+        issuing_date:
+          type: string
+          format: date
+          description: The date of creation of the invoice.
+          example: '2022-08-01'
+        lago_invoice_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: A unique identifier associated with the invoice related to this particular usage record.
+        currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the customer's current usage.
+          example: EUR
+        amount_cents:
+          type: integer
+          description: The amount in cents, tax excluded.
+          example: 123
+        projected_amount_cents:
+          type: integer
+          description: The projected amount in cents, tax excluded.
+          example: 256
+        taxes_amount_cents:
+          type: integer
+          description: The tax amount in cents.
+          example: 200
+        total_amount_cents:
+          type: integer
+          description: The total amount in cents, tax included.
+          example: 123
+        charges_usage:
+          type: array
+          description: Array of charges that comprise the current usage. It contains detailed information about individual charge items associated with the usage.
+          items:
+            $ref: '#/components/schemas/CustomerChargeUsageObject'
+    CustomerProjectedUsage:
+      type: object
+      required:
+        - customer_projected_usage
+      properties:
+        customer_projected_usage:
+          $ref: '#/components/schemas/CustomerProjectedUsageObject'
     CustomerPastUsage:
       type: object
       required:
