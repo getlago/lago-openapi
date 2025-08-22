@@ -189,6 +189,8 @@ paths:
     $ref: "./resources/customer_portal_url.yaml"
   /customers/{external_customer_id}/current_usage:
     $ref: "./resources/customer_current_usage.yaml"
+  /customers/{external_customer_id}/projected_usage:
+    $ref: "./resources/customer_projected_usage.yaml"
   /customers/{external_customer_id}/past_usage:
     $ref: "./resources/customer_past_usage.yaml"
   /customers/{external_customer_id}/checkout_url:
