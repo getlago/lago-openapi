@@ -1,0 +1,40 @@
+allOf:
+  - $ref: "./FeaturePrivilegeObject.yaml"
+  - type: object
+    required:
+      - value
+      - plan_value
+      - override_value
+    properties:
+      value:
+        oneOf:
+          - type: integer
+            description: "Value for integer type privileges"
+          - type: boolean
+            description: "Value for boolean type privileges"
+          - type: string
+            description: "Value for string or select type privileges"
+        example: 10
+        description: "Applicable value this this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type."
+      plan_value:
+        oneOf:
+          - type: integer
+            description: "Value for integer type privileges"
+          - type: boolean
+            description: "Value for boolean type privileges"
+          - type: string
+            description: "Value for string or select type privileges"
+        example: 10
+        description: "Value assigned to this privilege in the plan. Type depends on the privilege's value_type."
+      override_value:
+        oneOf:
+          - type: integer
+            description: "Value for integer type privileges"
+          - type: boolean
+            description: "Value for boolean type privileges"
+          - type: string
+            description: "Value for string or select type privileges"
+          - type: "null"
+            description: "No override value set"
+        example: 10
+        description: "Value assigned to this subscription specifically. Type depends on the privilege's value_type. Null if no override is set."

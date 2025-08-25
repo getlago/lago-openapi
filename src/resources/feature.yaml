@@ -1,0 +1,72 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing feature.
+    required: true
+    schema:
+      type: string
+      example: 'seats'
+put:
+  tags:
+    - features
+  summary: Update a feature
+  description: This endpoint updates an existing feature representing an entitlement component of your application.
+  operationId: updateFeature
+  requestBody:
+    description: Feature payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/Entitlement/FeatureUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Feature updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/Feature.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - features
+  summary: Delete a feature
+  description: This endpoint deletes an existing feature representing an entitlement component of your application. Deleting a feature will remove it from all plans and subscriptions.
+  operationId: destroyFeature
+  responses:
+    '200':
+      description: Feature deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/Feature.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+get:
+  tags:
+    - features
+  summary: Retrieve a feature
+  description: This endpoint retrieves an existing feature that represents an entitlement component of your application. The feature is identified by its unique code.
+  operationId: findFeature
+  responses:
+    '200':
+      description: Feature
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/Feature.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

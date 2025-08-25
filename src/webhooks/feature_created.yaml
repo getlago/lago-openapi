@@ -1,0 +1,32 @@
+post:
+  operationId: featureCreated
+  summary: A new feature has been created
+  description: A new feature has been created
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the new feature
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - feature
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - feature.created
+            object_type:
+              type: string
+              enum:
+                - feature
+            feature:
+              $ref: "../schemas/Entitlement/FeatureObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

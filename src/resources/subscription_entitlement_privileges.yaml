@@ -1,0 +1,41 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription
+    required: true
+    schema:
+      type: string
+      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+  - name: feature_code
+    in: path
+    description: Code of the existing feature.
+    required: true
+    schema:
+      type: string
+      example: 'seats'
+  - name: privilege_code
+    in: path
+    description: Code of the privilege to remove from the subscription entitlement override.
+    required: true
+    schema:
+      type: string
+      example: "max_admins"
+delete:
+  tags:
+    - entitlements
+  summary: Remove a privilege from a subscription entitlement override
+  description: This endpoint removes a specific privilege override from a subscription entitlement. This only works with privileges that are part of a feature specifically added to this subscription as an override. You cannot remove privileges from plan entitlements - only subscription-specific overrides can be removed.
+  operationId: removeSubscriptionEntitlementPrivilege
+  responses:
+    '200':
+      description: Subscription entitlement with privilege override removed
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Entitlement/SubscriptionEntitlement.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

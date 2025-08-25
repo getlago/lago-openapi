@@ -37,6 +37,16 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/api-reference/billable-metrics/object
+  - name: features
+    description: Everything about Feature collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/api-reference/features/object
+  - name: entitlements
+    description: Everything about Entitlement collection
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/api-reference/entitlements/object
   - name: billing_entities
     description: Everything about Billing Entities
     externalDocs:
@@ -165,6 +175,12 @@ paths:
     $ref: "./resources/billable_metric_evaluate_expression.yaml"
   /billable_metrics/{code}:
     $ref: "./resources/billable_metric.yaml"
+  /features:
+    $ref: "./resources/features.yaml"
+  /features/{code}:
+    $ref: "./resources/feature.yaml"
+  /features/{code}/privileges/{privilege_code}:
+    $ref: "./resources/feature_privilege.yml"
   /coupons:
     $ref: "./resources/coupons.yaml"
   /coupons/{code}:
@@ -251,6 +267,12 @@ paths:
     $ref: "./resources/plans.yaml"
   /plans/{code}:
     $ref: "./resources/plan.yaml"
+  /plans/{code}/entitlements:
+    $ref: "./resources/plan_entitlements.yaml"
+  /plans/{code}/entitlements/{feature_code}:
+    $ref: "./resources/plan_entitlement.yaml"
+  /plans/{code}/entitlements/{feature_code}/privileges/{privilege_code}:
+    $ref: "./resources/plan_entitlement_privileges.yaml"
   /subscriptions:
     $ref: "./resources/subscriptions.yaml"
   /subscriptions/{external_id}:
@@ -261,6 +283,16 @@ paths:
     $ref: "./resources/subscription_alerts.yaml"
   /subscriptions/{external_id}/alerts/{code}:
     $ref: "./resources/subscription_alert.yaml"
+  /subscriptions/{external_id}/entitlements:
+    $ref: "./resources/subscription_entitlements.yaml"
+  /subscriptions/{external_id}/entitlements/{feature_code}:
+    $ref: "./resources/subscription_entitlement.yaml"
+  /subscriptions/{external_id}/entitlements/{feature_code}/privileges/{privilege_code}:
+    $ref: "./resources/subscription_entitlement_privileges.yaml"
+  /subscriptions/{external_id}/entitlements/{feature_code}/remove:
+    $ref: "./resources/subscription_entitlement_remove.yaml"
+  /subscriptions/{external_id}/entitlements/{feature_code}/restore:
+    $ref: "./resources/subscription_entitlement_restore.yaml"
   /taxes:
     $ref: "./resources/taxes.yaml"
   /taxes/{code}:
@@ -320,6 +352,12 @@ webhooks:
     $ref: "./webhooks/event_error.yaml"
   events_errors:
     $ref: "./webhooks/events_errors.yaml"
+  feature.created:
+    $ref: "./webhooks/feature_created.yaml"
+  feature.updated:
+    $ref: "./webhooks/feature_updated.yaml"
+  feature.deleted:
+    $ref: "./webhooks/feature_deleted.yaml"
   fee_created:
     $ref: "./webhooks/fee_created.yaml"
   fee_tax_provider_error:

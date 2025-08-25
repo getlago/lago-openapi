@@ -1,0 +1,16 @@
+allOf:
+  - $ref: "./FeaturePrivilegeObject.yaml"
+  - type: object
+    required:
+      - value
+    properties:
+      value:
+        oneOf:
+          - type: integer
+            description: "Value for integer type privileges"
+          - type: boolean
+            description: "Value for boolean type privileges"
+          - type: string
+            description: "Value for string or select type privileges"
+        example: 10
+        description: "Value assigned to this privilege in the entitlement. Type depends on the privilege's value_type."
