@@ -6,7 +6,7 @@ properties:
     example: "Acme Corp"
     description: The name of the billing entity
   default_currency:
-    $ref: './Currency.yaml'
+    $ref: "./Currency.yaml"
     description: The default currency of the billing entity
     example: "USD"
   document_numbering:
@@ -72,7 +72,7 @@ properties:
     example: "CA"
     description: The state of the billing address
   country:
-    $ref: './Country.yaml'
+    $ref: "./Country.yaml"
     description: The country code of the billing address
     nullable: true
   zipcode:
@@ -107,14 +107,11 @@ properties:
     example: "EU123456789"
     description: The tax identification number of the billing entity
   timezone:
-    $ref: './Timezone.yaml'
+    $ref: "./Timezone.yaml"
     description: The timezone of the billing entity
     example: "UTC"
   tax_codes:
-    type: array
-    items:
-      type: string
-    example: [french_standard_vat]
+    $ref: "./TaxCodes.yaml"
     description: The tax codes that should be associated with this billing entity
   email_settings:
     type: array

@@ -22,11 +22,7 @@ properties:
     example: "Startup"
     description: The name of the plan.
   tax_codes:
-    type: array
-    items:
-      type: string
-    description: List of unique code used to identify the taxes.
-    example: [french_standard_vat]
+    $ref: "./TaxCodes.yaml"
   trial_period:
     type: number
     description: The duration in days during which the base cost of the plan is offered for free.
@@ -66,11 +62,7 @@ properties:
           items:
             $ref: "./ChargeFilterInput.yaml"
         tax_codes:
-          type: array
-          items:
-            type: string
-          description: List of unique code used to identify the taxes.
-          example: [french_standard_vat]
+          $ref: "./TaxCodes.yaml"
         applied_pricing_unit:
           type: object
           description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
