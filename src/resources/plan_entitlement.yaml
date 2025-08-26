@@ -30,34 +30,6 @@ get:
       $ref: '../responses/Unauthorized.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
-patch:
-  tags:
-    - entitlements
-  summary: Partial update of an entitlement
-  description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All feature and privileges not part of the payload are ignored. To remove privileges or feature, use the delete endpoints. All privileges must be valid for the feature.
-  operationId: updateEntitlement
-  requestBody:
-    description: Entitlement payload
-    content:
-      application/json:
-        schema:
-          $ref: '../schemas/Entitlement/EntitlementUpdateInput.yaml'
-    required: true
-  responses:
-    '200':
-      description: Entitlement updated
-      content:
-        application/json:
-          schema:
-            $ref: '../schemas/Entitlement/PlanEntitlement.yaml'
-    '400':
-      $ref: '../responses/BadRequest.yaml'
-    '401':
-      $ref: '../responses/Unauthorized.yaml'
-    '404':
-      $ref: '../responses/NotFound.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
 delete:
   tags:
     - entitlements

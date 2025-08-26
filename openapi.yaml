@@ -3318,6 +3318,34 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+        - entitlements
+      summary: Partial update of an entitlement
+      description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All feature and privileges not part of the payload are ignored. To remove privileges or feature, use the delete endpoints. All privileges must be valid for the feature.
+      operationId: updateEntitlement
+      requestBody:
+        description: Entitlement payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntitlementUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Entitlement updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanEntitlement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /plans/{code}/entitlements/{feature_code}:
     parameters:
       - name: code
@@ -3351,34 +3379,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-    patch:
-      tags:
-        - entitlements
-      summary: Partial update of an entitlement
-      description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All feature and privileges not part of the payload are ignored. To remove privileges or feature, use the delete endpoints. All privileges must be valid for the feature.
-      operationId: updateEntitlement
-      requestBody:
-        description: Entitlement payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EntitlementUpdateInput'
-        required: true
-      responses:
-        '200':
-          description: Entitlement updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlanEntitlement'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
     delete:
       tags:
         - entitlements
@@ -3910,7 +3910,7 @@ paths:
       tags:
         - entitlements
       summary: Remove an entitlement from a subscription
-      description: This endpoint removes a specific entitlement from a subscription by removing the feature override. The entitlement remains available from the plan.
+      description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan.
       operationId: destroySubscriptionEntitlement
       responses:
         '200':
@@ -3950,81 +3950,11 @@ paths:
       tags:
         - entitlements
       summary: Remove a privilege from a subscription entitlement override
-      description: This endpoint removes a specific privilege override from a subscription entitlement. This only works with privileges that are part of a feature specifically added to this subscription as an override. You cannot remove privileges from plan entitlements - only subscription-specific overrides can be removed.
-      operationId: removeSubscriptionEntitlementPrivilege
+      description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan.
+      operationId: destroySubscriptionEntitlementPrivilege
       responses:
         '200':
           description: Subscription entitlement with privilege override removed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionEntitlement'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  /subscriptions/{external_id}/entitlements/{feature_code}/remove:
-    parameters:
-      - name: external_id
-        in: path
-        description: External ID of the existing subscription
-        required: true
-        schema:
-          type: string
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-      - name: feature_code
-        in: path
-        description: Code of the existing feature to remove from the subscription.
-        required: true
-        schema:
-          type: string
-          example: seats
-    post:
-      tags:
-        - entitlements
-      summary: Remove a feature from a subscription
-      description: This endpoint removes a feature from a subscription by creating a removal override. The feature remains available in the plan but is not accessible to this subscription. This is useful when you want to disable a feature that is included in the plan for a specific subscription.
-      operationId: removeSubscriptionEntitlement
-      responses:
-        '200':
-          description: Feature removed from subscription
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionEntitlement'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  /subscriptions/{external_id}/entitlements/{feature_code}/restore:
-    parameters:
-      - name: external_id
-        in: path
-        description: External ID of the existing subscription
-        required: true
-        schema:
-          type: string
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-      - name: feature_code
-        in: path
-        description: Code of the existing feature to restore to the subscription.
-        required: true
-        schema:
-          type: string
-          example: seats
-    post:
-      tags:
-        - entitlements
-      summary: Restore a feature to a subscription
-      description: This endpoint restores a feature to a subscription by removing the removal override. The feature becomes available again to this subscription with the original plan values. This is useful when you want to re-enable a feature that was previously removed from a subscription.
-      operationId: restoreSubscriptionEntitlement
-      responses:
-        '200':
-          description: Feature restored to subscription
           content:
             application/json:
               schema:
