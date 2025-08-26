@@ -24,8 +24,8 @@ delete:
   tags:
     - entitlements
   summary: Remove a privilege from a subscription entitlement override
-  description: This endpoint removes a specific privilege override from a subscription entitlement. This only works with privileges that are part of a feature specifically added to this subscription as an override. You cannot remove privileges from plan entitlements - only subscription-specific overrides can be removed.
-  operationId: removeSubscriptionEntitlementPrivilege
+  description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan.
+  operationId: destroySubscriptionEntitlementPrivilege
   responses:
     '200':
       description: Subscription entitlement with privilege override removed

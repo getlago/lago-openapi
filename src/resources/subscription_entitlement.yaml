@@ -17,7 +17,7 @@ delete:
   tags:
     - entitlements
   summary: Remove an entitlement from a subscription
-  description: This endpoint removes a specific entitlement from a subscription by removing the feature override. The entitlement remains available from the plan.
+  description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan.
   operationId: destroySubscriptionEntitlement
   responses:
     '200':
