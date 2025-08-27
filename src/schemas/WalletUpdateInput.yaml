@@ -56,8 +56,9 @@ properties:
                 - weekly
                 - monthly
                 - quarterly
+                - semiannual
                 - yearly
-              description: "The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly` or `yearly`. Required only when trigger is set to `interval`."
+              description: "The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. Required only when trigger is set to `interval`."
               example: "monthly"
             threshold_credits:
               type: string

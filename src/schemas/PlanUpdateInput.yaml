@@ -19,12 +19,13 @@ properties:
         description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.
       interval:
         type: string
-        description: "The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly`, or `weekly`."
+        description: "The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `semiannual`, `quarterly`, `monthly`, or `weekly`."
         example: monthly
         enum:
           - weekly
           - monthly
           - quarterly
+          - semiannual
           - yearly
       description:
         type: string
@@ -50,7 +51,7 @@ properties:
         type:
           - boolean
           - "null"
-        description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`.
+        description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
         example: null
       tax_codes:
         $ref: "./TaxCodes.yaml"
