@@ -3277,7 +3277,7 @@ paths:
       tags:
         - entitlements
       summary: Create an entitlement
-      description: This endpoint creates a new entitlement by adding a feature to a plan. The feature must exist and all privileges must be valid for the feature.
+      description: This endpoint creates new entitlements by adding features to a plan. Note that all existing entitlements will be deleted and replaced by the ones provided. To add a new entitlement without removing the existing ones, use PATCH. The feature must exist and all privileges must be valid for the feature.
       operationId: createEntitlement
       requestBody:
         description: Entitlement payload
@@ -3292,7 +3292,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlanEntitlement'
+                $ref: '#/components/schemas/PlanEntitlements'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -3322,7 +3322,7 @@ paths:
       tags:
         - entitlements
       summary: Partial update of an entitlement
-      description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All feature and privileges not part of the payload are ignored. To remove privileges or feature, use the delete endpoints. All privileges must be valid for the feature.
+      description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All features and privileges not part of the payload are ignored. To remove privileges or features, use the DELETE endpoints. All privileges must be valid for the feature.
       operationId: updateEntitlement
       requestBody:
         description: Entitlement payload
@@ -3337,7 +3337,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlanEntitlement'
+                $ref: '#/components/schemas/PlanEntitlements'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
