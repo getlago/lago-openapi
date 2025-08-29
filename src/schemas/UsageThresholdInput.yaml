@@ -1,15 +1,7 @@
 type: object
 required:
   - amount_cents
-  - recurring
 properties:
-  id:
-    type:
-      - string
-      - "null"
-    format: uuid
-    description: Unique identifier of the usage threshold created by Lago.
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   threshold_display_name:
     type:
       - string
@@ -24,3 +16,4 @@ properties:
     type: boolean
     description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
     example: true
+    default: false

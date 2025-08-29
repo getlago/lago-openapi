@@ -3478,7 +3478,6 @@ paths:
           in: query
           description: The customer external unique identifier (provided by your own application)
           required: false
-          explode: true
           schema:
             type: string
             example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
@@ -3486,7 +3485,6 @@ paths:
           in: query
           description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
           required: false
-          explode: true
           schema:
             type: string
             example: premium
@@ -3500,10 +3498,10 @@ paths:
             items:
               type: string
               enum:
-                - pending
-                - canceled
-                - terminated
                 - active
+                - canceled
+                - pending
+                - terminated
             example:
               - active
               - pending
@@ -3516,8 +3514,6 @@ paths:
                 $ref: '#/components/schemas/SubscriptionsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
   /subscriptions/{external_id}:
     parameters:
       - name: external_id
@@ -3549,6 +3545,7 @@ paths:
               - pending
               - canceled
             example: active
+            default: active
       responses:
         '200':
           description: Subscription
@@ -3573,6 +3570,19 @@ paths:
             schema:
               $ref: '#/components/schemas/SubscriptionUpdateInput'
         required: true
+      parameters:
+        - name: status
+          in: query
+          description: |
+            By default, this endpoint only return `active` subscriptions. If you want to update a subscription with a different `status`, you can specify it here.
+          required: false
+          schema:
+            type: string
+            enum:
+              - active
+              - pending
+            example: active
+            default: active
       responses:
         '200':
           description: Subscription updated
@@ -3648,8 +3658,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-        '405':
-          $ref: '#/components/responses/NotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /subscriptions/{external_id}/lifetime_usage:
     parameters:
       - name: external_id
@@ -12843,17 +12853,28 @@ components:
     SubscriptionObject:
       type: object
       required:
-        - lago_id
-        - lago_customer_id
         - billing_time
-        - external_customer_id
+        - canceled_at
         - created_at
-        - subscription_at
-        - plan_code
+        - current_billing_period_ending_at
+        - current_billing_period_started_at
+        - downgrade_plan_date
+        - ending_at
+        - external_customer_id
         - external_id
-        - status
+        - lago_customer_id
+        - lago_id
+        - name
+        - next_plan_code
         - on_termination_credit_note
         - on_termination_invoice
+        - plan_code
+        - previous_plan_code
+        - started_at
+        - status
+        - subscription_at
+        - terminated_at
+        - trial_ended_at
       properties:
         lago_id:
           type: string
@@ -12894,16 +12915,16 @@ components:
           type: string
           description: |-
             The status of the subscription, which can have the following values:
-            - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
             - `active`: the subscription is currently active and applied to the customer.
-            - `terminated`: the subscription is no longer active.
             - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer or when a subscription with a pending status is terminated.
+            - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
+            - `terminated`: the subscription is no longer active.
           example: active
           enum:
             - active
+            - canceled
             - pending
             - terminated
-            - canceled
         created_at:
           type: string
           format: date-time
@@ -14600,15 +14621,7 @@ components:
       type: object
       required:
         - amount_cents
-        - recurring
       properties:
-        id:
-          type:
-            - string
-            - 'null'
-          format: uuid
-          description: Unique identifier of the usage threshold created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         threshold_display_name:
           type:
             - string
@@ -14623,6 +14636,7 @@ components:
           type: boolean
           description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
           example: true
+          default: false
     PlanCreateInput:
       type: object
       required:
@@ -15147,7 +15161,7 @@ components:
           description: The duration in days during which the base cost of the plan is offered for free.
           example: 5
         minimum_commitment:
-          $ref: '#/components/schemas/MinimumCommitmentObject'
+          $ref: '#/components/schemas/MinimumCommitmentInput'
         charges:
           type: array
           description: Additional usage-based charges for this plan.
@@ -15197,7 +15211,7 @@ components:
           type: array
           description: List of usage thresholds applied to the subscription.
           items:
-            $ref: '#/components/schemas/UsageThresholdObject'
+            $ref: '#/components/schemas/UsageThresholdInput'
     SubscriptionCreateInput:
       type: object
       required:
@@ -15210,6 +15224,32 @@ components:
             - plan_code
             - external_id
           properties:
+            authorization:
+              type: object
+              description: |
+                Optionally, you can create a pre-authorization on the customer's card before creating a subscription. This process places a temporary hold (capture) for a specified amount on the customer's account, but does not actually withdraw the funds.
+
+                Important notes:
+                  - The final amount due for the subscription is not known at the time of creation; it is determined only after the invoice is finalized.
+                  - The payment intent generated for pre-authorization cannot be reused, as the final invoice amount may exceed the authorized amount.
+                  - The payment intent is canceled immediately after creation, but this cancellation occurs asynchronously.
+                  - For these reasons, it is recommended to use a small amount (such as $1) for pre-authorization. While this does not guarantee sufficient funds for the final payment, it helps reduce the likelihood of payment errors.
+              required:
+                - amount_cents
+                - amount_currency
+              properties:
+                amount_cents:
+                  type: integer
+                  example: 1000
+                  description: The amount of the authorization in cents.
+                amount_currency:
+                  type: string
+                  example: USD
+                  description: The currency of the authorization.
+            billing_entity_code:
+              type: string
+              example: default
+              description: The code of the billing entity to be used for the subscription. If not provided, the default billing entity will be used.
             external_customer_id:
               type: string
               example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
@@ -15357,7 +15397,9 @@ components:
           example: 100
           description: The current usage amount in cents for the subscription on the current billing period.
         from_datetime:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
           example: '2024-01-01T00:00:00Z'
           description: The recording start date and time of the subscription lifetime usage. The date and time must be in ISO 8601 format.
@@ -17238,6 +17280,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
         - type: object
+          required:
+            - plan
+            - customer
           properties:
             plan:
               $ref: '#/components/schemas/PlanObject'
@@ -17247,6 +17292,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
         - type: object
+          required:
+            - plan
+            - customer
+            - usage_threshold
           properties:
             plan:
               $ref: '#/components/schemas/PlanObject'

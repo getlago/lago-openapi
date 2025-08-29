@@ -9,38 +9,64 @@ properties:
       - plan_code
       - external_id
     properties:
+      authorization:
+        type: object
+        description: |
+          Optionally, you can create a pre-authorization on the customer's card before creating a subscription. This process places a temporary hold (capture) for a specified amount on the customer's account, but does not actually withdraw the funds.
+
+          Important notes:
+            - The final amount due for the subscription is not known at the time of creation; it is determined only after the invoice is finalized.
+            - The payment intent generated for pre-authorization cannot be reused, as the final invoice amount may exceed the authorized amount.
+            - The payment intent is canceled immediately after creation, but this cancellation occurs asynchronously.
+            - For these reasons, it is recommended to use a small amount (such as $1) for pre-authorization. While this does not guarantee sufficient funds for the final payment, it helps reduce the likelihood of payment errors.
+        required:
+          - amount_cents
+          - amount_currency
+        properties:
+          amount_cents:
+            type: integer
+            example: 1000
+            description: The amount of the authorization in cents.
+          amount_currency:
+            type: string
+            example: "USD"
+            description: The currency of the authorization.
+      billing_entity_code:
+        type: string
+        example: "default"
+        description: The code of the billing entity to be used for the subscription. If not provided, the default billing entity will be used.
       external_customer_id:
         type: string
-        example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
         description: The customer external unique identifier (provided by your own application)
       plan_code:
         type: string
-        example: 'premium'
+        example: "premium"
         description: The unique code representing the plan to be attached to the customer. This code must correspond to the `code` property of one of the active plans.
       name:
         type: string
-        example: 'Repository A'
+        example: "Repository A"
         description: The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.
       external_id:
         type: string
-        example: 'my_sub_1234567890'
+        example: "my_sub_1234567890"
         description: The unique external identifier for the subscription. This identifier serves as an idempotency key, ensuring that each subscription is unique.
       billing_time:
         type: string
         description: The billing time for the subscription, which can be set as either `anniversary` or `calendar`. If not explicitly provided, it will default to `calendar`. The billing time determines the timing of recurring billing cycles for the subscription. By specifying `anniversary`, the billing cycle will be based on the specific date the subscription started (billed fully), while `calendar` sets the billing cycle at the first day of the week/month/year (billed with proration).
-        example: 'anniversary'
+        example: "anniversary"
         enum:
           - calendar
           - anniversary
       ending_at:
         type: string
-        format: 'date-time'
-        example: '2022-10-08T00:00:00Z'
+        format: "date-time"
+        example: "2022-10-08T00:00:00Z"
         description: The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).
       subscription_at:
         type: string
-        format: 'date-time'
-        example: '2022-08-08T00:00:00Z'
+        format: "date-time"
+        example: "2022-08-08T00:00:00Z"
         description: The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
       plan_overrides:
-        $ref: '../schemas/PlanOverridesObject.yaml'
+        $ref: "../schemas/PlanOverridesObject.yaml"
