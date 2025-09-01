@@ -3322,7 +3322,7 @@ paths:
       tags:
         - entitlements
       summary: Partial update of an entitlement
-      description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All features and privileges not part of the payload are ignored. To remove privileges or features, use the DELETE endpoints. All privileges must be valid for the feature.
+      description: This accepts a list of entitlements to update. If the feature isn't part of the plan yet, it's added with all the privileges from the payload. If the feature is already part of the plan, the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateEntitlement
       requestBody:
         description: Entitlement payload
@@ -3876,7 +3876,7 @@ paths:
       tags:
         - entitlements
       summary: Update subscription entitlements
-      description: This endpoint allows partial updates to subscription entitlements. New entitlements are added, provided values are overridden, but entitlements not included in the payload are ignored.
+      description: This accepts a list of entitlements to update. If the feature isn't part of the subscription yet, it's added with all the privileges from the payload. If the feature is already part of the subscription (via plan or via override), the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateSubscriptionEntitlements
       requestBody:
         description: Subscription entitlements payload
@@ -8858,6 +8858,8 @@ components:
       type: object
       required:
         - code
+        - value_type
+        - config
       properties:
         code:
           type: string
@@ -8893,6 +8895,7 @@ components:
       type: object
       required:
         - code
+        - privileges
         - created_at
       properties:
         code:
@@ -8919,12 +8922,15 @@ components:
             - code: max
               name: Maximum
               value_type: integer
+              config: {}
             - code: max_admins
               name: Max Admins
               value_type: integer
+              config: {}
             - code: root
               name: Allow root user
               value_type: boolean
+              config: {}
             - code: provider
               name: SSO Provider
               value_type: select
@@ -14337,14 +14343,17 @@ components:
             - code: max
               name: Maximum
               value_type: integer
+              config: {}
               value: 10
             - code: max_admins
               name: Max Admins
               value_type: integer
+              config: {}
               value: 5
             - code: root
               name: Allow root user
               value_type: boolean
+              config: {}
               value: true
             - code: provider
               name: SSO Provider
@@ -15702,18 +15711,21 @@ components:
             - code: max
               name: Maximum
               value_type: integer
+              config: {}
               value: 15
               plan_value: 10
               override_value: 15
             - code: max_admins
               name: Max Admins
               value_type: integer
+              config: {}
               value: 5
               plan_value: 5
               override_value: null
             - code: root
               name: Allow root user
               value_type: boolean
+              config: {}
               value: true
               plan_value: true
               override_value: null
