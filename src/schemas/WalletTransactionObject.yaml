@@ -9,6 +9,7 @@ required:
   - credit_amount
   - amount
   - created_at
+  - name
 properties:
   lago_id:
     type: string
@@ -102,3 +103,9 @@ properties:
     format: "date-time"
     description: The date of the wallet transaction creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
     example: "2022-04-29T08:59:51Z"
+  name:
+    type:
+      - string
+      - "null"
+    description: The name of the wallet transaction. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+    example: "Tokens for models 'high-fidelity-boost'"
