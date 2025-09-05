@@ -6211,7 +6211,7 @@ webhooks:
                   enum:
                     - wallet_transaction
                 wallet_transaction:
-                  $ref: '#/components/schemas/WalletTransactionObject'
+                  $ref: '#/components/schemas/WalletTransactionObjectExtended'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -6244,7 +6244,7 @@ webhooks:
                   enum:
                     - wallet_transaction
                 wallet_transaction:
-                  $ref: '#/components/schemas/WalletTransactionObject'
+                  $ref: '#/components/schemas/WalletTransactionObjectExtended'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -17303,6 +17303,13 @@ components:
               $ref: '#/components/schemas/CustomerObject'
             usage_threshold:
               $ref: '#/components/schemas/UsageThresholdObject'
+    WalletTransactionObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/WalletTransactionObject'
+        - type: object
+          properties:
+            wallet:
+              $ref: '#/components/schemas/WalletObject'
     WalletTransactionPaymentFailureObject:
       type: object
       required:
