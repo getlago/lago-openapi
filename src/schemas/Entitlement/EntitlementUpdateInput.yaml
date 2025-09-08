@@ -1,17 +1,22 @@
 type: object
-additionalProperties:
-  type: object
-  additionalProperties:
-    oneOf:
-      - type: integer
-      - type: boolean
-      - type: string
-  description: "Privilege values for this feature. All privileges must exist on the feature."
-example:
-  seats:
-    max: 20
-    max_admins: 10
-    root: false
-  sso:
-    provider: "okta"
-description: "Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values."
+required:
+  - entitlements
+properties:
+  entitlements:
+    type: object
+    additionalProperties:
+      type: object
+      additionalProperties:
+        oneOf:
+          - type: integer
+          - type: boolean
+          - type: string
+      description: "Privilege values for this feature. All privileges must exist on the feature."
+    example:
+      seats:
+        max: 20
+        max_admins: 10
+        root: false
+      sso:
+        provider: "okta"
+    description: "Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values."
