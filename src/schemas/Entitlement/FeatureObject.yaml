@@ -1,6 +1,9 @@
 type: object
 required:
   - code
+  - name
+  - description
+  - privileges
   - created_at
 properties:
   code:
@@ -27,12 +30,15 @@ properties:
       - code: "max"
         name: "Maximum"
         value_type: "integer"
+        config: {}
       - code: "max_admins"
         name: "Max Admins"
         value_type: "integer"
+        config: {}
       - code: "root"
         name: "Allow root user"
         value_type: "boolean"
+        config: {}
       - code: "provider"
         name: "SSO Provider"
         value_type: "select"

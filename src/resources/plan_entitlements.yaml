@@ -55,7 +55,7 @@ patch:
   tags:
     - entitlements
   summary: Partial update of an entitlement
-  description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All features and privileges not part of the payload are ignored. To remove privileges or features, use the DELETE endpoints. All privileges must be valid for the feature.
+  description: This accepts a list of entitlements to update. If the feature isn't part of the plan yet, it's added with all the privileges from the payload. If the feature is already part of the plan, the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
   operationId: updateEntitlement
   requestBody:
     description: Entitlement payload

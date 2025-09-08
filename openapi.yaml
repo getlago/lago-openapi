@@ -3322,7 +3322,7 @@ paths:
       tags:
         - entitlements
       summary: Partial update of an entitlement
-      description: This endpoint updates an existing entitlement by modifying privilege values. Notice that the update is partial. All new privileges or features are added. If there is already a value, it's overridden. All features and privileges not part of the payload are ignored. To remove privileges or features, use the DELETE endpoints. All privileges must be valid for the feature.
+      description: This accepts a list of entitlements to update. If the feature isn't part of the plan yet, it's added with all the privileges from the payload. If the feature is already part of the plan, the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateEntitlement
       requestBody:
         description: Entitlement payload
@@ -3876,7 +3876,7 @@ paths:
       tags:
         - entitlements
       summary: Update subscription entitlements
-      description: This endpoint allows partial updates to subscription entitlements. New entitlements are added, provided values are overridden, but entitlements not included in the payload are ignored.
+      description: This accepts a list of entitlements to update. If the feature isn't part of the subscription yet, it's added with all the privileges from the payload. If the feature is already part of the subscription (via plan or via override), the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateSubscriptionEntitlements
       requestBody:
         description: Subscription entitlements payload
@@ -8858,6 +8858,9 @@ components:
       type: object
       required:
         - code
+        - name
+        - value_type
+        - config
       properties:
         code:
           type: string
@@ -8893,6 +8896,9 @@ components:
       type: object
       required:
         - code
+        - name
+        - description
+        - privileges
         - created_at
       properties:
         code:
@@ -8919,12 +8925,15 @@ components:
             - code: max
               name: Maximum
               value_type: integer
+              config: {}
             - code: max_admins
               name: Max Admins
               value_type: integer
+              config: {}
             - code: root
               name: Allow root user
               value_type: boolean
+              config: {}
             - code: provider
               name: SSO Provider
               value_type: select
@@ -8950,15 +8959,9 @@ components:
             $ref: '#/components/schemas/FeatureObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    FeatureCreateInput:
+    FeatureBaseInput:
       type: object
-      required:
-        - code
       properties:
-        code:
-          type: string
-          example: seats
-          description: Unique code used to identify the feature.
         name:
           type:
             - string
@@ -9026,6 +9029,22 @@ components:
                   - google
                   - okta
           description: Privileges associated with this feature. Can be empty.
+    FeatureCreateInput:
+      type: object
+      required:
+        - feature
+      properties:
+        feature:
+          allOf:
+            - $ref: '#/components/schemas/FeatureBaseInput'
+            - type: object
+              required:
+                - code
+              properties:
+                code:
+                  type: string
+                  example: seats
+                  description: Unique code used to identify the feature.
     Feature:
       type: object
       required:
@@ -9035,63 +9054,11 @@ components:
           $ref: '#/components/schemas/FeatureObject'
     FeatureUpdateInput:
       type: object
+      required:
+        - feature
       properties:
-        name:
-          type:
-            - string
-            - 'null'
-          example: Number of seats
-          description: Name of the feature.
-        description:
-          type:
-            - string
-            - 'null'
-          example: Number of users of the account
-          description: Description of the feature.
-        privileges:
-          type: array
-          items:
-            type: object
-            properties:
-              code:
-                type: string
-                example: max
-                description: Code of the privilege to update or create.
-              name:
-                type: string
-                example: Maximum
-                description: Display name for the privilege.
-              value_type:
-                type: string
-                enum:
-                  - integer
-                  - boolean
-                  - string
-                  - select
-                example: integer
-                description: Data type of the privilege value. Value_type cannot be modified for existing privilege but can be set for new privileges.
-              config:
-                type: object
-                properties:
-                  select_options:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - ms
-                    description: Array of new string to add to existing options. Options cannot be deleted. Only used only when value_type is `select`.
-          example:
-            - code: max
-              name: Maximum
-            - code: new_extra
-              name: Extra
-              value_type: string
-            - code: providers
-              value_type: select
-              config:
-                select_options:
-                  - ms
-          description: Existing privilege names can be updated or new privilege created.
+        feature:
+          $ref: '#/components/schemas/FeatureBaseInput'
     CouponObject:
       type: object
       required:
@@ -14337,14 +14304,17 @@ components:
             - code: max
               name: Maximum
               value_type: integer
+              config: {}
               value: 10
             - code: max_admins
               name: Max Admins
               value_type: integer
+              config: {}
               value: 5
             - code: root
               name: Allow root user
               value_type: boolean
+              config: {}
               value: true
             - code: provider
               name: SSO Provider
@@ -15702,18 +15672,21 @@ components:
             - code: max
               name: Maximum
               value_type: integer
+              config: {}
               value: 15
               plan_value: 10
               override_value: 15
             - code: max_admins
               name: Max Admins
               value_type: integer
+              config: {}
               value: 5
               plan_value: 5
               override_value: null
             - code: root
               name: Allow root user
               value_type: boolean
+              config: {}
               value: true
               plan_value: true
               override_value: null
@@ -15728,6 +15701,12 @@ components:
                   - google
                   - okta
           description: Privileges associated with this feature. Each privilege shows the plan value and any subscription override.
+        overrides:
+          type: object
+          additionalProperties: true
+          example:
+            max: 15
+            provider: okta
     SubscriptionEntitlements:
       type: object
       required:
@@ -17356,8 +17335,6 @@ components:
               additionalProperties: true
     CustomerPaymentProvidernErrorObject:
       $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
-    PrivilegeObject:
-      $ref: '#/components/schemas/FeaturePrivilegeObject'
   responses:
     Unauthorized:
       description: Unauthorized error
