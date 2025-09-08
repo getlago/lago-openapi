@@ -1,0 +1,6 @@
+allOf:
+  - $ref: './WalletTransactionObject.yaml'
+  - type: object
+    properties:
+      wallet:
+        $ref: './WalletObject.yaml'

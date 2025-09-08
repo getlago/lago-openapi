@@ -26,7 +26,7 @@ post:
               enum:
                 - wallet_transaction
             wallet_transaction:
-              $ref: "../schemas/WalletTransactionObject.yaml"
+              $ref: "../schemas/WalletTransactionObjectExtended.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully
