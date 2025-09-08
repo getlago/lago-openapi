@@ -57,3 +57,9 @@ properties:
         config:
           select_options: ["google", "okta"]
     description: "Privileges associated with this feature. Each privilege shows the plan value and any subscription override."
+  overrides:
+    type: object
+    additionalProperties: true
+    example:
+      max: 15
+      provider: "okta"
