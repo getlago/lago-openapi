@@ -6050,6 +6050,39 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  subscription_updated:
+    post:
+      operationId: subscriptionUpdated
+      summary: A subscription has been updated
+      description: A subscription has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the subscription
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - subscription
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - subscription.updated
+                object_type:
+                  type: string
+                  enum:
+                    - subscription
+                subscription:
+                  $ref: '#/components/schemas/SubscriptionWithCustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   subscription_termination_alert:
     post:
       operationId: subscriptionTerminationAlert
