@@ -2564,7 +2564,7 @@ paths:
             example: '2022-08-09'
         - name: status
           in: query
-          description: Filter invoices by status. Possible values are `draft` or `finalized`.
+          description: Filter invoices by status. Possible values are `draft`, `failed`, `finalized`, `pending`and `voided`.
           required: false
           explode: true
           schema:
@@ -2572,6 +2572,9 @@ paths:
             enum:
               - draft
               - finalized
+              - failed
+              - pending
+              - voided
         - name: payment_status
           in: query
           description: Filter invoices by payment status. Possible values are `pending`, `failed` or `succeeded`.
