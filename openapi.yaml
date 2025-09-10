@@ -10270,14 +10270,14 @@ components:
               type:
                 - integer
                 - 'null'
-              description: The total amount to be credited on the customer balance.
-              example: 10
+              description: The total amount to be credited to the customer balance for discounts on future invoices. For a total or partial refund or credit, the amount in cents must include both the item amount and the applicable tax. The refunded and credited amounts should always balance. The total, including taxes, cannot exceed the invoice’s total fees.”
+              example: 100
             refund_amount_cents:
               type:
                 - integer
                 - 'null'
-              description: The total amount to be refunded to the customer.
-              example: 5
+              description: The total amount to be refunded immediately to the payment method used by the customer. For a total or partial refund or credit, the amount in cents must include both the item amount and the applicable tax. The refunded and credited amounts should always balance. The total, including taxes, cannot exceed the invoice’s total fees.”
+              example: 500
             items:
               type: array
               items:
@@ -10293,14 +10293,14 @@ components:
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   amount_cents:
                     type: integer
-                    description: The amount of the credit note item, expressed in cents.
-                    example: 10
+                    description: This is the amount of the credit note item excluding taxes, expressed in cents.
+                    example: 100
               description: The list of credit note's items.
               example:
                 - fee_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                  amount_cents: 10
+                  amount_cents: 100
                 - fee_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
-                  amount_cents: 5
+                  amount_cents: 500
     CreditNote:
       type: object
       required:
