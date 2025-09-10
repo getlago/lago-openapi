@@ -9903,17 +9903,38 @@ components:
               example: startup
             name:
               type: string
-              description: The name of the fee item. It can be the name of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+              description: |
+                The name of the fee item. The value depends on the type of the fee item:
+
+                - If the fee item is a `charge`, it is the billable metric name.
+                - If the fee item is a `add-on`, it is the add-on name.
+                - If the fee item is a `credit`, it is the wallet transaction name if set, or `"credit"` if not.
+                - If the fee item is a `fixed_charge`, it is the fixed charge add-on name.
+                - For all the other fee items, it is the subscription plan name.
               example: Startup
             description:
               type:
                 - string
                 - 'null'
-              description: The description of the fee item. It can be the description of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+              description: |
+                The description of the fee item. The value depends on the type of the fee item:
+
+                - If the fee item is a `charge`, it is the billable metric description.
+                - If the fee item is a `add-on`, it is the add-on description.
+                - If the fee item is a `credit`, it is always `"credit"`.
+                - If the fee item is a `fixed_charge`, it is the fixed charge add-on description.
+                - For all the other fee items, it is the subscription plan description.
               example: Startup
             invoice_display_name:
               type: string
-              description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+              description: |
+                Specifies the name that will be displayed on an invoice. If no value is set for this field, we'll fallback to a value that depends on the type of the fee items:
+
+                - If the fee item is a `charge`, we'll fallback to the `invoice_display_name` of the `charge` or the billable metric name if no `invoice_display_name` is set.
+                - If the fee item is a `add-on`, we'll fallback to the `invoice_name` of the `add-on` or the `name` of the `add-on`.
+                - If the fee item is a `credit`, we'll fallback to the wallet transaction name if set, or `credit` if not.
+                - If the fee item is a `fixed_charge`, we'll fallback to the `invoice_display_name` of the `fixed_charge` or the `invoice_name` of the `fixed_charge_add_on` if no `invoice_display_name` is set.
+                - For all the other fee items, we'll fallback to the `invoice_display_name` of the subscription plan.
               example: Setup Fee (SF1)
             filter_invoice_display_name:
               type:
@@ -16470,6 +16491,15 @@ components:
               format: uuid
               description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            name:
+              type:
+                - string
+                - 'null'
+              description: |
+                The name of the wallet transaction. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+
+                Note that this name will apply to all transactions (`paid_credits`, `granted_credits` and `voided_credits`) created by this action.
+              example: Tokens for models 'high-fidelity-boost'
             paid_credits:
               type:
                 - string
@@ -16526,6 +16556,7 @@ components:
         - credit_amount
         - amount
         - created_at
+        - name
       properties:
         lago_id:
           type: string
@@ -16619,6 +16650,12 @@ components:
           format: date-time
           description: The date of the wallet transaction creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
           example: '2022-04-29T08:59:51Z'
+        name:
+          type:
+            - string
+            - 'null'
+          description: The name of the wallet transaction. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+          example: Tokens for models 'high-fidelity-boost'
     WalletTransactions:
       type: object
       required:

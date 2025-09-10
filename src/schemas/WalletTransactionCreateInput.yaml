@@ -12,6 +12,15 @@ properties:
         format: "uuid"
         description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
         example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+      name:
+        type:
+          - string
+          - "null"
+        description: |
+          The name of the wallet transaction. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+
+          Note that this name will apply to all transactions (`paid_credits`, `granted_credits` and `voided_credits`) created by this action.
+        example: "Tokens for models 'high-fidelity-boost'"
       paid_credits:
         type:
           - string
