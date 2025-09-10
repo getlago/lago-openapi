@@ -244,7 +244,7 @@ properties:
 
           - If the fee item is a `charge`, it is the billable metric name.
           - If the fee item is a `add-on`, it is the add-on name.
-          - If the fee item is a `credit`, it is the wallet transaction name if set, or `credit` if not.
+          - If the fee item is a `credit`, it is the wallet transaction name if set, or `"credit"` if not.
           - If the fee item is a `fixed_charge`, it is the fixed charge add-on name.
           - For all the other fee items, it is the subscription plan name.
         example: "Startup"
@@ -257,7 +257,7 @@ properties:
 
           - If the fee item is a `charge`, it is the billable metric description.
           - If the fee item is a `add-on`, it is the add-on description.
-          - If the fee item is a `credit`, it is always `credit`.
+          - If the fee item is a `credit`, it is always `"credit"`.
           - If the fee item is a `fixed_charge`, it is the fixed charge add-on description.
           - For all the other fee items, it is the subscription plan description.
         example: "Startup"
