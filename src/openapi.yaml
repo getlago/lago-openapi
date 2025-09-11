@@ -201,8 +201,16 @@ paths:
     $ref: "./resources/customer.yaml"
   /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
     $ref: "./resources/customer_applied_coupon.yaml"
+  /customers/{external_customer_id}/invoices:
+    $ref: "./resources/customer_invoices.yaml"
+  /customers/{external_customer_id}/payments:
+    $ref: "./resources/customer_payments.yaml"
+  /customers/{external_customer_id}/payment_requests:
+    $ref: "./resources/customer_payment_requests.yaml"
   /customers/{external_customer_id}/portal_url:
     $ref: "./resources/customer_portal_url.yaml"
+  /customers/{external_customer_id}/wallets:
+    $ref: "./resources/customer_wallets.yaml"
   /customers/{external_customer_id}/current_usage:
     $ref: "./resources/customer_current_usage.yaml"
   /customers/{external_customer_id}/projected_usage:
