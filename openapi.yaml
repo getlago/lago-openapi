@@ -4556,6 +4556,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - triggered_alert
               properties:
                 webhook_type:
@@ -4566,6 +4567,11 @@ webhooks:
                   type: string
                   enum:
                     - triggered_alert
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 triggered_alert:
                   $ref: '#/components/schemas/TriggeredAlertObject'
       responses:
@@ -4589,6 +4595,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - customer
               properties:
                 webhook_type:
@@ -4599,6 +4606,11 @@ webhooks:
                   type: string
                   enum:
                     - customer
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 customer:
                   $ref: '#/components/schemas/CustomerObject'
       responses:
@@ -4632,6 +4644,11 @@ webhooks:
                   type: string
                   enum:
                     - customer
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 customer:
                   $ref: '#/components/schemas/CustomerObject'
       responses:
@@ -4655,6 +4672,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - customer
               properties:
                 webhook_type:
@@ -4665,6 +4683,11 @@ webhooks:
                   type: string
                   enum:
                     - customer
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 customer:
                   $ref: '#/components/schemas/CustomerObject'
       responses:
@@ -4688,6 +4711,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - accounting_provider_customer_error
               properties:
                 webhook_type:
@@ -4698,6 +4722,11 @@ webhooks:
                   type: string
                   enum:
                     - accounting_provider_customer_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 accounting_provider_customer_error:
                   $ref: '#/components/schemas/CustomerIntegratrionErrorObject'
       responses:
@@ -4721,6 +4750,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - customer
               properties:
                 webhook_type:
@@ -4731,6 +4761,11 @@ webhooks:
                   type: string
                   enum:
                     - customer
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 customer:
                   $ref: '#/components/schemas/CustomerObject'
       responses:
@@ -4754,6 +4789,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - crm_provider_customer_error
               properties:
                 webhook_type:
@@ -4764,6 +4800,11 @@ webhooks:
                   type: string
                   enum:
                     - crm_provider_customer_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 crm_provider_customer_error:
                   $ref: '#/components/schemas/CustomerIntegratrionErrorObject'
       responses:
@@ -4787,6 +4828,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - customer
               properties:
                 webhook_type:
@@ -4797,6 +4839,11 @@ webhooks:
                   type: string
                   enum:
                     - customer
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 customer:
                   $ref: '#/components/schemas/CustomerObject'
       responses:
@@ -4820,6 +4867,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_provider_customer_error
               properties:
                 webhook_type:
@@ -4830,6 +4878,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_provider_customer_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_provider_customer_error:
                   $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
       responses:
@@ -4853,6 +4906,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_provider_customer_checkout_url
               properties:
                 webhook_type:
@@ -4863,6 +4917,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_provider_customer_checkout_url
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_provider_customer_checkout_url:
                   $ref: '#/components/schemas/CustomerCheckoutUrl'
       responses:
@@ -4886,6 +4945,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - tax_provider_customer_error
               properties:
                 webhook_type:
@@ -4896,6 +4956,11 @@ webhooks:
                   type: string
                   enum:
                     - tax_provider_customer_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 tax_provider_customer_error:
                   $ref: '#/components/schemas/CustomerTaxProviderErrorObject'
       responses:
@@ -4919,6 +4984,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - customer
               properties:
                 webhook_type:
@@ -4929,6 +4995,11 @@ webhooks:
                   type: string
                   enum:
                     - customer
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 customer:
                   $ref: '#/components/schemas/CustomerViesCheckObject'
       responses:
@@ -4952,6 +5023,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - credit_note
               properties:
                 webhook_type:
@@ -4962,6 +5034,11 @@ webhooks:
                   type: string
                   enum:
                     - credit_note
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 credit_note:
                   $ref: '#/components/schemas/CreditNoteExtendedObject'
       responses:
@@ -4985,6 +5062,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - credit_note
               properties:
                 webhook_type:
@@ -4995,6 +5073,11 @@ webhooks:
                   type: string
                   enum:
                     - credit_note
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 credit_note:
                   $ref: '#/components/schemas/CreditNoteExtendedObject'
       responses:
@@ -5018,6 +5101,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - credit_note_payment_provider_refund_error
               properties:
                 webhook_type:
@@ -5051,6 +5135,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - dunning_campaign
               properties:
                 webhook_type:
@@ -5061,6 +5146,11 @@ webhooks:
                   type: string
                   enum:
                     - dunning_campaign
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 dunning_campaign:
                   $ref: '#/components/schemas/DunningCampaignFinishedObject'
       responses:
@@ -5085,6 +5175,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - event_error
               properties:
                 webhook_type:
@@ -5095,6 +5186,11 @@ webhooks:
                   type: string
                   enum:
                     - event_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 event_error:
                   $ref: '#/components/schemas/EventErrorsObject'
       responses:
@@ -5118,6 +5214,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - events_errors
               properties:
                 webhook_type:
@@ -5128,6 +5225,11 @@ webhooks:
                   type: string
                   enum:
                     - events_errors
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 events_errors:
                   $ref: '#/components/schemas/EventsErrorsObject'
       responses:
@@ -5151,6 +5253,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - feature
               properties:
                 webhook_type:
@@ -5161,6 +5264,11 @@ webhooks:
                   type: string
                   enum:
                     - feature
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 feature:
                   $ref: '#/components/schemas/FeatureObject'
       responses:
@@ -5184,6 +5292,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - feature
               properties:
                 webhook_type:
@@ -5194,6 +5303,11 @@ webhooks:
                   type: string
                   enum:
                     - feature
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 feature:
                   $ref: '#/components/schemas/FeatureObject'
       responses:
@@ -5217,6 +5331,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - feature
               properties:
                 webhook_type:
@@ -5227,6 +5342,11 @@ webhooks:
                   type: string
                   enum:
                     - feature
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 feature:
                   $ref: '#/components/schemas/FeatureObject'
       responses:
@@ -5250,6 +5370,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - fee
               properties:
                 webhook_type:
@@ -5260,6 +5381,11 @@ webhooks:
                   type: string
                   enum:
                     - fee
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 fee:
                   $ref: '#/components/schemas/FeeObject'
       responses:
@@ -5283,6 +5409,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - tax_provider_fee_error
               properties:
                 webhook_type:
@@ -5293,6 +5420,11 @@ webhooks:
                   type: string
                   enum:
                     - tax_provider_fee_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 tax_provider_fee_error:
                   $ref: '#/components/schemas/FeeTaxProviderErrorObject'
       responses:
@@ -5316,6 +5448,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5326,6 +5459,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5349,6 +5487,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5359,6 +5498,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5382,6 +5526,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5392,6 +5537,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5415,6 +5565,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5425,6 +5576,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5448,6 +5604,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5458,6 +5615,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5481,6 +5643,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5491,6 +5654,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5514,6 +5682,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5524,6 +5693,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5547,6 +5721,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_dispute_lost
               properties:
                 webhook_type:
@@ -5557,6 +5732,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_dispute_lost
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_dispute_lost:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5580,6 +5760,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5590,6 +5771,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5613,6 +5799,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5623,6 +5810,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5646,6 +5838,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_provider_invoice_payment_error
               properties:
                 webhook_type:
@@ -5656,6 +5849,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_provider_invoice_payment_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_provider_invoice_payment_error:
                   $ref: '#/components/schemas/InvoicePaymentFailureObject'
       responses:
@@ -5679,6 +5877,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - invoice
               properties:
                 webhook_type:
@@ -5689,6 +5888,11 @@ webhooks:
                   type: string
                   enum:
                     - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 invoice:
                   $ref: '#/components/schemas/InvoiceObjectExtended'
       responses:
@@ -5712,6 +5916,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - provider_error
               properties:
                 webhook_type:
@@ -5722,6 +5927,11 @@ webhooks:
                   type: string
                   enum:
                     - provider_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 provider_error:
                   $ref: '#/components/schemas/IntegrationProviderErrorObject'
       responses:
@@ -5745,6 +5955,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment
               properties:
                 webhook_type:
@@ -5755,6 +5966,11 @@ webhooks:
                   type: string
                   enum:
                     - payment
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment:
                   $ref: '#/components/schemas/PaymentObject'
       responses:
@@ -5778,6 +5994,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_provider_error
               properties:
                 webhook_type:
@@ -5788,6 +6005,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_provider_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_provider_error:
                   $ref: '#/components/schemas/PaymentProviderErrorObject'
       responses:
@@ -5811,6 +6033,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_request
               properties:
                 webhook_type:
@@ -5821,6 +6044,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_request
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_request:
                   $ref: '#/components/schemas/PaymentRequestObject'
       responses:
@@ -5844,6 +6072,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_provider_payment_request_payment_error
               properties:
                 webhook_type:
@@ -5854,6 +6083,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_provider_payment_request_payment_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_provider_payment_request_payment_error:
                   $ref: '#/components/schemas/PaymentRequestPaymentFailureObject'
       responses:
@@ -5877,6 +6111,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_request
               properties:
                 webhook_type:
@@ -5887,6 +6122,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_request
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_request:
                   $ref: '#/components/schemas/PaymentRequestObject'
       responses:
@@ -5910,6 +6150,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - plan
               properties:
                 webhook_type:
@@ -5920,6 +6161,11 @@ webhooks:
                   type: string
                   enum:
                     - plan
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 plan:
                   $ref: '#/components/schemas/PlanObject'
       responses:
@@ -5943,6 +6189,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - plan
               properties:
                 webhook_type:
@@ -5953,6 +6200,11 @@ webhooks:
                   type: string
                   enum:
                     - plan
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 plan:
                   $ref: '#/components/schemas/PlanObject'
       responses:
@@ -5976,6 +6228,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - plan
               properties:
                 webhook_type:
@@ -5986,6 +6239,11 @@ webhooks:
                   type: string
                   enum:
                     - plan
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 plan:
                   $ref: '#/components/schemas/PlanObject'
       responses:
@@ -6009,6 +6267,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - subscription
               properties:
                 webhook_type:
@@ -6019,6 +6278,11 @@ webhooks:
                   type: string
                   enum:
                     - subscription
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithCustomerObject'
       responses:
@@ -6042,6 +6306,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - subscription
               properties:
                 webhook_type:
@@ -6052,6 +6317,11 @@ webhooks:
                   type: string
                   enum:
                     - subscription
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithCustomerObject'
       responses:
@@ -6075,6 +6345,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - subscription
               properties:
                 webhook_type:
@@ -6085,6 +6356,11 @@ webhooks:
                   type: string
                   enum:
                     - subscription
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithCustomerObject'
       responses:
@@ -6108,6 +6384,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - subscription
               properties:
                 webhook_type:
@@ -6118,6 +6395,11 @@ webhooks:
                   type: string
                   enum:
                     - subscription
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithCustomerObject'
       responses:
@@ -6141,6 +6423,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - subscription
               properties:
                 webhook_type:
@@ -6151,6 +6434,11 @@ webhooks:
                   type: string
                   enum:
                     - subscription
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithCustomerObject'
       responses:
@@ -6174,6 +6462,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - subscription
               properties:
                 webhook_type:
@@ -6184,6 +6473,11 @@ webhooks:
                   type: string
                   enum:
                     - subscription
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithThresholdObject'
       responses:
@@ -6207,6 +6501,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - wallet
               properties:
                 webhook_type:
@@ -6217,6 +6512,11 @@ webhooks:
                   type: string
                   enum:
                     - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 wallet:
                   $ref: '#/components/schemas/WalletObject'
       responses:
@@ -6240,6 +6540,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - wallet_transaction
               properties:
                 webhook_type:
@@ -6250,6 +6551,11 @@ webhooks:
                   type: string
                   enum:
                     - wallet_transaction
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 wallet_transaction:
                   $ref: '#/components/schemas/WalletTransactionObjectExtended'
       responses:
@@ -6273,6 +6579,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - wallet_transaction
               properties:
                 webhook_type:
@@ -6283,6 +6590,11 @@ webhooks:
                   type: string
                   enum:
                     - wallet_transaction
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 wallet_transaction:
                   $ref: '#/components/schemas/WalletTransactionObjectExtended'
       responses:
@@ -6306,6 +6618,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - payment_provider_wallet_transaction_payment_error
               properties:
                 webhook_type:
@@ -6316,6 +6629,11 @@ webhooks:
                   type: string
                   enum:
                     - payment_provider_wallet_transaction_payment_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_provider_wallet_transaction_payment_error:
                   $ref: '#/components/schemas/WalletTransactionPaymentFailureObject'
       responses:

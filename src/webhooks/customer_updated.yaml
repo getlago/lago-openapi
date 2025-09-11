@@ -25,6 +25,11 @@ post:
               type: string
               enum:
                 - customer
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             customer:
               $ref: "../schemas/CustomerObject.yaml"
   responses:
