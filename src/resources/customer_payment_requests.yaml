@@ -1,0 +1,23 @@
+get:
+  tags:
+    - customers
+    - payment_requests
+  summary: List all customer's payment requests
+  description: This endpoint is used to list all existing payment requests of a customer.
+  operationId: findAllCustomerPaymentRequests
+  parameters:
+    - $ref: "../parameters/external_customer_id_path.yaml"
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - $ref: "../parameters/payment_status.yaml"
+  responses:
+    "200":
+      description: PaymentRequests
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/PaymentRequestsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

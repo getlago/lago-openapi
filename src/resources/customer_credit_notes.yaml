@@ -1,0 +1,116 @@
+get:
+  tags:
+    - customers
+    - credit_notes
+  summary: List all customer's credit notes
+  description: This endpoint list all existing credit notes for a customer.
+  operationId: findAllCustomerCreditNotes
+  parameters:
+    - $ref: "../parameters/external_customer_id_path.yaml"
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: issuing_date_from
+      in: query
+      description: Filter credit notes starting from a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date"
+        example: "2022-07-08"
+    - name: issuing_date_to
+      in: query
+      description: Filter credit notes up to a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date"
+        example: "2022-08-09"
+    - name: search_term
+      in: query
+      description: Search credit notes by id, number, customer name, customer external_id or customer email.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "Jane"
+    - name: reason
+      in: query
+      description: Filter credit notes by reasons. Possible values are `product_unsatisfactory`, `order_change`, `order_cancellation`, `fraudulent_charge`, `duplicated_charge` or `other`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - product_unsatisfactory
+          - order_change
+          - order_cancellation
+          - fraudulent_charge
+          - duplicated_charge
+          - other
+    - name: credit_status
+      in: query
+      description: Filter credit notes by credit status. Possible values are `available`, `consumed`  or `voided`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - available
+          - consumed
+          - voided
+    - name: refund_status
+      in: query
+      description: Filter credit notes by refund status. Possible values are `pending`, `succeeded`  or `failed`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - pending
+          - succeeded
+          - failed
+    - name: invoice_number
+      in: query
+      description: Filter credit notes by their related invoice number.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "INV-001-002"
+    - name: amount_from
+      in: query
+      description: Filter credit notes of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 9000
+    - name: amount_to
+      in: query
+      description: Filter credit notes up to a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 100000
+    - name: self_billed
+      in: query
+      description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
+      required: false
+      explode: true
+      schema:
+        type: boolean
+        example: true
+  responses:
+    "200":
+      description: Credit notes
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/CreditNotesPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
