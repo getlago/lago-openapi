@@ -6,13 +6,7 @@ get:
   description: This endpoint is used to list all payments of a customer
   operationId: findAllCustomerPayments
   parameters:
-    - name: external_customer_id
-      in: path
-      description: External ID of the existing customer
-      required: true
-      schema:
-        type: string
-        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+    - $ref: "../parameters/external_customer_id_path.yaml"
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
     - name: invoice_id
