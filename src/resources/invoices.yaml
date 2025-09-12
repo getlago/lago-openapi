@@ -68,7 +68,7 @@ get:
         type: string
         format: 'date'
         example: '2022-08-09'
-    - name: status[]
+    - name: statuses[]
       in: query
       description: Filter invoices by statuses. Possible values are `draft`, `failed`, `finalized`, `pending` and `voided`.
       required: false
@@ -83,7 +83,7 @@ get:
             - failed
             - pending
             - voided
-    - name: payment_status[]
+    - name: payment_statuses[]
       in: query
       description: Filter invoices by payment statuses. Possible values are `pending`, `failed` or `succeeded`.
       required: false
