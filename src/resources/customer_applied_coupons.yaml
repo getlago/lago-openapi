@@ -1,0 +1,43 @@
+get:
+  tags:
+    - customers
+    - coupons
+  summary: List all customer's applied coupons
+  description: This endpoint is used to list all applied coupons for a customer.
+  operationId: findAllCustomerAppliedCoupons
+  parameters:
+    - $ref: "../parameters/external_customer_id_path.yaml"
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: status
+      in: query
+      description: The status of the coupon. Can be either `active` or `terminated`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - active
+          - terminated
+        example: active
+    - name: coupon_code[]
+      in: query
+      description: The code of the coupon applied to the customer. Use it to filter applied coupons by their code.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example: ["BLACK_FRIDAY_2024", "CHRISTMAS_2024"]
+  responses:
+    "200":
+      description: Applied Coupons
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/AppliedCouponsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

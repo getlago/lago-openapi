@@ -1795,6 +1795,52 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/applied_coupons:
+    get:
+      tags:
+        - customers
+        - coupons
+      summary: List all customer's applied coupons
+      description: This endpoint is used to list all applied coupons for a customer.
+      operationId: findAllCustomerAppliedCoupons
+      parameters:
+        - $ref: '#/components/parameters/external_customer_id_path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: status
+          in: query
+          description: The status of the coupon. Can be either `active` or `terminated`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - active
+              - terminated
+            example: active
+        - name: coupon_code[]
+          in: query
+          description: The code of the coupon applied to the customer. Use it to filter applied coupons by their code.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - BLACK_FRIDAY_2024
+              - CHRISTMAS_2024
+      responses:
+        '200':
+          description: Applied Coupons
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCouponsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}:
     delete:
       tags:
@@ -1803,13 +1849,7 @@ paths:
       summary: Delete an applied coupon
       description: This endpoint is used to delete a specific coupon that has been applied to a customer.
       parameters:
-        - name: external_customer_id
-          in: path
-          description: The customer external unique identifier (provided by your own application)
-          required: true
-          schema:
-            type: string
-            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - $ref: '#/components/parameters/external_customer_id_path'
         - name: applied_coupon_id
           in: path
           description: Unique identifier of the applied coupon, created by Lago.
@@ -1827,6 +1867,312 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppliedCoupon'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/credit_notes:
+    get:
+      tags:
+        - customers
+        - credit_notes
+      summary: List all customer's credit notes
+      description: This endpoint list all existing credit notes for a customer.
+      operationId: findAllCustomerCreditNotes
+      parameters:
+        - $ref: '#/components/parameters/external_customer_id_path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: issuing_date_from
+          in: query
+          description: Filter credit notes starting from a specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2022-07-08'
+        - name: issuing_date_to
+          in: query
+          description: Filter credit notes up to a specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2022-08-09'
+        - name: search_term
+          in: query
+          description: Search credit notes by id, number, customer name, customer external_id or customer email.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: Jane
+        - name: reason
+          in: query
+          description: Filter credit notes by reasons. Possible values are `product_unsatisfactory`, `order_change`, `order_cancellation`, `fraudulent_charge`, `duplicated_charge` or `other`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - product_unsatisfactory
+              - order_change
+              - order_cancellation
+              - fraudulent_charge
+              - duplicated_charge
+              - other
+        - name: credit_status
+          in: query
+          description: Filter credit notes by credit status. Possible values are `available`, `consumed`  or `voided`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - available
+              - consumed
+              - voided
+        - name: refund_status
+          in: query
+          description: Filter credit notes by refund status. Possible values are `pending`, `succeeded`  or `failed`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - pending
+              - succeeded
+              - failed
+        - name: invoice_number
+          in: query
+          description: Filter credit notes by their related invoice number.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: INV-001-002
+        - name: amount_from
+          in: query
+          description: Filter credit notes of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 9000
+        - name: amount_to
+          in: query
+          description: Filter credit notes up to a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 100000
+        - name: self_billed
+          in: query
+          description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+      responses:
+        '200':
+          description: Credit notes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNotesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/invoices:
+    get:
+      tags:
+        - customers
+        - invoices
+      summary: List all customer's invoices
+      description: This endpoint is used for retrieving all invoices of a customer.
+      operationId: findAllCustomerInvoices
+      parameters:
+        - $ref: '#/components/parameters/external_customer_id_path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: amount_from
+          in: query
+          description: Filter invoices of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 9000
+        - name: amount_to
+          in: query
+          description: Filter invoices up to a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            example: 100000
+        - name: issuing_date_from
+          in: query
+          description: Filter invoices starting from a specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2022-07-08'
+        - name: issuing_date_to
+          in: query
+          description: Filter invoices up to a specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2022-08-09'
+        - name: status
+          in: query
+          description: Filter invoices by status. Possible values are `draft` or `finalized`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - draft
+              - finalized
+        - name: payment_status
+          in: query
+          description: Filter invoices by payment status. Possible values are `pending`, `failed` or `succeeded`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - pending
+              - failed
+              - succeeded
+        - name: payment_overdue
+          in: query
+          description: Filter invoices by payment_overdue. Possible values are `true` or `false`.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+        - name: search_term
+          in: query
+          description: Search invoices by id, number, customer name, customer external_id or customer email.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: Jane
+        - name: payment_dispute_lost
+          in: query
+          description: Filter invoices with a payment dispute lost. Possible values are `true` or `false`.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+        - name: invoice_type
+          in: query
+          description: Filter invoices by invoice type. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - subscription
+              - add_on
+              - credit
+              - one_off
+              - advance_charges
+              - progressive_billing
+        - name: self_billed
+          in: query
+          description: Filter invoices by self billed. Possible values are `true` or `false`.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+        - name: metadata[key]
+          in: query
+          description: Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for invoice without given metadata key. For example, `metadata[color]=blue`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: someValue
+      responses:
+        '200':
+          description: Invoices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{external_customer_id}/payments:
+    get:
+      tags:
+        - customers
+        - payments
+      summary: List all customer's payments
+      description: This endpoint is used to list all payments of a customer
+      operationId: findAllCustomerPayments
+      parameters:
+        - $ref: '#/components/parameters/external_customer_id_path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: invoice_id
+          in: query
+          description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      responses:
+        '200':
+          description: Payments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/payment_requests:
+    get:
+      tags:
+        - customers
+        - payment_requests
+      summary: List all customer's payment requests
+      description: This endpoint is used to list all existing payment requests of a customer.
+      operationId: findAllCustomerPaymentRequests
+      parameters:
+        - $ref: '#/components/parameters/external_customer_id_path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/payment_status'
+      responses:
+        '200':
+          description: PaymentRequests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequestsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1870,6 +2216,79 @@ paths:
                         description: An embeddable link for displaying a customer portal
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/subscriptions:
+    get:
+      tags:
+        - customers
+        - subscriptions
+      summary: List all customer's subscriptions
+      description: This endpoint retrieves all active subscriptions for a customer.
+      operationId: findAllCustomerSubscriptions
+      parameters:
+        - $ref: '#/components/parameters/external_customer_id_path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: plan_code
+          in: query
+          description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: premium
+        - name: status[]
+          in: query
+          description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - pending
+                - canceled
+                - terminated
+                - active
+            example:
+              - active
+              - pending
+      responses:
+        '200':
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/wallets:
+    get:
+      tags:
+        - customers
+        - wallets
+      summary: List all customer's wallets
+      description: This endpoint is used to list all wallets with prepaid credits of a customer
+      operationId: findAllCustomerWallets
+      parameters:
+        - $ref: '#/components/parameters/external_customer_id_path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: Wallets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/current_usage:
@@ -6687,15 +7106,14 @@ components:
       schema:
         type: integer
         example: 12
-    lago_invoice_id:
-      name: lago_id
+    external_customer_id_path:
+      name: external_customer_id
       in: path
-      description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+      description: The customer external unique identifier (provided by your own application)
       required: true
       schema:
         type: string
-        format: uuid
-        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
     payment_status:
       name: payment_status
       in: query
@@ -6709,6 +7127,15 @@ components:
           - failed
           - succeeded
         example: pending
+    lago_invoice_id:
+      name: lago_id
+      in: path
+      description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     webhook_signature:
       name: X-Lago-Signature
       in: header
@@ -11896,6 +12323,1062 @@ components:
       properties:
         customer:
           $ref: '#/components/schemas/CustomerObjectExtended'
+    InvoiceBaseObject:
+      type: object
+      required:
+        - lago_id
+        - billing_entity_code
+        - number
+        - issuing_date
+        - invoice_type
+        - status
+        - payment_status
+        - currency
+        - fees_amount_cents
+        - coupons_amount_cents
+        - credit_notes_amount_cents
+        - sub_total_excluding_taxes_amount_cents
+        - taxes_amount_cents
+        - sub_total_including_taxes_amount_cents
+        - prepaid_credit_amount_cents
+        - progressive_billing_credit_amount_cents
+        - total_amount_cents
+        - version_number
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        billing_entity_code:
+          type:
+            - string
+            - 'null'
+          example: acme_corp
+          description: The unique code of the billing entity associated with the invoice
+        sequential_id:
+          type: integer
+          description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
+          example: 2
+        number:
+          type: string
+          description: The unique number assigned to the invoice. This number serves as a distinct identifier for the invoice and helps in differentiating it from other invoices in the system.
+          example: LAG-1234-001-002
+        issuing_date:
+          type: string
+          format: date
+          description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
+          example: '2022-04-30'
+        payment_dispute_lost_at:
+          type: string
+          format: date-time
+          description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
+          example: '2022-09-14T16:35:31Z'
+        payment_due_date:
+          type: string
+          format: date
+          description: The payment due date for the invoice, specified in the ISO 8601 date format.
+          example: '2022-04-30'
+        payment_overdue:
+          type: boolean
+          description: Specifies if the payment is considered as overdue.
+          example: true
+        net_payment_term:
+          type: integer
+          example: 30
+          description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+        invoice_type:
+          type: string
+          enum:
+            - subscription
+            - add_on
+            - credit
+            - one_off
+            - progressive_billing
+          description: The type of invoice issued. Possible values are `subscription`, `one-off`, `credit` or `progressive_billing`.
+          example: subscription
+        status:
+          type: string
+          enum:
+            - draft
+            - finalized
+            - voided
+            - failed
+            - pending
+          description: |-
+            The status of the invoice. It indicates the current state of the invoice and can have following values:
+            - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
+            - `finalized`: the invoice has been issued and finalized. In this state, events cannot be ingested or added to the invoice anymore.
+            - `voided`: the invoice has been issued and subsequently voided. In this state, events cannot be ingested or added to the invoice anymore.
+            - `pending`: the invoice remains pending until the taxes are fetched from the external provider.
+            - `failed`: during an attempt of finalization of the invoice, an error happened. This invoice will have an array of error_details, explaining, in which part of the system an error happened and how it's possible to fix it. This invoice can't be edited or updated, only retried. This action will discard current error_details and will create new ones if the finalization failed again.
+          example: finalized
+        payment_status:
+          type: string
+          enum:
+            - pending
+            - succeeded
+            - failed
+          description: |-
+            The status of the payment associated with the invoice. It can have one of the following values:
+            - `pending`: the payment is pending, waiting for payment processing in Stripe or when the invoice is emitted but users have not updated the payment status through the endpoint.
+            - `succeeded`: the payment of the invoice has been successfully processed.
+            - `failed`: the payment of the invoice has failed or encountered an error during processing.
+          example: succeeded
+        currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the invoice issued.
+          example: EUR
+        fees_amount_cents:
+          type: integer
+          description: The total sum of fees amount in cents. It calculates the cumulative amount of all the fees associated with the invoice, providing a consolidated value.
+          example: 100
+        coupons_amount_cents:
+          type: integer
+          description: The total sum of all coupons discounted on the invoice. It calculates the cumulative discount amount applied by coupons, expressed in cents.
+          example: 10
+        credit_notes_amount_cents:
+          type: integer
+          description: The total sum of all credit notes discounted on the invoice. It calculates the cumulative discount amount applied by credit notes, expressed in cents.
+          example: 10
+        sub_total_excluding_taxes_amount_cents:
+          type: integer
+          description: |-
+            Subtotal amount, excluding taxes, expressed in cents.
+            This field depends on the version number. Here are the definitions based on the version:
+            - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
+            - Version 2: is equal to the `fees_amount_cents`.
+            - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
+          example: 100
+        taxes_amount_cents:
+          type: integer
+          description: The sum of tax amount associated with the invoice, expressed in cents.
+          example: 20
+        sub_total_including_taxes_amount_cents:
+          type: integer
+          description: |-
+            Subtotal amount, including taxes, expressed in cents.
+            This field depends on the version number. Here are the definitions based on the version:
+            - Version 1: is equal to the `total_amount_cents`.
+            - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
+            - Version 3 & 4: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
+          example: 120
+        prepaid_credit_amount_cents:
+          type: integer
+          description: The total sum of all prepaid credits discounted on the invoice. It calculates the cumulative discount amount applied by prepaid credits, expressed in cents.
+          example: 0
+        progressive_billing_credit_amount_cents:
+          type: integer
+          description: The usage already billed in previous invoices. Only apply to `progressive_billing` and `subscription` invoices.
+          example: 0
+        total_amount_cents:
+          type: integer
+          description: The sum of the amount and taxes amount on the invoice, expressed in cents. It calculates the total financial value of the invoice, including both the original amount and any applicable taxes.
+          example: 100
+        version_number:
+          type: integer
+          example: 3
+        self_billed:
+          type: boolean
+          example: false
+          description: Indicates if the invoice is self-billed. Self-billing is a process where an organization creates the invoice on behalf of the partner. This field specifies whether the invoice is self-billed or not.
+        file_url:
+          type: string
+          format: uri
+          description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
+          example: https://getlago.com/invoice/file
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the invoice object was created
+        updated_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
+    BillingPeriodObject:
+      type: object
+      required:
+        - lago_subscription_id
+        - external_subscription_id
+        - lago_plan_id
+        - subscription_from_datetime
+        - subscription_to_datetime
+        - charges_from_datetime
+        - charges_to_datetime
+        - invoicing_reason
+      properties:
+        lago_subscription_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the subscription, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_subscription_id:
+          type: string
+          description: Unique identifier assigned to the subscription in your application.
+          example: external_id
+        lago_plan_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the plan, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        subscription_from_datetime:
+          type: string
+          format: date-time
+          description: The beginning date of the subscription billing period. This field indicates the start date of the billing period associated with the subscription fee.
+          example: '2022-04-29T08:59:51Z'
+        subscription_to_datetime:
+          type: string
+          format: date-time
+          description: The ending date of the subscription billing period. This field indicates the end date of the billing period associated with the subscription fee.
+          example: '2022-05-29T08:59:51Z'
+        charges_from_datetime:
+          type: string
+          format: date-time
+          description: The beginning date of the period that covers the charge fees. It is applicable only to the `charge` fees attached to the subscription. This field indicates the start date of the billing period or subscription period associated with the fees.
+          example: '2022-04-29T08:59:51Z'
+        charges_to_datetime:
+          type: string
+          format: date-time
+          description: The ending date of the period that covers the charge fees. It is applicable only to the `charge` fees attached to the subscription. This field indicates the end date of the billing period or subscription period associated with the fees.
+          example: '2022-05-29T08:59:51Z'
+        invoicing_reason:
+          type: string
+          enum:
+            - subscription_starting
+            - subscription_periodic
+            - subscription_terminating
+            - in_advance_charge
+            - in_advance_charge_periodic
+            - progressive_billing
+          description: The reason explaining why this subscription appears on the invoice.
+          example: subscription_starting
+    InvoiceMetadataObject:
+      type: object
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the invoice metadata within the Lago application.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        key:
+          type: string
+          description: Represents the key of the metadata's key-value pair.
+          example: digital_ref_id
+        value:
+          type: string
+          description: Represents the value of the metadata's key-value pair.
+          example: INV-0123456-98765
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the metadata object was created. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
+    InvoiceAppliedTaxObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseAppliedTax'
+      type: object
+      properties:
+        lago_invoice_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the invoice, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        fees_amount_cents:
+          type: integer
+          description: Fees total amount on which the tax is applied
+          example: 20000
+    UsageThresholdObject:
+      type: object
+      required:
+        - lago_id
+        - threshold_display_name
+        - amount_cents
+        - recurring
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the usage threshold created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        threshold_display_name:
+          type:
+            - string
+            - 'null'
+          description: The display name of the usage threshold.
+          example: Threshold 1
+        amount_cents:
+          type: integer
+          description: The amount to reach to trigger a `progressive_billing` invoice.
+          example: 10000
+        recurring:
+          type: boolean
+          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the usage threshold was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2023-06-27T19:43:42Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the usage threshold was last updated. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2023-06-27T19:43:42Z'
+    AppliedUsageThresholdObject:
+      type: object
+      required:
+        - lifetime_usage_amount_cents
+        - created_at
+        - usage_threshold
+      properties:
+        lifetime_usage_amount_cents:
+          type: integer
+          description: The amount of usage in cents that has been accumulated over the lifetime of the subscription.
+          example: 2000
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the lifetime usage was computed. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2025-03-31T12:31:44Z'
+        usage_threshold:
+          $ref: '#/components/schemas/UsageThresholdObject'
+    InvoiceObject:
+      allOf:
+        - $ref: '#/components/schemas/InvoiceBaseObject'
+        - type: object
+          properties:
+            customer:
+              $ref: '#/components/schemas/CustomerObject'
+              description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
+            billing_periods:
+              type: array
+              items:
+                $ref: '#/components/schemas/BillingPeriodObject'
+            metadata:
+              type: array
+              items:
+                $ref: '#/components/schemas/InvoiceMetadataObject'
+            applied_taxes:
+              type: array
+              items:
+                $ref: '#/components/schemas/InvoiceAppliedTaxObject'
+            applied_usage_thresholds:
+              type: array
+              items:
+                $ref: '#/components/schemas/AppliedUsageThresholdObject'
+    InvoicesPaginated:
+      type: object
+      required:
+        - invoices
+        - meta
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaymentObject:
+      type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - invoice_ids
+        - lago_payable_id
+        - payable_type
+        - amount_cents
+        - amount_currency
+        - status
+        - payment_status
+        - type
+        - reference
+        - payment_provider_code
+        - payment_provider_type
+        - external_payment_id
+        - provider_payment_id
+        - provider_customer_id
+        - next_action
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the payment, created by Lago.
+          example: 4cf085a7-c196-4f07-a543-97c50ec6e8b2
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The customer external unique identifier (provided by your own application)
+        invoice_ids:
+          type: array
+          description: List of invoice IDs associated with the payment.
+          items:
+            type: string
+            format: uuid
+            example: 486b147a-02a1-4ccf-8603-f3541fc25e7a
+        lago_payable_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the paid resource, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        payable_type:
+          type: string
+          enum:
+            - Invoice
+            - PaymentRequest
+          description: The type of the paid resource, associated with the `lago_payable_id`.
+          example: Invoice
+        amount_cents:
+          type: integer
+          description: The amount of the payment in cents.
+          example: 1099
+        amount_currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the payment amount.
+          example: USD
+        status:
+          type: string
+          description: The status of the payment within the payment provider. This can be very different from a payment provider to another.
+          example: Completed
+        payment_status:
+          type: string
+          description: The normalized payment status by Lago.
+          enum:
+            - succeeded
+            - failed
+            - pending
+            - processing
+          example: succeeded
+        type:
+          type: string
+          description: The type of payment.
+          enum:
+            - manual
+            - provider
+          example: manual
+        reference:
+          type: string
+          description: Reference for the payment.
+          example: ref1
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: stripe_prod
+        payment_provider_type:
+          type: string
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+            - flutterwave
+            - moneyhash
+          description: The type of payment provider
+          example: stripe
+        external_payment_id:
+          type:
+            - string
+            - 'null'
+          description: 'DEPRECATED: use provider_payment_id'
+        provider_payment_id:
+          type:
+            - string
+            - 'null'
+          description: Unique identifier of the payment within the payment provider (if applicable).
+          example: pi_5eb0285741bc6ba
+        provider_customer_id:
+          type: string
+          description: Unique identifier of the customer within the payment provider
+          example: cus_5eb0285bcf941bc6ba
+        next_action:
+          type: object
+          additionalProperties: true
+          description: The next action to be taken by the customer to complete the payment. Should usually be empty, except when receiving the `payment.requires_action` webhook.
+          example:
+            type: redirect_to_url
+            redirect_to_url:
+              url: https://hooks.stripe.com/3d_secure_2/hosted?merchant=acct_AAA&payment_intent=pi_BBB&payment_intent_client_secret=pi_BBB&publishable_key=pk_test_CCC
+              return_url: https://app.example.com
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the payment was created in Lago's database, not on the payment provider.
+          example: '2025-01-21T00:10:29Z'
+    PaymentsPaginated:
+      type: object
+      required:
+        - payments
+        - meta
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaymentRequestObject:
+      type: object
+      required:
+        - lago_id
+        - email
+        - amount_cents
+        - amount_currency
+        - payment_status
+        - created_at
+        - customer
+        - invoices
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the payment request, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        email:
+          type: string
+          format: email
+          example: dinesh@piedpiper.test
+          description: The customer's email address used for sending dunning notifications
+        amount_cents:
+          type: integer
+          description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.
+          example: 100
+        amount_currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the payment request.
+          example: EUR
+        payment_status:
+          type: string
+          enum:
+            - pending
+            - succeeded
+            - failed
+          description: |-
+            The status of the payment associated with the payment request. It can have one of the following values:
+            - `pending`: the payment is pending, waiting for payment processing in the payment provider or when the invoice is emitted but users have not updated the payment status through the endpoint.
+            - `succeeded`: the payment of the payment request has been successfully processed.
+            - `failed`: the payment of the payment request has failed or encountered an error during processing.
+          example: succeeded
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the payment request was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the payment request was initially created.
+          example: '2022-04-29T08:59:51Z'
+        customer:
+          $ref: '#/components/schemas/CustomerBaseObject'
+          description: The customer on which the payment request applies. It refers to the customer account or entity associated with the payment request.
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceBaseObject'
+    PaymentRequestsPaginated:
+      type: object
+      required:
+        - payment_requests
+        - meta
+      properties:
+        payment_requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentRequestObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    SubscriptionObject:
+      type: object
+      required:
+        - billing_time
+        - canceled_at
+        - created_at
+        - current_billing_period_ending_at
+        - current_billing_period_started_at
+        - downgrade_plan_date
+        - ending_at
+        - external_customer_id
+        - external_id
+        - lago_customer_id
+        - lago_id
+        - name
+        - next_plan_code
+        - on_termination_credit_note
+        - on_termination_invoice
+        - plan_code
+        - previous_plan_code
+        - started_at
+        - status
+        - subscription_at
+        - terminated_at
+        - trial_ended_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription's record within the Lago system
+        external_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The subscription external unique identifier (provided by your own application).
+        lago_customer_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
+        external_customer_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The customer external unique identifier (provided by your own application).
+        billing_time:
+          type: string
+          description: The billing time for the subscription, which can be set as either `anniversary` or `calendar`. If not explicitly provided, it will default to `calendar`. The billing time determines the timing of recurring billing cycles for the subscription. By specifying `anniversary`, the billing cycle will be based on the specific date the subscription started (billed fully), while `calendar` sets the billing cycle at the first day of the week/month/year (billed with proration).
+          example: anniversary
+          enum:
+            - calendar
+            - anniversary
+        name:
+          type:
+            - string
+            - 'null'
+          example: Repository A
+          description: The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.
+        plan_code:
+          type: string
+          example: premium
+          description: The unique code representing the plan to be attached to the customer. This code must correspond to the `code` property of one of the active plans.
+        status:
+          type: string
+          description: |-
+            The status of the subscription, which can have the following values:
+            - `active`: the subscription is currently active and applied to the customer.
+            - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer or when a subscription with a pending status is terminated.
+            - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
+            - `terminated`: the subscription is no longer active.
+          example: active
+          enum:
+            - active
+            - canceled
+            - pending
+            - terminated
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The creation date of the subscription, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). This date provides a timestamp indicating when the subscription was initially created.
+        canceled_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-09-14T16:35:31Z'
+          description: The cancellation date of the subscription. This field is not null when the subscription is `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+        started_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The effective start date of the subscription. This field can be null if the subscription is `pending` or `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+        ending_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-10-08T00:00:00Z'
+          description: The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).
+        subscription_at:
+          type: string
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The anniversary date and time of the initial subscription. This date serves as the basis for billing subscriptions with `anniversary` billing time. The `anniversary_date` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+        terminated_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-09-14T16:35:31Z'
+          description: The termination date of the subscription. This field is not null when the subscription is `terminated`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC)
+        previous_plan_code:
+          type:
+            - string
+            - 'null'
+          example: null
+          description: The code identifying the previous plan associated with this subscription.
+        next_plan_code:
+          type:
+            - string
+            - 'null'
+          example: null
+          description: The code identifying the next plan in the case of a downgrade.
+        downgrade_plan_date:
+          type:
+            - string
+            - 'null'
+          format: date
+          example: '2022-04-30'
+          description: The date when the plan will be downgraded, represented in ISO 8601 date format.
+        trial_ended_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The date when the free trial is ended, represented in ISO 8601 date format.
+        current_billing_period_started_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The date and time when the current billing period started, represented in ISO 8601 date format.
+        current_billing_period_ending_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-09-08T00:00:00Z'
+          description: The date and time when the current billing period ends, represented in ISO 8601 date format.
+        on_termination_credit_note:
+          type:
+            - string
+            - 'null'
+          description: |
+            When a pay-in-advance subscription is terminated before the end of its billing period, we generate a credit note for the unused subscription time by default.
+            This field allows you to control the behavior of the credit note generation:
+
+            - `credit`: A credit note is generated for the unused subscription time. The unused amount is credited back to the customer.
+            - `refund`: A credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is credited back to the customer.
+            - `skip`: No credit note is generated for the unused subscription time.
+
+            _Note: This field is only applicable to pay-in-advance plans and will be `null` for pay-in-arrears plans._
+          example: credit
+          enum:
+            - credit
+            - refund
+            - skip
+        on_termination_invoice:
+          type:
+            - string
+          example: generate
+          enum:
+            - generate
+            - skip
+          default: generate
+          description: |
+            When a subscription is terminated before the end of its billing period, we generate an invoice for the unbilled usage.
+            This field allows you to control the behavior of the invoice generation:
+
+            - `generate`: An invoice is generated for the unbilled usage.
+            - `skip`: No invoice is generated for the unbilled usage.
+    SubscriptionsPaginated:
+      type: object
+      required:
+        - subscriptions
+        - meta
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    WalletRecurringTransactionRule:
+      type: object
+      description: Object that represents rule for wallet recurring transactions.
+      required:
+        - created_at
+        - expiration_at
+        - granted_credits
+        - interval
+        - invoice_requires_successful_payment
+        - lago_id
+        - method
+        - paid_credits
+        - started_at
+        - status
+        - target_ongoing_balance
+        - threshold_credits
+        - transaction_metadata
+        - transaction_name
+        - trigger
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: A unique identifier for the recurring transaction rule in the Lago application. Can be used to update a recurring transaction rule.
+        trigger:
+          type: string
+          enum:
+            - interval
+            - threshold
+          description: The trigger. Possible values are `interval` or `threshold`.
+          example: interval
+        method:
+          type: string
+          enum:
+            - fixed
+            - target
+          description: The method used for recurring top-up. Possible values are `fixed` or `target`.
+          example: target
+        interval:
+          type: string
+          enum:
+            - weekly
+            - monthly
+            - quarterly
+            - semiannual
+            - yearly
+          description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. Required only if trigger is set to `interval`.'
+          example: monthly
+        status:
+          type: string
+          enum:
+            - active
+            - terminated
+          description: The status of the recurring transaction rule. Possible values are `active` or `terminated`.
+          example: active
+        threshold_credits:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The threshold for recurring top-ups is the value at which an automatic top-up is triggered. For example, if this threshold is set at 10 credits, an automatic top-up will occur whenever the wallet balance falls to or below 10 credits. Required only when trigger is set to `threshold`.
+          example: '20.0'
+        paid_credits:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The number of paid credits. Required only if there is no granted credits.
+          example: '20.0'
+        granted_credits:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The number of free granted credits. Required only if there is no paid credits.
+          example: '10.0'
+        started_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The effective start date for recurring top-ups. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+        target_ongoing_balance:
+          type:
+            - string
+            - 'null'
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
+          example: '200.0'
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: The date of the metadata object creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the metadata object was created
+        expiration_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The expiration date and time for this specific recurring transaction rule. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2023-09-30T23:59:59Z'
+        invoice_requires_successful_payment:
+          type: boolean
+          description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
+          example: false
+        transaction_metadata:
+          type: array
+          description: This field allows you to store a list of key-value pairs containing additional information or custom attributes. These key-value pairs will populate the metadata of the wallet transactions triggered by this rule.
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                description: The unique identifier for the attribute.
+              value:
+                type: string
+                description: The value associated with the key.
+          example:
+            - key: example_key
+              value: example_value
+            - key: another_key
+              value: another_value
+        transaction_name:
+          type:
+            - string
+            - 'null'
+          description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+          example: Tokens for models 'high-fidelity-boost'
+    WalletObject:
+      type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - status
+        - currency
+        - rate_amount
+        - credits_balance
+        - balance
+        - balance_cents
+        - consumed_credits
+        - created_at
+        - ongoing_balance_cents
+        - invoice_requires_successful_payment
+        - ongoing_usage_balance_cents
+        - credits_ongoing_balance
+        - credits_ongoing_usage_balance
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application)
+          example: hooli_1234
+        status:
+          type: string
+          enum:
+            - active
+            - terminated
+          description: The status of the wallet. Possible values are `active` or `terminated`.
+          example: active
+        currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the wallet.
+          example: USD
+        name:
+          type:
+            - string
+            - 'null'
+          description: The name of the wallet.
+          example: Prepaid
+        rate_amount:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
+          example: '1.5'
+        credits_balance:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The current wallet balance expressed in credits. This reflects the available balance after all transactions are settled.
+          example: '28.0'
+        balance_cents:
+          type: integer
+          description: The current wallet balance expressed in cents. This reflects the available balance after all transactions are settled.
+          example: 1000
+        consumed_credits:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The number of consumed credits.
+          example: '2.0'
+        created_at:
+          type: string
+          format: date-time
+          description: The date of the wallet creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
+        expiration_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: null
+        last_balance_sync_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time of the last balance top-up. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
+        last_consumed_credit_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time of the last credits consumption. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
+        terminated_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          example: '2022-09-14T16:35:31Z'
+        invoice_requires_successful_payment:
+          type: boolean
+          description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
+          example: false
+        applies_to:
+          type: object
+          description: Set wallet limitations to fee types.
+          properties:
+            fee_types:
+              type: array
+              items:
+                type: string
+                enum:
+                  - charge
+                  - subscription
+                  - commitment
+              description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
+              example:
+                - charge
+            billable_metric_codes:
+              type: array
+              items:
+                type: string
+              description: An array of billable metric codes to which the wallet is applicable. By specifying the billable metric codes in this field, you can restrict the wallet's usage to specific metrics only.
+              example:
+                - bm1
+        recurring_transaction_rules:
+          description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletRecurringTransactionRule'
+        ongoing_balance_cents:
+          type: integer
+          description: The ongoing wallet balance expressed in cents. This represents the `balance_cents` minus the `ongoing_usage_balance_cents`, showing the real time balance after accounting for current usage including taxes.
+          example: 800
+        ongoing_usage_balance_cents:
+          type: integer
+          description: The ongoing usage balance of the wallet, expressed in cents. This reflects all current usage and draft invoices including taxes.
+          example: 200
+        credits_ongoing_balance:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The ongoing wallet balance expressed in credits. This represents the `credits_balance` minus the `credits_ongoing_usage_balance`, showing the real time balance after accounting for current usage including taxes.
+          example: '8.0'
+        credits_ongoing_usage_balance:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The ongoing usage balance of the wallet, expressed in credits. This reflects all current usage and draft invoices including taxes.
+          example: '2.0'
+    WalletsPaginated:
+      type: object
+      required:
+        - wallets
+        - meta
+      properties:
+        wallets:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     UsagePricingUnitDetailsObject:
       type:
         - object
@@ -12764,367 +14247,6 @@ components:
                 - refunded
               description: The payment status of the fee. Possible values are `pending`, `succeeded`, `failed` or `refunded`.
               example: succeeded
-    InvoiceBaseObject:
-      type: object
-      required:
-        - lago_id
-        - billing_entity_code
-        - number
-        - issuing_date
-        - invoice_type
-        - status
-        - payment_status
-        - currency
-        - fees_amount_cents
-        - coupons_amount_cents
-        - credit_notes_amount_cents
-        - sub_total_excluding_taxes_amount_cents
-        - taxes_amount_cents
-        - sub_total_including_taxes_amount_cents
-        - prepaid_credit_amount_cents
-        - progressive_billing_credit_amount_cents
-        - total_amount_cents
-        - version_number
-        - created_at
-        - updated_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        billing_entity_code:
-          type:
-            - string
-            - 'null'
-          example: acme_corp
-          description: The unique code of the billing entity associated with the invoice
-        sequential_id:
-          type: integer
-          description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
-          example: 2
-        number:
-          type: string
-          description: The unique number assigned to the invoice. This number serves as a distinct identifier for the invoice and helps in differentiating it from other invoices in the system.
-          example: LAG-1234-001-002
-        issuing_date:
-          type: string
-          format: date
-          description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
-          example: '2022-04-30'
-        payment_dispute_lost_at:
-          type: string
-          format: date-time
-          description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
-          example: '2022-09-14T16:35:31Z'
-        payment_due_date:
-          type: string
-          format: date
-          description: The payment due date for the invoice, specified in the ISO 8601 date format.
-          example: '2022-04-30'
-        payment_overdue:
-          type: boolean
-          description: Specifies if the payment is considered as overdue.
-          example: true
-        net_payment_term:
-          type: integer
-          example: 30
-          description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
-        invoice_type:
-          type: string
-          enum:
-            - subscription
-            - add_on
-            - credit
-            - one_off
-            - progressive_billing
-          description: The type of invoice issued. Possible values are `subscription`, `one-off`, `credit` or `progressive_billing`.
-          example: subscription
-        status:
-          type: string
-          enum:
-            - draft
-            - finalized
-            - voided
-            - failed
-            - pending
-          description: |-
-            The status of the invoice. It indicates the current state of the invoice and can have following values:
-            - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
-            - `finalized`: the invoice has been issued and finalized. In this state, events cannot be ingested or added to the invoice anymore.
-            - `voided`: the invoice has been issued and subsequently voided. In this state, events cannot be ingested or added to the invoice anymore.
-            - `pending`: the invoice remains pending until the taxes are fetched from the external provider.
-            - `failed`: during an attempt of finalization of the invoice, an error happened. This invoice will have an array of error_details, explaining, in which part of the system an error happened and how it's possible to fix it. This invoice can't be edited or updated, only retried. This action will discard current error_details and will create new ones if the finalization failed again.
-          example: finalized
-        payment_status:
-          type: string
-          enum:
-            - pending
-            - succeeded
-            - failed
-          description: |-
-            The status of the payment associated with the invoice. It can have one of the following values:
-            - `pending`: the payment is pending, waiting for payment processing in Stripe or when the invoice is emitted but users have not updated the payment status through the endpoint.
-            - `succeeded`: the payment of the invoice has been successfully processed.
-            - `failed`: the payment of the invoice has failed or encountered an error during processing.
-          example: succeeded
-        currency:
-          $ref: '#/components/schemas/Currency'
-          description: The currency of the invoice issued.
-          example: EUR
-        fees_amount_cents:
-          type: integer
-          description: The total sum of fees amount in cents. It calculates the cumulative amount of all the fees associated with the invoice, providing a consolidated value.
-          example: 100
-        coupons_amount_cents:
-          type: integer
-          description: The total sum of all coupons discounted on the invoice. It calculates the cumulative discount amount applied by coupons, expressed in cents.
-          example: 10
-        credit_notes_amount_cents:
-          type: integer
-          description: The total sum of all credit notes discounted on the invoice. It calculates the cumulative discount amount applied by credit notes, expressed in cents.
-          example: 10
-        sub_total_excluding_taxes_amount_cents:
-          type: integer
-          description: |-
-            Subtotal amount, excluding taxes, expressed in cents.
-            This field depends on the version number. Here are the definitions based on the version:
-            - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
-            - Version 2: is equal to the `fees_amount_cents`.
-            - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
-          example: 100
-        taxes_amount_cents:
-          type: integer
-          description: The sum of tax amount associated with the invoice, expressed in cents.
-          example: 20
-        sub_total_including_taxes_amount_cents:
-          type: integer
-          description: |-
-            Subtotal amount, including taxes, expressed in cents.
-            This field depends on the version number. Here are the definitions based on the version:
-            - Version 1: is equal to the `total_amount_cents`.
-            - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
-            - Version 3 & 4: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
-          example: 120
-        prepaid_credit_amount_cents:
-          type: integer
-          description: The total sum of all prepaid credits discounted on the invoice. It calculates the cumulative discount amount applied by prepaid credits, expressed in cents.
-          example: 0
-        progressive_billing_credit_amount_cents:
-          type: integer
-          description: The usage already billed in previous invoices. Only apply to `progressive_billing` and `subscription` invoices.
-          example: 0
-        total_amount_cents:
-          type: integer
-          description: The sum of the amount and taxes amount on the invoice, expressed in cents. It calculates the total financial value of the invoice, including both the original amount and any applicable taxes.
-          example: 100
-        version_number:
-          type: integer
-          example: 3
-        self_billed:
-          type: boolean
-          example: false
-          description: Indicates if the invoice is self-billed. Self-billing is a process where an organization creates the invoice on behalf of the partner. This field specifies whether the invoice is self-billed or not.
-        file_url:
-          type: string
-          format: uri
-          description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
-          example: https://getlago.com/invoice/file
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-04-29T08:59:51Z'
-          description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the invoice object was created
-        updated_at:
-          type: string
-          format: date-time
-          example: '2022-04-29T08:59:51Z'
-          description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
-    BillingPeriodObject:
-      type: object
-      required:
-        - lago_subscription_id
-        - external_subscription_id
-        - lago_plan_id
-        - subscription_from_datetime
-        - subscription_to_datetime
-        - charges_from_datetime
-        - charges_to_datetime
-        - invoicing_reason
-      properties:
-        lago_subscription_id:
-          type: string
-          format: uuid
-          description: Unique identifier assigned to the subscription, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_subscription_id:
-          type: string
-          description: Unique identifier assigned to the subscription in your application.
-          example: external_id
-        lago_plan_id:
-          type: string
-          format: uuid
-          description: Unique identifier assigned to the plan, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        subscription_from_datetime:
-          type: string
-          format: date-time
-          description: The beginning date of the subscription billing period. This field indicates the start date of the billing period associated with the subscription fee.
-          example: '2022-04-29T08:59:51Z'
-        subscription_to_datetime:
-          type: string
-          format: date-time
-          description: The ending date of the subscription billing period. This field indicates the end date of the billing period associated with the subscription fee.
-          example: '2022-05-29T08:59:51Z'
-        charges_from_datetime:
-          type: string
-          format: date-time
-          description: The beginning date of the period that covers the charge fees. It is applicable only to the `charge` fees attached to the subscription. This field indicates the start date of the billing period or subscription period associated with the fees.
-          example: '2022-04-29T08:59:51Z'
-        charges_to_datetime:
-          type: string
-          format: date-time
-          description: The ending date of the period that covers the charge fees. It is applicable only to the `charge` fees attached to the subscription. This field indicates the end date of the billing period or subscription period associated with the fees.
-          example: '2022-05-29T08:59:51Z'
-        invoicing_reason:
-          type: string
-          enum:
-            - subscription_starting
-            - subscription_periodic
-            - subscription_terminating
-            - in_advance_charge
-            - in_advance_charge_periodic
-            - progressive_billing
-          description: The reason explaining why this subscription appears on the invoice.
-          example: subscription_starting
-    InvoiceMetadataObject:
-      type: object
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: Unique identifier assigned to the invoice metadata within the Lago application.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        key:
-          type: string
-          description: Represents the key of the metadata's key-value pair.
-          example: digital_ref_id
-        value:
-          type: string
-          description: Represents the value of the metadata's key-value pair.
-          example: INV-0123456-98765
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the metadata object was created. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-          example: '2022-04-29T08:59:51Z'
-    InvoiceAppliedTaxObject:
-      allOf:
-        - $ref: '#/components/schemas/BaseAppliedTax'
-      type: object
-      properties:
-        lago_invoice_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the invoice, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        fees_amount_cents:
-          type: integer
-          description: Fees total amount on which the tax is applied
-          example: 20000
-    UsageThresholdObject:
-      type: object
-      required:
-        - lago_id
-        - threshold_display_name
-        - amount_cents
-        - recurring
-        - created_at
-        - updated_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the usage threshold created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        threshold_display_name:
-          type:
-            - string
-            - 'null'
-          description: The display name of the usage threshold.
-          example: Threshold 1
-        amount_cents:
-          type: integer
-          description: The amount to reach to trigger a `progressive_billing` invoice.
-          example: 10000
-        recurring:
-          type: boolean
-          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
-          example: true
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the usage threshold was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
-          example: '2023-06-27T19:43:42Z'
-        updated_at:
-          type: string
-          format: date-time
-          description: The date and time when the usage threshold was last updated. It is expressed in UTC format according to the ISO 8601 datetime standard.
-          example: '2023-06-27T19:43:42Z'
-    AppliedUsageThresholdObject:
-      type: object
-      required:
-        - lifetime_usage_amount_cents
-        - created_at
-        - usage_threshold
-      properties:
-        lifetime_usage_amount_cents:
-          type: integer
-          description: The amount of usage in cents that has been accumulated over the lifetime of the subscription.
-          example: 2000
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the lifetime usage was computed. It is expressed in UTC format according to the ISO 8601 datetime standard.
-          example: '2025-03-31T12:31:44Z'
-        usage_threshold:
-          $ref: '#/components/schemas/UsageThresholdObject'
-    InvoiceObject:
-      allOf:
-        - $ref: '#/components/schemas/InvoiceBaseObject'
-        - type: object
-          properties:
-            customer:
-              $ref: '#/components/schemas/CustomerObject'
-              description: The customer on which the invoice applies. It refers to the customer account or entity associated with the invoice.
-            billing_periods:
-              type: array
-              items:
-                $ref: '#/components/schemas/BillingPeriodObject'
-            metadata:
-              type: array
-              items:
-                $ref: '#/components/schemas/InvoiceMetadataObject'
-            applied_taxes:
-              type: array
-              items:
-                $ref: '#/components/schemas/InvoiceAppliedTaxObject'
-            applied_usage_thresholds:
-              type: array
-              items:
-                $ref: '#/components/schemas/AppliedUsageThresholdObject'
-    InvoicesPaginated:
-      type: object
-      required:
-        - invoices
-        - meta
-      properties:
-        invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     InvoiceOneOffCreateInput:
       type: object
       required:
@@ -13197,191 +14319,6 @@ components:
                     description: If true, the invoice will be created but not sent to the payment provider.
                     example: true
                     default: false
-    SubscriptionObject:
-      type: object
-      required:
-        - billing_time
-        - canceled_at
-        - created_at
-        - current_billing_period_ending_at
-        - current_billing_period_started_at
-        - downgrade_plan_date
-        - ending_at
-        - external_customer_id
-        - external_id
-        - lago_customer_id
-        - lago_id
-        - name
-        - next_plan_code
-        - on_termination_credit_note
-        - on_termination_invoice
-        - plan_code
-        - previous_plan_code
-        - started_at
-        - status
-        - subscription_at
-        - terminated_at
-        - trial_ended_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier assigned to the subscription within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the subscription's record within the Lago system
-        external_id:
-          type: string
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-          description: The subscription external unique identifier (provided by your own application).
-        lago_customer_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
-        external_customer_id:
-          type: string
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-          description: The customer external unique identifier (provided by your own application).
-        billing_time:
-          type: string
-          description: The billing time for the subscription, which can be set as either `anniversary` or `calendar`. If not explicitly provided, it will default to `calendar`. The billing time determines the timing of recurring billing cycles for the subscription. By specifying `anniversary`, the billing cycle will be based on the specific date the subscription started (billed fully), while `calendar` sets the billing cycle at the first day of the week/month/year (billed with proration).
-          example: anniversary
-          enum:
-            - calendar
-            - anniversary
-        name:
-          type:
-            - string
-            - 'null'
-          example: Repository A
-          description: The display name of the subscription on an invoice. This field allows for customization of the subscription's name for billing purposes, especially useful when a single customer has multiple subscriptions using the same plan.
-        plan_code:
-          type: string
-          example: premium
-          description: The unique code representing the plan to be attached to the customer. This code must correspond to the `code` property of one of the active plans.
-        status:
-          type: string
-          description: |-
-            The status of the subscription, which can have the following values:
-            - `active`: the subscription is currently active and applied to the customer.
-            - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer or when a subscription with a pending status is terminated.
-            - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
-            - `terminated`: the subscription is no longer active.
-          example: active
-          enum:
-            - active
-            - canceled
-            - pending
-            - terminated
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-08-08T00:00:00Z'
-          description: The creation date of the subscription, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). This date provides a timestamp indicating when the subscription was initially created.
-        canceled_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-          description: The cancellation date of the subscription. This field is not null when the subscription is `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-        started_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          example: '2022-08-08T00:00:00Z'
-          description: The effective start date of the subscription. This field can be null if the subscription is `pending` or `canceled`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-        ending_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          example: '2022-10-08T00:00:00Z'
-          description: The effective end date of the subscription. If this field is set to null, the subscription will automatically renew. This date should be provided in ISO 8601 datetime format, and use Coordinated Universal Time (UTC).
-        subscription_at:
-          type: string
-          format: date-time
-          example: '2022-08-08T00:00:00Z'
-          description: The anniversary date and time of the initial subscription. This date serves as the basis for billing subscriptions with `anniversary` billing time. The `anniversary_date` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-        terminated_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          example: '2022-09-14T16:35:31Z'
-          description: The termination date of the subscription. This field is not null when the subscription is `terminated`. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC)
-        previous_plan_code:
-          type:
-            - string
-            - 'null'
-          example: null
-          description: The code identifying the previous plan associated with this subscription.
-        next_plan_code:
-          type:
-            - string
-            - 'null'
-          example: null
-          description: The code identifying the next plan in the case of a downgrade.
-        downgrade_plan_date:
-          type:
-            - string
-            - 'null'
-          format: date
-          example: '2022-04-30'
-          description: The date when the plan will be downgraded, represented in ISO 8601 date format.
-        trial_ended_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          example: '2022-08-08T00:00:00Z'
-          description: The date when the free trial is ended, represented in ISO 8601 date format.
-        current_billing_period_started_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          example: '2022-08-08T00:00:00Z'
-          description: The date and time when the current billing period started, represented in ISO 8601 date format.
-        current_billing_period_ending_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          example: '2022-09-08T00:00:00Z'
-          description: The date and time when the current billing period ends, represented in ISO 8601 date format.
-        on_termination_credit_note:
-          type:
-            - string
-            - 'null'
-          description: |
-            When a pay-in-advance subscription is terminated before the end of its billing period, we generate a credit note for the unused subscription time by default.
-            This field allows you to control the behavior of the credit note generation:
-
-            - `credit`: A credit note is generated for the unused subscription time. The unused amount is credited back to the customer.
-            - `refund`: A credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is credited back to the customer.
-            - `skip`: No credit note is generated for the unused subscription time.
-
-            _Note: This field is only applicable to pay-in-advance plans and will be `null` for pay-in-arrears plans._
-          example: credit
-          enum:
-            - credit
-            - refund
-            - skip
-        on_termination_invoice:
-          type:
-            - string
-          example: generate
-          enum:
-            - generate
-            - skip
-          default: generate
-          description: |
-            When a subscription is terminated before the end of its billing period, we generate an invoice for the unbilled usage.
-            This field allows you to control the behavior of the invoice generation:
-
-            - `generate`: An invoice is generated for the unbilled usage.
-            - `skip`: No invoice is generated for the unbilled usage.
     ErrorDetailObject:
       type: object
       required:
@@ -13958,138 +14895,6 @@ components:
       properties:
         organization:
           $ref: '#/components/schemas/OrganizationObject'
-    PaymentObject:
-      type: object
-      required:
-        - lago_id
-        - lago_customer_id
-        - external_customer_id
-        - invoice_ids
-        - lago_payable_id
-        - payable_type
-        - amount_cents
-        - amount_currency
-        - status
-        - payment_status
-        - type
-        - reference
-        - payment_provider_code
-        - payment_provider_type
-        - external_payment_id
-        - provider_payment_id
-        - provider_customer_id
-        - next_action
-        - created_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the payment, created by Lago.
-          example: 4cf085a7-c196-4f07-a543-97c50ec6e8b2
-        lago_customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the customer, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_customer_id:
-          type: string
-          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-          description: The customer external unique identifier (provided by your own application)
-        invoice_ids:
-          type: array
-          description: List of invoice IDs associated with the payment.
-          items:
-            type: string
-            format: uuid
-            example: 486b147a-02a1-4ccf-8603-f3541fc25e7a
-        lago_payable_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the paid resource, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        payable_type:
-          type: string
-          enum:
-            - Invoice
-            - PaymentRequest
-          description: The type of the paid resource, associated with the `lago_payable_id`.
-          example: Invoice
-        amount_cents:
-          type: integer
-          description: The amount of the payment in cents.
-          example: 1099
-        amount_currency:
-          $ref: '#/components/schemas/Currency'
-          description: The currency of the payment amount.
-          example: USD
-        status:
-          type: string
-          description: The status of the payment within the payment provider. This can be very different from a payment provider to another.
-          example: Completed
-        payment_status:
-          type: string
-          description: The normalized payment status by Lago.
-          enum:
-            - succeeded
-            - failed
-            - pending
-            - processing
-          example: succeeded
-        type:
-          type: string
-          description: The type of payment.
-          enum:
-            - manual
-            - provider
-          example: manual
-        reference:
-          type: string
-          description: Reference for the payment.
-          example: ref1
-        payment_provider_code:
-          type: string
-          description: Code of the payment provider
-          example: stripe_prod
-        payment_provider_type:
-          type: string
-          enum:
-            - adyen
-            - cashfree
-            - gocardless
-            - stripe
-            - flutterwave
-            - moneyhash
-          description: The type of payment provider
-          example: stripe
-        external_payment_id:
-          type:
-            - string
-            - 'null'
-          description: 'DEPRECATED: use provider_payment_id'
-        provider_payment_id:
-          type:
-            - string
-            - 'null'
-          description: Unique identifier of the payment within the payment provider (if applicable).
-          example: pi_5eb0285741bc6ba
-        provider_customer_id:
-          type: string
-          description: Unique identifier of the customer within the payment provider
-          example: cus_5eb0285bcf941bc6ba
-        next_action:
-          type: object
-          additionalProperties: true
-          description: The next action to be taken by the customer to complete the payment. Should usually be empty, except when receiving the `payment.requires_action` webhook.
-          example:
-            type: redirect_to_url
-            redirect_to_url:
-              url: https://hooks.stripe.com/3d_secure_2/hosted?merchant=acct_AAA&payment_intent=pi_BBB&payment_intent_client_secret=pi_BBB&publishable_key=pk_test_CCC
-              return_url: https://app.example.com
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the payment was created in Lago's database, not on the payment provider.
-          example: '2025-01-21T00:10:29Z'
     PaymentReceiptObject:
       type: object
       required:
@@ -14133,72 +14938,6 @@ components:
       properties:
         payment_receipt:
           $ref: '#/components/schemas/PaymentReceiptObject'
-    PaymentRequestObject:
-      type: object
-      required:
-        - lago_id
-        - email
-        - amount_cents
-        - amount_currency
-        - payment_status
-        - created_at
-        - customer
-        - invoices
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the payment request, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        email:
-          type: string
-          format: email
-          example: dinesh@piedpiper.test
-          description: The customer's email address used for sending dunning notifications
-        amount_cents:
-          type: integer
-          description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.
-          example: 100
-        amount_currency:
-          $ref: '#/components/schemas/Currency'
-          description: The currency of the payment request.
-          example: EUR
-        payment_status:
-          type: string
-          enum:
-            - pending
-            - succeeded
-            - failed
-          description: |-
-            The status of the payment associated with the payment request. It can have one of the following values:
-            - `pending`: the payment is pending, waiting for payment processing in the payment provider or when the invoice is emitted but users have not updated the payment status through the endpoint.
-            - `succeeded`: the payment of the payment request has been successfully processed.
-            - `failed`: the payment of the payment request has failed or encountered an error during processing.
-          example: succeeded
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the payment request was created. It is expressed in UTC format according to the ISO 8601 datetime standard. This field provides the timestamp for the exact moment when the payment request was initially created.
-          example: '2022-04-29T08:59:51Z'
-        customer:
-          $ref: '#/components/schemas/CustomerBaseObject'
-          description: The customer on which the payment request applies. It refers to the customer account or entity associated with the payment request.
-        invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceBaseObject'
-    PaymentRequestsPaginated:
-      type: object
-      required:
-        - payment_requests
-        - meta
-      properties:
-        payment_requests:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentRequestObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     PaymentRequestCreateInput:
       type: object
       required:
@@ -14234,18 +14973,6 @@ components:
       properties:
         payment_request:
           $ref: '#/components/schemas/PaymentRequestObject'
-    PaymentsPaginated:
-      type: object
-      required:
-        - payments
-        - meta
-      properties:
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     PaymentCreateInput:
       type: object
       required:
@@ -15483,18 +16210,6 @@ components:
             sso:
               provider: okta
           description: Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values.
-    SubscriptionsPaginated:
-      type: object
-      required:
-        - subscriptions
-        - meta
-      properties:
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     PlanOverridesObject:
       type: object
       description: Based plan overrides.
@@ -16184,294 +16899,6 @@ components:
       properties:
         tax:
           $ref: '#/components/schemas/TaxBaseInput'
-    WalletRecurringTransactionRule:
-      type: object
-      description: Object that represents rule for wallet recurring transactions.
-      required:
-        - created_at
-        - expiration_at
-        - granted_credits
-        - interval
-        - invoice_requires_successful_payment
-        - lago_id
-        - method
-        - paid_credits
-        - started_at
-        - status
-        - target_ongoing_balance
-        - threshold_credits
-        - transaction_metadata
-        - transaction_name
-        - trigger
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: A unique identifier for the recurring transaction rule in the Lago application. Can be used to update a recurring transaction rule.
-        trigger:
-          type: string
-          enum:
-            - interval
-            - threshold
-          description: The trigger. Possible values are `interval` or `threshold`.
-          example: interval
-        method:
-          type: string
-          enum:
-            - fixed
-            - target
-          description: The method used for recurring top-up. Possible values are `fixed` or `target`.
-          example: target
-        interval:
-          type: string
-          enum:
-            - weekly
-            - monthly
-            - quarterly
-            - semiannual
-            - yearly
-          description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. Required only if trigger is set to `interval`.'
-          example: monthly
-        status:
-          type: string
-          enum:
-            - active
-            - terminated
-          description: The status of the recurring transaction rule. Possible values are `active` or `terminated`.
-          example: active
-        threshold_credits:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The threshold for recurring top-ups is the value at which an automatic top-up is triggered. For example, if this threshold is set at 10 credits, an automatic top-up will occur whenever the wallet balance falls to or below 10 credits. Required only when trigger is set to `threshold`.
-          example: '20.0'
-        paid_credits:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The number of paid credits. Required only if there is no granted credits.
-          example: '20.0'
-        granted_credits:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The number of free granted credits. Required only if there is no paid credits.
-          example: '10.0'
-        started_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          example: '2022-08-08T00:00:00Z'
-          description: The effective start date for recurring top-ups. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-        target_ongoing_balance:
-          type:
-            - string
-            - 'null'
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The target ongoing balance is the value set for the ongoing balance to be reached by the automatic top-up. Required only when trigger is set to `target`.
-          example: '200.0'
-        created_at:
-          type: string
-          format: date-time
-          example: '2022-04-29T08:59:51Z'
-          description: The date of the metadata object creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the metadata object was created
-        expiration_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          description: The expiration date and time for this specific recurring transaction rule. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-          example: '2023-09-30T23:59:59Z'
-        invoice_requires_successful_payment:
-          type: boolean
-          description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
-          example: false
-        transaction_metadata:
-          type: array
-          description: This field allows you to store a list of key-value pairs containing additional information or custom attributes. These key-value pairs will populate the metadata of the wallet transactions triggered by this rule.
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                description: The unique identifier for the attribute.
-              value:
-                type: string
-                description: The value associated with the key.
-          example:
-            - key: example_key
-              value: example_value
-            - key: another_key
-              value: another_value
-        transaction_name:
-          type:
-            - string
-            - 'null'
-          description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
-          example: Tokens for models 'high-fidelity-boost'
-    WalletObject:
-      type: object
-      required:
-        - lago_id
-        - lago_customer_id
-        - external_customer_id
-        - status
-        - currency
-        - rate_amount
-        - credits_balance
-        - balance
-        - balance_cents
-        - consumed_credits
-        - created_at
-        - ongoing_balance_cents
-        - invoice_requires_successful_payment
-        - ongoing_usage_balance_cents
-        - credits_ongoing_balance
-        - credits_ongoing_usage_balance
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        external_customer_id:
-          type: string
-          description: The customer external unique identifier (provided by your own application)
-          example: hooli_1234
-        status:
-          type: string
-          enum:
-            - active
-            - terminated
-          description: The status of the wallet. Possible values are `active` or `terminated`.
-          example: active
-        currency:
-          $ref: '#/components/schemas/Currency'
-          description: The currency of the wallet.
-          example: USD
-        name:
-          type:
-            - string
-            - 'null'
-          description: The name of the wallet.
-          example: Prepaid
-        rate_amount:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The rate of conversion between credits and the amount in the specified currency. It indicates the ratio or factor used to convert credits into the corresponding monetary value in the currency of the transaction.
-          example: '1.5'
-        credits_balance:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The current wallet balance expressed in credits. This reflects the available balance after all transactions are settled.
-          example: '28.0'
-        balance_cents:
-          type: integer
-          description: The current wallet balance expressed in cents. This reflects the available balance after all transactions are settled.
-          example: 1000
-        consumed_credits:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The number of consumed credits.
-          example: '2.0'
-        created_at:
-          type: string
-          format: date-time
-          description: The date of the wallet creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
-          example: '2022-04-29T08:59:51Z'
-        expiration_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-          example: null
-        last_balance_sync_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          description: The date and time of the last balance top-up. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-          example: '2022-04-29T08:59:51Z'
-        last_consumed_credit_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          description: The date and time of the last credits consumption. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-          example: '2022-04-29T08:59:51Z'
-        terminated_at:
-          type:
-            - string
-            - 'null'
-          format: date-time
-          description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
-          example: '2022-09-14T16:35:31Z'
-        invoice_requires_successful_payment:
-          type: boolean
-          description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
-          example: false
-        applies_to:
-          type: object
-          description: Set wallet limitations to fee types.
-          properties:
-            fee_types:
-              type: array
-              items:
-                type: string
-                enum:
-                  - charge
-                  - subscription
-                  - commitment
-              description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
-              example:
-                - charge
-            billable_metric_codes:
-              type: array
-              items:
-                type: string
-              description: An array of billable metric codes to which the wallet is applicable. By specifying the billable metric codes in this field, you can restrict the wallet's usage to specific metrics only.
-              example:
-                - bm1
-        recurring_transaction_rules:
-          description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
-          type: array
-          items:
-            $ref: '#/components/schemas/WalletRecurringTransactionRule'
-        ongoing_balance_cents:
-          type: integer
-          description: The ongoing wallet balance expressed in cents. This represents the `balance_cents` minus the `ongoing_usage_balance_cents`, showing the real time balance after accounting for current usage including taxes.
-          example: 800
-        ongoing_usage_balance_cents:
-          type: integer
-          description: The ongoing usage balance of the wallet, expressed in cents. This reflects all current usage and draft invoices including taxes.
-          example: 200
-        credits_ongoing_balance:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The ongoing wallet balance expressed in credits. This represents the `credits_balance` minus the `credits_ongoing_usage_balance`, showing the real time balance after accounting for current usage including taxes.
-          example: '8.0'
-        credits_ongoing_usage_balance:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: The ongoing usage balance of the wallet, expressed in credits. This reflects all current usage and draft invoices including taxes.
-          example: '2.0'
-    WalletsPaginated:
-      type: object
-      required:
-        - wallets
-        - meta
-      properties:
-        wallets:
-          type: array
-          items:
-            $ref: '#/components/schemas/WalletObject'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     WalletCreateInput:
       type: object
       properties:
