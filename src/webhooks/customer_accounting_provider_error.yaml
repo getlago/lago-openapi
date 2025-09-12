@@ -15,6 +15,7 @@ post:
           required:
             - webhook_type
             - object_type
+            - organization_id
             - accounting_provider_customer_error
           properties:
             webhook_type:
@@ -25,6 +26,11 @@ post:
               type: string
               enum:
                 - accounting_provider_customer_error
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             accounting_provider_customer_error:
               $ref: "../schemas/CustomerIntegratrionErrorObject.yaml"
   responses:
