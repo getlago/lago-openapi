@@ -14315,6 +14315,25 @@ components:
           description: All taxes applied to the minimum commitment.
           items:
             $ref: '#/components/schemas/TaxObject'
+    ChargeModelEnum:
+      type: string
+      description: |
+        Specifies the pricing model used for the calculation of the final fee. It can be any of the following values:
+          - [`dynamic`](https://docs.getlago.com/guide/plans/charges/charge-models/dynamic)
+          - [`graduated_percentage`](https://docs.getlago.com/guide/plans/charges/charge-models/graduated-percentage)
+          - [`graduated`](https://docs.getlago.com/guide/plans/charges/charge-models/graduated)
+          - [`package`](https://docs.getlago.com/guide/plans/charges/charge-models/package)
+          - [`percentage`](https://docs.getlago.com/guide/plans/charges/charge-models/percentage)
+          - [`standard`](https://docs.getlago.com/guide/plans/charges/charge-models/standard)
+          - [`volume`](https://docs.getlago.com/guide/plans/charges/charge-models/volume)
+      enum:
+        - dynamic
+        - graduated
+        - graduated_percentage
+        - package
+        - percentage
+        - standard
+        - volume
     ChargeProperties:
       type: object
       properties:
@@ -14559,16 +14578,7 @@ components:
           description: The date and time when the charge was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
           example: '2022-09-14T16:35:31Z'
         charge_model:
-          type: string
-          description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage`, `package`, `percentage`, `volume` or `dynamic`.
-          enum:
-            - standard
-            - graduated
-            - graduated_percentage
-            - package
-            - percentage
-            - volume
-            - dynamic
+          $ref: '#/components/schemas/ChargeModelEnum'
         pay_in_advance:
           type: boolean
           description: This field determines the billing timing for this specific usage-based charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to `false`, the charge is due and invoiced at the end of each billing period.
@@ -15057,17 +15067,7 @@ components:
                     description: Unique identifier of the billable metric created by Lago.
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   charge_model:
-                    type: string
-                    description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage` `package`, `percentage`, `volume` or `dynamic`.
-                    enum:
-                      - standard
-                      - graduated
-                      - graduated_percentage
-                      - package
-                      - percentage
-                      - volume
-                      - dynamic
-                    example: standard
+                    $ref: '#/components/schemas/ChargeModelEnum'
                   pay_in_advance:
                     type: boolean
                     example: false
@@ -15290,17 +15290,7 @@ components:
                     description: Unique identifier of the billable metric created by Lago.
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   charge_model:
-                    type: string
-                    description: Specifies the pricing model used for the calculation of the final fee. It can be `standard`, `graduated`, `graduated_percentage`, `package`, `percentage`, `volume` or `dynamic`.
-                    enum:
-                      - standard
-                      - graduated
-                      - graduated_percentage
-                      - package
-                      - percentage
-                      - volume
-                      - dynamic
-                    example: standard
+                    $ref: '#/components/schemas/ChargeModelEnum'
                   pay_in_advance:
                     type: boolean
                     example: false
@@ -15532,6 +15522,8 @@ components:
                 format: uuid
                 description: Unique identifier of the billable metric created by Lago.
                 example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              charge_model:
+                $ref: '#/components/schemas/ChargeModelEnum'
               invoice_display_name:
                 type: string
                 description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
