@@ -70,6 +70,12 @@ properties:
             value: "example_value"
           - key: "another_key"
             value: "another_value"
+      transaction_name:
+        type:
+          - string
+          - "null"
+        description: The name of the wallet transactions triggered when creating the wallet. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+        example: "Tokens for models 'high-fidelity-boost'"
       applies_to:
         type:
           - object
