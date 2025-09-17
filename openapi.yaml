@@ -16167,15 +16167,21 @@ components:
       type: object
       description: Object that represents rule for wallet recurring transactions.
       required:
-        - lago_id
+        - created_at
+        - expiration_at
+        - granted_credits
         - interval
-        - trigger
+        - invoice_requires_successful_payment
+        - lago_id
         - method
         - paid_credits
-        - granted_credits
-        - threshold_credits
+        - started_at
+        - status
         - target_ongoing_balance
-        - created_at
+        - threshold_credits
+        - transaction_metadata
+        - transaction_name
+        - trigger
       properties:
         lago_id:
           type: string
@@ -16274,6 +16280,12 @@ components:
               value: example_value
             - key: another_key
               value: another_value
+        transaction_name:
+          type:
+            - string
+            - 'null'
+          description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+          example: Tokens for models 'high-fidelity-boost'
     WalletObject:
       type: object
       required:
@@ -16631,6 +16643,12 @@ components:
                         value: example_value
                       - key: another_key
                         value: another_value
+                  transaction_name:
+                    type:
+                      - string
+                      - 'null'
+                    description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+                    example: Tokens for models 'high-fidelity-boost'
     Wallet:
       type: object
       required:
@@ -16759,6 +16777,12 @@ components:
                         value: example_value
                       - key: another_key
                         value: another_value
+                  transaction_name:
+                    type:
+                      - string
+                      - 'null'
+                    description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
+                    example: Tokens for models 'high-fidelity-boost'
             applies_to:
               type:
                 - object
