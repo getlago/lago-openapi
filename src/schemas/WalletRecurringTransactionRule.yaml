@@ -10,6 +10,7 @@ required:
   - threshold_credits
   - target_ongoing_balance
   - created_at
+  - ignore_paid_top_up_limits
 properties:
   lago_id:
     type: string
@@ -108,3 +109,7 @@ properties:
         value: "example_value"
       - key: "another_key"
         value: "another_value"
+  ignore_paid_top_up_limits:
+    type: boolean
+    description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
+    example: false

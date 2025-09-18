@@ -96,6 +96,18 @@ properties:
               type: string
             description: An array of billable metric codes to which the wallet is applicable. By specifying the billable metric codes in this field, you can restrict the wallet's usage to specific metrics only.
             example: []
+      paid_top_up_min_amount_cents:
+        type:
+          - integer
+          - "null"
+        description: Minimum amount of cents that can be top-up with a single paid transaction.
+        example: 100
+      paid_top_up_max_amount_cents:
+        type:
+          - integer
+          - "null"
+        description: Maximum amount of cents that can be top-up with a single paid transaction.
+        example: 1000
       recurring_transaction_rules:
         type:
           - array
@@ -189,3 +201,7 @@ properties:
                   value: "example_value"
                 - key: "another_key"
                   value: "another_value"
+            ignore_paid_top_up_limits:
+              type: boolean
+              description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
+              example: false
