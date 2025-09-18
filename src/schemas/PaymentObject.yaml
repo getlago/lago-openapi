@@ -58,7 +58,7 @@ properties:
     description: "The amount of the payment in cents."
     example: 1099
   amount_currency:
-    type: string
+    $ref: "./Currency.yaml"
     description: "The currency of the payment amount."
     example: "USD"
   status:
