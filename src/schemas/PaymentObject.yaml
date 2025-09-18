@@ -1,46 +1,94 @@
 type: object
 required:
   - lago_id
-  - lago_payable_id
   - lago_customer_id
-  - status
   - external_customer_id
-  - provider_customer_id
+  - invoice_ids
+  - lago_payable_id
+  - payable_type
+  - amount_cents
+  - amount_currency
+  - status
+  - payment_status
+  - type
+  - reference
+  - payment_provider_code
   - payment_provider_type
+  - external_payment_id
   - provider_payment_id
+  - provider_customer_id
   - next_action
+  - created_at
 properties:
   lago_id:
     type: string
     format: uuid
-    description: "Unique identifier of the payment, created by Lago."
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-  lago_payable_id:
-    type: string
-    format: uuid
-    description: "The unique identifier of the paid resource, created by Lago."
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    description: "The unique identifier of the payment, created by Lago."
+    example: "4cf085a7-c196-4f07-a543-97c50ec6e8b2"
   lago_customer_id:
     type: string
     format: "uuid"
     description: Unique identifier of the customer, created by Lago.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-  status:
-    type: string
-    description: "The status of the payment within the payment provider"
-    example: "processing"
-  external_id:
+  external_customer_id:
     type: string
     example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
     description: "The customer external unique identifier (provided by your own application)"
-  provider_customer_id:
+  invoice_ids:
+    type: array
+    description: "List of invoice IDs associated with the payment."
+    items:
+      type: string
+      format: uuid
+      example: "486b147a-02a1-4ccf-8603-f3541fc25e7a"
+  lago_payable_id:
     type: string
-    description: "Unique identifier of the customer within the payment provider"
-    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+    format: uuid
+    description: "The unique identifier of the paid resource, created by Lago."
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  payable_type:
+    type: string
+    enum:
+      - Invoice
+      - PaymentRequest
+    description: "The type of the paid resource, associated with the `lago_payable_id`."
+    example: "Invoice"
+  amount_cents:
+    type: integer
+    description: "The amount of the payment in cents."
+    example: 1099
+  amount_currency:
+    type: string
+    description: "The currency of the payment amount."
+    example: "USD"
+  status:
+    type: string
+    description: "The status of the payment within the payment provider. This can be very different from a payment provider to another."
+    example: "Completed"
+  payment_status:
+    type: string
+    description: "The normalized payment status by Lago."
+    enum:
+      - succeeded
+      - failed
+      - pending
+      - processing
+    example: "succeeded"
+  type:
+    type: string
+    description: "The type of payment."
+    enum:
+      - manual
+      - provider
+    example: "manual"
+  reference:
+    type: string
+    description: "Reference for the payment."
+    example: "ref1"
   payment_provider_code:
     type: string
     description: Code of the payment provider
-    example: "Stripe Prod"
+    example: "stripe_prod"
   payment_provider_type:
     type: string
     enum:
@@ -48,20 +96,36 @@ properties:
       - cashfree
       - gocardless
       - stripe
+      - flutterwave
+      - moneyhash
     description: The type of payment provider
     example: "stripe"
+  external_payment_id:
+    type:
+      - string
+      - "null"
+    description: "DEPRECATED: use provider_payment_id"
   provider_payment_id:
+    type:
+      - string
+      - "null"
+    description: "Unique identifier of the payment within the payment provider (if applicable)."
+    example: "pi_5eb0285741bc6ba"
+  provider_customer_id:
     type: string
-    description: "Unique identifier of the payment within the payment provider"
-    example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+    description: "Unique identifier of the customer within the payment provider"
+    example: "cus_5eb0285bcf941bc6ba"
   next_action:
     type: object
     additionalProperties: true
-  amount_cents:
-    type: integer
-    description: "The amount of the payment in cents"
-    example: 1000
-  amount_currency:
+    description: "The next action to be taken by the customer to complete the payment. Should usually be empty, except when receiving the `payment.requires_action` webhook."
+    example:
+      type: redirect_to_url
+      redirect_to_url:
+        url: https://hooks.stripe.com/3d_secure_2/hosted?merchant=acct_AAA&payment_intent=pi_BBB&payment_intent_client_secret=pi_BBB&publishable_key=pk_test_CCC
+        return_url: https://app.example.com
+  created_at:
     type: string
-    description: "The currency of the payment"
-    example: "EUR"
+    format: date-time
+    description: "Timestamp when the payment was created in Lago's database, not on the payment provider."
+    example: "2025-01-21T00:10:29Z"

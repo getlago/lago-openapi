@@ -19,7 +19,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/PaymentManualObject.yaml'
+            $ref: '../schemas/PaymentObject.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
     '404':
