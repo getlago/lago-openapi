@@ -726,7 +726,8 @@ paths:
 
             - Revenue from `monthly` subscription invoices is included in the MRR for the month in which the invoice is issued.
             - Revenue from `quarterly` subscription invoices is distributed evenly over three months. This distribution applies to fees paid in advance (allocated to the next remaining months depending on calendar or anniversary billing) as well as to fees paid in arrears (allocated to the preceding months depending on calendar or anniversary billing).
-            - Revenue from `yearly` subscription invoices is distributed evenly over twelve months. This allocation is applicable for fees paid in advance (spread over the next  remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
+            - Revenue from `yearly` subscription invoices is distributed evenly over twelve months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
+            - Revenue from `semiannual` subscription invoices is distributed evenly over six months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
             - Revenue from `weekly` subscription invoices, the total revenue from all invoices issued within a month is summed up. This total is then divided by the number of invoices issued during that month, and the result is multiplied by 4.33, representing the average number of weeks in a month.
           required: false
           explode: true
@@ -14293,11 +14294,12 @@ components:
           example: Minimum Commitment (C1)
         interval:
           type: string
-          description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly` or `weekly`.'
+          description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `semiannual`, `quarterly`, `monthly` or `weekly`.'
           enum:
             - weekly
             - monthly
             - quarterly
+            - semiannual
             - yearly
           example: monthly
         created_at:
@@ -14756,11 +14758,12 @@ components:
           example: startup
         interval:
           type: string
-          description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly` or `weekly`.'
+          description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `semiannual`, `quarterly`, `monthly` or `weekly`.'
           enum:
             - weekly
             - monthly
             - quarterly
+            - semiannual
             - yearly
           example: monthly
         description:
@@ -14787,7 +14790,7 @@ components:
           type:
             - boolean
             - 'null'
-          description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`.
+          description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
           example: null
         minimum_commitment:
           $ref: '#/components/schemas/MinimumCommitmentObject'
@@ -15018,12 +15021,13 @@ components:
               description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.
             interval:
               type: string
-              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly`, or `weekly`.'
+              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `semiannual`, `quarterly`, `monthly`, or `weekly`.'
               example: monthly
               enum:
                 - weekly
                 - monthly
                 - quarterly
+                - semiannual
                 - yearly
             description:
               type: string
@@ -15049,7 +15053,7 @@ components:
               type:
                 - boolean
                 - 'null'
-              description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`.
+              description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is `yearly` or `semiannual`. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
               example: null
             tax_codes:
               $ref: '#/components/schemas/TaxCodes'
@@ -15236,12 +15240,13 @@ components:
               description: The code of the plan. It serves as a unique identifier associated with a particular plan. The code is typically used for internal or system-level identification purposes, like assigning a subscription, for instance.
             interval:
               type: string
-              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `quarterly`, `monthly`, or `weekly`.'
+              description: 'The interval used for recurring billing. It represents the frequency at which subscription billing occurs. The interval can be one of the following values: `yearly`, `semiannual`, `quarterly`, `monthly`, or `weekly`.'
               example: monthly
               enum:
                 - weekly
                 - monthly
                 - quarterly
+                - semiannual
                 - yearly
             description:
               type: string
@@ -15267,7 +15272,7 @@ components:
               type:
                 - boolean
                 - 'null'
-              description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly`.
+              description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
               example: null
             tax_codes:
               $ref: '#/components/schemas/TaxCodes'
@@ -16208,8 +16213,9 @@ components:
             - weekly
             - monthly
             - quarterly
+            - semiannual
             - yearly
-          description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly` or `yearly`. Required only if trigger is set to `interval`.'
+          description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. Required only if trigger is set to `interval`.'
           example: monthly
         status:
           type: string
@@ -16601,8 +16607,9 @@ components:
                       - weekly
                       - monthly
                       - quarterly
+                      - semiannual
                       - yearly
-                    description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly` or `yearly`. Required only when trigger is `interval`.'
+                    description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. Required only when trigger is `interval`.'
                     example: monthly
                   started_at:
                     type:
@@ -16721,8 +16728,9 @@ components:
                       - weekly
                       - monthly
                       - quarterly
+                      - semiannual
                       - yearly
-                    description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly` or `yearly`. Required only when trigger is set to `interval`.'
+                    description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. Required only when trigger is set to `interval`.'
                     example: monthly
                   threshold_credits:
                     type: string
