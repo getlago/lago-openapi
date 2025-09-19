@@ -1,0 +1,24 @@
+get:
+  tags:
+    - customers
+    - wallets
+  summary: List all customer's wallets
+  description: This endpoint is used to list all wallets with prepaid credits of a customer
+  operationId: findAllCustomerWallets
+  parameters:
+    - $ref: "../parameters/external_customer_id_path.yaml"
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+  responses:
+    "200":
+      description: Wallets
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/WalletsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

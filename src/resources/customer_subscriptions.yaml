@@ -1,0 +1,46 @@
+get:
+  tags:
+    - customers
+    - subscriptions
+  summary: List all customer's subscriptions
+  description: This endpoint retrieves all active subscriptions for a customer.
+  operationId: findAllCustomerSubscriptions
+  parameters:
+    - $ref: "../parameters/external_customer_id_path.yaml"
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: plan_code
+      in: query
+      description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "premium"
+    - name: status[]
+      in: query
+      description: "If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`."
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - pending
+            - canceled
+            - terminated
+            - active
+        example: [active, pending]
+
+  responses:
+    "200":
+      description: List of subscriptions
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/SubscriptionsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

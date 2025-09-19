@@ -1,0 +1,133 @@
+get:
+  tags:
+    - customers
+    - invoices
+  summary: List all customer's invoices
+  description: This endpoint is used for retrieving all invoices of a customer.
+  operationId: findAllCustomerInvoices
+  parameters:
+    - $ref: "../parameters/external_customer_id_path.yaml"
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: amount_from
+      in: query
+      description: Filter invoices of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 9000
+    - name: amount_to
+      in: query
+      description: Filter invoices up to a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        example: 100000
+    - name: issuing_date_from
+      in: query
+      description: Filter invoices starting from a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date"
+        example: "2022-07-08"
+    - name: issuing_date_to
+      in: query
+      description: Filter invoices up to a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date"
+        example: "2022-08-09"
+    - name: status
+      in: query
+      description: Filter invoices by status. Possible values are `draft` or `finalized`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - draft
+          - finalized
+    - name: payment_status
+      in: query
+      description: Filter invoices by payment status. Possible values are `pending`, `failed` or `succeeded`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - pending
+          - failed
+          - succeeded
+    - name: payment_overdue
+      in: query
+      description: Filter invoices by payment_overdue. Possible values are `true` or `false`.
+      required: false
+      explode: true
+      schema:
+        type: boolean
+        example: true
+    - name: search_term
+      in: query
+      description: Search invoices by id, number, customer name, customer external_id or customer email.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "Jane"
+    - name: payment_dispute_lost
+      in: query
+      description: Filter invoices with a payment dispute lost. Possible values are `true` or `false`.
+      required: false
+      explode: true
+      schema:
+        type: boolean
+        example: true
+    - name: invoice_type
+      in: query
+      description: Filter invoices by invoice type. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - subscription
+          - add_on
+          - credit
+          - one_off
+          - advance_charges
+          - progressive_billing
+    - name: self_billed
+      in: query
+      description: Filter invoices by self billed. Possible values are `true` or `false`.
+      required: false
+      explode: true
+      schema:
+        type: boolean
+        example: true
+    - name: metadata[key]
+      in: query
+      description: Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for invoice without given metadata key. For example, `metadata[color]=blue`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "someValue"
+  responses:
+    "200":
+      description: Invoices
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/InvoicesPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
