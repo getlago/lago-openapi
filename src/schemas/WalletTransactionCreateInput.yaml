@@ -46,6 +46,10 @@ properties:
         type: boolean
         description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
         example: false
+      ignore_paid_top_up_limits:
+        type: boolean
+        description: When true, allows topping up the wallet with transactions that exceed the paid top-up limits. Defaults to false.
+        example: false
       metadata:
         type:
           - array

@@ -13098,6 +13098,7 @@ components:
         - created_at
         - expiration_at
         - granted_credits
+        - ignore_paid_top_up_limits
         - interval
         - invoice_requires_successful_payment
         - lago_id
@@ -13215,6 +13216,10 @@ components:
             - 'null'
           description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
           example: Tokens for models 'high-fidelity-boost'
+        ignore_paid_top_up_limits:
+          type: boolean
+          description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
+          example: false
     WalletObject:
       type: object
       required:
@@ -13367,6 +13372,18 @@ components:
           pattern: ^[0-9]+.?[0-9]*$
           description: The ongoing usage balance of the wallet, expressed in credits. This reflects all current usage and draft invoices including taxes.
           example: '2.0'
+        paid_top_up_min_amount_cents:
+          type:
+            - integer
+            - 'null'
+          description: Minimum amount of cents that can be top-up with a single paid transaction.
+          example: 100
+        paid_top_up_max_amount_cents:
+          type:
+            - integer
+            - 'null'
+          description: Maximum amount of cents that can be top-up with a single paid transaction.
+          example: 1000
     WalletsPaginated:
       type: object
       required:
@@ -17005,6 +17022,18 @@ components:
                     type: string
                   description: An array of billable metric codes to which the wallet is applicable. By specifying the billable metric codes in this field, you can restrict the wallet's usage to specific metrics only.
                   example: []
+            paid_top_up_min_amount_cents:
+              type:
+                - integer
+                - 'null'
+              description: Minimum amount of cents that can be top-up with a single paid transaction.
+              example: 100
+            paid_top_up_max_amount_cents:
+              type:
+                - integer
+                - 'null'
+              description: Maximum amount of cents that can be top-up with a single paid transaction.
+              example: 1000
             recurring_transaction_rules:
               type:
                 - array
@@ -17105,6 +17134,10 @@ components:
                       - 'null'
                     description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
                     example: Tokens for models 'high-fidelity-boost'
+                  ignore_paid_top_up_limits:
+                    type: boolean
+                    description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
+                    example: false
     Wallet:
       type: object
       required:
@@ -17315,6 +17348,10 @@ components:
             invoice_requires_successful_payment:
               type: boolean
               description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
+              example: false
+            ignore_paid_top_up_limits:
+              type: boolean
+              description: When true, allows topping up the wallet with transactions that exceed the paid top-up limits. Defaults to false.
               example: false
             metadata:
               type:
