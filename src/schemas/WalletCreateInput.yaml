@@ -114,6 +114,12 @@ properties:
           - "null"
         description: Maximum amount of cents that can be top-up with a single paid transaction.
         example: 1000
+      ignore_paid_top_up_limits_on_creation:
+        type:
+          - boolean
+          - "null"
+        description: If set to true, the wallet will ignore paid top-up limits on creation.
+        example: false
       recurring_transaction_rules:
         type:
           - array
