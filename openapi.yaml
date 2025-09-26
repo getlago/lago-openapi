@@ -1743,6 +1743,93 @@ paths:
             example:
               - billing_entity_code_1
               - billing_entity_code_2
+        - name: search_term
+          in: query
+          description: Filter customers by search term. This will filter all customers whose name, firstname, lastname, legal name, external id or email contain the search term.
+          required: false
+          schema:
+            type: string
+            example: John Doe
+        - name: countries[]
+          in: query
+          description: Filter customers by countries. Possible values are the ISO 3166-1 alpha-2 codes.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Country'
+            example:
+              - US
+              - FR
+        - name: states[]
+          in: query
+          description: Filter customers by states.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - CA
+              - Paris
+        - name: zipcodes[]
+          in: query
+          description: Filter customers by zipcodes.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - '10115'
+              - '75001'
+        - name: currencies[]
+          in: query
+          description: Filter customers by currencies.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Currency'
+            example:
+              - USD
+              - EUR
+        - name: has_tax_identification_number
+          in: query
+          description: Filter customers by whether they have a tax identification number or not.
+          required: false
+          schema:
+            type: boolean
+            example: true
+        - name: metadata[key]
+          in: query
+          description: Filter customers by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for customers without given metadata key. For example, `metadata[is_synced]=true&metadata[last_synced_at]=`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: value
+        - name: customer_type
+          in: query
+          description: Filter customers by customer type.
+          required: false
+          schema:
+            type: string
+            enum:
+              - company
+              - individual
+            example: company
+        - name: has_customer_type
+          in: query
+          description: Filter customers by whether they have a customer type or not.
+          required: false
+          schema:
+            type: boolean
+            example: true
       responses:
         '200':
           description: List of customers
