@@ -147,3 +147,15 @@ properties:
     pattern: "^[0-9]+.?[0-9]*$"
     description: The ongoing usage balance of the wallet, expressed in credits. This reflects all current usage and draft invoices including taxes.
     example: "2.0"
+  paid_top_up_min_amount_cents:
+    type:
+      - integer
+      - "null"
+    description: Minimum amount of cents that can be top-up with a single paid transaction.
+    example: 100
+  paid_top_up_max_amount_cents:
+    type:
+      - integer
+      - "null"
+    description: Maximum amount of cents that can be top-up with a single paid transaction.
+    example: 1000

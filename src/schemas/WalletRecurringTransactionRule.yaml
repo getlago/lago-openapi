@@ -4,6 +4,7 @@ required:
   - created_at
   - expiration_at
   - granted_credits
+  - ignore_paid_top_up_limits
   - interval
   - invoice_requires_successful_payment
   - lago_id
@@ -121,3 +122,7 @@ properties:
       - "null"
     description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
     example: "Tokens for models 'high-fidelity-boost'"
+  ignore_paid_top_up_limits:
+    type: boolean
+    description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
+    example: false

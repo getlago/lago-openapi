@@ -102,6 +102,24 @@ properties:
               type: string
             description: An array of billable metric codes to which the wallet is applicable. By specifying the billable metric codes in this field, you can restrict the wallet's usage to specific metrics only.
             example: []
+      paid_top_up_min_amount_cents:
+        type:
+          - integer
+          - "null"
+        description: Minimum amount of cents that can be top-up with a single paid transaction.
+        example: 100
+      paid_top_up_max_amount_cents:
+        type:
+          - integer
+          - "null"
+        description: Maximum amount of cents that can be top-up with a single paid transaction.
+        example: 1000
+      ignore_paid_top_up_limits_on_creation:
+        type:
+          - boolean
+          - "null"
+        description: If set to true, the wallet will ignore paid top-up limits on creation.
+        example: false
       recurring_transaction_rules:
         type:
           - array
@@ -202,3 +220,7 @@ properties:
                 - "null"
               description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
               example: "Tokens for models 'high-fidelity-boost'"
+            ignore_paid_top_up_limits:
+              type: boolean
+              description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
+              example: false
