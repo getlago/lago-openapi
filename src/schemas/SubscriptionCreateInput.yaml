@@ -2,6 +2,28 @@ type: object
 required:
   - subscription
 properties:
+  authorization:
+    type: object
+    description: |
+      Optionally, you can create a pre-authorization on the customer's card before creating a subscription. This process places a temporary hold (capture) for a specified amount on the customer's account, but does not actually withdraw the funds.
+
+      Important notes:
+        - The final amount due for the subscription is not known at the time of creation; it is determined only after the invoice is finalized.
+        - The payment intent generated for pre-authorization cannot be reused, as the final invoice amount may exceed the authorized amount.
+        - The payment intent is canceled immediately after creation, but this cancellation occurs asynchronously.
+        - For these reasons, it is recommended to use a small amount (such as $1) for pre-authorization. While this does not guarantee sufficient funds for the final payment, it helps reduce the likelihood of payment errors.
+    required:
+      - amount_cents
+      - amount_currency
+    properties:
+      amount_cents:
+        type: integer
+        example: 1000
+        description: The amount of the authorization in cents.
+      amount_currency:
+        type: string
+        example: "USD"
+        description: The currency of the authorization.
   subscription:
     type: object
     required:
@@ -9,28 +31,6 @@ properties:
       - plan_code
       - external_id
     properties:
-      authorization:
-        type: object
-        description: |
-          Optionally, you can create a pre-authorization on the customer's card before creating a subscription. This process places a temporary hold (capture) for a specified amount on the customer's account, but does not actually withdraw the funds.
-
-          Important notes:
-            - The final amount due for the subscription is not known at the time of creation; it is determined only after the invoice is finalized.
-            - The payment intent generated for pre-authorization cannot be reused, as the final invoice amount may exceed the authorized amount.
-            - The payment intent is canceled immediately after creation, but this cancellation occurs asynchronously.
-            - For these reasons, it is recommended to use a small amount (such as $1) for pre-authorization. While this does not guarantee sufficient funds for the final payment, it helps reduce the likelihood of payment errors.
-        required:
-          - amount_cents
-          - amount_currency
-        properties:
-          amount_cents:
-            type: integer
-            example: 1000
-            description: The amount of the authorization in cents.
-          amount_currency:
-            type: string
-            example: "USD"
-            description: The currency of the authorization.
       billing_entity_code:
         type: string
         example: "default"
