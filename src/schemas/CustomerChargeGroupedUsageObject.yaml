@@ -4,6 +4,7 @@ required:
   - amount_cents
   - events_count
   - units
+  - total_aggregated_units
   - grouped_by
   - groups
 items:
@@ -22,6 +23,11 @@ items:
       pattern: "^[0-9]+.?[0-9]*$"
       example: "0.9"
       description: The number of units consumed for a specific group related to a charge item.
+    total_aggregated_units:
+      type: string
+      pattern: "^[0-9]+.?[0-9]*$"
+      example: "1.0"
+      description: The total number of units consumed by the customer for a specific charge item, aggregated across all usage events.
     pricing_unit_details:
       $ref: "./UsagePricingUnitDetailsObject.yaml"
     grouped_by:

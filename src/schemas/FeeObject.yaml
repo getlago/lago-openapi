@@ -10,6 +10,7 @@ required:
   - pay_in_advance
   - invoiceable
   - units
+  - total_aggregated_units
   - precise_unit_amount
   - payment_status
 properties:
@@ -117,6 +118,10 @@ properties:
     type: string
     description: The unit amount of the fee per unit, with precision.
     example: "312.5"
+  total_aggregated_units:
+    type: string
+    description: The total number of units that have been aggregated for this specific fee.
+    example: "0.32"
   total_amount_cents:
     type: integer
     description: The cost of this specific fee, including any applicable taxes.
