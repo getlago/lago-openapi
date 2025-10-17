@@ -10507,6 +10507,7 @@ components:
         - pay_in_advance
         - invoiceable
         - units
+        - total_aggregated_units
         - precise_unit_amount
         - payment_status
       properties:
@@ -10614,6 +10615,10 @@ components:
           type: string
           description: The unit amount of the fee per unit, with precision.
           example: '312.5'
+        total_aggregated_units:
+          type: string
+          description: The total number of units that have been aggregated for this specific fee.
+          example: '0.32'
         total_amount_cents:
           type: integer
           description: The cost of this specific fee, including any applicable taxes.
@@ -13511,6 +13516,7 @@ components:
       required:
         - values
         - units
+        - total_aggregated_units
         - events_count
         - amount_cents
       items:
@@ -13521,6 +13527,11 @@ components:
             pattern: ^[0-9]+.?[0-9]*$
             example: '0.9'
             description: The number of units consumed for a specific charge filter related to a charge item.
+          total_aggregated_units:
+            type: string
+            pattern: ^[0-9]+.?[0-9]*$
+            example: '1.0'
+            description: The total number of units consumed by the customer for a specific charge item, aggregated across all usage events.
           amount_cents:
             type: integer
             example: 1000
@@ -13552,6 +13563,7 @@ components:
         - amount_cents
         - events_count
         - units
+        - total_aggregated_units
         - grouped_by
         - groups
       items:
@@ -13570,6 +13582,11 @@ components:
             pattern: ^[0-9]+.?[0-9]*$
             example: '0.9'
             description: The number of units consumed for a specific group related to a charge item.
+          total_aggregated_units:
+            type: string
+            pattern: ^[0-9]+.?[0-9]*$
+            example: '1.0'
+            description: The total number of units consumed by the customer for a specific charge item, aggregated across all usage events.
           pricing_unit_details:
             $ref: '#/components/schemas/UsagePricingUnitDetailsObject'
           grouped_by:
@@ -13583,6 +13600,7 @@ components:
       type: object
       required:
         - units
+        - total_aggregated_units
         - events_count
         - amount_cents
         - amount_currency
@@ -13595,6 +13613,11 @@ components:
           pattern: ^[0-9]+.?[0-9]*$
           example: '1.0'
           description: The number of units consumed by the customer for a specific charge item.
+        total_aggregated_units:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          example: '1.0'
+          description: The total number of units consumed by the customer for a specific charge item, aggregated across all usage events.
         events_count:
           type: integer
           example: 10

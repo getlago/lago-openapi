@@ -1,6 +1,7 @@
 type: object
 required:
   - units
+  - total_aggregated_units
   - events_count
   - amount_cents
   - amount_currency
@@ -13,6 +14,11 @@ properties:
     pattern: "^[0-9]+.?[0-9]*$"
     example: "1.0"
     description: The number of units consumed by the customer for a specific charge item.
+  total_aggregated_units:
+    type: string
+    pattern: "^[0-9]+.?[0-9]*$"
+    example: "1.0"
+    description: The total number of units consumed by the customer for a specific charge item, aggregated across all usage events.
   events_count:
     type: integer
     example: 10
