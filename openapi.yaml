@@ -2595,6 +2595,14 @@ paths:
           schema:
             type: string
             example: event-123
+        - name: timestamp_from_started_at
+          in: query
+          description: Requires `external_subscription_id` to be set. Filter events by timestamp after the subscription started at datetime.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
         - name: timestamp_from
           in: query
           description: Filter events by timestamp starting from a specific date.
