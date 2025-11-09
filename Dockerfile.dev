@@ -8,9 +8,10 @@ WORKDIR /app
 # Install dependencies separately to leverage caching
 COPY package*.json ./
 RUN npm install
+RUN npm install -g @redocly/cli@1.13.0
 
 # Copy the rest of the repository; when using bind mounts this layer is overridden.
 COPY . .
 
 EXPOSE 8080
-CMD ["npm", "run", "preview:redocly"]
+CMD ["redocly", "preview-docs", "src/openapi.yaml", "--port", "8080", "--host", "0.0.0.0"]
