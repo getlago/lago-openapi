@@ -1,4 +1,4 @@
-# Lago OpenAPI
+# Lago OpenAPI1
 
 Open API specification for Lago project
 
