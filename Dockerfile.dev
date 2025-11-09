@@ -1,0 +1,16 @@
+# syntax=docker/dockerfile:1
+
+FROM node:20-bullseye
+ENV NODE_ENV=development \
+    PORT=8080
+WORKDIR /app
+
+# Install dependencies separately to leverage caching
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of the repository; when using bind mounts this layer is overridden.
+COPY . .
+
+EXPOSE 8080
+CMD ["npm", "run", "preview:redocly"]
