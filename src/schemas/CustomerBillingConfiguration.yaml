@@ -6,25 +6,23 @@ properties:
     example: 3
     description: The grace period, expressed in days, for the invoice. This period refers to the additional time granted to the customer beyond the invoice due date to adjust usage and line items
   subscription_invoice_issuing_date_anchor:
-    type:
-      - string
-      - null
+    type: string
+    example: next_period_start
     description: |-
       Defines whether the issuing date follows the current billing period's end date or the next period starting date.
+      Accepted values: `current_period_end`, `next_period_start` or null.
     enum:
       - current_period_end
       - next_period_start
-    default: null
   subscription_invoice_issuing_date_adjustment:
-    type:
-      - string
-      - null
+    type: string
+    example: keep_anchor
     description: |-
       The logic applied on top of the subscription_invoice_issuing_date_anchor rule. You can opt to use the invoice finalization date, that includes any configured grace period.
+      Accepted values: `align_with_finalization_date`, `keep_anchor` or null.
     enum:
       - align_with_finalization_date
       - keep_anchor
-    default: null
   payment_provider:
     type: string
     example: stripe
