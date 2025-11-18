@@ -55,6 +55,22 @@ properties:
             type: integer
             example: 0
             description: The grace period (in days) for invoice finalization
+          subscription_invoice_issuing_date_anchor:
+            type: string
+            description: |-
+              Defines whether the issuing date follows the current billing period's end date or the next period starting date.
+            enum:
+              - current_period_end
+              - next_period_start
+            default: next_period_start
+          subscription_invoice_issuing_date_adjustment:
+            type: string
+            description: |-
+              The logic applied on top of the subscription_invoice_issuing_date_anchor rule. You can opt to use the invoice finalization date, that includes any configured grace period.
+            enum:
+              - align_with_finalization_date
+              - keep_anchor
+            default: align_with_finalization_date
       net_payment_term:
         type: integer
         example: 0
