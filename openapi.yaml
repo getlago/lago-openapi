@@ -11820,9 +11820,7 @@ components:
             - string
             - 'null'
           example: keep_anchor
-          description: |-
-            The logic applied on top of the subscription_invoice_issuing_date_anchor rule. You can opt to use the invoice finalization date, that includes any configured grace period.
-            Accepted values: `align_with_finalization_date`, `keep_anchor` or null.
+          description: The logic applied on top of the subscription_invoice_issuing_date_anchor rule. You can opt to use the invoice finalization date, that includes any configured grace period.
           enum:
             - align_with_finalization_date
             - keep_anchor
