@@ -1680,6 +1680,139 @@ paths:
           $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
+  /credit_notes/{lago_id}/metadata:
+    post:
+      tags:
+        - credit_notes
+      summary: Replace credit note metadata
+      description: |-
+        This endpoint replaces all existing metadata on a credit note with the provided key-value pairs.
+        Any existing metadata keys not included in the request will be removed.
+      parameters:
+        - name: lago_id
+          in: path
+          description: The credit note unique identifier, created by Lago.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1f615414-ceb0-11f0-94bf-0f2d5b311aba
+      operationId: replaceCreditNoteMetadata
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteMetadataResponse'
+      responses:
+        '200':
+          description: Credit note metadata replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNoteMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - credit_notes
+      summary: Merge credit note metadata
+      description: |-
+        This endpoint merges the provided metadata with existing metadata on the credit note.
+        Existing keys not in the request are preserved. New keys are added, existing keys are updated.
+      parameters:
+        - name: lago_id
+          in: path
+          description: The credit note unique identifier, created by Lago.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      operationId: mergeCreditNoteMetadata
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteMetadataResponse'
+      responses:
+        '200':
+          description: Credit note metadata merged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNoteMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - credit_notes
+      summary: Delete all credit note metadata
+      description: This endpoint removes all metadata from a credit note.
+      parameters:
+        - name: lago_id
+          in: path
+          description: The credit note unique identifier, created by Lago.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      operationId: deleteAllCreditNoteMetadata
+      responses:
+        '200':
+          description: Credit note metadata deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNoteMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /credit_notes/{lago_id}/metadata/{key}:
+    delete:
+      tags:
+        - credit_notes
+      summary: Delete a metadata key
+      description: This endpoint removes a single metadata key from a credit note.
+      parameters:
+        - name: lago_id
+          in: path
+          description: The credit note unique identifier, created by Lago.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: key
+          in: path
+          description: The metadata key to delete.
+          required: true
+          schema:
+            type: string
+            example: external_id
+      operationId: deleteCreditNoteMetadataKey
+      responses:
+        '200':
+          description: Metadata key deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNoteMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /customers:
     post:
       tags:
@@ -10864,6 +10997,21 @@ components:
         base_amount_cents:
           type: integer
           example: 100
+    CreditNoteMetadataObject:
+      type:
+        - object
+        - 'null'
+      description: |-
+        Custom metadata for the credit note, stored as key-value pairs.
+        Keys are strings (max 40 characters), values can be strings (max 255 characters) or null.
+      additionalProperties:
+        type:
+          - string
+          - 'null'
+      example:
+        external_id: ext-123
+        synced_at: '2024-01-15'
+        source: null
     CreditNoteErrorDetailsObject:
       type: object
       required:
@@ -11058,6 +11206,8 @@ components:
           type: boolean
           example: false
           description: Indicates if the credit note belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.
+        metadata:
+          $ref: '#/components/schemas/CreditNoteMetadataObject'
         error_details:
           type:
             - array
@@ -11076,6 +11226,16 @@ components:
             $ref: '#/components/schemas/CreditNoteObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    CreditNoteMetadataInput:
+      type: object
+      description: Metadata to set on the credit note. Keys are strings (max 40 characters), values can be strings (max 255 characters) or null.
+      additionalProperties:
+        type:
+          - string
+          - 'null'
+      example:
+        external_id: ext-123
+        synced_at: '2024-01-15'
     CreditNoteCreateInput:
       type: object
       required:
@@ -11147,6 +11307,8 @@ components:
                   amount_cents: 100
                 - fee_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   amount_cents: 500
+            metadata:
+              $ref: '#/components/schemas/CreditNoteMetadataInput'
     CreditNote:
       type: object
       required:
@@ -11177,6 +11339,8 @@ components:
                 - `succeeded`: this status indicates that the refund has been successfully executed. The refund amount has been processed and returned to the customer or the designated recipient.
                 - `failed`: this status indicates that the refund failed to execute. The refund request encountered an error or unsuccessful processing, and the refund amount could not be returned.
               example: succeeded
+            metadata:
+              $ref: '#/components/schemas/CreditNoteMetadataInput'
     CreditNoteEstimateInput:
       type: object
       required:
@@ -11356,6 +11520,13 @@ components:
         code:
           type: string
           example: not_allowed
+    CreditNoteMetadataResponse:
+      type: object
+      required:
+        - metadata
+      properties:
+        metadata:
+          $ref: '#/components/schemas/CreditNoteMetadataObject'
     CountryOrNull:
       type:
         - string

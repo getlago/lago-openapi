@@ -1,0 +1,14 @@
+type:
+  - object
+  - "null"
+description: |-
+  Custom metadata for the credit note, stored as key-value pairs.
+  Keys are strings (max 40 characters), values can be strings (max 255 characters) or null.
+additionalProperties:
+  type:
+    - string
+    - "null"
+example:
+  external_id: "ext-123"
+  synced_at: "2024-01-15"
+  source: null
