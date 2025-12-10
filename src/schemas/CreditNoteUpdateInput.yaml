@@ -20,3 +20,5 @@ properties:
           - `succeeded`: this status indicates that the refund has been successfully executed. The refund amount has been processed and returned to the customer or the designated recipient.
           - `failed`: this status indicates that the refund failed to execute. The refund request encountered an error or unsuccessful processing, and the refund amount could not be returned.
         example: 'succeeded'
+      metadata:
+        $ref: "./CreditNoteMetadataInput.yaml"

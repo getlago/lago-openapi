@@ -1,0 +1,33 @@
+delete:
+  tags:
+    - credit_notes
+  summary: Delete a metadata key
+  description: This endpoint removes a single metadata key from a credit note.
+  parameters:
+    - name: lago_id
+      in: path
+      description: The credit note unique identifier, created by Lago.
+      required: true
+      schema:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    - name: key
+      in: path
+      description: The metadata key to delete.
+      required: true
+      schema:
+        type: string
+        example: 'external_id'
+  operationId: deleteCreditNoteMetadataKey
+  responses:
+    '200':
+      description: Metadata key deleted
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/CreditNoteMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"

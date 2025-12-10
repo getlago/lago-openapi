@@ -1,0 +1,100 @@
+post:
+  tags:
+    - credit_notes
+  summary: Replace credit note metadata
+  description: |-
+    This endpoint replaces all existing metadata on a credit note with the provided key-value pairs.
+    Any existing metadata keys not included in the request will be removed.
+  parameters:
+    - name: lago_id
+      in: path
+      description: The credit note unique identifier, created by Lago.
+      required: true
+      schema:
+        type: string
+        format: 'uuid'
+        example: '1f615414-ceb0-11f0-94bf-0f2d5b311aba'
+  operationId: replaceCreditNoteMetadata
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/CreditNoteMetadataResponse.yaml"
+  responses:
+    '200':
+      description: Credit note metadata replaced
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/CreditNoteMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"
+    '422':
+      $ref: "../responses/UnprocessableEntity.yaml"
+
+patch:
+  tags:
+    - credit_notes
+  summary: Merge credit note metadata
+  description: |-
+    This endpoint merges the provided metadata with existing metadata on the credit note.
+    Existing keys not in the request are preserved. New keys are added, existing keys are updated.
+  parameters:
+    - name: lago_id
+      in: path
+      description: The credit note unique identifier, created by Lago.
+      required: true
+      schema:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  operationId: mergeCreditNoteMetadata
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/CreditNoteMetadataResponse.yaml"
+  responses:
+    '200':
+      description: Credit note metadata merged
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/CreditNoteMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"
+    '422':
+      $ref: "../responses/UnprocessableEntity.yaml"
+
+delete:
+  tags:
+    - credit_notes
+  summary: Delete all credit note metadata
+  description: This endpoint removes all metadata from a credit note.
+  parameters:
+    - name: lago_id
+      in: path
+      description: The credit note unique identifier, created by Lago.
+      required: true
+      schema:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  operationId: deleteAllCreditNoteMetadata
+  responses:
+    '200':
+      description: Credit note metadata deleted
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/CreditNoteMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"

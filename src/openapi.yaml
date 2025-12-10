@@ -195,6 +195,10 @@ paths:
     $ref: "./resources/credit_note_estimate.yaml"
   /credit_notes/{lago_id}/void:
     $ref: "./resources/credit_note_void.yaml"
+  /credit_notes/{lago_id}/metadata:
+    $ref: "./resources/credit_note_metadata.yaml"
+  /credit_notes/{lago_id}/metadata/{key}:
+    $ref: "./resources/credit_note_metadata_key.yaml"
   /customers:
     $ref: "./resources/customers.yaml"
   /customers/{external_customer_id}:
