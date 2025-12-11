@@ -1,11 +1,11 @@
 type: object
 required:
-  - customer_external_id
+  - external_customer_id
   - dunning_campaign_code
   - overdue_balance_cents
   - overdue_balance_currency
 properties:
-  customer_external_id:
+  external_customer_id:
     type: string
     description: The customer external unique identifier (provided by your own application).
     example: "cus_0987654321"
