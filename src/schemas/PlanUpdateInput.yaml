@@ -10,7 +10,9 @@ properties:
         example: "Startup"
         description: The name of the plan.
       invoice_display_name:
-        type: string
+        type:
+          - string
+          - "null"
         example: "Startup plan"
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
       code:
@@ -28,7 +30,9 @@ properties:
           - semiannual
           - yearly
       description:
-        type: string
+        type:
+          - string
+          - "null"
         description: The description on the plan.
         example: "Plan for early stage startups."
       amount_cents:
@@ -40,7 +44,9 @@ properties:
         description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
         example: "USD"
       trial_period:
-        type: number
+        type:
+          - number
+          - "null"
         description: The duration in days during which the base cost of the plan is offered for free.
         example: 5
       pay_in_advance:

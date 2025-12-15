@@ -16119,13 +16119,22 @@ components:
       properties:
         plan:
           type: object
+          required:
+            - name
+            - code
+            - interval
+            - amount_cents
+            - amount_currency
+            - pay_in_advance
           properties:
             name:
               type: string
               example: Startup
               description: The name of the plan.
             invoice_display_name:
-              type: string
+              type:
+                - string
+                - 'null'
               example: Startup plan
               description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
             code:
@@ -16143,7 +16152,9 @@ components:
                 - semiannual
                 - yearly
             description:
-              type: string
+              type:
+                - string
+                - 'null'
               description: The description on the plan.
               example: Plan for early stage startups.
             amount_cents:
@@ -16155,7 +16166,9 @@ components:
               description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
               example: USD
             trial_period:
-              type: number
+              type:
+                - number
+                - 'null'
               description: The duration in days during which the base cost of the plan is offered for free.
               example: 5
             pay_in_advance:
@@ -16177,6 +16190,9 @@ components:
               description: Additional usage-based charges for this plan.
               items:
                 type: object
+                required:
+                  - billable_metric_id
+                  - charge_model
                 properties:
                   billable_metric_id:
                     type: string
@@ -16344,7 +16360,9 @@ components:
               example: Startup
               description: The name of the plan.
             invoice_display_name:
-              type: string
+              type:
+                - string
+                - 'null'
               example: Startup plan
               description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
             code:
@@ -16362,7 +16380,9 @@ components:
                 - semiannual
                 - yearly
             description:
-              type: string
+              type:
+                - string
+                - 'null'
               description: The description on the plan.
               example: Plan for early stage startups.
             amount_cents:
@@ -16374,7 +16394,9 @@ components:
               description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
               example: USD
             trial_period:
-              type: number
+              type:
+                - number
+                - 'null'
               description: The duration in days during which the base cost of the plan is offered for free.
               example: 5
             pay_in_advance:
