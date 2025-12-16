@@ -59,6 +59,12 @@ properties:
           - "null"
         description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
         example: null
+      bill_fixed_charges_monthly:
+        type:
+          - boolean
+          - "null"
+        description: This field, when set to `true`, enables to invoice fixed charges on monthly basis, even if the cadence of the plan is `yearly` or `semiannual`. This allows customers to pay fixed charges on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
+        example: null
       tax_codes:
         $ref: "./TaxCodes.yaml"
       minimum_commitment:
