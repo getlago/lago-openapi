@@ -2,8 +2,8 @@ type: object
 required:
   - lago_id
   - lago_organization_id
-  - subscription_external_id
-  - customer_external_id
+  - external_subscription_id
+  - external_customer_id
   - billable_metric
   - alert_type
   - code
@@ -23,11 +23,11 @@ properties:
     format: uuid
     description: Unique identifier of the organization, created by Lago.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-  subscription_external_id:
+  external_subscription_id:
     type: string
     description: The subscription external unique identifier (provided by your own application).
     example: "sub_1234567890"
-  customer_external_id:
+  external_customer_id:
     type: string
     description: The customer external unique identifier (provided by your own application).
     example: "cus_0987654321"
