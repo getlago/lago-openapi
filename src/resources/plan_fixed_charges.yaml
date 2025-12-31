@@ -1,0 +1,56 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+post:
+  tags:
+    - plans
+  summary: Create a fixed charge
+  description: This endpoint creates a new fixed charge for a specific plan.
+  operationId: createPlanFixedCharge
+  requestBody:
+    description: Fixed charge payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/FixedChargeCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Fixed charge created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/FixedCharge.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - plans
+  summary: List all fixed charges for a plan
+  description: This endpoint retrieves all fixed charges for a specific plan.
+  operationId: findAllPlanFixedCharges
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+  responses:
+    '200':
+      description: List of fixed charges
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/FixedChargesPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

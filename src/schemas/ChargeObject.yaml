@@ -2,7 +2,6 @@ type: object
 required:
   - lago_id
   - lago_billable_metric_id
-  - invoice_display_name
   - billable_metric_code
   - created_at
   - charge_model
@@ -24,6 +23,12 @@ properties:
     format: "uuid"
     description: Unique identifier of the billable metric created by Lago.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  code:
+    type:
+      - string
+      - "null"
+    description: Unique code identifying the charge within the plan.
+    example: "api_requests_charge"
   billable_metric_code:
     type: string
     description: Unique code identifying a billable metric.
@@ -106,3 +111,10 @@ properties:
         type: string
         description: The conversion rate from pricing units to the plan's currency.
         example: "0.5"
+  lago_parent_id:
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    description: Unique identifier of the parent charge (if this is an override).
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
