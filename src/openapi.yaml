@@ -295,6 +295,10 @@ paths:
     $ref: "./resources/plan_charges.yaml"
   /plans/{code}/charges/{charge_code}:
     $ref: "./resources/plan_charge.yaml"
+  /plans/{code}/charges/{charge_code}/filters:
+    $ref: "./resources/plan_charge_filters.yaml"
+  /plans/{code}/charges/{charge_code}/filters/{filter_id}:
+    $ref: "./resources/plan_charge_filter.yaml"
   /plans/{code}/fixed_charges:
     $ref: "./resources/plan_fixed_charges.yaml"
   /plans/{code}/fixed_charges/{fixed_charge_code}:

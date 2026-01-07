@@ -1,0 +1,63 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+  - name: charge_code
+    in: path
+    description: Code of the existing charge.
+    required: true
+    schema:
+      type: string
+      example: 'api_requests_charge'
+post:
+  tags:
+    - plans
+  summary: Create a charge filter
+  description: This endpoint creates a new filter for a specific charge.
+  operationId: createPlanChargeFilter
+  requestBody:
+    description: Charge filter payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/ChargeFilterCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Charge filter created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ChargeFilterResponse.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - plans
+  summary: List all filters for a charge
+  description: This endpoint retrieves all filters for a specific charge.
+  operationId: findAllPlanChargeFilters
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+  responses:
+    '200':
+      description: List of charge filters
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ChargeFiltersPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
