@@ -11039,12 +11039,12 @@ components:
         base_amount_cents:
           type: integer
           example: 100
-    CreditNoteMetadataObject:
+    MetadataObject:
       type:
         - object
         - 'null'
       description: |-
-        Custom metadata for the credit note, stored as key-value pairs.
+        Custom metadata stored as key-value pairs.
         Keys are strings (max 40 characters), values can be strings (max 255 characters) or null.
       additionalProperties:
         type:
@@ -11249,7 +11249,7 @@ components:
           example: false
           description: Indicates if the credit note belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.
         metadata:
-          $ref: '#/components/schemas/CreditNoteMetadataObject'
+          $ref: '#/components/schemas/MetadataObject'
         error_details:
           type:
             - array
@@ -11268,9 +11268,9 @@ components:
             $ref: '#/components/schemas/CreditNoteObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    CreditNoteMetadataInput:
+    MetadataInput:
       type: object
-      description: Metadata to set on the credit note. Keys are strings (max 40 characters), values can be strings (max 255 characters) or null.
+      description: Metadata to set as key-value pairs. Keys are strings (max 100 characters), values can be strings (max 255 characters) or null.
       additionalProperties:
         type:
           - string
@@ -11350,7 +11350,7 @@ components:
                 - fee_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   amount_cents: 500
             metadata:
-              $ref: '#/components/schemas/CreditNoteMetadataInput'
+              $ref: '#/components/schemas/MetadataInput'
     CreditNote:
       type: object
       required:
@@ -11382,7 +11382,7 @@ components:
                 - `failed`: this status indicates that the refund failed to execute. The refund request encountered an error or unsuccessful processing, and the refund amount could not be returned.
               example: succeeded
             metadata:
-              $ref: '#/components/schemas/CreditNoteMetadataInput'
+              $ref: '#/components/schemas/MetadataInput'
     CreditNoteEstimateInput:
       type: object
       required:
@@ -11568,7 +11568,7 @@ components:
         - metadata
       properties:
         metadata:
-          $ref: '#/components/schemas/CreditNoteMetadataObject'
+          $ref: '#/components/schemas/MetadataObject'
     CountryOrNull:
       type:
         - string
@@ -14111,17 +14111,17 @@ components:
     EventObject:
       type: object
       required:
-        - lago_id
         - transaction_id
         - lago_customer_id
         - code
         - timestamp
         - lago_subscription_id
         - external_subscription_id
-        - created_at
       properties:
         lago_id:
-          type: string
+          type:
+            - string
+            - 'null'
           format: uuid
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
           description: Unique identifier assigned to the event within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the event's record within the Lago system
@@ -14182,7 +14182,9 @@ components:
           example: sub_1234567890
           description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
         created_at:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
           example: '2022-04-29T08:59:51Z'
           description: The creation date of the event's record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
@@ -16036,6 +16038,8 @@ components:
           description: List of all feature entitlements and their privileges available for this plan.
           items:
             $ref: '#/components/schemas/PlanEntitlement'
+        metadata:
+          $ref: '#/components/schemas/MetadataObject'
     PlansPaginated:
       type: object
       required:
@@ -16340,6 +16344,8 @@ components:
               description: List of usage thresholds to apply to the plan.
               items:
                 $ref: '#/components/schemas/UsageThresholdInput'
+            metadata:
+              $ref: '#/components/schemas/MetadataInput'
     Plan:
       type: object
       required:
@@ -16570,6 +16576,8 @@ components:
               type: boolean
               description: This field determines whether the changes made to the plan should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
               example: true
+            metadata:
+              $ref: '#/components/schemas/MetadataInput'
     PlanEntitlements:
       type: object
       required:
@@ -16686,6 +16694,8 @@ components:
           description: List of usage thresholds applied to the subscription.
           items:
             $ref: '#/components/schemas/UsageThresholdInput'
+        metadata:
+          $ref: '#/components/schemas/MetadataInput'
     SubscriptionCreateInput:
       type: object
       required:
