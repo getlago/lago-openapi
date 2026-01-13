@@ -1,0 +1,85 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+  - name: charge_code
+    in: path
+    description: Code of the existing charge.
+    required: true
+    schema:
+      type: string
+      example: 'api_requests_charge'
+  - name: filter_id
+    in: path
+    description: Unique identifier of the charge filter.
+    required: true
+    schema:
+      type: string
+      format: uuid
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+get:
+  tags:
+    - plans
+  summary: Retrieve a charge filter
+  description: This endpoint retrieves a specific filter for a charge.
+  operationId: findPlanChargeFilter
+  responses:
+    '200':
+      description: Charge filter
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ChargeFilterResponse.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+put:
+  tags:
+    - plans
+  summary: Update a charge filter
+  description: This endpoint updates a specific filter for a charge.
+  operationId: updatePlanChargeFilter
+  requestBody:
+    description: Charge filter payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/ChargeFilterUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Charge filter updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ChargeFilterResponse.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - plans
+  summary: Delete a charge filter
+  description: This endpoint deletes a specific filter from a charge.
+  operationId: destroyPlanChargeFilter
+  responses:
+    '200':
+      description: Charge filter deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ChargeFilterResponse.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

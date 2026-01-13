@@ -1,0 +1,11 @@
+type: object
+required:
+  - filters
+  - meta
+properties:
+  filters:
+    type: array
+    items:
+      $ref: './ChargeFilterFullObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

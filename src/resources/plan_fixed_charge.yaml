@@ -1,0 +1,77 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+  - name: fixed_charge_code
+    in: path
+    description: Code of the existing fixed charge.
+    required: true
+    schema:
+      type: string
+      example: 'setup_fee_charge'
+get:
+  tags:
+    - plans
+  summary: Retrieve a fixed charge
+  description: This endpoint retrieves a specific fixed charge for a plan.
+  operationId: findPlanFixedCharge
+  responses:
+    '200':
+      description: Fixed charge
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/FixedCharge.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+put:
+  tags:
+    - plans
+  summary: Update a fixed charge
+  description: This endpoint updates a specific fixed charge for a plan.
+  operationId: updatePlanFixedCharge
+  requestBody:
+    description: Fixed charge payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/FixedChargeUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Fixed charge updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/FixedCharge.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - plans
+  summary: Delete a fixed charge
+  description: This endpoint deletes a specific fixed charge from a plan.
+  operationId: destroyPlanFixedCharge
+  responses:
+    '200':
+      description: Fixed charge deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/FixedCharge.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

@@ -4091,6 +4091,426 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /plans/{code}/charges:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+    post:
+      tags:
+        - plans
+      summary: Create a charge
+      description: This endpoint creates a new charge for a specific plan.
+      operationId: createPlanCharge
+      requestBody:
+        description: Charge payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Charge created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - plans
+      summary: List all charges for a plan
+      description: This endpoint retrieves all charges for a specific plan.
+      operationId: findAllPlanCharges
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: List of charges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /plans/{code}/charges/{charge_code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+      - name: charge_code
+        in: path
+        description: Code of the existing charge.
+        required: true
+        schema:
+          type: string
+          example: api_requests_charge
+    get:
+      tags:
+        - plans
+      summary: Retrieve a charge
+      description: This endpoint retrieves a specific charge for a plan.
+      operationId: findPlanCharge
+      responses:
+        '200':
+          description: Charge
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - plans
+      summary: Update a charge
+      description: This endpoint updates a specific charge for a plan.
+      operationId: updatePlanCharge
+      requestBody:
+        description: Charge payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Charge updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - plans
+      summary: Delete a charge
+      description: This endpoint deletes a specific charge from a plan.
+      operationId: destroyPlanCharge
+      responses:
+        '200':
+          description: Charge deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /plans/{code}/charges/{charge_code}/filters:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+      - name: charge_code
+        in: path
+        description: Code of the existing charge.
+        required: true
+        schema:
+          type: string
+          example: api_requests_charge
+    post:
+      tags:
+        - plans
+      summary: Create a charge filter
+      description: This endpoint creates a new filter for a specific charge.
+      operationId: createPlanChargeFilter
+      requestBody:
+        description: Charge filter payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeFilterCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Charge filter created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFilterResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - plans
+      summary: List all filters for a charge
+      description: This endpoint retrieves all filters for a specific charge.
+      operationId: findAllPlanChargeFilters
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: List of charge filters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFiltersPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /plans/{code}/charges/{charge_code}/filters/{filter_id}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+      - name: charge_code
+        in: path
+        description: Code of the existing charge.
+        required: true
+        schema:
+          type: string
+          example: api_requests_charge
+      - name: filter_id
+        in: path
+        description: Unique identifier of the charge filter.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    get:
+      tags:
+        - plans
+      summary: Retrieve a charge filter
+      description: This endpoint retrieves a specific filter for a charge.
+      operationId: findPlanChargeFilter
+      responses:
+        '200':
+          description: Charge filter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFilterResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - plans
+      summary: Update a charge filter
+      description: This endpoint updates a specific filter for a charge.
+      operationId: updatePlanChargeFilter
+      requestBody:
+        description: Charge filter payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeFilterUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Charge filter updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFilterResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - plans
+      summary: Delete a charge filter
+      description: This endpoint deletes a specific filter from a charge.
+      operationId: destroyPlanChargeFilter
+      responses:
+        '200':
+          description: Charge filter deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFilterResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /plans/{code}/fixed_charges:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+    post:
+      tags:
+        - plans
+      summary: Create a fixed charge
+      description: This endpoint creates a new fixed charge for a specific plan.
+      operationId: createPlanFixedCharge
+      requestBody:
+        description: Fixed charge payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FixedChargeCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Fixed charge created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedCharge'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - plans
+      summary: List all fixed charges for a plan
+      description: This endpoint retrieves all fixed charges for a specific plan.
+      operationId: findAllPlanFixedCharges
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: List of fixed charges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedChargesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /plans/{code}/fixed_charges/{fixed_charge_code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing plan.
+        required: true
+        schema:
+          type: string
+          example: startup
+      - name: fixed_charge_code
+        in: path
+        description: Code of the existing fixed charge.
+        required: true
+        schema:
+          type: string
+          example: setup_fee_charge
+    get:
+      tags:
+        - plans
+      summary: Retrieve a fixed charge
+      description: This endpoint retrieves a specific fixed charge for a plan.
+      operationId: findPlanFixedCharge
+      responses:
+        '200':
+          description: Fixed charge
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedCharge'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - plans
+      summary: Update a fixed charge
+      description: This endpoint updates a specific fixed charge for a plan.
+      operationId: updatePlanFixedCharge
+      requestBody:
+        description: Fixed charge payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FixedChargeUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Fixed charge updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedCharge'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - plans
+      summary: Delete a fixed charge
+      description: This endpoint deletes a specific fixed charge from a plan.
+      operationId: destroyPlanFixedCharge
+      responses:
+        '200':
+          description: Fixed charge deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedCharge'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /subscriptions:
     post:
       tags:
@@ -15655,7 +16075,6 @@ components:
       required:
         - lago_id
         - lago_billable_metric_id
-        - invoice_display_name
         - billable_metric_code
         - created_at
         - charge_model
@@ -15677,6 +16096,12 @@ components:
           format: uuid
           description: Unique identifier of the billable metric created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        code:
+          type:
+            - string
+            - 'null'
+          description: Unique code identifying the charge within the plan.
+          example: api_requests_charge
         billable_metric_code:
           type: string
           description: Unique code identifying a billable metric.
@@ -15759,6 +16184,13 @@ components:
               type: string
               description: The conversion rate from pricing units to the plan's currency.
               example: '0.5'
+        lago_parent_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the parent charge (if this is an override).
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     PlanEntitlementPrivilegeObject:
       allOf:
         - $ref: '#/components/schemas/FeaturePrivilegeObject'
@@ -16092,6 +16524,17 @@ components:
           example:
             region:
               - us-east-1
+    FixedChargeModelEnum:
+      type: string
+      description: |
+        Specifies the pricing model used for the calculation of the fixed charge fee. It can be any of the following values:
+          - `standard`
+          - `graduated`
+          - `volume`
+      enum:
+        - standard
+        - graduated
+        - volume
     UsageThresholdInput:
       type: object
       required:
@@ -16199,6 +16642,10 @@ components:
                     format: uuid
                     description: Unique identifier of the billable metric created by Lago.
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  code:
+                    type: string
+                    description: Unique code identifying the charge within the plan.
+                    example: api_requests_charge
                   charge_model:
                     $ref: '#/components/schemas/ChargeModelEnum'
                   pay_in_advance:
@@ -16335,6 +16782,71 @@ components:
                     fixed_amount: '0.5'
                     free_units_per_events: 5
                     free_units_per_total_aggregation: '500'
+            fixed_charges:
+              type: array
+              description: Fixed charges for this plan.
+              items:
+                type: object
+                required:
+                  - add_on_id
+                  - charge_model
+                properties:
+                  add_on_id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the add-on. Either add_on_id or add_on_code is required.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  add_on_code:
+                    type: string
+                    description: Unique code identifying an add-on. Either add_on_id or add_on_code is required.
+                    example: setup_fee
+                  code:
+                    type: string
+                    description: Unique code identifying the fixed charge within the plan.
+                    example: setup_fee_charge
+                  invoice_display_name:
+                    type:
+                      - string
+                      - 'null'
+                    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the add-on will be used as the default display name.
+                    example: Setup Fee
+                  charge_model:
+                    $ref: '#/components/schemas/FixedChargeModelEnum'
+                  pay_in_advance:
+                    type: boolean
+                    description: This field determines the billing timing for this fixed charge. When set to `true`, the charge is due and invoiced immediately at the beginning of the billing period. When set to `false`, the charge is due and invoiced at the end of the billing period.
+                    example: true
+                  prorated:
+                    type: boolean
+                    example: false
+                    description: |-
+                      Specifies whether a fixed charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+                      - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+                      - If set to `false`, the charge is billed in full.
+                  units:
+                    type: string
+                    description: The quantity of units for the fixed charge.
+                    example: '1.0'
+                  apply_units_immediately:
+                    type: boolean
+                    description: When set to `true`, the fixed charge units are applied immediately for active subscriptions. When set to `false`, the units are applied at the next billing period.
+                    example: false
+                  properties:
+                    $ref: '#/components/schemas/ChargeProperties'
+                    description: List of all thresholds utilized for calculating the fixed charge.
+                  tax_codes:
+                    $ref: '#/components/schemas/TaxCodes'
+              example:
+                - add_on_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  code: setup_fee_charge
+                  charge_model: standard
+                  invoice_display_name: Setup Fee
+                  pay_in_advance: true
+                  prorated: false
+                  units: '1.0'
+                  properties:
+                    amount: '100'
             usage_thresholds:
               type: array
               description: List of usage thresholds to apply to the plan.
@@ -16429,6 +16941,10 @@ components:
                     format: uuid
                     description: Unique identifier of the billable metric created by Lago.
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  code:
+                    type: string
+                    description: Unique code identifying the charge within the plan.
+                    example: api_requests_charge
                   charge_model:
                     $ref: '#/components/schemas/ChargeModelEnum'
                   pay_in_advance:
@@ -16561,6 +17077,70 @@ components:
                     fixed_amount: '0.5'
                     free_units_per_events: 5
                     free_units_per_total_aggregation: '500'
+            fixed_charges:
+              type: array
+              description: Fixed charges for this plan.
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the fixed charge created by Lago.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  add_on_id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the add-on. Either add_on_id or add_on_code is required.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  add_on_code:
+                    type: string
+                    description: Unique code identifying an add-on. Either add_on_id or add_on_code is required.
+                    example: setup_fee
+                  code:
+                    type: string
+                    description: Unique code identifying the fixed charge within the plan.
+                    example: setup_fee_charge
+                  invoice_display_name:
+                    type:
+                      - string
+                      - 'null'
+                    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the add-on will be used as the default display name.
+                    example: Setup Fee
+                  charge_model:
+                    $ref: '#/components/schemas/FixedChargeModelEnum'
+                  pay_in_advance:
+                    type: boolean
+                    description: This field determines the billing timing for this fixed charge. When set to `true`, the charge is due and invoiced immediately at the beginning of the billing period. When set to `false`, the charge is due and invoiced at the end of the billing period.
+                    example: true
+                  prorated:
+                    type: boolean
+                    example: false
+                    description: |-
+                      Specifies whether a fixed charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+                      - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+                      - If set to `false`, the charge is billed in full.
+                  units:
+                    type: string
+                    description: The quantity of units for the fixed charge.
+                    example: '1.0'
+                  apply_units_immediately:
+                    type: boolean
+                    description: When set to `true`, the fixed charge units are applied immediately for active subscriptions. When set to `false`, the units are applied at the next billing period.
+                    example: false
+                  properties:
+                    $ref: '#/components/schemas/ChargeProperties'
+                    description: List of all thresholds utilized for calculating the fixed charge.
+                  tax_codes:
+                    $ref: '#/components/schemas/TaxCodes'
+              example:
+                - id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  code: setup_fee_charge
+                  invoice_display_name: Setup Fee Updated
+                  units: '2.0'
+                  properties:
+                    amount: '150'
             usage_thresholds:
               type: array
               description: List of usage thresholds to apply to the plan.
@@ -16602,6 +17182,394 @@ components:
             sso:
               provider: okta
           description: Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values.
+    ChargesPaginated:
+      type: object
+      required:
+        - charges
+        - meta
+      properties:
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    ChargeInput:
+      type: object
+      properties:
+        billable_metric_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the billable metric created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        code:
+          type: string
+          description: Unique code identifying the charge within the plan.
+          example: api_requests_charge
+        charge_model:
+          $ref: '#/components/schemas/ChargeModelEnum'
+        pay_in_advance:
+          type: boolean
+          example: false
+          description: This field determines the billing timing for this specific usage-based charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to false, the charge is due and invoiced at the end of each billing period.
+        invoiceable:
+          type: boolean
+          description: This field specifies whether the charge should be included in a proper invoice. If set to false, no invoice will be issued for this charge. You can only set it to `false` when `pay_in_advance` is `true`.
+          example: true
+        regroup_paid_fees:
+          type:
+            - string
+            - 'null'
+          enum:
+            - null
+            - invoice
+          description: |-
+            This setting can only be configured if `pay_in_advance` is `true` and `invoiceable` is `false`.
+            This field determines whether and when the charge fee should be included in
+            the invoice. If `null`, no invoice will be issued for this charge fee.
+            If `invoice`, an invoice will be generated at the end of the period,
+            consolidating all charge fees with a succeeded payment status.
+          example: null
+        invoice_display_name:
+          type: string
+          description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+          example: Setup
+        prorated:
+          type: boolean
+          example: false
+          description: |-
+            Specifies whether a charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+            - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+            - If set to `false`, the charge is billed in full.
+            - If not defined in the request, default value is `false`.
+        min_amount_cents:
+          type: integer
+          description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
+          example: 0
+        properties:
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the charge.
+        filters:
+          type: array
+          description: List of filters used to apply differentiated pricing based on additional event properties.
+          items:
+            $ref: '#/components/schemas/ChargeFilterInput'
+        tax_codes:
+          $ref: '#/components/schemas/TaxCodes'
+        applied_pricing_unit:
+          type: object
+          description: The pricing unit to apply to the charge.
+          properties:
+            code:
+              type: string
+              description: The code of the pricing unit.
+              example: credits
+            conversion_rate:
+              type: string
+              description: |-
+                The conversion rate from pricing units to the plan's currency.
+                This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
+                For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50.
+              example: '0.5'
+    ChargeCreateInput:
+      type: object
+      required:
+        - charge
+      properties:
+        charge:
+          allOf:
+            - $ref: '#/components/schemas/ChargeInput'
+            - required:
+                - billable_metric_id
+                - charge_model
+    Charge:
+      type: object
+      required:
+        - charge
+      properties:
+        charge:
+          $ref: '#/components/schemas/ChargeObject'
+    ChargeUpdateInput:
+      type: object
+      required:
+        - charge
+      properties:
+        charge:
+          $ref: '#/components/schemas/ChargeInput'
+    ChargeFilterFullObject:
+      type: object
+      description: Charge filter values used to apply differentiated pricing based on additional event properties.
+      required:
+        - lago_id
+        - charge_code
+        - invoice_display_name
+        - properties
+        - values
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the charge filter, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        charge_code:
+          type: string
+          description: Unique code identifying the charge this filter belongs to.
+          example: api_requests_charge
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name.
+          example: AWS
+        properties:
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the charge.
+        values:
+          type: object
+          description: List of possible filter values. The key and values must match one of the billable metric filters.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            region:
+              - us-east-1
+    ChargeFiltersPaginated:
+      type: object
+      required:
+        - filters
+        - meta
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeFilterFullObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    ChargeFilterCreateInput:
+      type: object
+      required:
+        - filter
+      properties:
+        filter:
+          type: object
+          required:
+            - properties
+            - values
+          properties:
+            invoice_display_name:
+              type:
+                - string
+                - 'null'
+              description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name.
+              example: AWS
+            properties:
+              $ref: '#/components/schemas/ChargeProperties'
+              description: List of all thresholds utilized for calculating the charge.
+            values:
+              type: object
+              description: List of possible filter values. The key and values must match one of the billable metric filters.
+              additionalProperties:
+                type: array
+                items:
+                  type: string
+              example:
+                region:
+                  - us-east-1
+    ChargeFilterResponse:
+      type: object
+      required:
+        - filter
+      properties:
+        filter:
+          $ref: '#/components/schemas/ChargeFilterFullObject'
+    ChargeFilterUpdateInput:
+      type: object
+      required:
+        - filter
+      properties:
+        filter:
+          type: object
+          properties:
+            invoice_display_name:
+              type:
+                - string
+                - 'null'
+              description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name.
+              example: AWS
+            properties:
+              $ref: '#/components/schemas/ChargeProperties'
+              description: List of all thresholds utilized for calculating the charge.
+            values:
+              type: object
+              description: List of possible filter values. The key and values must match one of the billable metric filters.
+              additionalProperties:
+                type: array
+                items:
+                  type: string
+              example:
+                region:
+                  - us-east-1
+    FixedChargeObject:
+      type: object
+      required:
+        - lago_id
+        - lago_add_on_id
+        - add_on_code
+        - created_at
+        - charge_model
+        - pay_in_advance
+        - prorated
+        - properties
+        - units
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the fixed charge, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_add_on_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the add-on created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        code:
+          type:
+            - string
+            - 'null'
+          description: Unique code identifying the fixed charge within the plan.
+          example: setup_fee_charge
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the add-on will be used as the default display name.
+          example: Setup Fee
+        add_on_code:
+          type: string
+          description: Unique code identifying an add-on.
+          example: setup_fee
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the fixed charge was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2022-09-14T16:35:31Z'
+        charge_model:
+          $ref: '#/components/schemas/FixedChargeModelEnum'
+        pay_in_advance:
+          type: boolean
+          description: This field determines the billing timing for this fixed charge. When set to `true`, the charge is due and invoiced immediately at the beginning of the billing period. When set to `false`, the charge is due and invoiced at the end of the billing period.
+          example: true
+        prorated:
+          type: boolean
+          example: false
+          description: |-
+            Specifies whether a fixed charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+            - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+            - If set to `false`, the charge is billed in full.
+        properties:
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the fixed charge.
+        units:
+          type: string
+          description: The quantity of units for the fixed charge.
+          example: '1.0'
+        taxes:
+          type: array
+          description: All taxes applied to the fixed charge.
+          items:
+            $ref: '#/components/schemas/TaxObject'
+        lago_parent_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the parent fixed charge (if this is an override).
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    FixedChargesPaginated:
+      type: object
+      required:
+        - fixed_charges
+        - meta
+      properties:
+        fixed_charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/FixedChargeObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    FixedChargeInput:
+      type: object
+      properties:
+        add_on_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the add-on. Either add_on_id or add_on_code is required.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        add_on_code:
+          type: string
+          description: Unique code identifying an add-on. Either add_on_id or add_on_code is required.
+          example: setup_fee
+        code:
+          type: string
+          description: Unique code identifying the fixed charge within the plan.
+          example: setup_fee_charge
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the add-on will be used as the default display name.
+          example: Setup Fee
+        charge_model:
+          $ref: '#/components/schemas/FixedChargeModelEnum'
+        pay_in_advance:
+          type: boolean
+          description: This field determines the billing timing for this fixed charge. When set to `true`, the charge is due and invoiced immediately at the beginning of the billing period. When set to `false`, the charge is due and invoiced at the end of the billing period.
+          example: true
+        prorated:
+          type: boolean
+          example: false
+          description: |-
+            Specifies whether a fixed charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+            - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+            - If set to `false`, the charge is billed in full.
+        units:
+          type: string
+          description: The quantity of units for the fixed charge.
+          example: '1.0'
+        apply_units_immediately:
+          type: boolean
+          description: When set to `true`, the fixed charge units are applied immediately for active subscriptions. When set to `false`, the units are applied at the next billing period.
+          example: false
+        properties:
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the fixed charge.
+        tax_codes:
+          $ref: '#/components/schemas/TaxCodes'
+    FixedChargeCreateInput:
+      type: object
+      required:
+        - fixed_charge
+      properties:
+        fixed_charge:
+          $ref: '#/components/schemas/FixedChargeInput'
+    FixedCharge:
+      type: object
+      required:
+        - fixed_charge
+      properties:
+        fixed_charge:
+          $ref: '#/components/schemas/FixedChargeObject'
+    FixedChargeUpdateInput:
+      type: object
+      required:
+        - fixed_charge
+      properties:
+        fixed_charge:
+          $ref: '#/components/schemas/FixedChargeInput'
     PlanOverridesObject:
       type: object
       description: Based plan overrides.
@@ -16650,6 +17618,10 @@ components:
                 format: uuid
                 description: Unique identifier of the billable metric created by Lago.
                 example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              code:
+                type: string
+                description: Unique code identifying the charge within the plan.
+                example: api_requests_charge
               charge_model:
                 $ref: '#/components/schemas/ChargeModelEnum'
               invoice_display_name:

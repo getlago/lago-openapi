@@ -1,0 +1,77 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+  - name: charge_code
+    in: path
+    description: Code of the existing charge.
+    required: true
+    schema:
+      type: string
+      example: 'api_requests_charge'
+get:
+  tags:
+    - plans
+  summary: Retrieve a charge
+  description: This endpoint retrieves a specific charge for a plan.
+  operationId: findPlanCharge
+  responses:
+    '200':
+      description: Charge
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Charge.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+put:
+  tags:
+    - plans
+  summary: Update a charge
+  description: This endpoint updates a specific charge for a plan.
+  operationId: updatePlanCharge
+  requestBody:
+    description: Charge payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/ChargeUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Charge updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Charge.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - plans
+  summary: Delete a charge
+  description: This endpoint deletes a specific charge from a plan.
+  operationId: destroyPlanCharge
+  responses:
+    '200':
+      description: Charge deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Charge.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

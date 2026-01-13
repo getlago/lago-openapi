@@ -291,6 +291,18 @@ paths:
     $ref: "./resources/plan_entitlement.yaml"
   /plans/{code}/entitlements/{feature_code}/privileges/{privilege_code}:
     $ref: "./resources/plan_entitlement_privileges.yaml"
+  /plans/{code}/charges:
+    $ref: "./resources/plan_charges.yaml"
+  /plans/{code}/charges/{charge_code}:
+    $ref: "./resources/plan_charge.yaml"
+  /plans/{code}/charges/{charge_code}/filters:
+    $ref: "./resources/plan_charge_filters.yaml"
+  /plans/{code}/charges/{charge_code}/filters/{filter_id}:
+    $ref: "./resources/plan_charge_filter.yaml"
+  /plans/{code}/fixed_charges:
+    $ref: "./resources/plan_fixed_charges.yaml"
+  /plans/{code}/fixed_charges/{fixed_charge_code}:
+    $ref: "./resources/plan_fixed_charge.yaml"
   /subscriptions:
     $ref: "./resources/subscriptions.yaml"
   /subscriptions/{external_id}:
