@@ -292,7 +292,7 @@ properties:
             prorated: false
             properties:
               amount: "500"
-            units: "1.0"
+            units: 1.0
             tax_codes: ["french_standard_vat"]
           - add_on_id: "4d604d60-4d60-4d60-4d60-4d604d604d60"
             invoice_display_name: "Support Tier"
@@ -309,7 +309,7 @@ properties:
                   to_value: null
                   per_unit_amount: "1"
                   flat_amount: "300"
-            units: "2"
+            units: 2
           - add_on_id: "6f406f40-6f40-6f40-6f40-6f406f406f40"
             charge_model: "volume"
             properties:
@@ -322,7 +322,7 @@ properties:
                   to_value: null
                   per_unit_amount: "1"
                   flat_amount: "0"
-            units: "50.0"
+            units: 50.0
       usage_thresholds:
         type: array
         description: List of usage thresholds to apply to the plan.

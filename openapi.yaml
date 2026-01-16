@@ -16203,7 +16203,7 @@ components:
               prorated: false
               properties:
                 amount: '500'
-              units: '1.0'
+              units: 1
               lago_parent_id: null
               taxes:
                 - lago_id: 3c703c70-3c70-3c70-3c70-3c703c703c70
@@ -16232,7 +16232,7 @@ components:
                     to_value: null
                     per_unit_amount: '1'
                     flat_amount: '300'
-              units: '1.0'
+              units: 1
               lago_parent_id: null
               taxes: []
             - lago_id: 6f406f40-6f40-6f40-6f40-6f406f406f40
@@ -16254,7 +16254,7 @@ components:
                     to_value: null
                     per_unit_amount: '1'
                     flat_amount: '0'
-              units: '50.0'
+              units: 50
               lago_parent_id: null
               taxes: []
         taxes:
@@ -16644,7 +16644,7 @@ components:
                   prorated: false
                   properties:
                     amount: '500'
-                  units: '1.0'
+                  units: 1
                   tax_codes:
                     - french_standard_vat
                 - add_on_id: 4d604d60-4d60-4d60-4d60-4d604d604d60
@@ -16662,7 +16662,7 @@ components:
                         to_value: null
                         per_unit_amount: '1'
                         flat_amount: '300'
-                  units: '2'
+                  units: 2
                 - add_on_id: 6f406f40-6f40-6f40-6f40-6f406f406f40
                   charge_model: volume
                   properties:
@@ -16675,7 +16675,7 @@ components:
                         to_value: null
                         per_unit_amount: '1'
                         flat_amount: '0'
-                  units: '50.0'
+                  units: 50
             usage_thresholds:
               type: array
               description: List of usage thresholds to apply to the plan.
@@ -16977,7 +16977,7 @@ components:
                   invoice_display_name: New Setup Fee
                   charge_model: standard
                   apply_units_immediately: true
-                  units: '5.0'
+                  units: 5
                 - add_on_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   code: setup_fee
                   invoice_display_name: Setup Fee
@@ -16986,7 +16986,7 @@ components:
                   prorated: false
                   properties:
                     amount: '500'
-                  units: '1.0'
+                  units: 1
                   apply_units_immediately: false
                   tax_codes:
                     - french_standard_vat
@@ -17005,7 +17005,7 @@ components:
                         to_value: null
                         per_unit_amount: '1'
                         flat_amount: '300'
-                  units: '2'
+                  units: 2
                 - add_on_id: 6f406f40-6f40-6f40-6f40-6f406f406f40
                   charge_model: volume
                   properties:
@@ -17018,7 +17018,7 @@ components:
                         to_value: null
                         per_unit_amount: '1'
                         flat_amount: '0'
-                  units: '50.0'
+                  units: 50
             usage_thresholds:
               type: array
               description: List of usage thresholds to apply to the plan.
