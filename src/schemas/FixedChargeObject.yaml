@@ -1,0 +1,80 @@
+type: object
+required:
+  - lago_id
+  - lago_add_on_id
+  - invoice_display_name
+  - add_on_code
+  - created_at
+  - charge_model
+  - pay_in_advance
+  - prorated
+  - properties
+  - units
+properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the fixed charge, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_add_on_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the add-on associated with this fixed charge.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  invoice_display_name:
+    type: string
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+    example: "Setup fee"
+  add_on_code:
+    type: string
+    description: Unique code used to identify the add-on.
+    example: "setup_fee"
+  created_at:
+    type: string
+    format: date-time
+    description: The date and time when the fixed charge was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
+    example: "2023-06-27T19:43:42Z"
+  code:
+    type: string
+    description: Unique code for the fixed charge.
+    example: "setup_fee"
+  charge_model:
+    type: string
+    enum:
+      - standard
+      - graduated
+      - volume
+    description: The charge model for the fixed charge. Only `standard`, `graduated`, and `volume` models are supported for fixed charges.
+    example: standard
+  pay_in_advance:
+    type: boolean
+    description: This field determines the billing timing for this fixed charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to false, the charge is due and invoiced at the end of each billing period.
+    example: false
+  prorated:
+    type: boolean
+    description: |
+      Specifies whether a fixed charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+      - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+      - If set to `false`, the charge is billed in full.
+      - If not defined in the request, default value is `false`.
+    example: false
+  properties:
+    $ref: "./FixedChargeProperties.yaml"
+    description: List of all thresholds utilized for calculating the fixed charge.
+  units:
+    type: number
+    description: The number of units for the fixed charge.
+    example: 1
+  lago_parent_id:
+    type:
+      - string
+      - "null"
+    format: uuid
+    description: Unique identifier of the parent fixed charge (for plan versions).
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  taxes:
+    type: array
+    description: List of taxes applied to the fixed charge.
+    items:
+      $ref: "./TaxObject.yaml"

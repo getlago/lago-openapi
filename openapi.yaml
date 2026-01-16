@@ -15759,6 +15759,165 @@ components:
               type: string
               description: The conversion rate from pricing units to the plan's currency.
               example: '0.5'
+    FixedChargeProperties:
+      type: object
+      properties:
+        amount:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: |-
+            - The unit price, excluding tax, for a `standard` charge model. It is expressed as a decimal value.
+            - The amount, excluding tax, for a complete set of units in a `package` charge model. It is expressed as a decimal value.
+          example: '30'
+        graduated_ranges:
+          type: array
+          description: Graduated ranges, sorted from bottom to top tiers, used for a `graduated` charge model.
+          items:
+            type: object
+            required:
+              - from_value
+              - to_value
+              - flat_amount
+              - per_unit_amount
+            properties:
+              from_value:
+                type: integer
+                description: Specifies the lower value of a tier for a `graduated` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+                example: 0
+              to_value:
+                type:
+                  - integer
+                  - 'null'
+                description: |-
+                  Specifies the highest value of a tier for a `graduated` charge model.
+                  - This value must be higher than the from_value of the same tier.
+                  - This value must be null for the last tier.
+                example: 10
+              flat_amount:
+                type: string
+                pattern: ^[0-9]+.?[0-9]*$
+                description: The flat amount for a whole tier, excluding tax, for a `graduated` charge model. It is expressed as a decimal value.
+                example: '10'
+              per_unit_amount:
+                type: string
+                pattern: ^[0-9]+.?[0-9]*$
+                description: The unit price, excluding tax, for a specific tier of a `graduated` charge model. It is expressed as a decimal value.
+                example: '0.5'
+        volume_ranges:
+          type: array
+          description: Volume ranges, sorted from bottom to top tiers, used for a `volume` charge model.
+          items:
+            type: object
+            required:
+              - from_value
+              - to_value
+              - flat_amount
+              - per_unit_amount
+            properties:
+              from_value:
+                type: integer
+                description: Specifies the lower value of a tier for a `volume` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+                example: 0
+              to_value:
+                type:
+                  - integer
+                  - 'null'
+                description: |-
+                  Specifies the highest value of a tier for a `volume` charge model.
+                  - This value must be higher than the `from_value` of the same tier.
+                  - This value must be `null` for the last tier.
+                example: 10
+              flat_amount:
+                type: string
+                pattern: ^[0-9]+.?[0-9]*$
+                description: The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.
+                example: '10'
+              per_unit_amount:
+                type: string
+                pattern: ^[0-9]+.?[0-9]*$
+                description: The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.
+                example: '0.5'
+    FixedChargeObject:
+      type: object
+      required:
+        - lago_id
+        - lago_add_on_id
+        - invoice_display_name
+        - add_on_code
+        - created_at
+        - charge_model
+        - pay_in_advance
+        - prorated
+        - properties
+        - units
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the fixed charge, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_add_on_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the add-on associated with this fixed charge.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        invoice_display_name:
+          type: string
+          description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+          example: Setup fee
+        add_on_code:
+          type: string
+          description: Unique code used to identify the add-on.
+          example: setup_fee
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the fixed charge was created. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2023-06-27T19:43:42Z'
+        code:
+          type: string
+          description: Unique code for the fixed charge.
+          example: setup_fee
+        charge_model:
+          type: string
+          enum:
+            - standard
+            - graduated
+            - volume
+          description: The charge model for the fixed charge. Only `standard`, `graduated`, and `volume` models are supported for fixed charges.
+          example: standard
+        pay_in_advance:
+          type: boolean
+          description: This field determines the billing timing for this fixed charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to false, the charge is due and invoiced at the end of each billing period.
+          example: false
+        prorated:
+          type: boolean
+          description: |
+            Specifies whether a fixed charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+            - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+            - If set to `false`, the charge is billed in full.
+            - If not defined in the request, default value is `false`.
+          example: false
+        properties:
+          $ref: '#/components/schemas/FixedChargeProperties'
+          description: List of all thresholds utilized for calculating the fixed charge.
+        units:
+          type: number
+          description: The number of units for the fixed charge.
+          example: 1
+        lago_parent_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the parent fixed charge (for plan versions).
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        taxes:
+          type: array
+          description: List of taxes applied to the fixed charge.
+          items:
+            $ref: '#/components/schemas/TaxObject'
     PlanEntitlementPrivilegeObject:
       allOf:
         - $ref: '#/components/schemas/FeaturePrivilegeObject'
@@ -16027,6 +16186,77 @@ components:
                 free_units_per_events: 5
                 free_units_per_total_aggregation: '500'
               filters: []
+        fixed_charges:
+          type: array
+          description: List of fixed charges for this plan.
+          items:
+            $ref: '#/components/schemas/FixedChargeObject'
+          example:
+            - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              lago_add_on_id: 2b802b80-2b80-2b80-2b80-2b802b802b80
+              code: setup_fee
+              invoice_display_name: Setup Fee
+              add_on_code: setup
+              created_at: '2026-01-15T10:30:00Z'
+              charge_model: standard
+              pay_in_advance: true
+              prorated: false
+              properties:
+                amount: '500'
+              units: '1.0'
+              lago_parent_id: null
+              taxes:
+                - lago_id: 3c703c70-3c70-3c70-3c70-3c703c703c70
+                  name: VAT
+                  code: vat_20
+                  rate: 20
+                  description: Standard VAT rate
+                  applied_to_organization: true
+                  created_at: '2026-01-01T00:00:00Z'
+            - lago_id: 4d604d60-4d60-4d60-4d60-4d604d604d60
+              lago_add_on_id: 5e505e50-5e50-5e50-5e50-5e505e505e50
+              code: support_tier
+              invoice_display_name: Support Tier
+              add_on_code: premium_support
+              created_at: '2026-01-15T10:30:00Z'
+              charge_model: graduated
+              pay_in_advance: false
+              prorated: true
+              properties:
+                graduated_ranges:
+                  - from_value: 0
+                    to_value: 10
+                    per_unit_amount: '5'
+                    flat_amount: '200'
+                  - from_value: 11
+                    to_value: null
+                    per_unit_amount: '1'
+                    flat_amount: '300'
+              units: '1.0'
+              lago_parent_id: null
+              taxes: []
+            - lago_id: 6f406f40-6f40-6f40-6f40-6f406f406f40
+              lago_add_on_id: 7a307a30-7a30-7a30-7a30-7a307a307a30
+              code: storage
+              invoice_display_name: Storage Allocation
+              add_on_code: cloud_storage
+              created_at: '2026-01-15T10:30:00Z'
+              charge_model: volume
+              pay_in_advance: false
+              prorated: false
+              properties:
+                volume_ranges:
+                  - from_value: 0
+                    to_value: 100
+                    per_unit_amount: '2'
+                    flat_amount: '1'
+                  - from_value: 101
+                    to_value: null
+                    per_unit_amount: '1'
+                    flat_amount: '0'
+              units: '50.0'
+              lago_parent_id: null
+              taxes: []
         taxes:
           type: array
           description: All taxes applied to the plan.
@@ -16098,84 +16328,6 @@ components:
           example:
             region:
               - us-east-1
-    FixedChargeProperties:
-      type: object
-      properties:
-        amount:
-          type: string
-          pattern: ^[0-9]+.?[0-9]*$
-          description: |-
-            - The unit price, excluding tax, for a `standard` charge model. It is expressed as a decimal value.
-            - The amount, excluding tax, for a complete set of units in a `package` charge model. It is expressed as a decimal value.
-          example: '30'
-        graduated_ranges:
-          type: array
-          description: Graduated ranges, sorted from bottom to top tiers, used for a `graduated` charge model.
-          items:
-            type: object
-            required:
-              - from_value
-              - to_value
-              - flat_amount
-              - per_unit_amount
-            properties:
-              from_value:
-                type: integer
-                description: Specifies the lower value of a tier for a `graduated` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
-                example: 0
-              to_value:
-                type:
-                  - integer
-                  - 'null'
-                description: |-
-                  Specifies the highest value of a tier for a `graduated` charge model.
-                  - This value must be higher than the from_value of the same tier.
-                  - This value must be null for the last tier.
-                example: 10
-              flat_amount:
-                type: string
-                pattern: ^[0-9]+.?[0-9]*$
-                description: The flat amount for a whole tier, excluding tax, for a `graduated` charge model. It is expressed as a decimal value.
-                example: '10'
-              per_unit_amount:
-                type: string
-                pattern: ^[0-9]+.?[0-9]*$
-                description: The unit price, excluding tax, for a specific tier of a `graduated` charge model. It is expressed as a decimal value.
-                example: '0.5'
-        volume_ranges:
-          type: array
-          description: Volume ranges, sorted from bottom to top tiers, used for a `volume` charge model.
-          items:
-            type: object
-            required:
-              - from_value
-              - to_value
-              - flat_amount
-              - per_unit_amount
-            properties:
-              from_value:
-                type: integer
-                description: Specifies the lower value of a tier for a `volume` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
-                example: 0
-              to_value:
-                type:
-                  - integer
-                  - 'null'
-                description: |-
-                  Specifies the highest value of a tier for a `volume` charge model.
-                  - This value must be higher than the `from_value` of the same tier.
-                  - This value must be `null` for the last tier.
-                example: 10
-              flat_amount:
-                type: string
-                pattern: ^[0-9]+.?[0-9]*$
-                description: The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.
-                example: '10'
-              per_unit_amount:
-                type: string
-                pattern: ^[0-9]+.?[0-9]*$
-                description: The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.
-                example: '0.5'
     UsageThresholdInput:
       type: object
       required:
