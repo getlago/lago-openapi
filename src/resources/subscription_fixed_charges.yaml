@@ -1,0 +1,25 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription
+    required: true
+    schema:
+      type: string
+      example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+get:
+  tags:
+    - subscriptions
+  summary: List subscription fixed charges
+  description: This endpoint retrieves all fixed charges for a specific subscription.
+  operationId: findAllSubscriptionFixedCharges
+  responses:
+    "200":
+      description: List of subscription fixed charges
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/FixedCharges.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

@@ -307,6 +307,8 @@ paths:
     $ref: "./resources/subscription_entitlement.yaml"
   /subscriptions/{external_id}/entitlements/{feature_code}/privileges/{privilege_code}:
     $ref: "./resources/subscription_entitlement_privileges.yaml"
+  /subscriptions/{external_id}/fixed_charges:
+    $ref: "./resources/subscription_fixed_charges.yaml"
   /taxes:
     $ref: "./resources/taxes.yaml"
   /taxes/{code}:

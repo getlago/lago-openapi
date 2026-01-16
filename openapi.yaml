@@ -4630,6 +4630,32 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/fixed_charges:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    get:
+      tags:
+        - subscriptions
+      summary: List subscription fixed charges
+      description: This endpoint retrieves all fixed charges for a specific subscription.
+      operationId: findAllSubscriptionFixedCharges
+      responses:
+        '200':
+          description: List of subscription fixed charges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedCharges'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /taxes:
     post:
       tags:
@@ -17717,6 +17743,15 @@ components:
       properties:
         entitlement:
           $ref: '#/components/schemas/SubscriptionEntitlementObject'
+    FixedCharges:
+      type: object
+      required:
+        - fixed_charges
+      properties:
+        fixed_charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/FixedChargeObject'
     TaxesPaginated:
       type: object
       required:
