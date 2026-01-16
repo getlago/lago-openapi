@@ -16098,6 +16098,84 @@ components:
           example:
             region:
               - us-east-1
+    FixedChargeProperties:
+      type: object
+      properties:
+        amount:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: |-
+            - The unit price, excluding tax, for a `standard` charge model. It is expressed as a decimal value.
+            - The amount, excluding tax, for a complete set of units in a `package` charge model. It is expressed as a decimal value.
+          example: '30'
+        graduated_ranges:
+          type: array
+          description: Graduated ranges, sorted from bottom to top tiers, used for a `graduated` charge model.
+          items:
+            type: object
+            required:
+              - from_value
+              - to_value
+              - flat_amount
+              - per_unit_amount
+            properties:
+              from_value:
+                type: integer
+                description: Specifies the lower value of a tier for a `graduated` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+                example: 0
+              to_value:
+                type:
+                  - integer
+                  - 'null'
+                description: |-
+                  Specifies the highest value of a tier for a `graduated` charge model.
+                  - This value must be higher than the from_value of the same tier.
+                  - This value must be null for the last tier.
+                example: 10
+              flat_amount:
+                type: string
+                pattern: ^[0-9]+.?[0-9]*$
+                description: The flat amount for a whole tier, excluding tax, for a `graduated` charge model. It is expressed as a decimal value.
+                example: '10'
+              per_unit_amount:
+                type: string
+                pattern: ^[0-9]+.?[0-9]*$
+                description: The unit price, excluding tax, for a specific tier of a `graduated` charge model. It is expressed as a decimal value.
+                example: '0.5'
+        volume_ranges:
+          type: array
+          description: Volume ranges, sorted from bottom to top tiers, used for a `volume` charge model.
+          items:
+            type: object
+            required:
+              - from_value
+              - to_value
+              - flat_amount
+              - per_unit_amount
+            properties:
+              from_value:
+                type: integer
+                description: Specifies the lower value of a tier for a `volume` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+                example: 0
+              to_value:
+                type:
+                  - integer
+                  - 'null'
+                description: |-
+                  Specifies the highest value of a tier for a `volume` charge model.
+                  - This value must be higher than the `from_value` of the same tier.
+                  - This value must be `null` for the last tier.
+                example: 10
+              flat_amount:
+                type: string
+                pattern: ^[0-9]+.?[0-9]*$
+                description: The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.
+                example: '10'
+              per_unit_amount:
+                type: string
+                pattern: ^[0-9]+.?[0-9]*$
+                description: The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.
+                example: '0.5'
     UsageThresholdInput:
       type: object
       required:
@@ -16347,6 +16425,105 @@ components:
                     fixed_amount: '0.5'
                     free_units_per_events: 5
                     free_units_per_total_aggregation: '500'
+            fixed_charges:
+              type: array
+              description: Additional fixed charges for this plan.
+              items:
+                type: object
+                required:
+                  - add_on_id
+                  - charge_model
+                properties:
+                  add_on_id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the add-on associated with this fixed charge.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  code:
+                    type: string
+                    description: Unique code for the fixed charge. If not provided, it will be automatically generated based on the add-on code.
+                    example: setup_fee
+                  invoice_display_name:
+                    type: string
+                    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+                    example: Setup fee
+                  units:
+                    type: number
+                    description: The number of units for the fixed charge. Defaults to 0 if not provided.
+                    example: 1
+                    default: 0
+                  charge_model:
+                    type: string
+                    enum:
+                      - standard
+                      - graduated
+                      - volume
+                    description: The charge model for the fixed charge. Only `standard`, `graduated`, and `volume` models are supported for fixed charges.
+                    example: standard
+                  pay_in_advance:
+                    type: boolean
+                    description: This field determines the billing timing for this specific fixed charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to false, the charge is due and invoiced at the end of each billing period. Defaults to `false` if not provided.
+                    example: false
+                    default: false
+                  prorated:
+                    type: boolean
+                    description: |
+                      Specifies whether a fixed charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+                      - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+                      - If set to `false`, the charge is billed in full.
+                      - Defaults to `false` if not provided.
+
+                      Note: Prorated fixed charges with `graduated` model and `pay_in_advance` are not allowed.
+                    example: false
+                    default: false
+                  properties:
+                    $ref: '#/components/schemas/FixedChargeProperties'
+                    description: List of all thresholds utilized for calculating the fixed charge.
+                  tax_codes:
+                    $ref: '#/components/schemas/TaxCodes'
+                    description: List of taxes applied to the fixed charge.
+              example:
+                - add_on_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  code: setup_fee
+                  invoice_display_name: Setup Fee
+                  charge_model: standard
+                  pay_in_advance: true
+                  prorated: false
+                  properties:
+                    amount: '500'
+                  units: '1.0'
+                  tax_codes:
+                    - french_standard_vat
+                - add_on_id: 4d604d60-4d60-4d60-4d60-4d604d604d60
+                  invoice_display_name: Support Tier
+                  charge_model: graduated
+                  pay_in_advance: false
+                  prorated: true
+                  properties:
+                    graduated_ranges:
+                      - from_value: 0
+                        to_value: 10
+                        per_unit_amount: '5'
+                        flat_amount: '200'
+                      - from_value: 11
+                        to_value: null
+                        per_unit_amount: '1'
+                        flat_amount: '300'
+                  units: '2'
+                - add_on_id: 6f406f40-6f40-6f40-6f40-6f406f406f40
+                  charge_model: volume
+                  properties:
+                    volume_ranges:
+                      - from_value: 0
+                        to_value: 100
+                        per_unit_amount: '2'
+                        flat_amount: '1'
+                      - from_value: 101
+                        to_value: null
+                        per_unit_amount: '1'
+                        flat_amount: '0'
+                  units: '50.0'
             usage_thresholds:
               type: array
               description: List of usage thresholds to apply to the plan.
