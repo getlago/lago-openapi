@@ -35,6 +35,13 @@ properties:
     format: "uuid"
     description: Unique identifier assigned to the charge filter that the fee belongs to
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_fixed_charge_id:
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    description: Unique identifier assigned to the fixed charge that the fee belongs to
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_invoice_id:
     type:
       - string
@@ -149,14 +156,14 @@ properties:
       - string
       - "null"
     format: "date-time"
-    description: The beginning date of the period that the fee covers. It is applicable only to `subscription` and `charge` fees. This field indicates the start date of the billing period or subscription period associated with the fee.
+    description: The beginning date of the period that the fee covers. It is applicable only to `subscription`, `charge`, `fixed_charge` and `commitment` fees. This field indicates the start date of the billing period or subscription period associated with the fee.
     example: "2022-04-29T08:59:51Z"
   to_date:
     type:
       - string
       - "null"
     format: "date-time"
-    description: The ending date of the period that the fee covers. It is applicable only to `subscription` and `charge` fees. This field indicates the end date of the billing period or subscription period associated with the fee.
+    description: The ending date of the period that the fee covers. It is applicable only to `subscription`, `charge`, `fixed_charge` and `commitment` fees. This field indicates the end date of the billing period or subscription period associated with the fee.
     example: "2022-05-29T08:59:51Z"
   payment_status:
     type: string
@@ -232,15 +239,16 @@ properties:
         type: string
         enum:
           - charge
+          - fixed_charge
           - add_on
           - subscription
           - credit
           - commitment
-        description: The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or `commitment`.
+        description: The fee type. Possible values are `add-on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
         example: subscription
       code:
         type: string
-        description: The code of the fee item. It can be the code of the `add-on`, the code of the `charge`, the code of the `credit` or the code of the `subscription`.
+        description: The code of the fee item. It can be the code of the `add-on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
         example: "startup"
       name:
         type: string
