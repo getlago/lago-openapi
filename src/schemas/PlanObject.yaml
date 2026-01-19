@@ -66,6 +66,12 @@ properties:
       - "null"
     description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
     example: null
+  bill_fixed_charges_monthly:
+    type:
+      - boolean
+      - "null"
+    description: This field, when set to `true`, enables to invoice fixed charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay fixed charges on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
+    example: null
   minimum_commitment:
     $ref: "./MinimumCommitmentObject.yaml"
   charges:
@@ -179,6 +185,77 @@ properties:
           free_units_per_events: 5
           free_units_per_total_aggregation: "500"
         filters: []
+  fixed_charges:
+    type: array
+    description: List of fixed charges for this plan.
+    items:
+      $ref: "./FixedChargeObject.yaml"
+    example:
+      - lago_id: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+        lago_add_on_id: "2b802b80-2b80-2b80-2b80-2b802b802b80"
+        code: "setup_fee"
+        invoice_display_name: "Setup Fee"
+        add_on_code: "setup"
+        created_at: "2026-01-15T10:30:00Z"
+        charge_model: "standard"
+        pay_in_advance: true
+        prorated: false
+        properties:
+          amount: "500"
+        units: 1.0
+        lago_parent_id: null
+        taxes:
+          - lago_id: "3c703c70-3c70-3c70-3c70-3c703c703c70"
+            name: "VAT"
+            code: "vat_20"
+            rate: 20.0
+            description: "Standard VAT rate"
+            applied_to_organization: true
+            created_at: "2026-01-01T00:00:00Z"
+      - lago_id: "4d604d60-4d60-4d60-4d60-4d604d604d60"
+        lago_add_on_id: "5e505e50-5e50-5e50-5e50-5e505e505e50"
+        code: "support_tier"
+        invoice_display_name: "Support Tier"
+        add_on_code: "premium_support"
+        created_at: "2026-01-15T10:30:00Z"
+        charge_model: "graduated"
+        pay_in_advance: false
+        prorated: true
+        properties:
+          graduated_ranges:
+            - from_value: 0
+              to_value: 10
+              per_unit_amount: "5"
+              flat_amount: "200"
+            - from_value: 11
+              to_value: null
+              per_unit_amount: "1"
+              flat_amount: "300"
+        units: 1.0
+        lago_parent_id: null
+        taxes: []
+      - lago_id: "6f406f40-6f40-6f40-6f40-6f406f406f40"
+        lago_add_on_id: "7a307a30-7a30-7a30-7a30-7a307a307a30"
+        code: "storage"
+        invoice_display_name: "Storage Allocation"
+        add_on_code: "cloud_storage"
+        created_at: "2026-01-15T10:30:00Z"
+        charge_model: "volume"
+        pay_in_advance: false
+        prorated: false
+        properties:
+          volume_ranges:
+            - from_value: 0
+              to_value: 100
+              per_unit_amount: "2"
+              flat_amount: "1"
+            - from_value: 101
+              to_value: null
+              per_unit_amount: "1"
+              flat_amount: "0"
+        units: 50.0
+        lago_parent_id: null
+        taxes: []
   taxes:
     type: array
     description: All taxes applied to the plan.

@@ -59,6 +59,12 @@ properties:
           - "null"
         description: This field, when set to `true`, enables to invoice usage-based charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay charges overage on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
         example: null
+      bill_fixed_charges_monthly:
+        type:
+          - boolean
+          - "null"
+        description: This field, when set to `true`, enables to invoice fixed charges on monthly basis, even if the cadence of the plan is `yearly` or `semiannual`. This allows customers to pay fixed charges on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
+        example: null
       tax_codes:
         $ref: "./TaxCodes.yaml"
       minimum_commitment:
@@ -210,6 +216,116 @@ properties:
               fixed_amount: "0.5"
               free_units_per_events: 5
               free_units_per_total_aggregation: "500"
+      fixed_charges:
+        type: array
+        description: Additional fixed charges for this plan.
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Unique identifier of the fixed charge created by Lago (required for updates).
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            add_on_id:
+              type: string
+              format: uuid
+              description: Unique identifier of the add-on associated with this fixed charge.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            code:
+              type: string
+              description: Unique code for the fixed charge. If not provided, it will be automatically generated based on the add-on code.
+              example: "setup_fee"
+            invoice_display_name:
+              type: string
+              description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+              example: "Setup fee"
+            units:
+              type: number
+              description: The number of units for the fixed charge. Defaults to 0 if not provided.
+              example: 1
+              default: 0
+            charge_model:
+              type: string
+              enum:
+                - standard
+                - graduated
+                - volume
+              description: The charge model for the fixed charge. Only `standard`, `graduated`, and `volume` models are supported for fixed charges.
+              example: standard
+            pay_in_advance:
+              type: boolean
+              description: This field determines the billing timing for this specific fixed charge. When set to `true`, the charge is due and invoiced immediately. Conversely, when set to false, the charge is due and invoiced at the end of each billing period. Defaults to `false` if not provided.
+              example: false
+              default: false
+            prorated:
+              type: boolean
+              description: |
+                Specifies whether a fixed charge is prorated based on the remaining number of days in the billing period or billed fully.
+
+                - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
+                - If set to `false`, the charge is billed in full.
+                - Defaults to `false` if not provided.
+
+                Note: Prorated fixed charges with `graduated` model and `pay_in_advance` are not allowed.
+              example: false
+              default: false
+            properties:
+              $ref: "./FixedChargeProperties.yaml"
+              description: List of all thresholds utilized for calculating the fixed charge.
+            tax_codes:
+              $ref: "./TaxCodes.yaml"
+              description: List of taxes applied to the fixed charge.
+            apply_units_immediately:
+              type: boolean
+              description: Determines if the units should be applied immediately upon assignment or deferred to the next billing cycle.
+              example: true
+        example:
+          - id: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            invoice_display_name: "New Setup Fee"
+            charge_model: "standard"
+            apply_units_immediately: true
+            units: 5.0
+          - add_on_id: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            code: "setup_fee"
+            invoice_display_name: "Setup Fee"
+            charge_model: "standard"
+            pay_in_advance: true
+            prorated: false
+            properties:
+              amount: "500"
+            units: 1.0
+            apply_units_immediately: false
+            tax_codes: ["french_standard_vat"]
+          - add_on_id: "4d604d60-4d60-4d60-4d60-4d604d604d60"
+            invoice_display_name: "Support Tier"
+            charge_model: "graduated"
+            pay_in_advance: false
+            prorated: true
+            properties:
+              graduated_ranges:
+                - from_value: 0
+                  to_value: 10
+                  per_unit_amount: "5"
+                  flat_amount: "200"
+                - from_value: 11
+                  to_value: null
+                  per_unit_amount: "1"
+                  flat_amount: "300"
+            units: 2
+          - add_on_id: "6f406f40-6f40-6f40-6f40-6f406f406f40"
+            charge_model: "volume"
+            properties:
+              volume_ranges:
+                - from_value: 0
+                  to_value: 100
+                  per_unit_amount: "2"
+                  flat_amount: "1"
+                - from_value: 101
+                  to_value: null
+                  per_unit_amount: "1"
+                  flat_amount: "0"
+            units: 50.0
       usage_thresholds:
         type: array
         description: List of usage thresholds to apply to the plan.

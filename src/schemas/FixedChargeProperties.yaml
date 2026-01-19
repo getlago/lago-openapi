@@ -1,0 +1,82 @@
+type: object
+properties:
+  # Standard charge model
+  amount:
+    type: string
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: |-
+      - The unit price, excluding tax, for a `standard` charge model. It is expressed as a decimal value.
+      - The amount, excluding tax, for a complete set of units in a `package` charge model. It is expressed as a decimal value.
+    example: "30"
+
+  # Graduated charge model
+  graduated_ranges:
+    type: array
+    description: Graduated ranges, sorted from bottom to top tiers, used for a `graduated` charge model.
+    items:
+      type: object
+      required:
+        - from_value
+        - to_value
+        - flat_amount
+        - per_unit_amount
+      properties:
+        from_value:
+          type: integer
+          description: Specifies the lower value of a tier for a `graduated` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+          example: 0
+        to_value:
+          type:
+            - integer
+            - "null"
+          description: |-
+            Specifies the highest value of a tier for a `graduated` charge model.
+            - This value must be higher than the from_value of the same tier.
+            - This value must be null for the last tier.
+          example: 10
+        flat_amount:
+          type: string
+          pattern: "^[0-9]+.?[0-9]*$"
+          description: The flat amount for a whole tier, excluding tax, for a `graduated` charge model. It is expressed as a decimal value.
+          example: "10"
+        per_unit_amount:
+          type: string
+          pattern: "^[0-9]+.?[0-9]*$"
+          description: The unit price, excluding tax, for a specific tier of a `graduated` charge model. It is expressed as a decimal value.
+          example: "0.5"
+
+  # Volume charge model
+  volume_ranges:
+    type: array
+    description: Volume ranges, sorted from bottom to top tiers, used for a `volume` charge model.
+    items:
+      type: object
+      required:
+        - from_value
+        - to_value
+        - flat_amount
+        - per_unit_amount
+      properties:
+        from_value:
+          type: integer
+          description: Specifies the lower value of a tier for a `volume` charge model. It must be either 0 or the previous range's `to_value + 1` to maintain the proper sequence of values.
+          example: 0
+        to_value:
+          type:
+            - integer
+            - "null"
+          description: |-
+            Specifies the highest value of a tier for a `volume` charge model.
+            - This value must be higher than the `from_value` of the same tier.
+            - This value must be `null` for the last tier.
+          example: 10
+        flat_amount:
+          type: string
+          pattern: "^[0-9]+.?[0-9]*$"
+          description: The flat amount for a whole tier, excluding tax, for a `volume` charge model. It is expressed as a decimal value.
+          example: "10"
+        per_unit_amount:
+          type: string
+          pattern: "^[0-9]+.?[0-9]*$"
+          description: The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.
+          example: "0.5"
