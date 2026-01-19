@@ -1,0 +1,8 @@
+type: object
+required:
+  - fixed_charges
+properties:
+  fixed_charges:
+    type: array
+    items:
+      $ref: "./FixedChargeObject.yaml"

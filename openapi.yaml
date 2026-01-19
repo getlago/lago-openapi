@@ -4630,6 +4630,32 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/fixed_charges:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    get:
+      tags:
+        - subscriptions
+      summary: List subscription fixed charges
+      description: This endpoint retrieves all fixed charges for a specific subscription.
+      operationId: findAllSubscriptionFixedCharges
+      responses:
+        '200':
+          description: List of subscription fixed charges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedCharges'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /taxes:
     post:
       tags:
@@ -17139,6 +17165,38 @@ components:
                       This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
                       For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50 USD.
                     example: '0.5'
+        fixed_charges:
+          type: array
+          description: Additional fixed charges for this plan.
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Unique identifier of the fixed charge created by Lago.
+                example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              invoice_display_name:
+                type: string
+                description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+                example: Setup fee
+              units:
+                type: number
+                description: The number of units for the fixed charge. Defaults to 0 if not provided.
+                example: 1
+                default: 0
+              apply_units_immediately:
+                type: boolean
+                description: Determines if the units should be applied immediately upon assignment or deferred to the next billing cycle.
+                example: true
+              properties:
+                $ref: '#/components/schemas/FixedChargeProperties'
+                description: List of all thresholds utilized for calculating the fixed charge.
+              tax_codes:
+                $ref: '#/components/schemas/TaxCodes'
+                description: List of taxes applied to the fixed charge.
         usage_thresholds:
           type: array
           description: List of usage thresholds applied to the subscription.
@@ -17685,6 +17743,15 @@ components:
       properties:
         entitlement:
           $ref: '#/components/schemas/SubscriptionEntitlementObject'
+    FixedCharges:
+      type: object
+      required:
+        - fixed_charges
+      properties:
+        fixed_charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/FixedChargeObject'
     TaxesPaginated:
       type: object
       required:
