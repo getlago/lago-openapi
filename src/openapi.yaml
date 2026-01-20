@@ -291,6 +291,10 @@ paths:
     $ref: "./resources/plan_entitlement.yaml"
   /plans/{code}/entitlements/{feature_code}/privileges/{privilege_code}:
     $ref: "./resources/plan_entitlement_privileges.yaml"
+  /plans/{code}/metadata:
+    $ref: "./resources/plan_metadata.yaml"
+  /plans/{code}/metadata/{key}:
+    $ref: "./resources/plan_metadata_key.yaml"
   /subscriptions:
     $ref: "./resources/subscriptions.yaml"
   /subscriptions/{external_id}:

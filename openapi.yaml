@@ -4091,6 +4091,135 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /plans/{code}/metadata:
+    post:
+      tags:
+        - plans
+      summary: Replace plan metadata
+      description: |-
+        This endpoint replaces all existing metadata on a plan with the provided key-value pairs.
+        Any existing metadata keys not included in the request will be removed.
+      parameters:
+        - name: code
+          in: path
+          description: The code of the plan.
+          required: true
+          schema:
+            type: string
+            example: startup
+      operationId: replacePlanMetadata
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanMetadataResponse'
+      responses:
+        '200':
+          description: Plan metadata replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - plans
+      summary: Merge plan metadata
+      description: |-
+        This endpoint merges the provided metadata with existing metadata on the plan.
+        Existing keys not in the request are preserved. New keys are added, existing keys are updated.
+      parameters:
+        - name: code
+          in: path
+          description: The code of the plan.
+          required: true
+          schema:
+            type: string
+            example: startup
+      operationId: mergePlanMetadata
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanMetadataResponse'
+      responses:
+        '200':
+          description: Plan metadata merged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - plans
+      summary: Delete all plan metadata
+      description: This endpoint removes all metadata from a plan.
+      parameters:
+        - name: code
+          in: path
+          description: The code of the plan.
+          required: true
+          schema:
+            type: string
+            example: startup
+      operationId: deleteAllPlanMetadata
+      responses:
+        '200':
+          description: Plan metadata deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /plans/{code}/metadata/{key}:
+    delete:
+      tags:
+        - plans
+      summary: Delete a metadata key
+      description: This endpoint removes a single metadata key from a plan.
+      parameters:
+        - name: code
+          in: path
+          description: The code of the plan.
+          required: true
+          schema:
+            type: string
+            example: startup
+        - name: key
+          in: path
+          description: The metadata key to delete.
+          required: true
+          schema:
+            type: string
+            example: external_id
+      operationId: deletePlanMetadataKey
+      responses:
+        '200':
+          description: Metadata key deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /subscriptions:
     post:
       tags:
@@ -16610,6 +16739,13 @@ components:
             sso:
               provider: okta
           description: Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values.
+    PlanMetadataResponse:
+      type: object
+      required:
+        - metadata
+      properties:
+        metadata:
+          $ref: '#/components/schemas/MetadataObject'
     PlanOverridesObject:
       type: object
       description: Based plan overrides.
