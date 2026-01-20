@@ -13645,6 +13645,11 @@ components:
             - 'null'
           description: The name of the wallet.
           example: Prepaid
+        priority:
+          type: integer
+          pattern: ^([1-9]|[1-4][0-9]|50)$
+          description: 'Wallet priority for ordering when a customer has multiple wallets. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50.'
+          example: 50
         rate_amount:
           type: string
           pattern: ^[0-9]+.?[0-9]*$
@@ -17845,6 +17850,11 @@ components:
                 - 'null'
               description: The name of the wallet.
               example: Prepaid
+            priority:
+              type: integer
+              pattern: ^([1-9]|[1-4][0-9]|50)$
+              description: 'Wallet priority for ordering when a customer has multiple wallets. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50.'
+              example: 50
             rate_amount:
               type: string
               pattern: ^[0-9]+.?[0-9]*$
@@ -18078,6 +18088,11 @@ components:
                 - 'null'
               description: The name of the wallet.
               example: new_name
+            priority:
+              type: integer
+              pattern: ^([1-9]|[1-4][0-9]|50)$
+              description: 'Wallet priority for ordering when a customer has multiple wallets. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50.'
+              example: 50
             expiration_at:
               type:
                 - string
