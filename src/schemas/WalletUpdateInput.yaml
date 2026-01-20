@@ -13,7 +13,8 @@ properties:
         example: "new_name"
       priority:
         type: integer
-        pattern: "^([1-9]|[1-4][0-9]|50)$"
+        minimum: 1
+        maximum: 50
         description: "Wallet priority for ordering when a customer has multiple wallets. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50."
         example: 50
       expiration_at:
