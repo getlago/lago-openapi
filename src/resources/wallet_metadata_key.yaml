@@ -1,0 +1,33 @@
+delete:
+  tags:
+    - wallets
+  summary: Delete a metadata key
+  description: This endpoint removes a single metadata key from a wallet.
+  parameters:
+    - name: lago_id
+      in: path
+      description: Unique identifier assigned to the wallet within the Lago application.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    - name: key
+      in: path
+      description: The metadata key to delete.
+      required: true
+      schema:
+        type: string
+        example: 'external_id'
+  operationId: deleteWalletMetadataKey
+  responses:
+    '200':
+      description: Metadata key deleted
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/WalletMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"

@@ -5065,6 +5065,139 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /wallets/{lago_id}/metadata:
+    post:
+      tags:
+        - wallets
+      summary: Replace wallet metadata
+      description: |-
+        This endpoint replaces all existing metadata on a wallet with the provided key-value pairs.
+        Any existing metadata keys not included in the request will be removed.
+      parameters:
+        - name: lago_id
+          in: path
+          description: Unique identifier assigned to the wallet within the Lago application.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      operationId: replaceWalletMetadata
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletMetadataResponse'
+      responses:
+        '200':
+          description: Wallet metadata replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - wallets
+      summary: Merge wallet metadata
+      description: |-
+        This endpoint merges the provided metadata with existing metadata on the wallet.
+        Existing keys not in the request are preserved. New keys are added, existing keys are updated.
+      parameters:
+        - name: lago_id
+          in: path
+          description: Unique identifier assigned to the wallet within the Lago application.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      operationId: mergeWalletMetadata
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletMetadataResponse'
+      responses:
+        '200':
+          description: Wallet metadata merged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - wallets
+      summary: Delete all wallet metadata
+      description: This endpoint removes all metadata from a wallet.
+      parameters:
+        - name: lago_id
+          in: path
+          description: Unique identifier assigned to the wallet within the Lago application.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      operationId: deleteAllWalletMetadata
+      responses:
+        '200':
+          description: Wallet metadata deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /wallets/{lago_id}/metadata/{key}:
+    delete:
+      tags:
+        - wallets
+      summary: Delete a metadata key
+      description: This endpoint removes a single metadata key from a wallet.
+      parameters:
+        - name: lago_id
+          in: path
+          description: Unique identifier assigned to the wallet within the Lago application.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: key
+          in: path
+          description: The metadata key to delete.
+          required: true
+          schema:
+            type: string
+            example: external_id
+      operationId: deleteWalletMetadataKey
+      responses:
+        '200':
+          description: Metadata key deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /wallet_transactions:
     post:
       tags:
@@ -11213,7 +11346,7 @@ components:
         - 'null'
       description: |-
         Custom metadata stored as key-value pairs.
-        Keys are strings (max 40 characters), values can be strings (max 255 characters) or null.
+        Keys are strings (max 100 characters), values can be strings (max 255 characters) or null.
       additionalProperties:
         type:
           - string
@@ -13893,6 +14026,8 @@ components:
             - 'null'
           description: Maximum amount of cents that can be top-up with a single paid transaction.
           example: 1000
+        metadata:
+          $ref: '#/components/schemas/MetadataObject'
     WalletsPaginated:
       type: object
       required:
@@ -18215,6 +18350,8 @@ components:
                     type: boolean
                     description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
                     example: false
+            metadata:
+              $ref: '#/components/schemas/MetadataInput'
     Wallet:
       type: object
       required:
@@ -18383,6 +18520,15 @@ components:
                     type: string
                   description: An array of billable metric codes to which the wallet is applicable. By specifying the billable metric codes in this field, you can restrict the wallet's usage to specific metrics only.
                   example: []
+            metadata:
+              $ref: '#/components/schemas/MetadataInput'
+    WalletMetadataResponse:
+      type: object
+      required:
+        - metadata
+      properties:
+        metadata:
+          $ref: '#/components/schemas/MetadataObject'
     WalletTransactionCreateInput:
       type: object
       required:

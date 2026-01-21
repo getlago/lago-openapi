@@ -321,6 +321,10 @@ paths:
     $ref: "./resources/wallets.yaml"
   /wallets/{lago_id}:
     $ref: "./resources/wallet.yaml"
+  /wallets/{lago_id}/metadata:
+    $ref: "./resources/wallet_metadata.yaml"
+  /wallets/{lago_id}/metadata/{key}:
+    $ref: "./resources/wallet_metadata_key.yaml"
   /wallet_transactions:
     $ref: "./resources/wallet_top_up.yaml"
   /wallet_transactions/{lago_id}:
