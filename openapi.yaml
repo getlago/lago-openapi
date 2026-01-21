@@ -11394,6 +11394,7 @@ components:
         - total_amount_cents
         - credit_amount_cents
         - refund_amount_cents
+        - offset_amount_cents
         - balance_amount_cents
         - taxes_amount_cents
         - taxes_rate
@@ -11516,6 +11517,10 @@ components:
           type: integer
           description: The refunded amount of the credit note, expressed in cents.
           example: 0
+        offset_amount_cents:
+          type: integer
+          description: The ofsetted amount (applied to source invoice) of the credit note, expressed in cents.
+          example: 0
         coupons_adjustment_amount_cents:
           type: integer
           description: The pro-rated amount of the coupons applied to the source invoice.
@@ -11627,6 +11632,12 @@ components:
                 - 'null'
               description: The total amount to be refunded immediately to the payment method used by the customer. For a total or partial refund or credit, the amount in cents must include both the item amount and the applicable tax. The refunded and credited amounts should always balance. The total, including taxes, cannot exceed the invoice’s total fees.”
               example: 500
+            offset_amount_cents:
+              type:
+                - integer
+                - 'null'
+              description: The ofsetted amount (applied to source invoice) of the credit note, expressed in cents.
+              example: 200
             items:
               type: array
               items:
@@ -11650,6 +11661,8 @@ components:
                   amount_cents: 100
                 - fee_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   amount_cents: 500
+                - fee_id: 1a901a90-1a90-1a90-1a90-1a901a901a92
+                  amount_cents: 200
             metadata:
               $ref: '#/components/schemas/MetadataInput'
     CreditNote:
