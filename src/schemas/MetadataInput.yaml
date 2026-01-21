@@ -1,0 +1,10 @@
+type: object
+description: |-
+  Metadata to set as key-value pairs. Keys are strings (max 100 characters), values can be strings (max 255 characters) or null.
+additionalProperties:
+  type:
+    - string
+    - "null"
+example:
+  external_id: "ext-123"
+  synced_at: "2024-01-15"

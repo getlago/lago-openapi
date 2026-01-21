@@ -1,0 +1,97 @@
+post:
+  tags:
+    - plans
+  summary: Replace plan metadata
+  description: |-
+    This endpoint replaces all existing metadata on a plan with the provided key-value pairs.
+    Any existing metadata keys not included in the request will be removed.
+  parameters:
+    - name: code
+      in: path
+      description: The code of the plan.
+      required: true
+      schema:
+        type: string
+        example: 'startup'
+  operationId: replacePlanMetadata
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/PlanMetadataResponse.yaml"
+  responses:
+    '200':
+      description: Plan metadata replaced
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/PlanMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"
+    '422':
+      $ref: "../responses/UnprocessableEntity.yaml"
+
+patch:
+  tags:
+    - plans
+  summary: Merge plan metadata
+  description: |-
+    This endpoint merges the provided metadata with existing metadata on the plan.
+    Existing keys not in the request are preserved. New keys are added, existing keys are updated.
+  parameters:
+    - name: code
+      in: path
+      description: The code of the plan.
+      required: true
+      schema:
+        type: string
+        example: 'startup'
+  operationId: mergePlanMetadata
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/PlanMetadataResponse.yaml"
+  responses:
+    '200':
+      description: Plan metadata merged
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/PlanMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"
+    '422':
+      $ref: "../responses/UnprocessableEntity.yaml"
+
+delete:
+  tags:
+    - plans
+  summary: Delete all plan metadata
+  description: This endpoint removes all metadata from a plan.
+  parameters:
+    - name: code
+      in: path
+      description: The code of the plan.
+      required: true
+      schema:
+        type: string
+        example: 'startup'
+  operationId: deleteAllPlanMetadata
+  responses:
+    '200':
+      description: Plan metadata deleted
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/PlanMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"

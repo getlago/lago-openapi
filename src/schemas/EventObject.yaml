@@ -1,16 +1,16 @@
 type: object
 required:
-  - lago_id
   - transaction_id
   - lago_customer_id
   - code
   - timestamp
   - lago_subscription_id
   - external_subscription_id
-  - created_at
 properties:
   lago_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: "uuid"
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
     description: Unique identifier assigned to the event within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the event's record within the Lago system
@@ -71,7 +71,9 @@ properties:
     example: "sub_1234567890"
     description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
   created_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
     example: "2022-04-29T08:59:51Z"
     description: The creation date of the event's record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
