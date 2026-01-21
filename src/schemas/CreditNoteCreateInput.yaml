@@ -37,19 +37,19 @@ properties:
         type:
           - integer
           - "null"
-        description: The total amount to be credited to the customer balance for discounts on future invoices. For a total or partial refund or credit, the amount in cents must include both the item amount and the applicable tax. The refunded and credited amounts should always balance. The total, including taxes, cannot exceed the invoice’s total fees.”
+        description: The total amount to be credited to the customer balance for discounts on future invoices. For a total or partial refund, credit or offset, the amount in cents must include both the item amount and the applicable tax. The refunded, credited and offsetted amounts should always balance. The total, including taxes, cannot exceed the invoice’s total fees.”
         example: 100
       refund_amount_cents:
         type:
           - integer
           - "null"
-        description: The total amount to be refunded immediately to the payment method used by the customer. For a total or partial refund or credit, the amount in cents must include both the item amount and the applicable tax. The refunded and credited amounts should always balance. The total, including taxes, cannot exceed the invoice’s total fees.”
+        description: The total amount to be refunded immediately to the payment method used by the customer. For a total or partial refund, credit or offset, the amount in cents must include both the item amount and the applicable tax. The refunded, credited and offsetted amounts should always balance. The total, including taxes, cannot exceed the invoice’s total fees.”
         example: 500
       offset_amount_cents:
         type:
           - integer
           - "null"
-        description: The ofsetted amount (applied to source invoice) of the credit note, expressed in cents.
+        description: The total amount to be immediately deducted from the invoice balance. For a total or partial refund, credit or offset, the amount in cents must include both the item amount and the applicable tax. The refunded, credited and offsetted amounts should always balance. The total, including taxes, cannot exceed the invoice’s total fees.”
         example: 200
       items:
         type: array
