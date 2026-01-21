@@ -8,7 +8,8 @@
     "test": "npm run build && redocly lint openapi.yaml && spectral lint openapi.yaml",
     "clean": "rm -r _build",
     "preview:swagger": "npm run build && docker run -p 8080:8080 -e SWAGGER_JSON=/swagger/openapi.yaml -v './openapi.yaml:/swagger/openapi.yaml' swaggerapi/swagger-ui",
-    "preview:redocly": "redocly preview-docs src/openapi.yaml --port 8080"  },
+    "preview:redocly": "redocly preview-docs src/openapi.yaml --port 8080"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/getlago/lago-openapi.git"
