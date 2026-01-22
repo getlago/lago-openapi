@@ -13,6 +13,7 @@ properties:
       - sub_total_excluding_taxes_amount_cents
       - max_creditable_amount_cents
       - max_refundable_amount_cents
+      - max_offsettable_amount_cents
       - coupons_adjustment_amount_cents
       - precise_coupons_adjustment_amount_cents
       - taxes_rate
@@ -54,6 +55,10 @@ properties:
       max_refundable_amount_cents:
         type: integer
         description: The refunded amount of the credit note, expressed in cents.
+        example: 0
+      max_offsettable_amount_cents:
+        type: integer
+        description: The ofsetted amount of the credit note, expressed in cents.
         example: 0
       coupons_adjustment_amount_cents:
         type: integer
