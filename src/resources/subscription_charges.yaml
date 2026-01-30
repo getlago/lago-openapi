@@ -1,0 +1,30 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription.
+    required: true
+    schema:
+      type: string
+      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+get:
+  tags:
+    - subscriptions
+  summary: List all charges for a subscription
+  description: |-
+    This endpoint retrieves all effective charges for a specific subscription.
+    If the subscription has plan overrides with charge overrides, the overridden charges are returned.
+  operationId: findAllSubscriptionCharges
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+  responses:
+    '200':
+      description: List of charges
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ChargesPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

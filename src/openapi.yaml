@@ -319,6 +319,10 @@ paths:
     $ref: "./resources/subscription_entitlement.yaml"
   /subscriptions/{external_id}/entitlements/{feature_code}/privileges/{privilege_code}:
     $ref: "./resources/subscription_entitlement_privileges.yaml"
+  /subscriptions/{external_id}/charges:
+    $ref: "./resources/subscription_charges.yaml"
+  /subscriptions/{external_id}/charges/{charge_code}:
+    $ref: "./resources/subscription_charge.yaml"
   /taxes:
     $ref: "./resources/taxes.yaml"
   /taxes/{code}:

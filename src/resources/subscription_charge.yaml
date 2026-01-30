@@ -1,0 +1,68 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription.
+    required: true
+    schema:
+      type: string
+      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+  - name: charge_code
+    in: path
+    description: Code of the existing charge.
+    required: true
+    schema:
+      type: string
+      example: 'api_requests_charge'
+get:
+  tags:
+    - subscriptions
+  summary: Retrieve a charge for a subscription
+  description: |-
+    This endpoint retrieves a specific effective charge for a subscription.
+    If the subscription has a plan override with a charge override, the overridden charge is returned.
+  operationId: findSubscriptionCharge
+  responses:
+    '200':
+      description: Charge
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Charge.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+put:
+  tags:
+    - subscriptions
+  summary: Override a charge for a subscription
+  description: |-
+    This endpoint creates or updates a charge override for a specific subscription.
+    If the subscription does not have a plan override yet, one will be created automatically.
+    The charge override allows customizing specific charge properties (invoice_display_name, min_amount_cents, properties, filters, taxes, applied_pricing_unit) without affecting the original plan charge.
+    This is a premium feature.
+  operationId: overrideSubscriptionCharge
+  requestBody:
+    description: Charge override payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/SubscriptionChargeOverride.yaml'
+    required: true
+  responses:
+    '200':
+      description: Charge override created or updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Charge.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
