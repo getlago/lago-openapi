@@ -1,7 +1,36 @@
+post:
+  tags:
+    - customers
+  summary: Create a wallet
+  description: This endpoint is used to create a wallet with prepaid credits.
+  operationId: createCustomerWallet
+  parameters:
+    - $ref: "../parameters/external_customer_id_path.yaml"
+  requestBody:
+    description: Wallet payload
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/WalletCreateInput.yaml"
+    required: true
+  responses:
+    "200":
+      description: Wallet created
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Wallet.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
 get:
   tags:
     - customers
-    - wallets
   summary: List all customer's wallets
   description: This endpoint is used to list all wallets with prepaid credits of a customer
   operationId: findAllCustomerWallets
