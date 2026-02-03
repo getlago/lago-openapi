@@ -1,0 +1,27 @@
+parameters:
+  - name: lago_id
+    in: path
+    description: The payment method unique identifier, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: uuid
+      example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+  - $ref: "../parameters/external_customer_id_path.yaml"
+delete:
+  tags:
+    - payment_methods
+  summary: Delete a payment method
+  description: This endpoint deletes a specific payment method for a customer.
+  operationId: destroyPaymentMethod
+  responses:
+    '200':
+      description: Payment method deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PaymentMethod.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
