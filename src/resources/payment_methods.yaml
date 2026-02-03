@@ -1,0 +1,19 @@
+get:
+  tags:
+    - payment_methods
+  summary: List all customer payment methods
+  description: This endpoint retrieves all payment methods of a Customer.
+  operationId: findAllCustomersPaymentMethods
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - $ref: "../parameters/external_customer_id_path.yaml"
+  responses:
+    '200':
+      description: List of customer's payment methods
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PaymentMethodsPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'

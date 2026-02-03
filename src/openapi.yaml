@@ -137,6 +137,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/api-reference/payments/payment-object
+  - name: payment_methods
+    description: Everything about Payments Methods
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/api-reference/payments/payment-method-object
 
 paths:
   /billing_entities:
@@ -229,6 +234,12 @@ paths:
     $ref: "./resources/customer_past_usage.yaml"
   /customers/{external_customer_id}/checkout_url:
     $ref: "./resources/customer_checkout_url.yaml"
+  /customers/{external_customer_id}/payment_methods:
+    $ref: "./resources/payment_methods.yaml"
+  /customers/{external_customer_id}/payment_methods/{lago_id}/set_as_default:
+    $ref: "./resources/payment_method_set_as_default.yaml"
+  /customers/{external_customer_id}/payment_methods/{lago_id}:
+    $ref: "./resources/payment_method.yaml"
   /events:
     $ref: "./resources/events.yaml"
   /events/batch:
