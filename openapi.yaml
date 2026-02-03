@@ -133,6 +133,11 @@ tags:
     externalDocs:
       description: Find out more
       url: https://doc.getlago.com/api-reference/payments/payment-object
+  - name: payment_methods
+    description: Everything about Payments Methods
+    externalDocs:
+      description: Find out more
+      url: https://doc.getlago.com/api-reference/payments/payment-method-object
 externalDocs:
   description: Lago Github
   url: https://github.com/getlago
@@ -2681,6 +2686,82 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{external_customer_id}/payment_methods:
+    get:
+      tags:
+        - payment_methods
+      summary: List all customer payment methods
+      description: This endpoint retrieves all payment methods of a Customer.
+      operationId: findAllCustomersPaymentMethods
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/external_customer_id_path'
+      responses:
+        '200':
+          description: List of customer's payment methods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethodsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{external_customer_id}/payment_methods/{lago_id}/set_as_default:
+    parameters:
+      - name: lago_id
+        in: path
+        description: The payment method unique identifier, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - $ref: '#/components/parameters/external_customer_id_path'
+    put:
+      tags:
+        - payment_methods
+      operationId: paymentMethodSetAsDefault
+      summary: Set the payment method as default
+      description: Use the payment method as default when not selected a payment method
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/payment_methods/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        description: The payment method unique identifier, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - $ref: '#/components/parameters/external_customer_id_path'
+    delete:
+      tags:
+        - payment_methods
+      summary: Delete a payment method
+      description: This endpoint deletes a specific payment method for a customer.
+      operationId: destroyPaymentMethod
+      responses:
+        '200':
+          description: Payment method deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /events:
     post:
       tags:
@@ -14437,6 +14518,75 @@ components:
               type: string
               example: https://foo.bar
               description: The new generated Payment Provider Checkout URL for the Customer.
+    PaymentMethodObject:
+      type: object
+      required:
+        - lago_id
+        - is_default
+        - payment_provider_type
+        - provider_method_id
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the payment method, created by Lago.
+          example: 4cf085a7-c196-4f07-a543-97c50ec6e8b2
+        is_default:
+          type: boolean
+          description: Indicates whether this payment method is the default one for the customer.
+          example: true
+        payment_provider_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the payment provider associated with this payment method.
+          example: stripe_prod
+        payment_provider_name:
+          type:
+            - string
+            - 'null'
+          description: Human-readable name of the payment provider.
+          example: Stripe
+        payment_provider_type:
+          type: string
+          description: The type of the payment provider.
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+            - flutterwave
+            - moneyhash
+          example: stripe
+        provider_method_id:
+          type: string
+          description: Unique identifier of the payment method within the payment provider.
+          example: pm_1N8ZQX2eZvKYlo2CkL9Y8XYZ
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the payment method was created in Lago's database.
+          example: '2025-01-21T00:10:29Z'
+    PaymentMethodsPaginated:
+      type: object
+      required:
+        - payment_methods
+        - meta
+      properties:
+        payment_methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethodObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaymentMethod:
+      type: object
+      required:
+        - payment_method
+      properties:
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodObject'
     EventObject:
       type: object
       required:

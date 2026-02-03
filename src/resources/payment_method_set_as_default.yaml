@@ -1,0 +1,27 @@
+parameters:
+  - name: lago_id
+    in: path
+    description: The payment method unique identifier, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: uuid
+      example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
+  - $ref: "../parameters/external_customer_id_path.yaml"
+put:
+  tags:
+    - payment_methods
+  operationId: paymentMethodSetAsDefault
+  summary: Set the payment method as default
+  description: Use the payment method as default when not selected a payment method
+  responses:
+    '200':
+      description: Return a 200 status to indicate that the data was received successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PaymentMethod.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
