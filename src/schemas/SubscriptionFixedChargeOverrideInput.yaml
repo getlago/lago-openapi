@@ -1,0 +1,22 @@
+type: object
+description: Input for overriding a fixed charge at the subscription level.
+properties:
+  invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the add-on will be used as the default display name.
+    example: "Setup Fee"
+  units:
+    type: string
+    description: The quantity of units for the fixed charge.
+    example: "1.0"
+  apply_units_immediately:
+    type: boolean
+    description: When set to `true`, the fixed charge units are applied immediately for active subscriptions. When set to `false`, the units are applied at the next billing period.
+    example: false
+  properties:
+    $ref: "./ChargeProperties.yaml"
+    description: List of all thresholds utilized for calculating the fixed charge.
+  tax_codes:
+    $ref: "./TaxCodes.yaml"

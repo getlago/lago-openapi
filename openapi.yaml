@@ -5050,6 +5050,206 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/charges:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription.
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    get:
+      tags:
+        - subscriptions
+      summary: List all charges for a subscription
+      description: |-
+        This endpoint retrieves all effective charges for a specific subscription.
+        If the subscription has plan overrides with charge overrides, the overridden charges are returned.
+      operationId: findAllSubscriptionCharges
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: List of charges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/charges/{charge_code}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription.
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - name: charge_code
+        in: path
+        description: Code of the existing charge.
+        required: true
+        schema:
+          type: string
+          example: api_requests_charge
+    get:
+      tags:
+        - subscriptions
+      summary: Retrieve a charge for a subscription
+      description: |-
+        This endpoint retrieves a specific effective charge for a subscription.
+        If the subscription has a plan override with a charge override, the overridden charge is returned.
+      operationId: findSubscriptionCharge
+      responses:
+        '200':
+          description: Charge
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - subscriptions
+      summary: Override a charge for a subscription
+      description: |-
+        This endpoint creates or updates a charge override for a specific subscription.
+        If the subscription does not have a plan override yet, one will be created automatically.
+        The charge override allows customizing specific charge properties (invoice_display_name, min_amount_cents, properties, filters, taxes, applied_pricing_unit) without affecting the original plan charge.
+        This is a premium feature.
+      operationId: overrideSubscriptionCharge
+      requestBody:
+        description: Charge override payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionChargeOverride'
+        required: true
+      responses:
+        '200':
+          description: Charge override created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Charge'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /subscriptions/{external_id}/fixed_charges:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription.
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    get:
+      tags:
+        - subscriptions
+      summary: List all fixed charges for a subscription
+      description: |-
+        This endpoint retrieves all effective fixed charges for a specific subscription.
+        If the subscription has plan overrides with fixed charge overrides, the overridden fixed charges are returned.
+      operationId: findAllSubscriptionFixedCharges
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: List of fixed charges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedChargesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/fixed_charges/{fixed_charge_code}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription.
+        required: true
+        schema:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+      - name: fixed_charge_code
+        in: path
+        description: Code of the existing fixed charge.
+        required: true
+        schema:
+          type: string
+          example: setup_fee_charge
+    get:
+      tags:
+        - subscriptions
+      summary: Retrieve a fixed charge for a subscription
+      description: |-
+        This endpoint retrieves a specific effective fixed charge for a subscription.
+        If the subscription has a plan override with a fixed charge override, the overridden fixed charge is returned.
+      operationId: findSubscriptionFixedCharge
+      responses:
+        '200':
+          description: Fixed Charge
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedCharge'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - subscriptions
+      summary: Override a fixed charge for a subscription
+      description: |-
+        This endpoint creates or updates a fixed charge override for a specific subscription.
+        If the subscription does not have a plan override yet, one will be created automatically.
+        The fixed charge override allows customizing specific fixed charge properties (invoice_display_name, units, properties, taxes) without affecting the original plan fixed charge.
+        This is a premium feature.
+      operationId: overrideSubscriptionFixedCharge
+      requestBody:
+        description: Fixed charge override payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionFixedChargeOverride'
+        required: true
+      responses:
+        '200':
+          description: Fixed charge override created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedCharge'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /taxes:
     post:
       tags:
@@ -17352,6 +17552,10 @@ components:
       required:
         - filter
       properties:
+        cascade_updates:
+          type: boolean
+          description: This field determines whether the changes made to the filter should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
+          example: true
         filter:
           type: object
           required:
@@ -17389,6 +17593,10 @@ components:
       required:
         - filter
       properties:
+        cascade_updates:
+          type: boolean
+          description: This field determines whether the changes made to the filter should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
+          example: true
         filter:
           type: object
           properties:
@@ -18199,6 +18407,80 @@ components:
       properties:
         entitlement:
           $ref: '#/components/schemas/SubscriptionEntitlementObject'
+    SubscriptionChargeOverrideInput:
+      type: object
+      description: Input for overriding a charge at the subscription level.
+      properties:
+        invoice_display_name:
+          type: string
+          description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
+          example: Custom API Requests
+        min_amount_cents:
+          type: integer
+          description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
+          example: 500
+        properties:
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the charge.
+        filters:
+          type: array
+          description: List of filters used to apply differentiated pricing based on additional event properties.
+          items:
+            $ref: '#/components/schemas/ChargeFilterInput'
+        tax_codes:
+          $ref: '#/components/schemas/TaxCodes'
+        applied_pricing_unit:
+          type: object
+          description: The pricing unit to apply to the charge.
+          properties:
+            code:
+              type: string
+              description: The code of the pricing unit.
+              example: credits
+            conversion_rate:
+              type: string
+              description: |-
+                The conversion rate from pricing units to the plan's currency.
+                This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
+                For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50.
+              example: '0.5'
+    SubscriptionChargeOverride:
+      type: object
+      required:
+        - charge
+      properties:
+        charge:
+          $ref: '#/components/schemas/SubscriptionChargeOverrideInput'
+    SubscriptionFixedChargeOverrideInput:
+      type: object
+      description: Input for overriding a fixed charge at the subscription level.
+      properties:
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the add-on will be used as the default display name.
+          example: Setup Fee
+        units:
+          type: string
+          description: The quantity of units for the fixed charge.
+          example: '1.0'
+        apply_units_immediately:
+          type: boolean
+          description: When set to `true`, the fixed charge units are applied immediately for active subscriptions. When set to `false`, the units are applied at the next billing period.
+          example: false
+        properties:
+          $ref: '#/components/schemas/ChargeProperties'
+          description: List of all thresholds utilized for calculating the fixed charge.
+        tax_codes:
+          $ref: '#/components/schemas/TaxCodes'
+    SubscriptionFixedChargeOverride:
+      type: object
+      required:
+        - fixed_charge
+      properties:
+        fixed_charge:
+          $ref: '#/components/schemas/SubscriptionFixedChargeOverrideInput'
     TaxesPaginated:
       type: object
       required:
