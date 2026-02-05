@@ -13609,6 +13609,14 @@ components:
           type: string
           example: premium
           description: The unique code representing the plan to be attached to the customer. This code must correspond to the `code` property of one of the active plans.
+        plan_amount_cents:
+          type: integer
+          description: The base cost of the related plan, excluding any applicable taxes, that is billed on a recurring basis.
+          example: 10000
+        plan_amount_currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the related plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
+          example: USD
         status:
           type: string
           description: |-
