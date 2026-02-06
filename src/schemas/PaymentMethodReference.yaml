@@ -1,0 +1,15 @@
+type: object
+description: Reference to a specific payment method for processing the payment.
+properties:
+  payment_method_type:
+    type: string
+    enum:
+      - provider
+      - manual
+    description: The type of payment method to use.
+    example: "provider"
+  payment_method_id:
+    type: string
+    format: uuid
+    description: The unique identifier of the payment method (required when using a specific provider payment method).
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"

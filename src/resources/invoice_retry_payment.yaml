@@ -6,6 +6,16 @@ post:
   parameters:
     - $ref: '../parameters/lago_invoice_id.yaml'
   operationId: retryPayment
+  requestBody:
+    description: Payment method to use for the retry (optional)
+    required: false
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            payment_method:
+              $ref: '../schemas/PaymentMethodReference.yaml'
   responses:
     '200':
       description: Invoice payment retried
