@@ -1,0 +1,48 @@
+parameters:
+  - $ref: "../parameters/external_customer_id_path.yaml"
+  - $ref: "../parameters/wallet_code.yaml"
+get:
+  tags:
+    - wallets
+  summary: List wallet alerts
+  description: This endpoint enables the retrieval of all alerts for a wallet.
+  operationId: getCustomerWalletAlerts
+  responses:
+    "200":
+      description: Wallet alerts
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Alerts.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+post:
+  tags:
+    - wallets
+  summary: Create a wallet alert
+  description: This endpoint allows you to create a new alert for a wallet.
+  operationId: createCustomerWalletAlert
+  requestBody:
+    description: Create a new alert for a wallet
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/WalletAlertCreateInput.yaml"
+    required: true
+  responses:
+    "200":
+      description: Wallet alert created
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Alert.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
