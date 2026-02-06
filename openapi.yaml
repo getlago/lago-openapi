@@ -4245,7 +4245,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscription'
+                $ref: '#/components/schemas/SubscriptionExtended'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -4341,7 +4341,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscription'
+                $ref: '#/components/schemas/SubscriptionExtended'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -17595,6 +17595,27 @@ components:
               description: The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
             plan_overrides:
               $ref: '#/components/schemas/PlanOverridesObject'
+    ApplicableUsageThreshold:
+      type: object
+      required:
+        - threshold_display_name
+        - amount_cents
+        - recurring
+      properties:
+        threshold_display_name:
+          type:
+            - string
+            - 'null'
+          description: The display name of the usage threshold.
+          example: Threshold 1
+        amount_cents:
+          type: integer
+          description: The amount to reach to trigger a `progressive_billing` invoice.
+          example: 10000
+        recurring:
+          type: boolean
+          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
+          example: true
     SubscriptionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
@@ -17602,7 +17623,12 @@ components:
           properties:
             plan:
               $ref: '#/components/schemas/PlanObject'
-    Subscription:
+            applicable_usage_thresholds:
+              type: array
+              items:
+                $ref: '#/components/schemas/ApplicableUsageThreshold'
+              description: List of usage thresholds applicable to this subscription.
+    SubscriptionExtended:
       type: object
       required:
         - subscription
@@ -17646,6 +17672,13 @@ components:
               description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
             plan_overrides:
               $ref: '#/components/schemas/PlanOverridesObject'
+    Subscription:
+      type: object
+      required:
+        - subscription
+      properties:
+        subscription:
+          $ref: '#/components/schemas/SubscriptionObject'
     LifetimeUsageThresholdObject:
       type: object
       required:
@@ -19441,6 +19474,11 @@ components:
               $ref: '#/components/schemas/CustomerObject'
             usage_threshold:
               $ref: '#/components/schemas/UsageThresholdObject'
+            applicable_usage_thresholds:
+              type: array
+              items:
+                $ref: '#/components/schemas/ApplicableUsageThreshold'
+              description: List of usage thresholds applicable to this subscription.
     WalletTransactionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/WalletTransactionObject'

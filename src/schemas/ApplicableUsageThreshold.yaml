@@ -1,0 +1,20 @@
+type: object
+required:
+  - threshold_display_name
+  - amount_cents
+  - recurring
+properties:
+  threshold_display_name:
+    type:
+      - string
+      - "null"
+    description: The display name of the usage threshold.
+    example: "Threshold 1"
+  amount_cents:
+    type: integer
+    description: The amount to reach to trigger a `progressive_billing` invoice.
+    example: 10000
+  recurring:
+    type: boolean
+    description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
+    example: true
