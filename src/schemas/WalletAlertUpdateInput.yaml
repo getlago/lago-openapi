@@ -1,0 +1,19 @@
+type: object
+required:
+  - alert
+properties:
+  alert:
+    allOf:
+      - $ref: './AlertBaseInput.yaml'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Unique code used to identify the alert.
+            example: "wallet_balance_alert"
+          name:
+            type:
+              - string
+              - "null"
+            description: The name of the alert.
+            example: "Wallet Balance Alert"
