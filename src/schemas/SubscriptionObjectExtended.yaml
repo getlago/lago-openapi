@@ -4,8 +4,3 @@ allOf:
     properties:
       plan:
         $ref: './PlanObject.yaml'
-      applicable_usage_thresholds:
-        type: array
-        items:
-          $ref: './ApplicableUsageThreshold.yaml'
-        description: List of usage thresholds applicable to this subscription.
