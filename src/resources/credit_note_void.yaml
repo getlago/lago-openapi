@@ -19,7 +19,7 @@ put:
       content:
         application/json:
           schema:
-            $ref: '../schemas/CreditNoteWithCustomer.yaml'
+            $ref: '../schemas/CreditNoteExtended.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
     '404':

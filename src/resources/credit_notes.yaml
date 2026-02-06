@@ -17,7 +17,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/CreditNoteWithCustomer.yaml'
+            $ref: '../schemas/CreditNoteExtended.yaml'
     '400':
       $ref: '../responses/BadRequest.yaml'
     '401':
