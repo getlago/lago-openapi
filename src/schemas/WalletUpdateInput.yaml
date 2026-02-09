@@ -131,6 +131,12 @@ properties:
                 - "null"
               description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
               example: "Tokens for models 'high-fidelity-boost'"
+            payment_method:
+              $ref: "./PaymentMethodReference.yaml"
+              description: Optional payment method to use for processing recurring top-up payments.
+      payment_method:
+        $ref: "./PaymentMethodReference.yaml"
+        description: Optional payment method to use for processing wallet top-up payments.
       applies_to:
         type:
           - object

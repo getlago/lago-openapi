@@ -13648,6 +13648,22 @@ components:
             $ref: '#/components/schemas/PaymentRequestObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    PaymentMethodReference:
+      type: object
+      description: Reference to a specific payment method for processing the payment.
+      properties:
+        payment_method_type:
+          type: string
+          enum:
+            - provider
+            - manual
+          description: The type of payment method to use.
+          example: provider
+        payment_method_id:
+          type: string
+          format: uuid
+          description: The unique identifier of the payment method (required when using a specific provider payment method).
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     SubscriptionObject:
       type: object
       required:
@@ -13835,6 +13851,9 @@ components:
 
             - `generate`: An invoice is generated for the unbilled usage.
             - `skip`: No invoice is generated for the unbilled usage.
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodReference'
+          description: The payment method assigned to this subscription for processing payments.
     SubscriptionsPaginated:
       type: object
       required:
@@ -13976,6 +13995,9 @@ components:
           type: boolean
           description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
           example: false
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodReference'
+          description: The payment method assigned to this recurring transaction rule for processing top-up payments.
     WalletObject:
       type: object
       required:
@@ -14146,6 +14168,9 @@ components:
             - 'null'
           description: Maximum amount of cents that can be top-up with a single paid transaction.
           example: 1000
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodReference'
+          description: The payment method assigned to this wallet for processing top-up payments.
         metadata:
           $ref: '#/components/schemas/MetadataObject'
     WalletsPaginated:
@@ -15117,22 +15142,6 @@ components:
                 - refunded
               description: The payment status of the fee. Possible values are `pending`, `succeeded`, `failed` or `refunded`.
               example: succeeded
-    PaymentMethodReference:
-      type: object
-      description: Reference to a specific payment method for processing the payment.
-      properties:
-        payment_method_type:
-          type: string
-          enum:
-            - provider
-            - manual
-          description: The type of payment method to use.
-          example: provider
-        payment_method_id:
-          type: string
-          format: uuid
-          description: The unique identifier of the payment method (required when using a specific provider payment method).
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     InvoiceOneOffCreateInput:
       type: object
       required:
@@ -17786,6 +17795,9 @@ components:
               description: The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
             plan_overrides:
               $ref: '#/components/schemas/PlanOverridesObject'
+            payment_method:
+              $ref: '#/components/schemas/PaymentMethodReference'
+              description: Optional payment method to use for processing subscription payments.
     SubscriptionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
@@ -17837,6 +17849,9 @@ components:
               description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
             plan_overrides:
               $ref: '#/components/schemas/PlanOverridesObject'
+            payment_method:
+              $ref: '#/components/schemas/PaymentMethodReference'
+              description: Optional payment method to use for processing subscription payments.
     LifetimeUsageThresholdObject:
       type: object
       required:
@@ -18561,6 +18576,12 @@ components:
                     type: boolean
                     description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
                     example: false
+                  payment_method:
+                    $ref: '#/components/schemas/PaymentMethodReference'
+                    description: Optional payment method to use for processing recurring top-up payments.
+            payment_method:
+              $ref: '#/components/schemas/PaymentMethodReference'
+              description: Optional payment method to use for processing wallet top-up payments.
             metadata:
               $ref: '#/components/schemas/MetadataInput'
     Wallet:
@@ -18704,6 +18725,12 @@ components:
                       - 'null'
                     description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
                     example: Tokens for models 'high-fidelity-boost'
+                  payment_method:
+                    $ref: '#/components/schemas/PaymentMethodReference'
+                    description: Optional payment method to use for processing recurring top-up payments.
+            payment_method:
+              $ref: '#/components/schemas/PaymentMethodReference'
+              description: Optional payment method to use for processing wallet top-up payments.
             applies_to:
               type:
                 - object
@@ -18793,6 +18820,9 @@ components:
               type: boolean
               description: When true, allows topping up the wallet with transactions that exceed the paid top-up limits. Defaults to false.
               example: false
+            payment_method:
+              $ref: '#/components/schemas/PaymentMethodReference'
+              description: Optional payment method to use for processing the wallet transaction payment.
             metadata:
               type:
                 - array
@@ -18924,6 +18954,9 @@ components:
             - 'null'
           description: The name of the wallet transaction. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
           example: Tokens for models 'high-fidelity-boost'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodReference'
+          description: The payment method assigned to this wallet transaction for processing the payment.
     WalletTransactions:
       type: object
       required:

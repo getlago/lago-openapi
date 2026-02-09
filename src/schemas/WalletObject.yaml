@@ -165,5 +165,8 @@ properties:
       - "null"
     description: Maximum amount of cents that can be top-up with a single paid transaction.
     example: 1000
+  payment_method:
+    $ref: "./PaymentMethodReference.yaml"
+    description: The payment method assigned to this wallet for processing top-up payments.
   metadata:
     $ref: "./MetadataObject.yaml"

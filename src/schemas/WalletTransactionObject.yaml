@@ -109,3 +109,6 @@ properties:
       - "null"
     description: The name of the wallet transaction. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
     example: "Tokens for models 'high-fidelity-boost'"
+  payment_method:
+    $ref: "./PaymentMethodReference.yaml"
+    description: The payment method assigned to this wallet transaction for processing the payment.

@@ -34,3 +34,6 @@ properties:
         description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
       plan_overrides:
         $ref: "../schemas/PlanOverridesObject.yaml"
+      payment_method:
+        $ref: "./PaymentMethodReference.yaml"
+        description: Optional payment method to use for processing subscription payments.
