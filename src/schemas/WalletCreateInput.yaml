@@ -13,6 +13,12 @@ properties:
           - "null"
         description: The name of the wallet.
         example: "Prepaid"
+      code:
+        type:
+          - string
+          - "null"
+        description: The code of the wallet.
+        example: "prepaid"
       priority:
         type: integer
         minimum: 1
