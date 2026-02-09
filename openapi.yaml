@@ -13949,6 +13949,12 @@ components:
             - 'null'
           description: The name of the wallet.
           example: Prepaid
+        code:
+          type:
+            - string
+            - 'null'
+          description: The code of the wallet.
+          example: prepaid
         priority:
           type: integer
           minimum: 1
@@ -16112,6 +16118,12 @@ components:
               type: string
               description: The conversion rate from pricing units to the plan's currency.
               example: '0.5'
+        accepts_target_wallet:
+          type:
+            - boolean
+            - 'null'
+          description: Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+          example: false
     FixedChargeProperties:
       type: object
       properties:
@@ -16862,6 +16874,12 @@ components:
                           This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
                           For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50.
                         example: '0.5'
+                  accepts_target_wallet:
+                    type:
+                      - boolean
+                      - 'null'
+                    description: Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+                    example: false
               example:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
@@ -17195,6 +17213,12 @@ components:
                           This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
                           For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50 USD.
                         example: '0.5'
+                  accepts_target_wallet:
+                    type:
+                      - boolean
+                      - 'null'
+                    description: Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+                    example: false
               example:
                 - billable_metric_id: 1a901a90-1a90-1a90-1a90-1a901a901a91
                   charge_model: package
@@ -18174,6 +18198,12 @@ components:
                 - 'null'
               description: The name of the wallet.
               example: Prepaid
+            code:
+              type:
+                - string
+                - 'null'
+              description: The code of the wallet.
+              example: prepaid
             priority:
               type: integer
               minimum: 1
@@ -18415,6 +18445,12 @@ components:
                 - 'null'
               description: The name of the wallet.
               example: new_name
+            code:
+              type:
+                - string
+                - 'null'
+              description: The code of the wallet.
+              example: prepaid
             priority:
               type: integer
               minimum: 1

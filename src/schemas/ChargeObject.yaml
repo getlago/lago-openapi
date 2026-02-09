@@ -106,3 +106,9 @@ properties:
         type: string
         description: The conversion rate from pricing units to the plan's currency.
         example: "0.5"
+  accepts_target_wallet:
+    type:
+      - boolean
+      - "null"
+    description: Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+    example: false

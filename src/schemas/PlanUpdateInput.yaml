@@ -147,6 +147,12 @@ properties:
                     This rate determines how many currency units (in the plan's base currency) equal one pricing unit.
                     For example, if the plan uses USD and the conversion rate is 0.5, then 1 pricing unit = $0.50 USD.
                   example: "0.5"
+            accepts_target_wallet:
+              type:
+                - boolean
+                - "null"
+              description: Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+              example: false
         example:
           - billable_metric_id: "1a901a90-1a90-1a90-1a90-1a901a901a91"
             charge_model: "package"
