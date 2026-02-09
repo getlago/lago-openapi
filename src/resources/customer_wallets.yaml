@@ -1,11 +1,11 @@
+parameters:
+  - $ref: "../parameters/external_customer_id_path.yaml"
 post:
   tags:
-    - customers
+    - wallets
   summary: Create a wallet
   description: This endpoint is used to create a wallet with prepaid credits.
   operationId: createCustomerWallet
-  parameters:
-    - $ref: "../parameters/external_customer_id_path.yaml"
   requestBody:
     description: Wallet payload
     content:
@@ -30,12 +30,11 @@ post:
       $ref: "../responses/UnprocessableEntity.yaml"
 get:
   tags:
-    - customers
+    - wallets
   summary: List all customer's wallets
   description: This endpoint is used to list all wallets with prepaid credits of a customer
   operationId: findAllCustomerWallets
   parameters:
-    - $ref: "../parameters/external_customer_id_path.yaml"
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
   responses:
