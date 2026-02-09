@@ -223,6 +223,10 @@ paths:
     $ref: "./resources/customer_wallets.yaml"
   /customers/{external_customer_id}/wallets/{code}:
     $ref: "./resources/customer_wallet.yaml"
+  /customers/{external_customer_id}/wallets/{wallet_code}/metadata:
+    $ref: "./resources/customer_wallet_metadata.yaml"
+  /customers/{external_customer_id}/wallets/{wallet_code}/metadata/{key}:
+    $ref: "./resources/customer_wallet_metadata_key.yaml"
   /customers/{external_customer_id}/current_usage:
     $ref: "./resources/customer_current_usage.yaml"
   /customers/{external_customer_id}/projected_usage:

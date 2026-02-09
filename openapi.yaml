@@ -2487,14 +2487,14 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/wallets:
+    parameters:
+      - $ref: '#/components/parameters/external_customer_id_path'
     post:
       tags:
-        - customers
+        - wallets
       summary: Create a wallet
       description: This endpoint is used to create a wallet with prepaid credits.
       operationId: createCustomerWallet
-      parameters:
-        - $ref: '#/components/parameters/external_customer_id_path'
       requestBody:
         description: Wallet payload
         content:
@@ -2519,12 +2519,11 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
-        - customers
+        - wallets
       summary: List all customer's wallets
       description: This endpoint is used to list all wallets with prepaid credits of a customer
       operationId: findAllCustomerWallets
       parameters:
-        - $ref: '#/components/parameters/external_customer_id_path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
       responses:
@@ -2552,7 +2551,7 @@ paths:
           example: wallet-code
     put:
       tags:
-        - customers
+        - wallets
       summary: Update a wallet
       description: This endpoint is used to update an existing wallet with prepaid credits.
       operationId: updateCustomerWallet
@@ -2582,7 +2581,7 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
-        - customers
+        - wallets
       summary: Retrieve a wallet
       description: This endpoint is used to retrieve an existing wallet with prepaid credits.
       operationId: findCustomerWallet
@@ -2601,7 +2600,7 @@ paths:
           $ref: '#/components/responses/NotFound'
     delete:
       tags:
-        - customers
+        - wallets
       summary: Terminate a wallet
       description: This endpoint is used to terminate an existing wallet with prepaid credits.
       operationId: destroyCustomerWallet
@@ -2620,6 +2619,110 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{external_customer_id}/wallets/{wallet_code}/metadata:
+    parameters:
+      - $ref: '#/components/parameters/external_customer_id_path'
+      - $ref: '#/components/parameters/wallet_code'
+    post:
+      tags:
+        - wallets
+      summary: Replace wallet metadata
+      description: |-
+        This endpoint replaces all existing metadata on a wallet with the provided key-value pairs.
+        Any existing metadata keys not included in the request will be removed.
+      operationId: replaceCustomerWalletMetadata
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletMetadataResponse'
+      responses:
+        '200':
+          description: Wallet metadata replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - wallets
+      summary: Merge wallet metadata
+      description: |-
+        This endpoint merges the provided metadata with existing metadata on the wallet.
+        Existing keys not in the request are preserved. New keys are added, existing keys are updated.
+      operationId: mergeCustomerWalletMetadata
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletMetadataResponse'
+      responses:
+        '200':
+          description: Wallet metadata merged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - wallets
+      summary: Delete all wallet metadata
+      description: This endpoint removes all metadata from a wallet.
+      operationId: deleteAllCustomerWalletMetadata
+      responses:
+        '200':
+          description: Wallet metadata deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{external_customer_id}/wallets/{wallet_code}/metadata/{key}:
+    parameters:
+      - $ref: '#/components/parameters/external_customer_id_path'
+      - $ref: '#/components/parameters/wallet_code'
+    delete:
+      tags:
+        - wallets
+      summary: Delete a metadata key
+      description: This endpoint removes a single metadata key from a wallet.
+      parameters:
+        - name: key
+          in: path
+          description: The metadata key to delete.
+          required: true
+          schema:
+            type: string
+            example: external_id
+      operationId: deleteCustomerWalletMetadataKey
+      responses:
+        '200':
+          description: Metadata key deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletMetadataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/current_usage:
     get:
       tags:
@@ -7774,6 +7877,14 @@ components:
           - failed
           - succeeded
         example: pending
+    wallet_code:
+      name: wallet_code
+      in: path
+      description: A unique wallet identifier within a customer. It is either set by the user at creation or auto-generated by Lago if not provided.
+      required: true
+      schema:
+        type: string
+        example: wallet-code
     lago_invoice_id:
       name: lago_id
       in: path
@@ -14632,6 +14743,13 @@ components:
                   example: []
             metadata:
               $ref: '#/components/schemas/MetadataInput'
+    WalletMetadataResponse:
+      type: object
+      required:
+        - metadata
+      properties:
+        metadata:
+          $ref: '#/components/schemas/MetadataObject'
     UsagePricingUnitDetailsObject:
       type:
         - object
@@ -18756,13 +18874,6 @@ components:
       properties:
         tax:
           $ref: '#/components/schemas/TaxBaseInput'
-    WalletMetadataResponse:
-      type: object
-      required:
-        - metadata
-      properties:
-        metadata:
-          $ref: '#/components/schemas/MetadataObject'
     WalletTransactionCreateInput:
       type: object
       required:

@@ -9,7 +9,7 @@ parameters:
       example: "wallet-code"
 put:
   tags:
-    - customers
+    - wallets
   summary: Update a wallet
   description: This endpoint is used to update an existing wallet with prepaid credits.
   operationId: updateCustomerWallet
@@ -39,7 +39,7 @@ put:
       $ref: "../responses/UnprocessableEntity.yaml"
 get:
   tags:
-    - customers
+    - wallets
   summary: Retrieve a wallet
   description: This endpoint is used to retrieve an existing wallet with prepaid credits.
   operationId: findCustomerWallet
@@ -58,7 +58,7 @@ get:
       $ref: "../responses/NotFound.yaml"
 delete:
   tags:
-    - customers
+    - wallets
   summary: Terminate a wallet
   description: This endpoint is used to terminate an existing wallet with prepaid credits.
   operationId: destroyCustomerWallet
