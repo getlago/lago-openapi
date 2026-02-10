@@ -323,6 +323,10 @@ paths:
     $ref: "./resources/subscription_charges.yaml"
   /subscriptions/{external_id}/charges/{charge_code}:
     $ref: "./resources/subscription_charge.yaml"
+  /subscriptions/{external_id}/charges/{charge_code}/filters:
+    $ref: "./resources/subscription_charge_filters.yaml"
+  /subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}:
+    $ref: "./resources/subscription_charge_filter.yaml"
   /subscriptions/{external_id}/fixed_charges:
     $ref: "./resources/subscription_fixed_charges.yaml"
   /subscriptions/{external_id}/fixed_charges/{fixed_charge_code}:

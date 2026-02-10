@@ -5150,6 +5150,156 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /subscriptions/{external_id}/charges/{charge_code}/filters:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription.
+        required: true
+        schema:
+          type: string
+          example: sub_1234567890
+      - name: charge_code
+        in: path
+        description: Code of the existing charge.
+        required: true
+        schema:
+          type: string
+          example: api_requests_charge
+    post:
+      tags:
+        - subscriptions
+      summary: Create a charge filter
+      description: This endpoint creates a new filter for a specific charge on a subscription.
+      operationId: createSubscriptionChargeFilter
+      requestBody:
+        description: Charge filter payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeFilterCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Charge filter created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFilterResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - subscriptions
+      summary: List all filters for a charge
+      description: This endpoint retrieves all filters for a specific charge on a subscription.
+      operationId: findAllSubscriptionChargeFilters
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: List of charge filters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFiltersPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}:
+    parameters:
+      - name: external_id
+        in: path
+        description: External ID of the existing subscription.
+        required: true
+        schema:
+          type: string
+          example: sub_1234567890
+      - name: charge_code
+        in: path
+        description: Code of the existing charge.
+        required: true
+        schema:
+          type: string
+          example: api_requests_charge
+      - name: filter_id
+        in: path
+        description: Unique identifier of the charge filter.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    get:
+      tags:
+        - subscriptions
+      summary: Retrieve a charge filter
+      description: This endpoint retrieves a specific filter for a charge on a subscription.
+      operationId: findSubscriptionChargeFilter
+      responses:
+        '200':
+          description: Charge filter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFilterResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - subscriptions
+      summary: Update a charge filter
+      description: This endpoint updates a specific filter for a charge on a subscription.
+      operationId: updateSubscriptionChargeFilter
+      requestBody:
+        description: Charge filter payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeFilterUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Charge filter updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFilterResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - subscriptions
+      summary: Delete a charge filter
+      description: This endpoint deletes a specific filter from a charge on a subscription.
+      operationId: destroySubscriptionChargeFilter
+      responses:
+        '200':
+          description: Charge filter deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeFilterResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /subscriptions/{external_id}/fixed_charges:
     parameters:
       - name: external_id
