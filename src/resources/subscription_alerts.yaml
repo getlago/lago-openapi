@@ -26,23 +26,30 @@ get:
 post:
   tags:
     - subscriptions
-  summary: Create a subscription alert
-  description: This endpoint allows you to create a new alert for a subscription.
+  summary: Create subscription alert(s)
+  description: >-
+    This endpoint allows you to create alerts for a subscription.
+    Send a single alert object wrapped in `alert` key to create one alert,
+    or an array of alert objects wrapped in `alerts` key to create multiple alerts atomically.
   operationId: createSubscriptionAlert
   requestBody:
-    description: Create a new alert for a subscription
+    description: Create one or more alerts for a subscription
     content:
       application/json:
         schema:
-          $ref: "../schemas/AlertCreateInput.yaml"
+          oneOf:
+            - $ref: "../schemas/AlertCreateInput.yaml"
+            - $ref: "../schemas/AlertBatchCreateInput.yaml"
     required: true
   responses:
     "200":
-      description: Subscription alert created
+      description: Subscription alert(s) created
       content:
         application/json:
           schema:
-            $ref: "../schemas/Alert.yaml"
+            oneOf:
+              - $ref: "../schemas/Alert.yaml"
+              - $ref: "../schemas/Alerts.yaml"
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":
@@ -51,3 +58,16 @@ post:
       $ref: "../responses/NotFound.yaml"
     "422":
       $ref: "../responses/UnprocessableEntity.yaml"
+delete:
+  tags:
+    - subscriptions
+  summary: Delete all subscription alerts
+  description: This endpoint allows you to delete all alerts for a subscription.
+  operationId: deleteAllSubscriptionAlerts
+  responses:
+    "200":
+      description: All subscription alerts deleted
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
