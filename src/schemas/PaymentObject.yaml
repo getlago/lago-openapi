@@ -115,6 +115,13 @@ properties:
     type: string
     description: "Unique identifier of the customer within the payment provider"
     example: "cus_5eb0285bcf941bc6ba"
+  payment_method_id:
+    type:
+      - string
+      - "null"
+    format: uuid
+    description: "The unique identifier of the payment method used for this payment."
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   next_action:
     type: object
     additionalProperties: true
