@@ -4215,6 +4215,14 @@ paths:
       summary: Delete a charge
       description: This endpoint deletes a specific charge from a plan.
       operationId: destroyPlanCharge
+      parameters:
+        - name: cascade_updates
+          in: query
+          description: When set to `true`, the deletion will be cascaded to the children plans.
+          required: false
+          schema:
+            type: boolean
+            example: true
       responses:
         '200':
           description: Charge deleted
@@ -4365,6 +4373,14 @@ paths:
       summary: Delete a charge filter
       description: This endpoint deletes a specific filter from a charge.
       operationId: destroyPlanChargeFilter
+      parameters:
+        - name: cascade_updates
+          in: query
+          description: When set to `true`, the deletion will be cascaded to the children plans.
+          required: false
+          schema:
+            type: boolean
+            example: true
       responses:
         '200':
           description: Charge filter deleted
@@ -4500,6 +4516,14 @@ paths:
       summary: Delete a fixed charge
       description: This endpoint deletes a specific fixed charge from a plan.
       operationId: destroyPlanFixedCharge
+      parameters:
+        - name: cascade_updates
+          in: query
+          description: When set to `true`, the deletion will be cascaded to the children plans.
+          required: false
+          schema:
+            type: boolean
+            example: true
       responses:
         '200':
           description: Fixed charge deleted
@@ -17645,6 +17669,10 @@ components:
       required:
         - charge
       properties:
+        cascade_updates:
+          type: boolean
+          description: This field determines whether the changes made to the charge should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
+          example: true
         charge:
           $ref: '#/components/schemas/ChargeInput'
     ChargeFilterFullObject:
@@ -17926,6 +17954,10 @@ components:
       required:
         - fixed_charge
       properties:
+        cascade_updates:
+          type: boolean
+          description: This field determines whether the changes made to the fixed charge should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
+          example: true
         fixed_charge:
           $ref: '#/components/schemas/FixedChargeInput'
     PlanOverridesObject:
