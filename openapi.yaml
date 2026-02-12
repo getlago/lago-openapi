@@ -4532,23 +4532,27 @@ paths:
     post:
       tags:
         - subscriptions
-      summary: Create a subscription alert
-      description: This endpoint allows you to create a new alert for a subscription.
+      summary: Create subscription alert(s)
+      description: This endpoint allows you to create alerts for a subscription. Send a single alert object wrapped in `alert` key to create one alert, or an array of alert objects wrapped in `alerts` key to create multiple alerts atomically.
       operationId: createSubscriptionAlert
       requestBody:
-        description: Create a new alert for a subscription
+        description: Create one or more alerts for a subscription
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AlertCreateInput'
+              oneOf:
+                - $ref: '#/components/schemas/AlertCreateInput'
+                - $ref: '#/components/schemas/AlertBatchCreateInput'
         required: true
       responses:
         '200':
-          description: Subscription alert created
+          description: Subscription alert(s) created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alert'
+                oneOf:
+                  - $ref: '#/components/schemas/Alert'
+                  - $ref: '#/components/schemas/Alerts'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -4557,6 +4561,19 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - subscriptions
+      summary: Delete all subscription alerts
+      description: This endpoint allows you to delete all alerts for a subscription.
+      operationId: deleteAllSubscriptionAlerts
+      responses:
+        '200':
+          description: All subscription alerts deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /subscriptions/{external_id}/alerts/{code}:
     parameters:
       - name: external_id
@@ -17970,6 +17987,36 @@ components:
                   type: string
                   description: Unique code used to identify the alert.
                   example: storage_threshold_alert
+    AlertBatchCreateInput:
+      type: object
+      required:
+        - alerts
+      properties:
+        alerts:
+          type: array
+          description: Array of alerts to create. All alerts are created atomically - if any fail validation, none are created.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/AlertBaseInput'
+              - type: object
+                required:
+                  - alert_type
+                  - code
+                  - thresholds
+                properties:
+                  alert_type:
+                    type: string
+                    description: The type of alert.
+                    enum:
+                      - current_usage_amount
+                      - billable_metric_current_usage_amount
+                      - billable_metric_current_usage_units
+                      - lifetime_usage_amount
+                    example: billable_metric_current_usage_amount
+                  code:
+                    type: string
+                    description: Unique code used to identify the alert.
+                    example: storage_threshold_alert
     Alert:
       type: object
       required:
