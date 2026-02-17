@@ -1,0 +1,28 @@
+parameters:
+  - $ref: "../parameters/external_customer_id_path.yaml"
+  - $ref: "../parameters/wallet_code.yaml"
+delete:
+  tags:
+    - wallets
+  summary: Delete a metadata key
+  description: This endpoint removes a single metadata key from a wallet.
+  parameters:
+    - name: key
+      in: path
+      description: The metadata key to delete.
+      required: true
+      schema:
+        type: string
+        example: 'external_id'
+  operationId: deleteCustomerWalletMetadataKey
+  responses:
+    '200':
+      description: Metadata key deleted
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/WalletMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"

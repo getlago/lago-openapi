@@ -1,0 +1,76 @@
+parameters:
+  - $ref: "../parameters/external_customer_id_path.yaml"
+  - $ref: "../parameters/wallet_code.yaml"
+post:
+  tags:
+    - wallets
+  summary: Replace wallet metadata
+  description: |-
+    This endpoint replaces all existing metadata on a wallet with the provided key-value pairs.
+    Any existing metadata keys not included in the request will be removed.
+  operationId: replaceCustomerWalletMetadata
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/WalletMetadataResponse.yaml"
+  responses:
+    '200':
+      description: Wallet metadata replaced
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/WalletMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"
+    '422':
+      $ref: "../responses/UnprocessableEntity.yaml"
+
+patch:
+  tags:
+    - wallets
+  summary: Merge wallet metadata
+  description: |-
+    This endpoint merges the provided metadata with existing metadata on the wallet.
+    Existing keys not in the request are preserved. New keys are added, existing keys are updated.
+  operationId: mergeCustomerWalletMetadata
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/WalletMetadataResponse.yaml"
+  responses:
+    '200':
+      description: Wallet metadata merged
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/WalletMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"
+    '422':
+      $ref: "../responses/UnprocessableEntity.yaml"
+
+delete:
+  tags:
+    - wallets
+  summary: Delete all wallet metadata
+  description: This endpoint removes all metadata from a wallet.
+  operationId: deleteAllCustomerWalletMetadata
+  responses:
+    '200':
+      description: Wallet metadata deleted
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/WalletMetadataResponse.yaml"
+    '401':
+      $ref: "../responses/Unauthorized.yaml"
+    '404':
+      $ref: "../responses/NotFound.yaml"
