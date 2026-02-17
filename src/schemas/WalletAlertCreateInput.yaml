@@ -15,18 +15,16 @@ properties:
             type: string
             description: The type of alert.
             enum:
-              - current_usage_amount
-              - billable_metric_current_usage_amount
-              - billable_metric_current_usage_units
-              - lifetime_usage_amount
-            example: "billable_metric_current_usage_amount"
+              - wallet_balance_amount
+              - wallet_credits_balance
+            example: "wallet_balance_amount"
           code:
             type: string
             description: Unique code used to identify the alert.
-            example: "storage_threshold_alert"
-          billable_metric_code:
+            example: "wallet_balance_alert"
+          name:
             type:
               - string
               - "null"
-            description: The code of the billable metric associated with the alert. Only for alerts based on a billable metric.
-            example: "storage_usage"
+            description: The name of the alert.
+            example: "Wallet Balance Alert"
