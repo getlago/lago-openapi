@@ -64,14 +64,12 @@ delete:
   summary: Delete a fixed charge
   description: This endpoint deletes a specific fixed charge from a plan.
   operationId: destroyPlanFixedCharge
-  parameters:
-    - name: cascade_updates
-      in: query
-      description: When set to `true`, the deletion will be cascaded to the children plans.
-      required: false
-      schema:
-        type: boolean
-        example: true
+  requestBody:
+    description: Fixed charge delete payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/FixedChargeDeleteInput.yaml'
   responses:
     '200':
       description: Fixed charge deleted

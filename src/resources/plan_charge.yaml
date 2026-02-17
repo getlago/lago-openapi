@@ -64,14 +64,12 @@ delete:
   summary: Delete a charge
   description: This endpoint deletes a specific charge from a plan.
   operationId: destroyPlanCharge
-  parameters:
-    - name: cascade_updates
-      in: query
-      description: When set to `true`, the deletion will be cascaded to the children plans.
-      required: false
-      schema:
-        type: boolean
-        example: true
+  requestBody:
+    description: Charge delete payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/ChargeDeleteInput.yaml'
   responses:
     '200':
       description: Charge deleted

@@ -72,14 +72,12 @@ delete:
   summary: Delete a charge filter
   description: This endpoint deletes a specific filter from a charge.
   operationId: destroyPlanChargeFilter
-  parameters:
-    - name: cascade_updates
-      in: query
-      description: When set to `true`, the deletion will be cascaded to the children plans.
-      required: false
-      schema:
-        type: boolean
-        example: true
+  requestBody:
+    description: Charge filter delete payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/ChargeFilterDeleteInput.yaml'
   responses:
     '200':
       description: Charge filter deleted

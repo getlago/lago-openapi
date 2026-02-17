@@ -3,4 +3,10 @@ required:
   - fixed_charge
 properties:
   fixed_charge:
-    $ref: './FixedChargeInput.yaml'
+    allOf:
+      - $ref: './FixedChargeInput.yaml'
+      - properties:
+          cascade_updates:
+            type: boolean
+            description: This field determines whether the creation of the fixed charge should be cascaded to the children plans. When set to `true`, the fixed charge will be created in children plans. Conversely, when set to `false`, the fixed charge will only be created in the plan itself. If not defined in the request, default value is `false`.
+            example: true
