@@ -192,3 +192,6 @@ properties:
 
       - `generate`: An invoice is generated for the unbilled usage.
       - `skip`: No invoice is generated for the unbilled usage.
+  payment_method:
+    $ref: "./PaymentMethodReference.yaml"
+    description: The payment method assigned to this subscription for processing payments.

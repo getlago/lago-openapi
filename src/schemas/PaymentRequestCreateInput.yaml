@@ -25,3 +25,6 @@ properties:
           type: string
           example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
           description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+      payment_method:
+        $ref: "./PaymentMethodReference.yaml"
+        description: Optional payment method to use for processing the payment request.

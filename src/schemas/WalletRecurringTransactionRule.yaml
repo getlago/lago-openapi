@@ -126,3 +126,6 @@ properties:
     type: boolean
     description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
     example: false
+  payment_method:
+    $ref: "./PaymentMethodReference.yaml"
+    description: The payment method assigned to this recurring transaction rule for processing top-up payments.
