@@ -1,0 +1,9 @@
+allOf:
+  - $ref: "./InvoiceObjectExtended.yaml"
+  - type: object
+    properties:
+      provider_error:
+        oneOf:
+          - type: string
+          - type: object
+            additionalProperties: true
