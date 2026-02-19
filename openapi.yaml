@@ -6696,7 +6696,7 @@ webhooks:
                   description: Unique identifier of the organization, created by Lago.
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 payment_dispute_lost:
-                  $ref: '#/components/schemas/InvoiceObjectExtended'
+                  $ref: '#/components/schemas/InvoicePaymentDisputeLostObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -14453,35 +14453,31 @@ components:
           $ref: '#/components/schemas/PaginationMeta'
     CustomerCheckoutUrl:
       type: object
-      description: .
+      required:
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
       properties:
-        customer:
-          type: object
-          required:
-            - lago_customer_id
-            - external_customer_id
-            - payment_provider
-          properties:
-            lago_customer_id:
-              type: string
-              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
-            external_customer_id:
-              type: string
-              example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-              description: The customer external unique identifier (provided by your own application)
-            payment_provider:
-              type: string
-              example: stripe
-              description: The Payment Provider name linked to the Customer.
-            payment_provider_code:
-              type: string
-              description: Code of the payment provider
-              example: Stripe Prod
-            checkout_url:
-              type: string
-              example: https://foo.bar
-              description: The new generated Payment Provider Checkout URL for the Customer.
+        lago_customer_id:
+          type: string
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the customer within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the customer's record within the Lago system
+        external_customer_id:
+          type: string
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+          description: The customer external unique identifier (provided by your own application)
+        payment_provider:
+          type: string
+          example: stripe
+          description: The Payment Provider name linked to the Customer.
+        payment_provider_code:
+          type: string
+          description: Code of the payment provider
+          example: Stripe Prod
+        checkout_url:
+          type: string
+          example: https://foo.bar
+          description: The new generated Payment Provider Checkout URL for the Customer.
     EventObject:
       type: object
       required:
@@ -19350,6 +19346,16 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    InvoicePaymentDisputeLostObject:
+      allOf:
+        - $ref: '#/components/schemas/InvoiceObjectExtended'
+        - type: object
+          properties:
+            provider_error:
+              oneOf:
+                - type: string
+                - type: object
+                  additionalProperties: true
     InvoicePaymentFailureObject:
       type: object
       required:
