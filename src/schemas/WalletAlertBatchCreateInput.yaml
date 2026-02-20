@@ -1,0 +1,33 @@
+type: object
+required:
+  - alerts
+properties:
+  alerts:
+    type: array
+    description: Array of alerts to create. All alerts are created atomically - if any fail validation, none are created.
+    items:
+      allOf:
+        - $ref: './AlertBaseInput.yaml'
+        - type: object
+          required:
+            - alert_type
+            - code
+            - thresholds
+          properties:
+            alert_type:
+              type: string
+              description: The type of alert.
+              enum:
+                - wallet_balance_amount
+                - wallet_credits_balance
+              example: "wallet_balance_amount"
+            code:
+              type: string
+              description: Unique code used to identify the alert.
+              example: "wallet_balance_alert"
+            name:
+              type:
+                - string
+                - "null"
+              description: The name of the alert.
+              example: "Wallet Balance Alert"
