@@ -221,6 +221,10 @@ paths:
     $ref: "./resources/customer_subscriptions.yaml"
   /customers/{external_customer_id}/wallets:
     $ref: "./resources/customer_wallets.yaml"
+  /customers/{external_customer_id}/wallets/{wallet_code}/alerts:
+    $ref: "./resources/customer_wallet_alerts.yaml"
+  /customers/{external_customer_id}/wallets/{wallet_code}/alerts/{code}:
+    $ref: "./resources/customer_wallet_alert.yaml"
   /customers/{external_customer_id}/current_usage:
     $ref: "./resources/customer_current_usage.yaml"
   /customers/{external_customer_id}/projected_usage:

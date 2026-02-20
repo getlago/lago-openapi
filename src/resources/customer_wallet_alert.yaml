@@ -1,0 +1,72 @@
+parameters:
+  - $ref: "../parameters/external_customer_id_path.yaml"
+  - $ref: "../parameters/wallet_code.yaml"
+  - name: code
+    in: path
+    description: Unique code of the alert
+    required: true
+    schema:
+      type: string
+      example: "balance_threshold_alert"
+get:
+  tags:
+    - wallets
+  summary: Retrieve a wallet alert
+  description: This endpoint enables the retrieval of a specific alert for a wallet.
+  operationId: getCustomerWalletAlert
+  responses:
+    "200":
+      description: Wallet alert
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Alert.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+put:
+  tags:
+    - wallets
+  summary: Update a wallet alert
+  description: This endpoint allows you to update an existing alert for a wallet.
+  operationId: updateCustomerWalletAlert
+  requestBody:
+    description: Update an existing alert for a wallet
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/WalletAlertUpdateInput.yaml"
+    required: true
+  responses:
+    "200":
+      description: Wallet alert updated
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Alert.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
+delete:
+  tags:
+    - wallets
+  summary: Delete a wallet alert
+  description: This endpoint allows you to delete an existing alert for a wallet.
+  operationId: deleteCustomerWalletAlert
+  responses:
+    "200":
+      description: Wallet alert deleted
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Alert.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
