@@ -45,6 +45,10 @@ properties:
           format: "uuid"
           description: Unique identifier of the billable metric created by Lago.
           example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+        code:
+          type: string
+          description: Unique code identifying the charge within the plan.
+          example: "api_requests_charge"
         charge_model:
           $ref: "./ChargeModelEnum.yaml"
         invoice_display_name:

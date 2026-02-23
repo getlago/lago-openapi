@@ -9,21 +9,21 @@ parameters:
 get:
   tags:
     - subscriptions
-  summary: List all fixed charges for a subscription
+  summary: List all charges for a subscription
   description: |-
-    This endpoint retrieves all effective fixed charges for a specific subscription.
-    If the subscription has plan overrides with fixed charge overrides, the overridden fixed charges are returned.
-  operationId: findAllSubscriptionFixedCharges
+    This endpoint retrieves all effective charges for a specific subscription.
+    If the subscription has plan overrides with charge overrides, the overridden charges are returned.
+  operationId: findAllSubscriptionCharges
   parameters:
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
   responses:
     '200':
-      description: List of fixed charges
+      description: List of charges
       content:
         application/json:
           schema:
-            $ref: '../schemas/FixedChargesPaginated.yaml'
+            $ref: '../schemas/ChargesPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
     '404':

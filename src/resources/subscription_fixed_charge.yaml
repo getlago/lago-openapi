@@ -1,0 +1,68 @@
+parameters:
+  - name: external_id
+    in: path
+    description: External ID of the existing subscription.
+    required: true
+    schema:
+      type: string
+      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+  - name: fixed_charge_code
+    in: path
+    description: Code of the existing fixed charge.
+    required: true
+    schema:
+      type: string
+      example: 'setup_fee_charge'
+get:
+  tags:
+    - subscriptions
+  summary: Retrieve a fixed charge for a subscription
+  description: |-
+    This endpoint retrieves a specific effective fixed charge for a subscription.
+    If the subscription has a plan override with a fixed charge override, the overridden fixed charge is returned.
+  operationId: findSubscriptionFixedCharge
+  responses:
+    '200':
+      description: Fixed Charge
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/FixedCharge.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+put:
+  tags:
+    - subscriptions
+  summary: Override a fixed charge for a subscription
+  description: |-
+    This endpoint creates or updates a fixed charge override for a specific subscription.
+    If the subscription does not have a plan override yet, one will be created automatically.
+    The fixed charge override allows customizing specific fixed charge properties (invoice_display_name, units, properties, taxes) without affecting the original plan fixed charge.
+    This is a premium feature.
+  operationId: overrideSubscriptionFixedCharge
+  requestBody:
+    description: Fixed charge override payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/SubscriptionFixedChargeOverride.yaml'
+    required: true
+  responses:
+    '200':
+      description: Fixed charge override created or updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/FixedCharge.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
