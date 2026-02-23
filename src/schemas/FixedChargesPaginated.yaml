@@ -1,0 +1,11 @@
+type: object
+required:
+  - fixed_charges
+  - meta
+properties:
+  fixed_charges:
+    type: array
+    items:
+      $ref: './FixedChargeObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'

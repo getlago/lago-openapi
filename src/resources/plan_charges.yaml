@@ -1,0 +1,56 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing plan.
+    required: true
+    schema:
+      type: string
+      example: 'startup'
+post:
+  tags:
+    - plans
+  summary: Create a charge
+  description: This endpoint creates a new charge for a specific plan.
+  operationId: createPlanCharge
+  requestBody:
+    description: Charge payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/ChargeCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Charge created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Charge.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - plans
+  summary: List all charges for a plan
+  description: This endpoint retrieves all charges for a specific plan.
+  operationId: findAllPlanCharges
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+  responses:
+    '200':
+      description: List of charges
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ChargesPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

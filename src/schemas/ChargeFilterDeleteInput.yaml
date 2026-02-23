@@ -1,0 +1,9 @@
+type: object
+properties:
+  filter:
+    type: object
+    properties:
+      cascade_updates:
+        type: boolean
+        description: When set to `true`, the deletion will be cascaded to the children plans.
+        example: true
