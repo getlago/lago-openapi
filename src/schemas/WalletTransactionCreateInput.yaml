@@ -50,6 +50,9 @@ properties:
         type: boolean
         description: When true, allows topping up the wallet with transactions that exceed the paid top-up limits. Defaults to false.
         example: false
+      payment_method:
+        $ref: "./PaymentMethodReference.yaml"
+        description: Optional payment method to use for processing the wallet transaction payment.
       metadata:
         type:
           - array
