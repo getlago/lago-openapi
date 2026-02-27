@@ -11,6 +11,7 @@ get:
   parameters:
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     '200':
       description: List of fixed charges

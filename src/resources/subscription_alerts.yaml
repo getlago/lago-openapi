@@ -12,6 +12,8 @@ get:
   summary: List subscription alerts
   description: This endpoint enables the retrieval of all alerts for a subscription.
   operationId: getSubscriptionAlerts
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     "200":
       description: Subscription alerts
@@ -27,6 +29,8 @@ post:
   tags:
     - subscriptions
   summary: Create subscription alert(s)
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   description: >-
     This endpoint allows you to create alerts for a subscription.
     Send a single alert object wrapped in `alert` key to create one alert,
@@ -64,6 +68,8 @@ delete:
   summary: Delete all subscription alerts
   description: This endpoint allows you to delete all alerts for a subscription.
   operationId: deleteAllSubscriptionAlerts
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     "200":
       description: All subscription alerts deleted
