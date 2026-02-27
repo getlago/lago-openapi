@@ -306,6 +306,18 @@ paths:
     $ref: "./resources/plan_metadata.yaml"
   /plans/{code}/metadata/{key}:
     $ref: "./resources/plan_metadata_key.yaml"
+  /plans/{code}/charges:
+    $ref: "./resources/plan_charges.yaml"
+  /plans/{code}/charges/{charge_code}:
+    $ref: "./resources/plan_charge.yaml"
+  /plans/{code}/charges/{charge_code}/filters:
+    $ref: "./resources/plan_charge_filters.yaml"
+  /plans/{code}/charges/{charge_code}/filters/{filter_id}:
+    $ref: "./resources/plan_charge_filter.yaml"
+  /plans/{code}/fixed_charges:
+    $ref: "./resources/plan_fixed_charges.yaml"
+  /plans/{code}/fixed_charges/{fixed_charge_code}:
+    $ref: "./resources/plan_fixed_charge.yaml"
   /subscriptions:
     $ref: "./resources/subscriptions.yaml"
   /subscriptions/{external_id}:
@@ -324,6 +336,16 @@ paths:
     $ref: "./resources/subscription_entitlement_privileges.yaml"
   /subscriptions/{external_id}/fixed_charges:
     $ref: "./resources/subscription_fixed_charges.yaml"
+  /subscriptions/{external_id}/charges:
+    $ref: "./resources/subscription_charges.yaml"
+  /subscriptions/{external_id}/charges/{charge_code}:
+    $ref: "./resources/subscription_charge.yaml"
+  /subscriptions/{external_id}/charges/{charge_code}/filters:
+    $ref: "./resources/subscription_charge_filters.yaml"
+  /subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}:
+    $ref: "./resources/subscription_charge_filter.yaml"
+  /subscriptions/{external_id}/fixed_charges/{fixed_charge_code}:
+    $ref: "./resources/subscription_fixed_charge.yaml"
   /taxes:
     $ref: "./resources/taxes.yaml"
   /taxes/{code}:

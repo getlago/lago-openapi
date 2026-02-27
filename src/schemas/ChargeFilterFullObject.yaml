@@ -1,0 +1,36 @@
+type: object
+description: "Charge filter values used to apply differentiated pricing based on additional event properties."
+required:
+  - lago_id
+  - charge_code
+  - invoice_display_name
+  - properties
+  - values
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the charge filter, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  charge_code:
+    type: string
+    description: Unique code identifying the charge this filter belongs to.
+    example: "api_requests_charge"
+  invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: "Specifies the name that will be displayed on an invoice. If no value is set for this field, the values of the filter will be used as the default display name."
+    example: AWS
+  properties:
+    $ref: "./ChargeProperties.yaml"
+    description: List of all thresholds utilized for calculating the charge.
+  values:
+    type: object
+    description: "List of possible filter values. The key and values must match one of the billable metric filters."
+    additionalProperties:
+      type: array
+      items:
+        type: string
+    example:
+      region: [us-east-1]

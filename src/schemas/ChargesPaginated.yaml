@@ -1,0 +1,11 @@
+type: object
+required:
+  - charges
+  - meta
+properties:
+  charges:
+    type: array
+    items:
+      $ref: './ChargeObject.yaml'
+  meta:
+    $ref: './PaginationMeta.yaml'
