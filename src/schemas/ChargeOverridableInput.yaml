@@ -1,14 +1,14 @@
 type: object
-description: Input for overriding a charge at the subscription level.
+description: Properties of a charge that can be overridden at the subscription level.
 properties:
   invoice_display_name:
     type: string
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
-    example: "Custom API Requests"
+    example: "Setup"
   min_amount_cents:
     type: integer
     description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
-    example: 500
+    example: 0
   properties:
     $ref: "./ChargeProperties.yaml"
     description: List of all thresholds utilized for calculating the charge.

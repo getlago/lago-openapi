@@ -1,18 +1,6 @@
 parameters:
-  - name: code
-    in: path
-    description: Code of the existing plan.
-    required: true
-    schema:
-      type: string
-      example: 'startup'
-  - name: charge_code
-    in: path
-    description: Code of the existing charge.
-    required: true
-    schema:
-      type: string
-      example: 'api_requests_charge'
+  - $ref: "../parameters/plan_code.yaml"
+  - $ref: "../parameters/charge_code.yaml"
 post:
   tags:
     - plans

@@ -1,11 +1,5 @@
 parameters:
-  - name: external_id
-    in: path
-    description: External ID of the existing subscription.
-    required: true
-    schema:
-      type: string
-      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
+  - $ref: "../parameters/subscription_external_id_path.yaml"
 get:
   tags:
     - subscriptions

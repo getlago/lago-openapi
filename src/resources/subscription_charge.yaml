@@ -1,18 +1,6 @@
 parameters:
-  - name: external_id
-    in: path
-    description: External ID of the existing subscription.
-    required: true
-    schema:
-      type: string
-      example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
-  - name: charge_code
-    in: path
-    description: Code of the existing charge.
-    required: true
-    schema:
-      type: string
-      example: 'api_requests_charge'
+  - $ref: "../parameters/subscription_external_id_path.yaml"
+  - $ref: "../parameters/charge_code.yaml"
 get:
   tags:
     - subscriptions

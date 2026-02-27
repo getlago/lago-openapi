@@ -1,18 +1,6 @@
 parameters:
-  - name: code
-    in: path
-    description: Code of the existing plan.
-    required: true
-    schema:
-      type: string
-      example: 'startup'
-  - name: fixed_charge_code
-    in: path
-    description: Code of the existing fixed charge.
-    required: true
-    schema:
-      type: string
-      example: 'setup_fee_charge'
+  - $ref: "../parameters/plan_code.yaml"
+  - $ref: "../parameters/fixed_charge_code.yaml"
 get:
   tags:
     - plans

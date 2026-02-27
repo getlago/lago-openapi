@@ -1,11 +1,5 @@
 parameters:
-  - name: code
-    in: path
-    description: Code of the existing plan.
-    required: true
-    schema:
-      type: string
-      example: 'startup'
+  - $ref: "../parameters/plan_code.yaml"
 post:
   tags:
     - plans

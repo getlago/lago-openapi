@@ -1,26 +1,7 @@
 parameters:
-  - name: code
-    in: path
-    description: Code of the existing plan.
-    required: true
-    schema:
-      type: string
-      example: 'startup'
-  - name: charge_code
-    in: path
-    description: Code of the existing charge.
-    required: true
-    schema:
-      type: string
-      example: 'api_requests_charge'
-  - name: filter_id
-    in: path
-    description: Unique identifier of the charge filter.
-    required: true
-    schema:
-      type: string
-      format: uuid
-      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  - $ref: "../parameters/plan_code.yaml"
+  - $ref: "../parameters/charge_code.yaml"
+  - $ref: "../parameters/charge_filter_id.yaml"
 get:
   tags:
     - plans
