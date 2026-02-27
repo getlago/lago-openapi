@@ -2542,6 +2542,43 @@ paths:
             type: boolean
             default: true
             example: true
+        - name: filter_by_charge_id
+          in: query
+          description: Filter usage to a specific charge by its Lago ID (UUID).
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: filter_by_charge_code
+          in: query
+          description: Filter usage to a specific charge by its code.
+          required: false
+          schema:
+            type: string
+            example: storage
+        - name: filter_by_group
+          in: query
+          description: |
+            Filter usage by pricing group. Pass key/value pairs as query parameters, e.g. `filter_by_group[cloud]=aws`.
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+            example:
+              cloud: aws
+        - name: full_usage
+          in: query
+          description: |
+            When `true`, returns usage since subscription start instead of the current billing period. Requires either `filter_by_charge_id`, `filter_by_charge_code`, or `filter_by_group` to be set.
+          required: false
+          schema:
+            type: boolean
+            default: false
+            example: true
       operationId: findCustomerCurrentUsage
       responses:
         '200':
