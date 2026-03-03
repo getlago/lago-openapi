@@ -8468,7 +8468,7 @@ components:
         type: string
         example: setup_fee_charge
     subscription_status:
-      name: status
+      name: subscription_status
       in: query
       description: |
         Filter by subscription status. When provided, the subscription is looked up with this status instead of the default `active` status. Possible values are `pending`, `active`, `terminated`, or `canceled`.
