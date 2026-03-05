@@ -1,0 +1,38 @@
+post:
+  operationId: paymentSucceeded
+  summary: A payment has been successfully processed
+  description: A payment has been successfully processed by the payment provider
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the successfully processed payment
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - payment
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - payment.succeeded
+            object_type:
+              type: string
+              enum:
+                - payment
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            payment:
+              $ref: "../schemas/PaymentObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully
