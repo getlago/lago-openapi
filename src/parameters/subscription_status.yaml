@@ -1,0 +1,15 @@
+name: subscription_status
+in: query
+description: >
+  Filter by subscription status. When provided, the subscription is looked up with this status
+  instead of the default `active` status. Possible values are `pending`, `active`, `terminated`, or `canceled`.
+required: false
+schema:
+  type: string
+  enum:
+    - pending
+    - active
+    - terminated
+    - canceled
+  default: active
+  example: active

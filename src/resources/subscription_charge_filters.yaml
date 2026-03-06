@@ -7,6 +7,8 @@ post:
   summary: Create a charge filter
   description: This endpoint creates a new filter for a specific charge on a subscription.
   operationId: createSubscriptionChargeFilter
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   requestBody:
     description: Charge filter payload
     content:
@@ -38,6 +40,7 @@ get:
   parameters:
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     '200':
       description: List of charge filters

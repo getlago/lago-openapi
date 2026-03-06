@@ -26,6 +26,8 @@ delete:
   summary: Remove a privilege from a subscription entitlement override
   description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan.
   operationId: destroySubscriptionEntitlementPrivilege
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     '200':
       description: Subscription entitlement with privilege override removed
