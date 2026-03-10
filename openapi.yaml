@@ -14251,6 +14251,12 @@ components:
             type: string
             format: uuid
             example: 486b147a-02a1-4ccf-8603-f3541fc25e7a
+        invoice_numbers:
+          type: array
+          description: List of invoice numbers associated with the payment.
+          items:
+            type: string
+            example: HOO-202D-005-001
         lago_payable_id:
           type: string
           format: uuid
