@@ -14113,11 +14113,15 @@ components:
           description: The total sum of all prepaid credits discounted on the invoice. It calculates the cumulative discount amount applied by prepaid credits, expressed in cents.
           example: 0
         prepaid_granted_credit_amount_cents:
-          type: integer
+          type:
+            - integer
+            - 'null'
           description: The portion of prepaid credits discounted on the invoice that originated from granted (free) credits, expressed in cents. Only populated for invoices associated with traceable wallets.
           example: 0
         prepaid_purchased_credit_amount_cents:
-          type: integer
+          type:
+            - integer
+            - 'null'
           description: The portion of prepaid credits discounted on the invoice that originated from purchased (paid) credits, expressed in cents. Only populated for invoices associated with traceable wallets.
           example: 0
         progressive_billing_credit_amount_cents:
