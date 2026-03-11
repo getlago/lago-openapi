@@ -20197,6 +20197,13 @@ components:
           format: uuid
           description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_invoice_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier assigned to the invoice that the wallet transaction is associated with. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         status:
           type: string
           enum:
