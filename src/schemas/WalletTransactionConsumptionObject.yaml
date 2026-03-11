@@ -1,0 +1,23 @@
+type: object
+required:
+  - lago_id
+  - amount_cents
+  - created_at
+  - wallet_transaction
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier assigned to the wallet transaction consumption within the Lago application.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  amount_cents:
+    type: integer
+    description: The amount consumed from the inbound wallet transaction, expressed in cents.
+    example: 5000
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date of the consumption record creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    example: "2022-04-29T08:59:51Z"
+  wallet_transaction:
+    $ref: "./WalletTransactionObject.yaml"

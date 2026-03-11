@@ -1,0 +1,8 @@
+type: object
+required:
+  - wallet_transaction_consumptions
+properties:
+  wallet_transaction_consumptions:
+    type: array
+    items:
+      $ref: "./WalletTransactionConsumptionObject.yaml"

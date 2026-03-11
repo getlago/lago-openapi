@@ -84,6 +84,12 @@ properties:
         value: "example value"
       - key: "another key"
         value: "another value"
+  remaining_amount_cents:
+    type:
+      - integer
+      - "null"
+    description: The remaining unconsumed amount of an inbound wallet transaction, expressed in cents. Only present for inbound transactions on traceable wallets. Tracks how much of the original credited amount has not yet been consumed by outbound transactions.
+    example: 5000
   settled_at:
     type:
       - string
