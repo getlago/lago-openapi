@@ -20358,8 +20358,8 @@ components:
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         webhook_url:
           type: string
-          description: The name of the wallet.
-          example: Prepaid
+          description: The URL of the webhook endpoint.
+          example: https://foo.bar
         signature_algo:
           type: string
           description: The signature algo for the webhook.
@@ -20367,6 +20367,22 @@ components:
           enum:
             - jwt
             - hmac
+        name:
+          type:
+            - string
+            - 'null'
+          description: The name of the webhook.
+          example: EC2-production
+        event_types:
+          type:
+            - array
+            - 'null'
+          description: A list of event types that will trigger the webhook.
+          items:
+            type: string
+          example:
+            - invoice.voided
+            - customer.created
         created_at:
           type: string
           format: date-time
@@ -20406,6 +20422,20 @@ components:
                 - jwt
                 - hmac
                 - null
+            name:
+              type: string
+              description: The name of the webhook.
+              example: EC2-production
+            event_types:
+              type:
+                - array
+                - 'null'
+              description: A list of event types that will trigger the webhook.
+              items:
+                type: string
+              example:
+                - invoice.voided
+                - customer.created
     WebhookEndpoint:
       type: object
       required:
@@ -20435,6 +20465,20 @@ components:
                 - jwt
                 - hmac
                 - null
+            name:
+              type: string
+              description: The name of the webhook.
+              example: EC2-production
+            event_types:
+              type:
+                - array
+                - 'null'
+              description: A list of event types that will trigger the webhook.
+              items:
+                type: string
+              example:
+                - invoice.voided
+                - customer.created
     TriggeredAlertObject:
       type: object
       required:
