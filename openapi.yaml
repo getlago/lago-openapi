@@ -20383,6 +20383,7 @@ components:
         - lago_alert_id
         - lago_subscription_id
         - external_subscription_id
+        - external_customer_id
         - billable_metric_code
         - alert_type
         - alert_code
@@ -20416,6 +20417,10 @@ components:
           type: string
           description: The subscription external unique identifier (provided by your own application).
           example: sub_1234567890
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application).
+          example: cust_1234567890
         billable_metric_code:
           type:
             - string
