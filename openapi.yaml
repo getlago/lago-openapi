@@ -5019,6 +5019,8 @@ paths:
       summary: List subscription alerts
       description: This endpoint enables the retrieval of all alerts for a subscription.
       operationId: getSubscriptionAlerts
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Subscription alerts
@@ -5034,6 +5036,8 @@ paths:
       tags:
         - subscriptions
       summary: Create subscription alert(s)
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       description: This endpoint allows you to create alerts for a subscription. Send a single alert object wrapped in `alert` key to create one alert, or an array of alert objects wrapped in `alerts` key to create multiple alerts atomically.
       operationId: createSubscriptionAlert
       requestBody:
@@ -5068,6 +5072,8 @@ paths:
       summary: Delete all subscription alerts
       description: This endpoint allows you to delete all alerts for a subscription.
       operationId: deleteAllSubscriptionAlerts
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: All subscription alerts deleted
@@ -5097,6 +5103,8 @@ paths:
       summary: Retrieve a subscription alert
       description: This endpoint enables the retrieval of a specific alert for a subscription.
       operationId: getSubscriptionAlert
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Subscription alert
@@ -5112,6 +5120,8 @@ paths:
       tags:
         - subscriptions
       summary: Update a subscription alert
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       description: This endpoint allows you to update an existing alert for a subscription.
       operationId: updateSubscriptionAlert
       requestBody:
@@ -5142,6 +5152,8 @@ paths:
       summary: Delete a subscription alert
       description: This endpoint allows you to delete an existing alert for a subscription.
       operationId: deleteSubscriptionAlert
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Subscription alert deleted
@@ -5168,6 +5180,8 @@ paths:
       summary: List all subscription entitlements
       description: This endpoint retrieves all entitlements for a specific subscription, including both plan entitlements and any subscription-specific overrides.
       operationId: findAllSubscriptionEntitlements
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: List of subscription entitlements
@@ -5183,6 +5197,8 @@ paths:
       tags:
         - entitlements
       summary: Update subscription entitlements
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       description: This accepts a list of entitlements to update. If the feature isn't part of the subscription yet, it's added with all the privileges from the payload. If the feature is already part of the subscription (via plan or via override), the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateSubscriptionEntitlements
       requestBody:
@@ -5229,6 +5245,8 @@ paths:
       summary: Remove an entitlement from a subscription
       description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan.
       operationId: destroySubscriptionEntitlement
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Subscription entitlement removed
@@ -5269,6 +5287,8 @@ paths:
       summary: Remove a privilege from a subscription entitlement override
       description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan.
       operationId: destroySubscriptionEntitlementPrivilege
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Subscription entitlement with privilege override removed
@@ -5296,6 +5316,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: List of fixed charges
@@ -5321,6 +5342,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: List of charges
@@ -5344,6 +5366,8 @@ paths:
         This endpoint retrieves a specific effective charge for a subscription.
         If the subscription has a plan override with a charge override, the overridden charge is returned.
       operationId: findSubscriptionCharge
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Charge
@@ -5359,6 +5383,8 @@ paths:
       tags:
         - subscriptions
       summary: Override a charge for a subscription
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       description: |-
         This endpoint creates or updates a charge override for a specific subscription.
         If the subscription does not have a plan override yet, one will be created automatically.
@@ -5399,6 +5425,8 @@ paths:
       summary: Create a charge filter
       description: This endpoint creates a new filter for a specific charge on a subscription.
       operationId: createSubscriptionChargeFilter
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       requestBody:
         description: Charge filter payload
         content:
@@ -5430,6 +5458,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: List of charge filters
@@ -5452,6 +5481,8 @@ paths:
       summary: Retrieve a charge filter
       description: This endpoint retrieves a specific filter for a charge on a subscription.
       operationId: findSubscriptionChargeFilter
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Charge filter
@@ -5467,6 +5498,8 @@ paths:
       tags:
         - subscriptions
       summary: Update a charge filter
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       description: This endpoint updates a specific filter for a charge on a subscription.
       operationId: updateSubscriptionChargeFilter
       requestBody:
@@ -5497,6 +5530,8 @@ paths:
       summary: Delete a charge filter
       description: This endpoint deletes a specific filter from a charge on a subscription.
       operationId: destroySubscriptionChargeFilter
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Charge filter deleted
@@ -5520,6 +5555,8 @@ paths:
         This endpoint retrieves a specific effective fixed charge for a subscription.
         If the subscription has a plan override with a fixed charge override, the overridden fixed charge is returned.
       operationId: findSubscriptionFixedCharge
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Fixed Charge
@@ -5535,6 +5572,8 @@ paths:
       tags:
         - subscriptions
       summary: Override a fixed charge for a subscription
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       description: |-
         This endpoint creates or updates a fixed charge override for a specific subscription.
         If the subscription does not have a plan override yet, one will be created automatically.
@@ -8504,6 +8543,21 @@ components:
       schema:
         type: string
         example: setup_fee_charge
+    subscription_status:
+      name: subscription_status
+      in: query
+      description: |
+        Filter by subscription status. When provided, the subscription is looked up with this status instead of the default `active` status. Possible values are `pending`, `active`, `terminated`, or `canceled`.
+      required: false
+      schema:
+        type: string
+        enum:
+          - pending
+          - active
+          - terminated
+          - canceled
+        default: active
+        example: active
     subscription_external_id_path:
       name: external_id
       in: path

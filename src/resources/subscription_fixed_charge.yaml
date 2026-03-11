@@ -9,6 +9,8 @@ get:
     This endpoint retrieves a specific effective fixed charge for a subscription.
     If the subscription has a plan override with a fixed charge override, the overridden fixed charge is returned.
   operationId: findSubscriptionFixedCharge
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     '200':
       description: Fixed Charge
@@ -24,6 +26,8 @@ put:
   tags:
     - subscriptions
   summary: Override a fixed charge for a subscription
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   description: |-
     This endpoint creates or updates a fixed charge override for a specific subscription.
     If the subscription does not have a plan override yet, one will be created automatically.

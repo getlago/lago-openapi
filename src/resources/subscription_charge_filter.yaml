@@ -8,6 +8,8 @@ get:
   summary: Retrieve a charge filter
   description: This endpoint retrieves a specific filter for a charge on a subscription.
   operationId: findSubscriptionChargeFilter
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     '200':
       description: Charge filter
@@ -23,6 +25,8 @@ put:
   tags:
     - subscriptions
   summary: Update a charge filter
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   description: This endpoint updates a specific filter for a charge on a subscription.
   operationId: updateSubscriptionChargeFilter
   requestBody:
@@ -53,6 +57,8 @@ delete:
   summary: Delete a charge filter
   description: This endpoint deletes a specific filter from a charge on a subscription.
   operationId: destroySubscriptionChargeFilter
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     '200':
       description: Charge filter deleted

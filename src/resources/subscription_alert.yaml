@@ -19,6 +19,8 @@ get:
   summary: Retrieve a subscription alert
   description: This endpoint enables the retrieval of a specific alert for a subscription.
   operationId: getSubscriptionAlert
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     "200":
       description: Subscription alert
@@ -34,6 +36,8 @@ put:
   tags:
     - subscriptions
   summary: Update a subscription alert
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   description: This endpoint allows you to update an existing alert for a subscription.
   operationId: updateSubscriptionAlert
   requestBody:
@@ -64,6 +68,8 @@ delete:
   summary: Delete a subscription alert
   description: This endpoint allows you to delete an existing alert for a subscription.
   operationId: deleteSubscriptionAlert
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     "200":
       description: Subscription alert deleted
