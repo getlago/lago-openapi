@@ -21,6 +21,13 @@ properties:
     format: "uuid"
     description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_voided_invoice_id:
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    description: Unique identifier of the invoice that was voided and triggered the creation of this inbound wallet transaction. Only present for inbound transactions on traceable wallets that were created as a result of an invoice void.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   status:
     type: string
     enum:

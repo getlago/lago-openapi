@@ -20275,6 +20275,13 @@ components:
           format: uuid
           description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_voided_invoice_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the invoice that was voided and triggered the creation of this inbound wallet transaction. Only present for inbound transactions on traceable wallets that were created as a result of an invoice void.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         status:
           type: string
           enum:
@@ -20467,6 +20474,35 @@ components:
           properties:
             meta:
               $ref: '#/components/schemas/PaginationMeta'
+    WalletTransactionFundingObject:
+      type: object
+      required:
+        - lago_id
+        - amount_cents
+        - created_at
+        - wallet_transaction
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the wallet transaction funding within the Lago application.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        amount_cents:
+          type: integer
+          description: The amount funded from the inbound wallet transaction, expressed in cents.
+          example: 5000
+        credit_amount:
+          type: string
+          pattern: ^[0-9]+.?[0-9]*$
+          description: The amount funded from the inbound wallet transaction, expressed in credits.
+          example: '5.0'
+        created_at:
+          type: string
+          format: date-time
+          description: The date of the funding record creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
+        wallet_transaction:
+          $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactionFundings:
       type: object
       required:
@@ -20475,7 +20511,7 @@ components:
         wallet_transaction_fundings:
           type: array
           items:
-            $ref: '#/components/schemas/WalletTransactionConsumptionObject'
+            $ref: '#/components/schemas/WalletTransactionFundingObject'
     WalletTransactionFundingsPaginated:
       allOf:
         - $ref: '#/components/schemas/WalletTransactionFundings'
