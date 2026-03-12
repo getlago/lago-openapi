@@ -21,23 +21,30 @@ get:
 post:
   tags:
     - wallets
-  summary: Create a wallet alert
-  description: This endpoint allows you to create a new alert for a wallet.
+  summary: Create wallet alert(s)
+  description: >-
+    This endpoint allows you to create new alerts for a wallet.
+    Send a single alert object wrapped in `alert` key to create one alert,
+    or an array of alert objects wrapped in `alerts` key to create multiple alerts atomically.
   operationId: createCustomerWalletAlert
   requestBody:
     description: Create a new alert for a wallet
     content:
       application/json:
         schema:
-          $ref: "../schemas/WalletAlertCreateInput.yaml"
+          oneOf:
+            - $ref: "../schemas/WalletAlertCreateInput.yaml"
+            - $ref: "../schemas/WalletAlertBatchCreateInput.yaml"
     required: true
   responses:
     "200":
-      description: Wallet alert created
+      description: Wallet alert(s) created
       content:
         application/json:
           schema:
-            $ref: "../schemas/Alert.yaml"
+            oneOf:
+              - $ref: "../schemas/Alert.yaml"
+              - $ref: "../schemas/Alerts.yaml"
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":
@@ -46,3 +53,16 @@ post:
       $ref: "../responses/NotFound.yaml"
     "422":
       $ref: "../responses/UnprocessableEntity.yaml"
+delete:
+  tags:
+    - wallets
+  summary: Delete all wallet alerts
+  description: This endpoint allows you to delete all alerts for a wallet.
+  operationId: deleteAllCustomerWalletAlerts
+  responses:
+    "200":
+      description: All wallet alerts deleted
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
