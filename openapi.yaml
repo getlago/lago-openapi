@@ -2535,23 +2535,27 @@ paths:
     post:
       tags:
         - wallets
-      summary: Create a wallet alert
-      description: This endpoint allows you to create a new alert for a wallet.
+      summary: Create wallet alert(s)
+      description: This endpoint allows you to create new alerts for a wallet. Send a single alert object wrapped in `alert` key to create one alert, or an array of alert objects wrapped in `alerts` key to create multiple alerts atomically.
       operationId: createCustomerWalletAlert
       requestBody:
         description: Create a new alert for a wallet
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WalletAlertCreateInput'
+              oneOf:
+                - $ref: '#/components/schemas/WalletAlertCreateInput'
+                - $ref: '#/components/schemas/WalletAlertBatchCreateInput'
         required: true
       responses:
         '200':
-          description: Wallet alert created
+          description: Wallet alert(s) created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alert'
+                oneOf:
+                  - $ref: '#/components/schemas/Alert'
+                  - $ref: '#/components/schemas/Alerts'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2560,6 +2564,19 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - wallets
+      summary: Delete all wallet alerts
+      description: This endpoint allows you to delete all alerts for a wallet.
+      operationId: deleteAllCustomerWalletAlerts
+      responses:
+        '200':
+          description: All wallet alerts deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/wallets/{wallet_code}/alerts/{code}:
     parameters:
       - $ref: '#/components/parameters/external_customer_id_path'
@@ -14434,6 +14451,40 @@ components:
                     - 'null'
                   description: The name of the alert.
                   example: Wallet Balance Alert
+    WalletAlertBatchCreateInput:
+      type: object
+      required:
+        - alerts
+      properties:
+        alerts:
+          type: array
+          description: Array of alerts to create. All alerts are created atomically - if any fail validation, none are created.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/AlertBaseInput'
+              - type: object
+                required:
+                  - alert_type
+                  - code
+                  - thresholds
+                properties:
+                  alert_type:
+                    type: string
+                    description: The type of alert.
+                    enum:
+                      - wallet_balance_amount
+                      - wallet_credits_balance
+                    example: wallet_balance_amount
+                  code:
+                    type: string
+                    description: Unique code used to identify the alert.
+                    example: wallet_balance_alert
+                  name:
+                    type:
+                      - string
+                      - 'null'
+                    description: The name of the alert.
+                    example: Wallet Balance Alert
     Alert:
       type: object
       required:
