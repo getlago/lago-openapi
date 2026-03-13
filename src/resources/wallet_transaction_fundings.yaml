@@ -1,0 +1,32 @@
+get:
+  tags:
+    - wallets
+  summary: List all fundings for a wallet transaction
+  description: This endpoint is used to list all funding records for an outbound wallet transaction. It shows which inbound transactions funded this outbound transaction. Only available for traceable wallets.
+  operationId: findAllWalletTransactionFundings
+  parameters:
+    - name: lago_id
+      in: path
+      description: Unique identifier assigned to the wallet transaction within the Lago application. Must be an outbound wallet transaction.
+      required: true
+      schema:
+        type: string
+        format: "uuid"
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+  responses:
+    "200":
+      description: Wallet transaction fundings
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/WalletTransactionFundingsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

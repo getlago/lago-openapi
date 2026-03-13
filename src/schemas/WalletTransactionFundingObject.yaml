@@ -1,0 +1,29 @@
+type: object
+required:
+  - lago_id
+  - amount_cents
+  - credit_amount
+  - created_at
+  - wallet_transaction
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier assigned to the wallet transaction funding within the Lago application.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  amount_cents:
+    type: integer
+    description: The amount funded from the inbound wallet transaction, expressed in cents.
+    example: 5000
+  credit_amount:
+    type: string
+    pattern: "^[0-9]+.?[0-9]*$"
+    description: The amount funded from the inbound wallet transaction, expressed in credits.
+    example: "5.0"
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date of the funding record creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    example: "2022-04-29T08:59:51Z"
+  wallet_transaction:
+    $ref: "./WalletTransactionObject.yaml"
