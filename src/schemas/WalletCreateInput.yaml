@@ -132,6 +132,8 @@ properties:
           - "null"
         description: If set to true, the wallet will ignore paid top-up limits on creation.
         example: false
+      invoice_custom_section:
+        $ref: "./InvoiceCustomSectionInput.yaml"
       recurring_transaction_rules:
         type:
           - array
@@ -236,6 +238,8 @@ properties:
               type: boolean
               description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
               example: false
+            invoice_custom_section:
+              $ref: "./InvoiceCustomSectionInput.yaml"
             payment_method:
               $ref: "./PaymentMethodReference.yaml"
               description: Optional payment method to use for processing recurring top-up payments.
