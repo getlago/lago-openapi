@@ -3,4 +3,13 @@ required:
   - alert
 properties:
   alert:
-    $ref: './AlertBaseInput.yaml'
+    allOf:
+      - $ref: './AlertBaseInput.yaml'
+      - type: object
+        properties:
+          billable_metric_code:
+            type:
+              - string
+              - "null"
+            description: The code of the billable metric associated with the alert. Only for alerts based on a billable metric.
+            example: "storage_usage"
