@@ -19,3 +19,5 @@ properties:
     type: object
     description: Key value list of more elaborated error detail, where by the key of error_code an external service error details are stored
     example: { tax_error: "taxDateTooFarInFuture" }
+    additionalProperties:
+      type: string

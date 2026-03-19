@@ -1,18 +1,23 @@
 allOf:
-  - $ref: './CustomerObject.yaml'
+  - $ref: "./CustomerObject.yaml"
   - type: object
     properties:
       metadata:
         type: array
         items:
-          $ref: './CustomerMetadata.yaml'
+          $ref: "./CustomerMetadata.yaml"
       taxes:
         description: List of customer taxes
         type: array
         items:
-          $ref: './TaxObject.yaml'
+          $ref: "./TaxObject.yaml"
       applicable_invoice_custom_sections:
         description: The customer’s invoice custom section used for generating invoices.
         type: array
         items:
-          $ref: './InvoiceCustomSectionObject.yaml'
+          $ref: "./InvoiceCustomSectionObject.yaml"
+      error_details:
+        description: List of errors with details that might have been raised while processing backgroud actions for the customers
+        type: array
+        items:
+          $ref: "./ErrorDetailObject.yaml"
