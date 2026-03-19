@@ -1,0 +1,36 @@
+type: object
+required:
+  - lago_id
+  - lago_invoice_id
+  - code
+  - details
+  - display_name
+  - created_at
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the applied invoice custom section in the Lago application.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_invoice_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the invoice this custom section is applied to.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  code:
+    type: string
+    description: Unique code identifying the invoice custom section.
+    example: "eu_bank_details"
+  details:
+    type: string
+    description: The value shown on the invoice PDF.
+    example: "Bank Name: Lago Bank, IBAN: FR7630004000031234567890143"
+  display_name:
+    type: string
+    description: The name of the invoice custom section displayed on the invoice.
+    example: "Bank Details:"
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date of the applied invoice custom section creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+    example: "2023-07-06T14:35:58Z"

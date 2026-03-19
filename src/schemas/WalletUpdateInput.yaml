@@ -34,6 +34,8 @@ properties:
         type: boolean
         description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
         example: false
+      invoice_custom_section:
+        $ref: "./InvoiceCustomSectionInput.yaml"
       recurring_transaction_rules:
         type: array
         description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
@@ -137,6 +139,8 @@ properties:
                 - "null"
               description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
               example: "Tokens for models 'high-fidelity-boost'"
+            invoice_custom_section:
+              $ref: "./InvoiceCustomSectionInput.yaml"
             payment_method:
               $ref: "./PaymentMethodReference.yaml"
               description: Optional payment method to use for processing recurring top-up payments.

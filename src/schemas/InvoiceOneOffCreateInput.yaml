@@ -69,6 +69,8 @@ properties:
               description: If true, the invoice will be created but not sent to the payment provider.
               example: true
               default: false
+      invoice_custom_section:
+        $ref: "./InvoiceCustomSectionInput.yaml"
       payment_method:
         $ref: "./PaymentMethodReference.yaml"
         description: Optional payment method to use for processing the invoice payment.

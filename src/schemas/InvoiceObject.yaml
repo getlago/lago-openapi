@@ -17,6 +17,11 @@ allOf:
         type: array
         items:
           $ref: "./InvoiceAppliedTaxObject.yaml"
+      applied_invoice_custom_sections:
+        description: The invoice custom sections applied to this invoice for PDF generation.
+        type: array
+        items:
+          $ref: "./InvoiceAppliedInvoiceCustomSectionObject.yaml"
       applied_usage_thresholds:
         type: array
         items:
