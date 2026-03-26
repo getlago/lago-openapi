@@ -10988,6 +10988,20 @@ components:
           type: string
           description: The name of the coupon.
           example: Startup Deal
+        coupon_status:
+          type: string
+          enum:
+            - active
+            - terminated
+          description: The status of the parent coupon. Can be either `active` or `terminated`.
+          example: active
+        coupon_deleted_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time when the parent coupon was deleted. If null, the coupon still exists. It is expressed in UTC format according to the ISO 8601 datetime standard.
+          example: '2022-04-29T08:59:51Z'
         lago_customer_id:
           type: string
           format: uuid
