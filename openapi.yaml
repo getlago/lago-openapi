@@ -20896,14 +20896,25 @@ components:
       required:
         - lago_id
         - lago_wallet_id
+        - lago_invoice_id
+        - lago_credit_note_id
+        - lago_voided_invoice_id
         - status
         - source
         - transaction_status
         - transaction_type
         - credit_amount
         - amount
+        - remaining_amount_cents
+        - remaining_credit_amount
+        - priority
+        - invoice_requires_successful_payment
+        - settled_at
+        - failed_at
         - created_at
+        - metadata
         - name
+        - payment_method
       properties:
         lago_id:
           type: string
