@@ -20896,14 +20896,25 @@ components:
       required:
         - lago_id
         - lago_wallet_id
+        - lago_invoice_id
+        - lago_credit_note_id
+        - lago_voided_invoice_id
         - status
         - source
         - transaction_status
         - transaction_type
         - credit_amount
         - amount
+        - remaining_amount_cents
+        - remaining_credit_amount
+        - priority
+        - invoice_requires_successful_payment
+        - settled_at
+        - failed_at
         - created_at
+        - metadata
         - name
+        - payment_method
       properties:
         lago_id:
           type: string
@@ -20914,6 +20925,20 @@ components:
           type: string
           format: uuid
           description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_invoice_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier assigned to the invoice associated with this wallet transaction. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_credit_note_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the credit note associated with this wallet transaction. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_voided_invoice_id:
           type:
@@ -20998,6 +21023,10 @@ components:
           pattern: ^[0-9]+.?[0-9]*$
           description: The remaining unconsumed amount of an inbound wallet transaction, expressed in credits. Only present for inbound transactions on traceable wallets.
           example: '5.0'
+        priority:
+          type: integer
+          description: The priority of the wallet transaction, used to determine the order in which inbound transactions are consumed. Lower values are consumed first.
+          example: 50
         settled_at:
           type:
             - string
