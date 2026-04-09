@@ -12,6 +12,8 @@ required:
   - units
   - total_aggregated_units
   - precise_unit_amount
+  - sub_total_excluding_taxes_amount_cents
+  - sub_total_excluding_taxes_precise_amount_cents
   - payment_status
 properties:
   lago_id:
@@ -218,6 +220,14 @@ properties:
     type: string
     description: The coupon amount applied to the fee, with precision.
     example: "0.0"
+  sub_total_excluding_taxes_amount_cents:
+    type: integer
+    description: The sub total of the fee excluding taxes, in cents.
+    example: 100
+  sub_total_excluding_taxes_precise_amount_cents:
+    type: string
+    description: The sub total of the fee excluding taxes, with precision.
+    example: "100.0"
   amount_details:
     $ref: "./FeeAmountDetails.yaml"
     description: List of all unit amount details for calculating the fee.
