@@ -3067,7 +3067,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerCheckoutUrl'
+                type: object
+                required:
+                  - customer
+                properties:
+                  customer:
+                    $ref: '#/components/schemas/CustomerCheckoutUrl'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
