@@ -18,7 +18,12 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/CustomerCheckoutUrl.yaml'
+            type: object
+            required:
+              - customer
+            properties:
+              customer:
+                $ref: '../schemas/CustomerCheckoutUrl.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
     '404':
