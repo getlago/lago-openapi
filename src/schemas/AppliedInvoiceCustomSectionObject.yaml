@@ -1,21 +1,24 @@
 type: object
 required:
   - lago_id
-  - invoice_custom_section_id
   - created_at
+  - invoice_custom_section
 properties:
   lago_id:
     type: string
     format: "uuid"
     description: Unique identifier of the applied invoice custom section in the Lago application.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-  invoice_custom_section_id:
-    type: string
-    format: "uuid"
-    description: Unique identifier of the invoice custom section that was applied.
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   created_at:
     type: string
     format: "date-time"
     description: The date of the applied invoice custom section creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
     example: "2023-07-06T14:35:58Z"
+  invoice_custom_section_id:
+    deprecated: true
+    type: string
+    format: "uuid"
+    description: Unique identifier of the invoice custom section that was applied.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  invoice_custom_section:
+    $ref: "./InvoiceCustomSectionObject.yaml"
