@@ -20,7 +20,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Alert.yaml"
+            $ref: "../schemas/WalletAlert.yaml"
     "401":
       $ref: "../responses/Unauthorized.yaml"
     "404":
@@ -44,7 +44,7 @@ put:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Alert.yaml"
+            $ref: "../schemas/WalletAlert.yaml"
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":
@@ -65,7 +65,7 @@ delete:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Alert.yaml"
+            $ref: "../schemas/WalletAlert.yaml"
     "401":
       $ref: "../responses/Unauthorized.yaml"
     "404":
