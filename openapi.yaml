@@ -2744,7 +2744,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alerts'
+                $ref: '#/components/schemas/WalletAlerts'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -2771,8 +2771,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Alert'
-                  - $ref: '#/components/schemas/Alerts'
+                  - $ref: '#/components/schemas/WalletAlert'
+                  - $ref: '#/components/schemas/WalletAlerts'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2817,7 +2817,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alert'
+                $ref: '#/components/schemas/WalletAlert'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -2841,7 +2841,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alert'
+                $ref: '#/components/schemas/WalletAlert'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2862,7 +2862,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alert'
+                $ref: '#/components/schemas/WalletAlert'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -16103,13 +16103,12 @@ components:
               pattern: ^[0-9]+.?[0-9]*$
               description: A value that should trigger this alert, formatted as a BigDecimal.
               example: '99.0'
-    AlertObject:
+    WalletAlertObject:
       type: object
       required:
         - lago_id
         - lago_organization_id
         - external_subscription_id
-        - external_customer_id
         - billable_metric
         - alert_type
         - code
@@ -16130,56 +16129,43 @@ components:
           description: Unique identifier of the organization, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_subscription_id:
-          type:
-            - string
-            - 'null'
-          description: The subscription external unique identifier (provided by your own application).
-          example: sub_1234567890
-        external_customer_id:
-          type: string
-          description: The customer external unique identifier (provided by your own application).
-          example: cus_0987654321
+          type: 'null'
         lago_wallet_id:
-          type:
-            - string
-            - 'null'
+          type: string
           description: Unique identifier of the wallet, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         wallet_code:
-          type:
-            - string
-            - 'null'
+          type: string
           description: The wallet external unique identifier (provided by your own application).
           example: wallet_code
         billable_metric:
-          $ref: '#/components/schemas/BillableMetricObject'
-          description: The billable metric associated with the alert. Only for alerts based on a billable metric.
+          type: 'null'
         alert_type:
           type: string
           description: The type of alert.
           enum:
-            - current_usage_amount
-            - billable_metric_current_usage_amount
-            - billable_metric_current_usage_units
-            - lifetime_usage_amount
-          example: billable_metric_current_usage_amount
+            - wallet_balance_amount
+            - wallet_credits_balance
+            - wallet_ongoing_balance_amount
+            - wallet_credits_ongoing_balance
+          example: wallet_balance_amount
         code:
           type: string
           description: Unique code used to identify the alert.
-          example: storage_threshold_alert
+          example: wallet_balance_alert
         name:
           type:
             - string
             - 'null'
           description: The name of the alert.
-          example: Storage Usage Alert
+          example: Wallet Balance Alert
         direction:
           type: string
           description: Indicates whether the alert is triggered when the monitored metric goes above or below the threshold.
           enum:
             - increasing
             - decreasing
-          example: increasing
+          example: decreasing
         previous_value:
           type: number
           description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds.
@@ -16201,7 +16187,7 @@ components:
           format: date-time
           description: The date and time in UTC (ISO 8601) when the alert was created.
           example: '2025-03-20T10:00:00Z'
-    Alerts:
+    WalletAlerts:
       type: object
       required:
         - alerts
@@ -16209,7 +16195,7 @@ components:
         alerts:
           type: array
           items:
-            $ref: '#/components/schemas/AlertObject'
+            $ref: '#/components/schemas/WalletAlertObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
     AlertThresholdInput:
@@ -16263,6 +16249,8 @@ components:
                   enum:
                     - wallet_balance_amount
                     - wallet_credits_balance
+                    - wallet_ongoing_balance_amount
+                    - wallet_credits_ongoing_balance
                   example: wallet_balance_amount
                 code:
                   type: string
@@ -16297,6 +16285,8 @@ components:
                     enum:
                       - wallet_balance_amount
                       - wallet_credits_balance
+                      - wallet_ongoing_balance_amount
+                      - wallet_credits_ongoing_balance
                     example: wallet_balance_amount
                   code:
                     type: string
@@ -16308,13 +16298,13 @@ components:
                       - 'null'
                     description: The name of the alert.
                     example: Wallet Balance Alert
-    Alert:
+    WalletAlert:
       type: object
       required:
         - alert
       properties:
         alert:
-          $ref: '#/components/schemas/AlertObject'
+          $ref: '#/components/schemas/WalletAlertObject'
     WalletAlertUpdateInput:
       type: object
       required:
@@ -20550,6 +20540,102 @@ components:
               type: integer
               example: 100
               description: The historical usage amount in cents for the subscription (provided by your own application).
+    AlertObject:
+      type: object
+      required:
+        - lago_id
+        - lago_organization_id
+        - external_subscription_id
+        - billable_metric
+        - alert_type
+        - code
+        - name
+        - previous_value
+        - last_processed_at
+        - thresholds
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the alert, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_subscription_id:
+          type:
+            - string
+            - 'null'
+          description: The subscription external unique identifier (provided by your own application).
+          example: sub_1234567890
+        lago_wallet_id:
+          type: 'null'
+        wallet_code:
+          type: 'null'
+        billable_metric:
+          $ref: '#/components/schemas/BillableMetricObject'
+          description: The billable metric associated with the alert. Only for alerts based on a billable metric.
+        alert_type:
+          type: string
+          description: The type of alert.
+          enum:
+            - current_usage_amount
+            - billable_metric_current_usage_amount
+            - billable_metric_current_usage_units
+            - lifetime_usage_amount
+          example: billable_metric_current_usage_amount
+        code:
+          type: string
+          description: Unique code used to identify the alert.
+          example: storage_threshold_alert
+        name:
+          type:
+            - string
+            - 'null'
+          description: The name of the alert.
+          example: Storage Usage Alert
+        direction:
+          type: string
+          description: Indicates whether the alert is triggered when the monitored metric goes above or below the threshold.
+          enum:
+            - increasing
+            - decreasing
+          example: increasing
+        previous_value:
+          type: number
+          description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds.
+          example: 1000
+        last_processed_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the system checked if this alert should be triggered. Null until it's processed for the first time.
+          example: '2025-05-19T10:04:21Z'
+        thresholds:
+          type: array
+          description: Array of thresholds associated with the alert.
+          items:
+            $ref: '#/components/schemas/AlertThresholdObject'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the alert was created.
+          example: '2025-03-20T10:00:00Z'
+    Alerts:
+      type: object
+      required:
+        - alerts
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     AlertCreateInput:
       type: object
       required:
@@ -20613,6 +20699,13 @@ components:
                     type: string
                     description: Unique code used to identify the alert.
                     example: storage_threshold_alert
+    Alert:
+      type: object
+      required:
+        - alert
+      properties:
+        alert:
+          $ref: '#/components/schemas/AlertObject'
     AlertUpdateInput:
       type: object
       required:

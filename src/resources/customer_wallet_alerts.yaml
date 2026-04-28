@@ -13,7 +13,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Alerts.yaml"
+            $ref: "../schemas/WalletAlerts.yaml"
     "401":
       $ref: "../responses/Unauthorized.yaml"
     "404":
@@ -43,8 +43,8 @@ post:
         application/json:
           schema:
             oneOf:
-              - $ref: "../schemas/Alert.yaml"
-              - $ref: "../schemas/Alerts.yaml"
+              - $ref: "../schemas/WalletAlert.yaml"
+              - $ref: "../schemas/WalletAlerts.yaml"
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":
