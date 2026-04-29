@@ -82,7 +82,7 @@ properties:
     description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
     example: 1200
   properties:
-    $ref: "./ChargeProperties.yaml"
+    $ref: "./ChargeObjectProperties.yaml"
     description: List of all thresholds utilized for calculating the charge.
   filters:
     type: array
