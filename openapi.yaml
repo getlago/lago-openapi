@@ -16904,6 +16904,18 @@ components:
             - object
             - 'null'
           description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
+          properties:
+            target_wallet_code:
+              type:
+                - string
+                - 'null'
+              example: main_wallet
+              description: |-
+                The code of the wallet targeted by this event for prepaid credits deduction.
+                When provided, credits are drawn from this specific wallet instead of following the standard wallet selection logic.
+                If the code does not match an existing wallet, no credits will be applied for the event.
+                This field is only taken into account when the targeted charge has `accepts_target_wallet` set to `true`.
+                This field requires a premium integration.
           additionalProperties:
             oneOf:
               - type: string
@@ -16979,6 +16991,18 @@ components:
             properties:
               type: object
               description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
+              properties:
+                target_wallet_code:
+                  type:
+                    - string
+                    - 'null'
+                  example: main_wallet
+                  description: |-
+                    The code of the wallet targeted by this event for prepaid credits deduction.
+                    When provided, credits are drawn from this specific wallet instead of following the standard wallet selection logic.
+                    If the code does not match an existing wallet, no credits will be applied for the event.
+                    This field is only taken into account when the targeted charge has `accepts_target_wallet` set to `true`.
+                    This field requires a premium integration.
     Fees:
       type: object
       required:
@@ -18414,7 +18438,10 @@ components:
           type:
             - boolean
             - 'null'
-          description: Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+          description: |-
+            Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+            When `true`, events may include a `target_wallet_code` in their `properties` to direct credit deduction to a specific wallet.
+            This field requires a premium integration.
           example: false
         lago_parent_id:
           type:
@@ -19854,6 +19881,18 @@ components:
                 - If set to `true`, the charge is prorated based on the remaining days in the current billing period.
                 - If set to `false`, the charge is billed in full.
                 - If not defined in the request, default value is `false`.
+            accepts_target_wallet:
+              type:
+                - boolean
+                - 'null'
+              example: false
+              description: |-
+                Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+                When set to `true`, events may include a `target_wallet_code` in their `properties` to direct credit deduction to a specific wallet.
+                If no `target_wallet_code` is provided on the event, the standard wallet selection logic is applied.
+                If the `target_wallet_code` does not match an existing wallet, no credits will be applied for that event.
+
+                This field requires a premium integration.
     ChargeCreateInput:
       type: object
       required:
