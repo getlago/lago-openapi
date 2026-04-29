@@ -68,6 +68,21 @@ get:
         type: boolean
         default: false
         example: true
+    - name: filter_by_presentation[]
+      in: query
+      description: >
+        Filter `presentation_breakdowns` by a list of presentation group key values.
+        Only breakdowns matching the provided values will be returned.
+        Pass an empty array to disable `presentation_breakdowns` entirely.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - engineering
+          - operations
   operationId: findCustomerCurrentUsage
   responses:
     '200':

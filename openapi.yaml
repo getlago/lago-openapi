@@ -2935,6 +2935,19 @@ paths:
             type: boolean
             default: false
             example: true
+        - name: filter_by_presentation[]
+          in: query
+          description: |
+            Filter `presentation_breakdowns` by a list of presentation group key values. Only breakdowns matching the provided values will be returned. Pass an empty array to disable `presentation_breakdowns` entirely.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - engineering
+              - operations
       operationId: findCustomerCurrentUsage
       responses:
         '200':
@@ -16393,6 +16406,21 @@ components:
             example:
               region:
                 - us-east-1
+    CustomerChargePresentationBreakdownsObject:
+      type: array
+      description: Array of usage breakdowns split by presentation group keys without affecting pricing or aggregation.
+      items:
+        type: object
+        properties:
+          presentation_by:
+            type: object
+            description: Key value list of event properties used for presentation grouping.
+            additionalProperties:
+              type: string
+          units:
+            type: string
+            example: '9.0'
+            description: The number of units consumed for a specific presentation group.
     CustomerChargeGroupedUsageObject:
       type: array
       description: Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.
@@ -16433,6 +16461,8 @@ components:
               type: string
           filters:
             $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
+          presentation_breakdowns:
+            $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
     CustomerChargeUsageObject:
       type: object
       required:
@@ -16532,6 +16562,8 @@ components:
           $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
         grouped_usage:
           $ref: '#/components/schemas/CustomerChargeGroupedUsageObject'
+        presentation_breakdowns:
+          $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
     CustomerUsageObject:
       type: object
       required:
@@ -18269,6 +18301,31 @@ components:
                 pattern: ^[0-9]+.?[0-9]*$
                 description: The unit price, excluding tax, for a specific tier of a `volume` charge model. It is expressed as a decimal value.
                 example: '0.5'
+    ChargeObjectProperties:
+      allOf:
+        - $ref: '#/components/schemas/ChargeProperties'
+        - type: object
+          properties:
+            presentation_group_keys:
+              type: array
+              description: Groups usage into sub-items on invoices for display only, without affecting pricing or aggregation.
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                    description: The event property to group by.
+                    example: region
+                  options:
+                    type: object
+                    properties:
+                      display_in_invoice:
+                        type: boolean
+                        example: true
+              example:
+                - value: region
+                  options:
+                    display_in_invoice: true
     ChargeFilterObject:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
@@ -18381,7 +18438,7 @@ components:
           description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
           example: 1200
         properties:
-          $ref: '#/components/schemas/ChargeProperties'
+          $ref: '#/components/schemas/ChargeObjectProperties'
           description: List of all thresholds utilized for calculating the charge.
         filters:
           type: array
@@ -19783,7 +19840,7 @@ components:
           description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
           example: 0
         properties:
-          $ref: '#/components/schemas/ChargeProperties'
+          $ref: '#/components/schemas/ChargeObjectProperties'
           description: List of all thresholds utilized for calculating the charge.
         filters:
           type: array
