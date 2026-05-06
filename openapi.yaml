@@ -2898,10 +2898,46 @@ paths:
             type: boolean
             default: true
             example: true
+        - name: charge_id
+          in: query
+          description: Filter usage to a specific charge by its Lago ID (UUID). Replaces deprecated `filter_by_charge_id`.
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: charge_code
+          in: query
+          description: Filter usage to a specific charge by its code. Replaces deprecated `filter_by_charge_code`.
+          required: false
+          schema:
+            type: string
+            example: storage
+        - name: billable_metric_code
+          in: query
+          description: Filter usage to a specific billable metric by its code.
+          required: false
+          schema:
+            type: string
+            example: storage
+        - name: group
+          in: query
+          description: |
+            Filter usage by pricing group. Pass key/value pairs as query parameters, e.g. `group[cloud]=aws`. Replaces deprecated `filter_by_group`.
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+            example:
+              cloud: aws
         - name: filter_by_charge_id
           in: query
           description: Filter usage to a specific charge by its Lago ID (UUID).
           required: false
+          deprecated: true
           schema:
             type: string
             format: uuid
@@ -2910,6 +2946,7 @@ paths:
           in: query
           description: Filter usage to a specific charge by its code.
           required: false
+          deprecated: true
           schema:
             type: string
             example: storage
@@ -2918,6 +2955,7 @@ paths:
           description: |
             Filter usage by pricing group. Pass key/value pairs as query parameters, e.g. `filter_by_group[cloud]=aws`.
           required: false
+          deprecated: true
           style: deepObject
           explode: true
           schema:
@@ -2929,7 +2967,7 @@ paths:
         - name: full_usage
           in: query
           description: |
-            When `true`, returns usage since subscription start instead of the current billing period. Requires either `filter_by_charge_id`, `filter_by_charge_code`, or `filter_by_group` to be set.
+            When `true`, returns usage since subscription start instead of the current billing period. Requires one of `charge_id`, `charge_code`, `group` (or their deprecated `filter_by_*` equivalents) to be set.
           required: false
           schema:
             type: boolean
