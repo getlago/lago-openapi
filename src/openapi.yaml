@@ -389,6 +389,12 @@ paths:
 webhooks:
   alert_triggered:
     $ref: "./webhooks/alert_triggered.yaml"
+  billable_metric_created:
+    $ref: "./webhooks/billable_metric_created.yaml"
+  billable_metric_updated:
+    $ref: "./webhooks/billable_metric_updated.yaml"
+  billable_metric_deleted:
+    $ref: "./webhooks/billable_metric_deleted.yaml"
   customer_created:
     $ref: "./webhooks/customer_created.yaml"
   customer_updated:

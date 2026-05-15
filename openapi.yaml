@@ -6792,6 +6792,123 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  billable_metric_created:
+    post:
+      operationId: billableMetricCreated
+      summary: A new billable metric has been created
+      description: A new billable metric has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new billable metric
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - billable_metric
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - billable_metric.created
+                object_type:
+                  type: string
+                  enum:
+                    - billable_metric
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                billable_metric:
+                  $ref: '#/components/schemas/BillableMetricObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  billable_metric_updated:
+    post:
+      operationId: billableMetricUpdated
+      summary: A billable metric has been updated
+      description: A billable metric has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the billable metric
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - billable_metric
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - billable_metric.updated
+                object_type:
+                  type: string
+                  enum:
+                    - billable_metric
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                billable_metric:
+                  $ref: '#/components/schemas/BillableMetricObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  billable_metric_deleted:
+    post:
+      operationId: billableMetricDeleted
+      summary: A billable metric has been deleted
+      description: A billable metric has been deleted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the billable metric
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - billable_metric
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - billable_metric.deleted
+                object_type:
+                  type: string
+                  enum:
+                    - billable_metric
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                billable_metric:
+                  $ref: '#/components/schemas/BillableMetricObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   customer_created:
     post:
       operationId: customerCreated
