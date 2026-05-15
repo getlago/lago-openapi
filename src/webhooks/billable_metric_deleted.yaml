@@ -1,0 +1,38 @@
+post:
+  operationId: billableMetricDeleted
+  summary: A billable metric has been deleted
+  description: A billable metric has been deleted
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the billable metric
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - billable_metric
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - billable_metric.deleted
+            object_type:
+              type: string
+              enum:
+                - billable_metric
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            billable_metric:
+              $ref: "../schemas/BillableMetricObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully
