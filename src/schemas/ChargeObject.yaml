@@ -115,7 +115,10 @@ properties:
     type:
       - boolean
       - "null"
-    description: Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+    description: |-
+      Specifies whether the charge accepts a target wallet for prepaid credits deduction.
+      When `true`, events may include a `target_wallet_code` in their `properties` to direct credit deduction to a specific wallet.
+      This field requires a premium integration.
     example: false
   lago_parent_id:
     type:

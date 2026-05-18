@@ -42,6 +42,18 @@ properties:
       - object
       - "null"
     description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
+    properties:
+      target_wallet_code:
+        type:
+          - string
+          - "null"
+        example: "main_wallet"
+        description: |-
+          The code of the wallet targeted by this event for prepaid credits deduction.
+          When provided, credits are drawn from this specific wallet instead of following the standard wallet selection logic.
+          If the code does not match an existing wallet, no credits will be applied for the event.
+          This field is only taken into account when the targeted charge has `accepts_target_wallet` set to `true`.
+          This field requires a premium integration.
     additionalProperties:
       oneOf:
         - type: string
