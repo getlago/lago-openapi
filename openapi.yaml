@@ -15423,6 +15423,15 @@ components:
         payment_method:
           $ref: '#/components/schemas/PaymentMethodReference'
           description: The payment method assigned to this subscription for processing payments.
+        consolidate_invoice:
+          type: boolean
+          default: true
+          example: true
+          description: |
+            Controls whether this subscription is eligible to be grouped with other subscriptions of the same customer on a consolidated recurring invoice.
+
+            - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
+            - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice, regardless of other grouping criteria.
     SubscriptionsPaginated:
       type: object
       required:
@@ -20508,6 +20517,15 @@ components:
             payment_method:
               $ref: '#/components/schemas/PaymentMethodReference'
               description: Optional payment method to use for processing subscription payments.
+            consolidate_invoice:
+              type: boolean
+              default: true
+              example: true
+              description: |
+                Defines whether this subscription should be grouped with other subscriptions of the same customer when generating recurring invoices.
+
+                - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
+                - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
     ApplicableUsageThreshold:
       type: object
       required:
@@ -20590,6 +20608,14 @@ components:
             payment_method:
               $ref: '#/components/schemas/PaymentMethodReference'
               description: Optional payment method to use for processing subscription payments.
+            consolidate_invoice:
+              type: boolean
+              example: false
+              description: |
+                Defines whether this subscription should be grouped with other subscriptions of the same customer when generating recurring invoices.
+
+                - `true`: the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
+                - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
     Subscription:
       type: object
       required:
