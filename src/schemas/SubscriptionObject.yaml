@@ -200,3 +200,12 @@ properties:
   payment_method:
     $ref: "./PaymentMethodReference.yaml"
     description: The payment method assigned to this subscription for processing payments.
+  consolidate_invoice:
+    type: boolean
+    default: true
+    example: true
+    description: |
+      Controls whether this subscription is eligible to be grouped with other subscriptions of the same customer on a consolidated recurring invoice.
+
+      - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
+      - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice, regardless of other grouping criteria.
