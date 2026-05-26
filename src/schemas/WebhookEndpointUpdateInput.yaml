@@ -19,3 +19,15 @@ properties:
           - jwt
           - hmac
           - null
+      name:
+        type: string
+        description: The name of the webhook.
+        example: EC2-production
+      event_types:
+        type:
+          - array
+          - "null"
+        description: A list of event types that will trigger the webhook.
+        items:
+          type: string
+        example: ["invoice.voided", "customer.created"]
