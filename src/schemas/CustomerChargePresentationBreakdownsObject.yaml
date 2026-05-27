@@ -1,0 +1,14 @@
+type: array
+description: Array of usage breakdowns split by presentation group keys without affecting pricing or aggregation.
+items:
+  type: object
+  properties:
+    presentation_by:
+      type: object
+      description: Key value list of event properties used for presentation grouping.
+      additionalProperties:
+        type: string
+    units:
+      type: string
+      example: "9.0"
+      description: The number of units consumed for a specific presentation group.
