@@ -4211,6 +4211,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/external_customer_id'
         - $ref: '#/components/parameters/payment_status'
       responses:
@@ -5158,6 +5159,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/currency'
         - name: external_customer_id
           in: query
           description: The customer external unique identifier (provided by your own application)
@@ -6174,6 +6176,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/currency'
         - name: external_customer_id
           in: query
           description: The customer external unique identifier (provided by your own application).
@@ -9095,6 +9098,15 @@ components:
         type: string
         format: uuid
         example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    currency:
+      name: currency
+      in: query
+      description: Filter the results by currency, expressed as an ISO 4217 code.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: EUR
     plan_code:
       name: code
       in: path
