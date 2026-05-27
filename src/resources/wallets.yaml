@@ -35,6 +35,7 @@ get:
   parameters:
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
+    - $ref: "../parameters/currency.yaml"
     - name: external_customer_id
       in: query
       description: The customer external unique identifier (provided by your own application).
