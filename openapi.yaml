@@ -12336,6 +12336,21 @@ components:
           type: string
           description: The conversion rate from pricing units to the plan's currency.
           example: '0.5'
+    PresentationBreakdownsObject:
+      type: array
+      description: Array of usage breakdowns split by presentation group keys without affecting pricing or aggregation.
+      items:
+        type: object
+        properties:
+          presentation_by:
+            type: object
+            description: Key value list of event properties used for presentation grouping.
+            additionalProperties:
+              type: string
+          units:
+            type: string
+            example: '9.0'
+            description: The number of units consumed for a specific presentation group.
     FeeObject:
       type: object
       required:
@@ -12679,6 +12694,8 @@ components:
             - 'null'
           description: Details about the pricing unit used and amounts for this fee.
           $ref: '#/components/schemas/PricingUnitDetailsObject'
+        presentation_breakdowns:
+          $ref: '#/components/schemas/PresentationBreakdownsObject'
     CreditNoteItemObject:
       type: object
       required:
@@ -16360,21 +16377,6 @@ components:
           type: string
           example: '0.5'
           description: The conversion rate from pricing units to the plan's currency.
-    CustomerChargePresentationBreakdownsObject:
-      type: array
-      description: Array of usage breakdowns split by presentation group keys without affecting pricing or aggregation.
-      items:
-        type: object
-        properties:
-          presentation_by:
-            type: object
-            description: Key value list of event properties used for presentation grouping.
-            additionalProperties:
-              type: string
-          units:
-            type: string
-            example: '9.0'
-            description: The number of units consumed for a specific presentation group.
     CustomerChargeFiltersUsageObject:
       type: array
       description: Array of filter object, representing multiple dimensions for a charge item.
@@ -16422,7 +16424,7 @@ components:
               region:
                 - us-east-1
           presentation_breakdowns:
-            $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+            $ref: '#/components/schemas/PresentationBreakdownsObject'
     CustomerChargeGroupedUsageObject:
       type: array
       description: Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.
@@ -16464,7 +16466,7 @@ components:
           filters:
             $ref: '#/components/schemas/CustomerChargeFiltersUsageObject'
           presentation_breakdowns:
-            $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+            $ref: '#/components/schemas/PresentationBreakdownsObject'
     CustomerChargeUsageObject:
       type: object
       required:
@@ -16565,7 +16567,7 @@ components:
         grouped_usage:
           $ref: '#/components/schemas/CustomerChargeGroupedUsageObject'
         presentation_breakdowns:
-          $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+          $ref: '#/components/schemas/PresentationBreakdownsObject'
     CustomerUsageObject:
       type: object
       required:
@@ -16679,9 +16681,9 @@ components:
               region:
                 - us-east-1
           presentation_breakdowns:
-            $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+            $ref: '#/components/schemas/PresentationBreakdownsObject'
           projected_presentation_breakdowns:
-            $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+            $ref: '#/components/schemas/PresentationBreakdownsObject'
     CustomerProjectedChargeGroupedUsageObject:
       type: array
       description: Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.
@@ -16728,9 +16730,9 @@ components:
           filters:
             $ref: '#/components/schemas/CustomerProjectedChargeFiltersUsageObject'
           presentation_breakdowns:
-            $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+            $ref: '#/components/schemas/PresentationBreakdownsObject'
           projected_presentation_breakdowns:
-            $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+            $ref: '#/components/schemas/PresentationBreakdownsObject'
     CustomerProjectedChargeUsageObject:
       type: object
       required:
@@ -16836,9 +16838,9 @@ components:
         grouped_usage:
           $ref: '#/components/schemas/CustomerProjectedChargeGroupedUsageObject'
         presentation_breakdowns:
-          $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+          $ref: '#/components/schemas/PresentationBreakdownsObject'
         projected_presentation_breakdowns:
-          $ref: '#/components/schemas/CustomerChargePresentationBreakdownsObject'
+          $ref: '#/components/schemas/PresentationBreakdownsObject'
     CustomerProjectedUsageObject:
       type: object
       required:
@@ -19425,7 +19427,7 @@ components:
                     description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
                     example: 0
                   properties:
-                    $ref: '#/components/schemas/ChargeProperties'
+                    $ref: '#/components/schemas/ChargeObjectProperties'
                     description: List of all thresholds utilized for calculating the charge.
                   filters:
                     type: array
@@ -19772,7 +19774,7 @@ components:
                     description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
                     example: 0
                   properties:
-                    $ref: '#/components/schemas/ChargeProperties'
+                    $ref: '#/components/schemas/ChargeObjectProperties'
                     description: List of all thresholds utilized for calculating the charge.
                   filters:
                     type: array
@@ -20487,7 +20489,7 @@ components:
                 description: The minimum spending amount required for the charge, measured in cents and excluding any applicable taxes. It indicates the minimum amount that needs to be charged for each billing period.
                 example: 0
               properties:
-                $ref: '#/components/schemas/ChargeProperties'
+                $ref: '#/components/schemas/ChargeObjectProperties'
                 description: List of all thresholds utilized for calculating the charge.
               filters:
                 type: array
