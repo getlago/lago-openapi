@@ -41,4 +41,8 @@ items:
       additionalProperties:
         type: string
     filters:
-      $ref: "./CustomerChargeFiltersUsageObject.yaml"
+      $ref: "./CustomerProjectedChargeFiltersUsageObject.yaml"
+    presentation_breakdowns:
+      $ref: "./PresentationBreakdownsObject.yaml"
+    projected_presentation_breakdowns:
+      $ref: "./PresentationBreakdownsObject.yaml"
