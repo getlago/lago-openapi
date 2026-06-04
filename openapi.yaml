@@ -16636,7 +16636,6 @@ components:
         - amount_currency
         - charge
         - billable_metric
-        - groups
       properties:
         units:
           type: string
@@ -16685,7 +16684,9 @@ components:
                 - volume
               example: graduated
             invoice_display_name:
-              type: string
+              type:
+                - string
+                - 'null'
               description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
               example: Setup
         billable_metric:
