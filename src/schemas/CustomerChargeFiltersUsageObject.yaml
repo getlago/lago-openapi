@@ -1,13 +1,13 @@
 type: array
 description: Array of filter object, representing multiple dimensions for a charge item.
-required:
-  - values
-  - units
-  - total_aggregated_units
-  - events_count
-  - amount_cents
 items:
   type: object
+  required:
+    - values
+    - units
+    - total_aggregated_units
+    - events_count
+    - amount_cents
   properties:
     units:
       type: string
