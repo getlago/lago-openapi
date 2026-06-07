@@ -16120,11 +16120,11 @@ components:
             recurring_transaction_rules:
               type: array
               description: List of recurring transaction rules. Currently, we only allow one recurring rule per wallet.
-              required:
-                - trigger
               items:
                 type: object
                 description: Object that represents rule for wallet recurring transactions.
+                required:
+                  - trigger
                 properties:
                   lago_id:
                     type: string
@@ -16539,14 +16539,14 @@ components:
     CustomerChargeFiltersUsageObject:
       type: array
       description: Array of filter object, representing multiple dimensions for a charge item.
-      required:
-        - values
-        - units
-        - total_aggregated_units
-        - events_count
-        - amount_cents
       items:
         type: object
+        required:
+          - values
+          - units
+          - total_aggregated_units
+          - events_count
+          - amount_cents
         properties:
           units:
             type: string
@@ -16587,15 +16587,14 @@ components:
     CustomerChargeGroupedUsageObject:
       type: array
       description: Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.
-      required:
-        - amount_cents
-        - events_count
-        - units
-        - total_aggregated_units
-        - grouped_by
-        - groups
       items:
         type: object
+        required:
+          - amount_cents
+          - events_count
+          - units
+          - total_aggregated_units
+          - grouped_by
         properties:
           amount_cents:
             type: integer
@@ -16792,15 +16791,15 @@ components:
     CustomerProjectedChargeFiltersUsageObject:
       type: array
       description: Array of filter object, representing multiple dimensions for a charge item.
-      required:
-        - values
-        - units
-        - projected_units
-        - events_count
-        - amount_cents
-        - projected_amount_cents
       items:
         type: object
+        required:
+          - values
+          - units
+          - projected_units
+          - events_count
+          - amount_cents
+          - projected_amount_cents
         properties:
           units:
             type: string
@@ -16847,16 +16846,15 @@ components:
     CustomerProjectedChargeGroupedUsageObject:
       type: array
       description: Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.
-      required:
-        - amount_cents
-        - projected_amount_cents
-        - events_count
-        - units
-        - projected_units
-        - grouped_by
-        - groups
       items:
         type: object
+        required:
+          - amount_cents
+          - projected_amount_cents
+          - events_count
+          - units
+          - projected_units
+          - grouped_by
         properties:
           amount_cents:
             type: integer

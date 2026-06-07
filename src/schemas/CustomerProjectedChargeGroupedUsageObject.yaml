@@ -1,15 +1,14 @@
 type: array
 description: Array of aggregated fees, grouped by the event properties defined in a `standard` charge model.
-required:
-  - amount_cents
-  - projected_amount_cents
-  - events_count
-  - units
-  - projected_units
-  - grouped_by
-  - groups
 items:
   type: object
+  required:
+    - amount_cents
+    - projected_amount_cents
+    - events_count
+    - units
+    - projected_units
+    - grouped_by
   properties:
     amount_cents:
       type: integer
