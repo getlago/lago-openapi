@@ -2,6 +2,10 @@ allOf:
   - $ref: './InvoiceObject.yaml'
   - type: object
     properties:
+      billing_periods:
+        type: array
+        items:
+          $ref: './BillingPeriodObject.yaml'
       credits:
         type: array
         items:
