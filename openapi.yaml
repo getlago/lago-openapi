@@ -15415,6 +15415,7 @@ components:
         - created_at
         - expiration_at
         - granted_credits
+        - grants_target_top_up
         - ignore_paid_top_up_limits
         - interval
         - invoice_requires_successful_payment
@@ -15480,6 +15481,12 @@ components:
           pattern: ^[0-9]+.?[0-9]*$
           description: The number of free granted credits. Required only if there is no paid credits.
           example: '10.0'
+        grants_target_top_up:
+          type:
+            - boolean
+            - 'null'
+          description: Applies only to `target` rules. When `true`, the recurring top-up grants free credits to reach the target ongoing balance instead of creating a paid top-up (and bypasses the paid top-up minimum). When `false`, the gap is filled with a paid top-up. `null` for `fixed` rules. Defaults to `false` for target rules when omitted.
+          example: false
         started_at:
           type:
             - string
@@ -15921,6 +15928,12 @@ components:
                     pattern: ^[0-9]+.?[0-9]*$
                     description: The number of free granted credits used for recurring top-up.
                     example: '10.0'
+                  grants_target_top_up:
+                    type:
+                      - boolean
+                      - 'null'
+                    description: Applies only to `target` rules. When `true`, the recurring top-up grants free credits to reach the target ongoing balance instead of creating a paid top-up (and bypasses the paid top-up minimum). When `false`, the gap is filled with a paid top-up. `null` for `fixed` rules. Defaults to `false` for target rules when omitted.
+                    example: false
                   method:
                     type: string
                     enum:
@@ -16113,6 +16126,12 @@ components:
                     pattern: ^[0-9]+.?[0-9]*$
                     description: The number of free granted credits. Required only if there is no paid credits.
                     example: '10.0'
+                  grants_target_top_up:
+                    type:
+                      - boolean
+                      - 'null'
+                    description: Applies only to `target` rules. When `true`, the recurring top-up grants free credits to reach the target ongoing balance instead of creating a paid top-up (and bypasses the paid top-up minimum). When `false`, the gap is filled with a paid top-up. `null` for `fixed` rules. Defaults to `false` for target rules when omitted.
+                    example: false
                   started_at:
                     type:
                       - string
