@@ -56,6 +56,13 @@ get:
         items:
           type: string
         example: [billing_entity_code_1, billing_entity_code_2]
+    - name: external_id
+      in: query
+      description: Filter customers by external id
+      required: false
+      schema:
+        type: string
+        example: "john_doe"
     - name: search_term
       in: query
       description: Filter customers by search term. This will filter all customers whose name, firstname, lastname, legal name, external id or email contain the search term.

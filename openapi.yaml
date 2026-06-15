@@ -1881,6 +1881,13 @@ paths:
             example:
               - billing_entity_code_1
               - billing_entity_code_2
+        - name: external_id
+          in: query
+          description: Filter customers by external id
+          required: false
+          schema:
+            type: string
+            example: john_doe
         - name: search_term
           in: query
           description: Filter customers by search term. This will filter all customers whose name, firstname, lastname, legal name, external id or email contain the search term.
@@ -2455,6 +2462,13 @@ paths:
         - $ref: '#/components/parameters/external_customer_id_path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - name: external_id
+          in: query
+          description: The subscription external unique identifier (provided by your own application).
+          required: false
+          schema:
+            type: string
+            example: subscription_premium
         - name: plan_code
           in: query
           description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
@@ -5166,6 +5180,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - name: external_id
+          in: query
+          description: The subscription external unique identifier (provided by your own application).
+          required: false
+          schema:
+            type: string
+            example: subscription_premium
         - name: external_customer_id
           in: query
           description: The customer external unique identifier (provided by your own application)
