@@ -35,6 +35,13 @@ get:
   parameters:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
+    - name: external_id
+      in: query
+      description: The subscription external unique identifier (provided by your own application).
+      required: false
+      schema:
+        type: string
+        example: "subscription_premium"
     - name: external_customer_id
       in: query
       description: The customer external unique identifier (provided by your own application)
