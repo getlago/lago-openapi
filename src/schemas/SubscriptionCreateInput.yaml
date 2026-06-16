@@ -84,3 +84,9 @@ properties:
 
           - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
           - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+      activation_rules:
+        type: array
+        items:
+          $ref: "./SubscriptionActivationRuleInput.yaml"
+        description: |
+          Optional list of activation rules that gate the subscription activation. When a `payment` rule is provided and the plan is paid in advance (and the subscription is not in a trial), the subscription is created in the `incomplete` state and is only activated once the gating payment succeeds. If the payment fails or the rule's `timeout_hours` elapses, the subscription is canceled.

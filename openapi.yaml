@@ -8667,6 +8667,84 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  subscription_incomplete:
+    post:
+      operationId: subscriptionIncomplete
+      summary: A subscription is incomplete and waiting for payment
+      description: A payment-gated subscription has been created in the `incomplete` state and is waiting for the gating payment to succeed before it is activated.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the subscription
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - subscription
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - subscription.incomplete
+                object_type:
+                  type: string
+                  enum:
+                    - subscription
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                subscription:
+                  $ref: '#/components/schemas/SubscriptionWithCustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  subscription_canceled:
+    post:
+      operationId: subscriptionCanceled
+      summary: A subscription has been canceled
+      description: A subscription has been canceled before its activation. For payment-gated subscriptions this happens when the gating payment fails or the activation rule expires, in which case the `cancellation_reason` field is set.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the subscription
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - subscription
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - subscription.canceled
+                object_type:
+                  type: string
+                  enum:
+                    - subscription
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                subscription:
+                  $ref: '#/components/schemas/SubscriptionWithCustomerObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   subscription_started:
     post:
       operationId: subscriptionStarted
@@ -15184,6 +15262,68 @@ components:
           format: uuid
           description: The unique identifier of the payment method (required when using a specific provider payment method).
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    SubscriptionActivationRuleObject:
+      type: object
+      required:
+        - lago_id
+        - type
+        - timeout_hours
+        - status
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier assigned to the activation rule within the Lago application. This ID is exclusively created by Lago.
+        type:
+          type: string
+          description: The type of the activation rule. Only `payment` is currently supported. A `payment` rule gates the subscription activation on a successful payment of the first invoice.
+          example: payment
+          enum:
+            - payment
+        timeout_hours:
+          type: integer
+          description: The number of hours the subscription stays in the `incomplete` state waiting for the payment to succeed before it is automatically canceled.
+          example: 48
+        status:
+          type: string
+          description: |-
+            The evaluation status of the activation rule:
+            - `inactive`: the rule has not been evaluated yet.
+            - `pending`: the rule is applicable and is waiting to be satisfied (e.g. waiting for the payment).
+            - `satisfied`: the rule has been satisfied and no longer blocks activation.
+            - `declined`: the rule was applicable but was declined.
+            - `failed`: the rule could not be satisfied (e.g. the payment failed).
+            - `expired`: the rule was not satisfied before its timeout elapsed.
+            - `not_applicable`: the rule did not apply to this subscription.
+          example: pending
+          enum:
+            - inactive
+            - pending
+            - satisfied
+            - declined
+            - failed
+            - expired
+            - not_applicable
+        expires_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-08-10T00:00:00Z'
+          description: The date and time when the rule expires, after which an unsatisfied rule causes the subscription to be canceled. Represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). Null until the rule starts being evaluated.
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The creation date of the activation rule, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+        updated_at:
+          type: string
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: The last update date of the activation rule, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
     SubscriptionObject:
       type: object
       required:
@@ -15258,13 +15398,15 @@ components:
           description: |-
             The status of the subscription, which can have the following values:
             - `active`: the subscription is currently active and applied to the customer.
-            - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer or when a subscription with a pending status is terminated.
+            - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer, when a subscription with a pending status is terminated, or when a payment-gated subscription fails to be paid (or its activation rule expires) before activation. When caused by payment gating, the `cancellation_reason` field is set.
+            - `incomplete`: the subscription was created with a payment activation rule and is waiting for the gating payment to succeed before it becomes `active`. It is automatically `canceled` if the payment fails or the activation rule expires.
             - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
             - `terminated`: the subscription is no longer active.
           example: active
           enum:
             - active
             - canceled
+            - incomplete
             - pending
             - terminated
         created_at:
@@ -15396,6 +15538,33 @@ components:
 
             - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
             - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice, regardless of other grouping criteria.
+        cancellation_reason:
+          type:
+            - string
+            - 'null'
+          example: payment_failed
+          enum:
+            - payment_failed
+            - timeout
+          description: |
+            The reason a payment-gated subscription was canceled before activation. Null unless the subscription was canceled by payment gating.
+
+            - `payment_failed`: the gating payment failed.
+            - `timeout`: the activation rule expired before the payment succeeded.
+        activated_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-08-08T00:00:00Z'
+          description: |
+            The date and time when a payment-gated subscription was activated (i.e. moved from `incomplete` to `active` once the gating payment succeeded), represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). Null while the subscription is still `incomplete`.
+        activation_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionActivationRuleObject'
+          description: |
+            The activation rules attached to the subscription. A payment activation rule gates activation on a successful first payment, keeping the subscription in the `incomplete` state until the payment succeeds or the rule expires.
     SubscriptionsPaginated:
       type: object
       required:
@@ -20714,6 +20883,21 @@ components:
             $ref: '#/components/schemas/UsageThresholdInput'
         metadata:
           $ref: '#/components/schemas/MetadataInput'
+    SubscriptionActivationRuleInput:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: The type of the activation rule. Only `payment` is currently supported. A `payment` rule gates the subscription activation on a successful payment of the first invoice.
+          example: payment
+          enum:
+            - payment
+        timeout_hours:
+          type: integer
+          description: The number of hours the subscription stays in the `incomplete` state waiting for the payment to succeed before it is automatically canceled. Must be a positive integer or zero.
+          example: 48
     SubscriptionCreateInput:
       type: object
       required:
@@ -20801,6 +20985,12 @@ components:
 
                 - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
                 - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+            activation_rules:
+              type: array
+              items:
+                $ref: '#/components/schemas/SubscriptionActivationRuleInput'
+              description: |
+                Optional list of activation rules that gate the subscription activation. When a `payment` rule is provided and the plan is paid in advance (and the subscription is not in a trial), the subscription is created in the `incomplete` state and is only activated once the gating payment succeeds. If the payment fails or the rule's `timeout_hours` elapses, the subscription is canceled.
     ApplicableUsageThreshold:
       type: object
       required:
@@ -20891,6 +21081,12 @@ components:
 
                 - `true`: the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
                 - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+            activation_rules:
+              type: array
+              items:
+                $ref: '#/components/schemas/SubscriptionActivationRuleInput'
+              description: |
+                Optional list of activation rules that gate the subscription activation. Activation rules can only be set or modified while the subscription is `pending` (future-dated and not yet activated); the request is rejected for `incomplete`, `active`, or `terminated` subscriptions.
     Subscription:
       type: object
       required:

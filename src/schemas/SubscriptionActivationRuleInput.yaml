@@ -1,0 +1,14 @@
+type: object
+required:
+  - type
+properties:
+  type:
+    type: string
+    description: The type of the activation rule. Only `payment` is currently supported. A `payment` rule gates the subscription activation on a successful payment of the first invoice.
+    example: "payment"
+    enum:
+      - payment
+  timeout_hours:
+    type: integer
+    description: The number of hours the subscription stays in the `incomplete` state waiting for the payment to succeed before it is automatically canceled. Must be a positive integer or zero.
+    example: 48
