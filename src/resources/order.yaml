@@ -1,0 +1,28 @@
+parameters:
+  - name: id
+    in: path
+    description: Unique identifier of the order, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: "uuid"
+      example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+get:
+  tags:
+    - orders
+  summary: Retrieve an order
+  description: This endpoint is used to retrieve a specific order. It requires the order forms feature to be enabled for the organization.
+  operationId: findOrder
+  responses:
+    "200":
+      description: Order
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Order.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

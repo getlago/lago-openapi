@@ -1,0 +1,99 @@
+type: object
+required:
+  - lago_id
+  - number
+  - status
+  - lago_organization_id
+  - lago_customer_id
+  - lago_quote_id
+  - lago_quote_version_id
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the order form, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  number:
+    type: string
+    description: Unique number identifying the order form within the organization.
+    example: "OF-2024-0001"
+  status:
+    type: string
+    description: Current status of the order form.
+    enum:
+      - generated
+      - signed
+      - expired
+      - voided
+    example: "generated"
+  void_reason:
+    type:
+      - string
+      - "null"
+    description: The reason the order form was voided. `null` unless the order form has been voided.
+    enum:
+      - null
+      - manual
+      - expired
+      - invalid
+    example: "manual"
+  expires_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The date and time when the order form expires. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-06-30T23:59:59Z"
+  signed_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The date and time when the order form was signed. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"
+  voided_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The date and time when the order form was voided. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-20T10:15:00Z"
+  signed_document_url:
+    type:
+      - string
+      - "null"
+    format: "uri"
+    description: A URL to download the signed document attached to the order form. `null` when no signed document has been attached.
+    example: "https://api.getlago.com/rails/active_storage/blobs/redirect/.../OF-2024-0001"
+  lago_organization_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the organization, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_customer_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the customer, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_quote_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the quote the order form originates from.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_quote_version_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the quote version the order form was generated from.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the order form was created. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"
+  updated_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the order form was last updated. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"

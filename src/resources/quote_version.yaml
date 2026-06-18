@@ -1,0 +1,28 @@
+parameters:
+  - name: id
+    in: path
+    description: Unique identifier of the quote version, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: "uuid"
+      example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+get:
+  tags:
+    - quote_versions
+  summary: Retrieve a quote version
+  description: This endpoint is used to retrieve a specific quote version, including its content and billing items. It requires the order forms feature to be enabled for the organization.
+  operationId: findQuoteVersion
+  responses:
+    "200":
+      description: Quote version
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuoteVersion.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

@@ -1,0 +1,30 @@
+parameters:
+  - name: id
+    in: path
+    description: Unique identifier of the quote version to clone, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: "uuid"
+      example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+post:
+  tags:
+    - quote_versions
+  summary: Clone a quote version
+  description: This endpoint is used to create a new draft version of a quote by cloning an existing quote version. It requires the order forms feature to be enabled for the organization.
+  operationId: cloneQuoteVersion
+  responses:
+    "200":
+      description: Quote version cloned
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuoteVersion.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

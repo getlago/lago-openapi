@@ -1,0 +1,14 @@
+type: object
+required:
+  - lago_id
+  - email
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the user who owns the quote, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  email:
+    type: string
+    description: The email address of the user who owns the quote.
+    example: "jane.doe@example.com"

@@ -1,0 +1,111 @@
+get:
+  tags:
+    - order_forms
+  summary: List all order forms
+  description: This endpoint is used to retrieve all order forms. It requires the order forms feature to be enabled for the organization.
+  operationId: findAllOrderForms
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: status
+      in: query
+      description: Filter order forms by status.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - generated
+          - signed
+          - expired
+          - voided
+        example: "generated"
+    - name: customer_id
+      in: query
+      description: Filter order forms by the Lago identifier of the customer.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "uuid"
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    - name: number
+      in: query
+      description: Filter order forms by their number.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "OF-2024-0001"
+    - name: quote_number
+      in: query
+      description: Filter order forms by the number of their originating quote.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "QT-2024-0001"
+    - name: owner_id
+      in: query
+      description: Filter order forms by the Lago identifier of a quote owner.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "uuid"
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    - name: created_at_from
+      in: query
+      description: Filter order forms created at or after a specific date and time.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2024-05-01T00:00:00Z"
+    - name: created_at_to
+      in: query
+      description: Filter order forms created at or before a specific date and time.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2024-05-31T23:59:59Z"
+    - name: expires_at_from
+      in: query
+      description: Filter order forms expiring at or after a specific date and time.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2024-06-01T00:00:00Z"
+    - name: expires_at_to
+      in: query
+      description: Filter order forms expiring at or before a specific date and time.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2024-06-30T23:59:59Z"
+    - name: search_term
+      in: query
+      description: Search order forms by their number.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "OF-2024"
+  responses:
+    "200":
+      description: Order forms
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/OrderFormsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"

@@ -1,0 +1,21 @@
+type: object
+properties:
+  order_form:
+    type: object
+    properties:
+      signed_document:
+        type: string
+        description: The base64 encoded signed document. Accepted content types are `application/pdf`, `image/jpeg` and `image/png`, up to 10MB.
+        example: "data:application/pdf;base64,..."
+      execution_mode:
+        type: string
+        description: How the resulting order should be executed. `execute_in_lago` provisions the subscription in Lago; `order_only` records the order without provisioning.
+        enum:
+          - execute_in_lago
+          - order_only
+        example: "execute_in_lago"
+      execute_at:
+        type: string
+        format: "date-time"
+        description: The date and time at which the order should be executed. Must be in the future. Expressed in UTC according to the ISO 8601 datetime standard.
+        example: "2024-06-01T00:00:00Z"

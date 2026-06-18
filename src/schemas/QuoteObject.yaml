@@ -1,0 +1,63 @@
+type: object
+required:
+  - lago_id
+  - number
+  - order_type
+  - lago_customer_id
+  - lago_organization_id
+  - created_at
+  - updated_at
+  - current_version
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the quote, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  number:
+    type: string
+    description: Unique number identifying the quote within the organization.
+    example: "QT-2024-0001"
+  order_type:
+    type: string
+    description: The type of order the quote describes.
+    enum:
+      - subscription_creation
+      - subscription_amendment
+      - one_off
+    example: "subscription_creation"
+  lago_customer_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the customer, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_subscription_id:
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    description: Unique identifier of the subscription the quote amends. Present only for `subscription_amendment` quotes.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_organization_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the organization, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the quote was created. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"
+  updated_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the quote was last updated. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"
+  current_version:
+    $ref: "./QuoteVersionObject.yaml"
+    description: The latest version of the quote. The `content` and `billing_items` fields are omitted from this embedded version.
+  owners:
+    type: array
+    description: The users who own the quote. Returned only when retrieving a single quote.
+    items:
+      $ref: "./QuoteOwnerObject.yaml"
