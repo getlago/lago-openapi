@@ -47,3 +47,9 @@ properties:
 
           - `true`: the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
           - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+      activation_rules:
+        type: array
+        items:
+          $ref: "./SubscriptionActivationRuleInput.yaml"
+        description: |
+          Optional list of activation rules that gate the subscription activation. Activation rules can only be set or modified while the subscription is `pending` (future-dated and not yet activated); the request is rejected for `incomplete`, `active`, or `terminated` subscriptions.

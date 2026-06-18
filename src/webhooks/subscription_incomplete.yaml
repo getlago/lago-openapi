@@ -1,0 +1,38 @@
+post:
+  operationId: subscriptionIncomplete
+  summary: A subscription is incomplete and waiting for payment
+  description: A payment-gated subscription has been created in the `incomplete` state and is waiting for the gating payment to succeed before it is activated.
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the subscription
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - subscription
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - subscription.incomplete
+            object_type:
+              type: string
+              enum:
+                - subscription
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            subscription:
+              $ref: "../schemas/SubscriptionWithCustomerObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

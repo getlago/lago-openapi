@@ -71,13 +71,15 @@ properties:
     description: |-
       The status of the subscription, which can have the following values:
       - `active`: the subscription is currently active and applied to the customer.
-      - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer or when a subscription with a pending status is terminated.
+      - `canceled`: the subscription has been stopped before its activation. This can occur when two consecutive downgrades have been applied to a customer, when a subscription with a pending status is terminated, or when a payment-gated subscription fails to be paid (or its activation rule expires) before activation. When caused by payment gating, the `cancellation_reason` field is set.
+      - `incomplete`: the subscription was created with a payment activation rule and is waiting for the gating payment to succeed before it becomes `active`. It is automatically `canceled` if the payment fails or the activation rule expires.
       - `pending`: a previous subscription has been downgraded, and the current one is awaiting automatic activation at the end of the billing period.
       - `terminated`: the subscription is no longer active.
     example: active
     enum:
       - active
       - canceled
+      - incomplete
       - pending
       - terminated
   created_at:
@@ -209,3 +211,30 @@ properties:
 
       - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
       - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice, regardless of other grouping criteria.
+  cancellation_reason:
+    type:
+      - string
+      - "null"
+    example: "payment_failed"
+    enum:
+      - payment_failed
+      - timeout
+    description: |
+      The reason a payment-gated subscription was canceled before activation. Null unless the subscription was canceled by payment gating.
+
+      - `payment_failed`: the gating payment failed.
+      - `timeout`: the activation rule expired before the payment succeeded.
+  activated_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    example: "2022-08-08T00:00:00Z"
+    description: |
+      The date and time when a payment-gated subscription was activated (i.e. moved from `incomplete` to `active` once the gating payment succeeded), represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). Null while the subscription is still `incomplete`.
+  activation_rules:
+    type: array
+    items:
+      $ref: "./SubscriptionActivationRuleObject.yaml"
+    description: |
+      The activation rules attached to the subscription. A payment activation rule gates activation on a successful first payment, keeping the subscription in the `incomplete` state until the payment succeeds or the rule expires.
