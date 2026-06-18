@@ -1,0 +1,11 @@
+type: object
+required:
+  - orders
+  - meta
+properties:
+  orders:
+    type: array
+    items:
+      $ref: "./OrderObject.yaml"
+  meta:
+    $ref: "./PaginationMeta.yaml"

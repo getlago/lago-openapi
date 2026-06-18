@@ -1,0 +1,122 @@
+get:
+  tags:
+    - orders
+  summary: List all orders
+  description: This endpoint is used to retrieve all orders. It requires the order forms feature to be enabled for the organization.
+  operationId: findAllOrders
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: status
+      in: query
+      description: Filter orders by status.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - created
+          - executed
+        example: "created"
+    - name: order_type
+      in: query
+      description: Filter orders by the order type of their quote.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - subscription_creation
+          - subscription_amendment
+          - one_off
+        example: "subscription_creation"
+    - name: execution_mode
+      in: query
+      description: Filter orders by execution mode.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - execute_in_lago
+          - order_only
+        example: "execute_in_lago"
+    - name: customer_id
+      in: query
+      description: Filter orders by the Lago identifier of the customer.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "uuid"
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    - name: number
+      in: query
+      description: Filter orders by their number.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "OR-2024-0001"
+    - name: order_form_number
+      in: query
+      description: Filter orders by the number of their order form.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "OF-2024-0001"
+    - name: quote_number
+      in: query
+      description: Filter orders by the number of their originating quote.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "QT-2024-0001"
+    - name: owner_id
+      in: query
+      description: Filter orders by the Lago identifier of a quote owner.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "uuid"
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    - name: executed_at_from
+      in: query
+      description: Filter orders executed at or after a specific date and time.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2024-05-01T00:00:00Z"
+    - name: executed_at_to
+      in: query
+      description: Filter orders executed at or before a specific date and time.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2024-05-31T23:59:59Z"
+    - name: search_term
+      in: query
+      description: Search orders by their number.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "OR-2024"
+  responses:
+    "200":
+      description: Orders
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/OrdersPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"

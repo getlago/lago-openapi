@@ -1,0 +1,39 @@
+parameters:
+  - name: id
+    in: path
+    description: Unique identifier of the order form, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: "uuid"
+      example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+post:
+  tags:
+    - order_forms
+  summary: Mark an order form as signed
+  description: |-
+    This endpoint marks a `generated` order form as signed and creates the resulting order. It requires the order forms feature to be enabled for the organization.
+    Optionally, a base64 encoded signed document can be attached, and an execution mode and execution date can be set on the resulting order.
+  operationId: markAsSignedOrderForm
+  requestBody:
+    description: Mark as signed payload
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/OrderFormMarkAsSignedInput.yaml"
+    required: false
+  responses:
+    "200":
+      description: Order form marked as signed
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/OrderForm.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

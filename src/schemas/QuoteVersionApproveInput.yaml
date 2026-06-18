@@ -1,0 +1,7 @@
+type: object
+properties:
+  expires_at:
+    type: string
+    format: "date-time"
+    description: The date and time at which the approved quote version expires. Must be in the future. Expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-12-31T23:59:59Z"

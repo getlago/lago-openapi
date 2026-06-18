@@ -1,0 +1,37 @@
+parameters:
+  - name: id
+    in: path
+    description: Unique identifier of the quote version, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: "uuid"
+      example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+post:
+  tags:
+    - quote_versions
+  summary: Approve a quote version
+  description: This endpoint is used to approve a quote version, optionally setting an expiration date. It requires the order forms feature to be enabled for the organization.
+  operationId: approveQuoteVersion
+  requestBody:
+    description: Approve quote version payload
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/QuoteVersionApproveInput.yaml"
+    required: false
+  responses:
+    "200":
+      description: Quote version approved
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuoteVersion.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

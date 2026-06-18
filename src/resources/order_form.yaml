@@ -1,0 +1,28 @@
+parameters:
+  - name: id
+    in: path
+    description: Unique identifier of the order form, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: "uuid"
+      example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+get:
+  tags:
+    - order_forms
+  summary: Retrieve an order form
+  description: This endpoint is used to retrieve a specific order form. It requires the order forms feature to be enabled for the organization.
+  operationId: findOrderForm
+  responses:
+    "200":
+      description: Order form
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/OrderForm.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

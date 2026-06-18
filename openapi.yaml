@@ -138,6 +138,26 @@ tags:
     externalDocs:
       description: Find out more
       url: https://getlago.com/docs/api-reference/payment-methods/payment-method-object
+  - name: quotes
+    description: Everything about Quotes
+    externalDocs:
+      description: Find out more
+      url: https://getlago.com/docs/api-reference/quotes/quote-object
+  - name: quote_versions
+    description: Everything about Quote versions
+    externalDocs:
+      description: Find out more
+      url: https://getlago.com/docs/api-reference/quotes/quote-version-object
+  - name: order_forms
+    description: Everything about Order forms
+    externalDocs:
+      description: Find out more
+      url: https://getlago.com/docs/api-reference/order-forms/order-form-object
+  - name: orders
+    description: Everything about Orders
+    externalDocs:
+      description: Find out more
+      url: https://getlago.com/docs/api-reference/orders/order-object
 externalDocs:
   description: Lago Github
   url: https://github.com/getlago
@@ -6760,6 +6780,661 @@ paths:
           $ref: '#/components/responses/NotFound'
         '405':
           $ref: '#/components/responses/NotAllowed'
+  /quotes:
+    get:
+      tags:
+        - quotes
+      summary: List all quotes
+      description: This endpoint is used to retrieve all quotes. It requires the order forms feature to be enabled for the organization.
+      operationId: findAllQuotes
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: status[]
+          in: query
+          description: Filter quotes by the status of their current version.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - draft
+                - approved
+                - voided
+        - name: order_type[]
+          in: query
+          description: Filter quotes by order type.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - subscription_creation
+                - subscription_amendment
+                - one_off
+        - name: number[]
+          in: query
+          description: Filter quotes by their number.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - QT-2024-0001
+              - QT-2024-0002
+        - name: owner_id[]
+          in: query
+          description: Filter quotes by the Lago identifier of their owners.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example:
+              - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: external_customer_id[]
+          in: query
+          description: Filter quotes by the external identifier of their customer.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - external_id_1
+              - external_id_2
+        - name: from_date
+          in: query
+          description: Filter quotes created at or after a specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2024-05-01'
+        - name: to_date
+          in: query
+          description: Filter quotes created at or before a specific date.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date
+            example: '2024-05-31'
+      responses:
+        '200':
+          description: Quotes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /quotes/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the quote, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    get:
+      tags:
+        - quotes
+      summary: Retrieve a quote
+      description: This endpoint is used to retrieve a specific quote, including its current version and owners. It requires the order forms feature to be enabled for the organization.
+      operationId: findQuote
+      responses:
+        '200':
+          description: Quote
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quote'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /quotes/{quote_id}/versions:
+    parameters:
+      - name: quote_id
+        in: path
+        description: Unique identifier of the quote, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    get:
+      tags:
+        - quotes
+      summary: List all versions of a quote
+      description: This endpoint is used to retrieve all versions of a specific quote. It requires the order forms feature to be enabled for the organization.
+      operationId: findAllQuoteVersions
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: Quote versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersionsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /quote_versions/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the quote version, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    get:
+      tags:
+        - quote_versions
+      summary: Retrieve a quote version
+      description: This endpoint is used to retrieve a specific quote version, including its content and billing items. It requires the order forms feature to be enabled for the organization.
+      operationId: findQuoteVersion
+      responses:
+        '200':
+          description: Quote version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /quote_versions/{id}/approve:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the quote version, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    post:
+      tags:
+        - quote_versions
+      summary: Approve a quote version
+      description: This endpoint is used to approve a quote version, optionally setting an expiration date. It requires the order forms feature to be enabled for the organization.
+      operationId: approveQuoteVersion
+      requestBody:
+        description: Approve quote version payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteVersionApproveInput'
+        required: false
+      responses:
+        '200':
+          description: Quote version approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /quote_versions/{id}/void:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the quote version, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    post:
+      tags:
+        - quote_versions
+      summary: Void a quote version
+      description: This endpoint is used to void a quote version. It requires the order forms feature to be enabled for the organization.
+      operationId: voidQuoteVersion
+      responses:
+        '200':
+          description: Quote version voided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /quote_versions/{id}/clone:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the quote version to clone, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    post:
+      tags:
+        - quote_versions
+      summary: Clone a quote version
+      description: This endpoint is used to create a new draft version of a quote by cloning an existing quote version. It requires the order forms feature to be enabled for the organization.
+      operationId: cloneQuoteVersion
+      responses:
+        '200':
+          description: Quote version cloned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /order_forms:
+    get:
+      tags:
+        - order_forms
+      summary: List all order forms
+      description: This endpoint is used to retrieve all order forms. It requires the order forms feature to be enabled for the organization.
+      operationId: findAllOrderForms
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: status
+          in: query
+          description: Filter order forms by status.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - generated
+              - signed
+              - expired
+              - voided
+            example: generated
+        - name: customer_id
+          in: query
+          description: Filter order forms by the Lago identifier of the customer.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: number
+          in: query
+          description: Filter order forms by their number.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: OF-2024-0001
+        - name: quote_number
+          in: query
+          description: Filter order forms by the number of their originating quote.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: QT-2024-0001
+        - name: owner_id
+          in: query
+          description: Filter order forms by the Lago identifier of a quote owner.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: created_at_from
+          in: query
+          description: Filter order forms created at or after a specific date and time.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2024-05-01T00:00:00Z'
+        - name: created_at_to
+          in: query
+          description: Filter order forms created at or before a specific date and time.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2024-05-31T23:59:59Z'
+        - name: expires_at_from
+          in: query
+          description: Filter order forms expiring at or after a specific date and time.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2024-06-01T00:00:00Z'
+        - name: expires_at_to
+          in: query
+          description: Filter order forms expiring at or before a specific date and time.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2024-06-30T23:59:59Z'
+        - name: search_term
+          in: query
+          description: Search order forms by their number.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: OF-2024
+      responses:
+        '200':
+          description: Order forms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderFormsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /order_forms/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the order form, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    get:
+      tags:
+        - order_forms
+      summary: Retrieve an order form
+      description: This endpoint is used to retrieve a specific order form. It requires the order forms feature to be enabled for the organization.
+      operationId: findOrderForm
+      responses:
+        '200':
+          description: Order form
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderForm'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /order_forms/{id}/mark_as_signed:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the order form, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    post:
+      tags:
+        - order_forms
+      summary: Mark an order form as signed
+      description: |-
+        This endpoint marks a `generated` order form as signed and creates the resulting order. It requires the order forms feature to be enabled for the organization.
+        Optionally, a base64 encoded signed document can be attached, and an execution mode and execution date can be set on the resulting order.
+      operationId: markAsSignedOrderForm
+      requestBody:
+        description: Mark as signed payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderFormMarkAsSignedInput'
+        required: false
+      responses:
+        '200':
+          description: Order form marked as signed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderForm'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /order_forms/{id}/void:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the order form, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    post:
+      tags:
+        - order_forms
+      summary: Void an order form
+      description: This endpoint is used to void an order form. It requires the order forms feature to be enabled for the organization.
+      operationId: voidOrderForm
+      responses:
+        '200':
+          description: Order form voided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderForm'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /orders:
+    get:
+      tags:
+        - orders
+      summary: List all orders
+      description: This endpoint is used to retrieve all orders. It requires the order forms feature to be enabled for the organization.
+      operationId: findAllOrders
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: status
+          in: query
+          description: Filter orders by status.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - created
+              - executed
+            example: created
+        - name: order_type
+          in: query
+          description: Filter orders by the order type of their quote.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - subscription_creation
+              - subscription_amendment
+              - one_off
+            example: subscription_creation
+        - name: execution_mode
+          in: query
+          description: Filter orders by execution mode.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - execute_in_lago
+              - order_only
+            example: execute_in_lago
+        - name: customer_id
+          in: query
+          description: Filter orders by the Lago identifier of the customer.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: number
+          in: query
+          description: Filter orders by their number.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: OR-2024-0001
+        - name: order_form_number
+          in: query
+          description: Filter orders by the number of their order form.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: OF-2024-0001
+        - name: quote_number
+          in: query
+          description: Filter orders by the number of their originating quote.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: QT-2024-0001
+        - name: owner_id
+          in: query
+          description: Filter orders by the Lago identifier of a quote owner.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: executed_at_from
+          in: query
+          description: Filter orders executed at or after a specific date and time.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2024-05-01T00:00:00Z'
+        - name: executed_at_to
+          in: query
+          description: Filter orders executed at or before a specific date and time.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2024-05-31T23:59:59Z'
+        - name: search_term
+          in: query
+          description: Search orders by their number.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: OR-2024
+      responses:
+        '200':
+          description: Orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /orders/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the order, created by Lago.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    get:
+      tags:
+        - orders
+      summary: Retrieve an order
+      description: This endpoint is used to retrieve a specific order. It requires the order forms feature to be enabled for the organization.
+      operationId: findOrder
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
 webhooks:
   alert_triggered:
     post:
@@ -21876,6 +22551,488 @@ components:
                 - jwt
                 - hmac
                 - null
+    QuoteVersionObject:
+      type: object
+      required:
+        - lago_id
+        - lago_quote_id
+        - lago_organization_id
+        - version
+        - status
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the quote version, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_quote_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the quote this version belongs to.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        version:
+          type: integer
+          description: Sequential version number of the quote, incrementing with each new version.
+          example: 1
+        status:
+          type: string
+          description: Current status of the quote version.
+          enum:
+            - draft
+            - approved
+            - voided
+          example: draft
+        currency:
+          type:
+            - string
+            - 'null'
+          description: The currency of the quote version, expressed as an ISO 4217 code.
+          example: USD
+        start_date:
+          type:
+            - string
+            - 'null'
+          format: date
+          description: The date on which the quoted period starts.
+          example: '2024-06-01'
+        end_date:
+          type:
+            - string
+            - 'null'
+          format: date
+          description: The date on which the quoted period ends.
+          example: '2025-05-31'
+        void_reason:
+          type:
+            - string
+            - 'null'
+          description: The reason the quote version was voided. `null` unless the quote version has been voided.
+          enum:
+            - null
+            - manual
+            - superseded
+            - cascade_of_expired
+            - cascade_of_voided
+          example: manual
+        approved_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time when the quote version was approved. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-15T08:59:51Z'
+        voided_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time when the quote version was voided. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-20T10:15:00Z'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the quote version was created. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the quote version was last updated. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+        content:
+          type:
+            - string
+            - 'null'
+          description: The rendered content of the quote version. Returned only when retrieving a single quote version, not in list or embedded responses.
+          example: <html>...</html>
+        billing_items:
+          type:
+            - object
+            - 'null'
+          additionalProperties: true
+          description: The billing items of the quote version. Returned only when retrieving a single quote version, not in list or embedded responses. The internal structure is not part of the stable API contract.
+    QuoteOwnerObject:
+      type: object
+      required:
+        - lago_id
+        - email
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the user who owns the quote, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        email:
+          type: string
+          description: The email address of the user who owns the quote.
+          example: jane.doe@example.com
+    QuoteObject:
+      type: object
+      required:
+        - lago_id
+        - number
+        - order_type
+        - lago_customer_id
+        - lago_organization_id
+        - created_at
+        - updated_at
+        - current_version
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the quote, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        number:
+          type: string
+          description: Unique number identifying the quote within the organization.
+          example: QT-2024-0001
+        order_type:
+          type: string
+          description: The type of order the quote describes.
+          enum:
+            - subscription_creation
+            - subscription_amendment
+            - one_off
+          example: subscription_creation
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_subscription_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the subscription the quote amends. Present only for `subscription_amendment` quotes.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the quote was created. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the quote was last updated. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+        current_version:
+          $ref: '#/components/schemas/QuoteVersionObject'
+          description: The latest version of the quote. The `content` and `billing_items` fields are omitted from this embedded version.
+        owners:
+          type: array
+          description: The users who own the quote. Returned only when retrieving a single quote.
+          items:
+            $ref: '#/components/schemas/QuoteOwnerObject'
+    QuotesPaginated:
+      type: object
+      required:
+        - quotes
+        - meta
+      properties:
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    Quote:
+      type: object
+      required:
+        - quote
+      properties:
+        quote:
+          $ref: '#/components/schemas/QuoteObject'
+    QuoteVersionsPaginated:
+      type: object
+      required:
+        - quote_versions
+        - meta
+      properties:
+        quote_versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteVersionObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    QuoteVersion:
+      type: object
+      required:
+        - quote_version
+      properties:
+        quote_version:
+          $ref: '#/components/schemas/QuoteVersionObject'
+    QuoteVersionApproveInput:
+      type: object
+      properties:
+        expires_at:
+          type: string
+          format: date-time
+          description: The date and time at which the approved quote version expires. Must be in the future. Expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-12-31T23:59:59Z'
+    OrderFormObject:
+      type: object
+      required:
+        - lago_id
+        - number
+        - status
+        - lago_organization_id
+        - lago_customer_id
+        - lago_quote_id
+        - lago_quote_version_id
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the order form, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        number:
+          type: string
+          description: Unique number identifying the order form within the organization.
+          example: OF-2024-0001
+        status:
+          type: string
+          description: Current status of the order form.
+          enum:
+            - generated
+            - signed
+            - expired
+            - voided
+          example: generated
+        void_reason:
+          type:
+            - string
+            - 'null'
+          description: The reason the order form was voided. `null` unless the order form has been voided.
+          enum:
+            - null
+            - manual
+            - expired
+            - invalid
+          example: manual
+        expires_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time when the order form expires. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-06-30T23:59:59Z'
+        signed_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time when the order form was signed. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+        voided_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time when the order form was voided. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-20T10:15:00Z'
+        signed_document_url:
+          type:
+            - string
+            - 'null'
+          format: uri
+          description: A URL to download the signed document attached to the order form. `null` when no signed document has been attached.
+          example: https://api.getlago.com/rails/active_storage/blobs/redirect/.../OF-2024-0001
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_quote_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the quote the order form originates from.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_quote_version_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the quote version the order form was generated from.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the order form was created. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the order form was last updated. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+    OrderFormsPaginated:
+      type: object
+      required:
+        - order_forms
+        - meta
+      properties:
+        order_forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderFormObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    OrderForm:
+      type: object
+      required:
+        - order_form
+      properties:
+        order_form:
+          $ref: '#/components/schemas/OrderFormObject'
+    OrderFormMarkAsSignedInput:
+      type: object
+      properties:
+        order_form:
+          type: object
+          properties:
+            signed_document:
+              type: string
+              description: The base64 encoded signed document. Accepted content types are `application/pdf`, `image/jpeg` and `image/png`, up to 10MB.
+              example: data:application/pdf;base64,...
+            execution_mode:
+              type: string
+              description: How the resulting order should be executed. `execute_in_lago` provisions the subscription in Lago; `order_only` records the order without provisioning.
+              enum:
+                - execute_in_lago
+                - order_only
+              example: execute_in_lago
+            execute_at:
+              type: string
+              format: date-time
+              description: The date and time at which the order should be executed. Must be in the future. Expressed in UTC according to the ISO 8601 datetime standard.
+              example: '2024-06-01T00:00:00Z'
+    OrderObject:
+      type: object
+      required:
+        - lago_id
+        - number
+        - status
+        - order_type
+        - lago_organization_id
+        - lago_customer_id
+        - lago_order_form_id
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the order, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        number:
+          type: string
+          description: Unique number identifying the order within the organization.
+          example: OR-2024-0001
+        status:
+          type: string
+          description: Current status of the order.
+          enum:
+            - created
+            - executed
+          example: created
+        order_type:
+          type: string
+          description: The type of order, inherited from the originating quote.
+          enum:
+            - subscription_creation
+            - subscription_amendment
+            - one_off
+          example: subscription_creation
+        execution_mode:
+          type:
+            - string
+            - 'null'
+          description: How the order is executed. `execute_in_lago` provisions the subscription in Lago; `order_only` records the order without provisioning. `null` until an execution mode is set.
+          enum:
+            - null
+            - execute_in_lago
+            - order_only
+          example: execute_in_lago
+        billing_snapshot:
+          type:
+            - object
+            - 'null'
+          additionalProperties: true
+          description: A point-in-time snapshot of the billing items captured from the quote version when the order was created. The internal structure is not part of the stable API contract.
+        currency:
+          type:
+            - string
+            - 'null'
+          description: The currency of the order, expressed as an ISO 4217 code.
+          example: USD
+        executed_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time when the order was executed. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T09:00:00Z'
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_order_form_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the order form the order was generated from.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the order was created. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the order was last updated. It is expressed in UTC according to the ISO 8601 datetime standard.
+          example: '2024-05-12T08:59:51Z'
+    OrdersPaginated:
+      type: object
+      required:
+        - orders
+        - meta
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    Order:
+      type: object
+      required:
+        - order
+      properties:
+        order:
+          $ref: '#/components/schemas/OrderObject'
     TriggeredAlertObject:
       type: object
       required:

@@ -1,0 +1,90 @@
+type: object
+required:
+  - lago_id
+  - number
+  - status
+  - order_type
+  - lago_organization_id
+  - lago_customer_id
+  - lago_order_form_id
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the order, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  number:
+    type: string
+    description: Unique number identifying the order within the organization.
+    example: "OR-2024-0001"
+  status:
+    type: string
+    description: Current status of the order.
+    enum:
+      - created
+      - executed
+    example: "created"
+  order_type:
+    type: string
+    description: The type of order, inherited from the originating quote.
+    enum:
+      - subscription_creation
+      - subscription_amendment
+      - one_off
+    example: "subscription_creation"
+  execution_mode:
+    type:
+      - string
+      - "null"
+    description: How the order is executed. `execute_in_lago` provisions the subscription in Lago; `order_only` records the order without provisioning. `null` until an execution mode is set.
+    enum:
+      - null
+      - execute_in_lago
+      - order_only
+    example: "execute_in_lago"
+  billing_snapshot:
+    type:
+      - object
+      - "null"
+    additionalProperties: true
+    description: A point-in-time snapshot of the billing items captured from the quote version when the order was created. The internal structure is not part of the stable API contract.
+  currency:
+    type:
+      - string
+      - "null"
+    description: The currency of the order, expressed as an ISO 4217 code.
+    example: "USD"
+  executed_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The date and time when the order was executed. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T09:00:00Z"
+  lago_organization_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the organization, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_customer_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the customer, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_order_form_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the order form the order was generated from.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the order was created. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"
+  updated_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the order was last updated. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"

@@ -142,6 +142,26 @@ tags:
     externalDocs:
       description: Find out more
       url: https://getlago.com/docs/api-reference/payment-methods/payment-method-object
+  - name: quotes
+    description: Everything about Quotes
+    externalDocs:
+      description: Find out more
+      url: https://getlago.com/docs/api-reference/quotes/quote-object
+  - name: quote_versions
+    description: Everything about Quote versions
+    externalDocs:
+      description: Find out more
+      url: https://getlago.com/docs/api-reference/quotes/quote-version-object
+  - name: order_forms
+    description: Everything about Order forms
+    externalDocs:
+      description: Find out more
+      url: https://getlago.com/docs/api-reference/order-forms/order-form-object
+  - name: orders
+    description: Everything about Orders
+    externalDocs:
+      description: Find out more
+      url: https://getlago.com/docs/api-reference/orders/order-object
 
 paths:
   /billing_entities:
@@ -386,6 +406,32 @@ paths:
     $ref: "./resources/webhook_endpoints.yaml"
   /webhook_endpoints/{lago_id}:
     $ref: "./resources/webhook_endpoint.yaml"
+  /quotes:
+    $ref: "./resources/quotes.yaml"
+  /quotes/{id}:
+    $ref: "./resources/quote.yaml"
+  /quotes/{quote_id}/versions:
+    $ref: "./resources/quote_versions.yaml"
+  /quote_versions/{id}:
+    $ref: "./resources/quote_version.yaml"
+  /quote_versions/{id}/approve:
+    $ref: "./resources/quote_version_approve.yaml"
+  /quote_versions/{id}/void:
+    $ref: "./resources/quote_version_void.yaml"
+  /quote_versions/{id}/clone:
+    $ref: "./resources/quote_version_clone.yaml"
+  /order_forms:
+    $ref: "./resources/order_forms.yaml"
+  /order_forms/{id}:
+    $ref: "./resources/order_form.yaml"
+  /order_forms/{id}/mark_as_signed:
+    $ref: "./resources/order_form_mark_as_signed.yaml"
+  /order_forms/{id}/void:
+    $ref: "./resources/order_form_void.yaml"
+  /orders:
+    $ref: "./resources/orders.yaml"
+  /orders/{id}:
+    $ref: "./resources/order.yaml"
 webhooks:
   alert_triggered:
     $ref: "./webhooks/alert_triggered.yaml"

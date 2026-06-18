@@ -1,0 +1,11 @@
+type: object
+required:
+  - quotes
+  - meta
+properties:
+  quotes:
+    type: array
+    items:
+      $ref: "./QuoteObject.yaml"
+  meta:
+    $ref: "./PaginationMeta.yaml"

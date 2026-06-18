@@ -1,0 +1,105 @@
+type: object
+required:
+  - lago_id
+  - lago_quote_id
+  - lago_organization_id
+  - version
+  - status
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the quote version, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_quote_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the quote this version belongs to.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_organization_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the organization, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  version:
+    type: integer
+    description: Sequential version number of the quote, incrementing with each new version.
+    example: 1
+  status:
+    type: string
+    description: Current status of the quote version.
+    enum:
+      - draft
+      - approved
+      - voided
+    example: "draft"
+  currency:
+    type:
+      - string
+      - "null"
+    description: The currency of the quote version, expressed as an ISO 4217 code.
+    example: "USD"
+  start_date:
+    type:
+      - string
+      - "null"
+    format: "date"
+    description: The date on which the quoted period starts.
+    example: "2024-06-01"
+  end_date:
+    type:
+      - string
+      - "null"
+    format: "date"
+    description: The date on which the quoted period ends.
+    example: "2025-05-31"
+  void_reason:
+    type:
+      - string
+      - "null"
+    description: The reason the quote version was voided. `null` unless the quote version has been voided.
+    enum:
+      - null
+      - manual
+      - superseded
+      - cascade_of_expired
+      - cascade_of_voided
+    example: "manual"
+  approved_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The date and time when the quote version was approved. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-15T08:59:51Z"
+  voided_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The date and time when the quote version was voided. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-20T10:15:00Z"
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the quote version was created. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"
+  updated_at:
+    type: string
+    format: "date-time"
+    description: The date and time when the quote version was last updated. It is expressed in UTC according to the ISO 8601 datetime standard.
+    example: "2024-05-12T08:59:51Z"
+  content:
+    type:
+      - string
+      - "null"
+    description: The rendered content of the quote version. Returned only when retrieving a single quote version, not in list or embedded responses.
+    example: "<html>...</html>"
+  billing_items:
+    type:
+      - object
+      - "null"
+    additionalProperties: true
+    description: The billing items of the quote version. Returned only when retrieving a single quote version, not in list or embedded responses. The internal structure is not part of the stable API contract.

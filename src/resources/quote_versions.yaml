@@ -1,0 +1,31 @@
+parameters:
+  - name: quote_id
+    in: path
+    description: Unique identifier of the quote, created by Lago.
+    required: true
+    schema:
+      type: string
+      format: "uuid"
+      example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+get:
+  tags:
+    - quotes
+  summary: List all versions of a quote
+  description: This endpoint is used to retrieve all versions of a specific quote. It requires the order forms feature to be enabled for the organization.
+  operationId: findAllQuoteVersions
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+  responses:
+    "200":
+      description: Quote versions
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuoteVersionsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
