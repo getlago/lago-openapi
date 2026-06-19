@@ -82,7 +82,8 @@ properties:
               example: "0.5"
   fixed_charges:
     type: array
-    description: Additional fixed charges for this plan.
+    description: |-
+      Fixed charge overrides for the subscription. When `plan_overrides` contains only `fixed_charges` and every entry contains only `id`, `units`, and optionally `apply_units_immediately`, the units are recorded as a per-subscription override without creating a plan override, and subscription-scoped reads return these units. If any entry carries other fields, or `plan_overrides` contains any other key, the request is applied as a full plan override for the subscription instead.
     items:
       type: object
       required:

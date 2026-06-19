@@ -5713,7 +5713,7 @@ paths:
       summary: List all fixed charges for a subscription
       description: |-
         This endpoint retrieves all effective fixed charges for a specific subscription.
-        If the subscription has plan overrides with fixed charge overrides, the overridden fixed charges are returned.
+        The `units` of each fixed charge reflect any per-subscription unit override applied to the subscription; when no override exists, the plan-level units are returned.
       operationId: findAllSubscriptionFixedCharges
       parameters:
         - $ref: '#/components/parameters/page'
@@ -5955,7 +5955,7 @@ paths:
       summary: Retrieve a fixed charge for a subscription
       description: |-
         This endpoint retrieves a specific effective fixed charge for a subscription.
-        If the subscription has a plan override with a fixed charge override, the overridden fixed charge is returned.
+        The `units` reflect any per-subscription unit override applied to the subscription; when no override exists, the plan-level units are returned.
       operationId: findSubscriptionFixedCharge
       parameters:
         - $ref: '#/components/parameters/subscription_status'
@@ -5977,9 +5977,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/subscription_status'
       description: |-
-        This endpoint creates or updates a fixed charge override for a specific subscription.
-        If the subscription does not have a plan override yet, one will be created automatically.
-        The fixed charge override allows customizing specific fixed charge properties (invoice_display_name, units, properties, taxes) without affecting the original plan fixed charge.
+        This endpoint creates or updates a fixed charge override for a subscription, without affecting the original plan fixed charge.
+        When the body contains only `units` (and optionally `apply_units_immediately`), the change is recorded as a per-subscription unit override. When the body also sets `invoice_display_name`, `properties`, or `tax_codes`, it is applied as a full plan override for the subscription instead.
+        With `apply_units_immediately: true` on a pay-in-advance fixed charge the change is billed mid-period; otherwise it takes effect at the next billing period.
         This is a premium feature.
       operationId: overrideSubscriptionFixedCharge
       requestBody:
@@ -19008,7 +19008,10 @@ components:
           description: List of all thresholds utilized for calculating the fixed charge.
         units:
           type: number
-          description: The number of units for the fixed charge.
+          description: |-
+            The number of units for the fixed charge.
+
+            When retrieved through a subscription-scoped endpoint (e.g. `GET /subscriptions/{external_id}/fixed_charges`), this reflects the per-subscription unit override when one exists, and falls back to the plan-level units otherwise. Plan-scoped endpoints always return the plan-level units.
           example: 1
         lago_parent_id:
           type:
@@ -20677,7 +20680,7 @@ components:
                     example: '0.5'
         fixed_charges:
           type: array
-          description: Additional fixed charges for this plan.
+          description: Fixed charge overrides for the subscription. When `plan_overrides` contains only `fixed_charges` and every entry contains only `id`, `units`, and optionally `apply_units_immediately`, the units are recorded as a per-subscription override without creating a plan override, and subscription-scoped reads return these units. If any entry carries other fields, or `plan_overrides` contains any other key, the request is applied as a full plan override for the subscription instead.
           items:
             type: object
             required:
@@ -20787,6 +20790,7 @@ components:
               description: The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
             plan_overrides:
               $ref: '#/components/schemas/PlanOverridesObject'
+              description: Overrides applied to the plan for this subscription. A units-only `fixed_charges` override is recorded as a per-subscription unit override without creating a plan override; any other override creates a plan override for the subscription. See `fixed_charges` for the exact rule.
             invoice_custom_section:
               $ref: '#/components/schemas/InvoiceCustomSectionInput'
             payment_method:
@@ -20878,6 +20882,7 @@ components:
               description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
             plan_overrides:
               $ref: '#/components/schemas/PlanOverridesObject'
+              description: Overrides applied to the plan for this subscription. A units-only `fixed_charges` override is recorded as a per-subscription unit override without creating a plan override; any other override creates a plan override for the subscription. See `fixed_charges` for the exact rule.
             invoice_custom_section:
               $ref: '#/components/schemas/InvoiceCustomSectionInput'
             payment_method:
