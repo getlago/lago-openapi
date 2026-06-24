@@ -47,3 +47,7 @@ properties:
 
           - `true`: the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
           - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+      billing_entity_code:
+        type: string
+        example: "default"
+        description: The code of the billing entity associated with the subscription. Updates take effect on future invoices only.

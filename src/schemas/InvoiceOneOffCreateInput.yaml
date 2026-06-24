@@ -12,6 +12,10 @@ properties:
         type: string
         description: Unique identifier assigned to the customer in your application.
         example: "hooli_1234"
+      billing_entity_code:
+        type: string
+        example: "default"
+        description: The code of the billing entity to issue the invoice from. If not provided, the customer's billing entity is used.
       currency:
         $ref: "./Currency.yaml"
         description: The currency of the invoice.

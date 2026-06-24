@@ -52,6 +52,10 @@ properties:
         type: string
         description: The customer external unique identifier (provided by your own application)
         example: "hooli_1234"
+      billing_entity_code:
+        type: string
+        example: "default"
+        description: The code of the billing entity associated with the wallet. If not provided, the customer's billing entity is used.
       expiration_at:
         type:
           - string
