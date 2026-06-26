@@ -70,6 +70,7 @@ properties:
         description: The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
       plan_overrides:
         $ref: "../schemas/PlanOverridesObject.yaml"
+        description: Overrides applied to the plan for this subscription. A units-only `fixed_charges` override is recorded as a per-subscription unit override without creating a plan override; any other override creates a plan override for the subscription. See `fixed_charges` for the exact rule.
       invoice_custom_section:
         $ref: "./InvoiceCustomSectionInput.yaml"
       payment_method:
