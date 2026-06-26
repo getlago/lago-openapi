@@ -32,6 +32,16 @@ get:
             - terminated
             - active
         example: [active, pending]
+    - name: billing_entity_codes[]
+      in: query
+      description: Filter subscriptions by billing entity codes.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example: [billing_entity_code_1, billing_entity_code_2]
 
   responses:
     "200":

@@ -34,6 +34,10 @@ properties:
         type: boolean
         description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
         example: false
+      billing_entity_code:
+        type: string
+        example: "default"
+        description: The code of the billing entity associated with the wallet.
       invoice_custom_section:
         $ref: "./InvoiceCustomSectionInput.yaml"
       recurring_transaction_rules:
