@@ -1,0 +1,61 @@
+type: object
+required:
+  - lago_id
+  - type
+  - timeout_hours
+  - status
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    description: Unique identifier assigned to the activation rule within the Lago application. This ID is exclusively created by Lago.
+  type:
+    type: string
+    description: The type of the activation rule. Only `payment` is currently supported. A `payment` rule gates the subscription activation on a successful payment of the first invoice.
+    example: "payment"
+    enum:
+      - payment
+  timeout_hours:
+    type: integer
+    description: The number of hours the subscription stays in the `incomplete` state waiting for the payment to succeed before it is automatically canceled.
+    example: 48
+  status:
+    type: string
+    description: |-
+      The evaluation status of the activation rule:
+      - `inactive`: the rule has not been evaluated yet.
+      - `pending`: the rule is applicable and is waiting to be satisfied (e.g. waiting for the payment).
+      - `satisfied`: the rule has been satisfied and no longer blocks activation.
+      - `declined`: the rule was applicable but was declined.
+      - `failed`: the rule could not be satisfied (e.g. the payment failed).
+      - `expired`: the rule was not satisfied before its timeout elapsed.
+      - `not_applicable`: the rule did not apply to this subscription.
+    example: "pending"
+    enum:
+      - inactive
+      - pending
+      - satisfied
+      - declined
+      - failed
+      - expired
+      - not_applicable
+  expires_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    example: "2022-08-10T00:00:00Z"
+    description: The date and time when the rule expires, after which an unsatisfied rule causes the subscription to be canceled. Represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). Null until the rule starts being evaluated.
+  created_at:
+    type: string
+    format: "date-time"
+    example: "2022-08-08T00:00:00Z"
+    description: The creation date of the activation rule, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+  updated_at:
+    type: string
+    format: "date-time"
+    example: "2022-08-08T00:00:00Z"
+    description: The last update date of the activation rule, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).

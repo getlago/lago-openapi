@@ -485,6 +485,10 @@ webhooks:
     $ref: "./webhooks/plan_deleted.yaml"
   subscription_terminated:
     $ref: "./webhooks/subscription_terminated.yaml"
+  subscription_incomplete:
+    $ref: "./webhooks/subscription_incomplete.yaml"
+  subscription_canceled:
+    $ref: "./webhooks/subscription_canceled.yaml"
   subscription_started:
     $ref: "./webhooks/subscription_started.yaml"
   subscription_updated:
