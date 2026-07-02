@@ -22267,6 +22267,20 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    OverdueBalancePerCurrencyObject:
+      type: object
+      required:
+        - amount_cents
+        - currency
+      properties:
+        amount_cents:
+          type: integer
+          description: The amount of the overdue balance for this currency, expressed in cents.
+          example: 120
+        currency:
+          $ref: '#/components/schemas/Currency'
+          description: The currency of the overdue balance.
+          example: EUR
     DunningCampaignFinishedObject:
       type: object
       required:
@@ -22291,6 +22305,11 @@ components:
           $ref: '#/components/schemas/Currency'
           description: The currency of the balance.
           example: EUR
+        overdue_balances:
+          type: array
+          description: Overdue balance broken down per currency.
+          items:
+            $ref: '#/components/schemas/OverdueBalancePerCurrencyObject'
     EventErrorsObject:
       type: object
       required:
