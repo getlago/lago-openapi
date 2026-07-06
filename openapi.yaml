@@ -6705,6 +6705,7 @@ paths:
         - webhooks
       summary: Retrieve webhook public key
       description: This endpoint is used to retrieve the public key used to verify the webhooks signature
+      deprecated: true
       operationId: fetchPublicKey
       responses:
         '200':
@@ -6714,6 +6715,22 @@ paths:
               schema:
                 type: string
                 example: MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /webhooks/json_public_key:
+    get:
+      tags:
+        - webhooks
+      summary: Retrieve webhook public key (JSON)
+      description: This endpoint is used to retrieve the public key used to verify the webhooks signature, wrapped in a JSON object. Prefer this endpoint over the deprecated GET /webhooks/public_key.
+      operationId: fetchJsonPublicKey
+      responses:
+        '200':
+          description: Public key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookPublicKey'
         '401':
           $ref: '#/components/responses/Unauthorized'
   /webhook_endpoints:
@@ -22107,6 +22124,22 @@ components:
           properties:
             meta:
               $ref: '#/components/schemas/PaginationMeta'
+    WebhookPublicKeyObject:
+      type: object
+      required:
+        - public_key
+      properties:
+        public_key:
+          type: string
+          description: Base64-encoded public key used to verify webhook signatures.
+          example: MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE=
+    WebhookPublicKey:
+      type: object
+      required:
+        - webhook
+      properties:
+        webhook:
+          $ref: '#/components/schemas/WebhookPublicKeyObject'
     WebhookEndpointObject:
       type: object
       required:
