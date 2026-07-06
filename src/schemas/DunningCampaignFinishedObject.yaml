@@ -21,3 +21,8 @@ properties:
     $ref: "./Currency.yaml"
     description: The currency of the balance.
     example: "EUR"
+  overdue_balances:
+    type: array
+    description: Overdue balance broken down per currency.
+    items:
+      $ref: "./OverdueBalancePerCurrencyObject.yaml"

@@ -1,0 +1,13 @@
+type: object
+required:
+  - amount_cents
+  - currency
+properties:
+  amount_cents:
+    type: integer
+    description: The amount of the overdue balance for this currency, expressed in cents.
+    example: 120
+  currency:
+    $ref: "./Currency.yaml"
+    description: The currency of the overdue balance.
+    example: "EUR"
