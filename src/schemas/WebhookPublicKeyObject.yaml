@@ -1,0 +1,8 @@
+type: object
+required:
+  - public_key
+properties:
+  public_key:
+    type: string
+    description: Base64-encoded public key used to verify webhook signatures.
+    example: 'MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE='
