@@ -11,9 +11,8 @@ properties:
     type:
       - string
       - "null"
-    format: "uuid"
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-    description: Unique identifier assigned to the event within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the event's record within the Lago system
+    description: Unique identifier assigned to the event within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the event's record within the Lago system. It is an opaque identifier and is not guaranteed to be a UUID; on organizations using the ClickHouse events store it is a composite string.
   transaction_id:
     type: string
     example: "transaction_1234567890"
