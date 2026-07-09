@@ -4,8 +4,8 @@ properties:
   grouped_by:
     type: array
     description: |-
-      The list of event properties that are used to group the events on the invoice for a `standard` charge model.
       **Deprecated.** Replaced by `pricing_group_keys`.
+      The list of event properties that are used to group the events on the invoice for a `standard` charge model.
     items:
       type: string
     example: ["agent_name"]
