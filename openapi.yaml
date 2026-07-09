@@ -2971,7 +2971,7 @@ paths:
               cloud: aws
         - name: filter_by_charge_id
           in: query
-          description: Filter usage to a specific charge by its Lago ID (UUID).
+          description: '**Deprecated.** Filter usage to a specific charge by its Lago ID (UUID).'
           required: false
           deprecated: true
           schema:
@@ -2980,7 +2980,7 @@ paths:
             example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         - name: filter_by_charge_code
           in: query
-          description: Filter usage to a specific charge by its code.
+          description: '**Deprecated.** Filter usage to a specific charge by its code.'
           required: false
           deprecated: true
           schema:
@@ -2989,7 +2989,7 @@ paths:
         - name: filter_by_group
           in: query
           description: |
-            Filter usage by pricing group. Pass key/value pairs as query parameters, e.g. `filter_by_group[cloud]=aws`.
+            **Deprecated.** Filter usage by pricing group. Pass key/value pairs as query parameters, e.g. `filter_by_group[cloud]=aws`.
           required: false
           deprecated: true
           style: deepObject
@@ -10341,7 +10341,7 @@ components:
         applied_to_organization:
           type: boolean
           deprecated: true
-          description: This field is deprecated and will be removed in a future version. When set to true, it applies the tax to the organization's default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.
+          description: '**Deprecated.** This field will be removed in a future version. When set to true, it applies the tax to the organization''s default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.'
           example: true
         created_at:
           type: string
@@ -10383,7 +10383,7 @@ components:
         applied_to_organization:
           type: boolean
           deprecated: true
-          description: This field is deprecated and will be removed in a future version. When set to true, it applies the invoice custom section to the organization's default billing entity. To apply or remove an invoice custom section from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.
+          description: '**Deprecated.** This field will be removed in a future version. When set to true, it applies the invoice custom section to the organization''s default billing entity. To apply or remove an invoice custom section from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.'
           example: true
         organization_id:
           type: string
@@ -15343,7 +15343,7 @@ components:
           deprecated: true
           type: string
           format: uuid
-          description: Unique identifier of the invoice custom section that was applied.
+          description: '**Deprecated.** Unique identifier of the invoice custom section that was applied.'
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         invoice_custom_section:
           $ref: '#/components/schemas/InvoiceCustomSectionObject'
@@ -18824,7 +18824,7 @@ components:
           type: array
           description: |-
             The list of event properties that are used to group the events on the invoice for a `standard` charge model.
-            **DEPRECATED** Replaced by `pricing_group_keys`.
+            **Deprecated.** Replaced by `pricing_group_keys`.
           items:
             type: string
           example:
@@ -21704,7 +21704,7 @@ components:
         applied_to_organization:
           type: boolean
           deprecated: true
-          description: This field is deprecated and will be removed in a future version. When set to true, it applies the tax to the organization's default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.
+          description: '**Deprecated.** This field will be removed in a future version. When set to true, it applies the tax to the organization''s default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.'
           example: true
     TaxCreateInput:
       type: object
@@ -22594,6 +22594,7 @@ components:
           type: array
           items:
             type: string
+          description: '**Deprecated.** List of event transaction_id with a missing group key.'
           deprecated: true
     FeeTaxProviderErrorObject:
       type: object

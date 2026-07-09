@@ -19,3 +19,25 @@ rules:
     then:
       - field: name
         function: plural
+  deprecated-parameter-must-mention-in-description:
+    message: "Deprecated parameter at {{path}} must mention 'deprecated' in its description."
+    severity: error
+    given: "$.paths.*.*.parameters[?(@ && @.deprecated == true)]"
+    then:
+      - field: description
+        function: truthy
+      - field: description
+        function: pattern
+        functionOptions:
+          match: "/deprecated/i"
+  deprecated-schema-property-must-mention-in-description:
+    message: "Deprecated schema property at {{path}} must mention 'deprecated' in its description."
+    severity: error
+    given: "$..properties[?(@ && @.deprecated == true)]"
+    then:
+      - field: description
+        function: truthy
+      - field: description
+        function: pattern
+        functionOptions:
+          match: "/deprecated/i"
