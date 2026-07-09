@@ -20,7 +20,7 @@ rules:
       - field: name
         function: plural
   deprecated-parameter-must-mention-in-description:
-    message: "Deprecated parameter at {{path}} must mention 'deprecated' in its description."
+    message: "Deprecated parameter at {{path}} must start with '**Deprecated**.' in its description."
     description: Deprecated parameters must mention the deprecation in their description.
     severity: error
     given: "$.paths.*.*.parameters[?(@ && @.deprecated == true)]"
@@ -30,9 +30,9 @@ rules:
       - field: description
         function: pattern
         functionOptions:
-          match: "/deprecated/i"
+          match: "/^\\*\\*Deprecated\\.\\*\\*/"
   deprecated-schema-property-must-mention-in-description:
-    message: "Deprecated schema property at {{path}} must mention 'deprecated' in its description."
+    message: "Deprecated schema property at {{path}} must start with '**Deprecated**.' in its description."
     description: Deprecated schema properties must mention the deprecation in their description.
     severity: error
     given: "$..properties[?(@ && @.deprecated == true)]"
@@ -42,4 +42,4 @@ rules:
       - field: description
         function: pattern
         functionOptions:
-          match: "/deprecated/i"
+          match: "/^\\*\\*Deprecated\\.\\*\\*/"
