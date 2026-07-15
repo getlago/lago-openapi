@@ -71,8 +71,9 @@ properties:
         type:
           - string
           - "null"
+        maxLength: 255
         example: "Gavin Belson"
-        description: "The full name of the customer"
+        description: "The full name of the customer (255 characters max)."
       firstname:
         type:
           - string
