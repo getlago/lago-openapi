@@ -11,7 +11,8 @@ properties:
     example: 'digital_ref_id'
   value:
     type: string
-    description: Represents the value of the metadata's key-value pair.
+    maxLength: 140
+    description: Represents the value of the metadata's key-value pair (140 characters max).
     example: 'INV-0123456-98765'
   created_at:
     type: string

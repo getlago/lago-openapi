@@ -14209,8 +14209,9 @@ components:
               type:
                 - string
                 - 'null'
+              maxLength: 255
               example: Gavin Belson
-              description: The full name of the customer
+              description: The full name of the customer (255 characters max).
             firstname:
               type:
                 - string
@@ -14645,7 +14646,8 @@ components:
           example: digital_ref_id
         value:
           type: string
-          description: Represents the value of the metadata's key-value pair.
+          maxLength: 140
+          description: Represents the value of the metadata's key-value pair (140 characters max).
           example: INV-0123456-98765
         created_at:
           type: string
@@ -17425,7 +17427,8 @@ components:
                     example: digital_ref_id
                   value:
                     type: string
-                    description: The value in the key-value pair of the metadata.
+                    maxLength: 140
+                    description: The value in the key-value pair of the metadata (140 characters max).
                     example: INV-0123456-98765
     InvoicePaymentUrl:
       type: object
