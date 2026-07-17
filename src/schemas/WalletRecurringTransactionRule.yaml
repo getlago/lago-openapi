@@ -141,3 +141,9 @@ properties:
   payment_method:
     $ref: "./PaymentMethodReference.yaml"
     description: The payment method assigned to this recurring transaction rule for processing top-up payments.
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    example: "PO-123"
+    description: The purchase order number associated with this recurring transaction rule. It will be added to invoices generated for the resulting wallet top-ups. If not set, falls back to the wallet's `purchase_order_number`.

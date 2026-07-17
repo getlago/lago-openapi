@@ -38,6 +38,12 @@ properties:
         type: string
         example: "default"
         description: The code of the billing entity associated with the wallet.
+      purchase_order_number:
+        type:
+          - string
+          - "null"
+        example: "PO-123"
+        description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
       invoice_custom_section:
         $ref: "./InvoiceCustomSectionInput.yaml"
       recurring_transaction_rules:
@@ -149,6 +155,12 @@ properties:
                 - "null"
               description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
               example: "Tokens for models 'high-fidelity-boost'"
+            purchase_order_number:
+              type:
+                - string
+                - "null"
+              example: "PO-123"
+              description: The purchase order number associated with this recurring transaction rule. It will be added to invoices generated for the resulting wallet top-ups. If not set, falls back to the wallet's `purchase_order_number`.
             invoice_custom_section:
               $ref: "./InvoiceCustomSectionInput.yaml"
             payment_method:
