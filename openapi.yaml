@@ -3891,7 +3891,7 @@ paths:
       tags:
         - invoices
       summary: Update an invoice
-      description: This endpoint is used for updating an existing invoice.
+      description: This endpoint is used for updating an existing invoice. A voided invoice cannot be updated and returns a `405` error.
       operationId: updateInvoice
       requestBody:
         description: Update an existing invoice
@@ -3913,6 +3913,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
