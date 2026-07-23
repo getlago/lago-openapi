@@ -2594,7 +2594,7 @@ paths:
       tags:
         - wallets
       summary: Update a wallet
-      description: This endpoint is used to update an existing wallet with prepaid credits.
+      description: This endpoint is used to update an existing wallet with prepaid credits. A terminated wallet cannot be updated and returns a `422` error.
       operationId: updateCustomerWallet
       requestBody:
         description: Wallet update payload
@@ -6292,7 +6292,7 @@ paths:
       tags:
         - wallets
       summary: Update a wallet
-      description: This endpoint is used to update an existing wallet with prepaid credits.
+      description: This endpoint is used to update an existing wallet with prepaid credits. A terminated wallet cannot be updated and returns a `422` error.
       operationId: updateWallet
       requestBody:
         description: Wallet update payload
