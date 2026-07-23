@@ -5223,6 +5223,13 @@ paths:
           schema:
             type: string
             example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - name: external_id
+          in: query
+          description: Filter subscriptions by their external unique identifier (provided by your own application).
+          required: false
+          schema:
+            type: string
+            example: my_sub_1234567890
         - name: plan_code
           in: query
           description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
@@ -5230,6 +5237,13 @@ paths:
           schema:
             type: string
             example: premium
+        - name: overridden
+          in: query
+          description: When set, filters subscriptions by whether their plan is an override of a parent plan. `true` returns only subscriptions on overridden plans; `false` returns only those on standard (non-overridden) plans.
+          required: false
+          schema:
+            type: boolean
+            example: true
         - name: status[]
           in: query
           description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
