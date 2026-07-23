@@ -6247,8 +6247,8 @@ paths:
         - $ref: '#/components/parameters/currency'
         - name: external_customer_id
           in: query
-          description: The customer external unique identifier (provided by your own application).
-          required: true
+          description: Filter wallets by customer external unique identifier (provided by your own application). When omitted, all wallets for the organization are returned.
+          required: false
           explode: true
           schema:
             type: string
