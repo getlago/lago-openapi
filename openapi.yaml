@@ -3932,6 +3932,25 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - invoices
+      summary: Delete a draft invoice
+      description: 'This endpoint is used for permanently deleting a `draft` invoice. Deleting a draft invoice removes it entirely: it never becomes accounts receivable, consumes no invoice number, and disappears from every list, export, and analytics surface. Only invoices in the `draft` status can be deleted; for a `finalized` invoice, void it instead.'
+      operationId: deleteInvoice
+      responses:
+        '200':
+          description: Invoice deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   /invoices/{lago_id}/download:
     post:
       tags:
@@ -8121,6 +8140,45 @@ webhooks:
                   type: string
                   enum:
                     - invoice.voided
+                object_type:
+                  type: string
+                  enum:
+                    - invoice
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                invoice:
+                  $ref: '#/components/schemas/InvoiceObjectExtended'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  invoice_deleted:
+    post:
+      operationId: invoiceDeleted
+      summary: A draft invoice has been deleted
+      description: A draft invoice has been deleted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the invoice
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - invoice
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - invoice.deleted
                 object_type:
                   type: string
                   enum:
@@ -14830,6 +14888,7 @@ components:
             - voided
             - failed
             - pending
+            - deleted
           description: |-
             The status of the invoice. It indicates the current state of the invoice and can have following values:
             - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
@@ -14837,6 +14896,7 @@ components:
             - `voided`: the invoice has been issued and subsequently voided. In this state, events cannot be ingested or added to the invoice anymore.
             - `pending`: the invoice remains pending until the taxes are fetched from the external provider.
             - `failed`: during an attempt of finalization of the invoice, an error happened. This invoice will have an array of error_details, explaining, in which part of the system an error happened and how it's possible to fix it. This invoice can't be edited or updated, only retried. This action will discard current error_details and will create new ones if the finalization failed again.
+            - `deleted`: the draft invoice has been permanently deleted. This status is only returned by the delete endpoint and its webhook; a deleted invoice is no longer retrievable afterwards.
           example: finalized
         payment_status:
           type: string
