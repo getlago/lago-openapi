@@ -455,6 +455,8 @@ webhooks:
     $ref: "./webhooks/invoice_drafted.yaml"
   invoice_voided:
     $ref: "./webhooks/invoice_voided.yaml"
+  invoice_deleted:
+    $ref: "./webhooks/invoice_deleted.yaml"
   invoice_payment_dispute_lost:
     $ref: "./webhooks/invoice_payment_dispute_lost.yaml"
   invoice_payment_status_updated:
