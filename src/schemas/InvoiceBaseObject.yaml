@@ -177,6 +177,13 @@ properties:
     format: uri
     description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
     example: "https://getlago.com/invoice/file"
+  web_url:
+    type:
+      - string
+      - "null"
+    format: uri
+    description: Contains the URL to the invoice page in the Lago dashboard. It is `null` for invoices that are not visible in the dashboard (for example while still generating). Use it to link users directly to the invoice overview page.
+    example: "https://app.getlago.com/acme/customer/1a901a90-1a90-1a90-1a90-1a901a901a90/invoice/2b012b01-2b01-2b01-2b01-2b012b012b01/overview"
   created_at:
     type: string
     format: "date-time"
