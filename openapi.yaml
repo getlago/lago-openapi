@@ -15739,6 +15739,12 @@ components:
             $ref: '#/components/schemas/SubscriptionActivationRuleObject'
           description: |
             The activation rules attached to the subscription. A payment activation rule gates activation on a successful first payment, keeping the subscription in the `incomplete` state until the payment succeeds or the rule expires.
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          example: PO-123
+          description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
     SubscriptionsPaginated:
       type: object
       required:
@@ -15895,6 +15901,12 @@ components:
         payment_method:
           $ref: '#/components/schemas/PaymentMethodReference'
           description: The payment method assigned to this recurring transaction rule for processing top-up payments.
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          example: PO-123
+          description: The purchase order number associated with this recurring transaction rule. It will be added to invoices generated for the resulting wallet top-ups. If not set, falls back to the wallet's `purchase_order_number`.
     WalletObject:
       type: object
       required:
@@ -16083,6 +16095,12 @@ components:
         payment_method:
           $ref: '#/components/schemas/PaymentMethodReference'
           description: The payment method assigned to this wallet for processing top-up payments.
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          example: PO-123
+          description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
         metadata:
           $ref: '#/components/schemas/MetadataObject'
     WalletsPaginated:
@@ -16207,6 +16225,12 @@ components:
                 - 'null'
               description: The name of the wallet transactions triggered when creating the wallet. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
               example: Tokens for models 'high-fidelity-boost'
+            purchase_order_number:
+              type:
+                - string
+                - 'null'
+              example: PO-123
+              description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
             applies_to:
               type:
                 - object
@@ -16360,6 +16384,12 @@ components:
                       - 'null'
                     description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
                     example: Tokens for models 'high-fidelity-boost'
+                  purchase_order_number:
+                    type:
+                      - string
+                      - 'null'
+                    example: PO-123
+                    description: The purchase order number associated with this recurring transaction rule. It will be added to invoices generated for the resulting wallet top-ups. If not set, falls back to the wallet's `purchase_order_number`.
                   ignore_paid_top_up_limits:
                     type: boolean
                     description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.
@@ -16422,6 +16452,12 @@ components:
               type: string
               example: default
               description: The code of the billing entity associated with the wallet.
+            purchase_order_number:
+              type:
+                - string
+                - 'null'
+              example: PO-123
+              description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
             invoice_custom_section:
               $ref: '#/components/schemas/InvoiceCustomSectionInput'
             recurring_transaction_rules:
@@ -16533,6 +16569,12 @@ components:
                       - 'null'
                     description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
                     example: Tokens for models 'high-fidelity-boost'
+                  purchase_order_number:
+                    type:
+                      - string
+                      - 'null'
+                    example: PO-123
+                    description: The purchase order number associated with this recurring transaction rule. It will be added to invoices generated for the resulting wallet top-ups. If not set, falls back to the wallet's `purchase_order_number`.
                   invoice_custom_section:
                     $ref: '#/components/schemas/InvoiceCustomSectionInput'
                   payment_method:
@@ -21198,6 +21240,12 @@ components:
 
                 - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
                 - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+            purchase_order_number:
+              type:
+                - string
+                - 'null'
+              example: PO-123
+              description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
             activation_rules:
               type: array
               items:
@@ -21299,6 +21347,12 @@ components:
               type: string
               example: default
               description: The code of the billing entity associated with the subscription. Updates take effect on future invoices only.
+            purchase_order_number:
+              type:
+                - string
+                - 'null'
+              example: PO-123
+              description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
             activation_rules:
               type: array
               items:
@@ -21854,6 +21908,12 @@ components:
               type: boolean
               description: When true, allows topping up the wallet with transactions that exceed the paid top-up limits. Defaults to false.
               example: false
+            purchase_order_number:
+              type:
+                - string
+                - 'null'
+              example: PO-123
+              description: The purchase order number associated with this wallet transaction. It will be added to invoices generated for the resulting wallet top-up. If not set, falls back to the wallet's `purchase_order_number`.
             invoice_custom_section:
               $ref: '#/components/schemas/InvoiceCustomSectionInput'
             payment_method:
@@ -22047,6 +22107,12 @@ components:
         payment_method:
           $ref: '#/components/schemas/PaymentMethodReference'
           description: The payment method assigned to this wallet transaction for processing the payment.
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          example: PO-123
+          description: The purchase order number associated with this wallet transaction. It will be added to invoices generated for the resulting wallet top-up. If not set, falls back to the wallet's `purchase_order_number`.
     WalletTransactions:
       type: object
       required:

@@ -166,3 +166,9 @@ properties:
   payment_method:
     $ref: "./PaymentMethodReference.yaml"
     description: The payment method assigned to this wallet transaction for processing the payment.
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    example: "PO-123"
+    description: The purchase order number associated with this wallet transaction. It will be added to invoices generated for the resulting wallet top-up. If not set, falls back to the wallet's `purchase_order_number`.

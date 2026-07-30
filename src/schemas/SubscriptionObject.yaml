@@ -242,3 +242,9 @@ properties:
       $ref: "./SubscriptionActivationRuleObject.yaml"
     description: |
       The activation rules attached to the subscription. A payment activation rule gates activation on a successful first payment, keeping the subscription in the `incomplete` state until the payment succeeds or the rule expires.
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    example: "PO-123"
+    description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.

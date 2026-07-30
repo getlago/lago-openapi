@@ -85,6 +85,12 @@ properties:
 
           - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
           - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+      purchase_order_number:
+        type:
+          - string
+          - "null"
+        example: "PO-123"
+        description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
       activation_rules:
         type: array
         items:
