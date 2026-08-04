@@ -1504,6 +1504,7 @@ paths:
           schema:
             type: string
             example: INV-001-002
+        - $ref: '#/components/parameters/purchase_order_number'
         - name: amount_from
           in: query
           description: Filter credit notes of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
@@ -2178,6 +2179,7 @@ paths:
           schema:
             type: string
             example: INV-001-002
+        - $ref: '#/components/parameters/purchase_order_number'
         - name: amount_from
           in: query
           description: Filter credit notes of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.
@@ -2334,6 +2336,7 @@ paths:
           schema:
             type: string
             example: someValue
+        - $ref: '#/components/parameters/purchase_order_number'
       responses:
         '200':
           description: Invoices
@@ -3875,6 +3878,7 @@ paths:
           schema:
             type: string
             example: someValue
+        - $ref: '#/components/parameters/purchase_order_number'
       responses:
         '200':
           description: Invoices
@@ -9293,6 +9297,15 @@ components:
       schema:
         type: integer
         example: 12
+    purchase_order_number:
+      name: purchase_order_number
+      in: query
+      description: Filter by the invoice purchase order number. The match is exact but case-insensitive.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: PO-123
     external_customer_id_path:
       name: external_customer_id
       in: path
@@ -13951,6 +13964,12 @@ components:
           type: string
           description: The invoice unique number, related to the credit note.
           example: LAG-1234
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          example: PO-123
+          description: The purchase order number of the invoice the credit note belongs to.
         issuing_date:
           type: string
           format: date
@@ -14847,6 +14866,12 @@ components:
           type: string
           description: The unique number assigned to the invoice. This number serves as a distinct identifier for the invoice and helps in differentiating it from other invoices in the system.
           example: LAG-1234-001-002
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          example: PO-123
+          description: The purchase order number associated with the invoice. It is inherited from the subscription, wallet or wallet transaction the invoice was generated for.
         issuing_date:
           type: string
           format: date
@@ -18063,6 +18088,12 @@ components:
               $ref: '#/components/schemas/Currency'
               description: The currency of the invoice.
               example: EUR
+            purchase_order_number:
+              type:
+                - string
+                - 'null'
+              example: PO-123
+              description: The purchase order number to associate with the invoice.
             fees:
               type: array
               items:

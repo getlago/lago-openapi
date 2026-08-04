@@ -40,6 +40,12 @@ properties:
     type: string
     description: The unique number assigned to the invoice. This number serves as a distinct identifier for the invoice and helps in differentiating it from other invoices in the system.
     example: "LAG-1234-001-002"
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    example: "PO-123"
+    description: The purchase order number associated with the invoice. It is inherited from the subscription, wallet or wallet transaction the invoice was generated for.
   issuing_date:
     type: string
     format: "date"
