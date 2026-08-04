@@ -4,7 +4,7 @@ put:
   tags:
     - invoices
   summary: Update an invoice
-  description: This endpoint is used for updating an existing invoice.
+  description: This endpoint is used for updating an existing invoice. A voided invoice cannot be updated and returns a `405` error.
   operationId: updateInvoice
   requestBody:
     description: Update an existing invoice
@@ -26,6 +26,8 @@ put:
       $ref: '../responses/Unauthorized.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
 get:
