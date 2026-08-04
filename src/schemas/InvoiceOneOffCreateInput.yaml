@@ -20,6 +20,12 @@ properties:
         $ref: "./Currency.yaml"
         description: The currency of the invoice.
         example: "EUR"
+      purchase_order_number:
+        type:
+          - string
+          - "null"
+        example: "PO-123"
+        description: The purchase order number to associate with the invoice.
       fees:
         type: array
         items:

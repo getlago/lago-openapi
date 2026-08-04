@@ -1,0 +1,8 @@
+name: purchase_order_number
+in: query
+description: Filter by the invoice purchase order number. The match is exact but case-insensitive.
+required: false
+explode: true
+schema:
+  type: string
+  example: "PO-123"
