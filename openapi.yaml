@@ -21132,7 +21132,9 @@ components:
                 description: List of taxes applied to the fixed charge.
         usage_thresholds:
           type: array
-          description: List of usage thresholds applied to the subscription.
+          deprecated: true
+          description: |
+            **Deprecated.** Managing usage thresholds through `plan_overrides` is deprecated. Use the top-level `usage_thresholds` array on the subscription instead, or `progressive_billing_disabled` to switch progressive billing off. An empty array here is ignored and does not clear existing thresholds.
           items:
             $ref: '#/components/schemas/UsageThresholdInput'
         metadata:
@@ -21246,6 +21248,22 @@ components:
                 - 'null'
               example: PO-123
               description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+            progressive_billing_disabled:
+              type: boolean
+              default: false
+              example: true
+              description: |
+                Disables progressive billing for this subscription, regardless of any usage thresholds defined on the plan (including thresholds inherited from a parent plan when the subscription runs on a plan override).
+
+                Set to `true` to switch progressive billing off for this subscription specifically, without changing the plan's thresholds.
+            usage_thresholds:
+              type: array
+              description: |
+                Usage thresholds managed directly on the subscription. This is the recommended way to set progressive billing thresholds per subscription; when present, they take precedence over the thresholds defined on the plan.
+
+                This field cannot be combined with `plan_overrides.usage_thresholds` in the same request.
+              items:
+                $ref: '#/components/schemas/UsageThresholdInput'
             activation_rules:
               type: array
               items:
@@ -21353,6 +21371,22 @@ components:
                 - 'null'
               example: PO-123
               description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+            progressive_billing_disabled:
+              type: boolean
+              default: false
+              example: true
+              description: |
+                Disables progressive billing for this subscription, regardless of any usage thresholds defined on the plan (including thresholds inherited from a parent plan when the subscription runs on a plan override).
+
+                Set to `true` to switch progressive billing off for this subscription specifically. This is the recommended way to stop progressive billing on a subscription that inherits thresholds from its plan, since clearing `usage_thresholds` only removes subscription-level thresholds and does not remove those defined on (or inherited from) the plan.
+            usage_thresholds:
+              type: array
+              description: |
+                Usage thresholds managed directly on the subscription. This is the recommended way to set progressive billing thresholds per subscription; when present, they take precedence over the thresholds defined on the plan.
+
+                Sending an empty array removes all subscription-level thresholds. This field cannot be combined with `plan_overrides.usage_thresholds` in the same request. To fully disable progressive billing on a subscription that inherits thresholds from its plan, use `progressive_billing_disabled` instead.
+              items:
+                $ref: '#/components/schemas/UsageThresholdInput'
             activation_rules:
               type: array
               items:
