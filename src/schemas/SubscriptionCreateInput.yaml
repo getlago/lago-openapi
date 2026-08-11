@@ -91,6 +91,22 @@ properties:
           - "null"
         example: "PO-123"
         description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+      progressive_billing_disabled:
+        type: boolean
+        default: false
+        example: true
+        description: |
+          Disables progressive billing for this subscription, regardless of any usage thresholds defined on the plan (including thresholds inherited from a parent plan when the subscription runs on a plan override).
+
+          Set to `true` to switch progressive billing off for this subscription specifically, without changing the plan's thresholds.
+      usage_thresholds:
+        type: array
+        description: |
+          Usage thresholds managed directly on the subscription. This is the recommended way to set progressive billing thresholds per subscription; when present, they take precedence over the thresholds defined on the plan.
+
+          This field cannot be combined with `plan_overrides.usage_thresholds` in the same request.
+        items:
+          $ref: "./UsageThresholdInput.yaml"
       activation_rules:
         type: array
         items:

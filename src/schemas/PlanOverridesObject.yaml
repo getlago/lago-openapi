@@ -115,7 +115,9 @@ properties:
           description: List of taxes applied to the fixed charge.
   usage_thresholds:
     type: array
-    description: List of usage thresholds applied to the subscription.
+    deprecated: true
+    description: |
+      **Deprecated.** Managing usage thresholds through `plan_overrides` is deprecated and its behavior is inconsistent: an empty array does not reliably clear thresholds (it is ignored the first time a subscription is overridden), and it never affects thresholds inherited from a parent plan. Use the top-level `usage_thresholds` array on the subscription instead, or `progressive_billing_disabled` to switch progressive billing off.
     items:
       $ref: "./UsageThresholdInput.yaml"
   metadata:
