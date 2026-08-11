@@ -33,6 +33,13 @@ get:
   parameters:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
+    - name: external_id
+      in: query
+      description: Filter customers by external ID.
+      required: false
+      schema:
+        type: string
+        example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
     - name: account_type[]
       in: query
       description: Filter customers by account type.
