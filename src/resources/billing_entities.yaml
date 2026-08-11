@@ -41,7 +41,12 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../schemas/BillingEntityObject.yaml'
+            type: object
+            required:
+              - billing_entity
+            properties:
+              billing_entity:
+                $ref: '../schemas/BillingEntityObject.yaml'
     '400':
       $ref: '../responses/BadRequest.yaml'
     '401':

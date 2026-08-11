@@ -87,6 +87,12 @@ properties:
           - "null"
         example: "Suite 100"
         description: The second line of the billing address
+      phone:
+        type:
+          - string
+          - "null"
+        example: "1-171-883-3711 x245"
+        description: The phone number of the billing entity
       city:
         type:
           - string
@@ -100,9 +106,8 @@ properties:
         example: "CA"
         description: The state of the billing address
       country:
-        $ref: './Country.yaml'
+        $ref: './CountryOrNull.yaml'
         description: The country code of the billing address
-        nullable: true
       zipcode:
         type:
           - string
@@ -145,11 +150,16 @@ properties:
           enum:
             - invoice.finalized
             - credit_note.created
+            - payment_receipt.created
         description: The email notification settings for this billing entity
       eu_tax_management:
         type: boolean
         example: false
         description: Whether EU tax management is enabled for this billing entity
+      einvoicing:
+        type: boolean
+        example: false
+        description: Whether e-invoicing is enabled for this billing entity
       logo:
         type:
           - string

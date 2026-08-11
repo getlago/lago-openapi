@@ -30,11 +30,14 @@ properties:
     example: stripe
     description: |-
       The payment provider utilized to initiate payments for invoices issued by Lago.
-      Accepted values: `stripe`, `adyen`, `gocardless` or null. This field is required if you intend to assign a `provider_customer_id`.
+      Accepted values: `stripe`, `adyen`, `cashfree`, `flutterwave`, `gocardless`, `moneyhash` or null. This field is required if you intend to assign a `provider_customer_id`.
     enum:
       - stripe
       - adyen
+      - cashfree
+      - flutterwave
       - gocardless
+      - moneyhash
   payment_provider_code:
     type: string
     example: stripe-eu-1

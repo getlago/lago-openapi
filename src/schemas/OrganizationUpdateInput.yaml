@@ -101,14 +101,18 @@ properties:
         example: "America/New_York"
       email_settings:
         type: array
-        description: Represents the email settings of the organization. It allows you to define which documents are sent by email. The field value determines the types of documents that trigger email notifications. Possible values for are `invoice.finalized` and `credit_note.created`. By configuring this field, you can specify whether invoices, credit notes, or both should be sent to recipients via email.
+        description: Represents the email settings of the organization. It allows you to define which documents are sent by email. The field value determines the types of documents that trigger email notifications. Possible values are `invoice.finalized`, `credit_note.created` and `payment_receipt.created`.
         example: ["invoice.finalized", "credit_note.created"]
         items:
           type: string
-          enum: [invoice.finalized, credit_note.created]
+          enum: [invoice.finalized, credit_note.created, payment_receipt.created]
       billing_configuration:
         $ref: "./OrganizationBillingConfiguration.yaml"
       finalize_zero_amount_invoice:
         type: boolean
         example: false
         description: Determines whether invoices with a zero total amount should be finalized. If set to true, zero amount invoices will be finalized. If set to false, zero amount invoices will not be finalized.
+      slug:
+        type: string
+        example: "NAME1-1234"
+        description: A concise and unique identifier for your organization, used as a prefix in customer slugs.

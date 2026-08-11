@@ -42,13 +42,19 @@ put:
       application/json:
         schema:
           $ref: '../schemas/BillingEntityUpdateInput.yaml'
+    required: true
   responses:
     '200':
       description: Billing entity updated
       content:
         application/json:
           schema:
-            $ref: '../schemas/BillingEntityObjectExtended.yaml'
+            type: object
+            required:
+              - billing_entity
+            properties:
+              billing_entity:
+                $ref: '../schemas/BillingEntityObjectExtended.yaml'
     '400':
       $ref: '../responses/BadRequest.yaml'
     '401':
