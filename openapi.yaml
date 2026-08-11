@@ -208,8 +208,8 @@ paths:
         required: true
         schema:
           type: string
-          format: uuid
-        description: The ID of the billing entity
+          example: acme_corp
+        description: The unique code of the billing entity
     get:
       tags:
         - billing_entities
@@ -7895,7 +7895,7 @@ webhooks:
                   description: Unique identifier of the organization, created by Lago.
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 accounting_provider_customer_error:
-                  $ref: '#/components/schemas/CustomerIntegratrionErrorObject'
+                  $ref: '#/components/schemas/CustomerIntegrationErrorObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -7973,7 +7973,7 @@ webhooks:
                   description: Unique identifier of the organization, created by Lago.
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 crm_provider_customer_error:
-                  $ref: '#/components/schemas/CustomerIntegratrionErrorObject'
+                  $ref: '#/components/schemas/CustomerIntegrationErrorObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -25123,7 +25123,7 @@ components:
           description: Array of thresholds crossed. All the recurring threshold values are present.
           items:
             $ref: '#/components/schemas/AlertThresholdObject'
-    CustomerIntegratrionErrorObject:
+    CustomerIntegrationErrorObject:
       type: object
       required:
         - lago_customer_id
@@ -25687,8 +25687,6 @@ components:
             - type: string
             - type: object
               additionalProperties: true
-    CustomerPaymentProvidernErrorObject:
-      $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
   responses:
     Unauthorized:
       description: Unauthorized error

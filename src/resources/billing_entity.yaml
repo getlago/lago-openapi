@@ -4,8 +4,8 @@ parameters:
     required: true
     schema:
       type: string
-      format: uuid
-    description: The ID of the billing entity
+      example: "acme_corp"
+    description: The unique code of the billing entity
 get:
   tags:
     - billing_entities
