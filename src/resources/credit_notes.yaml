@@ -112,6 +112,7 @@ get:
       schema:
         type: string
         example: "INV-001-002"
+    - $ref: '../parameters/purchase_order_number.yaml'
     - name: amount_from
       in: query
       description: Filter credit notes of at least a specific amount. This parameter must be defined in cents to ensure consistent handling for all currency types.

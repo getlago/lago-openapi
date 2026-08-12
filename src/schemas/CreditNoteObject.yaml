@@ -47,6 +47,12 @@ properties:
     type: string
     description: The invoice unique number, related to the credit note.
     example: "LAG-1234"
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    example: "PO-123"
+    description: The purchase order number of the invoice the credit note belongs to.
   issuing_date:
     type: string
     format: "date"
