@@ -1,0 +1,11 @@
+type: string
+description: |
+  The commercial motion the quote describes. It can be any of the following values:
+    - `subscription_creation`: the quote creates one or more subscriptions.
+    - `subscription_amendment`: the quote amends an existing subscription. `lago_subscription_id` is always set in that case.
+    - `one_off`: the quote bills add-ons once, without any subscription.
+enum:
+  - subscription_creation
+  - subscription_amendment
+  - one_off
+example: "subscription_creation"

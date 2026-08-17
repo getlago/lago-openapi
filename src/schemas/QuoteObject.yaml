@@ -1,0 +1,55 @@
+type: object
+required:
+  - lago_id
+  - number
+  - order_type
+  - lago_customer_id
+  - lago_subscription_id
+  - lago_organization_id
+  - current_version
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the quote, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  number:
+    type: string
+    description: The unique number assigned to the quote by Lago.
+    example: "QT-2026-0001"
+  order_type:
+    $ref: "./QuoteOrderTypeEnum.yaml"
+  lago_customer_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the customer the quote is addressed to, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_subscription_id:
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    description: Unique identifier of the subscription the quote amends, created by Lago. It is set only when the `order_type` is `subscription_amendment`.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_organization_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the organization, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  current_version:
+    oneOf:
+      - $ref: "./QuoteVersionObject.yaml"
+      - type: "null"
+    description: The latest version of the quote. Its `content` and `billing_items` are omitted here; retrieve the version to get them.
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date and time in UTC (ISO 8601) when the quote was created.
+    example: "2026-04-29T08:59:51Z"
+  updated_at:
+    type: string
+    format: "date-time"
+    description: The date and time in UTC (ISO 8601) when the quote was last updated.
+    example: "2026-04-29T08:59:51Z"

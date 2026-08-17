@@ -1,0 +1,303 @@
+type: object
+required:
+  - id
+  - type
+  - payload
+properties:
+  id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the plan in Lago, pinned when the entry was added to the quote.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  localId:
+    type:
+      - string
+      - "null"
+    description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
+    example: "b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b"
+  type:
+    type: string
+    description: The kind of billing item.
+    enum:
+      - plan
+    example: "plan"
+  payload:
+    type: object
+    description: A snapshot of the plan as it was added to the quote, and of the subscription to create from it. Additional catalog properties may be present, as only the ones Lago reads when the quote is executed are documented here. `code` is required to approve the version.
+    properties:
+      code:
+        type: string
+        description: Unique code identifying the plan.
+        example: "premium_plan"
+      subscriptionExternalId:
+        type:
+          - string
+          - "null"
+        description: The external unique identifier to assign to the subscription created from the entry. For a `subscription_amendment` quote, it identifies the subscription being amended.
+        example: "sub_1234567890"
+      subscriptionName:
+        type:
+          - string
+          - "null"
+        description: The name to assign to the subscription created from the entry.
+        example: "Premium plan - Acme Corp"
+      billingTime:
+        type:
+          - string
+          - "null"
+        description: The billing time of the subscription created from the entry.
+        enum:
+          - null
+          - calendar
+          - anniversary
+        example: "calendar"
+      startDate:
+        type:
+          - string
+          - "null"
+        description: The date and time in UTC (ISO 8601) when the subscription starts. It defaults to the subscription-level `start_date` of the quote version when it is not set.
+        example: "2026-01-01T00:00:00Z"
+      endDate:
+        type:
+          - string
+          - "null"
+        description: The date and time in UTC (ISO 8601) when the subscription ends. It defaults to the subscription-level `end_date` of the quote version when it is not set.
+        example: "2027-01-01T00:00:00Z"
+      paymentMethodId:
+        type:
+          - string
+          - "null"
+        format: "uuid"
+        description: Unique identifier of the payment method to charge for the subscription, created by Lago.
+        example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+      charges:
+        type:
+          - array
+          - "null"
+        description: A snapshot of the usage-based charges of the plan. It pins the charge each entry of `overrides.charges` applies to.
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the charge in Lago. It is required to approve the version.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            billableMetric:
+              type: object
+              description: The billable metric the charge is based on.
+              properties:
+                code:
+                  type: string
+                  description: Unique code identifying the billable metric. It is required to approve the version.
+                  example: "api_calls"
+            chargeModel:
+              type:
+                - string
+                - "null"
+              description: The pricing model of the charge.
+              enum:
+                - null
+                - standard
+                - graduated
+                - graduated_percentage
+                - package
+                - percentage
+                - volume
+                - custom
+                - dynamic
+              example: "standard"
+      fixedCharges:
+        type:
+          - array
+          - "null"
+        description: A snapshot of the fixed charges of the plan. It pins the fixed charge each entry of `overrides.fixedCharges` applies to.
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the fixed charge in Lago. It is required to approve the version.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            addOn:
+              type: object
+              description: The add-on the fixed charge is based on.
+              properties:
+                code:
+                  type: string
+                  description: Unique code identifying the add-on. It is required to approve the version.
+                  example: "seats"
+            chargeModel:
+              type:
+                - string
+                - "null"
+              description: The pricing model of the fixed charge.
+              enum:
+                - null
+                - standard
+                - graduated
+                - volume
+              example: "standard"
+  overrides:
+    type:
+      - object
+      - "null"
+    description: The deviations from the plan snapshot negotiated on the quote. Only the properties set here are overridden.
+    properties:
+      amountCents:
+        type:
+          - integer
+          - "null"
+        description: Overrides the base amount of the plan, in cents.
+        example: 50000
+      invoiceDisplayName:
+        type:
+          - string
+          - "null"
+        description: Overrides the name of the plan as it appears on the invoice.
+        example: "Premium"
+      name:
+        type:
+          - string
+          - "null"
+        description: Overrides the name of the plan.
+        example: "Premium plan - Acme Corp"
+      description:
+        type:
+          - string
+          - "null"
+        description: Overrides the description of the plan.
+        example: "Negotiated premium plan"
+      trialPeriod:
+        type:
+          - number
+          - "null"
+        description: Overrides the trial period of the plan, in days.
+        example: 30
+      minimumCommitment:
+        type:
+          - object
+          - "null"
+        description: Overrides the minimum commitment of the plan.
+        properties:
+          amountCents:
+            type:
+              - integer
+              - "null"
+            description: The amount of the minimum commitment, in cents. It must be greater than 0.
+            example: 100000
+          invoiceDisplayName:
+            type:
+              - string
+              - "null"
+            description: The name of the minimum commitment as it appears on the invoice.
+            example: "Annual commitment"
+      usageThresholds:
+        type:
+          - array
+          - "null"
+        description: Overrides the progressive billing thresholds of the plan.
+        items:
+          type: object
+          required:
+            - amountCents
+          properties:
+            amountCents:
+              type: integer
+              description: The usage amount, in cents, at which the threshold is reached. It must be greater than 0.
+              example: 100000
+            recurring:
+              type:
+                - boolean
+                - "null"
+              description: Whether the threshold applies to every period, instead of only once.
+              example: false
+            thresholdDisplayName:
+              type:
+                - string
+                - "null"
+              description: The name of the threshold as it appears on the invoice.
+              example: "First 1,000 EUR of usage"
+      charges:
+        type:
+          - array
+          - "null"
+        description: Overrides the usage-based charges of the plan. Each entry applies to the charge of the same billable metric in `payload.charges`.
+        items:
+          type: object
+          required:
+            - billableMetricCode
+          properties:
+            billableMetricCode:
+              type: string
+              description: Unique code identifying the billable metric of the charge to override.
+              example: "api_calls"
+            chargeModel:
+              type:
+                - string
+                - "null"
+              description: The pricing model of the charge.
+              enum:
+                - null
+                - standard
+                - graduated
+                - graduated_percentage
+                - package
+                - percentage
+                - volume
+                - custom
+                - dynamic
+              example: "standard"
+            properties:
+              type:
+                - object
+                - "null"
+              description: The pricing properties of the charge. Their shape depends on the charge model, and is validated when the quote is executed.
+              example:
+                amount: "0.02"
+            minAmountCents:
+              type:
+                - integer
+                - "null"
+              description: The minimum amount billed for the charge, in cents.
+              example: 10000
+            invoiceDisplayName:
+              type:
+                - string
+                - "null"
+              description: The name of the charge as it appears on the invoice.
+              example: "API calls"
+      fixedCharges:
+        type:
+          - array
+          - "null"
+        description: Overrides the fixed charges of the plan. Each entry applies to the fixed charge of the same add-on in `payload.fixedCharges`.
+        items:
+          type: object
+          required:
+            - addOnCode
+          properties:
+            addOnCode:
+              type: string
+              description: Unique code identifying the add-on of the fixed charge to override.
+              example: "seats"
+            units:
+              type:
+                - string
+                - "null"
+              description: The number of units billed by the fixed charge.
+              example: "10"
+            properties:
+              type:
+                - object
+                - "null"
+              description: The pricing properties of the fixed charge. Their shape depends on the charge model, and is validated when the quote is executed.
+              example:
+                amount: "5"
+            invoiceDisplayName:
+              type:
+                - string
+                - "null"
+              description: The name of the fixed charge as it appears on the invoice.
+              example: "Seats"

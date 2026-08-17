@@ -1,0 +1,26 @@
+parameters:
+  - $ref: "../parameters/lago_quote_version_id.yaml"
+post:
+  tags:
+    - quotes
+  summary: Void a quote version
+  description: |-
+    This endpoint voids a quote version, which makes it definitive: a voided version can neither be edited nor approved again.
+    Only a `draft` version can be voided through this endpoint, and the resulting `void_reason` is `manual`. An `approved` version is voided by Lago itself, through the order form generated from it.
+    This is a premium feature.
+  operationId: voidQuoteVersion
+  responses:
+    "200":
+      description: Quote version voided
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuoteVersion.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

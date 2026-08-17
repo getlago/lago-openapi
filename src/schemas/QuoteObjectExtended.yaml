@@ -1,0 +1,11 @@
+allOf:
+  - $ref: "./QuoteObject.yaml"
+  - type: object
+    required:
+      - owners
+    properties:
+      owners:
+        type: array
+        description: The users of the organization responsible for the quote.
+        items:
+          $ref: "./QuoteOwnerObject.yaml"

@@ -1,0 +1,34 @@
+type:
+  - object
+  - "null"
+description: |
+  A snapshot of everything the quote bills. Unlike the rest of the Lago API, the keys nested in this object are camelCased: the object is stored and returned as it is authored in the Lago user interface.
+
+  Which top-level keys are present depends on the `order_type` of the parent quote:
+    - `one_off`: `addOns`.
+    - `subscription_creation` and `subscription_amendment`: `plans`, plus the optional `coupons` and `walletCredits`.
+
+  Every entry pins the catalog record it was built from through its `id` and its `payload`, so that an approved quote keeps billing what was approved even if the catalog changes afterwards. The optional `overrides` object carries the deviations from that record negotiated on the quote.
+
+  On a `draft` version this object may be incomplete: only the properties documented as required below are enforced on every save, the others are enforced when the version is approved.
+properties:
+  addOns:
+    type: array
+    description: The add-ons billed once by a `one_off` quote. At least one entry is required to approve the version.
+    items:
+      $ref: "./QuoteBillingItemAddOnObject.yaml"
+  plans:
+    type: array
+    description: The plans subscribed to, or amended, by a `subscription_creation` or `subscription_amendment` quote. At least one entry is required to approve the version.
+    items:
+      $ref: "./QuoteBillingItemPlanObject.yaml"
+  coupons:
+    type: array
+    description: The coupons applied to the customer when the quote is executed.
+    items:
+      $ref: "./QuoteBillingItemCouponObject.yaml"
+  walletCredits:
+    type: array
+    description: The prepaid credit wallets created for the customer when the quote is executed.
+    items:
+      $ref: "./QuoteBillingItemWalletCreditObject.yaml"

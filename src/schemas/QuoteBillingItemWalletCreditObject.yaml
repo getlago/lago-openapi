@@ -1,0 +1,175 @@
+type: object
+required:
+  - localId
+  - type
+  - payload
+properties:
+  localId:
+    type: string
+    description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
+    example: "b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b"
+  type:
+    type: string
+    description: The kind of billing item.
+    enum:
+      - wallet_credit
+    example: "wallet_credit"
+  payload:
+    type: object
+    description: The prepaid credit wallet to create for the customer. Unlike the other billing items, a wallet credit is not built from an existing record, so it carries no `id` and no `overrides`. `paidCredits`, `grantedCredits` and `rateAmount` are required to approve the version.
+    properties:
+      paidCredits:
+        type:
+          - string
+          - "null"
+        description: The number of credits the customer pays for.
+        example: "100.0"
+      grantedCredits:
+        type:
+          - string
+          - "null"
+        description: The number of credits granted for free.
+        example: "20.0"
+      rateAmount:
+        type:
+          - string
+          - "null"
+        description: The value of one credit, in the currency of the wallet.
+        example: "1.0"
+      currency:
+        $ref: "./CurrencyOrNull.yaml"
+        description: The currency of the wallet.
+      expirationAt:
+        type:
+          - string
+          - "null"
+        format: "date-time"
+        description: The date and time in UTC (ISO 8601) when the credits expire.
+        example: "2027-01-01T00:00:00Z"
+      appliesTo:
+        type:
+          - object
+          - "null"
+        description: The limitations restricting what the credits can be spent on.
+        properties:
+          feeTypes:
+            type:
+              - array
+              - "null"
+            description: The fee types the credits can be spent on.
+            items:
+              type: string
+              enum:
+                - charge
+                - add_on
+                - subscription
+                - credit
+                - commitment
+                - fixed_charge
+                - product
+            example: ["charge"]
+          billableMetricCodes:
+            type:
+              - array
+              - "null"
+            description: The codes of the billable metrics the credits can be spent on.
+            items:
+              type: string
+            example: ["api_calls"]
+      recurringTransactionRules:
+        type:
+          - array
+          - "null"
+        description: The rule automatically topping the wallet up. At most one rule is allowed, and its `trigger` is required, to approve the version.
+        items:
+          type: object
+          properties:
+            trigger:
+              type:
+                - string
+                - "null"
+              description: What triggers the top-up.
+              enum:
+                - null
+                - interval
+                - threshold
+              example: "interval"
+            interval:
+              type:
+                - string
+                - "null"
+              description: How often the wallet is topped up. Only for an `interval` trigger.
+              enum:
+                - null
+                - weekly
+                - monthly
+                - quarterly
+                - semiannual
+                - yearly
+              example: "monthly"
+            thresholdCredits:
+              type:
+                - string
+                - "null"
+              description: The credit balance below which the wallet is topped up. Only for a `threshold` trigger.
+              example: "10.0"
+            method:
+              type:
+                - string
+                - "null"
+              description: Whether the top-up grants a fixed number of credits, or brings the balance up to a target.
+              enum:
+                - null
+                - fixed
+                - target
+              example: "fixed"
+            targetOngoingBalance:
+              type:
+                - string
+                - "null"
+              description: The balance the top-up brings the wallet up to. Only for a `target` method.
+              example: "100.0"
+            grantsTargetTopUp:
+              type:
+                - boolean
+                - "null"
+              description: Whether the granted credits count towards the target balance.
+              example: false
+            paidCredits:
+              type:
+                - string
+                - "null"
+              description: The number of credits the customer pays for on every top-up.
+              example: "100.0"
+            grantedCredits:
+              type:
+                - string
+                - "null"
+              description: The number of credits granted for free on every top-up.
+              example: "20.0"
+            startedAt:
+              type:
+                - string
+                - "null"
+              format: "date-time"
+              description: The date and time in UTC (ISO 8601) when the rule starts applying.
+              example: "2026-01-01T00:00:00Z"
+            expirationAt:
+              type:
+                - string
+                - "null"
+              format: "date-time"
+              description: The date and time in UTC (ISO 8601) when the rule stops applying.
+              example: "2027-01-01T00:00:00Z"
+            transactionName:
+              type:
+                - string
+                - "null"
+              description: The name given to the wallet transactions created by the rule.
+              example: "Monthly top-up"
+            invoiceRequiresSuccessfulPayment:
+              type:
+                - boolean
+                - "null"
+              description: Whether the credits are granted only once the top-up invoice is paid.
+              example: false

@@ -1,0 +1,33 @@
+parameters:
+  - $ref: "../parameters/lago_quote_version_id.yaml"
+post:
+  tags:
+    - quotes
+  summary: Approve a quote version
+  description: |-
+    This endpoint approves a quote version and generates the order form to send to the customer for signature.
+    Only a `draft` version can be approved, and its `billing_items` must be complete: approval validates them against the catalog and against the customer, and returns a `422` when the deal cannot be executed as quoted.
+    This is a premium feature.
+  operationId: approveQuoteVersion
+  requestBody:
+    description: Approve quote version payload
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/QuoteVersionApproveInput.yaml"
+    required: false
+  responses:
+    "200":
+      description: Quote version approved
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuoteVersion.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"
