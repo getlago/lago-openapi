@@ -9054,6 +9054,129 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  quote_created:
+    post:
+      operationId: quoteCreated
+      summary: A new quote has been created
+      description: |-
+        A new quote has been created. The payload names the initial `draft` version of the quote, numbered 1.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new quote
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - quote
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - quote.created
+                object_type:
+                  type: string
+                  enum:
+                    - quote
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                quote:
+                  $ref: '#/components/schemas/QuoteWithVersionObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  quote_approved:
+    post:
+      operationId: quoteApproved
+      summary: A quote has been approved
+      description: |-
+        A version of a quote has been approved. An order form is generated from it in the same transaction, so an `order_form.created` event follows.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the approved quote
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - quote
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - quote.approved
+                object_type:
+                  type: string
+                  enum:
+                    - quote
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                quote:
+                  $ref: '#/components/schemas/QuoteWithVersionObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  quote_voided:
+    post:
+      operationId: quoteVoided
+      summary: A quote has been voided
+      description: |-
+        A version of a quote has been voided. It is emitted whichever way the version was voided, so read `version.void_reason` to tell them apart: `manual` for an explicit void, `superseded` when the version was cloned into a new draft, `cascade_of_expired` or `cascade_of_voided` when the order form generated from it expired or was voided.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the voided quote
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - quote
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - quote.voided
+                object_type:
+                  type: string
+                  enum:
+                    - quote
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                quote:
+                  $ref: '#/components/schemas/QuoteWithVersionObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   subscription_terminated:
     post:
       operationId: subscriptionTerminated
@@ -21349,6 +21472,56 @@ components:
         - subscription_amendment
         - one_off
       example: subscription_creation
+    QuoteBaseObject:
+      type: object
+      required:
+        - lago_id
+        - number
+        - order_type
+        - lago_customer_id
+        - lago_subscription_id
+        - lago_organization_id
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the quote, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        number:
+          type: string
+          description: The unique number assigned to the quote by Lago.
+          example: QT-2026-0001
+        order_type:
+          $ref: '#/components/schemas/QuoteOrderTypeEnum'
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer the quote is addressed to, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_subscription_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the subscription the quote amends, created by Lago. It is set only when the `order_type` is `subscription_amendment`.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the quote was created.
+          example: '2026-04-29T08:59:51Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the quote was last updated.
+          example: '2026-04-29T08:59:51Z'
     QuoteVersionStatusEnum:
       type: string
       description: |
@@ -21462,61 +21635,17 @@ components:
           description: The date and time in UTC (ISO 8601) when the version was last updated.
           example: '2026-04-29T08:59:51Z'
     QuoteObject:
-      type: object
-      required:
-        - lago_id
-        - number
-        - order_type
-        - lago_customer_id
-        - lago_subscription_id
-        - lago_organization_id
-        - current_version
-        - created_at
-        - updated_at
-      properties:
-        lago_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the quote, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        number:
-          type: string
-          description: The unique number assigned to the quote by Lago.
-          example: QT-2026-0001
-        order_type:
-          $ref: '#/components/schemas/QuoteOrderTypeEnum'
-        lago_customer_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the customer the quote is addressed to, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_subscription_id:
-          type:
-            - string
-            - 'null'
-          format: uuid
-          description: Unique identifier of the subscription the quote amends, created by Lago. It is set only when the `order_type` is `subscription_amendment`.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        lago_organization_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the organization, created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        current_version:
-          oneOf:
-            - $ref: '#/components/schemas/QuoteVersionObject'
-            - type: 'null'
-          description: The latest version of the quote. Its `content` and `billing_items` are omitted here; retrieve the version to get them.
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time in UTC (ISO 8601) when the quote was created.
-          example: '2026-04-29T08:59:51Z'
-        updated_at:
-          type: string
-          format: date-time
-          description: The date and time in UTC (ISO 8601) when the quote was last updated.
-          example: '2026-04-29T08:59:51Z'
+      allOf:
+        - $ref: '#/components/schemas/QuoteBaseObject'
+        - type: object
+          required:
+            - current_version
+          properties:
+            current_version:
+              oneOf:
+                - $ref: '#/components/schemas/QuoteVersionObject'
+                - type: 'null'
+              description: The latest version of the quote. Its `content` and `billing_items` are omitted here; retrieve the version to get them.
     QuotesPaginated:
       type: object
       required:
@@ -24329,6 +24458,16 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    QuoteWithVersionObject:
+      allOf:
+        - $ref: '#/components/schemas/QuoteBaseObject'
+        - type: object
+          required:
+            - version
+          properties:
+            version:
+              $ref: '#/components/schemas/QuoteVersionObject'
+              description: The version of the quote the event happened to. It is not necessarily the current version of the quote, as a `quote.voided` event triggered by a clone names the version that was voided while the quote already carries its replacement. Its `content` and `billing_items` are omitted here; retrieve the version to get them.
     SubscriptionWithCustomerObject:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'

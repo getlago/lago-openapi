@@ -503,6 +503,12 @@ webhooks:
     $ref: "./webhooks/plan_updated.yaml"
   plan_deleted:
     $ref: "./webhooks/plan_deleted.yaml"
+  quote_created:
+    $ref: "./webhooks/quote_created.yaml"
+  quote_approved:
+    $ref: "./webhooks/quote_approved.yaml"
+  quote_voided:
+    $ref: "./webhooks/quote_voided.yaml"
   subscription_terminated:
     $ref: "./webhooks/subscription_terminated.yaml"
   subscription_incomplete:
