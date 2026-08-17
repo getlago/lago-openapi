@@ -15908,18 +15908,17 @@ components:
               example: Belson
               description: Last name of the customer
             account_type:
-              type:
-                - string
-                - 'null'
+              type: string
               enum:
                 - customer
                 - partner
-                - null
               example: customer
               description: |-
                 The type of the account. It can have one of the following values:
                 - `customer`: the account is a customer, default value.
                 - `partner`: the account is a partner.
+
+                This field is only applied when revenue share is enabled on your organization; otherwise it is ignored.
             customer_type:
               type:
                 - string
@@ -19388,9 +19387,10 @@ components:
                   units:
                     type:
                       - string
+                      - number
                       - 'null'
                     pattern: ^[0-9]+.?[0-9]*$
-                    description: The quantity of units associated with the fee. By default, only 1 unit is added to the invoice.
+                    description: The quantity of units associated with the fee. Accepts a number or a string formatted as a BigDecimal. By default, only 1 unit is added to the invoice.
                     example: '2.5'
                   description:
                     type:
