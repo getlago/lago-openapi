@@ -1,0 +1,68 @@
+type: object
+required:
+  - lago_id
+  - number
+  - status
+  - order_type
+  - execution_mode
+  - currency
+  - executed_at
+  - execution_record
+  - lago_organization_id
+  - lago_customer_id
+  - lago_order_form_id
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the order, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  number:
+    type: string
+    description: The unique number assigned to the order by Lago.
+    example: "OR-2026-0001"
+  status:
+    $ref: "./OrderStatusEnum.yaml"
+  order_type:
+    $ref: "./QuoteOrderTypeEnum.yaml"
+  execution_mode:
+    $ref: "./OrderExecutionModeEnumOrNull.yaml"
+  currency:
+    $ref: "./CurrencyOrNull.yaml"
+    description: The currency the order is denominated in, inherited from the quote version it comes from.
+  executed_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The date and time in UTC (ISO 8601) when the order was executed. It is `null` unless the `status` is `executed`.
+    example: "2026-07-01T00:00:00Z"
+  execution_record:
+    $ref: "./OrderExecutionRecordObject.yaml"
+  lago_organization_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the organization, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_customer_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the customer the order was placed for, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_order_form_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the signed order form the order comes from, created by Lago. An order form carries at most one order.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  created_at:
+    type: string
+    format: "date-time"
+    description: The date and time in UTC (ISO 8601) when the order was created.
+    example: "2026-04-29T08:59:51Z"
+  updated_at:
+    type: string
+    format: "date-time"
+    description: The date and time in UTC (ISO 8601) when the order was last updated.
+    example: "2026-04-29T08:59:51Z"

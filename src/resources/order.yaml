@@ -1,0 +1,23 @@
+parameters:
+  - $ref: "../parameters/lago_order_id.yaml"
+get:
+  tags:
+    - orders
+  summary: Retrieve an order
+  description: |-
+    This endpoint retrieves a specific order, along with the `billing_snapshot` its execution applies and the `execution_record` of what it produced.
+    This is a premium feature.
+  operationId: findOrder
+  responses:
+    "200":
+      description: Order
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Order.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

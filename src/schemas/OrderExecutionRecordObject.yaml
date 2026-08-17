@@ -1,0 +1,66 @@
+type: object
+description: |
+  A trace of what the execution produced. Every key is always present, whichever the order type, so a reader never has to tell a missing key from an empty one; the keys that do not apply keep their empty value.
+
+  Which ones are filled depends on the `order_type` of the quote, and only for an `execute_in_lago` order: `invoice_id` for `one_off`, `subscription_ids` with `applied_coupon_ids` and `wallet_ids` for `subscription_creation`, and the same plus `terminated_subscription_ids` for `subscription_amendment`. An `order_only` order records the mode and the timestamp alone.
+required:
+  - executed_at
+  - execution_mode
+  - invoice_id
+  - subscription_ids
+  - terminated_subscription_ids
+  - applied_coupon_ids
+  - wallet_ids
+  - errors
+properties:
+  executed_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The date and time in UTC (ISO 8601) when the execution succeeded. It is `null` until then, and stays `null` on a failed attempt.
+    example: "2026-07-01T00:00:00Z"
+  execution_mode:
+    $ref: "./OrderExecutionModeEnumOrNull.yaml"
+    description: The mode the execution ran in.
+  invoice_id:
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    description: Unique identifier of the one-off invoice created by the execution, created by Lago. Only for a `one_off` order.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  subscription_ids:
+    type: array
+    description: Unique identifiers of the subscriptions created by the execution, created by Lago.
+    items:
+      type: string
+      format: "uuid"
+    example: ["1a901a90-1a90-1a90-1a90-1a901a901a90"]
+  terminated_subscription_ids:
+    type: array
+    description: Unique identifiers of the subscriptions terminated by the execution, created by Lago. Only for a `subscription_amendment` order, and only when the amendment took effect immediately and terminated the subscription it replaced. It stays empty for an amendment scheduled for the next billing period.
+    items:
+      type: string
+      format: "uuid"
+    example: ["1a901a90-1a90-1a90-1a90-1a901a901a90"]
+  applied_coupon_ids:
+    type: array
+    description: Unique identifiers of the coupons applied to the customer by the execution, created by Lago.
+    items:
+      type: string
+      format: "uuid"
+    example: ["1a901a90-1a90-1a90-1a90-1a901a901a90"]
+  wallet_ids:
+    type: array
+    description: Unique identifiers of the prepaid credit wallets created by the execution, created by Lago.
+    items:
+      type: string
+      format: "uuid"
+    example: ["1a901a90-1a90-1a90-1a90-1a901a901a90"]
+  errors:
+    type: array
+    description: The reasons why the execution failed. It is empty unless the `status` is `failed`.
+    items:
+      type: string
+    example: ["plan_not_found"]
