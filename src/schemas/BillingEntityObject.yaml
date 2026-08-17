@@ -84,7 +84,7 @@ properties:
   is_default:
     type: boolean
     example: false
-    description: Whether this billing entity is the default billing entity for the organization. Default billing entity will be used as fallback in services if no billing entity is specified when billing_entity is not provided. Default billing entity is the billing entity that will be used to generate invoices if no billing entity is specified when invoice is created. is the oldest active billing entity and this flag cannot be changed
+    description: Whether this billing entity is the organization's default billing entity. The default billing entity is the oldest active one, and is used as a fallback whenever no billing entity is provided, for example when an invoice is created. This flag cannot be changed.
   net_payment_term:
     type: integer
     example: 0

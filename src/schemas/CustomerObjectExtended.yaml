@@ -12,12 +12,12 @@ allOf:
         items:
           $ref: "./TaxObject.yaml"
       applicable_invoice_custom_sections:
-        description: The customer’s invoice custom section used for generating invoices.
+        description: The customer's invoice custom sections used for generating invoices.
         type: array
         items:
           $ref: "./InvoiceCustomSectionObject.yaml"
       error_details:
-        description: List of errors with details that might have been raised while processing backgroud actions for the customers
+        description: List of errors with details that might have been raised while processing background actions for the customer
         type: array
         items:
           $ref: "./ErrorDetailObject.yaml"

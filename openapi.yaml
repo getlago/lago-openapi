@@ -11252,7 +11252,7 @@ components:
         is_default:
           type: boolean
           example: false
-          description: Whether this billing entity is the default billing entity for the organization. Default billing entity will be used as fallback in services if no billing entity is specified when billing_entity is not provided. Default billing entity is the billing entity that will be used to generate invoices if no billing entity is specified when invoice is created. is the oldest active billing entity and this flag cannot be changed
+          description: Whether this billing entity is the organization's default billing entity. The default billing entity is the oldest active one, and is used as a fallback whenever no billing entity is provided, for example when an invoice is created. This flag cannot be changed.
         net_payment_term:
           type: integer
           example: 0
@@ -14936,7 +14936,7 @@ components:
         sequential_id:
           type: integer
           example: 1
-          description: The unique identifier assigned to the customer within the organization's scope. This identifier is used to track and reference the customer's order of creation within the organization's system. It ensures that each customer has a distinct `sequential_id`` associated with them, allowing for easy identification and sorting based on the order of creation
+          description: The unique identifier assigned to the customer within the organization's scope. This identifier is used to track and reference the customer's order of creation within the organization's system. It ensures that each customer has a distinct `sequential_id` associated with them, allowing for easy identification and sorting based on the order of creation
         slug:
           type: string
           example: LAG-1234-001
@@ -15797,12 +15797,12 @@ components:
               items:
                 $ref: '#/components/schemas/TaxObject'
             applicable_invoice_custom_sections:
-              description: The customer’s invoice custom section used for generating invoices.
+              description: The customer's invoice custom sections used for generating invoices.
               type: array
               items:
                 $ref: '#/components/schemas/InvoiceCustomSectionObject'
             error_details:
-              description: List of errors with details that might have been raised while processing backgroud actions for the customers
+              description: List of errors with details that might have been raised while processing background actions for the customer
               type: array
               items:
                 $ref: '#/components/schemas/ErrorDetailObject'
@@ -17934,7 +17934,10 @@ components:
             value:
               type: string
               pattern: ^[0-9]+.?[0-9]*$
-              description: A value that should trigger this alert, formatted as a BigDecimal.
+              description: |-
+                A value that should trigger this alert, formatted as a BigDecimal.
+
+                The unit depends on the alert type: `billable_metric_current_usage_units` and `billable_metric_lifetime_usage_units` are expressed in units, `wallet_credits_balance` and `wallet_credits_ongoing_balance` in credits, and all other types in cents.
               example: '99.0'
     WalletAlertObject:
       type: object
@@ -18042,7 +18045,10 @@ components:
               oneOf:
                 - type: integer
                 - type: string
-              description: A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
+              description: |-
+                A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
+
+                The unit depends on the alert type: `billable_metric_current_usage_units` and `billable_metric_lifetime_usage_units` are expressed in units, `wallet_credits_balance` and `wallet_credits_ongoing_balance` in credits, and all other types in cents.
               example: 99
     AlertBaseInput:
       type: object
