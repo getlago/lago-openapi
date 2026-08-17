@@ -140,6 +140,8 @@ tags:
       url: https://getlago.com/docs/api-reference/payment-methods/payment-method-object
   - name: quotes
     description: Everything about Quote collection
+  - name: order_forms
+    description: Everything about Order form collection
 externalDocs:
   description: Lago Github
   url: https://github.com/getlago
@@ -4164,6 +4166,221 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /order_forms:
+    get:
+      tags:
+        - order_forms
+      summary: List all order forms
+      description: |-
+        This endpoint is used to list all existing order forms.
+        This is a premium feature.
+      operationId: findAllOrderForms
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: status[]
+          in: query
+          description: Filter order forms by status. Possible values are `generated`, `signed`, `expired` and `voided`.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - generated
+                - signed
+                - expired
+                - voided
+        - name: customer_id[]
+          in: query
+          description: Filter order forms by the Lago identifiers of their customers.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example:
+              - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: number[]
+          in: query
+          description: Filter order forms by their number, as assigned by Lago.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - OF-2026-0001
+              - OF-2026-0002
+        - name: quote_number[]
+          in: query
+          description: Filter order forms by the number of the quote they come from.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - QT-2026-0001
+        - name: owner_id[]
+          in: query
+          description: Filter order forms by the Lago identifiers of the users owning the quote they come from.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example:
+              - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: search_term
+          in: query
+          description: Search order forms by number.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: OF-2026
+        - name: created_at_from
+          in: query
+          description: Filter order forms created from a specific date and time, in UTC (ISO 8601).
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2026-01-01T00:00:00Z'
+        - name: created_at_to
+          in: query
+          description: Filter order forms created up to a specific date and time, in UTC (ISO 8601).
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2026-12-31T23:59:59Z'
+        - name: expires_at_from
+          in: query
+          description: Filter order forms expiring from a specific date and time, in UTC (ISO 8601). Order forms that never expire are excluded.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2026-01-01T00:00:00Z'
+        - name: expires_at_to
+          in: query
+          description: Filter order forms expiring up to a specific date and time, in UTC (ISO 8601). Order forms that never expire are excluded.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2026-12-31T23:59:59Z'
+      responses:
+        '200':
+          description: Order forms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderFormsPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /order_forms/{lago_id}:
+    parameters:
+      - $ref: '#/components/parameters/lago_order_form_id'
+    get:
+      tags:
+        - order_forms
+      summary: Retrieve an order form
+      description: |-
+        This endpoint retrieves a specific order form.
+        This is a premium feature.
+      operationId: findOrderForm
+      responses:
+        '200':
+          description: Order form
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderForm'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /order_forms/{lago_id}/mark_as_signed:
+    parameters:
+      - $ref: '#/components/parameters/lago_order_form_id'
+    post:
+      tags:
+        - order_forms
+      summary: Mark an order form as signed
+      description: |-
+        This endpoint records the customer's signature on an order form, and creates the order that carries the quoted deal out.
+        Only a `generated` order form can be signed, so a `422` is returned once the order form has been signed, has expired or has been voided.
+        This is a premium feature.
+      operationId: markOrderFormAsSigned
+      requestBody:
+        description: Mark order form as signed payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderFormMarkAsSignedInput'
+        required: false
+      responses:
+        '200':
+          description: Order form marked as signed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderForm'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /order_forms/{lago_id}/void:
+    parameters:
+      - $ref: '#/components/parameters/lago_order_form_id'
+    post:
+      tags:
+        - order_forms
+      summary: Void an order form
+      description: |-
+        This endpoint voids an order form, with the `manual` reason, and cascades to the quote version it was generated from, which is voided with the `cascade_of_voided` reason.
+        Only a `generated` order form can be voided, so a `422` is returned once the order form has been signed, has expired or has already been voided.
+        This is a premium feature.
+      operationId: voidOrderForm
+      responses:
+        '200':
+          description: Order form voided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderForm'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /organizations:
     put:
       tags:
@@ -8751,6 +8968,170 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  order_form_created:
+    post:
+      operationId: orderFormCreated
+      summary: An order form has been generated from an approved quote
+      description: |-
+        An order form has been generated from an approved quote version, and is now waiting for the customer's signature. It always follows a `quote.approved` event, emitted in the same transaction.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new order form
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - order_form
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - order_form.created
+                object_type:
+                  type: string
+                  enum:
+                    - order_form
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                order_form:
+                  $ref: '#/components/schemas/OrderFormObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  order_form_signed:
+    post:
+      operationId: orderFormSigned
+      summary: An order form has been marked as signed
+      description: |-
+        An order form has been marked as signed. An order is created from it in the same transaction, so an `order.created` event follows.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the signed order form
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - order_form
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - order_form.signed
+                object_type:
+                  type: string
+                  enum:
+                    - order_form
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                order_form:
+                  $ref: '#/components/schemas/OrderFormObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  order_form_expired:
+    post:
+      operationId: orderFormExpired
+      summary: An order form has expired
+      description: |-
+        An order form reached its `expires_at` without being signed, and is no longer actionable. Expiry is detected by an hourly job comparing calendar dates in the timezone of the customer's billing entity, so the event is emitted during the day the order form expires rather than at the exact `expires_at` time. It cascades to the quote version the order form was generated from, so a `quote.voided` event with the `cascade_of_expired` reason follows.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the expired order form
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - order_form
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - order_form.expired
+                object_type:
+                  type: string
+                  enum:
+                    - order_form
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                order_form:
+                  $ref: '#/components/schemas/OrderFormObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  order_form_voided:
+    post:
+      operationId: orderFormVoided
+      summary: An order form has been voided
+      description: |-
+        An order form has been voided before being signed. It cascades to the quote version the order form was generated from, so a `quote.voided` event with the `cascade_of_voided` reason follows.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the voided order form
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - order_form
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - order_form.voided
+                object_type:
+                  type: string
+                  enum:
+                    - order_form
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                order_form:
+                  $ref: '#/components/schemas/OrderFormObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   payment_requires_action:
     post:
       operationId: paymentRequiresAction
@@ -9782,6 +10163,15 @@ components:
       name: lago_id
       in: path
       description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    lago_order_form_id:
+      name: lago_id
+      in: path
+      description: Unique identifier assigned to the order form within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the order form's record within the Lago system.
       required: true
       schema:
         type: string
@@ -18945,6 +19335,176 @@ components:
           minimum: 0
       required: []
       description: Parameters available when voiding an invoice that optionally generate credit notes.
+    OrderFormStatusEnum:
+      type: string
+      description: |
+        The status of the order form. It can be any of the following values:
+          - `generated`: the order form is waiting for the customer's signature.
+          - `signed`: the customer has signed, and an order has been created from the order form.
+          - `expired`: the order form reached its `expires_at` without being signed.
+          - `voided`: the order form has been voided before being signed.
+
+        Only a `generated` order form is actionable. Reaching any other status also voids the quote version the order form was generated from.
+      enum:
+        - generated
+        - signed
+        - expired
+        - voided
+      example: generated
+    OrderFormVoidReasonEnum:
+      type:
+        - string
+        - 'null'
+      description: |
+        The reason why the order form is no longer actionable. It is `null` unless the `status` is `voided` or `expired`. It can be any of the following values:
+          - `manual`: the order form has been voided explicitly, through the API or the Lago user interface.
+          - `expired`: the order form reached its `expires_at` without being signed.
+          - `invalid`: the order form has been voided by Lago because it could no longer be executed.
+      enum:
+        - null
+        - manual
+        - expired
+        - invalid
+      example: manual
+    OrderFormObject:
+      type: object
+      required:
+        - lago_id
+        - number
+        - status
+        - void_reason
+        - expires_at
+        - signed_at
+        - voided_at
+        - signed_document_url
+        - lago_organization_id
+        - lago_customer_id
+        - lago_quote_id
+        - lago_quote_version_id
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the order form, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        number:
+          type: string
+          description: The unique number assigned to the order form by Lago.
+          example: OF-2026-0001
+        status:
+          $ref: '#/components/schemas/OrderFormStatusEnum'
+        void_reason:
+          $ref: '#/components/schemas/OrderFormVoidReasonEnum'
+        expires_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the order form stops being signable. It is `null` when the order form never expires.
+          example: '2026-06-30T23:59:59Z'
+        signed_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the order form was marked as signed. It is `null` unless the `status` is `signed`.
+          example: '2026-04-29T08:59:51Z'
+        voided_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the order form stopped being actionable. It is set both when the order form is voided and when it expires, and is `null` otherwise.
+          example: '2026-04-29T08:59:51Z'
+        signed_document_url:
+          type:
+            - string
+            - 'null'
+          format: uri
+          description: The URL of the signed document attached to the order form. It is `null` when no document was uploaded.
+          example: https://api.getlago.com/rails/active_storage/blobs/redirect/eyJfcmFpbHMi/OF-2026-0001
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer the order form is addressed to, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_quote_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the quote the order form comes from, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_quote_version_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the approved quote version the order form was generated from, created by Lago. A quote version carries at most one order form.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the order form was created.
+          example: '2026-04-29T08:59:51Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the order form was last updated.
+          example: '2026-04-29T08:59:51Z'
+    OrderFormsPaginated:
+      type: object
+      required:
+        - order_forms
+        - meta
+      properties:
+        order_forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderFormObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    OrderForm:
+      type: object
+      required:
+        - order_form
+      properties:
+        order_form:
+          $ref: '#/components/schemas/OrderFormObject'
+    OrderExecutionModeEnum:
+      type: string
+      description: |
+        How the order created from the order form is carried out. It can be any of the following values:
+          - `execute_in_lago`: Lago applies the quoted deal itself, creating the subscriptions, coupons, wallets or one-off invoice it describes.
+          - `order_only`: Lago records the order without applying it, leaving the execution to your own systems.
+      enum:
+        - execute_in_lago
+        - order_only
+      example: execute_in_lago
+    OrderFormMarkAsSignedInput:
+      type: object
+      description: Parameters available when marking an order form as signed. Every parameter is optional, so an empty body records the signature without attaching a document, and creates an order that is not scheduled for execution.
+      required: []
+      properties:
+        order_form:
+          type: object
+          required: []
+          properties:
+            signed_document:
+              type: string
+              description: The document signed by the customer, as a base64 data URI (`data:<content_type>;base64,<data>`). Accepted content types are `application/pdf`, `image/jpeg` and `image/png`, for a maximum of 10 MB. Once attached, it is exposed as `signed_document_url` on the order form.
+              example: data:application/pdf;base64,JVBERi0xLjQKJcfs...
+            execution_mode:
+              $ref: '#/components/schemas/OrderExecutionModeEnum'
+              description: How the order created from the order form is carried out. It becomes mandatory as soon as `execute_at` is provided.
+            execute_at:
+              type: string
+              format: date-time
+              description: The date and time in UTC (ISO 8601) when Lago executes the order created from the order form. It must be in the future, and requires `execution_mode` to be set. When it is omitted, the order is created but never scheduled for execution.
+              example: '2026-07-01T00:00:00Z'
     OrganizationBillingConfiguration:
       type: object
       description: The custom billing settings for your organization.

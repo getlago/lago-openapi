@@ -1,0 +1,23 @@
+parameters:
+  - $ref: "../parameters/lago_order_form_id.yaml"
+get:
+  tags:
+    - order_forms
+  summary: Retrieve an order form
+  description: |-
+    This endpoint retrieves a specific order form.
+    This is a premium feature.
+  operationId: findOrderForm
+  responses:
+    "200":
+      description: Order form
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/OrderForm.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

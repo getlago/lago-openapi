@@ -1,0 +1,9 @@
+type: string
+description: |
+  How the order created from the order form is carried out. It can be any of the following values:
+    - `execute_in_lago`: Lago applies the quoted deal itself, creating the subscriptions, coupons, wallets or one-off invoice it describes.
+    - `order_only`: Lago records the order without applying it, leaving the execution to your own systems.
+enum:
+  - execute_in_lago
+  - order_only
+example: "execute_in_lago"

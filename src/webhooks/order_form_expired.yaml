@@ -1,0 +1,40 @@
+post:
+  operationId: orderFormExpired
+  summary: An order form has expired
+  description: |-
+    An order form reached its `expires_at` without being signed, and is no longer actionable. Expiry is detected by an hourly job comparing calendar dates in the timezone of the customer's billing entity, so the event is emitted during the day the order form expires rather than at the exact `expires_at` time. It cascades to the quote version the order form was generated from, so a `quote.voided` event with the `cascade_of_expired` reason follows.
+    This is a premium feature.
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the expired order form
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - order_form
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - order_form.expired
+            object_type:
+              type: string
+              enum:
+                - order_form
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            order_form:
+              $ref: "../schemas/OrderFormObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

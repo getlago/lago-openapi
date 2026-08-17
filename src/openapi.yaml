@@ -144,6 +144,8 @@ tags:
       url: https://getlago.com/docs/api-reference/payment-methods/payment-method-object
   - name: quotes
     description: Everything about Quote collection
+  - name: order_forms
+    description: Everything about Order form collection
 
 paths:
   /billing_entities:
@@ -290,6 +292,14 @@ paths:
     $ref: "./resources/invoice_retry_payment.yaml"
   /invoices/{lago_id}/void:
     $ref: "./resources/invoice_void.yaml"
+  /order_forms:
+    $ref: "./resources/order_forms.yaml"
+  /order_forms/{lago_id}:
+    $ref: "./resources/order_form.yaml"
+  /order_forms/{lago_id}/mark_as_signed:
+    $ref: "./resources/order_form_mark_as_signed.yaml"
+  /order_forms/{lago_id}/void:
+    $ref: "./resources/order_form_void.yaml"
   /organizations:
     $ref: "./resources/organizations.yaml"
   /payment_receipts:
@@ -487,6 +497,14 @@ webhooks:
     $ref: "./webhooks/invoice_resynced.yaml"
   integration_provider_error:
     $ref: "./webhooks/integration_provider_error.yaml"
+  order_form_created:
+    $ref: "./webhooks/order_form_created.yaml"
+  order_form_signed:
+    $ref: "./webhooks/order_form_signed.yaml"
+  order_form_expired:
+    $ref: "./webhooks/order_form_expired.yaml"
+  order_form_voided:
+    $ref: "./webhooks/order_form_voided.yaml"
   payment_requires_action:
     $ref: "./webhooks/payment_requires_action.yaml"
   payment_succeeded:
