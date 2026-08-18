@@ -10,6 +10,8 @@ description: |
 
   Every entry pins the catalog record it was built from through its `id` and its `payload`, so that an approved quote keeps billing what was approved even if the catalog changes afterwards. The optional `overrides` object carries the deviations from that record negotiated on the quote.
 
+  Three of the nested dates bound the deal alongside the version's own `end_date`, because the execution flow refuses them once past: `plans[].payload.endDate`, `walletCredits[].payload.expirationAt` and the `expirationAt` of a wallet credit's recurring top-up rule. The earliest of them all is the day the deal stops being executable, and both the signing window and the execution date must fall strictly before it.
+
   On a `draft` version this object may be incomplete: only the properties documented as required below are enforced on every save, the others are enforced when the version is approved.
 properties:
   addOns:

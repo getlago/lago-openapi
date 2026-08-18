@@ -50,7 +50,12 @@ properties:
       - string
       - "null"
     format: "date"
-    description: The date the commercial term ends on. It is `null` for an open-ended deal. The subscriptions created from the version fall back to it when they carry no end date of their own.
+    description: >-
+      The date the commercial term ends on. It is `null` for an open-ended deal.
+      The subscriptions created from the version fall back to it when they carry
+      no end date of their own. It also bounds the deal: the signing window of the
+      order form and the execution date of the order must both fall strictly
+      before it.
     example: "2027-01-01"
   void_reason:
     $ref: "./QuoteVersionVoidReasonEnum.yaml"

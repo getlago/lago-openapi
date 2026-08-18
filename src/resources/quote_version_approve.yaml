@@ -7,6 +7,7 @@ post:
   description: |-
     This endpoint approves a quote version and generates the order form to send to the customer for signature.
     Only a `draft` version can be approved, and its `billing_items` must be complete: approval validates them against the catalog and against the customer, and returns a `422` when the deal cannot be executed as quoted.
+    The `expires_at` of the generated order form is bounded by the deal's own term, so a signing window reaching beyond the day the deal stops being executable is rejected.
     This is a premium feature.
   operationId: approveQuoteVersion
   requestBody:
