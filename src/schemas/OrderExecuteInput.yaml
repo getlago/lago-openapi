@@ -1,0 +1,11 @@
+type: object
+description: Parameters available when executing an order. The body is optional, as the execution mode is normally chosen when the order form is signed.
+required: []
+properties:
+  order:
+    type: object
+    required: []
+    properties:
+      execution_mode:
+        $ref: "./OrderExecutionModeEnum.yaml"
+        description: How the order is carried out. It is only persisted when it differs from the mode already stored on the order, so restating the current mode never fails. Changing the mode of an order that has already been executed is rejected.

@@ -4557,6 +4557,41 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+  /orders/{lago_id}/execute:
+    parameters:
+      - $ref: '#/components/parameters/lago_order_id'
+    post:
+      tags:
+        - orders
+      summary: Execute an order
+      description: |-
+        This endpoint carries out an order on demand, without waiting for its `execute_at` schedule. It runs synchronously, so the response carries the resulting status and, when the execution fails, the reason it failed.
+        An `execute_in_lago` order applies the quoted deal, creating the subscriptions, coupons, wallets or one-off invoice it describes; an `order_only` order is simply marked as executed. What the execution produced is listed in `execution_record`.
+        Executing is idempotent: an order that has already been executed is returned untouched. An order whose previous execution failed is executed again, and a `422` is returned when the order carries no execution mode and none is provided in the body.
+        This is a premium feature.
+      operationId: executeOrder
+      requestBody:
+        description: Execute order payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderExecuteInput'
+        required: false
+      responses:
+        '200':
+          description: Order executed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /organizations:
     put:
       tags:
@@ -19781,7 +19816,7 @@ components:
         The status of the order. It can be any of the following values:
           - `created`: the order has been created from a signed order form and is waiting to be executed.
           - `executed`: the order has been carried out. What it produced is listed in `execution_record`.
-          - `failed`: the execution was attempted and rolled back. The reasons are listed in `execution_record.errors`, and Lago does not retry on its own.
+          - `failed`: the execution was attempted and rolled back. The reasons are listed in `execution_record.errors`. Lago does not retry on its own, so a new attempt has to be triggered through the execute endpoint.
       enum:
         - created
         - executed
@@ -20707,6 +20742,18 @@ components:
       properties:
         order:
           $ref: '#/components/schemas/OrderObjectExtended'
+    OrderExecuteInput:
+      type: object
+      description: Parameters available when executing an order. The body is optional, as the execution mode is normally chosen when the order form is signed.
+      required: []
+      properties:
+        order:
+          type: object
+          required: []
+          properties:
+            execution_mode:
+              $ref: '#/components/schemas/OrderExecutionModeEnum'
+              description: How the order is carried out. It is only persisted when it differs from the mode already stored on the order, so restating the current mode never fails. Changing the mode of an order that has already been executed is rejected.
     OrganizationBillingConfiguration:
       type: object
       description: The custom billing settings for your organization.

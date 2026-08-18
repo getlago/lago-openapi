@@ -306,6 +306,8 @@ paths:
     $ref: "./resources/orders.yaml"
   /orders/{lago_id}:
     $ref: "./resources/order.yaml"
+  /orders/{lago_id}/execute:
+    $ref: "./resources/order_execute.yaml"
   /organizations:
     $ref: "./resources/organizations.yaml"
   /payment_receipts:
