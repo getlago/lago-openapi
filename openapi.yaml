@@ -4330,6 +4330,7 @@ paths:
       description: |-
         This endpoint records the customer's signature on an order form, and creates the order that carries the quoted deal out.
         Only a `generated` order form can be signed, so a `422` is returned once the order form has been signed, has expired or has been voided.
+        An `execute_at` landing on or after the day the quoted deal stops being executable is rejected as well, so the order can never be scheduled past the term it bills.
         This is a premium feature.
       operationId: markOrderFormAsSigned
       requestBody:
@@ -19402,7 +19403,7 @@ components:
             - string
             - 'null'
           format: date-time
-          description: The date and time in UTC (ISO 8601) when the order form stops being signable. It is `null` when the order form never expires.
+          description: The date and time in UTC (ISO 8601) when the order form stops being signable. It is `null` when the order form never expires. It is capped when the quote is approved, so it always falls strictly before the day the quoted deal stops being executable.
           example: '2026-06-30T23:59:59Z'
         signed_at:
           type:
@@ -19503,7 +19504,7 @@ components:
             execute_at:
               type: string
               format: date-time
-              description: The date and time in UTC (ISO 8601) when Lago executes the order created from the order form. It must be in the future, and requires `execution_mode` to be set. When it is omitted, the order is created but never scheduled for execution.
+              description: The date and time in UTC (ISO 8601) when Lago executes the order created from the order form. It must be in the future, requires `execution_mode` to be set, and must fall strictly before the day the quoted deal stops being executable, otherwise signing is rejected with a `422`. When it is omitted, the order is created but not scheduled, and waits to be executed on demand.
               example: '2026-07-01T00:00:00Z'
     OrganizationBillingConfiguration:
       type: object

@@ -33,7 +33,11 @@ properties:
       - string
       - "null"
     format: "date-time"
-    description: The date and time in UTC (ISO 8601) when the order form stops being signable. It is `null` when the order form never expires.
+    description: >-
+      The date and time in UTC (ISO 8601) when the order form stops being signable.
+      It is `null` when the order form never expires. It is capped when the quote
+      is approved, so it always falls strictly before the day the quoted deal stops
+      being executable.
     example: "2026-06-30T23:59:59Z"
   signed_at:
     type:

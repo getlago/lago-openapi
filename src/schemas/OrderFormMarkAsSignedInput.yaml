@@ -16,5 +16,11 @@ properties:
       execute_at:
         type: string
         format: "date-time"
-        description: The date and time in UTC (ISO 8601) when Lago executes the order created from the order form. It must be in the future, and requires `execution_mode` to be set. When it is omitted, the order is created but never scheduled for execution.
+        description: >-
+          The date and time in UTC (ISO 8601) when Lago executes the order created
+          from the order form. It must be in the future, requires `execution_mode`
+          to be set, and must fall strictly before the day the quoted deal stops
+          being executable, otherwise signing is rejected with a `422`. When it is
+          omitted, the order is created but not scheduled, and waits to be executed
+          on demand.
         example: "2026-07-01T00:00:00Z"

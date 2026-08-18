@@ -7,6 +7,7 @@ post:
   description: |-
     This endpoint records the customer's signature on an order form, and creates the order that carries the quoted deal out.
     Only a `generated` order form can be signed, so a `422` is returned once the order form has been signed, has expired or has been voided.
+    An `execute_at` landing on or after the day the quoted deal stops being executable is rejected as well, so the order can never be scheduled past the term it bills.
     This is a premium feature.
   operationId: markOrderFormAsSigned
   requestBody:
