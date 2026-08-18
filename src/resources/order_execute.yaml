@@ -8,6 +8,7 @@ post:
     This endpoint carries out an order on demand, without waiting for its `execute_at` schedule. It runs synchronously, so the response carries the resulting status and, when the execution fails, the reason it failed.
     An `execute_in_lago` order applies the quoted deal, creating the subscriptions, coupons, wallets or one-off invoice it describes; an `order_only` order is simply marked as executed. What the execution produced is listed in `execution_record`.
     Executing is idempotent: an order that has already been executed is returned untouched. An order whose previous execution failed is executed again, and a `422` is returned when the order carries no execution mode and none is provided in the body.
+    Restating an `execution_mode` that differs from the one stored on the order updates it first, which re-validates the order's own `execute_at` against the day the quoted deal stops being executable; a `422` is then possible even though no date was sent. An order carrying no `execute_at` is not bounded that way, so a deal whose term has passed only fails when the execution runs.
     This is a premium feature.
   operationId: executeOrder
   requestBody:
