@@ -34,10 +34,12 @@ properties:
       - "null"
     format: "date-time"
     description: >-
-      The date and time in UTC (ISO 8601) when the order form stops being signable.
-      It is `null` when the order form never expires. It is capped when the quote
-      is approved, so it always falls strictly before the day the quoted deal stops
-      being executable.
+      The date and time in UTC (ISO 8601) after which the order form is meant to
+      expire. It is `null` when the order form never expires. It is validated when
+      the quote is approved, where a value on or after the day the quoted deal stops
+      being executable is rejected rather than clamped. Expiry is then swept hourly
+      and compared by calendar date, so signing keeps succeeding until the sweep
+      moves the order form to `expired`.
     example: "2026-06-30T23:59:59Z"
   signed_at:
     type:

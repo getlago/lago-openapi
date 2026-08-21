@@ -2,7 +2,7 @@ post:
   operationId: orderFormExpired
   summary: An order form has expired
   description: |-
-    An order form reached its `expires_at` without being signed, and is no longer actionable. Expiry is detected by an hourly job comparing calendar dates in the timezone of the customer's billing entity, so the event is emitted during the day the order form expires rather than at the exact `expires_at` time. It cascades to the quote version the order form was generated from, so a `quote.voided` event with the `cascade_of_expired` reason follows.
+    An order form reached its `expires_at` without being signed, and is no longer actionable. Expiry is detected by an hourly job comparing calendar dates in the customer's timezone, falling back to the billing entity's and then to UTC, so the event is emitted during the day the order form expires rather than at the exact `expires_at` time. It cascades to the quote version the order form was generated from, so a `quote.voided` event with the `cascade_of_expired` reason follows.
     This is a premium feature.
   parameters:
     - $ref: "../parameters/webhook_signature.yaml"

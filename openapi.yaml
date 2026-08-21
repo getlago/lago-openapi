@@ -9056,7 +9056,7 @@ webhooks:
       operationId: orderFormExpired
       summary: An order form has expired
       description: |-
-        An order form reached its `expires_at` without being signed, and is no longer actionable. Expiry is detected by an hourly job comparing calendar dates in the timezone of the customer's billing entity, so the event is emitted during the day the order form expires rather than at the exact `expires_at` time. It cascades to the quote version the order form was generated from, so a `quote.voided` event with the `cascade_of_expired` reason follows.
+        An order form reached its `expires_at` without being signed, and is no longer actionable. Expiry is detected by an hourly job comparing calendar dates in the customer's timezone, falling back to the billing entity's and then to UTC, so the event is emitted during the day the order form expires rather than at the exact `expires_at` time. It cascades to the quote version the order form was generated from, so a `quote.voided` event with the `cascade_of_expired` reason follows.
         This is a premium feature.
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
@@ -19345,7 +19345,7 @@ components:
           - `expired`: the order form reached its `expires_at` without being signed.
           - `voided`: the order form has been voided before being signed.
 
-        Only a `generated` order form is actionable. Reaching any other status also voids the quote version the order form was generated from.
+        Only a `generated` order form is actionable. Reaching `expired` or `voided` also voids the quote version the order form was generated from; signing does not, since the deal it quotes goes on to be executed.
       enum:
         - generated
         - signed
@@ -19360,7 +19360,7 @@ components:
         The reason why the order form is no longer actionable. It is `null` unless the `status` is `voided` or `expired`. It can be any of the following values:
           - `manual`: the order form has been voided explicitly, through the API or the Lago user interface.
           - `expired`: the order form reached its `expires_at` without being signed.
-          - `invalid`: the order form has been voided by Lago because it could no longer be executed.
+          - `invalid`: reserved for an order form Lago voids because it can no longer be executed. No flow writes it yet.
       enum:
         - null
         - manual
@@ -19403,7 +19403,7 @@ components:
             - string
             - 'null'
           format: date-time
-          description: The date and time in UTC (ISO 8601) when the order form stops being signable. It is `null` when the order form never expires. It is capped when the quote is approved, so it always falls strictly before the day the quoted deal stops being executable.
+          description: The date and time in UTC (ISO 8601) after which the order form is meant to expire. It is `null` when the order form never expires. It is validated when the quote is approved, where a value on or after the day the quoted deal stops being executable is rejected rather than clamped. Expiry is then swept hourly and compared by calendar date, so signing keeps succeeding until the sweep moves the order form to `expired`.
           example: '2026-06-30T23:59:59Z'
         signed_at:
           type:

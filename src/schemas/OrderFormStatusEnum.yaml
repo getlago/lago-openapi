@@ -6,7 +6,7 @@ description: |
     - `expired`: the order form reached its `expires_at` without being signed.
     - `voided`: the order form has been voided before being signed.
 
-  Only a `generated` order form is actionable. Reaching any other status also voids the quote version the order form was generated from.
+  Only a `generated` order form is actionable. Reaching `expired` or `voided` also voids the quote version the order form was generated from; signing does not, since the deal it quotes goes on to be executed.
 enum:
   - generated
   - signed
