@@ -21601,7 +21601,7 @@ components:
           type:
             - string
             - 'null'
-          description: 'Unique code identifying the billing entity that issues the deal. It is resolved rather than stored: the version''s own entity when it names one, then the entity of the subscription being amended for a `subscription_amendment` quote, then the customer''s own. It is `null` when none of them resolves. An amendment cannot name an entity itself, since the subscription it restates is already bound to one, and approving a version that does is rejected.'
+          description: 'Unique code identifying the billing entity that issues the deal. It is resolved rather than stored: the version''s own entity when it names one, then the entity of the subscription being amended for a `subscription_amendment` quote, then the customer''s own. It is `null` when none of them resolves. An amendment cannot name an entity itself, since the subscription it restates is already bound to one, and naming one on an amendment is rejected.'
           example: acme_corp
         void_reason:
           $ref: '#/components/schemas/QuoteVersionVoidReasonEnum'
