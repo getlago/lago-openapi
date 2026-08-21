@@ -7,6 +7,7 @@ post:
   description: |-
     This endpoint voids an order form, with the `manual` reason, and cascades to the quote version it was generated from, which is voided with the `cascade_of_voided` reason.
     Only a `generated` order form can be voided, so a `422` is returned once the order form has been signed, has expired or has already been voided.
+    A concurrent write on the same quote is reported as a `422` rather than retried, so a duplicated call can fail while the first one is still in flight.
     This is a premium feature.
   operationId: voidOrderForm
   responses:
