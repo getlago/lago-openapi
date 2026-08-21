@@ -8,7 +8,8 @@ post:
     This endpoint carries out an order on demand, without waiting for its `execute_at` schedule. It runs synchronously, so the response carries the resulting status and, when the execution fails, the reason it failed.
     An `execute_in_lago` order applies the quoted deal, creating the subscriptions, coupons, wallets or one-off invoice it describes; an `order_only` order is simply marked as executed. What the execution produced is listed in `execution_record`.
     Executing is idempotent: an order that has already been executed is returned untouched. An order whose previous execution failed is executed again, and a `422` is returned when the order carries no execution mode and none is provided in the body.
-    Restating an `execution_mode` that differs from the one stored on the order updates it first, which re-validates the order's own `execute_at` against the day the quoted deal stops being executable; a `422` is then possible even though no date was sent. An order carrying no `execute_at` is not bounded that way, so a deal whose term has passed only fails when the execution runs.
+    Restating an `execution_mode` that differs from the one stored on the order updates it first, which only succeeds while the order is still `created`: a `failed` order can be retried, but not switched to another mode. That update also re-validates the order's own `execute_at` against the day the quoted deal stops being executable, so a `422` is possible even though no date was sent. An order carrying no `execute_at` is not bounded that way, and a deal whose term has passed then only fails when the execution runs.
+    A `404` is not limited to an unknown order: when the execution cannot find a catalog record the quote pinned, such as a deleted plan, charge, coupon or the subscription being amended, the missing resource is reported as a `404` and the order is left `failed`.
     This is a premium feature.
   operationId: executeOrder
   requestBody:
