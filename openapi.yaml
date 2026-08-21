@@ -5395,6 +5395,7 @@ paths:
         This endpoint approves a quote version and generates the order form to send to the customer for signature.
         Only a `draft` version can be approved, and its `billing_items` must be complete: approval validates them against the catalog and against the customer, and returns a `422` when the deal cannot be executed as quoted.
         The `expires_at` of the generated order form is bounded by the deal's own term, so a signing window reaching beyond the day the deal stops being executable is rejected.
+        A concurrent write on the same quote is reported as a `422` rather than retried, so a duplicated call can fail while the first one is still in flight.
         This is a premium feature.
       operationId: approveQuoteVersion
       requestBody:
@@ -5429,6 +5430,7 @@ paths:
       description: |-
         This endpoint voids a quote version, which makes it definitive: a voided version can neither be edited nor approved again.
         Only a `draft` version can be voided through this endpoint, and the resulting `void_reason` is `manual`. An `approved` version is voided by Lago itself, through the order form generated from it.
+        A concurrent write on the same quote is reported as a `422` rather than retried, so a duplicated call can fail while the first one is still in flight.
         This is a premium feature.
       operationId: voidQuoteVersion
       responses:
@@ -5456,6 +5458,7 @@ paths:
       description: |-
         This endpoint copies a quote version into a new `draft` version of the same quote, so that the deal can be renegotiated.
         Any version of the quote can be cloned, but a quote can only carry one active version: the draft the quote currently holds, if any, is voided with the `superseded` reason. Cloning is therefore rejected with a `422` once a version of the quote has been approved.
+        A concurrent write on the same quote is reported as a `422` rather than retried, so a duplicated call can fail while the first one is still in flight.
         This is a premium feature.
       operationId: cloneQuoteVersion
       responses:
@@ -21563,8 +21566,7 @@ components:
         - version
         - status
         - currency
-        - start_date
-        - end_date
+        - billing_entity_code
         - void_reason
         - approved_at
         - voided_at
@@ -21595,20 +21597,12 @@ components:
         currency:
           $ref: '#/components/schemas/CurrencyOrNull'
           description: The currency the version is quoted in.
-        start_date:
+        billing_entity_code:
           type:
             - string
             - 'null'
-          format: date
-          description: The date the commercial term starts on. The subscriptions created from the version fall back to it when they carry no start date of their own.
-          example: '2026-01-01'
-        end_date:
-          type:
-            - string
-            - 'null'
-          format: date
-          description: 'The date the commercial term ends on. It is `null` for an open-ended deal. The subscriptions created from the version fall back to it when they carry no end date of their own. It also bounds the deal: the signing window of the order form and the execution date of the order must both fall strictly before it.'
-          example: '2027-01-01'
+          description: 'Unique code identifying the billing entity that issues the deal. It is resolved rather than stored: the version''s own entity when it names one, then the entity of the subscription being amended for a `subscription_amendment` quote, then the customer''s own. It is `null` when none of them resolves. An amendment cannot name an entity itself, since the subscription it restates is already bound to one, and approving a version that does is rejected.'
+          example: acme_corp
         void_reason:
           $ref: '#/components/schemas/QuoteVersionVoidReasonEnum'
         approved_at:
@@ -21861,13 +21855,13 @@ components:
               type:
                 - string
                 - 'null'
-              description: The date and time in UTC (ISO 8601) when the subscription starts. It defaults to the subscription-level `start_date` of the quote version when it is not set.
+              description: The date and time in UTC (ISO 8601) when the subscription starts. It is optional, and a plan naming none starts the moment the order is executed.
               example: '2026-01-01T00:00:00Z'
             endDate:
               type:
                 - string
                 - 'null'
-              description: The date and time in UTC (ISO 8601) when the subscription ends. It defaults to the subscription-level `end_date` of the quote version when it is not set.
+              description: The date and time in UTC (ISO 8601) when the subscription ends. Leaving it unset makes the deal open-ended, and on a `subscription_amendment` quote it leaves the amended subscription's own ending date in place. It bounds the deal, so the signing window and the execution date must both fall strictly before it.
               example: '2027-01-01T00:00:00Z'
             paymentMethodId:
               type:
@@ -21957,6 +21951,9 @@ components:
                 - 'null'
               description: Overrides the base amount of the plan, in cents.
               example: 50000
+            amountCurrency:
+              $ref: '#/components/schemas/CurrencyOrNull'
+              description: Overrides the currency the plan is priced in, which is how a catalog plan is quoted in the currency of the deal. The figure in `amountCents` is not converted, it is restated in this currency. It is set only while it differs from the catalog record, and removed once they agree.
             invoiceDisplayName:
               type:
                 - string
@@ -22189,6 +22186,9 @@ components:
                 - 'null'
               description: Overrides the amount deducted by the coupon, in cents.
               example: 15000
+            amountCurrency:
+              $ref: '#/components/schemas/CurrencyOrNull'
+              description: Overrides the currency the coupon is priced in, which is how a catalog coupon is quoted in the currency of the deal. The figure in `amountCents` is not converted, it is restated in this currency. It is set only while it differs from the catalog record, and removed once they agree.
             percentageRate:
               type:
                 - number
@@ -22403,7 +22403,7 @@ components:
 
         Every entry pins the catalog record it was built from through its `id` and its `payload`, so that an approved quote keeps billing what was approved even if the catalog changes afterwards. The optional `overrides` object carries the deviations from that record negotiated on the quote.
 
-        Three of the nested dates bound the deal alongside the version's own `end_date`, because the execution flow refuses them once past: `plans[].payload.endDate`, `walletCredits[].payload.expirationAt` and the `expirationAt` of a wallet credit's recurring top-up rule. The earliest of them all is the day the deal stops being executable, and both the signing window and the execution date must fall strictly before it.
+        This object is the single source of truth for the term of the deal. Three of its nested dates bound that term, because the execution flow refuses them once past: `plans[].payload.endDate`, `walletCredits[].payload.expirationAt` and the `expirationAt` of a wallet credit's recurring top-up rule. The earliest of them is the day the deal stops being executable, and both the signing window and the execution date must fall strictly before it. A `one_off` quote carries none of them and is never bounded.
 
         On a `draft` version this object may be incomplete: only the properties documented as required below are enforced on every save, the others are enforced when the version is approved.
       properties:
@@ -22458,7 +22458,7 @@ components:
         expires_at:
           type: string
           format: date-time
-          description: The date and time in UTC (ISO 8601) when the order form generated by the approval expires. It must be in the future, and must fall strictly before the day the quoted deal stops being executable, otherwise the approval is rejected with a `422`. That boundary is the earliest of the version's `end_date`, the `endDate` of any quoted plan, and the `expirationAt` of any quoted wallet credit or recurring top-up rule. A `one_off` quote carries no plan or wallet dates, so it is bounded by its `end_date` alone, and is unbounded when that is unset too. When `expires_at` is omitted, the order form never expires.
+          description: The date and time in UTC (ISO 8601) when the order form generated by the approval expires. It must be in the future, and must fall strictly before the day the quoted deal stops being executable, otherwise the approval is rejected with a `422`. That boundary is the earliest of the `endDate` of any quoted plan and the `expirationAt` of any quoted wallet credit or recurring top-up rule. A `one_off` quote carries none of them, so its signing window is never bounded. When `expires_at` is omitted, the order form never expires.
           example: '2026-06-30T23:59:59Z'
     PlanOverridesObject:
       type: object

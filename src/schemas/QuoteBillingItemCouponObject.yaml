@@ -79,6 +79,14 @@ properties:
           - "null"
         description: Overrides the amount deducted by the coupon, in cents.
         example: 15000
+      amountCurrency:
+        $ref: "./CurrencyOrNull.yaml"
+        description: >-
+          Overrides the currency the coupon is priced in, which is how a catalog
+          coupon is quoted in the currency of the deal. The figure in
+          `amountCents` is not converted, it is restated in this currency. It is
+          set only while it differs from the catalog record, and removed once they
+          agree.
       percentageRate:
         type:
           - number

@@ -6,8 +6,7 @@ required:
   - version
   - status
   - currency
-  - start_date
-  - end_date
+  - billing_entity_code
   - void_reason
   - approved_at
   - voided_at
@@ -38,25 +37,18 @@ properties:
   currency:
     $ref: "./CurrencyOrNull.yaml"
     description: The currency the version is quoted in.
-  start_date:
+  billing_entity_code:
     type:
       - string
       - "null"
-    format: "date"
-    description: The date the commercial term starts on. The subscriptions created from the version fall back to it when they carry no start date of their own.
-    example: "2026-01-01"
-  end_date:
-    type:
-      - string
-      - "null"
-    format: "date"
     description: >-
-      The date the commercial term ends on. It is `null` for an open-ended deal.
-      The subscriptions created from the version fall back to it when they carry
-      no end date of their own. It also bounds the deal: the signing window of the
-      order form and the execution date of the order must both fall strictly
-      before it.
-    example: "2027-01-01"
+      Unique code identifying the billing entity that issues the deal. It is
+      resolved rather than stored: the version's own entity when it names one, then
+      the entity of the subscription being amended for a `subscription_amendment`
+      quote, then the customer's own. It is `null` when none of them resolves. An
+      amendment cannot name an entity itself, since the subscription it restates is
+      already bound to one, and approving a version that does is rejected.
+    example: "acme_corp"
   void_reason:
     $ref: "./QuoteVersionVoidReasonEnum.yaml"
   approved_at:

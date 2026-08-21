@@ -55,13 +55,13 @@ properties:
         type:
           - string
           - "null"
-        description: The date and time in UTC (ISO 8601) when the subscription starts. It defaults to the subscription-level `start_date` of the quote version when it is not set.
+        description: The date and time in UTC (ISO 8601) when the subscription starts. It is optional, and a plan naming none starts the moment the order is executed.
         example: "2026-01-01T00:00:00Z"
       endDate:
         type:
           - string
           - "null"
-        description: The date and time in UTC (ISO 8601) when the subscription ends. It defaults to the subscription-level `end_date` of the quote version when it is not set.
+        description: The date and time in UTC (ISO 8601) when the subscription ends. Leaving it unset makes the deal open-ended, and on a `subscription_amendment` quote it leaves the amended subscription's own ending date in place. It bounds the deal, so the signing window and the execution date must both fall strictly before it.
         example: "2027-01-01T00:00:00Z"
       paymentMethodId:
         type:
@@ -151,6 +151,14 @@ properties:
           - "null"
         description: Overrides the base amount of the plan, in cents.
         example: 50000
+      amountCurrency:
+        $ref: "./CurrencyOrNull.yaml"
+        description: >-
+          Overrides the currency the plan is priced in, which is how a catalog
+          plan is quoted in the currency of the deal. The figure in
+          `amountCents` is not converted, it is restated in this currency. It is
+          set only while it differs from the catalog record, and removed once they
+          agree.
       invoiceDisplayName:
         type:
           - string
