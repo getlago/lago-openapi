@@ -1,0 +1,38 @@
+post:
+  operationId: invoiceReadyToFinalize
+  summary: A draft invoice is ready to be finalized
+  description: A draft invoice is ready to be finalized (taxes are resolved). Sent when the draft invoice is created if no tax provider call is pending, or once the tax provider has returned taxes for the draft invoice.
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the draft invoice ready to be finalized
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - invoice
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - invoice.ready_to_finalize
+            object_type:
+              type: string
+              enum:
+                - invoice
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            invoice:
+              $ref: "../schemas/InvoiceObjectExtended.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

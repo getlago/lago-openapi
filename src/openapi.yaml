@@ -453,6 +453,8 @@ webhooks:
     $ref: "./webhooks/invoice_generated.yaml"
   invoice_drafted:
     $ref: "./webhooks/invoice_drafted.yaml"
+  invoice_ready_to_finalize:
+    $ref: "./webhooks/invoice_ready_to_finalize.yaml"
   invoice_voided:
     $ref: "./webhooks/invoice_voided.yaml"
   invoice_deleted:
