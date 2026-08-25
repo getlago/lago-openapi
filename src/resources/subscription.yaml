@@ -90,12 +90,17 @@ delete:
   parameters:
     - name: status
       in: query
-      description: If the field is not defined, Lago will terminate only `active` subscriptions. However, if you wish to cancel a `pending` subscription, please ensure that you include `status=pending` in your request.
+      description: |
+        Selects which subscription to terminate for the given `external_id`, based on its status. If the field is not defined, Lago targets only `active` subscriptions.
+
+        - `pending`: cancel a subscription scheduled for a future activation (include `status=pending`).
+        - `incomplete`: cancel a payment-gated subscription that is still awaiting its activation payment (include `status=incomplete`). The subscription is canceled with `cancellation_reason: manual`, its invoice is closed and nothing is billed, and any pending payment is canceled on a best-effort basis with the payment provider (some provider statuses cannot be canceled). Applied coupons, credit notes and wallet credits are recredited. Termination behaviours (`on_termination_credit_note`, `on_termination_invoice`) are ignored, as an incomplete subscription has never been billed.
       required: false
       explode: true
       schema:
         type: string
-        example: "pending"
+        example: "incomplete"
+        default: active
     - name: on_termination_credit_note
       in: query
       description: |

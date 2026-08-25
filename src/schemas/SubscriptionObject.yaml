@@ -223,11 +223,13 @@ properties:
     enum:
       - payment_failed
       - timeout
+      - manual
     description: |
-      The reason a payment-gated subscription was canceled before activation. Null unless the subscription was canceled by payment gating.
+      The reason a payment-gated subscription was canceled while still `incomplete`. Null unless the subscription was canceled before activation.
 
       - `payment_failed`: the gating payment failed.
       - `timeout`: the activation rule expired before the payment succeeded.
+      - `manual`: the incomplete subscription was canceled on demand, via a terminate request with `status=incomplete`.
   activated_at:
     type:
       - string
