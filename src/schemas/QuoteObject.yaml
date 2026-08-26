@@ -1,0 +1,11 @@
+allOf:
+  - $ref: "./QuoteBaseObject.yaml"
+  - type: object
+    required:
+      - current_version
+    properties:
+      current_version:
+        oneOf:
+          - $ref: "./QuoteVersionObject.yaml"
+          - type: "null"
+        description: The latest version of the quote. Its `content` and `billing_items` are omitted here; retrieve the version to get them.

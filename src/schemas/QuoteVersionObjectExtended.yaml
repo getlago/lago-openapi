@@ -1,0 +1,15 @@
+allOf:
+  - $ref: "./QuoteVersionObject.yaml"
+  - type: object
+    required:
+      - content
+      - billing_items
+    properties:
+      content:
+        type:
+          - string
+          - "null"
+        description: The HTML body of the quote document, as authored in the Lago user interface. It may reference the entries of `billing_items` through their `localId`.
+        example: "<h1>Quote QT-2026-0001</h1><p>Prepared for Acme Corp.</p>"
+      billing_items:
+        $ref: "./QuoteBillingItems.yaml"

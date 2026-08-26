@@ -1,0 +1,11 @@
+type: object
+required:
+  - quote_versions
+  - meta
+properties:
+  quote_versions:
+    type: array
+    items:
+      $ref: "./QuoteVersionObject.yaml"
+  meta:
+    $ref: "./PaginationMeta.yaml"

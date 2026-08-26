@@ -1,0 +1,23 @@
+parameters:
+  - $ref: "../parameters/lago_quote_version_id.yaml"
+get:
+  tags:
+    - quotes
+  summary: Retrieve a quote version
+  description: |-
+    This endpoint retrieves a specific quote version, along with its document `content` and its `billing_items`.
+    This is a premium feature.
+  operationId: findQuoteVersion
+  responses:
+    "200":
+      description: Quote version
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuoteVersion.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

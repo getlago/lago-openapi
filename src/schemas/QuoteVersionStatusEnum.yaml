@@ -1,0 +1,13 @@
+type: string
+description: |
+  The status of the quote version. It can be any of the following values:
+    - `draft`: the version is still editable.
+    - `approved`: the version has been approved and an order form has been generated from it.
+    - `voided`: the version is no longer actionable.
+
+  A quote has at most one version in `draft` or `approved` status at any time; all the other versions are `voided`.
+enum:
+  - draft
+  - approved
+  - voided
+example: "draft"

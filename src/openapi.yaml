@@ -142,6 +142,8 @@ tags:
     externalDocs:
       description: Find out more
       url: https://getlago.com/docs/api-reference/payment-methods/payment-method-object
+  - name: quotes
+    description: Everything about Quote collection
 
 paths:
   /billing_entities:
@@ -328,6 +330,20 @@ paths:
     $ref: "./resources/plan_fixed_charges.yaml"
   /plans/{code}/fixed_charges/{fixed_charge_code}:
     $ref: "./resources/plan_fixed_charge.yaml"
+  /quotes:
+    $ref: "./resources/quotes.yaml"
+  /quotes/{lago_id}:
+    $ref: "./resources/quote.yaml"
+  /quotes/{lago_id}/versions:
+    $ref: "./resources/quote_versions.yaml"
+  /quote_versions/{lago_id}:
+    $ref: "./resources/quote_version.yaml"
+  /quote_versions/{lago_id}/approve:
+    $ref: "./resources/quote_version_approve.yaml"
+  /quote_versions/{lago_id}/void:
+    $ref: "./resources/quote_version_void.yaml"
+  /quote_versions/{lago_id}/clone:
+    $ref: "./resources/quote_version_clone.yaml"
   /subscriptions:
     $ref: "./resources/subscriptions.yaml"
   /subscriptions/{external_id}:
@@ -489,6 +505,12 @@ webhooks:
     $ref: "./webhooks/plan_updated.yaml"
   plan_deleted:
     $ref: "./webhooks/plan_deleted.yaml"
+  quote_created:
+    $ref: "./webhooks/quote_created.yaml"
+  quote_approved:
+    $ref: "./webhooks/quote_approved.yaml"
+  quote_voided:
+    $ref: "./webhooks/quote_voided.yaml"
   subscription_terminated:
     $ref: "./webhooks/subscription_terminated.yaml"
   subscription_incomplete:
