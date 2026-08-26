@@ -1,0 +1,40 @@
+post:
+  operationId: orderFormCreated
+  summary: An order form has been generated from an approved quote
+  description: |-
+    An order form has been generated from an approved quote version, and is now waiting for the customer's signature. It always follows a `quote.approved` event, emitted in the same transaction.
+    This is a premium feature.
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the new order form
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - order_form
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - order_form.created
+            object_type:
+              type: string
+              enum:
+                - order_form
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            order_form:
+              $ref: "../schemas/OrderFormObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully
