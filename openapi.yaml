@@ -142,6 +142,8 @@ tags:
     description: Everything about Quote collection
   - name: order_forms
     description: Everything about Order form collection
+  - name: orders
+    description: Everything about Order collection
 externalDocs:
   description: Lago Github
   url: https://github.com/getlago
@@ -4376,6 +4378,215 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderForm'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /orders:
+    get:
+      tags:
+        - orders
+      summary: List all orders
+      description: |-
+        This endpoint is used to list all existing orders.
+        This is a premium feature.
+      operationId: findAllOrders
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: status[]
+          in: query
+          description: Filter orders by status. Possible values are `created`, `executed` and `failed`.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - created
+                - executed
+                - failed
+        - name: order_type[]
+          in: query
+          description: Filter orders by the order type of the quote they come from. Possible values are `subscription_creation`, `subscription_amendment` and `one_off`.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - subscription_creation
+                - subscription_amendment
+                - one_off
+        - name: execution_mode[]
+          in: query
+          description: Filter orders by execution mode. Possible values are `execute_in_lago` and `order_only`.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - execute_in_lago
+                - order_only
+        - name: customer_id[]
+          in: query
+          description: Filter orders by the Lago identifiers of their customers.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example:
+              - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: number[]
+          in: query
+          description: Filter orders by their number, as assigned by Lago.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - OR-2026-0001
+              - OR-2026-0002
+        - name: order_form_number[]
+          in: query
+          description: Filter orders by the number of the order form they come from.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - OF-2026-0001
+        - name: quote_number[]
+          in: query
+          description: Filter orders by the number of the quote they come from.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - QT-2026-0001
+        - name: owner_id[]
+          in: query
+          description: Filter orders by the Lago identifiers of the users owning the quote they come from.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example:
+              - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: search_term
+          in: query
+          description: Search orders by number.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: OR-2026
+        - name: executed_at_from
+          in: query
+          description: Filter orders executed from a specific date and time, in UTC (ISO 8601). Orders that have not been executed are excluded.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2026-01-01T00:00:00Z'
+        - name: executed_at_to
+          in: query
+          description: Filter orders executed up to a specific date and time, in UTC (ISO 8601). Orders that have not been executed are excluded.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2026-12-31T23:59:59Z'
+      responses:
+        '200':
+          description: Orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /orders/{lago_id}:
+    parameters:
+      - $ref: '#/components/parameters/lago_order_id'
+    get:
+      tags:
+        - orders
+      summary: Retrieve an order
+      description: |-
+        This endpoint retrieves a specific order, along with the `billing_snapshot` its execution applies and the `execution_record` of what it produced.
+        This is a premium feature.
+      operationId: findOrder
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /orders/{lago_id}/execute:
+    parameters:
+      - $ref: '#/components/parameters/lago_order_id'
+    post:
+      tags:
+        - orders
+      summary: Execute an order
+      description: |-
+        This endpoint carries out an order on demand, without waiting for its `execute_at` schedule. It runs synchronously, so the response carries the resulting status and, when the execution fails, the reason it failed.
+        An `execute_in_lago` order applies the quoted deal, creating the subscriptions, coupons, wallets or one-off invoice it describes; an `order_only` order is simply marked as executed. What the execution produced is listed in `execution_record`.
+        Executing is idempotent: an order that has already been executed is returned untouched. An order whose previous execution failed is executed again, and a `422` is returned when the order carries no execution mode and none is provided in the body.
+        Restating an `execution_mode` that differs from the one stored on the order updates it first, which only succeeds while the order is still `created`: a `failed` order can be retried, but not switched to another mode. That update also re-validates the order's own `execute_at` against the day the quoted deal stops being executable, so a `422` is possible even though no date was sent. An order carrying no `execute_at` is not bounded that way, and a deal whose term has passed then only fails when the execution runs.
+        A `404` is not limited to an unknown order: when the execution cannot find a catalog record the quote pinned, such as a deleted plan, charge, coupon or the subscription being amended, the missing resource is reported as a `404` and the order is left `failed`.
+        Concurrency is reported two ways. A mode change losing the race on the quote comes back as a `422` validation error, while the execution itself losing it comes back as a `422` carrying a lock code, because a scheduled execution relies on that error to be retried.
+        This is a premium feature.
+      operationId: executeOrder
+      requestBody:
+        description: Execute order payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderExecuteInput'
+        required: false
+      responses:
+        '200':
+          description: Order executed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -8971,6 +9182,91 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  order_created:
+    post:
+      operationId: orderCreated
+      summary: An order has been created from a signed order form
+      description: |-
+        An order has been created from a signed order form. It always follows an `order_form.signed` event, emitted in the same transaction.
+        The `billing_snapshot` returned by the REST endpoints is omitted from this payload, being a heavy blob; retrieve the order to get it.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new order
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - order
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - order.created
+                object_type:
+                  type: string
+                  enum:
+                    - order
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                order:
+                  $ref: '#/components/schemas/OrderObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  order_executed:
+    post:
+      operationId: orderExecuted
+      summary: An order has been executed
+      description: |-
+        An order has been carried out, and what it produced is listed in `execution_record`. For an `execute_in_lago` order that means the subscriptions, coupons, wallets or one-off invoice the quote described; an `order_only` order records the mode and the timestamp alone.
+        It is emitted on success only: a failed attempt is rolled back and leaves the order in the `failed` status with the reasons in `execution_record.errors`, without emitting anything.
+        The `billing_snapshot` returned by the REST endpoints is omitted from this payload, being a heavy blob; retrieve the order to get it.
+        This is a premium feature.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the executed order
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - order
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - order.executed
+                object_type:
+                  type: string
+                  enum:
+                    - order
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                order:
+                  $ref: '#/components/schemas/OrderObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   order_form_created:
     post:
       operationId: orderFormCreated
@@ -10175,6 +10471,15 @@ components:
       name: lago_id
       in: path
       description: Unique identifier assigned to the order form within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the order form's record within the Lago system.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    lago_order_id:
+      name: lago_id
+      in: path
+      description: Unique identifier assigned to the order within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the order's record within the Lago system.
       required: true
       schema:
         type: string
@@ -19508,6 +19813,950 @@ components:
               format: date-time
               description: The date and time in UTC (ISO 8601) when Lago executes the order created from the order form. It must be in the future, requires `execution_mode` to be set, and must fall strictly before the day the quoted deal stops being executable, otherwise signing is rejected with a `422`. When it is omitted, the order is created but not scheduled, and waits to be executed on demand.
               example: '2026-07-01T00:00:00Z'
+    OrderStatusEnum:
+      type: string
+      description: |
+        The status of the order. It can be any of the following values:
+          - `created`: the order has been created from a signed order form and is waiting to be executed.
+          - `executed`: the order has been carried out. What it produced is listed in `execution_record`.
+          - `failed`: the execution was attempted and rolled back. The reasons are listed in `execution_record.errors`. Lago does not retry on its own, so a new attempt has to be triggered through the execute endpoint.
+      enum:
+        - created
+        - executed
+        - failed
+      example: created
+    QuoteOrderTypeEnum:
+      type: string
+      description: |
+        The commercial motion the quote describes. It can be any of the following values:
+          - `subscription_creation`: the quote creates one or more subscriptions.
+          - `subscription_amendment`: the quote amends an existing subscription, named by the quote's own `lago_subscription_id`.
+          - `one_off`: the quote bills add-ons once, without any subscription.
+      enum:
+        - subscription_creation
+        - subscription_amendment
+        - one_off
+      example: subscription_creation
+    OrderExecutionModeEnumOrNull:
+      type:
+        - string
+        - 'null'
+      description: |
+        How the order is carried out. It is `null` while the order has neither been scheduled nor executed. It can be any of the following values:
+          - `execute_in_lago`: Lago applies the quoted deal itself, creating the subscriptions, coupons, wallets or one-off invoice it describes.
+          - `order_only`: Lago records the order without applying it, leaving the execution to your own systems.
+      enum:
+        - null
+        - execute_in_lago
+        - order_only
+      example: execute_in_lago
+    OrderExecutionRecordObject:
+      type: object
+      description: |
+        A trace of what the execution produced. Every key is always present, whichever the order type, so a reader never has to tell a missing key from an empty one; the keys that do not apply keep their empty value.
+
+        Which ones are filled depends on the `order_type` of the quote, and only for an `execute_in_lago` order: `invoice_id` for `one_off`, `subscription_ids` with `applied_coupon_ids` and `wallet_ids` for `subscription_creation`, and the same plus `terminated_subscription_ids` for `subscription_amendment`. An `order_only` order records the mode and the timestamp alone.
+      required:
+        - executed_at
+        - execution_mode
+        - invoice_id
+        - subscription_ids
+        - terminated_subscription_ids
+        - applied_coupon_ids
+        - wallet_ids
+        - errors
+      properties:
+        executed_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the execution succeeded. It is `null` until then, and stays `null` on a failed attempt.
+          example: '2026-07-01T00:00:00Z'
+        execution_mode:
+          $ref: '#/components/schemas/OrderExecutionModeEnumOrNull'
+          description: The mode the execution ran in.
+        invoice_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the one-off invoice created by the execution, created by Lago. Only for a `one_off` order.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        subscription_ids:
+          type: array
+          description: Unique identifiers of the subscriptions created by the execution, created by Lago.
+          items:
+            type: string
+            format: uuid
+          example:
+            - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        terminated_subscription_ids:
+          type: array
+          description: Unique identifiers of the subscriptions terminated by the execution, created by Lago. Only for a `subscription_amendment` order, and only when the amendment took effect immediately and terminated the subscription it replaced. It stays empty for an amendment scheduled for the next billing period.
+          items:
+            type: string
+            format: uuid
+          example:
+            - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        applied_coupon_ids:
+          type: array
+          description: Unique identifiers of the coupons applied to the customer by the execution, created by Lago.
+          items:
+            type: string
+            format: uuid
+          example:
+            - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        wallet_ids:
+          type: array
+          description: Unique identifiers of the prepaid credit wallets created by the execution, created by Lago.
+          items:
+            type: string
+            format: uuid
+          example:
+            - 1a901a90-1a90-1a90-1a90-1a901a901a90
+        errors:
+          type: array
+          description: The reasons why the execution failed. It is empty unless the `status` is `failed`.
+          items:
+            type: string
+          example:
+            - plan_not_found
+    OrderObject:
+      type: object
+      required:
+        - lago_id
+        - number
+        - status
+        - order_type
+        - execution_mode
+        - currency
+        - executed_at
+        - execution_record
+        - lago_organization_id
+        - lago_customer_id
+        - lago_order_form_id
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the order, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        number:
+          type: string
+          description: The unique number assigned to the order by Lago.
+          example: OR-2026-0001
+        status:
+          $ref: '#/components/schemas/OrderStatusEnum'
+        order_type:
+          $ref: '#/components/schemas/QuoteOrderTypeEnum'
+        execution_mode:
+          $ref: '#/components/schemas/OrderExecutionModeEnumOrNull'
+        currency:
+          $ref: '#/components/schemas/CurrencyOrNull'
+          description: The currency the order is denominated in, inherited from the quote version it comes from.
+        executed_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the order was executed. It is `null` unless the `status` is `executed`.
+          example: '2026-07-01T00:00:00Z'
+        execution_record:
+          $ref: '#/components/schemas/OrderExecutionRecordObject'
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer the order was placed for, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_order_form_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the signed order form the order comes from, created by Lago. An order form carries at most one order.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the order was created.
+          example: '2026-04-29T08:59:51Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when the order was last updated.
+          example: '2026-04-29T08:59:51Z'
+    QuoteBillingItemAddOnObject:
+      type: object
+      required:
+        - id
+        - localId
+        - type
+        - payload
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the add-on in Lago, pinned when the entry was added to the quote.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        localId:
+          type: string
+          description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
+          example: b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b
+        type:
+          type: string
+          description: The kind of billing item.
+          enum:
+            - add_on
+          example: add_on
+        payload:
+          type: object
+          description: A snapshot of the add-on as it was added to the quote. `code`, `units`, `unitAmountCents` and `totalAmountCents` are required to approve the version.
+          properties:
+            code:
+              type: string
+              description: Unique code identifying the add-on.
+              example: setup_fee
+            units:
+              type: number
+              description: The number of units billed. It must be greater than 0.
+              example: 1
+            unitAmountCents:
+              type: integer
+              description: The amount of one unit, in cents, in the currency of the quote version.
+              example: 10000
+            totalAmountCents:
+              type: integer
+              description: The total amount billed for the entry, in cents, in the currency of the quote version.
+              example: 10000
+            fromDatetime:
+              type:
+                - string
+                - 'null'
+              format: date-time
+              description: The beginning of the period covered by the entry, in UTC (ISO 8601).
+              example: '2026-01-01T00:00:00Z'
+            toDatetime:
+              type:
+                - string
+                - 'null'
+              format: date-time
+              description: The end of the period covered by the entry, in UTC (ISO 8601).
+              example: '2026-12-31T23:59:59Z'
+        overrides:
+          type: object
+          description: The deviations from the add-on snapshot negotiated on the quote. Only the properties set here are overridden.
+          properties:
+            description:
+              type: string
+              description: Overrides the description of the add-on.
+              example: Onboarding package, discounted for the first year
+            units:
+              type: number
+              description: Overrides the number of units billed. It must be greater than 0.
+              example: 2
+            unitAmountCents:
+              type: integer
+              description: Overrides the amount of one unit, in cents.
+              example: 8000
+            totalAmountCents:
+              type: integer
+              description: Overrides the total amount billed for the entry, in cents.
+              example: 16000
+            invoiceDisplayName:
+              type: string
+              description: Overrides the name of the add-on as it appears on the invoice.
+              example: Onboarding
+            fromDatetime:
+              type:
+                - string
+                - 'null'
+              format: date-time
+              description: Overrides the beginning of the period covered by the entry, in UTC (ISO 8601).
+              example: '2026-01-01T00:00:00Z'
+            toDatetime:
+              type:
+                - string
+                - 'null'
+              format: date-time
+              description: Overrides the end of the period covered by the entry, in UTC (ISO 8601).
+              example: '2026-12-31T23:59:59Z'
+    QuoteBillingItemPlanObject:
+      type: object
+      required:
+        - id
+        - type
+        - payload
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the plan in Lago, pinned when the entry was added to the quote.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        localId:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
+          example: b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b
+        type:
+          type: string
+          description: The kind of billing item.
+          enum:
+            - plan
+          example: plan
+        payload:
+          type: object
+          description: A snapshot of the plan as it was added to the quote, and of the subscription to create from it. Additional catalog properties may be present, as only the ones Lago reads when the quote is executed are documented here. `code` is required to approve the version.
+          properties:
+            code:
+              type: string
+              description: Unique code identifying the plan.
+              example: premium_plan
+            subscriptionExternalId:
+              type:
+                - string
+                - 'null'
+              description: The external unique identifier to assign to the subscription created from the entry. For a `subscription_amendment` quote, it identifies the subscription being amended.
+              example: sub_1234567890
+            subscriptionName:
+              type:
+                - string
+                - 'null'
+              description: The name to assign to the subscription created from the entry.
+              example: Premium plan - Acme Corp
+            billingTime:
+              type:
+                - string
+                - 'null'
+              description: The billing time of the subscription created from the entry.
+              enum:
+                - null
+                - calendar
+                - anniversary
+              example: calendar
+            startDate:
+              type:
+                - string
+                - 'null'
+              description: The date and time in UTC (ISO 8601) when the subscription starts. It is optional, and a plan naming none starts the moment the order is executed.
+              example: '2026-01-01T00:00:00Z'
+            endDate:
+              type:
+                - string
+                - 'null'
+              description: The date and time in UTC (ISO 8601) when the subscription ends. Leaving it unset makes the deal open-ended, and on a `subscription_amendment` quote it leaves the amended subscription's own ending date in place. It bounds the deal, so the signing window and the execution date must both fall strictly before it.
+              example: '2027-01-01T00:00:00Z'
+            paymentMethodId:
+              type:
+                - string
+                - 'null'
+              format: uuid
+              description: Unique identifier of the payment method to charge for the subscription, created by Lago.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            charges:
+              type:
+                - array
+                - 'null'
+              description: A snapshot of the usage-based charges of the plan. It pins the charge each entry of `overrides.charges` applies to.
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the charge in Lago. It is required to approve the version.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  billableMetric:
+                    type: object
+                    description: The billable metric the charge is based on.
+                    properties:
+                      code:
+                        type: string
+                        description: Unique code identifying the billable metric. It is required to approve the version.
+                        example: api_calls
+                  chargeModel:
+                    type:
+                      - string
+                      - 'null'
+                    description: The pricing model of the charge.
+                    enum:
+                      - null
+                      - standard
+                      - graduated
+                      - graduated_percentage
+                      - package
+                      - percentage
+                      - volume
+                      - custom
+                      - dynamic
+                    example: standard
+            fixedCharges:
+              type:
+                - array
+                - 'null'
+              description: A snapshot of the fixed charges of the plan. It pins the fixed charge each entry of `overrides.fixedCharges` applies to.
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the fixed charge in Lago. It is required to approve the version.
+                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  addOn:
+                    type: object
+                    description: The add-on the fixed charge is based on.
+                    properties:
+                      code:
+                        type: string
+                        description: Unique code identifying the add-on. It is required to approve the version.
+                        example: seats
+                  chargeModel:
+                    type:
+                      - string
+                      - 'null'
+                    description: The pricing model of the fixed charge.
+                    enum:
+                      - null
+                      - standard
+                      - graduated
+                      - volume
+                    example: standard
+        overrides:
+          type:
+            - object
+            - 'null'
+          description: The deviations from the plan snapshot negotiated on the quote. Only the properties set here are overridden.
+          properties:
+            amountCents:
+              type:
+                - integer
+                - 'null'
+              description: Overrides the base amount of the plan, in cents.
+              example: 50000
+            amountCurrency:
+              $ref: '#/components/schemas/CurrencyOrNull'
+              description: Overrides the currency the plan is priced in, which is how a catalog plan is quoted in the currency of the deal. The figure in `amountCents` is not converted, it is restated in this currency. It is set only while it differs from the catalog record, and removed once they agree.
+            invoiceDisplayName:
+              type:
+                - string
+                - 'null'
+              description: Overrides the name of the plan as it appears on the invoice.
+              example: Premium
+            name:
+              type:
+                - string
+                - 'null'
+              description: Overrides the name of the plan.
+              example: Premium plan - Acme Corp
+            description:
+              type:
+                - string
+                - 'null'
+              description: Overrides the description of the plan.
+              example: Negotiated premium plan
+            trialPeriod:
+              type:
+                - number
+                - 'null'
+              description: Overrides the trial period of the plan, in days.
+              example: 30
+            minimumCommitment:
+              type:
+                - object
+                - 'null'
+              description: Overrides the minimum commitment of the plan.
+              properties:
+                amountCents:
+                  type:
+                    - integer
+                    - 'null'
+                  description: The amount of the minimum commitment, in cents. It must be greater than 0.
+                  example: 100000
+                invoiceDisplayName:
+                  type:
+                    - string
+                    - 'null'
+                  description: The name of the minimum commitment as it appears on the invoice.
+                  example: Annual commitment
+            usageThresholds:
+              type:
+                - array
+                - 'null'
+              description: Overrides the progressive billing thresholds of the plan.
+              items:
+                type: object
+                required:
+                  - amountCents
+                properties:
+                  amountCents:
+                    type: integer
+                    description: The usage amount, in cents, at which the threshold is reached. It must be greater than 0.
+                    example: 100000
+                  recurring:
+                    type:
+                      - boolean
+                      - 'null'
+                    description: Whether the threshold applies to every period, instead of only once.
+                    example: false
+                  thresholdDisplayName:
+                    type:
+                      - string
+                      - 'null'
+                    description: The name of the threshold as it appears on the invoice.
+                    example: First 1,000 EUR of usage
+            charges:
+              type:
+                - array
+                - 'null'
+              description: Overrides the usage-based charges of the plan. Each entry applies to the charge of the same billable metric in `payload.charges`.
+              items:
+                type: object
+                required:
+                  - billableMetricCode
+                properties:
+                  billableMetricCode:
+                    type: string
+                    description: Unique code identifying the billable metric of the charge to override.
+                    example: api_calls
+                  chargeModel:
+                    type:
+                      - string
+                      - 'null'
+                    description: The pricing model of the charge.
+                    enum:
+                      - null
+                      - standard
+                      - graduated
+                      - graduated_percentage
+                      - package
+                      - percentage
+                      - volume
+                      - custom
+                      - dynamic
+                    example: standard
+                  properties:
+                    type:
+                      - object
+                      - 'null'
+                    description: The pricing properties of the charge. Their shape depends on the charge model, and is validated when the quote is executed.
+                    example:
+                      amount: '0.02'
+                  minAmountCents:
+                    type:
+                      - integer
+                      - 'null'
+                    description: The minimum amount billed for the charge, in cents.
+                    example: 10000
+                  invoiceDisplayName:
+                    type:
+                      - string
+                      - 'null'
+                    description: The name of the charge as it appears on the invoice.
+                    example: API calls
+            fixedCharges:
+              type:
+                - array
+                - 'null'
+              description: Overrides the fixed charges of the plan. Each entry applies to the fixed charge of the same add-on in `payload.fixedCharges`.
+              items:
+                type: object
+                required:
+                  - addOnCode
+                properties:
+                  addOnCode:
+                    type: string
+                    description: Unique code identifying the add-on of the fixed charge to override.
+                    example: seats
+                  units:
+                    type:
+                      - string
+                      - 'null'
+                    description: The number of units billed by the fixed charge.
+                    example: '10'
+                  properties:
+                    type:
+                      - object
+                      - 'null'
+                    description: The pricing properties of the fixed charge. Their shape depends on the charge model, and is validated when the quote is executed.
+                    example:
+                      amount: '5'
+                  invoiceDisplayName:
+                    type:
+                      - string
+                      - 'null'
+                    description: The name of the fixed charge as it appears on the invoice.
+                    example: Seats
+    QuoteBillingItemCouponObject:
+      type: object
+      required:
+        - id
+        - localId
+        - type
+        - payload
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the coupon in Lago, pinned when the entry was added to the quote.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        localId:
+          type: string
+          description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
+          example: b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b
+        type:
+          type: string
+          description: The kind of billing item.
+          enum:
+            - coupon
+          example: coupon
+        payload:
+          type: object
+          description: A snapshot of the coupon as it was added to the quote. `code` and `type` are required to approve the version.
+          properties:
+            code:
+              type: string
+              description: Unique code identifying the coupon.
+              example: welcome_offer
+            type:
+              type: string
+              description: Whether the coupon deducts a fixed amount or a percentage.
+              enum:
+                - fixed_amount
+                - percentage
+              example: fixed_amount
+            amountCents:
+              type:
+                - integer
+                - 'null'
+              description: The amount deducted by the coupon, in cents. Only for a `fixed_amount` coupon.
+              example: 10000
+            currency:
+              $ref: '#/components/schemas/CurrencyOrNull'
+              description: The currency of `amountCents`. Only for a `fixed_amount` coupon.
+            percentageRate:
+              type:
+                - number
+                - 'null'
+              description: The percentage deducted by the coupon. Only for a `percentage` coupon. It must be greater than 0.
+              example: 10.5
+            frequency:
+              type:
+                - string
+                - 'null'
+              description: How often the coupon is deducted.
+              enum:
+                - null
+                - once
+                - recurring
+                - forever
+              example: once
+            frequencyDuration:
+              type:
+                - integer
+                - 'null'
+              description: The number of billing periods the coupon is deducted over. Only for a `recurring` coupon. It must be greater than 0.
+              example: 3
+        overrides:
+          type:
+            - object
+            - 'null'
+          description: The deviations from the coupon snapshot negotiated on the quote. Only the properties set here are overridden.
+          properties:
+            amountCents:
+              type:
+                - integer
+                - 'null'
+              description: Overrides the amount deducted by the coupon, in cents.
+              example: 15000
+            amountCurrency:
+              $ref: '#/components/schemas/CurrencyOrNull'
+              description: Overrides the currency the coupon is priced in, which is how a catalog coupon is quoted in the currency of the deal. The figure in `amountCents` is not converted, it is restated in this currency. It is set only while it differs from the catalog record, and removed once they agree.
+            percentageRate:
+              type:
+                - number
+                - 'null'
+              description: Overrides the percentage deducted by the coupon. It must be greater than 0.
+              example: 15
+            frequency:
+              type:
+                - string
+                - 'null'
+              description: Overrides how often the coupon is deducted.
+              enum:
+                - null
+                - once
+                - recurring
+                - forever
+              example: recurring
+            frequencyDuration:
+              type:
+                - integer
+                - 'null'
+              description: Overrides the number of billing periods the coupon is deducted over. It must be greater than 0.
+              example: 6
+    QuoteBillingItemWalletCreditObject:
+      type: object
+      required:
+        - localId
+        - type
+        - payload
+      properties:
+        localId:
+          type: string
+          description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
+          example: b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b
+        type:
+          type: string
+          description: The kind of billing item.
+          enum:
+            - wallet_credit
+          example: wallet_credit
+        payload:
+          type: object
+          description: The prepaid credit wallet to create for the customer. Unlike the other billing items, a wallet credit is not built from an existing record, so it carries no `id` and no `overrides`. `paidCredits`, `grantedCredits` and `rateAmount` are required to approve the version.
+          properties:
+            paidCredits:
+              type:
+                - string
+                - 'null'
+              description: The number of credits the customer pays for.
+              example: '100.0'
+            grantedCredits:
+              type:
+                - string
+                - 'null'
+              description: The number of credits granted for free.
+              example: '20.0'
+            rateAmount:
+              type:
+                - string
+                - 'null'
+              description: The value of one credit, in the currency of the wallet.
+              example: '1.0'
+            currency:
+              $ref: '#/components/schemas/CurrencyOrNull'
+              description: The currency of the wallet.
+            expirationAt:
+              type:
+                - string
+                - 'null'
+              format: date-time
+              description: The date and time in UTC (ISO 8601) when the credits expire.
+              example: '2027-01-01T00:00:00Z'
+            appliesTo:
+              type:
+                - object
+                - 'null'
+              description: The limitations restricting what the credits can be spent on.
+              properties:
+                feeTypes:
+                  type:
+                    - array
+                    - 'null'
+                  description: The fee types the credits can be spent on.
+                  items:
+                    type: string
+                    enum:
+                      - charge
+                      - add_on
+                      - subscription
+                      - credit
+                      - commitment
+                      - fixed_charge
+                      - product
+                  example:
+                    - charge
+                billableMetricCodes:
+                  type:
+                    - array
+                    - 'null'
+                  description: The codes of the billable metrics the credits can be spent on.
+                  items:
+                    type: string
+                  example:
+                    - api_calls
+            recurringTransactionRules:
+              type:
+                - array
+                - 'null'
+              description: The rule automatically topping the wallet up. At most one rule is allowed, and its `trigger` is required, to approve the version.
+              items:
+                type: object
+                properties:
+                  trigger:
+                    type:
+                      - string
+                      - 'null'
+                    description: What triggers the top-up.
+                    enum:
+                      - null
+                      - interval
+                      - threshold
+                    example: interval
+                  interval:
+                    type:
+                      - string
+                      - 'null'
+                    description: How often the wallet is topped up. Only for an `interval` trigger.
+                    enum:
+                      - null
+                      - weekly
+                      - monthly
+                      - quarterly
+                      - semiannual
+                      - yearly
+                    example: monthly
+                  thresholdCredits:
+                    type:
+                      - string
+                      - 'null'
+                    description: The credit balance below which the wallet is topped up. Only for a `threshold` trigger.
+                    example: '10.0'
+                  method:
+                    type:
+                      - string
+                      - 'null'
+                    description: Whether the top-up grants a fixed number of credits, or brings the balance up to a target.
+                    enum:
+                      - null
+                      - fixed
+                      - target
+                    example: fixed
+                  targetOngoingBalance:
+                    type:
+                      - string
+                      - 'null'
+                    description: The balance the top-up brings the wallet up to. Only for a `target` method.
+                    example: '100.0'
+                  grantsTargetTopUp:
+                    type:
+                      - boolean
+                      - 'null'
+                    description: Whether the granted credits count towards the target balance.
+                    example: false
+                  paidCredits:
+                    type:
+                      - string
+                      - 'null'
+                    description: The number of credits the customer pays for on every top-up.
+                    example: '100.0'
+                  grantedCredits:
+                    type:
+                      - string
+                      - 'null'
+                    description: The number of credits granted for free on every top-up.
+                    example: '20.0'
+                  startedAt:
+                    type:
+                      - string
+                      - 'null'
+                    format: date-time
+                    description: The date and time in UTC (ISO 8601) when the rule starts applying.
+                    example: '2026-01-01T00:00:00Z'
+                  expirationAt:
+                    type:
+                      - string
+                      - 'null'
+                    format: date-time
+                    description: The date and time in UTC (ISO 8601) when the rule stops applying.
+                    example: '2027-01-01T00:00:00Z'
+                  transactionName:
+                    type:
+                      - string
+                      - 'null'
+                    description: The name given to the wallet transactions created by the rule.
+                    example: Monthly top-up
+                  invoiceRequiresSuccessfulPayment:
+                    type:
+                      - boolean
+                      - 'null'
+                    description: Whether the credits are granted only once the top-up invoice is paid.
+                    example: false
+    QuoteBillingItems:
+      type:
+        - object
+        - 'null'
+      description: |
+        A snapshot of everything the quote bills. Unlike the rest of the Lago API, the keys nested in this object are camelCased: the object is stored and returned as it is authored in the Lago user interface.
+
+        Which top-level keys are present depends on the `order_type` of the parent quote:
+          - `one_off`: `addOns`.
+          - `subscription_creation` and `subscription_amendment`: `plans`, plus the optional `coupons` and `walletCredits`.
+
+        Every entry pins the catalog record it was built from through its `id` and its `payload`, so that an approved quote keeps billing what was approved even if the catalog changes afterwards. The optional `overrides` object carries the deviations from that record negotiated on the quote.
+
+        This object is the single source of truth for the term of the deal. Three of its nested dates bound that term, because the execution flow refuses them once past: `plans[].payload.endDate`, `walletCredits[].payload.expirationAt` and the `expirationAt` of a wallet credit's recurring top-up rule. The earliest of them is the day the deal stops being executable, and both the signing window and the execution date must fall strictly before it. A `one_off` quote carries none of them and is never bounded.
+
+        On a `draft` version this object may be incomplete: only the properties documented as required below are enforced on every save, the others are enforced when the version is approved.
+      properties:
+        addOns:
+          type: array
+          description: The add-ons billed once by a `one_off` quote. At least one entry is required to approve the version.
+          items:
+            $ref: '#/components/schemas/QuoteBillingItemAddOnObject'
+        plans:
+          type: array
+          description: The plans subscribed to, or amended, by a `subscription_creation` or `subscription_amendment` quote. At least one entry is required to approve the version.
+          items:
+            $ref: '#/components/schemas/QuoteBillingItemPlanObject'
+        coupons:
+          type: array
+          description: The coupons applied to the customer when the quote is executed.
+          items:
+            $ref: '#/components/schemas/QuoteBillingItemCouponObject'
+        walletCredits:
+          type: array
+          description: The prepaid credit wallets created for the customer when the quote is executed.
+          items:
+            $ref: '#/components/schemas/QuoteBillingItemWalletCreditObject'
+    OrderObjectExtended:
+      allOf:
+        - $ref: '#/components/schemas/OrderObject'
+        - type: object
+          required:
+            - billing_snapshot
+          properties:
+            billing_snapshot:
+              $ref: '#/components/schemas/QuoteBillingItems'
+              description: The billing items of the quote version the order comes from, as they stood when it was approved. This is what the execution applies. It is omitted from the webhook payloads, being a heavy blob.
+    OrdersPaginated:
+      type: object
+      required:
+        - orders
+        - meta
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderObjectExtended'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    Order:
+      type: object
+      required:
+        - order
+      properties:
+        order:
+          $ref: '#/components/schemas/OrderObjectExtended'
+    OrderExecuteInput:
+      type: object
+      description: Parameters available when executing an order. The body is optional, as the execution mode is normally chosen when the order form is signed.
+      required: []
+      properties:
+        order:
+          type: object
+          required: []
+          properties:
+            execution_mode:
+              $ref: '#/components/schemas/OrderExecutionModeEnum'
+              description: How the order is carried out. It is only persisted when it differs from the mode already stored on the order, so restating the current mode never fails. Changing the mode of an order that has already been executed is rejected.
     OrganizationBillingConfiguration:
       type: object
       description: The custom billing settings for your organization.
@@ -22073,18 +23322,6 @@ components:
               type: boolean
               description: When set to `true`, the deletion will be cascaded to the children plans.
               example: true
-    QuoteOrderTypeEnum:
-      type: string
-      description: |
-        The commercial motion the quote describes. It can be any of the following values:
-          - `subscription_creation`: the quote creates one or more subscriptions.
-          - `subscription_amendment`: the quote amends an existing subscription, named by the quote's own `lago_subscription_id`.
-          - `one_off`: the quote bills add-ons once, without any subscription.
-      enum:
-        - subscription_creation
-        - subscription_amendment
-        - one_off
-      example: subscription_creation
     QuoteBaseObject:
       type: object
       required:
@@ -22311,731 +23548,6 @@ components:
             $ref: '#/components/schemas/QuoteVersionObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    QuoteBillingItemAddOnObject:
-      type: object
-      required:
-        - id
-        - localId
-        - type
-        - payload
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the add-on in Lago, pinned when the entry was added to the quote.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        localId:
-          type: string
-          description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
-          example: b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b
-        type:
-          type: string
-          description: The kind of billing item.
-          enum:
-            - add_on
-          example: add_on
-        payload:
-          type: object
-          description: A snapshot of the add-on as it was added to the quote. `code`, `units`, `unitAmountCents` and `totalAmountCents` are required to approve the version.
-          properties:
-            code:
-              type: string
-              description: Unique code identifying the add-on.
-              example: setup_fee
-            units:
-              type: number
-              description: The number of units billed. It must be greater than 0.
-              example: 1
-            unitAmountCents:
-              type: integer
-              description: The amount of one unit, in cents, in the currency of the quote version.
-              example: 10000
-            totalAmountCents:
-              type: integer
-              description: The total amount billed for the entry, in cents, in the currency of the quote version.
-              example: 10000
-            fromDatetime:
-              type:
-                - string
-                - 'null'
-              format: date-time
-              description: The beginning of the period covered by the entry, in UTC (ISO 8601).
-              example: '2026-01-01T00:00:00Z'
-            toDatetime:
-              type:
-                - string
-                - 'null'
-              format: date-time
-              description: The end of the period covered by the entry, in UTC (ISO 8601).
-              example: '2026-12-31T23:59:59Z'
-        overrides:
-          type: object
-          description: The deviations from the add-on snapshot negotiated on the quote. Only the properties set here are overridden.
-          properties:
-            description:
-              type: string
-              description: Overrides the description of the add-on.
-              example: Onboarding package, discounted for the first year
-            units:
-              type: number
-              description: Overrides the number of units billed. It must be greater than 0.
-              example: 2
-            unitAmountCents:
-              type: integer
-              description: Overrides the amount of one unit, in cents.
-              example: 8000
-            totalAmountCents:
-              type: integer
-              description: Overrides the total amount billed for the entry, in cents.
-              example: 16000
-            invoiceDisplayName:
-              type: string
-              description: Overrides the name of the add-on as it appears on the invoice.
-              example: Onboarding
-            fromDatetime:
-              type:
-                - string
-                - 'null'
-              format: date-time
-              description: Overrides the beginning of the period covered by the entry, in UTC (ISO 8601).
-              example: '2026-01-01T00:00:00Z'
-            toDatetime:
-              type:
-                - string
-                - 'null'
-              format: date-time
-              description: Overrides the end of the period covered by the entry, in UTC (ISO 8601).
-              example: '2026-12-31T23:59:59Z'
-    QuoteBillingItemPlanObject:
-      type: object
-      required:
-        - id
-        - type
-        - payload
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the plan in Lago, pinned when the entry was added to the quote.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        localId:
-          type:
-            - string
-            - 'null'
-          description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
-          example: b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b
-        type:
-          type: string
-          description: The kind of billing item.
-          enum:
-            - plan
-          example: plan
-        payload:
-          type: object
-          description: A snapshot of the plan as it was added to the quote, and of the subscription to create from it. Additional catalog properties may be present, as only the ones Lago reads when the quote is executed are documented here. `code` is required to approve the version.
-          properties:
-            code:
-              type: string
-              description: Unique code identifying the plan.
-              example: premium_plan
-            subscriptionExternalId:
-              type:
-                - string
-                - 'null'
-              description: The external unique identifier to assign to the subscription created from the entry. For a `subscription_amendment` quote, it identifies the subscription being amended.
-              example: sub_1234567890
-            subscriptionName:
-              type:
-                - string
-                - 'null'
-              description: The name to assign to the subscription created from the entry.
-              example: Premium plan - Acme Corp
-            billingTime:
-              type:
-                - string
-                - 'null'
-              description: The billing time of the subscription created from the entry.
-              enum:
-                - null
-                - calendar
-                - anniversary
-              example: calendar
-            startDate:
-              type:
-                - string
-                - 'null'
-              description: The date and time in UTC (ISO 8601) when the subscription starts. It is optional, and a plan naming none starts the moment the order is executed.
-              example: '2026-01-01T00:00:00Z'
-            endDate:
-              type:
-                - string
-                - 'null'
-              description: The date and time in UTC (ISO 8601) when the subscription ends. Leaving it unset makes the deal open-ended, and on a `subscription_amendment` quote it leaves the amended subscription's own ending date in place. It bounds the deal, so the signing window and the execution date must both fall strictly before it.
-              example: '2027-01-01T00:00:00Z'
-            paymentMethodId:
-              type:
-                - string
-                - 'null'
-              format: uuid
-              description: Unique identifier of the payment method to charge for the subscription, created by Lago.
-              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-            charges:
-              type:
-                - array
-                - 'null'
-              description: A snapshot of the usage-based charges of the plan. It pins the charge each entry of `overrides.charges` applies to.
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    description: Unique identifier of the charge in Lago. It is required to approve the version.
-                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                  billableMetric:
-                    type: object
-                    description: The billable metric the charge is based on.
-                    properties:
-                      code:
-                        type: string
-                        description: Unique code identifying the billable metric. It is required to approve the version.
-                        example: api_calls
-                  chargeModel:
-                    type:
-                      - string
-                      - 'null'
-                    description: The pricing model of the charge.
-                    enum:
-                      - null
-                      - standard
-                      - graduated
-                      - graduated_percentage
-                      - package
-                      - percentage
-                      - volume
-                      - custom
-                      - dynamic
-                    example: standard
-            fixedCharges:
-              type:
-                - array
-                - 'null'
-              description: A snapshot of the fixed charges of the plan. It pins the fixed charge each entry of `overrides.fixedCharges` applies to.
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    description: Unique identifier of the fixed charge in Lago. It is required to approve the version.
-                    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                  addOn:
-                    type: object
-                    description: The add-on the fixed charge is based on.
-                    properties:
-                      code:
-                        type: string
-                        description: Unique code identifying the add-on. It is required to approve the version.
-                        example: seats
-                  chargeModel:
-                    type:
-                      - string
-                      - 'null'
-                    description: The pricing model of the fixed charge.
-                    enum:
-                      - null
-                      - standard
-                      - graduated
-                      - volume
-                    example: standard
-        overrides:
-          type:
-            - object
-            - 'null'
-          description: The deviations from the plan snapshot negotiated on the quote. Only the properties set here are overridden.
-          properties:
-            amountCents:
-              type:
-                - integer
-                - 'null'
-              description: Overrides the base amount of the plan, in cents.
-              example: 50000
-            amountCurrency:
-              $ref: '#/components/schemas/CurrencyOrNull'
-              description: Overrides the currency the plan is priced in, which is how a catalog plan is quoted in the currency of the deal. The figure in `amountCents` is not converted, it is restated in this currency. It is set only while it differs from the catalog record, and removed once they agree.
-            invoiceDisplayName:
-              type:
-                - string
-                - 'null'
-              description: Overrides the name of the plan as it appears on the invoice.
-              example: Premium
-            name:
-              type:
-                - string
-                - 'null'
-              description: Overrides the name of the plan.
-              example: Premium plan - Acme Corp
-            description:
-              type:
-                - string
-                - 'null'
-              description: Overrides the description of the plan.
-              example: Negotiated premium plan
-            trialPeriod:
-              type:
-                - number
-                - 'null'
-              description: Overrides the trial period of the plan, in days.
-              example: 30
-            minimumCommitment:
-              type:
-                - object
-                - 'null'
-              description: Overrides the minimum commitment of the plan.
-              properties:
-                amountCents:
-                  type:
-                    - integer
-                    - 'null'
-                  description: The amount of the minimum commitment, in cents. It must be greater than 0.
-                  example: 100000
-                invoiceDisplayName:
-                  type:
-                    - string
-                    - 'null'
-                  description: The name of the minimum commitment as it appears on the invoice.
-                  example: Annual commitment
-            usageThresholds:
-              type:
-                - array
-                - 'null'
-              description: Overrides the progressive billing thresholds of the plan.
-              items:
-                type: object
-                required:
-                  - amountCents
-                properties:
-                  amountCents:
-                    type: integer
-                    description: The usage amount, in cents, at which the threshold is reached. It must be greater than 0.
-                    example: 100000
-                  recurring:
-                    type:
-                      - boolean
-                      - 'null'
-                    description: Whether the threshold applies to every period, instead of only once.
-                    example: false
-                  thresholdDisplayName:
-                    type:
-                      - string
-                      - 'null'
-                    description: The name of the threshold as it appears on the invoice.
-                    example: First 1,000 EUR of usage
-            charges:
-              type:
-                - array
-                - 'null'
-              description: Overrides the usage-based charges of the plan. Each entry applies to the charge of the same billable metric in `payload.charges`.
-              items:
-                type: object
-                required:
-                  - billableMetricCode
-                properties:
-                  billableMetricCode:
-                    type: string
-                    description: Unique code identifying the billable metric of the charge to override.
-                    example: api_calls
-                  chargeModel:
-                    type:
-                      - string
-                      - 'null'
-                    description: The pricing model of the charge.
-                    enum:
-                      - null
-                      - standard
-                      - graduated
-                      - graduated_percentage
-                      - package
-                      - percentage
-                      - volume
-                      - custom
-                      - dynamic
-                    example: standard
-                  properties:
-                    type:
-                      - object
-                      - 'null'
-                    description: The pricing properties of the charge. Their shape depends on the charge model, and is validated when the quote is executed.
-                    example:
-                      amount: '0.02'
-                  minAmountCents:
-                    type:
-                      - integer
-                      - 'null'
-                    description: The minimum amount billed for the charge, in cents.
-                    example: 10000
-                  invoiceDisplayName:
-                    type:
-                      - string
-                      - 'null'
-                    description: The name of the charge as it appears on the invoice.
-                    example: API calls
-            fixedCharges:
-              type:
-                - array
-                - 'null'
-              description: Overrides the fixed charges of the plan. Each entry applies to the fixed charge of the same add-on in `payload.fixedCharges`.
-              items:
-                type: object
-                required:
-                  - addOnCode
-                properties:
-                  addOnCode:
-                    type: string
-                    description: Unique code identifying the add-on of the fixed charge to override.
-                    example: seats
-                  units:
-                    type:
-                      - string
-                      - 'null'
-                    description: The number of units billed by the fixed charge.
-                    example: '10'
-                  properties:
-                    type:
-                      - object
-                      - 'null'
-                    description: The pricing properties of the fixed charge. Their shape depends on the charge model, and is validated when the quote is executed.
-                    example:
-                      amount: '5'
-                  invoiceDisplayName:
-                    type:
-                      - string
-                      - 'null'
-                    description: The name of the fixed charge as it appears on the invoice.
-                    example: Seats
-    QuoteBillingItemCouponObject:
-      type: object
-      required:
-        - id
-        - localId
-        - type
-        - payload
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the coupon in Lago, pinned when the entry was added to the quote.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-        localId:
-          type: string
-          description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
-          example: b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b
-        type:
-          type: string
-          description: The kind of billing item.
-          enum:
-            - coupon
-          example: coupon
-        payload:
-          type: object
-          description: A snapshot of the coupon as it was added to the quote. `code` and `type` are required to approve the version.
-          properties:
-            code:
-              type: string
-              description: Unique code identifying the coupon.
-              example: welcome_offer
-            type:
-              type: string
-              description: Whether the coupon deducts a fixed amount or a percentage.
-              enum:
-                - fixed_amount
-                - percentage
-              example: fixed_amount
-            amountCents:
-              type:
-                - integer
-                - 'null'
-              description: The amount deducted by the coupon, in cents. Only for a `fixed_amount` coupon.
-              example: 10000
-            currency:
-              $ref: '#/components/schemas/CurrencyOrNull'
-              description: The currency of `amountCents`. Only for a `fixed_amount` coupon.
-            percentageRate:
-              type:
-                - number
-                - 'null'
-              description: The percentage deducted by the coupon. Only for a `percentage` coupon. It must be greater than 0.
-              example: 10.5
-            frequency:
-              type:
-                - string
-                - 'null'
-              description: How often the coupon is deducted.
-              enum:
-                - null
-                - once
-                - recurring
-                - forever
-              example: once
-            frequencyDuration:
-              type:
-                - integer
-                - 'null'
-              description: The number of billing periods the coupon is deducted over. Only for a `recurring` coupon. It must be greater than 0.
-              example: 3
-        overrides:
-          type:
-            - object
-            - 'null'
-          description: The deviations from the coupon snapshot negotiated on the quote. Only the properties set here are overridden.
-          properties:
-            amountCents:
-              type:
-                - integer
-                - 'null'
-              description: Overrides the amount deducted by the coupon, in cents.
-              example: 15000
-            amountCurrency:
-              $ref: '#/components/schemas/CurrencyOrNull'
-              description: Overrides the currency the coupon is priced in, which is how a catalog coupon is quoted in the currency of the deal. The figure in `amountCents` is not converted, it is restated in this currency. It is set only while it differs from the catalog record, and removed once they agree.
-            percentageRate:
-              type:
-                - number
-                - 'null'
-              description: Overrides the percentage deducted by the coupon. It must be greater than 0.
-              example: 15
-            frequency:
-              type:
-                - string
-                - 'null'
-              description: Overrides how often the coupon is deducted.
-              enum:
-                - null
-                - once
-                - recurring
-                - forever
-              example: recurring
-            frequencyDuration:
-              type:
-                - integer
-                - 'null'
-              description: Overrides the number of billing periods the coupon is deducted over. It must be greater than 0.
-              example: 6
-    QuoteBillingItemWalletCreditObject:
-      type: object
-      required:
-        - localId
-        - type
-        - payload
-      properties:
-        localId:
-          type: string
-          description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
-          example: b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b
-        type:
-          type: string
-          description: The kind of billing item.
-          enum:
-            - wallet_credit
-          example: wallet_credit
-        payload:
-          type: object
-          description: The prepaid credit wallet to create for the customer. Unlike the other billing items, a wallet credit is not built from an existing record, so it carries no `id` and no `overrides`. `paidCredits`, `grantedCredits` and `rateAmount` are required to approve the version.
-          properties:
-            paidCredits:
-              type:
-                - string
-                - 'null'
-              description: The number of credits the customer pays for.
-              example: '100.0'
-            grantedCredits:
-              type:
-                - string
-                - 'null'
-              description: The number of credits granted for free.
-              example: '20.0'
-            rateAmount:
-              type:
-                - string
-                - 'null'
-              description: The value of one credit, in the currency of the wallet.
-              example: '1.0'
-            currency:
-              $ref: '#/components/schemas/CurrencyOrNull'
-              description: The currency of the wallet.
-            expirationAt:
-              type:
-                - string
-                - 'null'
-              format: date-time
-              description: The date and time in UTC (ISO 8601) when the credits expire.
-              example: '2027-01-01T00:00:00Z'
-            appliesTo:
-              type:
-                - object
-                - 'null'
-              description: The limitations restricting what the credits can be spent on.
-              properties:
-                feeTypes:
-                  type:
-                    - array
-                    - 'null'
-                  description: The fee types the credits can be spent on.
-                  items:
-                    type: string
-                    enum:
-                      - charge
-                      - add_on
-                      - subscription
-                      - credit
-                      - commitment
-                      - fixed_charge
-                      - product
-                  example:
-                    - charge
-                billableMetricCodes:
-                  type:
-                    - array
-                    - 'null'
-                  description: The codes of the billable metrics the credits can be spent on.
-                  items:
-                    type: string
-                  example:
-                    - api_calls
-            recurringTransactionRules:
-              type:
-                - array
-                - 'null'
-              description: The rule automatically topping the wallet up. At most one rule is allowed, and its `trigger` is required, to approve the version.
-              items:
-                type: object
-                properties:
-                  trigger:
-                    type:
-                      - string
-                      - 'null'
-                    description: What triggers the top-up.
-                    enum:
-                      - null
-                      - interval
-                      - threshold
-                    example: interval
-                  interval:
-                    type:
-                      - string
-                      - 'null'
-                    description: How often the wallet is topped up. Only for an `interval` trigger.
-                    enum:
-                      - null
-                      - weekly
-                      - monthly
-                      - quarterly
-                      - semiannual
-                      - yearly
-                    example: monthly
-                  thresholdCredits:
-                    type:
-                      - string
-                      - 'null'
-                    description: The credit balance below which the wallet is topped up. Only for a `threshold` trigger.
-                    example: '10.0'
-                  method:
-                    type:
-                      - string
-                      - 'null'
-                    description: Whether the top-up grants a fixed number of credits, or brings the balance up to a target.
-                    enum:
-                      - null
-                      - fixed
-                      - target
-                    example: fixed
-                  targetOngoingBalance:
-                    type:
-                      - string
-                      - 'null'
-                    description: The balance the top-up brings the wallet up to. Only for a `target` method.
-                    example: '100.0'
-                  grantsTargetTopUp:
-                    type:
-                      - boolean
-                      - 'null'
-                    description: Whether the granted credits count towards the target balance.
-                    example: false
-                  paidCredits:
-                    type:
-                      - string
-                      - 'null'
-                    description: The number of credits the customer pays for on every top-up.
-                    example: '100.0'
-                  grantedCredits:
-                    type:
-                      - string
-                      - 'null'
-                    description: The number of credits granted for free on every top-up.
-                    example: '20.0'
-                  startedAt:
-                    type:
-                      - string
-                      - 'null'
-                    format: date-time
-                    description: The date and time in UTC (ISO 8601) when the rule starts applying.
-                    example: '2026-01-01T00:00:00Z'
-                  expirationAt:
-                    type:
-                      - string
-                      - 'null'
-                    format: date-time
-                    description: The date and time in UTC (ISO 8601) when the rule stops applying.
-                    example: '2027-01-01T00:00:00Z'
-                  transactionName:
-                    type:
-                      - string
-                      - 'null'
-                    description: The name given to the wallet transactions created by the rule.
-                    example: Monthly top-up
-                  invoiceRequiresSuccessfulPayment:
-                    type:
-                      - boolean
-                      - 'null'
-                    description: Whether the credits are granted only once the top-up invoice is paid.
-                    example: false
-    QuoteBillingItems:
-      type:
-        - object
-        - 'null'
-      description: |
-        A snapshot of everything the quote bills. Unlike the rest of the Lago API, the keys nested in this object are camelCased: the object is stored and returned as it is authored in the Lago user interface.
-
-        Which top-level keys are present depends on the `order_type` of the parent quote:
-          - `one_off`: `addOns`.
-          - `subscription_creation` and `subscription_amendment`: `plans`, plus the optional `coupons` and `walletCredits`.
-
-        Every entry pins the catalog record it was built from through its `id` and its `payload`, so that an approved quote keeps billing what was approved even if the catalog changes afterwards. The optional `overrides` object carries the deviations from that record negotiated on the quote.
-
-        This object is the single source of truth for the term of the deal. Three of its nested dates bound that term, because the execution flow refuses them once past: `plans[].payload.endDate`, `walletCredits[].payload.expirationAt` and the `expirationAt` of a wallet credit's recurring top-up rule. The earliest of them is the day the deal stops being executable, and both the signing window and the execution date must fall strictly before it. A `one_off` quote carries none of them and is never bounded.
-
-        On a `draft` version this object may be incomplete: only the properties documented as required below are enforced on every save, the others are enforced when the version is approved.
-      properties:
-        addOns:
-          type: array
-          description: The add-ons billed once by a `one_off` quote. At least one entry is required to approve the version.
-          items:
-            $ref: '#/components/schemas/QuoteBillingItemAddOnObject'
-        plans:
-          type: array
-          description: The plans subscribed to, or amended, by a `subscription_creation` or `subscription_amendment` quote. At least one entry is required to approve the version.
-          items:
-            $ref: '#/components/schemas/QuoteBillingItemPlanObject'
-        coupons:
-          type: array
-          description: The coupons applied to the customer when the quote is executed.
-          items:
-            $ref: '#/components/schemas/QuoteBillingItemCouponObject'
-        walletCredits:
-          type: array
-          description: The prepaid credit wallets created for the customer when the quote is executed.
-          items:
-            $ref: '#/components/schemas/QuoteBillingItemWalletCreditObject'
     QuoteVersionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/QuoteVersionObject'

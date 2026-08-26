@@ -146,6 +146,8 @@ tags:
     description: Everything about Quote collection
   - name: order_forms
     description: Everything about Order form collection
+  - name: orders
+    description: Everything about Order collection
 
 paths:
   /billing_entities:
@@ -300,6 +302,12 @@ paths:
     $ref: "./resources/order_form_mark_as_signed.yaml"
   /order_forms/{lago_id}/void:
     $ref: "./resources/order_form_void.yaml"
+  /orders:
+    $ref: "./resources/orders.yaml"
+  /orders/{lago_id}:
+    $ref: "./resources/order.yaml"
+  /orders/{lago_id}/execute:
+    $ref: "./resources/order_execute.yaml"
   /organizations:
     $ref: "./resources/organizations.yaml"
   /payment_receipts:
@@ -497,6 +505,10 @@ webhooks:
     $ref: "./webhooks/invoice_resynced.yaml"
   integration_provider_error:
     $ref: "./webhooks/integration_provider_error.yaml"
+  order_created:
+    $ref: "./webhooks/order_created.yaml"
+  order_executed:
+    $ref: "./webhooks/order_executed.yaml"
   order_form_created:
     $ref: "./webhooks/order_form_created.yaml"
   order_form_signed:

@@ -1,0 +1,146 @@
+get:
+  tags:
+    - orders
+  summary: List all orders
+  description: |-
+    This endpoint is used to list all existing orders.
+    This is a premium feature.
+  operationId: findAllOrders
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: status[]
+      in: query
+      description: Filter orders by status. Possible values are `created`, `executed` and `failed`.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - created
+            - executed
+            - failed
+    - name: order_type[]
+      in: query
+      description: Filter orders by the order type of the quote they come from. Possible values are `subscription_creation`, `subscription_amendment` and `one_off`.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - subscription_creation
+            - subscription_amendment
+            - one_off
+    - name: execution_mode[]
+      in: query
+      description: Filter orders by execution mode. Possible values are `execute_in_lago` and `order_only`.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - execute_in_lago
+            - order_only
+    - name: customer_id[]
+      in: query
+      description: Filter orders by the Lago identifiers of their customers.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: "uuid"
+        example:
+          - 1a901a90-1a90-1a90-1a90-1a901a901a90
+    - name: number[]
+      in: query
+      description: Filter orders by their number, as assigned by Lago.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - OR-2026-0001
+          - OR-2026-0002
+    - name: order_form_number[]
+      in: query
+      description: Filter orders by the number of the order form they come from.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - OF-2026-0001
+    - name: quote_number[]
+      in: query
+      description: Filter orders by the number of the quote they come from.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - QT-2026-0001
+    - name: owner_id[]
+      in: query
+      description: Filter orders by the Lago identifiers of the users owning the quote they come from.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: "uuid"
+        example:
+          - 1a901a90-1a90-1a90-1a90-1a901a901a90
+    - name: search_term
+      in: query
+      description: Search orders by number.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "OR-2026"
+    - name: executed_at_from
+      in: query
+      description: Filter orders executed from a specific date and time, in UTC (ISO 8601). Orders that have not been executed are excluded.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2026-01-01T00:00:00Z"
+    - name: executed_at_to
+      in: query
+      description: Filter orders executed up to a specific date and time, in UTC (ISO 8601). Orders that have not been executed are excluded.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2026-12-31T23:59:59Z"
+  responses:
+    "200":
+      description: Orders
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/OrdersPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

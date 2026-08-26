@@ -1,0 +1,41 @@
+post:
+  operationId: orderCreated
+  summary: An order has been created from a signed order form
+  description: |-
+    An order has been created from a signed order form. It always follows an `order_form.signed` event, emitted in the same transaction.
+    The `billing_snapshot` returned by the REST endpoints is omitted from this payload, being a heavy blob; retrieve the order to get it.
+    This is a premium feature.
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the new order
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - order
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - order.created
+            object_type:
+              type: string
+              enum:
+                - order
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            order:
+              $ref: "../schemas/OrderObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully
