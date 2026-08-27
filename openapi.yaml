@@ -12176,6 +12176,7 @@ components:
         - amount_cents
         - currency
         - invoices_count
+        - billing_entity_id
       properties:
         month:
           type: string
@@ -12193,6 +12194,11 @@ components:
           type: integer
           description: Contains invoices count.
           example: 10
+        billing_entity_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the billing entity the revenue is attributed to, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     GrossRevenues:
       type: object
       required:
@@ -12308,6 +12314,7 @@ components:
         - amount_cents
         - currency
         - lago_invoice_ids
+        - billing_entity_id
       properties:
         month:
           type: string
@@ -12329,6 +12336,11 @@ components:
           description: The Lago invoice IDs associated with the revenue.
           example:
             - 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        billing_entity_id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the billing entity the overdue balance is attributed to, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
     OverdueBalances:
       type: object
       required:

@@ -4,6 +4,7 @@ required:
   - amount_cents
   - currency
   - invoices_count
+  - billing_entity_id
 properties:
   month:
     type: string
@@ -21,3 +22,8 @@ properties:
     type: integer
     description: Contains invoices count.
     example: 10
+  billing_entity_id:
+    type: string
+    format: "uuid"
+    description: Unique identifier assigned to the billing entity the revenue is attributed to, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
