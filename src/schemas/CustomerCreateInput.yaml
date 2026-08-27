@@ -152,6 +152,12 @@ properties:
           - "null"
         example: 30
         description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+      external_salesforce_id:
+        type:
+          - string
+          - "null"
+        example: "0015p00001JQx1QAAT"
+        description: The customer ID within the Salesforce system
       finalize_zero_amount_invoice:
         type: string
         enum:
@@ -182,12 +188,15 @@ properties:
               type: string
               example: "netsuite"
               description: |-
-                The integration type used for accounting and tax syncs.
-                Accepted values: `netsuite, anrok, xero`.
+                The integration type used for accounting, tax and CRM syncs.
+                Accepted values: `netsuite`, `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
               enum:
                 - netsuite
                 - anrok
+                - avalara
                 - xero
+                - hubspot
+                - salesforce
             integration_code:
               type: string
               example: "netsuite-eu-1"
@@ -204,6 +213,12 @@ properties:
               type: string
               example: "2"
               description: This optional field is needed only when working with `netsuite` connection.
+            targeted_object:
+              type:
+                - string
+                - "null"
+              example: "contacts"
+              description: This optional field is needed only when working with `hubspot` connection.
 
       metadata:
         type: array
@@ -213,7 +228,6 @@ properties:
           required:
             - key
             - value
-            - display_in_invoice
           properties:
             id:
               type: string

@@ -17,6 +17,10 @@ properties:
     type: string
     example: "Name1"
     description: The name of your organization.
+  slug:
+    type: string
+    example: "NAME1-1234"
+    description: A concise and unique identifier for your organization, formed by combining the organization's `name` and `id`.
   created_at:
     type:
       - string
@@ -128,6 +132,13 @@ properties:
     $ref: "./Timezone.yaml"
     description: Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone.
     example: "America/New_York"
+  email_settings:
+    type: array
+    description: Represents the email settings of the organization. It allows you to define which documents are sent by email. The field value determines the types of documents that trigger email notifications. Possible values are `invoice.finalized`, `credit_note.created` and `payment_receipt.created`.
+    example: ["invoice.finalized", "credit_note.created"]
+    items:
+      type: string
+      enum: [invoice.finalized, credit_note.created, payment_receipt.created]
   billing_configuration:
     $ref: "./OrganizationBillingConfiguration.yaml"
   taxes:

@@ -192,7 +192,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BillingEntityObject'
+                type: object
+                required:
+                  - billing_entity
+                properties:
+                  billing_entity:
+                    $ref: '#/components/schemas/BillingEntityObject'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -208,8 +213,8 @@ paths:
         required: true
         schema:
           type: string
-          format: uuid
-        description: The ID of the billing entity
+          example: acme_corp
+        description: The unique code of the billing entity
     get:
       tags:
         - billing_entities
@@ -246,13 +251,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/BillingEntityUpdateInput'
+        required: true
       responses:
         '200':
           description: Billing entity updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BillingEntityObjectExtended'
+                type: object
+                required:
+                  - billing_entity
+                properties:
+                  billing_entity:
+                    $ref: '#/components/schemas/BillingEntityObjectExtended'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1861,6 +1872,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - name: external_id
+          in: query
+          description: Filter customers by external ID.
+          required: false
+          schema:
+            type: string
+            example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         - name: account_type[]
           in: query
           description: Filter customers by account type.
@@ -4596,6 +4614,21 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /organizations:
+    get:
+      tags:
+        - organizations
+      summary: Retrieve your organization
+      description: This endpoint retrieves your own organization's settings.
+      operationId: findOrganization
+      responses:
+        '200':
+          description: Organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
     put:
       tags:
         - organizations
@@ -7895,7 +7928,7 @@ webhooks:
                   description: Unique identifier of the organization, created by Lago.
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 accounting_provider_customer_error:
-                  $ref: '#/components/schemas/CustomerIntegratrionErrorObject'
+                  $ref: '#/components/schemas/CustomerIntegrationErrorObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -7973,7 +8006,7 @@ webhooks:
                   description: Unique identifier of the organization, created by Lago.
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 crm_provider_customer_error:
-                  $ref: '#/components/schemas/CustomerIntegratrionErrorObject'
+                  $ref: '#/components/schemas/CustomerIntegrationErrorObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -10739,10 +10772,13 @@ components:
         - YER
         - ZAR
         - ZMW
-    Country:
-      type: string
+    CountryOrNull:
+      type:
+        - string
+        - 'null'
       example: US
       enum:
+        - null
         - AD
         - AE
         - AF
@@ -11233,6 +11269,12 @@ components:
             - 'null'
           example: Suite 100
           description: The second line of the billing address
+        phone:
+          type:
+            - string
+            - 'null'
+          example: 1-171-883-3711 x245
+          description: The phone number of the billing entity
         city:
           type:
             - string
@@ -11246,9 +11288,8 @@ components:
           example: CA
           description: The state of the billing address
         country:
-          $ref: '#/components/schemas/Country'
+          $ref: '#/components/schemas/CountryOrNull'
           description: The country code of the billing address
-          nullable: true
         zipcode:
           type:
             - string
@@ -11297,6 +11338,10 @@ components:
           type: boolean
           example: false
           description: Whether EU tax management is enabled for this billing entity
+        einvoicing:
+          type: boolean
+          example: false
+          description: Whether e-invoicing is enabled for this billing entity
         logo_url:
           type:
             - string
@@ -11435,6 +11480,12 @@ components:
                 - 'null'
               example: Suite 100
               description: The second line of the billing address
+            phone:
+              type:
+                - string
+                - 'null'
+              example: 1-171-883-3711 x245
+              description: The phone number of the billing entity
             city:
               type:
                 - string
@@ -11448,9 +11499,8 @@ components:
               example: CA
               description: The state of the billing address
             country:
-              $ref: '#/components/schemas/Country'
+              $ref: '#/components/schemas/CountryOrNull'
               description: The country code of the billing address
-              nullable: true
             zipcode:
               type:
                 - string
@@ -11493,11 +11543,16 @@ components:
                 enum:
                   - invoice.finalized
                   - credit_note.created
+                  - payment_receipt.created
               description: The email notification settings for this billing entity
             eu_tax_management:
               type: boolean
               example: false
               description: Whether EU tax management is enabled for this billing entity
+            einvoicing:
+              type: boolean
+              example: false
+              description: Whether e-invoicing is enabled for this billing entity
             logo:
               type:
                 - string
@@ -11665,160 +11720,175 @@ components:
     BillingEntityUpdateInput:
       type: object
       description: Billing entity update input
+      required:
+        - billing_entity
       properties:
-        name:
-          type: string
-          example: Acme Corp
-          description: The name of the billing entity
-        default_currency:
-          $ref: '#/components/schemas/Currency'
-          description: The default currency of the billing entity
-          example: USD
-        document_numbering:
-          type: string
-          enum:
-            - per_customer
-            - per_billing_entity
-          description: |-
-            The type of document numbering for this billing entity:
-            - `per_customer`: document numbers are unique per customer
-            - `per_billing_entity`: document numbers are unique per billing entity
-        document_number_prefix:
-          type:
-            - string
-            - 'null'
-          example: ABC-123
-          description: The prefix used in document numbers for this billing entity
-        finalize_zero_amount_invoice:
-          type: boolean
-          example: true
-          description: Whether to finalize invoices with zero amount for this billing entity
-        billing_configuration:
+        billing_entity:
           type: object
           properties:
-            invoice_footer:
+            name:
               type: string
-              example: Thank you for your business
-              description: The footer text to be displayed on invoices for this billing entity
-            document_locale:
+              example: Acme Corp
+              description: The name of the billing entity
+            default_currency:
+              $ref: '#/components/schemas/Currency'
+              description: The default currency of the billing entity
+              example: USD
+            document_numbering:
               type: string
-              example: en
-              description: The language of the documents generated for this billing entity
-            invoice_grace_period:
+              enum:
+                - per_customer
+                - per_billing_entity
+              description: |-
+                The type of document numbering for this billing entity:
+                - `per_customer`: document numbers are unique per customer
+                - `per_billing_entity`: document numbers are unique per billing entity
+            document_number_prefix:
+              type:
+                - string
+                - 'null'
+              example: ABC-123
+              description: The prefix used in document numbers for this billing entity
+            finalize_zero_amount_invoice:
+              type: boolean
+              example: true
+              description: Whether to finalize invoices with zero amount for this billing entity
+            billing_configuration:
+              type: object
+              properties:
+                invoice_footer:
+                  type: string
+                  example: Thank you for your business
+                  description: The footer text to be displayed on invoices for this billing entity
+                document_locale:
+                  type: string
+                  example: en
+                  description: The language of the documents generated for this billing entity
+                invoice_grace_period:
+                  type: integer
+                  example: 0
+                  description: The grace period (in days) for invoice finalization
+                subscription_invoice_issuing_date_anchor:
+                  type: string
+                  description: Defines whether the issuing date follows the current billing period's end date or the next period starting date.
+                  enum:
+                    - current_period_end
+                    - next_period_start
+                  default: next_period_start
+                subscription_invoice_issuing_date_adjustment:
+                  type: string
+                  description: The logic applied on top of the subscription_invoice_issuing_date_anchor rule. You can opt to use the invoice finalization date, that includes any configured grace period.
+                  enum:
+                    - align_with_finalization_date
+                    - keep_anchor
+                  default: align_with_finalization_date
+            net_payment_term:
               type: integer
               example: 0
-              description: The grace period (in days) for invoice finalization
-            subscription_invoice_issuing_date_anchor:
-              type: string
-              description: Defines whether the issuing date follows the current billing period's end date or the next period starting date.
-              enum:
-                - current_period_end
-                - next_period_start
-              default: next_period_start
-            subscription_invoice_issuing_date_adjustment:
-              type: string
-              description: The logic applied on top of the subscription_invoice_issuing_date_anchor rule. You can opt to use the invoice finalization date, that includes any configured grace period.
-              enum:
-                - align_with_finalization_date
-                - keep_anchor
-              default: align_with_finalization_date
-        net_payment_term:
-          type: integer
-          example: 0
-          description: The net payment term (in days) for this billing entity
-        address_line1:
-          type:
-            - string
-            - 'null'
-          example: 5230 Penfield Ave
-          description: The first line of the billing address
-        address_line2:
-          type:
-            - string
-            - 'null'
-          example: Suite 100
-          description: The second line of the billing address
-        city:
-          type:
-            - string
-            - 'null'
-          example: Woodland Hills
-          description: The city of the billing address
-        state:
-          type:
-            - string
-            - 'null'
-          example: CA
-          description: The state of the billing address
-        country:
-          $ref: '#/components/schemas/Country'
-          description: The country code of the billing address
-          nullable: true
-        zipcode:
-          type:
-            - string
-            - 'null'
-          example: '91364'
-          description: The zipcode of the billing address
-        email:
-          type:
-            - string
-            - 'null'
-          format: email
-          example: billing@acme.com
-          description: The email address of the billing entity
-        legal_name:
-          type:
-            - string
-            - 'null'
-          example: Acme Corporation
-          description: The legal name of the billing entity
-        legal_number:
-          type:
-            - string
-            - 'null'
-          example: US123456789
-          description: The legal registration number of the billing entity
-        tax_identification_number:
-          type:
-            - string
-            - 'null'
-          example: EU123456789
-          description: The tax identification number of the billing entity
-        timezone:
-          $ref: '#/components/schemas/Timezone'
-          description: The timezone of the billing entity
-          example: UTC
-        tax_codes:
-          $ref: '#/components/schemas/TaxCodes'
-          description: The tax codes that should be associated with this billing entity
-        email_settings:
-          type: array
-          items:
-            type: string
-            enum:
-              - invoice.finalized
-              - credit_note.created
-          description: The email notification settings for this billing entity
-        eu_tax_management:
-          type: boolean
-          example: false
-          description: Whether EU tax management is enabled for this billing entity
-        logo:
-          type:
-            - string
-            - 'null'
-          format: uri
-          example: data:image/png;base64,...
-          description: The base64 encoded logo image for the billing entity. Sending "null" will remove the logo, if any exist.
-        invoice_custom_section_codes:
-          type: array
-          items:
-            type: string
-          example:
-            - custom_section_1
-            - custom_section_2
-          description: The codes of the invoice custom section that should be associated with this billing entity
+              description: The net payment term (in days) for this billing entity
+            address_line1:
+              type:
+                - string
+                - 'null'
+              example: 5230 Penfield Ave
+              description: The first line of the billing address
+            address_line2:
+              type:
+                - string
+                - 'null'
+              example: Suite 100
+              description: The second line of the billing address
+            phone:
+              type:
+                - string
+                - 'null'
+              example: 1-171-883-3711 x245
+              description: The phone number of the billing entity
+            city:
+              type:
+                - string
+                - 'null'
+              example: Woodland Hills
+              description: The city of the billing address
+            state:
+              type:
+                - string
+                - 'null'
+              example: CA
+              description: The state of the billing address
+            country:
+              $ref: '#/components/schemas/CountryOrNull'
+              description: The country code of the billing address
+            zipcode:
+              type:
+                - string
+                - 'null'
+              example: '91364'
+              description: The zipcode of the billing address
+            email:
+              type:
+                - string
+                - 'null'
+              format: email
+              example: billing@acme.com
+              description: The email address of the billing entity
+            legal_name:
+              type:
+                - string
+                - 'null'
+              example: Acme Corporation
+              description: The legal name of the billing entity
+            legal_number:
+              type:
+                - string
+                - 'null'
+              example: US123456789
+              description: The legal registration number of the billing entity
+            tax_identification_number:
+              type:
+                - string
+                - 'null'
+              example: EU123456789
+              description: The tax identification number of the billing entity
+            timezone:
+              $ref: '#/components/schemas/Timezone'
+              description: The timezone of the billing entity
+              example: UTC
+            tax_codes:
+              $ref: '#/components/schemas/TaxCodes'
+              description: The tax codes that should be associated with this billing entity
+            email_settings:
+              type: array
+              items:
+                type: string
+                enum:
+                  - invoice.finalized
+                  - credit_note.created
+                  - payment_receipt.created
+              description: The email notification settings for this billing entity
+            eu_tax_management:
+              type: boolean
+              example: false
+              description: Whether EU tax management is enabled for this billing entity
+            einvoicing:
+              type: boolean
+              example: false
+              description: Whether e-invoicing is enabled for this billing entity
+            logo:
+              type:
+                - string
+                - 'null'
+              format: uri
+              example: data:image/png;base64,...
+              description: The base64 encoded logo image for the billing entity. Sending "null" will remove the logo, if any exist.
+            invoice_custom_section_codes:
+              type: array
+              items:
+                type: string
+              example:
+                - custom_section_1
+                - custom_section_2
+              description: The codes of the invoice custom section that should be associated with this billing entity
     ActivityLogObject:
       type: object
       required:
@@ -12350,6 +12420,259 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OverdueBalanceObject'
+    Country:
+      type: string
+      example: US
+      enum:
+        - AD
+        - AE
+        - AF
+        - AG
+        - AI
+        - AL
+        - AM
+        - AO
+        - AQ
+        - AR
+        - AS
+        - AT
+        - AU
+        - AW
+        - AX
+        - AZ
+        - BA
+        - BB
+        - BD
+        - BE
+        - BF
+        - BG
+        - BH
+        - BI
+        - BJ
+        - BL
+        - BM
+        - BN
+        - BO
+        - BQ
+        - BR
+        - BS
+        - BT
+        - BV
+        - BW
+        - BY
+        - BZ
+        - CA
+        - CC
+        - CD
+        - CF
+        - CG
+        - CH
+        - CI
+        - CK
+        - CL
+        - CM
+        - CN
+        - CO
+        - CR
+        - CU
+        - CV
+        - CW
+        - CX
+        - CY
+        - CZ
+        - DE
+        - DJ
+        - DK
+        - DM
+        - DO
+        - DZ
+        - EC
+        - EE
+        - EG
+        - EH
+        - ER
+        - ES
+        - ET
+        - FI
+        - FJ
+        - FK
+        - FM
+        - FO
+        - FR
+        - GA
+        - GB
+        - GD
+        - GE
+        - GF
+        - GG
+        - GH
+        - GI
+        - GL
+        - GM
+        - GN
+        - GP
+        - GQ
+        - GR
+        - GS
+        - GT
+        - GU
+        - GW
+        - GY
+        - HK
+        - HM
+        - HN
+        - HR
+        - HT
+        - HU
+        - ID
+        - IE
+        - IL
+        - IM
+        - IN
+        - IO
+        - IQ
+        - IR
+        - IS
+        - IT
+        - JE
+        - JM
+        - JO
+        - JP
+        - KE
+        - KG
+        - KH
+        - KI
+        - KM
+        - KN
+        - KP
+        - KR
+        - KW
+        - KY
+        - KZ
+        - LA
+        - LB
+        - LC
+        - LI
+        - LK
+        - LR
+        - LS
+        - LT
+        - LU
+        - LV
+        - LY
+        - MA
+        - MC
+        - MD
+        - ME
+        - MF
+        - MG
+        - MH
+        - MK
+        - ML
+        - MM
+        - MN
+        - MO
+        - MP
+        - MQ
+        - MR
+        - MS
+        - MT
+        - MU
+        - MV
+        - MW
+        - MX
+        - MY
+        - MZ
+        - NA
+        - NC
+        - NE
+        - NF
+        - NG
+        - NI
+        - NL
+        - 'NO'
+        - NP
+        - NR
+        - NU
+        - NZ
+        - OM
+        - PA
+        - PE
+        - PF
+        - PG
+        - PH
+        - PK
+        - PL
+        - PM
+        - PN
+        - PR
+        - PS
+        - PT
+        - PW
+        - PY
+        - QA
+        - RE
+        - RO
+        - RS
+        - RU
+        - RW
+        - SA
+        - SB
+        - SC
+        - SD
+        - SE
+        - SG
+        - SH
+        - SI
+        - SJ
+        - SK
+        - SL
+        - SM
+        - SN
+        - SO
+        - SR
+        - SS
+        - ST
+        - SV
+        - SX
+        - SY
+        - SZ
+        - TC
+        - TD
+        - TF
+        - TG
+        - TH
+        - TJ
+        - TK
+        - TL
+        - TM
+        - TN
+        - TO
+        - TR
+        - TT
+        - TV
+        - TW
+        - TZ
+        - UA
+        - UG
+        - UM
+        - US
+        - UY
+        - UZ
+        - VA
+        - VC
+        - VE
+        - VG
+        - VI
+        - VN
+        - VU
+        - WF
+        - WS
+        - YE
+        - YT
+        - ZA
+        - ZM
+        - ZW
     UsageObject:
       type: object
       required:
@@ -14304,262 +14627,6 @@ components:
         base_amount_cents:
           type: integer
           example: 100
-    CountryOrNull:
-      type:
-        - string
-        - 'null'
-      example: US
-      enum:
-        - null
-        - AD
-        - AE
-        - AF
-        - AG
-        - AI
-        - AL
-        - AM
-        - AO
-        - AQ
-        - AR
-        - AS
-        - AT
-        - AU
-        - AW
-        - AX
-        - AZ
-        - BA
-        - BB
-        - BD
-        - BE
-        - BF
-        - BG
-        - BH
-        - BI
-        - BJ
-        - BL
-        - BM
-        - BN
-        - BO
-        - BQ
-        - BR
-        - BS
-        - BT
-        - BV
-        - BW
-        - BY
-        - BZ
-        - CA
-        - CC
-        - CD
-        - CF
-        - CG
-        - CH
-        - CI
-        - CK
-        - CL
-        - CM
-        - CN
-        - CO
-        - CR
-        - CU
-        - CV
-        - CW
-        - CX
-        - CY
-        - CZ
-        - DE
-        - DJ
-        - DK
-        - DM
-        - DO
-        - DZ
-        - EC
-        - EE
-        - EG
-        - EH
-        - ER
-        - ES
-        - ET
-        - FI
-        - FJ
-        - FK
-        - FM
-        - FO
-        - FR
-        - GA
-        - GB
-        - GD
-        - GE
-        - GF
-        - GG
-        - GH
-        - GI
-        - GL
-        - GM
-        - GN
-        - GP
-        - GQ
-        - GR
-        - GS
-        - GT
-        - GU
-        - GW
-        - GY
-        - HK
-        - HM
-        - HN
-        - HR
-        - HT
-        - HU
-        - ID
-        - IE
-        - IL
-        - IM
-        - IN
-        - IO
-        - IQ
-        - IR
-        - IS
-        - IT
-        - JE
-        - JM
-        - JO
-        - JP
-        - KE
-        - KG
-        - KH
-        - KI
-        - KM
-        - KN
-        - KP
-        - KR
-        - KW
-        - KY
-        - KZ
-        - LA
-        - LB
-        - LC
-        - LI
-        - LK
-        - LR
-        - LS
-        - LT
-        - LU
-        - LV
-        - LY
-        - MA
-        - MC
-        - MD
-        - ME
-        - MF
-        - MG
-        - MH
-        - MK
-        - ML
-        - MM
-        - MN
-        - MO
-        - MP
-        - MQ
-        - MR
-        - MS
-        - MT
-        - MU
-        - MV
-        - MW
-        - MX
-        - MY
-        - MZ
-        - NA
-        - NC
-        - NE
-        - NF
-        - NG
-        - NI
-        - NL
-        - 'NO'
-        - NP
-        - NR
-        - NU
-        - NZ
-        - OM
-        - PA
-        - PE
-        - PF
-        - PG
-        - PH
-        - PK
-        - PL
-        - PM
-        - PN
-        - PR
-        - PS
-        - PT
-        - PW
-        - PY
-        - QA
-        - RE
-        - RO
-        - RS
-        - RU
-        - RW
-        - SA
-        - SB
-        - SC
-        - SD
-        - SE
-        - SG
-        - SH
-        - SI
-        - SJ
-        - SK
-        - SL
-        - SM
-        - SN
-        - SO
-        - SR
-        - SS
-        - ST
-        - SV
-        - SX
-        - SY
-        - SZ
-        - TC
-        - TD
-        - TF
-        - TG
-        - TH
-        - TJ
-        - TK
-        - TL
-        - TM
-        - TN
-        - TO
-        - TR
-        - TT
-        - TV
-        - TW
-        - TZ
-        - UA
-        - UG
-        - UM
-        - US
-        - UY
-        - UZ
-        - VA
-        - VC
-        - VE
-        - VG
-        - VI
-        - VN
-        - VU
-        - WF
-        - WS
-        - YE
-        - YT
-        - ZA
-        - ZM
-        - ZW
     TimezoneOrNull:
       type:
         - string
@@ -14737,11 +14804,14 @@ components:
           example: stripe
           description: |-
             The payment provider utilized to initiate payments for invoices issued by Lago.
-            Accepted values: `stripe`, `adyen`, `gocardless` or null. This field is required if you intend to assign a `provider_customer_id`.
+            Accepted values: `stripe`, `adyen`, `cashfree`, `flutterwave`, `gocardless`, `moneyhash` or null. This field is required if you intend to assign a `provider_customer_id`.
           enum:
             - stripe
             - adyen
+            - cashfree
+            - flutterwave
             - gocardless
+            - moneyhash
         payment_provider_code:
           type: string
           example: stripe-eu-1
@@ -15012,6 +15082,12 @@ components:
             - 'null'
           example: 30
           description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+        external_salesforce_id:
+          type:
+            - string
+            - 'null'
+          example: 0015p00001JQx1QAAT
+          description: The customer ID within the Salesforce system
         created_at:
           type: string
           format: date-time
@@ -15064,8 +15140,8 @@ components:
           type: string
           example: netsuite
           description: |-
-            The integration type used for accounting and tax syncs.
-            Accepted values: `netsuite, anrok`.
+            The integration type used for accounting, tax and CRM syncs.
+            Accepted values: `netsuite`, `anrok`, `xero`, `hubspot`, `salesforce`.
           enum:
             - netsuite
             - anrok
@@ -15897,6 +15973,12 @@ components:
                 - 'null'
               example: 30
               description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+            external_salesforce_id:
+              type:
+                - string
+                - 'null'
+              example: 0015p00001JQx1QAAT
+              description: The customer ID within the Salesforce system
             finalize_zero_amount_invoice:
               type: string
               enum:
@@ -15927,12 +16009,15 @@ components:
                     type: string
                     example: netsuite
                     description: |-
-                      The integration type used for accounting and tax syncs.
-                      Accepted values: `netsuite, anrok, xero`.
+                      The integration type used for accounting, tax and CRM syncs.
+                      Accepted values: `netsuite`, `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
                     enum:
                       - netsuite
                       - anrok
+                      - avalara
                       - xero
+                      - hubspot
+                      - salesforce
                   integration_code:
                     type: string
                     example: netsuite-eu-1
@@ -15949,6 +16034,12 @@ components:
                     type: string
                     example: '2'
                     description: This optional field is needed only when working with `netsuite` connection.
+                  targeted_object:
+                    type:
+                      - string
+                      - 'null'
+                    example: contacts
+                    description: This optional field is needed only when working with `hubspot` connection.
             metadata:
               type: array
               description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
@@ -15957,7 +16048,6 @@ components:
                 required:
                   - key
                   - value
-                  - display_in_invoice
                 properties:
                   id:
                     type: string
@@ -20787,125 +20877,6 @@ components:
           type: string
           example: en
           description: The locale of the billing documents, expressed in the ISO 639-1 format. This field indicates the language or regional variant used for the documents content issued or the embeddable customer portal.
-    OrganizationUpdateInput:
-      type: object
-      required:
-        - organization
-      properties:
-        organization:
-          type: object
-          properties:
-            webhook_url:
-              type:
-                - string
-                - 'null'
-              example: https://webhook.brex.com
-              description: The URL of your newest updated webhook endpoint. This URL allows your organization to receive important messages, notifications, or data from the Lago system. By configuring your webhook endpoint to this URL, you can ensure that your organization stays informed and receives relevant information in a timely manner.
-            country:
-              $ref: '#/components/schemas/CountryOrNull'
-              description: The country of your organization.
-              example: US
-            default_currency:
-              $ref: '#/components/schemas/Currency'
-              description: The default currency of an organization.
-              example: USD
-            address_line1:
-              type:
-                - string
-                - 'null'
-              example: 100 Brex Street
-              description: The first line of your organization's billing address.
-            address_line2:
-              type:
-                - string
-                - 'null'
-              example: null
-              description: The second line of your organization's billing address.
-            state:
-              type:
-                - string
-                - 'null'
-              example: NYC
-              description: The state of your organization's billing address.
-            zipcode:
-              type:
-                - string
-                - 'null'
-              example: '10000'
-              description: The zipcode of your organization's billing address.
-            email:
-              type:
-                - string
-                - 'null'
-              format: email
-              example: brex@brex.com
-              description: The email address of your organization used to bill your customers.
-            city:
-              type:
-                - string
-                - 'null'
-              example: New York
-              description: The city of your organization's billing address.
-            legal_name:
-              type:
-                - string
-                - 'null'
-              example: null
-              description: The legal name of your organization.
-            legal_number:
-              type:
-                - string
-                - 'null'
-              example: null
-              description: The legal number of your organization.
-            document_numbering:
-              type: string
-              enum:
-                - per_customer
-                - per_organization
-              example: per_customer
-              description: |-
-                This parameter configures the method of incrementing invoice numbers for your customers.
-
-                - `per_customer`: Invoice numbers are incremented individually for each customer. This means every customer will have their own unique sequence of invoice numbers, separate from other customers. It ensures that each customer's invoice numbers follow a distinct and isolated numbering pattern.
-                - `per_organization`: Invoice number incrementation is made across your entire organization. Rather than individual sequences for each customer, all invoices within the organization follow a single, unified numbering system. This creates a continuous and organization-wide sequence for all invoice numbers. Invoices are incremented per month (dynamic value used is YYYYMM), and invoice numbers are reset at the end of each month.
-
-                The default value for `document_numbering` is set to `per_customer`, meaning that, unless changed, invoice numbers will increment uniquely for each customer.
-            document_number_prefix:
-              type: string
-              example: ORG-1234
-              description: Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four digits of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.
-            net_payment_term:
-              type: integer
-              example: 30
-              description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
-            tax_identification_number:
-              type:
-                - string
-                - 'null'
-              example: US123456789
-              description: The tax identification number of your organization.
-            timezone:
-              $ref: '#/components/schemas/Timezone'
-              description: Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone.
-              example: America/New_York
-            email_settings:
-              type: array
-              description: Represents the email settings of the organization. It allows you to define which documents are sent by email. The field value determines the types of documents that trigger email notifications. Possible values for are `invoice.finalized` and `credit_note.created`. By configuring this field, you can specify whether invoices, credit notes, or both should be sent to recipients via email.
-              example:
-                - invoice.finalized
-                - credit_note.created
-              items:
-                type: string
-                enum:
-                  - invoice.finalized
-                  - credit_note.created
-            billing_configuration:
-              $ref: '#/components/schemas/OrganizationBillingConfiguration'
-            finalize_zero_amount_invoice:
-              type: boolean
-              example: false
-              description: Determines whether invoices with a zero total amount should be finalized. If set to true, zero amount invoices will be finalized. If set to false, zero amount invoices will not be finalized.
     OrganizationObject:
       type: object
       required:
@@ -20926,6 +20897,10 @@ components:
           type: string
           example: Name1
           description: The name of your organization.
+        slug:
+          type: string
+          example: NAME1-1234
+          description: A concise and unique identifier for your organization, formed by combining the organization's `name` and `id`.
         created_at:
           type:
             - string
@@ -21037,6 +21012,18 @@ components:
           $ref: '#/components/schemas/Timezone'
           description: Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone.
           example: America/New_York
+        email_settings:
+          type: array
+          description: Represents the email settings of the organization. It allows you to define which documents are sent by email. The field value determines the types of documents that trigger email notifications. Possible values are `invoice.finalized`, `credit_note.created` and `payment_receipt.created`.
+          example:
+            - invoice.finalized
+            - credit_note.created
+          items:
+            type: string
+            enum:
+              - invoice.finalized
+              - credit_note.created
+              - payment_receipt.created
         billing_configuration:
           $ref: '#/components/schemas/OrganizationBillingConfiguration'
         taxes:
@@ -21061,6 +21048,130 @@ components:
       properties:
         organization:
           $ref: '#/components/schemas/OrganizationObject'
+    OrganizationUpdateInput:
+      type: object
+      required:
+        - organization
+      properties:
+        organization:
+          type: object
+          properties:
+            webhook_url:
+              type:
+                - string
+                - 'null'
+              example: https://webhook.brex.com
+              description: The URL of your newest updated webhook endpoint. This URL allows your organization to receive important messages, notifications, or data from the Lago system. By configuring your webhook endpoint to this URL, you can ensure that your organization stays informed and receives relevant information in a timely manner.
+            country:
+              $ref: '#/components/schemas/CountryOrNull'
+              description: The country of your organization.
+              example: US
+            default_currency:
+              $ref: '#/components/schemas/Currency'
+              description: The default currency of an organization.
+              example: USD
+            address_line1:
+              type:
+                - string
+                - 'null'
+              example: 100 Brex Street
+              description: The first line of your organization's billing address.
+            address_line2:
+              type:
+                - string
+                - 'null'
+              example: null
+              description: The second line of your organization's billing address.
+            state:
+              type:
+                - string
+                - 'null'
+              example: NYC
+              description: The state of your organization's billing address.
+            zipcode:
+              type:
+                - string
+                - 'null'
+              example: '10000'
+              description: The zipcode of your organization's billing address.
+            email:
+              type:
+                - string
+                - 'null'
+              format: email
+              example: brex@brex.com
+              description: The email address of your organization used to bill your customers.
+            city:
+              type:
+                - string
+                - 'null'
+              example: New York
+              description: The city of your organization's billing address.
+            legal_name:
+              type:
+                - string
+                - 'null'
+              example: null
+              description: The legal name of your organization.
+            legal_number:
+              type:
+                - string
+                - 'null'
+              example: null
+              description: The legal number of your organization.
+            document_numbering:
+              type: string
+              enum:
+                - per_customer
+                - per_organization
+              example: per_customer
+              description: |-
+                This parameter configures the method of incrementing invoice numbers for your customers.
+
+                - `per_customer`: Invoice numbers are incremented individually for each customer. This means every customer will have their own unique sequence of invoice numbers, separate from other customers. It ensures that each customer's invoice numbers follow a distinct and isolated numbering pattern.
+                - `per_organization`: Invoice number incrementation is made across your entire organization. Rather than individual sequences for each customer, all invoices within the organization follow a single, unified numbering system. This creates a continuous and organization-wide sequence for all invoice numbers. Invoices are incremented per month (dynamic value used is YYYYMM), and invoice numbers are reset at the end of each month.
+
+                The default value for `document_numbering` is set to `per_customer`, meaning that, unless changed, invoice numbers will increment uniquely for each customer.
+            document_number_prefix:
+              type: string
+              example: ORG-1234
+              description: Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four digits of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.
+            net_payment_term:
+              type: integer
+              example: 30
+              description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+            tax_identification_number:
+              type:
+                - string
+                - 'null'
+              example: US123456789
+              description: The tax identification number of your organization.
+            timezone:
+              $ref: '#/components/schemas/Timezone'
+              description: Your organization's timezone, used for billing purposes in your own local time. Can be overwritten by the customer's timezone.
+              example: America/New_York
+            email_settings:
+              type: array
+              description: Represents the email settings of the organization. It allows you to define which documents are sent by email. The field value determines the types of documents that trigger email notifications. Possible values are `invoice.finalized`, `credit_note.created` and `payment_receipt.created`.
+              example:
+                - invoice.finalized
+                - credit_note.created
+              items:
+                type: string
+                enum:
+                  - invoice.finalized
+                  - credit_note.created
+                  - payment_receipt.created
+            billing_configuration:
+              $ref: '#/components/schemas/OrganizationBillingConfiguration'
+            finalize_zero_amount_invoice:
+              type: boolean
+              example: false
+              description: Determines whether invoices with a zero total amount should be finalized. If set to true, zero amount invoices will be finalized. If set to false, zero amount invoices will not be finalized.
+            slug:
+              type: string
+              example: NAME1-1234
+              description: A concise and unique identifier for your organization, used as a prefix in customer slugs.
     PaymentReceiptObject:
       type: object
       required:
@@ -25123,7 +25234,7 @@ components:
           description: Array of thresholds crossed. All the recurring threshold values are present.
           items:
             $ref: '#/components/schemas/AlertThresholdObject'
-    CustomerIntegratrionErrorObject:
+    CustomerIntegrationErrorObject:
       type: object
       required:
         - lago_customer_id
@@ -25687,8 +25798,6 @@ components:
             - type: string
             - type: object
               additionalProperties: true
-    CustomerPaymentProvidernErrorObject:
-      $ref: '#/components/schemas/CustomerPaymentProviderErrorObject'
   responses:
     Unauthorized:
       description: Unauthorized error

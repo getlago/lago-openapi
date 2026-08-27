@@ -161,6 +161,12 @@ properties:
       - "null"
     example: 30
     description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+  external_salesforce_id:
+    type:
+      - string
+      - "null"
+    example: "0015p00001JQx1QAAT"
+    description: The customer ID within the Salesforce system
   created_at:
     type: string
     format: "date-time"
