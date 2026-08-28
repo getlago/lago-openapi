@@ -2621,7 +2621,7 @@ paths:
       tags:
         - wallets
       summary: Update a wallet
-      description: This endpoint is used to update an existing wallet with prepaid credits.
+      description: This endpoint is used to update an existing wallet with prepaid credits. A terminated wallet cannot be updated and returns a `422` error.
       operationId: updateCustomerWallet
       requestBody:
         description: Wallet update payload
@@ -3919,7 +3919,7 @@ paths:
       tags:
         - invoices
       summary: Update an invoice
-      description: This endpoint is used for updating an existing invoice.
+      description: This endpoint is used for updating an existing invoice. A voided invoice cannot be updated and returns a `405` error.
       operationId: updateInvoice
       requestBody:
         description: Update an existing invoice
@@ -3941,6 +3941,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -7072,7 +7074,7 @@ paths:
       tags:
         - wallets
       summary: Update a wallet
-      description: This endpoint is used to update an existing wallet with prepaid credits.
+      description: This endpoint is used to update an existing wallet with prepaid credits. A terminated wallet cannot be updated and returns a `422` error.
       operationId: updateWallet
       requestBody:
         description: Wallet update payload
