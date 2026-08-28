@@ -10620,11 +10620,14 @@ components:
     webhook_signature:
       name: X-Lago-Signature
       in: header
-      description: Signature of the webhook payload
+      description: |-
+        Signature of the webhook payload. The format depends on `X-Lago-Signature-Algorithm`:
+        `hmac` is the Base64 encoding of an HMAC-SHA256 digest of the payload,
+        `jwt` is an RS256 JSON Web Token (a string starting with `eyJ`).
       required: true
       schema:
         type: string
-        example: "Ap¶5É¿\x9D\x9FÎ£6ÐfV£Ä\x15\x15ºõÔõÔ[D\x8BæAâÿüÚ"
+        example: AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=
     webhook_signature_algorithm:
       name: X-Lago-Signature-Algorithm
       in: header

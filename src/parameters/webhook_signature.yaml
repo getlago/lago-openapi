@@ -1,7 +1,10 @@
 name: "X-Lago-Signature"
 in: header
-description: Signature of the webhook payload
+description: |-
+  Signature of the webhook payload. The format depends on `X-Lago-Signature-Algorithm`:
+  `hmac` is the Base64 encoding of an HMAC-SHA256 digest of the payload,
+  `jwt` is an RS256 JSON Web Token (a string starting with `eyJ`).
 required: true
 schema:
   type: string
-  example: "Ap\xB65\xC9\xBF\x9D\x9F\xCE\xA36\xD0fV\xA3\xC4\x15\x15\xBA\xF5\xD4\xF5\xD4[D\x8B\xE6A\xE2\xFF\xFC\xDA"
+  example: "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8="
