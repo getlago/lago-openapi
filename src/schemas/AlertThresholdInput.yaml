@@ -8,5 +8,8 @@ allOf:
         oneOf:
           - type: integer
           - type: string
-        description: A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
+        description: |-
+          A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
+
+          The unit depends on the alert type: `billable_metric_current_usage_units` and `billable_metric_lifetime_usage_units` are expressed in units, `wallet_credits_balance` and `wallet_credits_ongoing_balance` in credits, and all other types in cents.
         example: 99
