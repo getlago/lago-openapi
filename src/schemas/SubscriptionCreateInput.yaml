@@ -70,6 +70,7 @@ properties:
         description: The start date for the subscription, allowing for the creation of subscriptions that can begin in the past or future. Please note that it cannot be used to update the start date of a pending subscription or schedule an upgrade/downgrade. The start_date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
       plan_overrides:
         $ref: "../schemas/PlanOverridesObject.yaml"
+        description: Overrides applied to the plan for this subscription. A units-only `fixed_charges` override is recorded as a per-subscription unit override without creating a plan override; any other override creates a plan override for the subscription. See `fixed_charges` for the exact rule.
       invoice_custom_section:
         $ref: "./InvoiceCustomSectionInput.yaml"
       payment_method:
@@ -84,3 +85,31 @@ properties:
 
           - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
           - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+      purchase_order_number:
+        type:
+          - string
+          - "null"
+        example: "PO-123"
+        description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+      progressive_billing_disabled:
+        type: boolean
+        default: false
+        example: true
+        description: |
+          Disables progressive billing for this subscription, regardless of any usage thresholds defined on the plan (including thresholds inherited from a parent plan when the subscription runs on a plan override).
+
+          Set to `true` to switch progressive billing off for this subscription specifically, without changing the plan's thresholds.
+      usage_thresholds:
+        type: array
+        description: |
+          Usage thresholds managed directly on the subscription. This is the recommended way to set progressive billing thresholds per subscription; when present, they take precedence over the thresholds defined on the plan.
+
+          This field cannot be combined with `plan_overrides.usage_thresholds` in the same request.
+        items:
+          $ref: "./UsageThresholdInput.yaml"
+      activation_rules:
+        type: array
+        items:
+          $ref: "./SubscriptionActivationRuleInput.yaml"
+        description: |
+          Optional list of activation rules that gate the subscription activation. When a `payment` rule is provided and the plan is paid in advance (and the subscription is not in a trial), the subscription is created in the `incomplete` state and is only activated once the gating payment succeeds. If the payment fails or the rule's `timeout_hours` elapses, the subscription is canceled.

@@ -1,0 +1,129 @@
+get:
+  tags:
+    - order_forms
+  summary: List all order forms
+  description: |-
+    This endpoint is used to list all existing order forms.
+    This is a premium feature.
+  operationId: findAllOrderForms
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: status[]
+      in: query
+      description: Filter order forms by status. Possible values are `generated`, `signed`, `expired` and `voided`.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - generated
+            - signed
+            - expired
+            - voided
+    - name: customer_id[]
+      in: query
+      description: Filter order forms by the Lago identifiers of their customers.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: "uuid"
+        example:
+          - 1a901a90-1a90-1a90-1a90-1a901a901a90
+    - name: number[]
+      in: query
+      description: Filter order forms by their number, as assigned by Lago.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - OF-2026-0001
+          - OF-2026-0002
+    - name: quote_number[]
+      in: query
+      description: Filter order forms by the number of the quote they come from.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - QT-2026-0001
+    - name: owner_id[]
+      in: query
+      description: Filter order forms by the Lago identifiers of the users owning the quote they come from.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: "uuid"
+        example:
+          - 1a901a90-1a90-1a90-1a90-1a901a901a90
+    - name: search_term
+      in: query
+      description: Search order forms by number.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "OF-2026"
+    - name: created_at_from
+      in: query
+      description: Filter order forms created from a specific date and time, in UTC (ISO 8601).
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2026-01-01T00:00:00Z"
+    - name: created_at_to
+      in: query
+      description: Filter order forms created up to a specific date and time, in UTC (ISO 8601).
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2026-12-31T23:59:59Z"
+    - name: expires_at_from
+      in: query
+      description: Filter order forms expiring from a specific date and time, in UTC (ISO 8601). Order forms that never expire are excluded.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2026-01-01T00:00:00Z"
+    - name: expires_at_to
+      in: query
+      description: Filter order forms expiring up to a specific date and time, in UTC (ISO 8601). Order forms that never expire are excluded.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date-time"
+        example: "2026-12-31T23:59:59Z"
+  responses:
+    "200":
+      description: Order forms
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/OrderFormsPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

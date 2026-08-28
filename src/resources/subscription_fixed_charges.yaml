@@ -6,7 +6,7 @@ get:
   summary: List all fixed charges for a subscription
   description: |-
     This endpoint retrieves all effective fixed charges for a specific subscription.
-    If the subscription has plan overrides with fixed charge overrides, the overridden fixed charges are returned.
+    The `units` of each fixed charge reflect any per-subscription unit override applied to the subscription; when no override exists, the plan-level units are returned.
   operationId: findAllSubscriptionFixedCharges
   parameters:
     - $ref: "../parameters/page.yaml"

@@ -1,0 +1,11 @@
+type: string
+description: |
+  The status of the order. It can be any of the following values:
+    - `created`: the order has been created from a signed order form and is waiting to be executed.
+    - `executed`: the order has been carried out. What it produced is listed in `execution_record`.
+    - `failed`: the execution was attempted and rolled back. The reasons are listed in `execution_record.errors`. Lago does not retry on its own, so a new attempt has to be triggered through the execute endpoint.
+enum:
+  - created
+  - executed
+  - failed
+example: "created"

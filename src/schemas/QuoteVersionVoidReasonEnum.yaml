@@ -1,0 +1,16 @@
+type:
+  - string
+  - "null"
+description: |
+  The reason why the quote version was voided. It is `null` unless the `status` is `voided`. It can be any of the following values:
+    - `manual`: voided explicitly, through the API or the Lago user interface.
+    - `superseded`: voided because the version was cloned into a new draft.
+    - `cascade_of_expired`: voided because the order form generated from the version expired.
+    - `cascade_of_voided`: voided because the order form generated from the version was voided.
+enum:
+  - null
+  - manual
+  - superseded
+  - cascade_of_expired
+  - cascade_of_voided
+example: "manual"

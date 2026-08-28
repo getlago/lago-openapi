@@ -84,7 +84,7 @@ properties:
   is_default:
     type: boolean
     example: false
-    description: Whether this billing entity is the default billing entity for the organization. Default billing entity will be used as fallback in services if no billing entity is specified when billing_entity is not provided. Default billing entity is the billing entity that will be used to generate invoices if no billing entity is specified when invoice is created. is the oldest active billing entity and this flag cannot be changed
+    description: Whether this billing entity is the organization's default billing entity. The default billing entity is the oldest active one, and is used as a fallback whenever no billing entity is provided, for example when an invoice is created. This flag cannot be changed.
   net_payment_term:
     type: integer
     example: 0
@@ -96,11 +96,17 @@ properties:
     example: "5230 Penfield Ave"
     description: The first line of the billing address
   address_line2:
-    type: 
+    type:
       - string
       - 'null'
     example: "Suite 100"
     description: The second line of the billing address
+  phone:
+    type:
+      - string
+      - 'null'
+    example: "1-171-883-3711 x245"
+    description: The phone number of the billing entity
   city:
     type: 
       - string
@@ -114,9 +120,8 @@ properties:
     example: "CA"
     description: The state of the billing address
   country:
-    $ref: './Country.yaml'
+    $ref: './CountryOrNull.yaml'
     description: The country code of the billing address
-    nullable: true
   zipcode:
     type: 
       - string
@@ -165,6 +170,10 @@ properties:
     type: boolean
     example: false
     description: Whether EU tax management is enabled for this billing entity
+  einvoicing:
+    type: boolean
+    example: false
+    description: Whether e-invoicing is enabled for this billing entity
   logo_url:
     type: 
       - string

@@ -178,8 +178,8 @@ CustomerChargeUsageObject:
   $ref: "./CustomerChargeUsageObject.yaml"
 CustomerCreateInput:
   $ref: "./CustomerCreateInput.yaml"
-CustomerIntegratrionErrorObject:
-  $ref: "./CustomerIntegratrionErrorObject.yaml"
+CustomerIntegrationErrorObject:
+  $ref: "./CustomerIntegrationErrorObject.yaml"
 CustomerMetadata:
   $ref: "./CustomerMetadata.yaml"
 CustomerObject:
@@ -188,7 +188,7 @@ CustomerObjectExtended:
   $ref: "./CustomerObjectExtended.yaml"
 CustomerPastUsage:
   $ref: "./CustomerPastUsage.yaml"
-CustomerPaymentProvidernErrorObject:
+CustomerPaymentProviderErrorObject:
   $ref: "./CustomerPaymentProviderErrorObject.yaml"
 CustomersPaginated:
   $ref: "./CustomersPaginated.yaml"
@@ -330,6 +330,10 @@ PlansPaginated:
   $ref: "./PlansPaginated.yaml"
 Subscription:
   $ref: "./Subscription.yaml"
+SubscriptionActivationRuleObject:
+  $ref: "./SubscriptionActivationRuleObject.yaml"
+SubscriptionActivationRuleInput:
+  $ref: "./SubscriptionActivationRuleInput.yaml"
 SubscriptionCreateInput:
   $ref: "./SubscriptionCreateInput.yaml"
 SubscriptionUpdateInput:
@@ -372,6 +376,8 @@ Wallet:
   $ref: "./Wallet.yaml"
 WalletCreateInput:
   $ref: "./WalletCreateInput.yaml"
+WalletFeeTypeEnum:
+  $ref: "./WalletFeeTypeEnum.yaml"
 WalletObject:
   $ref: "./WalletObject.yaml"
 WalletsPaginated:
@@ -400,6 +406,10 @@ WebhookEndpointsPaginated:
   $ref: "./WebhookEndpointsPaginated.yaml"
 WebhookEndpointUpdateInput:
   $ref: "./WebhookEndpointUpdateInput.yaml"
+WebhookPublicKey:
+  $ref: "./WebhookPublicKey.yaml"
+WebhookPublicKeyObject:
+  $ref: "./WebhookPublicKeyObject.yaml"
 Feature:
   $ref: "./Entitlement/Feature.yaml"
 FeatureObject:

@@ -1,0 +1,14 @@
+type:
+  - string
+  - "null"
+description: |
+  The reason why the order form is no longer actionable. It is `null` unless the `status` is `voided` or `expired`. It can be any of the following values:
+    - `manual`: the order form has been voided explicitly, through the API or the Lago user interface.
+    - `expired`: the order form reached its `expires_at` without being signed.
+    - `invalid`: reserved for an order form Lago voids because it can no longer be executed. No flow writes it yet.
+enum:
+  - null
+  - manual
+  - expired
+  - invalid
+example: "manual"

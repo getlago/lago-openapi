@@ -4,7 +4,7 @@ put:
   tags:
     - invoices
   summary: Update an invoice
-  description: This endpoint is used for updating an existing invoice.
+  description: This endpoint is used for updating an existing invoice. A voided invoice cannot be updated and returns a `405` error.
   operationId: updateInvoice
   requestBody:
     description: Update an existing invoice
@@ -26,6 +26,8 @@ put:
       $ref: '../responses/Unauthorized.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
 get:
@@ -45,3 +47,23 @@ get:
       $ref: '../responses/Unauthorized.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
+delete:
+  tags:
+    - invoices
+  summary: Delete a draft invoice
+  description: |-
+    This endpoint is used for permanently deleting a `draft` invoice. Deleting a draft invoice removes it entirely: it never becomes accounts receivable, consumes no invoice number, and disappears from every list, export, and analytics surface. Only invoices in the `draft` status can be deleted; for a `finalized` invoice, void it instead.
+  operationId: deleteInvoice
+  responses:
+    '200':
+      description: Invoice deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'

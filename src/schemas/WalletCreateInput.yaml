@@ -52,6 +52,10 @@ properties:
         type: string
         description: The customer external unique identifier (provided by your own application)
         example: "hooli_1234"
+      billing_entity_code:
+        type: string
+        example: "default"
+        description: The code of the billing entity associated with the wallet. If not provided, the customer's billing entity is used.
       expiration_at:
         type:
           - string
@@ -88,6 +92,12 @@ properties:
           - "null"
         description: The name of the wallet transactions triggered when creating the wallet. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
         example: "Tokens for models 'high-fidelity-boost'"
+      purchase_order_number:
+        type:
+          - string
+          - "null"
+        example: "PO-123"
+        description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
       applies_to:
         type:
           - object
@@ -99,11 +109,7 @@ properties:
               - array
               - "null"
             items:
-              type: string
-              enum:
-                - charge
-                - subscription
-                - commitment
+              $ref: "./WalletFeeTypeEnum.yaml"
             description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
             example: ["charge"]
           billable_metric_codes:
@@ -159,6 +165,12 @@ properties:
               pattern: "^[0-9]+.?[0-9]*$"
               description: The number of free granted credits used for recurring top-up.
               example: "10.0"
+            grants_target_top_up:
+              type:
+                - boolean
+                - "null"
+              description: "Applies only to `target` rules. When `true`, the recurring top-up grants free credits to reach the target ongoing balance instead of creating a paid top-up (and bypasses the paid top-up minimum). When `false`, the gap is filled with a paid top-up. `null` for `fixed` rules. Defaults to `false` for target rules when omitted."
+              example: false
             method:
               type: string
               enum:
@@ -234,6 +246,12 @@ properties:
                 - "null"
               description: The name of the wallet transactions triggered by this rule. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
               example: "Tokens for models 'high-fidelity-boost'"
+            purchase_order_number:
+              type:
+                - string
+                - "null"
+              example: "PO-123"
+              description: The purchase order number associated with this recurring transaction rule. It will be added to invoices generated for the resulting wallet top-ups. If not set, falls back to the wallet's `purchase_order_number`.
             ignore_paid_top_up_limits:
               type: boolean
               description: When true, allows rule to topped up wallet with transactions that exceed the paid top-up limits. Defaults to false.

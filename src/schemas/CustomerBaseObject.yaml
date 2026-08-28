@@ -15,7 +15,7 @@ properties:
   sequential_id:
     type: integer
     example: 1
-    description: The unique identifier assigned to the customer within the organization's scope. This identifier is used to track and reference the customer's order of creation within the organization's system. It ensures that each customer has a distinct `sequential_id`` associated with them, allowing for easy identification and sorting based on the order of creation
+    description: The unique identifier assigned to the customer within the organization's scope. This identifier is used to track and reference the customer's order of creation within the organization's system. It ensures that each customer has a distinct `sequential_id` associated with them, allowing for easy identification and sorting based on the order of creation
   slug:
     type: string
     example: "LAG-1234-001"
@@ -161,6 +161,12 @@ properties:
       - "null"
     example: 30
     description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+  external_salesforce_id:
+    type:
+      - string
+      - "null"
+    example: "0015p00001JQx1QAAT"
+    description: The customer ID within the Salesforce system
   created_at:
     type: string
     format: "date-time"

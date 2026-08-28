@@ -1,0 +1,94 @@
+type: object
+required:
+  - id
+  - localId
+  - type
+  - payload
+properties:
+  id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the add-on in Lago, pinned when the entry was added to the quote.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  localId:
+    type: string
+    description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
+    example: "b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b"
+  type:
+    type: string
+    description: The kind of billing item.
+    enum:
+      - add_on
+    example: "add_on"
+  payload:
+    type: object
+    description: A snapshot of the add-on as it was added to the quote. `code`, `units`, `unitAmountCents` and `totalAmountCents` are required to approve the version.
+    properties:
+      code:
+        type: string
+        description: Unique code identifying the add-on.
+        example: "setup_fee"
+      units:
+        type: number
+        description: The number of units billed. It must be greater than 0.
+        example: 1
+      unitAmountCents:
+        type: integer
+        description: The amount of one unit, in cents, in the currency of the quote version.
+        example: 10000
+      totalAmountCents:
+        type: integer
+        description: The total amount billed for the entry, in cents, in the currency of the quote version.
+        example: 10000
+      fromDatetime:
+        type:
+          - string
+          - "null"
+        format: "date-time"
+        description: The beginning of the period covered by the entry, in UTC (ISO 8601).
+        example: "2026-01-01T00:00:00Z"
+      toDatetime:
+        type:
+          - string
+          - "null"
+        format: "date-time"
+        description: The end of the period covered by the entry, in UTC (ISO 8601).
+        example: "2026-12-31T23:59:59Z"
+  overrides:
+    type: object
+    description: The deviations from the add-on snapshot negotiated on the quote. Only the properties set here are overridden.
+    properties:
+      description:
+        type: string
+        description: Overrides the description of the add-on.
+        example: "Onboarding package, discounted for the first year"
+      units:
+        type: number
+        description: Overrides the number of units billed. It must be greater than 0.
+        example: 2
+      unitAmountCents:
+        type: integer
+        description: Overrides the amount of one unit, in cents.
+        example: 8000
+      totalAmountCents:
+        type: integer
+        description: Overrides the total amount billed for the entry, in cents.
+        example: 16000
+      invoiceDisplayName:
+        type: string
+        description: Overrides the name of the add-on as it appears on the invoice.
+        example: "Onboarding"
+      fromDatetime:
+        type:
+          - string
+          - "null"
+        format: "date-time"
+        description: Overrides the beginning of the period covered by the entry, in UTC (ISO 8601).
+        example: "2026-01-01T00:00:00Z"
+      toDatetime:
+        type:
+          - string
+          - "null"
+        format: "date-time"
+        description: Overrides the end of the period covered by the entry, in UTC (ISO 8601).
+        example: "2026-12-31T23:59:59Z"

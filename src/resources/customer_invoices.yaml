@@ -118,6 +118,7 @@ get:
       schema:
         type: string
         example: "someValue"
+    - $ref: "../parameters/purchase_order_number.yaml"
   responses:
     "200":
       description: Invoices

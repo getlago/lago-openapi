@@ -47,6 +47,12 @@ properties:
     type: string
     description: The invoice unique number, related to the credit note.
     example: "LAG-1234"
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    example: "PO-123"
+    description: The purchase order number of the invoice the credit note belongs to.
   issuing_date:
     type: string
     format: "date"
@@ -173,7 +179,7 @@ properties:
     example: false
     description: Indicates if the credit note belongs to self-billed invoice. Self-billing is a process where an organization creates the invoice on behalf of the partner.
   customer:
-    $ref: "../schemas/CustomerBaseObject.yaml"
+    $ref: "../schemas/CustomerObject.yaml"
   metadata:
     $ref: "./CreditNoteMetadataObject.yaml"
   error_details:

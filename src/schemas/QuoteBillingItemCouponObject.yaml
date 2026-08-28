@@ -1,0 +1,112 @@
+type: object
+required:
+  - id
+  - localId
+  - type
+  - payload
+properties:
+  id:
+    type: string
+    format: "uuid"
+    description: Unique identifier of the coupon in Lago, pinned when the entry was added to the quote.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  localId:
+    type: string
+    description: Identifier of the entry within the quote version, assigned by the Lago user interface. It allows the quote document to reference the entry.
+    example: "b5c1e2a4-4e1e-4a7f-9f0e-9c1a0c7e1f2b"
+  type:
+    type: string
+    description: The kind of billing item.
+    enum:
+      - coupon
+    example: "coupon"
+  payload:
+    type: object
+    description: A snapshot of the coupon as it was added to the quote. `code` and `type` are required to approve the version.
+    properties:
+      code:
+        type: string
+        description: Unique code identifying the coupon.
+        example: "welcome_offer"
+      type:
+        type: string
+        description: Whether the coupon deducts a fixed amount or a percentage.
+        enum:
+          - fixed_amount
+          - percentage
+        example: "fixed_amount"
+      amountCents:
+        type:
+          - integer
+          - "null"
+        description: The amount deducted by the coupon, in cents. Only for a `fixed_amount` coupon.
+        example: 10000
+      currency:
+        $ref: "./CurrencyOrNull.yaml"
+        description: The currency of `amountCents`. Only for a `fixed_amount` coupon.
+      percentageRate:
+        type:
+          - number
+          - "null"
+        description: The percentage deducted by the coupon. Only for a `percentage` coupon. It must be greater than 0.
+        example: 10.5
+      frequency:
+        type:
+          - string
+          - "null"
+        description: How often the coupon is deducted.
+        enum:
+          - null
+          - once
+          - recurring
+          - forever
+        example: "once"
+      frequencyDuration:
+        type:
+          - integer
+          - "null"
+        description: The number of billing periods the coupon is deducted over. Only for a `recurring` coupon. It must be greater than 0.
+        example: 3
+  overrides:
+    type:
+      - object
+      - "null"
+    description: The deviations from the coupon snapshot negotiated on the quote. Only the properties set here are overridden.
+    properties:
+      amountCents:
+        type:
+          - integer
+          - "null"
+        description: Overrides the amount deducted by the coupon, in cents.
+        example: 15000
+      amountCurrency:
+        $ref: "./CurrencyOrNull.yaml"
+        description: >-
+          Overrides the currency the coupon is priced in, which is how a catalog
+          coupon is quoted in the currency of the deal. The figure in
+          `amountCents` is not converted, it is restated in this currency. It is
+          set only while it differs from the catalog record, and removed once they
+          agree.
+      percentageRate:
+        type:
+          - number
+          - "null"
+        description: Overrides the percentage deducted by the coupon. It must be greater than 0.
+        example: 15
+      frequency:
+        type:
+          - string
+          - "null"
+        description: Overrides how often the coupon is deducted.
+        enum:
+          - null
+          - once
+          - recurring
+          - forever
+        example: "recurring"
+      frequencyDuration:
+        type:
+          - integer
+          - "null"
+        description: Overrides the number of billing periods the coupon is deducted over. It must be greater than 0.
+        example: 6

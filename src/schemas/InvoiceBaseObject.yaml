@@ -40,6 +40,12 @@ properties:
     type: string
     description: The unique number assigned to the invoice. This number serves as a distinct identifier for the invoice and helps in differentiating it from other invoices in the system.
     example: "LAG-1234-001-002"
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    example: "PO-123"
+    description: The purchase order number associated with the invoice. It is inherited from the subscription, wallet or wallet transaction the invoice was generated for.
   issuing_date:
     type: string
     format: "date"
@@ -81,6 +87,7 @@ properties:
       - voided
       - failed
       - pending
+      - deleted
     description: |-
       The status of the invoice. It indicates the current state of the invoice and can have following values:
       - `draft`: the invoice is in the draft state, waiting for the end of the grace period to be finalized. During this period, events can still be ingested and added to the invoice.
@@ -88,6 +95,7 @@ properties:
       - `voided`: the invoice has been issued and subsequently voided. In this state, events cannot be ingested or added to the invoice anymore.
       - `pending`: the invoice remains pending until the taxes are fetched from the external provider.
       - `failed`: during an attempt of finalization of the invoice, an error happened. This invoice will have an array of error_details, explaining, in which part of the system an error happened and how it's possible to fix it. This invoice can't be edited or updated, only retried. This action will discard current error_details and will create new ones if the finalization failed again.
+      - `deleted`: the draft invoice has been permanently deleted. This status is only returned by the delete endpoint and its webhook; a deleted invoice is no longer retrievable afterwards.
     example: finalized
   payment_status:
     type: string
@@ -175,6 +183,13 @@ properties:
     format: uri
     description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
     example: "https://getlago.com/invoice/file"
+  web_url:
+    type:
+      - string
+      - "null"
+    format: uri
+    description: Contains the URL to the invoice page in the Lago dashboard. It is `null` for invoices that are not visible in the dashboard (for example while still generating). Use it to link users directly to the invoice overview page.
+    example: "https://app.getlago.com/acme/customer/1a901a90-1a90-1a90-1a90-1a901a901a90/invoice/2b012b01-2b01-2b01-2b01-2b012b012b01/overview"
   created_at:
     type: string
     format: "date-time"

@@ -12,10 +12,20 @@ properties:
         type: string
         description: Unique identifier assigned to the customer in your application.
         example: "hooli_1234"
+      billing_entity_code:
+        type: string
+        example: "default"
+        description: The code of the billing entity to issue the invoice from. If not provided, the customer's billing entity is used.
       currency:
         $ref: "./Currency.yaml"
         description: The currency of the invoice.
         example: "EUR"
+      purchase_order_number:
+        type:
+          - string
+          - "null"
+        example: "PO-123"
+        description: The purchase order number to associate with the invoice.
       fees:
         type: array
         items:
@@ -40,9 +50,10 @@ properties:
             units:
               type:
                 - string
+                - number
                 - "null"
               pattern: "^[0-9]+.?[0-9]*$"
-              description: The quantity of units associated with the fee. By default, only 1 unit is added to the invoice.
+              description: The quantity of units associated with the fee. Accepts a number or a string formatted as a BigDecimal. By default, only 1 unit is added to the invoice.
               example: "2.5"
             description:
               type:

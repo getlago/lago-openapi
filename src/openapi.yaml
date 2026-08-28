@@ -3,7 +3,7 @@ info:
   title: Lago API documentation
   description: |-
     Lago API allows your application to push customer information and metrics (events) from your application to the billing application.
-  version: 1.48.1
+  version: 1.52.1
   license:
     name: AGPLv3
     url: https://github.com/getlago/lago-openapi/blob/main/LICENSE
@@ -142,6 +142,12 @@ tags:
     externalDocs:
       description: Find out more
       url: https://getlago.com/docs/api-reference/payment-methods/payment-method-object
+  - name: quotes
+    description: Everything about Quote collection
+  - name: order_forms
+    description: Everything about Order form collection
+  - name: orders
+    description: Everything about Order collection
 
 paths:
   /billing_entities:
@@ -288,6 +294,20 @@ paths:
     $ref: "./resources/invoice_retry_payment.yaml"
   /invoices/{lago_id}/void:
     $ref: "./resources/invoice_void.yaml"
+  /order_forms:
+    $ref: "./resources/order_forms.yaml"
+  /order_forms/{lago_id}:
+    $ref: "./resources/order_form.yaml"
+  /order_forms/{lago_id}/mark_as_signed:
+    $ref: "./resources/order_form_mark_as_signed.yaml"
+  /order_forms/{lago_id}/void:
+    $ref: "./resources/order_form_void.yaml"
+  /orders:
+    $ref: "./resources/orders.yaml"
+  /orders/{lago_id}:
+    $ref: "./resources/order.yaml"
+  /orders/{lago_id}/execute:
+    $ref: "./resources/order_execute.yaml"
   /organizations:
     $ref: "./resources/organizations.yaml"
   /payment_receipts:
@@ -328,6 +348,20 @@ paths:
     $ref: "./resources/plan_fixed_charges.yaml"
   /plans/{code}/fixed_charges/{fixed_charge_code}:
     $ref: "./resources/plan_fixed_charge.yaml"
+  /quotes:
+    $ref: "./resources/quotes.yaml"
+  /quotes/{lago_id}:
+    $ref: "./resources/quote.yaml"
+  /quotes/{lago_id}/versions:
+    $ref: "./resources/quote_versions.yaml"
+  /quote_versions/{lago_id}:
+    $ref: "./resources/quote_version.yaml"
+  /quote_versions/{lago_id}/approve:
+    $ref: "./resources/quote_version_approve.yaml"
+  /quote_versions/{lago_id}/void:
+    $ref: "./resources/quote_version_void.yaml"
+  /quote_versions/{lago_id}/clone:
+    $ref: "./resources/quote_version_clone.yaml"
   /subscriptions:
     $ref: "./resources/subscriptions.yaml"
   /subscriptions/{external_id}:
@@ -382,6 +416,8 @@ paths:
     $ref: "./resources/wallet_transactions.yaml"
   /webhooks/public_key:
     $ref: "./resources/webhook_public_key.yaml"
+  /webhooks/json_public_key:
+    $ref: "./resources/webhook_json_public_key.yaml"
   /webhook_endpoints:
     $ref: "./resources/webhook_endpoints.yaml"
   /webhook_endpoints/{lago_id}:
@@ -451,8 +487,12 @@ webhooks:
     $ref: "./webhooks/invoice_generated.yaml"
   invoice_drafted:
     $ref: "./webhooks/invoice_drafted.yaml"
+  invoice_ready_to_finalize:
+    $ref: "./webhooks/invoice_ready_to_finalize.yaml"
   invoice_voided:
     $ref: "./webhooks/invoice_voided.yaml"
+  invoice_deleted:
+    $ref: "./webhooks/invoice_deleted.yaml"
   invoice_payment_dispute_lost:
     $ref: "./webhooks/invoice_payment_dispute_lost.yaml"
   invoice_payment_status_updated:
@@ -465,6 +505,18 @@ webhooks:
     $ref: "./webhooks/invoice_resynced.yaml"
   integration_provider_error:
     $ref: "./webhooks/integration_provider_error.yaml"
+  order_created:
+    $ref: "./webhooks/order_created.yaml"
+  order_executed:
+    $ref: "./webhooks/order_executed.yaml"
+  order_form_created:
+    $ref: "./webhooks/order_form_created.yaml"
+  order_form_signed:
+    $ref: "./webhooks/order_form_signed.yaml"
+  order_form_expired:
+    $ref: "./webhooks/order_form_expired.yaml"
+  order_form_voided:
+    $ref: "./webhooks/order_form_voided.yaml"
   payment_requires_action:
     $ref: "./webhooks/payment_requires_action.yaml"
   payment_succeeded:
@@ -483,8 +535,18 @@ webhooks:
     $ref: "./webhooks/plan_updated.yaml"
   plan_deleted:
     $ref: "./webhooks/plan_deleted.yaml"
+  quote_created:
+    $ref: "./webhooks/quote_created.yaml"
+  quote_approved:
+    $ref: "./webhooks/quote_approved.yaml"
+  quote_voided:
+    $ref: "./webhooks/quote_voided.yaml"
   subscription_terminated:
     $ref: "./webhooks/subscription_terminated.yaml"
+  subscription_incomplete:
+    $ref: "./webhooks/subscription_incomplete.yaml"
+  subscription_canceled:
+    $ref: "./webhooks/subscription_canceled.yaml"
   subscription_started:
     $ref: "./webhooks/subscription_started.yaml"
   subscription_updated:

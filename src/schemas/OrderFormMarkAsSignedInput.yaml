@@ -1,0 +1,26 @@
+type: object
+description: Parameters available when marking an order form as signed. Every parameter is optional, so an empty body records the signature without attaching a document, and creates an order that is not scheduled for execution.
+required: []
+properties:
+  order_form:
+    type: object
+    required: []
+    properties:
+      signed_document:
+        type: string
+        description: The document signed by the customer, as a base64 data URI (`data:<content_type>;base64,<data>`). Accepted content types are `application/pdf`, `image/jpeg` and `image/png`, for a maximum of 10 MB. Once attached, it is exposed as `signed_document_url` on the order form.
+        example: "data:application/pdf;base64,JVBERi0xLjQKJcfs..."
+      execution_mode:
+        $ref: "./OrderExecutionModeEnum.yaml"
+        description: How the order created from the order form is carried out. It becomes mandatory as soon as `execute_at` is provided.
+      execute_at:
+        type: string
+        format: "date-time"
+        description: >-
+          The date and time in UTC (ISO 8601) when Lago executes the order created
+          from the order form. It must be in the future, requires `execution_mode`
+          to be set, and must fall strictly before the day the quoted deal stops
+          being executable, otherwise signing is rejected with a `422`. When it is
+          omitted, the order is created but not scheduled, and waits to be executed
+          on demand.
+        example: "2026-07-01T00:00:00Z"

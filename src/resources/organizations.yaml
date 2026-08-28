@@ -1,3 +1,18 @@
+get:
+  tags:
+    - organizations
+  summary: Retrieve your organization
+  description: This endpoint retrieves your own organization's settings.
+  operationId: findOrganization
+  responses:
+    '200':
+      description: Organization
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Organization.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
 put:
   tags:
     - organizations

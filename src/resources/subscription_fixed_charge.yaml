@@ -7,7 +7,7 @@ get:
   summary: Retrieve a fixed charge for a subscription
   description: |-
     This endpoint retrieves a specific effective fixed charge for a subscription.
-    If the subscription has a plan override with a fixed charge override, the overridden fixed charge is returned.
+    The `units` reflect any per-subscription unit override applied to the subscription; when no override exists, the plan-level units are returned.
   operationId: findSubscriptionFixedCharge
   parameters:
     - $ref: "../parameters/subscription_status.yaml"
@@ -29,9 +29,9 @@ put:
   parameters:
     - $ref: "../parameters/subscription_status.yaml"
   description: |-
-    This endpoint creates or updates a fixed charge override for a specific subscription.
-    If the subscription does not have a plan override yet, one will be created automatically.
-    The fixed charge override allows customizing specific fixed charge properties (invoice_display_name, units, properties, taxes) without affecting the original plan fixed charge.
+    This endpoint creates or updates a fixed charge override for a subscription, without affecting the original plan fixed charge.
+    When the body contains only `units` (and optionally `apply_units_immediately`), the change is recorded as a per-subscription unit override. When the body also sets `invoice_display_name`, `properties`, or `tax_codes`, it is applied as a full plan override for the subscription instead.
+    With `apply_units_immediately: true` on a pay-in-advance fixed charge the change is billed mid-period; otherwise it takes effect at the next billing period.
     This is a premium feature.
   operationId: overrideSubscriptionFixedCharge
   requestBody:

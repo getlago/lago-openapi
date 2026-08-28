@@ -1,0 +1,105 @@
+get:
+  tags:
+    - quotes
+  summary: List all quotes
+  description: |-
+    This endpoint is used to list all existing quotes.
+    Quotes are ordered by creation date, from the most recent to the oldest.
+    This is a premium feature.
+  operationId: findAllQuotes
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
+    - name: status[]
+      in: query
+      description: Filter quotes by the status of their current version. Possible values are `draft`, `approved` and `voided`.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - draft
+            - approved
+            - voided
+    - name: order_type[]
+      in: query
+      description: Filter quotes by order type. Possible values are `subscription_creation`, `subscription_amendment` and `one_off`.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - subscription_creation
+            - subscription_amendment
+            - one_off
+    - name: number[]
+      in: query
+      description: Filter quotes by their number, as assigned by Lago.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: '^QT-\d{4}-\d{4,}$'
+        example:
+          - QT-2026-0001
+          - QT-2026-0002
+    - name: owner_id[]
+      in: query
+      description: Filter quotes by the Lago identifiers of the users owning them.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: "uuid"
+        example:
+          - 1a901a90-1a90-1a90-1a90-1a901a901a90
+    - name: external_customer_id[]
+      in: query
+      description: Filter quotes by the external unique identifiers of their customers (provided by your own application).
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - external_id_1234
+    - name: from_date
+      in: query
+      description: Filter quotes created from a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date"
+        example: "2026-01-01"
+    - name: to_date
+      in: query
+      description: Filter quotes created up to a specific date.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: "date"
+        example: "2026-12-31"
+  responses:
+    "200":
+      description: Quotes
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuotesPaginated.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

@@ -82,7 +82,8 @@ properties:
               example: "0.5"
   fixed_charges:
     type: array
-    description: Additional fixed charges for this plan.
+    description: |-
+      Fixed charge overrides for the subscription. When `plan_overrides` contains only `fixed_charges` and every entry contains only `id`, `units`, and optionally `apply_units_immediately`, the units are recorded as a per-subscription override without creating a plan override, and subscription-scoped reads return these units. If any entry carries other fields, or `plan_overrides` contains any other key, the request is applied as a full plan override for the subscription instead.
     items:
       type: object
       required:
@@ -114,7 +115,9 @@ properties:
           description: List of taxes applied to the fixed charge.
   usage_thresholds:
     type: array
-    description: List of usage thresholds applied to the subscription.
+    deprecated: true
+    description: |
+      **Deprecated.** Managing usage thresholds through `plan_overrides` is deprecated and its behavior is inconsistent: an empty array does not reliably clear thresholds (it is ignored the first time a subscription is overridden), and it never affects thresholds inherited from a parent plan. Use the top-level `usage_thresholds` array on the subscription instead, or `progressive_billing_disabled` to switch progressive billing off.
     items:
       $ref: "./UsageThresholdInput.yaml"
   metadata:

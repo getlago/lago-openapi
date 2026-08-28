@@ -31,6 +31,10 @@ properties:
     type: string
     description: The customer external unique identifier (provided by your own application)
     example: "hooli_1234"
+  billing_entity_code:
+    type: string
+    example: "default"
+    description: The code of the billing entity associated with the wallet.
   status:
     type: string
     enum:
@@ -123,11 +127,7 @@ properties:
       fee_types:
         type: array
         items:
-          type: string
-          enum:
-            - charge
-            - subscription
-            - commitment
+          $ref: "./WalletFeeTypeEnum.yaml"
         description: An array of fee types to which the wallet is applicable. By specifying the fee types in this field, you can restrict the wallet's usage to specific fee types only.
         example: ["charge"]
       billable_metric_codes:
@@ -179,5 +179,11 @@ properties:
   payment_method:
     $ref: "./PaymentMethodReference.yaml"
     description: The payment method assigned to this wallet for processing top-up payments.
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    example: "PO-123"
+    description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
   metadata:
     $ref: "./MetadataObject.yaml"

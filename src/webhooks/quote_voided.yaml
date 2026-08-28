@@ -1,0 +1,40 @@
+post:
+  operationId: quoteVoided
+  summary: A quote has been voided
+  description: |-
+    A version of a quote has been voided. It is emitted whichever way the version was voided, so read `version.void_reason` to tell them apart: `manual` for an explicit void, `superseded` when the version was cloned into a new draft, `cascade_of_expired` or `cascade_of_voided` when the order form generated from it expired or was voided.
+    This is a premium feature.
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the voided quote
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - quote
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - quote.voided
+            object_type:
+              type: string
+              enum:
+                - quote
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            quote:
+              $ref: "../schemas/QuoteWithVersionObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

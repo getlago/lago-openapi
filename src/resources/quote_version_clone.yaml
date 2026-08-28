@@ -1,0 +1,27 @@
+parameters:
+  - $ref: "../parameters/lago_quote_version_id.yaml"
+post:
+  tags:
+    - quotes
+  summary: Clone a quote version
+  description: |-
+    This endpoint copies a quote version into a new `draft` version of the same quote, so that the deal can be renegotiated.
+    Any version of the quote can be cloned, but a quote can only carry one active version: the draft the quote currently holds, if any, is voided with the `superseded` reason. Cloning is therefore rejected with a `422` once a version of the quote has been approved.
+    A concurrent write on the same quote is reported as a `422` rather than retried, so a duplicated call can fail while the first one is still in flight.
+    This is a premium feature.
+  operationId: cloneQuoteVersion
+  responses:
+    "200":
+      description: Quote version cloned
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/QuoteVersion.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/UnprocessableEntity.yaml"

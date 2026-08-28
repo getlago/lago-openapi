@@ -1,0 +1,9 @@
+allOf:
+  - $ref: "./OrderObject.yaml"
+  - type: object
+    required:
+      - billing_snapshot
+    properties:
+      billing_snapshot:
+        $ref: "./QuoteBillingItems.yaml"
+        description: The billing items of the quote version the order comes from, as they stood when it was approved. This is what the execution applies. It is omitted from the webhook payloads, being a heavy blob.

@@ -1,0 +1,14 @@
+allOf:
+  - $ref: "./QuoteBaseObject.yaml"
+  - type: object
+    required:
+      - version
+    properties:
+      version:
+        $ref: "./QuoteVersionObject.yaml"
+        description: >-
+          The version of the quote the event happened to. It is not necessarily
+          the current version of the quote, as a `quote.voided` event triggered
+          by a clone names the version that was voided while the quote already
+          carries its replacement. Its `content` and `billing_items` are omitted
+          here; retrieve the version to get them.

@@ -1,0 +1,23 @@
+parameters:
+  - $ref: "../parameters/lago_quote_id.yaml"
+get:
+  tags:
+    - quotes
+  summary: Retrieve a quote
+  description: |-
+    This endpoint retrieves a specific quote, along with its owners and its current version.
+    This is a premium feature.
+  operationId: findQuote
+  responses:
+    "200":
+      description: Quote
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Quote.yaml"
+    "401":
+      $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"

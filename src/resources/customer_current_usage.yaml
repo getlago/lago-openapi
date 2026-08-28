@@ -67,7 +67,7 @@ get:
           cloud: 'aws'
     - name: filter_by_charge_id
       in: query
-      description: Filter usage to a specific charge by its Lago ID (UUID).
+      description: '**Deprecated.** Filter usage to a specific charge by its Lago ID (UUID).'
       required: false
       deprecated: true
       schema:
@@ -76,7 +76,7 @@ get:
         example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
     - name: filter_by_charge_code
       in: query
-      description: Filter usage to a specific charge by its code.
+      description: '**Deprecated.** Filter usage to a specific charge by its code.'
       required: false
       deprecated: true
       schema:
@@ -85,7 +85,7 @@ get:
     - name: filter_by_group
       in: query
       description: >
-        Filter usage by pricing group. Pass key/value pairs as query parameters,
+        **Deprecated.** Filter usage by pricing group. Pass key/value pairs as query parameters,
         e.g. `filter_by_group[cloud]=aws`.
       required: false
       deprecated: true

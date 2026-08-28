@@ -65,7 +65,10 @@ properties:
     description: List of all thresholds utilized for calculating the fixed charge.
   units:
     type: number
-    description: The number of units for the fixed charge.
+    description: |-
+      The number of units for the fixed charge.
+
+      When retrieved through a subscription-scoped endpoint (e.g. `GET /subscriptions/{external_id}/fixed_charges`), this reflects the per-subscription unit override when one exists, and falls back to the plan-level units otherwise. Plan-scoped endpoints always return the plan-level units.
     example: 1
   lago_parent_id:
     type:

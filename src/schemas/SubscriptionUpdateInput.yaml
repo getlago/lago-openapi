@@ -34,6 +34,7 @@ properties:
         description: The start date and time of the subscription. This field can only be modified for pending subscriptions that have not yet started. This date should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
       plan_overrides:
         $ref: "../schemas/PlanOverridesObject.yaml"
+        description: Overrides applied to the plan for this subscription. A units-only `fixed_charges` override is recorded as a per-subscription unit override without creating a plan override; any other override creates a plan override for the subscription. See `fixed_charges` for the exact rule.
       invoice_custom_section:
         $ref: "./InvoiceCustomSectionInput.yaml"
       payment_method:
@@ -47,3 +48,35 @@ properties:
 
           - `true`: the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
           - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice.
+      billing_entity_code:
+        type: string
+        example: "default"
+        description: The code of the billing entity associated with the subscription. Updates take effect on future invoices only.
+      purchase_order_number:
+        type:
+          - string
+          - "null"
+        example: "PO-123"
+        description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+      progressive_billing_disabled:
+        type: boolean
+        default: false
+        example: true
+        description: |
+          Disables progressive billing for this subscription, regardless of any usage thresholds defined on the plan (including thresholds inherited from a parent plan when the subscription runs on a plan override).
+
+          Set to `true` to switch progressive billing off for this subscription specifically. This is the recommended way to stop progressive billing on a subscription that inherits thresholds from its plan, since clearing `usage_thresholds` only removes subscription-level thresholds and does not remove those defined on (or inherited from) the plan.
+      usage_thresholds:
+        type: array
+        description: |
+          Usage thresholds managed directly on the subscription. This is the recommended way to set progressive billing thresholds per subscription; when present, they take precedence over the thresholds defined on the plan.
+
+          Sending an empty array removes all subscription-level thresholds. This field cannot be combined with `plan_overrides.usage_thresholds` in the same request. To fully disable progressive billing on a subscription that inherits thresholds from its plan, use `progressive_billing_disabled` instead.
+        items:
+          $ref: "./UsageThresholdInput.yaml"
+      activation_rules:
+        type: array
+        items:
+          $ref: "./SubscriptionActivationRuleInput.yaml"
+        description: |
+          Optional list of activation rules that gate the subscription activation. Activation rules can only be set or modified while the subscription is `pending` (future-dated and not yet activated); the request is rejected for `incomplete`, `active`, or `terminated` subscriptions.
