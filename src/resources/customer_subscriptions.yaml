@@ -9,6 +9,13 @@ get:
     - $ref: "../parameters/external_customer_id_path.yaml"
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
+    - name: external_id
+      in: query
+      description: The subscription external unique identifier (provided by your own application).
+      required: false
+      schema:
+        type: string
+        example: "subscription_premium"
     - name: plan_code
       in: query
       description: The unique code representing the plan to be attached to the customer. This code must correspond to the code property of one of the active plans.
