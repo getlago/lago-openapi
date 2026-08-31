@@ -1,7 +1,9 @@
 post:
+  deprecated: true
   operationId: invoiceAddOnAdded
   summary: A new add on invoice has been emitted
-  description: A new add on invoice has been emitted
+  description: |-
+    **Deprecated.** This webhook is no longer emitted by Lago. Use `invoice.one_off_created` for invoices created from add-ons.
   parameters:
     - $ref: "../parameters/webhook_signature.yaml"
     - $ref: "../parameters/webhook_signature_algorithm.yaml"
