@@ -1538,6 +1538,22 @@ paths:
           schema:
             type: integer
             example: 100000
+        - name: types[]
+          in: query
+          description: Filter credit notes by the kind of amount they carry. `credit` matches credit notes with a credited amount, `refund` those with a refunded amount and `offset` those with an amount deducted from the invoice balance. A credit note can match several types.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - credit
+                - refund
+                - offset
+            example:
+              - credit
+              - refund
         - name: self_billed
           in: query
           description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
@@ -3861,6 +3877,29 @@ paths:
           schema:
             type: boolean
             example: true
+        - name: partially_paid
+          in: query
+          description: Filter invoices that are partially paid. When `true`, only invoices with a non-zero amount paid that is below the total due are returned. When `false`, those invoices are excluded.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+        - name: settlements[]
+          in: query
+          description: Filter invoices settled by at least one of the given settlement types. `payment` matches invoices settled by a payment, `credit_note` matches invoices settled by a credit note.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - payment
+                - credit_note
+            example:
+              - payment
+              - credit_note
         - name: invoice_type
           in: query
           description: Filter invoices by invoice type. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.

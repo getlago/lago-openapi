@@ -129,6 +129,22 @@ get:
       schema:
         type: integer
         example: 100000
+    - name: types[]
+      in: query
+      description: Filter credit notes by the kind of amount they carry. `credit` matches credit notes with a credited amount, `refund` those with a refunded amount and `offset` those with an amount deducted from the invoice balance. A credit note can match several types.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - credit
+            - refund
+            - offset
+        example:
+          - credit
+          - refund
     - name: self_billed
       in: query
       description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
