@@ -1,0 +1,38 @@
+post:
+  operationId: paymentReceiptGenerated
+  summary: The PDF of a payment receipt has been generated
+  description: The PDF of a payment receipt has been generated
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the payment receipt whose PDF has been generated
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - payment_receipt
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - payment_receipt.generated
+            object_type:
+              type: string
+              enum:
+                - payment_receipt
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            payment_receipt:
+              $ref: "../schemas/PaymentReceiptObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

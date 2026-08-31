@@ -65,6 +65,13 @@ properties:
     format: uuid
     description: Unique identifier assigned to the parent fee on which the true-up fee is assigned. This identifier establishes the relationship between the parent fee and the associated true-up fee.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_original_fee_id:
+    type:
+      - string
+      - "null"
+    format: uuid
+    description: Unique identifier assigned to the fee this fee was derived from. It is set on fees regenerated from an existing fee, and `null` otherwise.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   lago_subscription_id:
     type:
       - string

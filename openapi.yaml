@@ -9637,6 +9637,84 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  payment_receipt_created:
+    post:
+      operationId: paymentReceiptCreated
+      summary: A new payment receipt has been created
+      description: A new payment receipt has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new payment receipt
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - payment_receipt
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_receipt.created
+                object_type:
+                  type: string
+                  enum:
+                    - payment_receipt
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                payment_receipt:
+                  $ref: '#/components/schemas/PaymentReceiptObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  payment_receipt_generated:
+    post:
+      operationId: paymentReceiptGenerated
+      summary: The PDF of a payment receipt has been generated
+      description: The PDF of a payment receipt has been generated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the payment receipt whose PDF has been generated
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - payment_receipt
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_receipt.generated
+                object_type:
+                  type: string
+                  enum:
+                    - payment_receipt
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                payment_receipt:
+                  $ref: '#/components/schemas/PaymentReceiptObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   payment_request_created:
     post:
       operationId: paymentRequestCreated
@@ -10303,6 +10381,123 @@ webhooks:
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithThresholdObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_created:
+    post:
+      operationId: walletCreated
+      summary: A new wallet has been created
+      description: A new wallet has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.created
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_updated:
+    post:
+      operationId: walletUpdated
+      summary: A wallet has been updated
+      description: A wallet has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the updated wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.updated
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_terminated:
+    post:
+      operationId: walletTerminated
+      summary: A wallet has been terminated
+      description: A wallet has been terminated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the terminated wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.terminated
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -11687,6 +11882,14 @@ components:
           deprecated: true
           description: '**Deprecated.** This field will be removed in a future version. When set to true, it applies the tax to the organization''s default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.'
           example: true
+        applied_to_billing_entities_codes:
+          type: array
+          items:
+            type: string
+          description: The codes of the billing entities the tax is applied to, sorted alphabetically. It is empty when the tax is only attached to customers.
+          example:
+            - acme_corp
+            - foo_bar
         created_at:
           type: string
           format: date-time
@@ -14372,6 +14575,13 @@ components:
           format: uuid
           description: Unique identifier assigned to the parent fee on which the true-up fee is assigned. This identifier establishes the relationship between the parent fee and the associated true-up fee.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_original_fee_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier assigned to the fee this fee was derived from. It is set on fees regenerated from an existing fee, and `null` otherwise.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_subscription_id:
           type:
             - string
@@ -15405,10 +15615,22 @@ components:
           type: integer
           description: The total amount of the credit note, expressed in cents.
           example: 120
+        precise_total_amount_cents:
+          type:
+            - string
+            - 'null'
+          description: The total amount of the credit note, expressed in cents, with precision.
+          example: '120.0001'
         taxes_amount_cents:
           type: integer
           description: The tax amount of the credit note, expressed in cents.
           example: 20
+        precise_taxes_amount_cents:
+          type:
+            - string
+            - 'null'
+          description: The tax amount of the credit note, expressed in cents, with precision.
+          example: '20.0001'
         taxes_rate:
           type: number
           description: The tax rate associated with this specific credit note.
@@ -15451,8 +15673,14 @@ components:
           type:
             - string
             - 'null'
-          description: The PDF file of the credit note.
+          description: The PDF file of the credit note. It is `null` while no PDF has been generated.
           example: https://getlago.com/credit_note/file
+        xml_url:
+          type:
+            - string
+            - 'null'
+          description: The e-invoicing XML file of the credit note. It is `null` while no XML file has been generated.
+          example: https://getlago.com/credit_note/xml
         items:
           type: array
           items:
@@ -16225,6 +16453,7 @@ components:
             - add_on
             - credit
             - one_off
+            - advance_charges
             - progressive_billing
           description: The type of invoice issued. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.
           example: subscription
@@ -16320,6 +16549,18 @@ components:
           type: integer
           description: The sum of the amount and taxes amount on the invoice, expressed in cents. It calculates the total financial value of the invoice, including both the original amount and any applicable taxes.
           example: 100
+        total_paid_amount_cents:
+          type: integer
+          description: The amount already paid on the invoice, expressed in cents.
+          example: 40
+        total_offsetted_credit_note_amount_cents:
+          type: integer
+          description: The amount of the invoice settled by finalized credit notes, expressed in cents.
+          example: 10
+        total_due_amount_cents:
+          type: integer
+          description: The amount still due on the invoice, expressed in cents. It is equal to `total_amount_cents` minus `total_paid_amount_cents` and `total_offsetted_credit_note_amount_cents`, and is `0` for voided invoices.
+          example: 50
         version_number:
           type: integer
           example: 3
@@ -16334,6 +16575,13 @@ components:
           format: uri
           description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice. It is `null` while no PDF has been generated, which is the case for draft invoices.
           example: https://getlago.com/invoice/file
+        xml_url:
+          type:
+            - string
+            - 'null'
+          format: uri
+          description: Contains the URL that provides direct access to the e-invoicing XML file. It is `null` while no XML file has been generated for the invoice.
+          example: https://getlago.com/invoice/xml
         web_url:
           type:
             - string
@@ -16351,6 +16599,13 @@ components:
           format: date-time
           example: '2022-04-29T08:59:51Z'
           description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
+        voided_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: The date when the invoice was voided, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It is `null` for invoices that have not been voided.
     InvoiceMetadataObject:
       type: object
       properties:
@@ -19109,7 +19364,8 @@ components:
               description: The unique identifier of the subscription within your application.
             properties:
               type: object
-              description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
+              description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required. Any property of the targeted billable metric can be sent here, in addition to the documented fields below.
+              additionalProperties: true
               properties:
                 target_wallet_code:
                   type:
@@ -19444,6 +19700,13 @@ components:
               $ref: '#/components/schemas/Currency'
               description: The currency of the invoice.
               example: EUR
+            skip_psp:
+              type:
+                - boolean
+                - 'null'
+              description: If true, the invoice will be created but not sent to the payment provider.
+              example: true
+              default: false
             purchase_order_number:
               type:
                 - string
@@ -19497,13 +19760,6 @@ components:
                     example: '2022-08-08T00:00:00Z'
                   tax_codes:
                     $ref: '#/components/schemas/TaxCodes'
-                  skip_psp:
-                    type:
-                      - boolean
-                      - 'null'
-                    description: If true, the invoice will be created but not sent to the payment provider.
-                    example: true
-                    default: false
             invoice_custom_section:
               $ref: '#/components/schemas/InvoiceCustomSectionInput'
             payment_method:
@@ -24341,6 +24597,7 @@ components:
             - billable_metric_current_usage_amount
             - billable_metric_current_usage_units
             - lifetime_usage_amount
+            - billable_metric_lifetime_usage_units
           example: billable_metric_current_usage_amount
         code:
           type: string
@@ -24413,6 +24670,7 @@ components:
                     - billable_metric_current_usage_amount
                     - billable_metric_current_usage_units
                     - lifetime_usage_amount
+                    - billable_metric_lifetime_usage_units
                   example: billable_metric_current_usage_amount
                 code:
                   type: string
@@ -24449,6 +24707,7 @@ components:
                       - billable_metric_current_usage_amount
                       - billable_metric_current_usage_units
                       - lifetime_usage_amount
+                      - billable_metric_lifetime_usage_units
                     example: billable_metric_current_usage_amount
                   code:
                     type: string
@@ -25311,6 +25570,11 @@ components:
             - billable_metric_current_usage_amount
             - billable_metric_current_usage_units
             - lifetime_usage_amount
+            - billable_metric_lifetime_usage_units
+            - wallet_balance_amount
+            - wallet_credits_balance
+            - wallet_ongoing_balance_amount
+            - wallet_credits_ongoing_balance
           example: billable_metric_current_usage_amount
         alert_code:
           type: string
