@@ -31,3 +31,8 @@ properties:
               If the code does not match an existing wallet, no credits will be applied for the event.
               This field is only taken into account when the targeted charge has `accepts_target_wallet` set to `true`.
               This field requires a premium integration.
+        additionalProperties:
+          oneOf:
+            - type: string
+            - type: integer
+            - type: number

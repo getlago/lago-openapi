@@ -1,15 +1,13 @@
 post:
-  deprecated: true
-  operationId: invoiceAddOnAdded
-  summary: A new add on invoice has been emitted
-  description: |-
-    **Deprecated.** This webhook is no longer emitted by Lago. Use `invoice.one_off_created` for invoices created from add-ons.
+  operationId: paymentReceiptGenerated
+  summary: A new payment receipt PDF has been generated
+  description: A new payment receipt PDF has been generated
   parameters:
     - $ref: "../parameters/webhook_signature.yaml"
     - $ref: "../parameters/webhook_signature_algorithm.yaml"
     - $ref: "../parameters/webhook_unique_key.yaml"
   requestBody:
-    description: Details of the new invoice
+    description: Details of the payment receipt
     content:
       application/json:
         schema:
@@ -18,23 +16,23 @@ post:
             - webhook_type
             - object_type
             - organization_id
-            - invoice
+            - payment_receipt
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.add_on_added
+                - payment_receipt.generated
             object_type:
               type: string
               enum:
-                - invoice
+                - payment_receipt
             organization_id:
               type: string
               format: "uuid"
               description: Unique identifier of the organization, created by Lago.
               example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-            invoice:
-              $ref: "../schemas/InvoiceObjectExtended.yaml"
+            payment_receipt:
+              $ref: "../schemas/PaymentReceiptObject.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully

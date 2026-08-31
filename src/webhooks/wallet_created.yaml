@@ -1,15 +1,13 @@
 post:
-  deprecated: true
-  operationId: invoiceAddOnAdded
-  summary: A new add on invoice has been emitted
-  description: |-
-    **Deprecated.** This webhook is no longer emitted by Lago. Use `invoice.one_off_created` for invoices created from add-ons.
+  operationId: walletCreated
+  summary: A new wallet has been created
+  description: A new wallet has been created
   parameters:
     - $ref: "../parameters/webhook_signature.yaml"
     - $ref: "../parameters/webhook_signature_algorithm.yaml"
     - $ref: "../parameters/webhook_unique_key.yaml"
   requestBody:
-    description: Details of the new invoice
+    description: Details of the wallet
     content:
       application/json:
         schema:
@@ -18,23 +16,23 @@ post:
             - webhook_type
             - object_type
             - organization_id
-            - invoice
+            - wallet
           properties:
             webhook_type:
               type: string
               enum:
-                - invoice.add_on_added
+                - wallet.created
             object_type:
               type: string
               enum:
-                - invoice
+                - wallet
             organization_id:
               type: string
               format: "uuid"
               description: Unique identifier of the organization, created by Lago.
               example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-            invoice:
-              $ref: "../schemas/InvoiceObjectExtended.yaml"
+            wallet:
+              $ref: "../schemas/WalletObject.yaml"
   responses:
     "200":
       description: Return a 200 status to indicate that the data was received successfully

@@ -529,6 +529,10 @@ webhooks:
     $ref: "./webhooks/payment_request_payment_failure.yaml"
   payment_request_payment_status_updated:
     $ref: "./webhooks/payment_request_payment_status_updated.yaml"
+  payment_receipt_created:
+    $ref: "./webhooks/payment_receipt_created.yaml"
+  payment_receipt_generated:
+    $ref: "./webhooks/payment_receipt_generated.yaml"
   plan_created:
     $ref: "./webhooks/plan_created.yaml"
   plan_updated:
@@ -557,6 +561,12 @@ webhooks:
     $ref: "./webhooks/subscription_trial_ended.yaml"
   subscription_usage_threshold_reached:
     $ref: "./webhooks/subscription_usage_threshold_reached.yaml"
+  wallet_created:
+    $ref: "./webhooks/wallet_created.yaml"
+  wallet_updated:
+    $ref: "./webhooks/wallet_updated.yaml"
+  wallet_terminated:
+    $ref: "./webhooks/wallet_terminated.yaml"
   wallet_depleted_ongoing_balance:
     $ref: "./webhooks/wallet_depleted_ongoing_balance.yaml"
   wallet_transaction_created:

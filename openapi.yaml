@@ -8726,9 +8726,10 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_add_on_added:
     post:
+      deprecated: true
       operationId: invoiceAddOnAdded
       summary: A new add on invoice has been emitted
-      description: A new add on invoice has been emitted
+      description: '**Deprecated.** This webhook is no longer emitted by Lago. Use `invoice.one_off_created` for invoices created from add-ons.'
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -9714,6 +9715,84 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  payment_receipt_created:
+    post:
+      operationId: paymentReceiptCreated
+      summary: A new payment receipt has been created
+      description: A new payment receipt has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the payment receipt
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - payment_receipt
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_receipt.created
+                object_type:
+                  type: string
+                  enum:
+                    - payment_receipt
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                payment_receipt:
+                  $ref: '#/components/schemas/PaymentReceiptObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  payment_receipt_generated:
+    post:
+      operationId: paymentReceiptGenerated
+      summary: A new payment receipt PDF has been generated
+      description: A new payment receipt PDF has been generated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the payment receipt
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - payment_receipt
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_receipt.generated
+                object_type:
+                  type: string
+                  enum:
+                    - payment_receipt
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                payment_receipt:
+                  $ref: '#/components/schemas/PaymentReceiptObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   plan_created:
     post:
       operationId: planCreated
@@ -10263,6 +10342,123 @@ webhooks:
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithThresholdObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_created:
+    post:
+      operationId: walletCreated
+      summary: A new wallet has been created
+      description: A new wallet has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.created
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_updated:
+    post:
+      operationId: walletUpdated
+      summary: A wallet has been updated
+      description: A wallet has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.updated
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_terminated:
+    post:
+      operationId: walletTerminated
+      summary: A wallet has been terminated
+      description: A wallet has been terminated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.terminated
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -19076,6 +19272,11 @@ components:
                     If the code does not match an existing wallet, no credits will be applied for the event.
                     This field is only taken into account when the targeted charge has `accepts_target_wallet` set to `true`.
                     This field requires a premium integration.
+              additionalProperties:
+                oneOf:
+                  - type: string
+                  - type: integer
+                  - type: number
     Fees:
       type: object
       required:
@@ -24295,6 +24496,7 @@ components:
             - billable_metric_current_usage_amount
             - billable_metric_current_usage_units
             - lifetime_usage_amount
+            - billable_metric_lifetime_usage_units
           example: billable_metric_current_usage_amount
         code:
           type: string
@@ -24367,6 +24569,7 @@ components:
                     - billable_metric_current_usage_amount
                     - billable_metric_current_usage_units
                     - lifetime_usage_amount
+                    - billable_metric_lifetime_usage_units
                   example: billable_metric_current_usage_amount
                 code:
                   type: string
@@ -24403,6 +24606,7 @@ components:
                       - billable_metric_current_usage_amount
                       - billable_metric_current_usage_units
                       - lifetime_usage_amount
+                      - billable_metric_lifetime_usage_units
                     example: billable_metric_current_usage_amount
                   code:
                     type: string
@@ -25265,6 +25469,11 @@ components:
             - billable_metric_current_usage_amount
             - billable_metric_current_usage_units
             - lifetime_usage_amount
+            - billable_metric_lifetime_usage_units
+            - wallet_balance_amount
+            - wallet_credits_balance
+            - wallet_ongoing_balance_amount
+            - wallet_credits_ongoing_balance
           example: billable_metric_current_usage_amount
         alert_code:
           type: string
