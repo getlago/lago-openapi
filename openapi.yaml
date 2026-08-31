@@ -1493,7 +1493,7 @@ paths:
               - other
         - name: credit_status
           in: query
-          description: Filter credit notes by credit status. Possible values are `available`, `consumed`  or `voided`.
+          description: Filter credit notes by credit status. Possible values are `available`, `consumed` or `voided`.
           required: false
           explode: true
           schema:
@@ -1504,7 +1504,7 @@ paths:
               - voided
         - name: refund_status
           in: query
-          description: Filter credit notes by refund status. Possible values are `pending`, `succeeded`  or `failed`.
+          description: Filter credit notes by refund status. Possible values are `pending`, `succeeded` or `failed`.
           required: false
           explode: true
           schema:
@@ -3512,7 +3512,7 @@ paths:
       tags:
         - fees
       summary: List all fees
-      description: This endpoint is used for retrieving all fees that has been issued.
+      description: This endpoint is used for retrieving all fees that have been issued.
       operationId: findAllFees
       parameters:
         - $ref: '#/components/parameters/page'
@@ -3529,7 +3529,7 @@ paths:
             example: et_12345678
         - name: currency
           in: query
-          description: Filter results by fee"s currency.
+          description: Filter results by the fee's currency.
           required: false
           explode: true
           schema:
@@ -3538,13 +3538,14 @@ paths:
               - example: USD
         - name: fee_type
           in: query
-          description: The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or "commitment".
+          description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
           required: false
           explode: true
           schema:
             type: string
             enum:
               - charge
+              - fixed_charge
               - add_on
               - subscription
               - credit
@@ -3560,7 +3561,7 @@ paths:
             example: bm_code
         - name: payment_status
           in: query
-          description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and refunded`.
+          description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and `refunded`.
           required: false
           explode: true
           schema:
@@ -3573,7 +3574,7 @@ paths:
             example: succeeded
         - name: created_at_from
           in: query
-          description: Filter results created after creation date and time in UTC.
+          description: Filter results created at or after this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3582,7 +3583,7 @@ paths:
             format: date-time
         - name: created_at_to
           in: query
-          description: Filter results created before creation date and time in UTC.
+          description: Filter results created at or before this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3591,7 +3592,7 @@ paths:
             format: date-time
         - name: succeeded_at_from
           in: query
-          description: Filter results with payment success after creation date and time in UTC.
+          description: Filter results with a payment success at or after this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3600,7 +3601,7 @@ paths:
             format: date-time
         - name: succeeded_at_to
           in: query
-          description: Filter results with payment success after creation date and time in UTC.
+          description: Filter results with a payment success at or before this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3609,7 +3610,7 @@ paths:
             format: date-time
         - name: failed_at_from
           in: query
-          description: Filter results with payment failure after creation date and time in UTC.
+          description: Filter results with a payment failure at or after this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3618,7 +3619,7 @@ paths:
             format: date-time
         - name: failed_at_to
           in: query
-          description: Filter results with payment failure after creation date and time in UTC.
+          description: Filter results with a payment failure at or before this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3627,7 +3628,7 @@ paths:
             format: date-time
         - name: refunded_at_from
           in: query
-          description: Filter results with payment refund after creation date and time in UTC.
+          description: Filter results with a payment refund at or after this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3636,7 +3637,7 @@ paths:
             format: date-time
         - name: refunded_at_to
           in: query
-          description: Filter results with payment refund after creation date and time in UTC.
+          description: Filter results with a payment refund at or before this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -14521,11 +14522,11 @@ components:
                 - subscription
                 - credit
                 - commitment
-              description: The fee type. Possible values are `add-on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
+              description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
               example: subscription
             code:
               type: string
-              description: The code of the fee item. It can be the code of the `add-on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
+              description: The code of the fee item. It can be the code of the `add_on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
               example: startup
             name:
               type: string
@@ -14533,7 +14534,7 @@ components:
                 The name of the fee item. The value depends on the type of the fee item:
 
                 - If the fee item is a `charge`, it is the billable metric name.
-                - If the fee item is a `add-on`, it is the add-on name.
+                - If the fee item is an `add_on`, it is the add-on name.
                 - If the fee item is a `credit`, it is the wallet transaction name if set, or `"credit"` if not.
                 - If the fee item is a `fixed_charge`, it is the fixed charge add-on name.
                 - For all the other fee items, it is the subscription plan name.
@@ -14546,7 +14547,7 @@ components:
                 The description of the fee item. The value depends on the type of the fee item:
 
                 - If the fee item is a `charge`, it is the billable metric description.
-                - If the fee item is a `add-on`, it is the add-on description.
+                - If the fee item is an `add_on`, it is the add-on description.
                 - If the fee item is a `credit`, it is always `"credit"`.
                 - If the fee item is a `fixed_charge`, it is the fixed charge add-on description.
                 - For all the other fee items, it is the subscription plan description.
@@ -14557,7 +14558,7 @@ components:
                 Specifies the name that will be displayed on an invoice. If no value is set for this field, we'll fallback to a value that depends on the type of the fee items:
 
                 - If the fee item is a `charge`, we'll fallback to the `invoice_display_name` of the `charge` or the billable metric name if no `invoice_display_name` is set.
-                - If the fee item is a `add-on`, we'll fallback to the `invoice_name` of the `add-on` or the `name` of the `add-on`.
+                - If the fee item is an `add_on`, we'll fallback to the `invoice_name` of the `add_on` or the `name` of the `add_on`.
                 - If the fee item is a `credit`, we'll fallback to the wallet transaction name if set, or `credit` if not.
                 - If the fee item is a `fixed_charge`, we'll fallback to the `invoice_display_name` of the `fixed_charge` or the `invoice_name` of the `fixed_charge_add_on` if no `invoice_display_name` is set.
                 - For all the other fee items, we'll fallback to the `invoice_display_name` of the subscription plan.
@@ -14580,7 +14581,7 @@ components:
             lago_item_id:
               type: string
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+              description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add_on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
               format: uuid
             item_type:
               type: string
@@ -15391,7 +15392,7 @@ components:
           example: 0
         offset_amount_cents:
           type: integer
-          description: The ofsetted amount (deducted from the invoice balance) of the credit note, expressed in cents.
+          description: The offset amount (deducted from the invoice balance) of the credit note, expressed in cents.
           example: 0
         coupons_adjustment_amount_cents:
           type: integer
@@ -16182,7 +16183,7 @@ components:
             - credit
             - one_off
             - progressive_billing
-          description: The type of invoice issued. Possible values are `subscription`, `one-off`, `credit` or `progressive_billing`.
+          description: The type of invoice issued. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.
           example: subscription
         status:
           type: string
@@ -19437,8 +19438,8 @@ components:
                     type:
                       - string
                       - 'null'
-                    example: The description of the fee line item in the invoice. By default, the description of the add-on is used.
-                    description: This is a description
+                    description: The description of the fee line item in the invoice. By default, the description of the add-on is used.
+                    example: Onboarding session, June 2024
                   from_datetime:
                     type: string
                     description: The lower boundary of the invoice billing interval. The `from_datetime` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
@@ -24608,7 +24609,7 @@ components:
           type:
             - string
             - 'null'
-          description: Internal description of the taxe
+          description: Internal description of the tax
           example: French standard VAT
         applied_to_organization:
           type: boolean

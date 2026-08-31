@@ -2,7 +2,7 @@ get:
   tags:
     - fees
   summary: List all fees
-  description: This endpoint is used for retrieving all fees that has been issued.
+  description: This endpoint is used for retrieving all fees that have been issued.
   operationId: findAllFees
   parameters:
     - $ref: "../parameters/page.yaml"
@@ -19,7 +19,7 @@ get:
         example: "et_12345678"
     - name: currency
       in: query
-      description: Filter results by fee"s currency.
+      description: Filter results by the fee's currency.
       required: false
       explode: true
       schema:
@@ -28,13 +28,14 @@ get:
           - example: "USD"
     - name: fee_type
       in: query
-      description: The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or "commitment".
+      description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
       required: false
       explode: true
       schema:
         type: string
         enum:
           - charge
+          - fixed_charge
           - add_on
           - subscription
           - credit
@@ -50,7 +51,7 @@ get:
         example: "bm_code"
     - name: payment_status
       in: query
-      description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and refunded`.
+      description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and `refunded`.
       required: false
       explode: true
       schema:
@@ -63,7 +64,7 @@ get:
         example: "succeeded"
     - name: created_at_from
       in: query
-      description: Filter results created after creation date and time in UTC.
+      description: Filter results created at or after this date and time in UTC.
       required: false
       explode: true
       schema:
@@ -72,7 +73,7 @@ get:
         format: date-time
     - name: created_at_to
       in: query
-      description: Filter results created before creation date and time in UTC.
+      description: Filter results created at or before this date and time in UTC.
       required: false
       explode: true
       schema:
@@ -81,7 +82,7 @@ get:
         format: date-time
     - name: succeeded_at_from
       in: query
-      description: Filter results with payment success after creation date and time in UTC.
+      description: Filter results with a payment success at or after this date and time in UTC.
       required: false
       explode: true
       schema:
@@ -90,7 +91,7 @@ get:
         format: date-time
     - name: succeeded_at_to
       in: query
-      description: Filter results with payment success after creation date and time in UTC.
+      description: Filter results with a payment success at or before this date and time in UTC.
       required: false
       explode: true
       schema:
@@ -99,7 +100,7 @@ get:
         format: date-time
     - name: failed_at_from
       in: query
-      description: Filter results with payment failure after creation date and time in UTC.
+      description: Filter results with a payment failure at or after this date and time in UTC.
       required: false
       explode: true
       schema:
@@ -108,7 +109,7 @@ get:
         format: date-time
     - name: failed_at_to
       in: query
-      description: Filter results with payment failure after creation date and time in UTC.
+      description: Filter results with a payment failure at or before this date and time in UTC.
       required: false
       explode: true
       schema:
@@ -117,7 +118,7 @@ get:
         format: date-time
     - name: refunded_at_from
       in: query
-      description: Filter results with payment refund after creation date and time in UTC.
+      description: Filter results with a payment refund at or after this date and time in UTC.
       required: false
       explode: true
       schema:
@@ -126,7 +127,7 @@ get:
         format: date-time
     - name: refunded_at_to
       in: query
-      description: Filter results with payment refund after creation date and time in UTC.
+      description: Filter results with a payment refund at or before this date and time in UTC.
       required: false
       explode: true
       schema:

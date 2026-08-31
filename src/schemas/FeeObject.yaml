@@ -254,11 +254,11 @@ properties:
           - subscription
           - credit
           - commitment
-        description: The fee type. Possible values are `add-on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
+        description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
         example: subscription
       code:
         type: string
-        description: The code of the fee item. It can be the code of the `add-on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
+        description: The code of the fee item. It can be the code of the `add_on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
         example: "startup"
       name:
         type: string
@@ -266,7 +266,7 @@ properties:
           The name of the fee item. The value depends on the type of the fee item:
 
           - If the fee item is a `charge`, it is the billable metric name.
-          - If the fee item is a `add-on`, it is the add-on name.
+          - If the fee item is an `add_on`, it is the add-on name.
           - If the fee item is a `credit`, it is the wallet transaction name if set, or `"credit"` if not.
           - If the fee item is a `fixed_charge`, it is the fixed charge add-on name.
           - For all the other fee items, it is the subscription plan name.
@@ -279,7 +279,7 @@ properties:
           The description of the fee item. The value depends on the type of the fee item:
 
           - If the fee item is a `charge`, it is the billable metric description.
-          - If the fee item is a `add-on`, it is the add-on description.
+          - If the fee item is an `add_on`, it is the add-on description.
           - If the fee item is a `credit`, it is always `"credit"`.
           - If the fee item is a `fixed_charge`, it is the fixed charge add-on description.
           - For all the other fee items, it is the subscription plan description.
@@ -290,7 +290,7 @@ properties:
           Specifies the name that will be displayed on an invoice. If no value is set for this field, we'll fallback to a value that depends on the type of the fee items:
 
           - If the fee item is a `charge`, we'll fallback to the `invoice_display_name` of the `charge` or the billable metric name if no `invoice_display_name` is set.
-          - If the fee item is a `add-on`, we'll fallback to the `invoice_name` of the `add-on` or the `name` of the `add-on`.
+          - If the fee item is an `add_on`, we'll fallback to the `invoice_name` of the `add_on` or the `name` of the `add_on`.
           - If the fee item is a `credit`, we'll fallback to the wallet transaction name if set, or `credit` if not.
           - If the fee item is a `fixed_charge`, we'll fallback to the `invoice_display_name` of the `fixed_charge` or the `invoice_name` of the `fixed_charge_add_on` if no `invoice_display_name` is set.
           - For all the other fee items, we'll fallback to the `invoice_display_name` of the subscription plan.
@@ -313,7 +313,7 @@ properties:
       lago_item_id:
         type: string
         example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-        description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+        description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add_on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
         format: uuid
       item_type:
         type: string

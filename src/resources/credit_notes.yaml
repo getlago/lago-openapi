@@ -84,7 +84,7 @@ get:
           - other
     - name: credit_status
       in: query
-      description: Filter credit notes by credit status. Possible values are `available`, `consumed`  or `voided`.
+      description: Filter credit notes by credit status. Possible values are `available`, `consumed` or `voided`.
       required: false
       explode: true
       schema:
@@ -95,7 +95,7 @@ get:
           - voided
     - name: refund_status
       in: query
-      description: Filter credit notes by refund status. Possible values are `pending`, `succeeded`  or `failed`.
+      description: Filter credit notes by refund status. Possible values are `pending`, `succeeded` or `failed`.
       required: false
       explode: true
       schema:

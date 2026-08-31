@@ -59,8 +59,8 @@ properties:
               type:
                 - string
                 - "null"
-              example: "The description of the fee line item in the invoice. By default, the description of the add-on is used."
-              description: "This is a description"
+              description: The description of the fee line item in the invoice. By default, the description of the add-on is used.
+              example: "Onboarding session, June 2024"
             from_datetime:
               type: string
               description: The lower boundary of the invoice billing interval. The `from_datetime` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
