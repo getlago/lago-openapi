@@ -16158,12 +16158,16 @@ components:
           description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
           example: '2022-04-30'
         payment_dispute_lost_at:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
-          description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
+          description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC). It is `null` until a dispute is lost on the invoice.
           example: '2022-09-14T16:35:31Z'
         payment_due_date:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date
           description: The payment due date for the invoice, specified in the ISO 8601 date format.
           example: '2022-04-30'
@@ -16285,9 +16289,11 @@ components:
           example: false
           description: Indicates if the invoice is self-billed. Self-billing is a process where an organization creates the invoice on behalf of the partner. This field specifies whether the invoice is self-billed or not.
         file_url:
-          type: string
+          type:
+            - string
+            - 'null'
           format: uri
-          description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
+          description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice. It is `null` while no PDF has been generated, which is the case for draft invoices.
           example: https://getlago.com/invoice/file
         web_url:
           type:
