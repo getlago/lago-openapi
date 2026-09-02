@@ -52,12 +52,16 @@ properties:
     description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
     example: "2022-04-30"
   payment_dispute_lost_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date-time"
-    description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
+    description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC). It is `null` until a dispute is lost on the invoice.
     example: "2022-09-14T16:35:31Z"
   payment_due_date:
-    type: string
+    type:
+      - string
+      - "null"
     format: "date"
     description: The payment due date for the invoice, specified in the ISO 8601 date format.
     example: "2022-04-30"
@@ -76,8 +80,9 @@ properties:
       - add_on
       - credit
       - one_off
+      - advance_charges
       - progressive_billing
-    description: The type of invoice issued. Possible values are `subscription`, `one-off`, `credit` or `progressive_billing`.
+    description: The type of invoice issued. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.
     example: subscription
   status:
     type: string
@@ -171,6 +176,18 @@ properties:
     type: integer
     description: The sum of the amount and taxes amount on the invoice, expressed in cents. It calculates the total financial value of the invoice, including both the original amount and any applicable taxes.
     example: 100
+  total_paid_amount_cents:
+    type: integer
+    description: The amount already paid on the invoice, expressed in cents.
+    example: 40
+  total_offsetted_credit_note_amount_cents:
+    type: integer
+    description: The amount of the invoice settled by finalized credit notes, expressed in cents.
+    example: 10
+  total_due_amount_cents:
+    type: integer
+    description: The amount still due on the invoice, expressed in cents. It is equal to `total_amount_cents` minus `total_paid_amount_cents` and `total_offsetted_credit_note_amount_cents`, and is `0` for voided invoices.
+    example: 50
   version_number:
     type: integer
     example: 3
@@ -179,10 +196,19 @@ properties:
     example: false
     description: Indicates if the invoice is self-billed. Self-billing is a process where an organization creates the invoice on behalf of the partner. This field specifies whether the invoice is self-billed or not.
   file_url:
-    type: string
+    type:
+      - string
+      - "null"
     format: uri
-    description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
+    description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice. It is `null` while no PDF has been generated, which is the case for draft invoices.
     example: "https://getlago.com/invoice/file"
+  xml_url:
+    type:
+      - string
+      - "null"
+    format: uri
+    description: Contains the URL that provides direct access to the e-invoicing XML file. It is `null` while no XML file has been generated for the invoice.
+    example: "https://getlago.com/invoice/xml"
   web_url:
     type:
       - string
@@ -200,3 +226,10 @@ properties:
     format: "date-time"
     example: "2022-04-29T08:59:51Z"
     description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
+  voided_at:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    example: "2022-04-29T08:59:51Z"
+    description: The date when the invoice was voided, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It is `null` for invoices that have not been voided.

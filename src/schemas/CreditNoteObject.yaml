@@ -117,10 +117,22 @@ properties:
     type: integer
     description: The total amount of the credit note, expressed in cents.
     example: 120
+  precise_total_amount_cents:
+    type:
+      - string
+      - "null"
+    description: The total amount of the credit note, expressed in cents, with precision.
+    example: "120.0001"
   taxes_amount_cents:
     type: integer
     description: The tax amount of the credit note, expressed in cents.
     example: 20
+  precise_taxes_amount_cents:
+    type:
+      - string
+      - "null"
+    description: The tax amount of the credit note, expressed in cents, with precision.
+    example: "20.0001"
   taxes_rate:
     type: number
     description: The tax rate associated with this specific credit note.
@@ -143,7 +155,7 @@ properties:
     example: 0
   offset_amount_cents:
     type: integer
-    description: The ofsetted amount (deducted from the invoice balance) of the credit note, expressed in cents.
+    description: The offset amount (deducted from the invoice balance) of the credit note, expressed in cents.
     example: 0
   coupons_adjustment_amount_cents:
     type: integer
@@ -163,8 +175,14 @@ properties:
     type:
       - string
       - "null"
-    description: The PDF file of the credit note.
+    description: The PDF file of the credit note. It is `null` while no PDF has been generated.
     example: "https://getlago.com/credit_note/file"
+  xml_url:
+    type:
+      - string
+      - "null"
+    description: The e-invoicing XML file of the credit note. It is `null` while no XML file has been generated.
+    example: "https://getlago.com/credit_note/xml"
   items:
     type: array
     items:

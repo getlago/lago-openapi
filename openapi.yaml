@@ -1493,7 +1493,7 @@ paths:
               - other
         - name: credit_status
           in: query
-          description: Filter credit notes by credit status. Possible values are `available`, `consumed`  or `voided`.
+          description: Filter credit notes by credit status. Possible values are `available`, `consumed` or `voided`.
           required: false
           explode: true
           schema:
@@ -1504,7 +1504,7 @@ paths:
               - voided
         - name: refund_status
           in: query
-          description: Filter credit notes by refund status. Possible values are `pending`, `succeeded`  or `failed`.
+          description: Filter credit notes by refund status. Possible values are `pending`, `succeeded` or `failed`.
           required: false
           explode: true
           schema:
@@ -1538,6 +1538,22 @@ paths:
           schema:
             type: integer
             example: 100000
+        - name: types[]
+          in: query
+          description: Filter credit notes by the kind of amount they carry. `credit` matches credit notes with a credited amount, `refund` those with a refunded amount and `offset` those with an amount deducted from the invoice balance. A credit note can match several types.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - credit
+                - refund
+                - offset
+            example:
+              - credit
+              - refund
         - name: self_billed
           in: query
           description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
@@ -3512,7 +3528,7 @@ paths:
       tags:
         - fees
       summary: List all fees
-      description: This endpoint is used for retrieving all fees that has been issued.
+      description: This endpoint is used for retrieving all fees that have been issued.
       operationId: findAllFees
       parameters:
         - $ref: '#/components/parameters/page'
@@ -3529,7 +3545,7 @@ paths:
             example: et_12345678
         - name: currency
           in: query
-          description: Filter results by fee"s currency.
+          description: Filter results by the fee's currency.
           required: false
           explode: true
           schema:
@@ -3538,13 +3554,14 @@ paths:
               - example: USD
         - name: fee_type
           in: query
-          description: The fee type. Possible values are `add-on`, `charge`, `credit`, `subscription` or "commitment".
+          description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
           required: false
           explode: true
           schema:
             type: string
             enum:
               - charge
+              - fixed_charge
               - add_on
               - subscription
               - credit
@@ -3560,7 +3577,7 @@ paths:
             example: bm_code
         - name: payment_status
           in: query
-          description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and refunded`.
+          description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The possible values for this field are `pending`, `succeeded`, `failed` and `refunded`.
           required: false
           explode: true
           schema:
@@ -3573,7 +3590,7 @@ paths:
             example: succeeded
         - name: created_at_from
           in: query
-          description: Filter results created after creation date and time in UTC.
+          description: Filter results created at or after this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3582,7 +3599,7 @@ paths:
             format: date-time
         - name: created_at_to
           in: query
-          description: Filter results created before creation date and time in UTC.
+          description: Filter results created at or before this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3591,7 +3608,7 @@ paths:
             format: date-time
         - name: succeeded_at_from
           in: query
-          description: Filter results with payment success after creation date and time in UTC.
+          description: Filter results with a payment success at or after this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3600,7 +3617,7 @@ paths:
             format: date-time
         - name: succeeded_at_to
           in: query
-          description: Filter results with payment success after creation date and time in UTC.
+          description: Filter results with a payment success at or before this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3609,7 +3626,7 @@ paths:
             format: date-time
         - name: failed_at_from
           in: query
-          description: Filter results with payment failure after creation date and time in UTC.
+          description: Filter results with a payment failure at or after this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3618,7 +3635,7 @@ paths:
             format: date-time
         - name: failed_at_to
           in: query
-          description: Filter results with payment failure after creation date and time in UTC.
+          description: Filter results with a payment failure at or before this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3627,7 +3644,7 @@ paths:
             format: date-time
         - name: refunded_at_from
           in: query
-          description: Filter results with payment refund after creation date and time in UTC.
+          description: Filter results with a payment refund at or after this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3636,7 +3653,7 @@ paths:
             format: date-time
         - name: refunded_at_to
           in: query
-          description: Filter results with payment refund after creation date and time in UTC.
+          description: Filter results with a payment refund at or before this date and time in UTC.
           required: false
           explode: true
           schema:
@@ -3860,6 +3877,29 @@ paths:
           schema:
             type: boolean
             example: true
+        - name: partially_paid
+          in: query
+          description: Filter invoices that are partially paid. When `true`, only invoices with a non-zero amount paid that is below the total due are returned. When `false`, those invoices are excluded.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+        - name: settlements[]
+          in: query
+          description: Filter invoices settled by at least one of the given settlement types. `payment` matches invoices settled by a payment, `credit_note` matches invoices settled by a credit note.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - payment
+                - credit_note
+            example:
+              - payment
+              - credit_note
         - name: invoice_type
           in: query
           description: Filter invoices by invoice type. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.
@@ -9597,6 +9637,84 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  payment_receipt_created:
+    post:
+      operationId: paymentReceiptCreated
+      summary: A new payment receipt has been created
+      description: A new payment receipt has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new payment receipt
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - payment_receipt
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_receipt.created
+                object_type:
+                  type: string
+                  enum:
+                    - payment_receipt
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                payment_receipt:
+                  $ref: '#/components/schemas/PaymentReceiptObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  payment_receipt_generated:
+    post:
+      operationId: paymentReceiptGenerated
+      summary: The PDF of a payment receipt has been generated
+      description: The PDF of a payment receipt has been generated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the payment receipt whose PDF has been generated
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - payment_receipt
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - payment_receipt.generated
+                object_type:
+                  type: string
+                  enum:
+                    - payment_receipt
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                payment_receipt:
+                  $ref: '#/components/schemas/PaymentReceiptObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   payment_request_created:
     post:
       operationId: paymentRequestCreated
@@ -10263,6 +10381,123 @@ webhooks:
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 subscription:
                   $ref: '#/components/schemas/SubscriptionWithThresholdObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_created:
+    post:
+      operationId: walletCreated
+      summary: A new wallet has been created
+      description: A new wallet has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.created
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_updated:
+    post:
+      operationId: walletUpdated
+      summary: A wallet has been updated
+      description: A wallet has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the updated wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.updated
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  wallet_terminated:
+    post:
+      operationId: walletTerminated
+      summary: A wallet has been terminated
+      description: A wallet has been terminated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the terminated wallet
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - wallet
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - wallet.terminated
+                object_type:
+                  type: string
+                  enum:
+                    - wallet
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                wallet:
+                  $ref: '#/components/schemas/WalletObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -11647,6 +11882,14 @@ components:
           deprecated: true
           description: '**Deprecated.** This field will be removed in a future version. When set to true, it applies the tax to the organization''s default billing entity. To apply or remove a tax from any billing entity (including the default one), please use the `PUT /billing_entities/:code` endpoint instead.'
           example: true
+        applied_to_billing_entities_codes:
+          type: array
+          items:
+            type: string
+          description: The codes of the billing entities the tax is applied to, sorted alphabetically. It is empty when the tax is only attached to customers.
+          example:
+            - acme_corp
+            - foo_bar
         created_at:
           type: string
           format: date-time
@@ -14332,6 +14575,13 @@ components:
           format: uuid
           description: Unique identifier assigned to the parent fee on which the true-up fee is assigned. This identifier establishes the relationship between the parent fee and the associated true-up fee.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_original_fee_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier assigned to the fee this fee was derived from. It is set on fees regenerated from an existing fee, and `null` otherwise.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_subscription_id:
           type:
             - string
@@ -14521,11 +14771,11 @@ components:
                 - subscription
                 - credit
                 - commitment
-              description: The fee type. Possible values are `add-on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
+              description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
               example: subscription
             code:
               type: string
-              description: The code of the fee item. It can be the code of the `add-on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
+              description: The code of the fee item. It can be the code of the `add_on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
               example: startup
             name:
               type: string
@@ -14533,7 +14783,7 @@ components:
                 The name of the fee item. The value depends on the type of the fee item:
 
                 - If the fee item is a `charge`, it is the billable metric name.
-                - If the fee item is a `add-on`, it is the add-on name.
+                - If the fee item is an `add_on`, it is the add-on name.
                 - If the fee item is a `credit`, it is the wallet transaction name if set, or `"credit"` if not.
                 - If the fee item is a `fixed_charge`, it is the fixed charge add-on name.
                 - For all the other fee items, it is the subscription plan name.
@@ -14546,7 +14796,7 @@ components:
                 The description of the fee item. The value depends on the type of the fee item:
 
                 - If the fee item is a `charge`, it is the billable metric description.
-                - If the fee item is a `add-on`, it is the add-on description.
+                - If the fee item is an `add_on`, it is the add-on description.
                 - If the fee item is a `credit`, it is always `"credit"`.
                 - If the fee item is a `fixed_charge`, it is the fixed charge add-on description.
                 - For all the other fee items, it is the subscription plan description.
@@ -14557,7 +14807,7 @@ components:
                 Specifies the name that will be displayed on an invoice. If no value is set for this field, we'll fallback to a value that depends on the type of the fee items:
 
                 - If the fee item is a `charge`, we'll fallback to the `invoice_display_name` of the `charge` or the billable metric name if no `invoice_display_name` is set.
-                - If the fee item is a `add-on`, we'll fallback to the `invoice_name` of the `add-on` or the `name` of the `add-on`.
+                - If the fee item is an `add_on`, we'll fallback to the `invoice_name` of the `add_on` or the `name` of the `add_on`.
                 - If the fee item is a `credit`, we'll fallback to the wallet transaction name if set, or `credit` if not.
                 - If the fee item is a `fixed_charge`, we'll fallback to the `invoice_display_name` of the `fixed_charge` or the `invoice_name` of the `fixed_charge_add_on` if no `invoice_display_name` is set.
                 - For all the other fee items, we'll fallback to the `invoice_display_name` of the subscription plan.
@@ -14580,7 +14830,7 @@ components:
             lago_item_id:
               type: string
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add-on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+              description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add_on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
               format: uuid
             item_type:
               type: string
@@ -15365,10 +15615,22 @@ components:
           type: integer
           description: The total amount of the credit note, expressed in cents.
           example: 120
+        precise_total_amount_cents:
+          type:
+            - string
+            - 'null'
+          description: The total amount of the credit note, expressed in cents, with precision.
+          example: '120.0001'
         taxes_amount_cents:
           type: integer
           description: The tax amount of the credit note, expressed in cents.
           example: 20
+        precise_taxes_amount_cents:
+          type:
+            - string
+            - 'null'
+          description: The tax amount of the credit note, expressed in cents, with precision.
+          example: '20.0001'
         taxes_rate:
           type: number
           description: The tax rate associated with this specific credit note.
@@ -15391,7 +15653,7 @@ components:
           example: 0
         offset_amount_cents:
           type: integer
-          description: The ofsetted amount (deducted from the invoice balance) of the credit note, expressed in cents.
+          description: The offset amount (deducted from the invoice balance) of the credit note, expressed in cents.
           example: 0
         coupons_adjustment_amount_cents:
           type: integer
@@ -15411,8 +15673,14 @@ components:
           type:
             - string
             - 'null'
-          description: The PDF file of the credit note.
+          description: The PDF file of the credit note. It is `null` while no PDF has been generated.
           example: https://getlago.com/credit_note/file
+        xml_url:
+          type:
+            - string
+            - 'null'
+          description: The e-invoicing XML file of the credit note. It is `null` while no XML file has been generated.
+          example: https://getlago.com/credit_note/xml
         items:
           type: array
           items:
@@ -16157,12 +16425,16 @@ components:
           description: The date when the invoice was issued. It is provided in the ISO 8601 date format.
           example: '2022-04-30'
         payment_dispute_lost_at:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date-time
-          description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC).
+          description: The date when the payment dispute was lost. It is expressed in Coordinated Universal Time (UTC). It is `null` until a dispute is lost on the invoice.
           example: '2022-09-14T16:35:31Z'
         payment_due_date:
-          type: string
+          type:
+            - string
+            - 'null'
           format: date
           description: The payment due date for the invoice, specified in the ISO 8601 date format.
           example: '2022-04-30'
@@ -16181,8 +16453,9 @@ components:
             - add_on
             - credit
             - one_off
+            - advance_charges
             - progressive_billing
-          description: The type of invoice issued. Possible values are `subscription`, `one-off`, `credit` or `progressive_billing`.
+          description: The type of invoice issued. Possible values are `subscription`, `add_on`, `credit`, `one_off`, `advance_charges` or `progressive_billing`.
           example: subscription
         status:
           type: string
@@ -16276,6 +16549,18 @@ components:
           type: integer
           description: The sum of the amount and taxes amount on the invoice, expressed in cents. It calculates the total financial value of the invoice, including both the original amount and any applicable taxes.
           example: 100
+        total_paid_amount_cents:
+          type: integer
+          description: The amount already paid on the invoice, expressed in cents.
+          example: 40
+        total_offsetted_credit_note_amount_cents:
+          type: integer
+          description: The amount of the invoice settled by finalized credit notes, expressed in cents.
+          example: 10
+        total_due_amount_cents:
+          type: integer
+          description: The amount still due on the invoice, expressed in cents. It is equal to `total_amount_cents` minus `total_paid_amount_cents` and `total_offsetted_credit_note_amount_cents`, and is `0` for voided invoices.
+          example: 50
         version_number:
           type: integer
           example: 3
@@ -16284,10 +16569,19 @@ components:
           example: false
           description: Indicates if the invoice is self-billed. Self-billing is a process where an organization creates the invoice on behalf of the partner. This field specifies whether the invoice is self-billed or not.
         file_url:
-          type: string
+          type:
+            - string
+            - 'null'
           format: uri
-          description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice
+          description: Contains the URL that provides direct access to the invoice PDF file. You can use this URL to download or view the PDF document of the invoice. It is `null` while no PDF has been generated, which is the case for draft invoices.
           example: https://getlago.com/invoice/file
+        xml_url:
+          type:
+            - string
+            - 'null'
+          format: uri
+          description: Contains the URL that provides direct access to the e-invoicing XML file. It is `null` while no XML file has been generated for the invoice.
+          example: https://getlago.com/invoice/xml
         web_url:
           type:
             - string
@@ -16305,6 +16599,13 @@ components:
           format: date-time
           example: '2022-04-29T08:59:51Z'
           description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
+        voided_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          example: '2022-04-29T08:59:51Z'
+          description: The date when the invoice was voided, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It is `null` for invoices that have not been voided.
     InvoiceMetadataObject:
       type: object
       properties:
@@ -19063,7 +19364,8 @@ components:
               description: The unique identifier of the subscription within your application.
             properties:
               type: object
-              description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
+              description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required. Any property of the targeted billable metric can be sent here, in addition to the documented fields below.
+              additionalProperties: true
               properties:
                 target_wallet_code:
                   type:
@@ -19398,6 +19700,13 @@ components:
               $ref: '#/components/schemas/Currency'
               description: The currency of the invoice.
               example: EUR
+            skip_psp:
+              type:
+                - boolean
+                - 'null'
+              description: If true, the invoice will be created but not sent to the payment provider.
+              example: true
+              default: false
             purchase_order_number:
               type:
                 - string
@@ -19437,8 +19746,8 @@ components:
                     type:
                       - string
                       - 'null'
-                    example: The description of the fee line item in the invoice. By default, the description of the add-on is used.
-                    description: This is a description
+                    description: The description of the fee line item in the invoice. By default, the description of the add-on is used.
+                    example: Onboarding session, June 2024
                   from_datetime:
                     type: string
                     description: The lower boundary of the invoice billing interval. The `from_datetime` should be provided in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
@@ -19451,13 +19760,6 @@ components:
                     example: '2022-08-08T00:00:00Z'
                   tax_codes:
                     $ref: '#/components/schemas/TaxCodes'
-                  skip_psp:
-                    type:
-                      - boolean
-                      - 'null'
-                    description: If true, the invoice will be created but not sent to the payment provider.
-                    example: true
-                    default: false
             invoice_custom_section:
               $ref: '#/components/schemas/InvoiceCustomSectionInput'
             payment_method:
@@ -24295,6 +24597,7 @@ components:
             - billable_metric_current_usage_amount
             - billable_metric_current_usage_units
             - lifetime_usage_amount
+            - billable_metric_lifetime_usage_units
           example: billable_metric_current_usage_amount
         code:
           type: string
@@ -24367,6 +24670,7 @@ components:
                     - billable_metric_current_usage_amount
                     - billable_metric_current_usage_units
                     - lifetime_usage_amount
+                    - billable_metric_lifetime_usage_units
                   example: billable_metric_current_usage_amount
                 code:
                   type: string
@@ -24403,6 +24707,7 @@ components:
                       - billable_metric_current_usage_amount
                       - billable_metric_current_usage_units
                       - lifetime_usage_amount
+                      - billable_metric_lifetime_usage_units
                     example: billable_metric_current_usage_amount
                   code:
                     type: string
@@ -24608,7 +24913,7 @@ components:
           type:
             - string
             - 'null'
-          description: Internal description of the taxe
+          description: Internal description of the tax
           example: French standard VAT
         applied_to_organization:
           type: boolean
@@ -25265,6 +25570,11 @@ components:
             - billable_metric_current_usage_amount
             - billable_metric_current_usage_units
             - lifetime_usage_amount
+            - billable_metric_lifetime_usage_units
+            - wallet_balance_amount
+            - wallet_credits_balance
+            - wallet_ongoing_balance_amount
+            - wallet_credits_ongoing_balance
           example: billable_metric_current_usage_amount
         alert_code:
           type: string
