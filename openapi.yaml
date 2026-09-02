@@ -8766,9 +8766,10 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   invoice_add_on_added:
     post:
+      deprecated: true
       operationId: invoiceAddOnAdded
       summary: A new add on invoice has been emitted
-      description: A new add on invoice has been emitted
+      description: '**Deprecated.** This webhook is no longer emitted by Lago. Use `invoice.one_off_created` for invoices created from add-ons.'
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
