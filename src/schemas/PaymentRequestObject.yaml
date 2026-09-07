@@ -15,10 +15,12 @@ properties:
     description: Unique identifier of the payment request, created by Lago.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   email:
-    type: string
+    type:
+      - string
+      - "null"
     format: "email"
     example: "dinesh@piedpiper.test"
-    description: The customer's email address used for sending dunning notifications
+    description: The email address used for sending dunning notifications. It defaults to the customer's own email address, and is `null` when the customer has none.
   amount_cents:
     type: integer
     description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.

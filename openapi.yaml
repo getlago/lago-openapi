@@ -16782,6 +16782,7 @@ components:
         - lago_customer_id
         - external_customer_id
         - invoice_ids
+        - invoice_numbers
         - lago_payable_id
         - payable_type
         - amount_cents
@@ -16866,12 +16867,16 @@ components:
             - provider
           example: manual
         reference:
-          type: string
-          description: Reference for the payment.
+          type:
+            - string
+            - 'null'
+          description: Reference for the payment. Set on manual payments only; it is always `null` for payments collected through a payment provider.
           example: ref1
         payment_provider_code:
-          type: string
-          description: Code of the payment provider
+          type:
+            - string
+            - 'null'
+          description: Code of the payment provider. It is `null` for manual payments, which are not attached to a payment provider.
           example: stripe_prod
         payment_provider_type:
           type: string
@@ -16896,16 +16901,11 @@ components:
           description: Unique identifier of the payment within the payment provider (if applicable).
           example: pi_5eb0285741bc6ba
         provider_customer_id:
-          type: string
-          description: Unique identifier of the customer within the payment provider
-          example: cus_5eb0285bcf941bc6ba
-        payment_method_id:
           type:
             - string
             - 'null'
-          format: uuid
-          description: The unique identifier of the payment method used for this payment.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          description: Unique identifier of the customer within the payment provider. It is `null` for manual payments.
+          example: cus_5eb0285bcf941bc6ba
         next_action:
           type: object
           additionalProperties: true
@@ -16950,10 +16950,12 @@ components:
           description: Unique identifier of the payment request, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         email:
-          type: string
+          type:
+            - string
+            - 'null'
           format: email
           example: dinesh@piedpiper.test
-          description: The customer's email address used for sending dunning notifications
+          description: The email address used for sending dunning notifications. It defaults to the customer's own email address, and is `null` when the customer has none.
         amount_cents:
           type: integer
           description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.
@@ -19080,6 +19082,8 @@ components:
       required:
         - lago_id
         - is_default
+        - payment_provider_code
+        - payment_provider_name
         - payment_provider_type
         - provider_method_id
         - created_at
@@ -19106,9 +19110,12 @@ components:
           description: Human-readable name of the payment provider.
           example: Stripe
         payment_provider_type:
-          type: string
-          description: The type of the payment provider.
+          type:
+            - string
+            - 'null'
+          description: The type of the payment provider. It is `null` when the payment method is no longer attached to a payment provider.
           enum:
+            - null
             - adyen
             - cashfree
             - gocardless
@@ -21545,6 +21552,18 @@ components:
           type: string
           description: The unique number assigned to the payment receipt.
           example: LAG-1234-001-002
+        file_url:
+          type:
+            - string
+            - 'null'
+          description: The PDF file of the payment receipt. It is `null` while no PDF has been generated.
+          example: https://getlago.com/payment_receipt/file
+        xml_url:
+          type:
+            - string
+            - 'null'
+          description: The e-invoicing XML file of the payment receipt. It is `null` while no XML file has been generated.
+          example: https://getlago.com/payment_receipt/xml
         payment:
           $ref: '#/components/schemas/PaymentObject'
     PaymentReceiptsPaginated:
@@ -21574,7 +21593,6 @@ components:
         payment_request:
           type: object
           required:
-            - email
             - external_customer_id
             - lago_invoice_ids
           properties:
@@ -21586,7 +21604,7 @@ components:
               type: string
               format: email
               example: dinesh@piedpiper.test
-              description: The customer's email address used for sending dunning notifications
+              description: The email address used for sending dunning notifications. When omitted, the customer's own email address is used.
             lago_invoice_ids:
               type: array
               description: A list of Lago IDs for the customer's overdue invoices to start the dunning process
@@ -21626,6 +21644,7 @@ components:
               description: The payment amount in cents
             reference:
               type: string
+              maxLength: 40
               example: ref1
               description: Reference for the payment
             paid_at:
