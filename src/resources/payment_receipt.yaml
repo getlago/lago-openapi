@@ -1,10 +1,11 @@
 parameters:
   - name: lago_id
     in: path
-    description: Payment receipt ID
+    description: Unique identifier of the payment receipt.
     required: true
     schema:
       type: string
+      format: uuid
       example: '5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba'
 get:
   tags:
