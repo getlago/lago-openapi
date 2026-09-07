@@ -2433,6 +2433,7 @@ paths:
         - $ref: '#/components/parameters/external_customer_id_path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/payment_status'
         - name: billing_entity_codes[]
           in: query
@@ -10722,6 +10723,15 @@ components:
       schema:
         type: string
         example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    currency:
+      name: currency
+      in: query
+      description: Filter the results by currency, expressed as an ISO 4217 code.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: EUR
     payment_status:
       name: payment_status
       in: query
@@ -10770,15 +10780,6 @@ components:
         type: string
         format: uuid
         example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-    currency:
-      name: currency
-      in: query
-      description: Filter the results by currency, expressed as an ISO 4217 code.
-      required: false
-      explode: true
-      schema:
-        type: string
-        example: EUR
     plan_code:
       name: code
       in: path
