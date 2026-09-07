@@ -1,0 +1,10 @@
+name: created_at_to
+in: query
+description: Filter payments created on or before this ISO-8601 date, inclusive through the end of the day in the organization timezone; invalid dates are ignored.
+required: false
+style: form
+explode: true
+schema:
+  type: string
+  format: date
+  example: "2026-09-07"

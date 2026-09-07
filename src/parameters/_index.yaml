@@ -1,3 +1,7 @@
+amount_from:
+  $ref: "./amount_from.yaml"
+amount_to:
+  $ref: "./amount_to.yaml"
 charge_code:
   $ref: "./charge_code.yaml"
 charge_filter_id:
@@ -8,16 +12,40 @@ external_subscription_id:
   $ref: "./external_subscription_id.yaml"
 fixed_charge_code:
   $ref: "./fixed_charge_code.yaml"
+invoice_number:
+  $ref: "./invoice_number.yaml"
 lago_invoice_id:
   $ref: "./lago_invoice_id.yaml"
 months:
   $ref: "./months.yaml"
 page:
   $ref: "./page.yaml"
+payable_type:
+  $ref: "./payable_type.yaml"
+payment_created_at_from:
+  $ref: "./payment_created_at_from.yaml"
+payment_created_at_to:
+  $ref: "./payment_created_at_to.yaml"
+payment_invoice_id:
+  $ref: "./payment_invoice_id.yaml"
+payment_method_type:
+  $ref: "./payment_method_type.yaml"
+payment_payable_status:
+  $ref: "./payment_payable_status.yaml"
+payment_payable_statuses:
+  $ref: "./payment_payable_statuses.yaml"
+payment_provider_type:
+  $ref: "./payment_provider_type.yaml"
+payment_type:
+  $ref: "./payment_type.yaml"
 per_page:
   $ref: "./per_page.yaml"
 plan_code:
   $ref: "./plan_code.yaml"
+receipt_number:
+  $ref: "./receipt_number.yaml"
+search_term:
+  $ref: "./search_term.yaml"
 subscription_external_id_path:
   $ref: "./subscription_external_id_path.yaml"
 webhook_signature:

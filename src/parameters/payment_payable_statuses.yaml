@@ -1,0 +1,17 @@
+name: payment_statuses[]
+in: query
+description: Alias for `payment_status[]`, matching any of `pending`, `processing`, `succeeded` or `failed`; a single value can also be sent as `payment_statuses=succeeded`, and it is ignored when `payment_status` is supplied.
+required: false
+style: form
+explode: true
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+      - pending
+      - processing
+      - succeeded
+      - failed
+  example:
+    - succeeded

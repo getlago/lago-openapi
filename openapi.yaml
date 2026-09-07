@@ -2396,20 +2396,27 @@ paths:
         - customers
         - payments
       summary: List all customer's payments
-      description: This endpoint is used to list all payments of a customer
+      description: List payments with filters combined using AND and values within each array combined using OR. Results keep their existing visibility rules and are ordered by creation date descending, then ID. Amounts are integer cents and support the full signed 64-bit range from 0 through 9223372036854775807. Unknown enum or currency values, negative or out-of-range amounts, inverted amount bounds, invalid invoice UUIDs and receipt or invoice numbers longer than 255 characters return 422 validation_errors. Invalid date bounds are ignored. Search narrows the scope before exact filters apply; invoice search is skipped when invoice_id or invoice_number is supplied, and customer search is skipped when external_customer_id is supplied. Repeat the same filters when requesting the page number returned in meta.next_page.
       operationId: findAllCustomerPayments
       parameters:
         - $ref: '#/components/parameters/external_customer_id_path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - name: invoice_id
-          in: query
-          description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
-          required: false
-          schema:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - $ref: '#/components/parameters/payment_invoice_id'
+        - $ref: '#/components/parameters/payment_payable_status'
+        - $ref: '#/components/parameters/payment_payable_statuses'
+        - $ref: '#/components/parameters/amount_from'
+        - $ref: '#/components/parameters/amount_to'
+        - $ref: '#/components/parameters/receipt_number'
+        - $ref: '#/components/parameters/payment_created_at_from'
+        - $ref: '#/components/parameters/payment_created_at_to'
+        - $ref: '#/components/parameters/payment_provider_type'
+        - $ref: '#/components/parameters/payment_method_type'
+        - $ref: '#/components/parameters/currency'
+        - $ref: '#/components/parameters/invoice_number'
+        - $ref: '#/components/parameters/payment_type'
+        - $ref: '#/components/parameters/payable_type'
+        - $ref: '#/components/parameters/search_term'
       responses:
         '200':
           description: Payments
@@ -2421,6 +2428,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /customers/{external_customer_id}/payment_requests:
     get:
       tags:
@@ -4868,20 +4877,27 @@ paths:
       tags:
         - payments
       summary: List all payments
-      description: This endpoint is used to list all payments
+      description: List payments with filters combined using AND and values within each array combined using OR. Results keep their existing visibility rules and are ordered by creation date descending, then ID. Amounts are integer cents and support the full signed 64-bit range from 0 through 9223372036854775807. Unknown enum or currency values, negative or out-of-range amounts, inverted amount bounds, invalid invoice UUIDs and receipt or invoice numbers longer than 255 characters return 422 validation_errors. Invalid date bounds are ignored. Search narrows the scope before exact filters apply; invoice search is skipped when invoice_id or invoice_number is supplied, and customer search is skipped when external_customer_id is supplied. Repeat the same filters when requesting the page number returned in meta.next_page.
       operationId: findAllPayments
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/external_customer_id'
-        - name: invoice_id
-          in: query
-          description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
-          required: false
-          schema:
-            type: string
-            format: uuid
-            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - $ref: '#/components/parameters/payment_invoice_id'
+        - $ref: '#/components/parameters/payment_payable_status'
+        - $ref: '#/components/parameters/payment_payable_statuses'
+        - $ref: '#/components/parameters/amount_from'
+        - $ref: '#/components/parameters/amount_to'
+        - $ref: '#/components/parameters/receipt_number'
+        - $ref: '#/components/parameters/payment_created_at_from'
+        - $ref: '#/components/parameters/payment_created_at_to'
+        - $ref: '#/components/parameters/payment_provider_type'
+        - $ref: '#/components/parameters/payment_method_type'
+        - $ref: '#/components/parameters/currency'
+        - $ref: '#/components/parameters/invoice_number'
+        - $ref: '#/components/parameters/payment_type'
+        - $ref: '#/components/parameters/payable_type'
+        - $ref: '#/components/parameters/search_term'
       responses:
         '200':
           description: Payments
@@ -4891,6 +4907,8 @@ paths:
                 $ref: '#/components/schemas/PaymentsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /payments/{lago_id}:
     parameters:
       - name: lago_id
@@ -10721,6 +10739,216 @@ components:
       schema:
         type: string
         example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    payment_invoice_id:
+      name: invoice_id
+      in: query
+      description: Filter by the Lago invoice UUID, matching the directly payable invoice or any invoice covered by a payment request.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    payment_payable_status:
+      name: payment_status[]
+      in: query
+      description: Filter by any of `pending`, `processing`, `succeeded` or `failed`; a single value can also be sent as `payment_status=succeeded`, and this parameter takes precedence over `payment_statuses`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - pending
+            - processing
+            - succeeded
+            - failed
+        example:
+          - succeeded
+          - failed
+    payment_payable_statuses:
+      name: payment_statuses[]
+      in: query
+      description: Alias for `payment_status[]`, matching any of `pending`, `processing`, `succeeded` or `failed`; a single value can also be sent as `payment_statuses=succeeded`, and it is ignored when `payment_status` is supplied.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - pending
+            - processing
+            - succeeded
+            - failed
+        example:
+          - succeeded
+    amount_from:
+      name: amount_from
+      in: query
+      description: Inclusive minimum payment amount in integer cents, from 0 through 9223372036854775807; it must not exceed `amount_to` when both bounds are supplied.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+        example: 1000
+    amount_to:
+      name: amount_to
+      in: query
+      description: Inclusive maximum payment amount in integer cents, from 0 through 9223372036854775807; set it equal to `amount_from` to match an exact amount.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+        example: 5000
+    receipt_number:
+      name: receipt_number
+      in: query
+      description: Filter by an exact, case-insensitive payment receipt number of at most 255 characters; payments without a receipt do not match.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        maxLength: 255
+        example: rcpt-2026-0001
+    payment_created_at_from:
+      name: created_at_from
+      in: query
+      description: Filter payments created on or after this ISO-8601 date, inclusive from the start of the day in the organization timezone; invalid dates are ignored.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        format: date
+        example: '2026-09-01'
+    payment_created_at_to:
+      name: created_at_to
+      in: query
+      description: Filter payments created on or before this ISO-8601 date, inclusive through the end of the day in the organization timezone; invalid dates are ignored.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        format: date
+        example: '2026-09-07'
+    payment_provider_type:
+      name: payment_provider_type[]
+      in: query
+      description: Filter by any of `stripe`, `gocardless`, `cashfree`, `adyen`, `flutterwave` or `moneyhash`; a single value can also be sent as `payment_provider_type=stripe`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - stripe
+            - gocardless
+            - cashfree
+            - adyen
+            - flutterwave
+            - moneyhash
+        example:
+          - stripe
+    payment_method_type:
+      name: payment_method_type[]
+      in: query
+      description: Filter by any of `card`, `sepa_debit`, `us_bank_account`, `bacs_debit`, `link`, `boleto`, `crypto` or `customer_balance`, using the payment provider method data and falling back to the saved payment method when its type is empty; a single value can also be sent as `payment_method_type=card`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - card
+            - sepa_debit
+            - us_bank_account
+            - bacs_debit
+            - link
+            - boleto
+            - crypto
+            - customer_balance
+        example:
+          - card
+          - sepa_debit
+    currency:
+      name: currency
+      in: query
+      description: Filter the results by currency, expressed as an ISO 4217 code.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: EUR
+    invoice_number:
+      name: invoice_number
+      in: query
+      description: Filter by an exact, case-insensitive invoice number of at most 255 characters, matching either the directly payable invoice or any invoice covered by a payment request.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        maxLength: 255
+        example: LAG-1234-001-002
+    payment_type:
+      name: payment_type[]
+      in: query
+      description: Filter by either `manual` or `provider`, matching any supplied type; a single value can also be sent as `payment_type=manual`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - manual
+            - provider
+        example:
+          - manual
+    payable_type:
+      name: payable_type[]
+      in: query
+      description: Filter by either `Invoice` or `PaymentRequest`, matching any supplied payable type; a single value can also be sent as `payable_type=PaymentRequest`.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - Invoice
+            - PaymentRequest
+        example:
+          - PaymentRequest
+    search_term:
+      name: search_term
+      in: query
+      description: Search case-insensitively within provider payment IDs, references, payment UUIDs, directly payable invoice numbers and customer name, first name, last name, external ID or email; receipt numbers use their own exact filter.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: pi_3
     payment_status:
       name: payment_status
       in: query
@@ -10769,15 +10997,6 @@ components:
         type: string
         format: uuid
         example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-    currency:
-      name: currency
-      in: query
-      description: Filter the results by currency, expressed as an ISO 4217 code.
-      required: false
-      explode: true
-      schema:
-        type: string
-        example: EUR
     plan_code:
       name: code
       in: path

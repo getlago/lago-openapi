@@ -1,0 +1,11 @@
+name: amount_from
+in: query
+description: Inclusive minimum payment amount in integer cents, from 0 through 9223372036854775807; it must not exceed `amount_to` when both bounds are supplied.
+required: false
+style: form
+explode: true
+schema:
+  type: integer
+  format: int64
+  minimum: 0
+  example: 1000

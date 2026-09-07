@@ -1,0 +1,10 @@
+name: receipt_number
+in: query
+description: Filter by an exact, case-insensitive payment receipt number of at most 255 characters; payments without a receipt do not match.
+required: false
+style: form
+explode: true
+schema:
+  type: string
+  maxLength: 255
+  example: "rcpt-2026-0001"

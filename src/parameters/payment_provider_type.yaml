@@ -1,0 +1,19 @@
+name: payment_provider_type[]
+in: query
+description: Filter by any of `stripe`, `gocardless`, `cashfree`, `adyen`, `flutterwave` or `moneyhash`; a single value can also be sent as `payment_provider_type=stripe`.
+required: false
+style: form
+explode: true
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+      - stripe
+      - gocardless
+      - cashfree
+      - adyen
+      - flutterwave
+      - moneyhash
+  example:
+    - stripe

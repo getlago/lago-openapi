@@ -1,0 +1,11 @@
+name: amount_to
+in: query
+description: Inclusive maximum payment amount in integer cents, from 0 through 9223372036854775807; set it equal to `amount_from` to match an exact amount.
+required: false
+style: form
+explode: true
+schema:
+  type: integer
+  format: int64
+  minimum: 0
+  example: 5000

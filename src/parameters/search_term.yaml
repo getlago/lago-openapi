@@ -1,0 +1,9 @@
+name: search_term
+in: query
+description: Search case-insensitively within provider payment IDs, references, payment UUIDs, directly payable invoice numbers and customer name, first name, last name, external ID or email; receipt numbers use their own exact filter.
+required: false
+style: form
+explode: true
+schema:
+  type: string
+  example: "pi_3"
