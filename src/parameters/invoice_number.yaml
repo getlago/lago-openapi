@@ -1,0 +1,10 @@
+name: invoice_number
+in: query
+description: Filter by an exact, case-insensitive invoice number of at most 255 characters, matching either the directly payable invoice or any invoice covered by a payment request.
+required: false
+style: form
+explode: true
+schema:
+  type: string
+  maxLength: 255
+  example: "LAG-1234-001-002"

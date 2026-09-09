@@ -1,0 +1,18 @@
+name: payment_status[]
+in: query
+description: Filter by any of `pending`, `processing`, `succeeded` or `failed`; a single value can also be sent as `payment_status=succeeded`, and this parameter takes precedence over `payment_statuses`.
+required: false
+style: form
+explode: true
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+      - pending
+      - processing
+      - succeeded
+      - failed
+  example:
+    - succeeded
+    - failed

@@ -1,0 +1,15 @@
+name: payable_type[]
+in: query
+description: Filter by either `Invoice` or `PaymentRequest`, matching any supplied payable type; a single value can also be sent as `payable_type=PaymentRequest`.
+required: false
+style: form
+explode: true
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+      - Invoice
+      - PaymentRequest
+  example:
+    - PaymentRequest
