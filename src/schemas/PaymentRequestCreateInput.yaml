@@ -5,7 +5,6 @@ properties:
   payment_request:
     type: object
     required:
-      - email
       - external_customer_id
       - lago_invoice_ids
     properties:
@@ -17,7 +16,7 @@ properties:
         type: string
         format: "email"
         example: "dinesh@piedpiper.test"
-        description: The customer's email address used for sending dunning notifications
+        description: The email address used for sending dunning notifications. When omitted, the customer's own email address is used.
       lago_invoice_ids:
         type: array
         description: A list of Lago IDs for the customer's overdue invoices to start the dunning process

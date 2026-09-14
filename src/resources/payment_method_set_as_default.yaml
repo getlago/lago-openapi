@@ -13,10 +13,10 @@ put:
     - payment_methods
   operationId: paymentMethodSetAsDefault
   summary: Set the payment method as default
-  description: Use the payment method as default when not selected a payment method
+  description: This endpoint sets a payment method as the customer's default one. It is the payment method Lago uses when a payment is triggered without an explicit one. Any other default payment method of the customer is unset.
   responses:
     '200':
-      description: Return a 200 status to indicate that the data was received successfully
+      description: Payment method set as default
       content:
         application/json:
           schema:

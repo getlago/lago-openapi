@@ -19,6 +19,7 @@ properties:
         description: The payment amount in cents
       reference:
         type: string
+        maxLength: 40
         example: "ref1"
         description: Reference for the payment
       paid_at:

@@ -4,6 +4,7 @@ required:
   - lago_customer_id
   - external_customer_id
   - invoice_ids
+  - invoice_numbers
   - lago_payable_id
   - payable_type
   - amount_cents
@@ -88,12 +89,16 @@ properties:
       - provider
     example: "manual"
   reference:
-    type: string
-    description: "Reference for the payment."
+    type:
+      - string
+      - "null"
+    description: "Reference for the payment. Set on manual payments only; it is always `null` for payments collected through a payment provider."
     example: "ref1"
   payment_provider_code:
-    type: string
-    description: Code of the payment provider
+    type:
+      - string
+      - "null"
+    description: "Code of the payment provider. It is `null` for manual payments, which are not attached to a payment provider."
     example: "stripe_prod"
   payment_provider_type:
     type: string
@@ -118,16 +123,11 @@ properties:
     description: "Unique identifier of the payment within the payment provider (if applicable)."
     example: "pi_5eb0285741bc6ba"
   provider_customer_id:
-    type: string
-    description: "Unique identifier of the customer within the payment provider"
-    example: "cus_5eb0285bcf941bc6ba"
-  payment_method_id:
     type:
       - string
       - "null"
-    format: uuid
-    description: "The unique identifier of the payment method used for this payment."
-    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+    description: "Unique identifier of the customer within the payment provider. It is `null` for manual payments."
+    example: "cus_5eb0285bcf941bc6ba"
   next_action:
     type: object
     additionalProperties: true

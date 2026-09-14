@@ -19,5 +19,17 @@ properties:
     type: string
     description: The unique number assigned to the payment receipt.
     example: "LAG-1234-001-002"
+  file_url:
+    type:
+      - string
+      - "null"
+    description: The PDF file of the payment receipt. It is `null` while no PDF has been generated.
+    example: "https://getlago.com/payment_receipt/file"
+  xml_url:
+    type:
+      - string
+      - "null"
+    description: The e-invoicing XML file of the payment receipt. It is `null` while no XML file has been generated.
+    example: "https://getlago.com/payment_receipt/xml"
   payment:
     $ref: './PaymentObject.yaml'
