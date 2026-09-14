@@ -7,6 +7,9 @@ get:
   summary: List wallet alerts
   description: This endpoint enables the retrieval of all alerts for a wallet.
   operationId: getCustomerWalletAlerts
+  parameters:
+    - $ref: "../parameters/page.yaml"
+    - $ref: "../parameters/per_page.yaml"
   responses:
     "200":
       description: Wallet alerts

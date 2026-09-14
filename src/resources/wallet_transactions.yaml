@@ -39,6 +39,14 @@ get:
       schema:
         type: string
         example: "inbound"
+    - name: metadata[key]
+      in: query
+      description: Filter wallet transactions by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. For example, `metadata[color]=blue`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "someValue"
   responses:
     "200":
       description: Wallet transactions

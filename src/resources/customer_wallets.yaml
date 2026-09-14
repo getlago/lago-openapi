@@ -37,6 +37,7 @@ get:
   parameters:
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
+    - $ref: "../parameters/currency.yaml"
     - name: billing_entity_codes[]
       in: query
       description: Filter wallets by billing entity codes.

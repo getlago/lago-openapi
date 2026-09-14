@@ -2605,6 +2605,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/currency'
         - name: billing_entity_codes[]
           in: query
           description: Filter wallets by billing entity codes.
@@ -2824,6 +2825,9 @@ paths:
       summary: List wallet alerts
       description: This endpoint enables the retrieval of all alerts for a wallet.
       operationId: getCustomerWalletAlerts
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: Wallet alerts
@@ -6316,6 +6320,8 @@ paths:
       operationId: getSubscriptionAlerts
       parameters:
         - $ref: '#/components/parameters/subscription_status'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: Subscription alerts
@@ -7517,6 +7523,14 @@ paths:
           schema:
             type: string
             example: inbound
+        - name: metadata[key]
+          in: query
+          description: Filter wallet transactions by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. For example, `metadata[color]=blue`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: someValue
       responses:
         '200':
           description: Wallet transactions
@@ -10742,6 +10756,15 @@ components:
           - failed
           - succeeded
         example: pending
+    currency:
+      name: currency
+      in: query
+      description: Filter the results by currency, expressed as an ISO 4217 code.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: EUR
     wallet_code:
       name: wallet_code
       in: path
@@ -10777,15 +10800,6 @@ components:
         type: string
         format: uuid
         example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-    currency:
-      name: currency
-      in: query
-      description: Filter the results by currency, expressed as an ISO 4217 code.
-      required: false
-      explode: true
-      schema:
-        type: string
-        example: EUR
     plan_code:
       name: code
       in: path
