@@ -32,6 +32,10 @@ properties:
     format: "uuid"
     description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  billing_entity_code:
+    type: string
+    example: "default"
+    description: The code of the billing entity associated with the wallet transaction. Falls back to the wallet's billing entity when the transaction does not carry one.
   lago_invoice_id:
     type:
       - string

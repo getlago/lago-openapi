@@ -34,6 +34,18 @@ properties:
         type: boolean
         description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
         example: false
+      paid_top_up_min_amount_cents:
+        type:
+          - integer
+          - "null"
+        description: Minimum amount of cents that can be top-up with a single paid transaction.
+        example: 100
+      paid_top_up_max_amount_cents:
+        type:
+          - integer
+          - "null"
+        description: Maximum amount of cents that can be top-up with a single paid transaction.
+        example: 1000
       billing_entity_code:
         type: string
         example: "default"

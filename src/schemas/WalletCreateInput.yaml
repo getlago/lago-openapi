@@ -1,4 +1,6 @@
 type: object
+required:
+  - wallet
 properties:
   wallet:
     type: object
@@ -92,6 +94,12 @@ properties:
           - "null"
         description: The name of the wallet transactions triggered when creating the wallet. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
         example: "Tokens for models 'high-fidelity-boost'"
+      transaction_priority:
+        type: integer
+        minimum: 1
+        maximum: 50
+        description: "The priority of the wallet transactions triggered when creating the wallet. It drives the order in which credits are consumed. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50."
+        example: 50
       purchase_order_number:
         type:
           - string
