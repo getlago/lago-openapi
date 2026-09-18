@@ -2606,6 +2606,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/currency'
         - name: billing_entity_codes[]
           in: query
           description: Filter wallets by billing entity codes.
@@ -2825,6 +2826,9 @@ paths:
       summary: List wallet alerts
       description: This endpoint enables the retrieval of all alerts for a wallet.
       operationId: getCustomerWalletAlerts
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: Wallet alerts
@@ -6318,6 +6322,8 @@ paths:
       operationId: getSubscriptionAlerts
       parameters:
         - $ref: '#/components/parameters/subscription_status'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: Subscription alerts
@@ -7519,6 +7525,14 @@ paths:
           schema:
             type: string
             example: inbound
+        - name: metadata[key]
+          in: query
+          description: Filter wallet transactions by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. For example, `metadata[color]=blue`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: someValue
       responses:
         '200':
           description: Wallet transactions
@@ -10753,6 +10767,15 @@ components:
           - failed
           - succeeded
         example: pending
+    currency:
+      name: currency
+      in: query
+      description: Filter the results by currency, expressed as an ISO 4217 code.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: EUR
     wallet_code:
       name: wallet_code
       in: path
@@ -13176,6 +13199,12 @@ components:
           type: string
           description: The name of the coupon.
           example: Startup Deal
+        coupon_description:
+          type:
+            - string
+            - 'null'
+          description: The description of the parent coupon.
+          example: I am a coupon description
         coupon_status:
           type: string
           enum:
@@ -17553,7 +17582,6 @@ components:
         - currency
         - rate_amount
         - credits_balance
-        - balance
         - balance_cents
         - consumed_credits
         - created_at
@@ -17764,6 +17792,8 @@ components:
             - eu_bank_details
     WalletCreateInput:
       type: object
+      required:
+        - wallet
       properties:
         wallet:
           type: object
@@ -17857,6 +17887,12 @@ components:
                 - 'null'
               description: The name of the wallet transactions triggered when creating the wallet. It will appear on the invoice as the label for the fee. If not set, the label on the invoice will fallback to either `Prepaid credits - {{wallet_name}}` if the wallet name is set, or `Prepaid credits`.
               example: Tokens for models 'high-fidelity-boost'
+            transaction_priority:
+              type: integer
+              minimum: 1
+              maximum: 50
+              description: 'The priority of the wallet transactions triggered when creating the wallet. It drives the order in which credits are consumed. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50.'
+              example: 50
             purchase_order_number:
               type:
                 - string
@@ -18076,6 +18112,18 @@ components:
               type: boolean
               description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
               example: false
+            paid_top_up_min_amount_cents:
+              type:
+                - integer
+                - 'null'
+              description: Minimum amount of cents that can be top-up with a single paid transaction.
+              example: 100
+            paid_top_up_max_amount_cents:
+              type:
+                - integer
+                - 'null'
+              description: Maximum amount of cents that can be top-up with a single paid transaction.
+              example: 1000
             billing_entity_code:
               type: string
               example: default
@@ -25023,6 +25071,19 @@ components:
               pattern: ^[0-9]+.?[0-9]*$
               description: The number of voided credits.
               example: '5.0'
+            voided_transaction_id:
+              type:
+                - string
+                - 'null'
+              format: uuid
+              description: Unique identifier of the inbound wallet transaction to void. Only available on traceable wallets, and the target transaction must still have a remaining amount.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            priority:
+              type: integer
+              minimum: 1
+              maximum: 50
+              description: 'The priority of the wallet transaction. It drives the order in which credits are consumed. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50.'
+              example: 50
             invoice_requires_successful_payment:
               type: boolean
               description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
@@ -25096,6 +25157,10 @@ components:
           format: uuid
           description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        billing_entity_code:
+          type: string
+          example: default
+          description: The code of the billing entity associated with the wallet transaction. Falls back to the wallet's billing entity when the transaction does not carry one.
         lago_invoice_id:
           type:
             - string
