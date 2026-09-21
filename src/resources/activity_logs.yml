@@ -34,7 +34,7 @@ get:
         type: array
         items:
           type: string
-        example: [billing_metric.created, billing_metric.updated]
+        example: [billable_metric.created, billable_metric.updated]
     - name: activity_sources[]
       in: query
       description: Filter results by activity sources

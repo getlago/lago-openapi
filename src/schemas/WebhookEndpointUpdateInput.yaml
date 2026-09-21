@@ -13,7 +13,7 @@ properties:
         type:
           - string
           - "null"
-        description: The signature used for the webhook. If no value is passed,
+        description: The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept.
         example: "hmac"
         enum:
           - jwt

@@ -23,8 +23,8 @@ properties:
     description: "The email of the user who performed the activity"
   activity_type:
     type: string
-    example: "billing_metric.created"
-    description: This field stores the actitivy action that was performed to the activity_object.
+    example: "billable_metric.created"
+    description: This field stores the activity action that was performed on the activity_object.
   activity_source:
     type: string
     example: "api"

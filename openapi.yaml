@@ -310,8 +310,8 @@ paths:
             items:
               type: string
             example:
-              - billing_metric.created
-              - billing_metric.updated
+              - billable_metric.created
+              - billable_metric.updated
         - name: activity_sources[]
           in: query
           description: Filter results by activity sources
@@ -738,19 +738,19 @@ paths:
       tags:
         - analytics
       summary: List MRR
-      description: This endpoint is used to list MRR.
+      description: |-
+        Quantifies the revenue generated from `subscription` fees on a monthly basis. This figure is calculated post-application of applicable taxes and deduction of any applicable discounts. The method of calculation varies based on the subscription billing cycle:
+
+        - Revenue from `monthly` subscription invoices is included in the MRR for the month in which the invoice is issued.
+        - Revenue from `quarterly` subscription invoices is distributed evenly over three months. This distribution applies to fees paid in advance (allocated to the next remaining months depending on calendar or anniversary billing) as well as to fees paid in arrears (allocated to the preceding months depending on calendar or anniversary billing).
+        - Revenue from `yearly` subscription invoices is distributed evenly over twelve months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
+        - Revenue from `semiannual` subscription invoices is distributed evenly over six months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
+        - Revenue from `weekly` subscription invoices, the total revenue from all invoices issued within a month is summed up. This total is then divided by the number of invoices issued during that month, and the result is multiplied by 4.33, representing the average number of weeks in a month.
       operationId: findAllMrrs
       parameters:
         - name: currency
           in: query
-          description: |-
-            Quantifies the revenue generated from `subscription` fees on a monthly basis. This figure is calculated post-application of applicable taxes and deduction of any applicable discounts. The method of calculation varies based on the subscription billing cycle:
-
-            - Revenue from `monthly` subscription invoices is included in the MRR for the month in which the invoice is issued.
-            - Revenue from `quarterly` subscription invoices is distributed evenly over three months. This distribution applies to fees paid in advance (allocated to the next remaining months depending on calendar or anniversary billing) as well as to fees paid in arrears (allocated to the preceding months depending on calendar or anniversary billing).
-            - Revenue from `yearly` subscription invoices is distributed evenly over twelve months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
-            - Revenue from `semiannual` subscription invoices is distributed evenly over six months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
-            - Revenue from `weekly` subscription invoices, the total revenue from all invoices issued within a month is summed up. This total is then divided by the number of invoices issued during that month, and the result is multiplied by 4.33, representing the average number of weeks in a month.
+          description: The currency of MRR analytics. Format must be ISO 4217.
           required: false
           explode: true
           schema:
@@ -816,7 +816,7 @@ paths:
       parameters:
         - name: time_granularity
           in: query
-          description: The time granularity of usage analytics. Possible values are 'daily', 'weekly', 'monthly', 'yearly'.
+          description: The time granularity of usage analytics. Possible values are 'daily', 'weekly' and 'monthly'. Defaults to 'daily'.
           required: false
           schema:
             type: string
@@ -824,6 +824,7 @@ paths:
               - daily
               - weekly
               - monthly
+            default: daily
             example: monthly
         - name: currency
           in: query
@@ -9742,8 +9743,8 @@ webhooks:
   payment_request_created:
     post:
       operationId: paymentRequestCreated
-      summary: An new payment request has been created
-      description: An new payment request has been created
+      summary: A new payment request has been created
+      description: A new payment request has been created
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -9820,8 +9821,8 @@ webhooks:
   payment_request_payment_status_updated:
     post:
       operationId: paymentRequestPaymentStatusUpdated
-      summary: The payment status of an invoice has been updated
-      description: The payment status of an invoice has been updated
+      summary: The payment status of a payment request has been updated
+      description: The payment status of a payment request has been updated
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -12203,8 +12204,8 @@ components:
           description: The email of the user who performed the activity
         activity_type:
           type: string
-          example: billing_metric.created
-          description: This field stores the actitivy action that was performed to the activity_object.
+          example: billable_metric.created
+          description: This field stores the activity action that was performed on the activity_object.
         activity_source:
           type: string
           example: api
@@ -25465,7 +25466,7 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the webhook endpoint's record within the Lago system.
+          description: Unique identifier assigned to the webhook endpoint within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the webhook endpoint's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_organization_id:
           type: string
@@ -25532,7 +25533,8 @@ components:
               type:
                 - string
                 - 'null'
-              description: The signature used for the webhook. If no value is passed,
+              description: The algorithm used to sign the webhook payload. Defaults to `jwt` when no value is passed.
+              default: jwt
               example: hmac
               enum:
                 - jwt
@@ -25577,7 +25579,7 @@ components:
               type:
                 - string
                 - 'null'
-              description: The signature used for the webhook. If no value is passed,
+              description: The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept.
               example: hmac
               enum:
                 - jwt
