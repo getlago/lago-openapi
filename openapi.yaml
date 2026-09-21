@@ -12187,7 +12187,6 @@ components:
         - logged_at
         - resource_id
         - resource_type
-        - organization_id
         - created_at
       properties:
         activity_id:
@@ -12253,11 +12252,6 @@ components:
           type: string
           description: The resource type of the resource_id record.
           example: BillableMetric
-        organization_id:
-          type: string
-          format: uuid
-          description: Unique identifier for the organization associated with the activity log.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         logged_at:
           type: string
           format: date-time
@@ -25568,8 +25562,6 @@ components:
       properties:
         webhook_endpoint:
           type: object
-          required:
-            - webhook_url
           properties:
             webhook_url:
               type: string
