@@ -64,14 +64,26 @@ get:
       schema:
         type: string
         example: v1
-    - name: request_paths
+    - name: request_paths[]
       in: query
-      description: Filter results by the path of the request
+      description: Filter results by the path of the request. A value containing `*` is matched as a wildcard, otherwise the path must match exactly.
       required: false
       explode: true
       schema:
-        type: string
-        example: /billable_metrics/ 
+        type: array
+        items:
+          type: string
+        example: ['/api/v1/billable_metrics', '*billable_metrics*']
+    - name: clients[]
+      in: query
+      description: Filter results by the client that issued the request, as reported by its user agent.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example: ['Lago Ruby v1.26.0']
   responses:
     '200':
       description: List of api logs

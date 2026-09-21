@@ -21,6 +21,7 @@ get:
         allOf:
           - $ref: "../schemas/Currency.yaml"
           - example: "USD"
+    - $ref: "../parameters/billing_entity_code.yaml"
     - $ref: "../parameters/months.yaml"
   responses:
     "200":
