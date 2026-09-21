@@ -37,9 +37,10 @@ properties:
     example: "2025-03-31T12:31:44Z"
     description: The logged date of the api log, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
   request_body:
-    type: string
-    format: object
-    example: '{ "billable_metric": { "name": "Storage", "code": "storage" } }'
+    type: object
+    additionalProperties: true
+    description: The parameters of the request, keyed by their top-level name. Nested values are returned JSON-encoded.
+    example: { "billable_metric": "{\"name\":\"Storage\",\"code\":\"storage\"}" }
   request_origin:
     type: string
     description: This field represents the API origin of the requested URL
@@ -59,6 +60,9 @@ properties:
     description: Unique identifier for the api log.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   request_response:
-    type: string
-    format: object
-    example: '{ "lago_id": "b9155544-e261-4e92-b54e-f65d7609294c", ... }'
+    type:
+      - object
+      - "null"
+    additionalProperties: true
+    description: The body Lago returned for the request, keyed by its top-level name. Nested values are returned JSON-encoded. Null when the response had no body.
+    example: { "billable_metric": "{\"lago_id\":\"b9155544-e261-4e92-b54e-f65d7609294c\"}" }
