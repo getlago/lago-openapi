@@ -32,13 +32,13 @@ properties:
     type: string
     format: "date-time"
     example: "2022-04-29T08:59:51.123Z"
-    description: This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.
+    description: The date and time at which the event occurred, in ISO 8601 format with millisecond precision and expressed in Coordinated Universal Time (UTC). When no timestamp is sent on the event, it is set to the time of event reception.
   precise_total_amount_cents:
     type:
       - string
       - "null"
     example: "1234.56"
-    description: The precise total amount that was sent in the event payload. This filed is used by the `dynamic` pricing model.
+    description: The precise total amount that was sent in the event payload. This field is used by the `dynamic` pricing model.
   properties:
     type: object
     description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
@@ -68,7 +68,7 @@ properties:
   external_subscription_id:
     type: string
     example: "sub_1234567890"
-    description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
+    description: The unique identifier of the subscription within your application, as sent on the event. It is the value Lago uses to attach the event to a subscription.
   created_at:
     type:
       - string
