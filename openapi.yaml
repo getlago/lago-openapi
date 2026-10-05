@@ -21733,7 +21733,9 @@ components:
           description: The amount of the minimum commitment in cents.
           example: 100000
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the default name will be used as the display name.
           example: Minimum Commitment (C1)
         interval:
@@ -22240,7 +22242,9 @@ components:
           description: Unique identifier of the add-on associated with this fixed charge.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
           example: Setup fee
         add_on_code:
@@ -22299,6 +22303,27 @@ components:
           description: List of taxes applied to the fixed charge.
           items:
             $ref: '#/components/schemas/TaxObject'
+    ApplicableUsageThreshold:
+      type: object
+      required:
+        - threshold_display_name
+        - amount_cents
+        - recurring
+      properties:
+        threshold_display_name:
+          type:
+            - string
+            - 'null'
+          description: The display name of the usage threshold.
+          example: Threshold 1
+        amount_cents:
+          type: integer
+          description: The amount to reach to trigger a `progressive_billing` invoice.
+          example: 10000
+        recurring:
+          type: boolean
+          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
+          example: true
     PlanEntitlementPrivilegeObject:
       allOf:
         - $ref: '#/components/schemas/FeaturePrivilegeObject'
@@ -22397,7 +22422,9 @@ components:
           description: The name of the plan.
           example: Startup
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
           example: Startup plan
         created_at:
@@ -22420,9 +22447,11 @@ components:
             - yearly
           example: monthly
         description:
-          type: string
+          type:
+            - string
+            - 'null'
           description: The description on the plan.
-          example: ''
+          example: Plan for early stage startups.
         amount_cents:
           type: integer
           description: The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.
@@ -22432,7 +22461,9 @@ components:
           description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
           example: USD
         trial_period:
-          type: number
+          type:
+            - number
+            - 'null'
           description: The duration in days during which the base cost of the plan is offered for free.
           example: 5
         pay_in_advance:
@@ -22451,6 +22482,17 @@ components:
             - 'null'
           description: This field, when set to `true`, enables to invoice fixed charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay fixed charges on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
           example: null
+        parent_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the parent plan, created by Lago. It is set on plans that override a parent plan for a single subscription, and `null` on standard plans.
+          example: null
+        pending_deletion:
+          type: boolean
+          description: This field is set to `true` when the plan is scheduled for deletion but still attached to subscriptions that have to be billed first.
+          example: false
         minimum_commitment:
           $ref: '#/components/schemas/MinimumCommitmentObject'
         charges:
@@ -22648,6 +22690,11 @@ components:
           description: List of usage thresholds applied to the plan.
           items:
             $ref: '#/components/schemas/UsageThresholdObject'
+        applicable_usage_thresholds:
+          type: array
+          description: List of usage thresholds that actually apply to the plan. For an overriding plan these are inherited from its parent plan; for a standard plan they match `usage_thresholds`.
+          items:
+            $ref: '#/components/schemas/ApplicableUsageThreshold'
         entitlements:
           type: array
           description: List of all feature entitlements and their privileges available for this plan.
@@ -24401,27 +24448,6 @@ components:
                 $ref: '#/components/schemas/SubscriptionActivationRuleInput'
               description: |
                 Optional list of activation rules that gate the subscription activation. When a `payment` rule is provided and the plan is paid in advance (and the subscription is not in a trial), the subscription is created in the `incomplete` state and is only activated once the gating payment succeeds. If the payment fails or the rule's `timeout_hours` elapses, the subscription is canceled.
-    ApplicableUsageThreshold:
-      type: object
-      required:
-        - threshold_display_name
-        - amount_cents
-        - recurring
-      properties:
-        threshold_display_name:
-          type:
-            - string
-            - 'null'
-          description: The display name of the usage threshold.
-          example: Threshold 1
-        amount_cents:
-          type: integer
-          description: The amount to reach to trigger a `progressive_billing` invoice.
-          example: 10000
-        recurring:
-          type: boolean
-          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
-          example: true
     SubscriptionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
@@ -24847,8 +24873,10 @@ components:
                   description: Value for boolean type privileges
                 - type: string
                   description: Value for string or select type privileges
+                - type: 'null'
+                  description: No plan value set
               example: 10
-              description: Value assigned to this privilege in the plan. Type depends on the privilege's value_type.
+              description: Value assigned to this privilege in the plan. Type depends on the privilege's value_type. Null when the privilege only exists as a subscription override.
             override_value:
               oneOf:
                 - type: integer

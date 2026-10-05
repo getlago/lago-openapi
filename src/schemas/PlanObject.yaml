@@ -18,7 +18,9 @@ properties:
     description: The name of the plan.
     example: "Startup"
   invoice_display_name:
-    type: string
+    type:
+      - string
+      - "null"
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
     example: "Startup plan"
   created_at:
@@ -41,9 +43,11 @@ properties:
       - yearly
     example: monthly
   description:
-    type: string
+    type:
+      - string
+      - "null"
     description: The description on the plan.
-    example: ""
+    example: "Plan for early stage startups."
   amount_cents:
     type: integer
     description: The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.
@@ -53,7 +57,9 @@ properties:
     description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
     example: "USD"
   trial_period:
-    type: number
+    type:
+      - number
+      - "null"
     description: The duration in days during which the base cost of the plan is offered for free.
     example: 5
   pay_in_advance:
@@ -72,6 +78,17 @@ properties:
       - "null"
     description: This field, when set to `true`, enables to invoice fixed charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay fixed charges on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
     example: null
+  parent_id:
+    type:
+      - string
+      - "null"
+    format: "uuid"
+    description: Unique identifier of the parent plan, created by Lago. It is set on plans that override a parent plan for a single subscription, and `null` on standard plans.
+    example: null
+  pending_deletion:
+    type: boolean
+    description: This field is set to `true` when the plan is scheduled for deletion but still attached to subscriptions that have to be billed first.
+    example: false
   minimum_commitment:
     $ref: "./MinimumCommitmentObject.yaml"
   charges:
@@ -266,6 +283,11 @@ properties:
     description: List of usage thresholds applied to the plan.
     items:
       $ref: "./UsageThresholdObject.yaml"
+  applicable_usage_thresholds:
+    type: array
+    description: List of usage thresholds that actually apply to the plan. For an overriding plan these are inherited from its parent plan; for a standard plan they match `usage_thresholds`.
+    items:
+      $ref: "./ApplicableUsageThreshold.yaml"
   entitlements:
     type: array
     description: List of all feature entitlements and their privileges available for this plan.

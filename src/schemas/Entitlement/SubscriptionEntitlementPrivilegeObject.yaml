@@ -24,8 +24,10 @@ allOf:
             description: "Value for boolean type privileges"
           - type: string
             description: "Value for string or select type privileges"
+          - type: "null"
+            description: "No plan value set"
         example: 10
-        description: "Value assigned to this privilege in the plan. Type depends on the privilege's value_type."
+        description: "Value assigned to this privilege in the plan. Type depends on the privilege's value_type. Null when the privilege only exists as a subscription override."
       override_value:
         oneOf:
           - type: integer
