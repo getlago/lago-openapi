@@ -293,6 +293,11 @@ properties:
             tax_codes:
               $ref: "./TaxCodes.yaml"
               description: List of taxes applied to the fixed charge.
+            apply_units_immediately:
+              type: boolean
+              description: When set to `true`, the fixed charge units are applied immediately for active subscriptions. When set to `false`, the units are applied at the next billing period.
+              example: false
+              default: false
         example:
           - add_on_id: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             code: "setup_fee"
@@ -303,6 +308,7 @@ properties:
             properties:
               amount: "500"
             units: 1.0
+            apply_units_immediately: false
             tax_codes: ["french_standard_vat"]
           - add_on_id: "4d604d60-4d60-4d60-4d60-4d604d604d60"
             invoice_display_name: "Support Tier"
