@@ -6546,17 +6546,17 @@ paths:
       tags:
         - entitlements
       summary: Remove an entitlement from a subscription
-      description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan.
+      description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
       operationId: destroySubscriptionEntitlement
       parameters:
         - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
-          description: Subscription entitlement removed
+          description: Remaining subscription entitlements
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubscriptionEntitlement'
+                $ref: '#/components/schemas/SubscriptionEntitlements'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -6588,17 +6588,17 @@ paths:
       tags:
         - entitlements
       summary: Remove a privilege from a subscription entitlement override
-      description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan.
+      description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
       operationId: destroySubscriptionEntitlementPrivilege
       parameters:
         - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
-          description: Subscription entitlement with privilege override removed
+          description: Remaining subscription entitlements
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubscriptionEntitlement'
+                $ref: '#/components/schemas/SubscriptionEntitlements'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -24938,13 +24938,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionEntitlementObject'
-    SubscriptionEntitlement:
-      type: object
-      required:
-        - entitlement
-      properties:
-        entitlement:
-          $ref: '#/components/schemas/SubscriptionEntitlementObject'
     SubscriptionChargeOverride:
       type: object
       required:
@@ -26265,6 +26258,13 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    SubscriptionEntitlement:
+      type: object
+      required:
+        - entitlement
+      properties:
+        entitlement:
+          $ref: '#/components/schemas/SubscriptionEntitlementObject'
   responses:
     Unauthorized:
       description: Unauthorized error

@@ -17,17 +17,17 @@ delete:
   tags:
     - entitlements
   summary: Remove an entitlement from a subscription
-  description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan.
+  description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
   operationId: destroySubscriptionEntitlement
   parameters:
     - $ref: "../parameters/subscription_status.yaml"
   responses:
     '200':
-      description: Subscription entitlement removed
+      description: Remaining subscription entitlements
       content:
         application/json:
           schema:
-            $ref: '../schemas/Entitlement/SubscriptionEntitlement.yaml'
+            $ref: '../schemas/Entitlement/SubscriptionEntitlements.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
     '404':
