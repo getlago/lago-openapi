@@ -15,7 +15,7 @@ allOf:
           - type: string
             description: "Value for string or select type privileges"
         example: 10
-        description: "Applicable value this this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type."
+        description: "Applicable value for this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type."
       plan_value:
         oneOf:
           - type: integer

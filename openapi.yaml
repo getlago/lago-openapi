@@ -1276,8 +1276,8 @@ paths:
     delete:
       tags:
         - features
-      summary: Delete a privilege. Deleting a privilege removes it from all plans and subscriptions.
-      description: Delete privilege from feature. Deleting a privilege removes it from all plans and subscriptions.
+      summary: Delete a privilege
+      description: This endpoint deletes a privilege from a feature. Deleting a privilege removes it from all plans and subscriptions.
       operationId: deleteFeaturePrivilege
       responses:
         '200':
@@ -5107,7 +5107,7 @@ paths:
       tags:
         - entitlements
       summary: Partial update of an entitlement
-      description: This accepts a list of entitlements to update. If the feature isn't part of the plan yet, it's added with all the privileges from the payload. If the feature is already part of the plan, the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
+      description: This accepts a list of entitlements to update. If the feature isn't part of the plan yet, it's added with all the privileges from the payload. If the feature is already part of the plan, the privilege and values are updated or added. All privileges must be valid for the feature. All features and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateEntitlement
       requestBody:
         description: Entitlement payload
@@ -6502,7 +6502,7 @@ paths:
       summary: Update subscription entitlements
       parameters:
         - $ref: '#/components/parameters/subscription_status'
-      description: This accepts a list of entitlements to update. If the feature isn't part of the subscription yet, it's added with all the privileges from the payload. If the feature is already part of the subscription (via plan or via override), the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
+      description: This accepts a list of entitlements to update. If the feature isn't part of the subscription yet, it's added with all the privileges from the payload. If the feature is already part of the subscription (via plan or via override), the privilege and values are updated or added. All privileges must be valid for the feature. All features and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateSubscriptionEntitlements
       requestBody:
         description: Subscription entitlements payload
@@ -24832,7 +24832,7 @@ components:
                 - type: string
                   description: Value for string or select type privileges
               example: 10
-              description: Applicable value this this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type.
+              description: Applicable value for this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type.
             plan_value:
               oneOf:
                 - type: integer
