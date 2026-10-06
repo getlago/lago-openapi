@@ -61,7 +61,7 @@ properties:
     type: integer
     minimum: 1
     maximum: 50
-    description: "Wallet priority for ordering when a customer has multiple wallets. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50."
+    description: "Wallet priority for ordering when a customer has multiple wallets. Allowed values: 1-50, where 1 is highest priority and 50 is lowest. Defaults to 50. Wallets with the same priority are applied by expiration date, soonest first, with wallets without an expiration date last, then by creation date, oldest first."
     example: 50
   rate_amount:
     type: string
