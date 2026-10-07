@@ -6,6 +6,7 @@ required:
   - aggregation_type
   - recurring
   - created_at
+  - filters
 properties:
   lago_id:
     type: string
@@ -61,7 +62,7 @@ properties:
     type:
       - string
       - "null"
-    example: "round((ended_at - started_at) * units)"
+    example: "round((event.properties.ended_at - event.properties.started_at) * event.properties.units)"
     description: "Expression used to calculate the event units. The expression is evaluated for each event and the result is then used to calculate the total aggregated units."
   field_name:
     type:
@@ -88,7 +89,7 @@ properties:
       - seconds
       - null
     example: "seconds"
-    description: "Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`."
+    description: "Parameter exclusively utilized in conjunction with the `weighted_sum_agg` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals."
   filters:
     type: array
     items:

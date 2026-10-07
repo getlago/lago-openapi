@@ -13516,6 +13516,7 @@ components:
         - aggregation_type
         - recurring
         - created_at
+        - filters
       properties:
         lago_id:
           type: string
@@ -13571,7 +13572,7 @@ components:
           type:
             - string
             - 'null'
-          example: round((ended_at - started_at) * units)
+          example: round((event.properties.ended_at - event.properties.started_at) * event.properties.units)
           description: Expression used to calculate the event units. The expression is evaluated for each event and the result is then used to calculate the total aggregated units.
         field_name:
           type:
@@ -13598,7 +13599,7 @@ components:
             - seconds
             - null
           example: seconds
-          description: Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.
+          description: Parameter exclusively utilized in conjunction with the `weighted_sum_agg` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals.
         filters:
           type: array
           items:
@@ -13662,11 +13663,12 @@ components:
           type:
             - string
             - 'null'
-          example: round((ended_at - started_at) * units)
+          example: round((event.properties.ended_at - event.properties.started_at) * event.properties.units)
           description: |
             Expression used to calculate the event units. The expression is evaluated for each event and the result is then used to calculate the total aggregated units.
-            Accepted functions are `ceil`, `concat` and `round` as well as `+`, `-`, `\` and `*` operations.
-            Round is accepting an optional second parameter to specify the number of decimal.
+            Event values are read with `event.code`, `event.timestamp` and `event.properties.<name>`.
+            Accepted functions are `ceil`, `concat`, `floor`, `greatest`, `least` and `round` as well as `+`, `-`, `/` and `*` operations.
+            `ceil`, `floor` and `round` accept an optional second parameter to specify the number of decimals.
         rounding_function:
           type:
             - string
@@ -13709,7 +13711,7 @@ components:
             - seconds
             - null
           example: seconds
-          description: Parameter exclusively utilized in conjunction with the `weighted_sum` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. When this field is not provided, the default time interval is assumed to be in `seconds`.
+          description: Parameter exclusively utilized in conjunction with the `weighted_sum_agg` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. It is required when `aggregation_type` is `weighted_sum_agg`, and `seconds` is the only accepted value.
         filters:
           type: array
           items:
@@ -13740,11 +13742,12 @@ components:
       properties:
         expression:
           type: string
-          example: round((ended_at - started_at) * units)
+          example: round((event.properties.ended_at - event.properties.started_at) * event.properties.units)
           description: |
             Expression used to calculate the event units. The expression is evaluated for each event and the result is then used to calculate the total aggregated units.
-            Accepted functions are `ceil`, `concat` and `round` as well as `+`, `-`, `\` and `*` operations.
-            Round is accepting an optional second parameter to specify the number of decimal.
+            Event values are read with `event.code`, `event.timestamp` and `event.properties.<name>`.
+            Accepted functions are `ceil`, `concat`, `floor`, `greatest`, `least` and `round` as well as `+`, `-`, `/` and `*` operations.
+            `ceil`, `floor` and `round` accept an optional second parameter to specify the number of decimals.
         event:
           type: object
           required:
@@ -13784,11 +13787,9 @@ components:
             - value
           properties:
             value:
-              anyOf:
-                - type: string
-                - type: number
-              example: 1
-              description: Result of evaluating the expression
+              type: string
+              example: '2.0'
+              description: Result of evaluating the expression. A numeric result is returned as a decimal string.
     BillableMetricUpdateInput:
       type: object
       required:
