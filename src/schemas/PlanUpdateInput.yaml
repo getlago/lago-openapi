@@ -142,8 +142,12 @@ properties:
               $ref: "./TaxCodes.yaml"
             applied_pricing_unit:
               type: object
-              description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
+              description: The pricing unit of the charge. For an existing charge, only `conversion_rate` is updated, and only if the charge already has an applied pricing unit. For a new charge (no `id`), `code` selects the pricing unit to apply.
               properties:
+                code:
+                  type: string
+                  description: The code of the pricing unit. Only used when the charge is created by this request.
+                  example: "credits"
                 conversion_rate:
                   type: string
                   description: |-

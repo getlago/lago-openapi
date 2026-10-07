@@ -22032,6 +22032,15 @@ components:
         - properties
         - values
       properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the charge filter, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        charge_code:
+          type: string
+          description: Unique code identifying the charge this filter belongs to.
+          example: api_requests_charge
         invoice_display_name:
           type:
             - string
@@ -22078,9 +22087,7 @@ components:
           description: Unique identifier of the billable metric created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         code:
-          type:
-            - string
-            - 'null'
+          type: string
           description: Unique code identifying the charge within the plan.
           example: api_requests_charge
         billable_metric_code:
@@ -22166,9 +22173,7 @@ components:
               description: The conversion rate from pricing units to the plan's currency.
               example: '0.5'
         accepts_target_wallet:
-          type:
-            - boolean
-            - 'null'
+          type: boolean
           description: |-
             Specifies whether the charge accepts a target wallet for prepaid credits deduction.
             When `true`, events may include a `target_wallet_code` in their `properties` to direct credit deduction to a specific wallet.
@@ -22328,12 +22333,12 @@ components:
           $ref: '#/components/schemas/FixedChargeProperties'
           description: List of all thresholds utilized for calculating the fixed charge.
         units:
-          type: number
+          type: string
           description: |-
-            The number of units for the fixed charge.
+            The number of units for the fixed charge, as a decimal string.
 
             When retrieved through a subscription-scoped endpoint (e.g. `GET /subscriptions/{external_id}/fixed_charges`), this reflects the per-subscription unit override when one exists, and falls back to the plan-level units otherwise. Plan-scoped endpoints always return the plan-level units.
-          example: 1
+          example: '1.0'
         lago_parent_id:
           type:
             - string
@@ -22669,7 +22674,7 @@ components:
               prorated: false
               properties:
                 amount: '500'
-              units: 1
+              units: '1.0'
               lago_parent_id: null
               taxes:
                 - lago_id: 3c703c70-3c70-3c70-3c70-3c703c703c70
@@ -22698,7 +22703,7 @@ components:
                     to_value: null
                     per_unit_amount: '1'
                     flat_amount: '300'
-              units: 1
+              units: '1.0'
               lago_parent_id: null
               taxes: []
             - lago_id: 6f406f40-6f40-6f40-6f40-6f406f406f40
@@ -22720,7 +22725,7 @@ components:
                     to_value: null
                     per_unit_amount: '1'
                     flat_amount: '0'
-              units: 50
+              units: '50.0'
               lago_parent_id: null
               taxes: []
         taxes:
@@ -23324,8 +23329,12 @@ components:
                     $ref: '#/components/schemas/TaxCodes'
                   applied_pricing_unit:
                     type: object
-                    description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
+                    description: The pricing unit of the charge. For an existing charge, only `conversion_rate` is updated, and only if the charge already has an applied pricing unit. For a new charge (no `id`), `code` selects the pricing unit to apply.
                     properties:
+                      code:
+                        type: string
+                        description: The code of the pricing unit. Only used when the charge is created by this request.
+                        example: credits
                       conversion_rate:
                         type: string
                         description: |-
