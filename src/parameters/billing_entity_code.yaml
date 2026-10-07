@@ -1,0 +1,8 @@
+name: billing_entity_code
+in: query
+description: Restrict the analytics to a single billing entity, identified by its code. An unknown code is ignored and the analytics cover the whole organization.
+required: false
+explode: true
+schema:
+  type: string
+  example: 'acme_corp'

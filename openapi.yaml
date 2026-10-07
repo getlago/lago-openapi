@@ -310,8 +310,8 @@ paths:
             items:
               type: string
             example:
-              - billing_metric.created
-              - billing_metric.updated
+              - billable_metric.created
+              - billable_metric.updated
         - name: activity_sources[]
           in: query
           description: Filter results by activity sources
@@ -599,14 +599,29 @@ paths:
           schema:
             type: string
             example: v1
-        - name: request_paths
+        - name: request_paths[]
           in: query
-          description: Filter results by the path of the request
+          description: Filter results by the path of the request. A value containing `*` is matched as a wildcard, otherwise the path must match exactly.
           required: false
           explode: true
           schema:
-            type: string
-            example: /billable_metrics/
+            type: array
+            items:
+              type: string
+            example:
+              - /api/v1/billable_metrics
+              - '*billable_metrics*'
+        - name: clients[]
+          in: query
+          description: Filter results by the client that issued the request, as reported by its user agent.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - Lago Ruby v1.26.0
       responses:
         '200':
           description: List of api logs
@@ -667,6 +682,7 @@ paths:
           schema:
             type: string
             example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - $ref: '#/components/parameters/billing_entity_code'
         - $ref: '#/components/parameters/months'
       responses:
         '200':
@@ -696,6 +712,7 @@ paths:
             allOf:
               - $ref: '#/components/schemas/Currency'
               - example: USD
+        - $ref: '#/components/parameters/billing_entity_code'
         - $ref: '#/components/parameters/months'
       responses:
         '200':
@@ -723,6 +740,7 @@ paths:
             allOf:
               - $ref: '#/components/schemas/Currency'
               - example: USD
+        - $ref: '#/components/parameters/billing_entity_code'
         - $ref: '#/components/parameters/months'
       responses:
         '200':
@@ -738,25 +756,26 @@ paths:
       tags:
         - analytics
       summary: List MRR
-      description: This endpoint is used to list MRR.
+      description: |-
+        Quantifies the revenue generated from `subscription` fees on a monthly basis. This figure is calculated post-application of applicable taxes and deduction of any applicable discounts. The method of calculation varies based on the subscription billing cycle:
+
+        - Revenue from `monthly` subscription invoices is included in the MRR for the month in which the invoice is issued.
+        - Revenue from `quarterly` subscription invoices is distributed evenly over three months. This distribution applies to fees paid in advance (allocated to the next remaining months depending on calendar or anniversary billing) as well as to fees paid in arrears (allocated to the preceding months depending on calendar or anniversary billing).
+        - Revenue from `yearly` subscription invoices is distributed evenly over twelve months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
+        - Revenue from `semiannual` subscription invoices is distributed evenly over six months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
+        - Revenue from `weekly` subscription invoices, the total revenue from all invoices issued within a month is summed up. This total is then divided by the number of invoices issued during that month, and the result is multiplied by 4.33, representing the average number of weeks in a month.
       operationId: findAllMrrs
       parameters:
         - name: currency
           in: query
-          description: |-
-            Quantifies the revenue generated from `subscription` fees on a monthly basis. This figure is calculated post-application of applicable taxes and deduction of any applicable discounts. The method of calculation varies based on the subscription billing cycle:
-
-            - Revenue from `monthly` subscription invoices is included in the MRR for the month in which the invoice is issued.
-            - Revenue from `quarterly` subscription invoices is distributed evenly over three months. This distribution applies to fees paid in advance (allocated to the next remaining months depending on calendar or anniversary billing) as well as to fees paid in arrears (allocated to the preceding months depending on calendar or anniversary billing).
-            - Revenue from `yearly` subscription invoices is distributed evenly over twelve months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
-            - Revenue from `semiannual` subscription invoices is distributed evenly over six months. This allocation is applicable for fees paid in advance (spread over the next remaining months depending on calendar or anniversary billing) and for fees paid in arrears (spread over the previous months depending on calendar or anniversary billing).
-            - Revenue from `weekly` subscription invoices, the total revenue from all invoices issued within a month is summed up. This total is then divided by the number of invoices issued during that month, and the result is multiplied by 4.33, representing the average number of weeks in a month.
+          description: The currency of MRR analytics. Format must be ISO 4217.
           required: false
           explode: true
           schema:
             allOf:
               - $ref: '#/components/schemas/Currency'
               - example: USD
+        - $ref: '#/components/parameters/billing_entity_code'
         - $ref: '#/components/parameters/months'
       responses:
         '200':
@@ -794,6 +813,7 @@ paths:
           schema:
             type: string
             example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        - $ref: '#/components/parameters/billing_entity_code'
         - $ref: '#/components/parameters/months'
       responses:
         '200':
@@ -816,7 +836,7 @@ paths:
       parameters:
         - name: time_granularity
           in: query
-          description: The time granularity of usage analytics. Possible values are 'daily', 'weekly', 'monthly', 'yearly'.
+          description: The time granularity of usage analytics. Possible values are 'daily', 'weekly' and 'monthly'. Defaults to 'daily'.
           required: false
           schema:
             type: string
@@ -824,6 +844,7 @@ paths:
               - daily
               - weekly
               - monthly
+            default: daily
             example: monthly
         - name: currency
           in: query
@@ -8391,6 +8412,11 @@ webhooks:
                   type: string
                   enum:
                     - credit_note_payment_provider_refund_error
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 credit_note_payment_provider_refund_error:
                   $ref: '#/components/schemas/CreditNotePaymentProviderRefundError'
       responses:
@@ -9742,8 +9768,8 @@ webhooks:
   payment_request_created:
     post:
       operationId: paymentRequestCreated
-      summary: An new payment request has been created
-      description: An new payment request has been created
+      summary: A new payment request has been created
+      description: A new payment request has been created
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -9820,8 +9846,8 @@ webhooks:
   payment_request_payment_status_updated:
     post:
       operationId: paymentRequestPaymentStatusUpdated
-      summary: The payment status of an invoice has been updated
-      description: The payment status of an invoice has been updated
+      summary: The payment status of a payment request has been updated
+      description: The payment status of a payment request has been updated
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -10719,6 +10745,15 @@ components:
       schema:
         type: string
         example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+    billing_entity_code:
+      name: billing_entity_code
+      in: query
+      description: Restrict the analytics to a single billing entity, identified by its code. An unknown code is ignored and the analytics cover the whole organization.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: acme_corp
     months:
       name: months
       in: query
@@ -12186,7 +12221,6 @@ components:
         - logged_at
         - resource_id
         - resource_type
-        - organization_id
         - created_at
       properties:
         activity_id:
@@ -12203,8 +12237,8 @@ components:
           description: The email of the user who performed the activity
         activity_type:
           type: string
-          example: billing_metric.created
-          description: This field stores the actitivy action that was performed to the activity_object.
+          example: billable_metric.created
+          description: This field stores the activity action that was performed on the activity_object.
         activity_source:
           type: string
           example: api
@@ -12252,11 +12286,6 @@ components:
           type: string
           description: The resource type of the resource_id record.
           example: BillableMetric
-        organization_id:
-          type: string
-          format: uuid
-          description: Unique identifier for the organization associated with the activity log.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         logged_at:
           type: string
           format: date-time
@@ -12483,9 +12512,11 @@ components:
           example: '2025-03-31T12:31:44Z'
           description: The logged date of the api log, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
         request_body:
-          type: string
-          format: object
-          example: '{ "billable_metric": { "name": "Storage", "code": "storage" } }'
+          type: object
+          additionalProperties: true
+          description: The parameters of the request, keyed by their top-level name. Nested values are returned JSON-encoded.
+          example:
+            billable_metric: '{"name":"Storage","code":"storage"}'
         request_origin:
           type: string
           description: This field represents the API origin of the requested URL
@@ -12505,9 +12536,13 @@ components:
           description: Unique identifier for the api log.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         request_response:
-          type: string
-          format: object
-          example: '{ "lago_id": "b9155544-e261-4e92-b54e-f65d7609294c", ... }'
+          type:
+            - object
+            - 'null'
+          additionalProperties: true
+          description: The body Lago returned for the request, keyed by its top-level name. Nested values are returned JSON-encoded. Null when the response had no body.
+          example:
+            billable_metric: '{"lago_id":"b9155544-e261-4e92-b54e-f65d7609294c"}'
     ApiLogsPaginated:
       type: object
       required:
@@ -25465,7 +25500,7 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the wallet within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the webhook endpoint's record within the Lago system.
+          description: Unique identifier assigned to the webhook endpoint within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the webhook endpoint's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_organization_id:
           type: string
@@ -25532,7 +25567,8 @@ components:
               type:
                 - string
                 - 'null'
-              description: The signature used for the webhook. If no value is passed,
+              description: The algorithm used to sign the webhook payload. Defaults to `jwt` when no value is passed.
+              default: jwt
               example: hmac
               enum:
                 - jwt
@@ -25566,8 +25602,6 @@ components:
       properties:
         webhook_endpoint:
           type: object
-          required:
-            - webhook_url
           properties:
             webhook_url:
               type: string
@@ -25577,7 +25611,7 @@ components:
               type:
                 - string
                 - 'null'
-              description: The signature used for the webhook. If no value is passed,
+              description: The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept.
               example: hmac
               enum:
                 - jwt

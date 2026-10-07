@@ -7,7 +7,7 @@ get:
   parameters:
     - name: time_granularity
       in: query
-      description: The time granularity of usage analytics. Possible values are 'daily', 'weekly', 'monthly', 'yearly'.
+      description: The time granularity of usage analytics. Possible values are 'daily', 'weekly' and 'monthly'. Defaults to 'daily'.
       required: false
       schema:
         type: string
@@ -15,6 +15,7 @@ get:
           - daily
           - weekly
           - monthly
+        default: daily
         example: monthly
     - name: currency
       in: query
