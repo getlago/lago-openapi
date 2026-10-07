@@ -1297,8 +1297,8 @@ paths:
     delete:
       tags:
         - features
-      summary: Delete a privilege. Deleting a privilege removes it from all plans and subscriptions.
-      description: Delete privilege from feature. Deleting a privilege removes it from all plans and subscriptions.
+      summary: Delete a privilege
+      description: This endpoint deletes a privilege from a feature. Deleting a privilege removes it from all plans and subscriptions.
       operationId: deleteFeaturePrivilege
       responses:
         '200':
@@ -5128,7 +5128,7 @@ paths:
       tags:
         - entitlements
       summary: Partial update of an entitlement
-      description: This accepts a list of entitlements to update. If the feature isn't part of the plan yet, it's added with all the privileges from the payload. If the feature is already part of the plan, the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
+      description: This accepts a list of entitlements to update. If the feature isn't part of the plan yet, it's added with all the privileges from the payload. If the feature is already part of the plan, the privilege and values are updated or added. All privileges must be valid for the feature. All features and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateEntitlement
       requestBody:
         description: Entitlement payload
@@ -6523,7 +6523,7 @@ paths:
       summary: Update subscription entitlements
       parameters:
         - $ref: '#/components/parameters/subscription_status'
-      description: This accepts a list of entitlements to update. If the feature isn't part of the subscription yet, it's added with all the privileges from the payload. If the feature is already part of the subscription (via plan or via override), the privilege and values are updated or added. All privileges must be valid for the feature. All features  and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
+      description: This accepts a list of entitlements to update. If the feature isn't part of the subscription yet, it's added with all the privileges from the payload. If the feature is already part of the subscription (via plan or via override), the privilege and values are updated or added. All privileges must be valid for the feature. All features and privileges not part of the payload are left untouched. To remove privileges or features, use the DELETE endpoints.
       operationId: updateSubscriptionEntitlements
       requestBody:
         description: Subscription entitlements payload
@@ -6567,17 +6567,17 @@ paths:
       tags:
         - entitlements
       summary: Remove an entitlement from a subscription
-      description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan.
+      description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
       operationId: destroySubscriptionEntitlement
       parameters:
         - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
-          description: Subscription entitlement removed
+          description: Remaining subscription entitlements
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubscriptionEntitlement'
+                $ref: '#/components/schemas/SubscriptionEntitlements'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -6609,17 +6609,17 @@ paths:
       tags:
         - entitlements
       summary: Remove a privilege from a subscription entitlement override
-      description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan.
+      description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
       operationId: destroySubscriptionEntitlementPrivilege
       parameters:
         - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
-          description: Subscription entitlement with privilege override removed
+          description: Remaining subscription entitlements
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubscriptionEntitlement'
+                $ref: '#/components/schemas/SubscriptionEntitlements'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -21776,7 +21776,9 @@ components:
           description: The amount of the minimum commitment in cents.
           example: 100000
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the default name will be used as the display name.
           example: Minimum Commitment (C1)
         interval:
@@ -22283,7 +22285,9 @@ components:
           description: Unique identifier of the add-on associated with this fixed charge.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
           example: Setup fee
         add_on_code:
@@ -22342,6 +22346,27 @@ components:
           description: List of taxes applied to the fixed charge.
           items:
             $ref: '#/components/schemas/TaxObject'
+    ApplicableUsageThreshold:
+      type: object
+      required:
+        - threshold_display_name
+        - amount_cents
+        - recurring
+      properties:
+        threshold_display_name:
+          type:
+            - string
+            - 'null'
+          description: The display name of the usage threshold.
+          example: Threshold 1
+        amount_cents:
+          type: integer
+          description: The amount to reach to trigger a `progressive_billing` invoice.
+          example: 10000
+        recurring:
+          type: boolean
+          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
+          example: true
     PlanEntitlementPrivilegeObject:
       allOf:
         - $ref: '#/components/schemas/FeaturePrivilegeObject'
@@ -22440,7 +22465,9 @@ components:
           description: The name of the plan.
           example: Startup
         invoice_display_name:
-          type: string
+          type:
+            - string
+            - 'null'
           description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the plan will be used as the default display name.
           example: Startup plan
         created_at:
@@ -22463,9 +22490,11 @@ components:
             - yearly
           example: monthly
         description:
-          type: string
+          type:
+            - string
+            - 'null'
           description: The description on the plan.
-          example: ''
+          example: Plan for early stage startups.
         amount_cents:
           type: integer
           description: The base cost of the plan, excluding any applicable taxes, that is billed on a recurring basis. This value is defined at 0 if your plan is a pay-as-you-go plan.
@@ -22475,7 +22504,9 @@ components:
           description: The currency of the plan. It indicates the monetary unit in which the plan's cost, including taxes and usage-based charges, is expressed.
           example: USD
         trial_period:
-          type: number
+          type:
+            - number
+            - 'null'
           description: The duration in days during which the base cost of the plan is offered for free.
           example: 5
         pay_in_advance:
@@ -22494,6 +22525,17 @@ components:
             - 'null'
           description: This field, when set to `true`, enables to invoice fixed charges on monthly basis, even if the cadence of the plan is yearly or semiannual. This allows customers to pay fixed charges on a monthly basis. This can be set to true only if the plan's interval is `yearly` or `semiannual`.
           example: null
+        parent_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the parent plan, created by Lago. It is set on plans that override a parent plan for a single subscription, and `null` on standard plans.
+          example: null
+        pending_deletion:
+          type: boolean
+          description: This field is set to `true` when the plan is scheduled for deletion but still attached to subscriptions that have to be billed first.
+          example: false
         minimum_commitment:
           $ref: '#/components/schemas/MinimumCommitmentObject'
         charges:
@@ -22691,6 +22733,11 @@ components:
           description: List of usage thresholds applied to the plan.
           items:
             $ref: '#/components/schemas/UsageThresholdObject'
+        applicable_usage_thresholds:
+          type: array
+          description: List of usage thresholds that actually apply to the plan. For an overriding plan these are inherited from its parent plan; for a standard plan they match `usage_thresholds`.
+          items:
+            $ref: '#/components/schemas/ApplicableUsageThreshold'
         entitlements:
           type: array
           description: List of all feature entitlements and their privileges available for this plan.
@@ -23071,6 +23118,11 @@ components:
                   tax_codes:
                     $ref: '#/components/schemas/TaxCodes'
                     description: List of taxes applied to the fixed charge.
+                  apply_units_immediately:
+                    type: boolean
+                    description: When set to `true`, the fixed charge units are applied immediately for active subscriptions. When set to `false`, the units are applied at the next billing period.
+                    example: false
+                    default: false
               example:
                 - add_on_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   code: setup_fee
@@ -23081,6 +23133,7 @@ components:
                   properties:
                     amount: '500'
                   units: 1
+                  apply_units_immediately: false
                   tax_codes:
                     - french_standard_vat
                 - add_on_id: 4d604d60-4d60-4d60-4d60-4d604d604d60
@@ -24438,27 +24491,6 @@ components:
                 $ref: '#/components/schemas/SubscriptionActivationRuleInput'
               description: |
                 Optional list of activation rules that gate the subscription activation. When a `payment` rule is provided and the plan is paid in advance (and the subscription is not in a trial), the subscription is created in the `incomplete` state and is only activated once the gating payment succeeds. If the payment fails or the rule's `timeout_hours` elapses, the subscription is canceled.
-    ApplicableUsageThreshold:
-      type: object
-      required:
-        - threshold_display_name
-        - amount_cents
-        - recurring
-      properties:
-        threshold_display_name:
-          type:
-            - string
-            - 'null'
-          description: The display name of the usage threshold.
-          example: Threshold 1
-        amount_cents:
-          type: integer
-          description: The amount to reach to trigger a `progressive_billing` invoice.
-          example: 10000
-        recurring:
-          type: boolean
-          description: This field when set to `true` indicates that a `progressive_billing` invoice will be created every time the lifetime usage increases by the specified amount.
-          example: true
     SubscriptionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
@@ -24875,7 +24907,7 @@ components:
                 - type: string
                   description: Value for string or select type privileges
               example: 10
-              description: Applicable value this this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type.
+              description: Applicable value for this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type.
             plan_value:
               oneOf:
                 - type: integer
@@ -24884,8 +24916,10 @@ components:
                   description: Value for boolean type privileges
                 - type: string
                   description: Value for string or select type privileges
+                - type: 'null'
+                  description: No plan value set
               example: 10
-              description: Value assigned to this privilege in the plan. Type depends on the privilege's value_type.
+              description: Value assigned to this privilege in the plan. Type depends on the privilege's value_type. Null when the privilege only exists as a subscription override.
             override_value:
               oneOf:
                 - type: integer
@@ -24975,13 +25009,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionEntitlementObject'
-    SubscriptionEntitlement:
-      type: object
-      required:
-        - entitlement
-      properties:
-        entitlement:
-          $ref: '#/components/schemas/SubscriptionEntitlementObject'
     SubscriptionChargeOverride:
       type: object
       required:
@@ -26301,6 +26328,13 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    SubscriptionEntitlement:
+      type: object
+      required:
+        - entitlement
+      properties:
+        entitlement:
+          $ref: '#/components/schemas/SubscriptionEntitlementObject'
   responses:
     Unauthorized:
       description: Unauthorized error

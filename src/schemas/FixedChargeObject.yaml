@@ -23,7 +23,9 @@ properties:
     description: Unique identifier of the add-on associated with this fixed charge.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   invoice_display_name:
-    type: string
+    type:
+      - string
+      - "null"
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
     example: "Setup fee"
   add_on_code:

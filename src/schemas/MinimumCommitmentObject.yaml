@@ -20,7 +20,9 @@ properties:
     description: The amount of the minimum commitment in cents.
     example: 100000
   invoice_display_name:
-    type: string
+    type:
+      - string
+      - "null"
     description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the default name will be used as the display name.
     example: "Minimum Commitment (C1)"
   interval:
