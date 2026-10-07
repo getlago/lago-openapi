@@ -3364,7 +3364,7 @@ paths:
             example: event-123
         - name: timestamp_from_started_at
           in: query
-          description: Requires `external_subscription_id` to be set. Filter events by timestamp after the subscription started at datetime.
+          description: Requires `external_subscription_id` to be set, and cannot be combined with `timestamp_from`. Filter events by timestamp after the subscription started at datetime.
           required: false
           explode: true
           schema:
@@ -13568,9 +13568,11 @@ components:
           example: '2022-09-14T16:35:31Z'
           description: Creation date of the billable metric.
         expression:
-          type: string
+          type:
+            - string
+            - 'null'
           example: round((ended_at - started_at) * units)
-          description: Expression used to calculate the event units. The expression is evalutated for each event and the result is then used to calculate the total aggregated units.
+          description: Expression used to calculate the event units. The expression is evaluated for each event and the result is then used to calculate the total aggregated units.
         field_name:
           type:
             - string
@@ -13662,8 +13664,8 @@ components:
             - 'null'
           example: round((ended_at - started_at) * units)
           description: |
-            Expression used to calculate the event units. The expression is evalutated for each event and the result is then used to calculate the total aggregated units.
-            Accepted function are `ceil`, `concat` and `round` as well as `+`, `-`, `\` and `*` operations.
+            Expression used to calculate the event units. The expression is evaluated for each event and the result is then used to calculate the total aggregated units.
+            Accepted functions are `ceil`, `concat` and `round` as well as `+`, `-`, `\` and `*` operations.
             Round is accepting an optional second parameter to specify the number of decimal.
         rounding_function:
           type:
@@ -13740,8 +13742,8 @@ components:
           type: string
           example: round((ended_at - started_at) * units)
           description: |
-            Expression used to calculate the event units. The expression is evalutated for each event and the result is then used to calculate the total aggregated units.
-            Accepted function are `ceil`, `concat` and `round` as well as `+`, `-`, `\` and `*` operations.
+            Expression used to calculate the event units. The expression is evaluated for each event and the result is then used to calculate the total aggregated units.
+            Accepted functions are `ceil`, `concat` and `round` as well as `+`, `-`, `\` and `*` operations.
             Round is accepting an optional second parameter to specify the number of decimal.
         event:
           type: object
@@ -19272,13 +19274,13 @@ components:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51.123Z'
-          description: This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC). If this timestamp is not provided, the API will automatically set it to the time of event reception.
+          description: The date and time at which the event occurred, in ISO 8601 format with millisecond precision and expressed in Coordinated Universal Time (UTC). When no timestamp is sent on the event, it is set to the time of event reception.
         precise_total_amount_cents:
           type:
             - string
             - 'null'
           example: '1234.56'
-          description: The precise total amount that was sent in the event payload. This filed is used by the `dynamic` pricing model.
+          description: The precise total amount that was sent in the event payload. This field is used by the `dynamic` pricing model.
         properties:
           type: object
           description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
@@ -19308,7 +19310,7 @@ components:
         external_subscription_id:
           type: string
           example: sub_1234567890
-          description: The unique identifier of the subscription within your application. It is a mandatory field when the customer possesses multiple subscriptions or when the `external_customer_id` is not provided.
+          description: The unique identifier of the subscription within your application, as sent on the event. It is the value Lago uses to attach the event to a subscription.
         created_at:
           type:
             - string
@@ -19361,7 +19363,7 @@ components:
           description: |
             This field captures the Unix timestamp in seconds indicating the occurrence of the event in Coordinated Universal Time (UTC).
             If this timestamp is not provided, the API will automatically set it to the time of event reception.
-            You can also provide miliseconds precision by appending decimals to the timestamp.
+            You can also provide milliseconds precision by appending decimals to the timestamp.
         precise_total_amount_cents:
           type:
             - string
@@ -19457,6 +19459,12 @@ components:
               type: string
               example: sub_1234567890
               description: The unique identifier of the subscription within your application.
+            precise_total_amount_cents:
+              type:
+                - string
+                - 'null'
+              example: '1234.56'
+              description: The precise total amount in cents with precision used by the `dynamic` pricing model to compute the estimated usage amount. Defaults to `0` when omitted.
             properties:
               type: object
               description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required. Any property of the targeted billable metric can be sent here, in addition to the documented fields below.
