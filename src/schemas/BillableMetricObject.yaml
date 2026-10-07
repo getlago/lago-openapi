@@ -71,7 +71,7 @@ properties:
     description: "Property of the billable metric used for aggregating usage data. This field is not required for `count_agg`."
   aggregation_type:
     type: string
-    description: "Aggregation method used to compute usage for this billable metric. `custom_agg` is only returned for metrics that use a custom aggregator; it cannot be set through this API."
+    description: "Aggregation method used to compute usage for this billable metric."
     example: "sum_agg"
     enum:
       - count_agg
@@ -80,7 +80,6 @@ properties:
       - unique_count_agg
       - weighted_sum_agg
       - latest_agg
-      - custom_agg
   weighted_interval:
     type:
       - string
