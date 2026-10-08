@@ -2,7 +2,8 @@ name: subscription_status
 in: query
 description: >
   Filter by subscription status. When provided, the subscription is looked up with this status
-  instead of the default `active` status. Possible values are `pending`, `active`, `terminated`, or `canceled`.
+  instead of the default `active` status. Possible values are `pending`, `active`, `terminated`, `canceled`,
+  or `incomplete`.
 required: false
 schema:
   type: string
@@ -11,5 +12,6 @@ schema:
     - active
     - terminated
     - canceled
+    - incomplete
   default: active
   example: active

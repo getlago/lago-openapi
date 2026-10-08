@@ -8,4 +8,9 @@ allOf:
         type: array
         items:
           $ref: './ApplicableUsageThreshold.yaml'
-        description: List of usage thresholds applicable to this subscription.
+        description: List of usage thresholds applicable to this subscription. Not returned when terminating a subscription.
+      entitlements:
+        type: array
+        items:
+          $ref: './Entitlement/SubscriptionEntitlementObject.yaml'
+        description: The feature entitlements of the subscription. Only returned when creating or retrieving a subscription.

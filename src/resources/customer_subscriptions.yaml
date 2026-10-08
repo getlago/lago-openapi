@@ -9,6 +9,7 @@ get:
     - $ref: "../parameters/external_customer_id_path.yaml"
     - $ref: "../parameters/page.yaml"
     - $ref: "../parameters/per_page.yaml"
+    - $ref: "../parameters/currency.yaml"
     - name: external_id
       in: query
       description: The subscription external unique identifier (provided by your own application).
@@ -24,6 +25,13 @@ get:
       schema:
         type: string
         example: "premium"
+    - name: overridden
+      in: query
+      description: 'When set, filters subscriptions by whether their plan is an override of a parent plan. `true` returns only subscriptions on overridden plans; `false` returns only those on standard (non-overridden) plans.'
+      required: false
+      schema:
+        type: boolean
+        example: true
     - name: status[]
       in: query
       description: "If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`."
