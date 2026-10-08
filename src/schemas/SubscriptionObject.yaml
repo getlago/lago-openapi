@@ -215,6 +215,14 @@ properties:
 
       - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
       - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice, regardless of other grouping criteria.
+  progressive_billing_disabled:
+    type: boolean
+    default: false
+    example: false
+    description: |
+      Indicates whether progressive billing is switched off for this subscription, regardless of any usage thresholds defined on the plan (including thresholds inherited from a parent plan when the subscription runs on a plan override).
+
+      When `true`, no progressive billing invoice is issued for this subscription.
   cancellation_reason:
     type:
       - string

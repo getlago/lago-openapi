@@ -2532,6 +2532,7 @@ paths:
         - $ref: '#/components/parameters/external_customer_id_path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/currency'
         - name: external_id
           in: query
           description: The subscription external unique identifier (provided by your own application).
@@ -2547,6 +2548,13 @@ paths:
           schema:
             type: string
             example: premium
+        - name: overridden
+          in: query
+          description: When set, filters subscriptions by whether their plan is an override of a parent plan. `true` returns only subscriptions on overridden plans; `false` returns only those on standard (non-overridden) plans.
+          required: false
+          schema:
+            type: boolean
+            example: true
         - name: status[]
           in: query
           description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
@@ -6140,9 +6148,9 @@ paths:
         - name: status
           in: query
           description: |
-            By default, this endpoint only return `active` subscriptions. If you want to retrieve a subscription with a different `status`, you can specify it here.
+            By default, this endpoint only returns `active` subscriptions. If you want to retrieve a subscription with a different `status`, you can specify it here.
 
-            _Note: As there may exists multiple `canceled` or `terminated` subscribtions for the same `external_id`, it is recommended to use the "List all subscriptions" endpoint to retrieve those subscriptions._
+            _Note: As there may exist multiple `canceled` or `terminated` subscriptions for the same `external_id`, it is recommended to use the "List all subscriptions" endpoint to retrieve those subscriptions._
           required: false
           schema:
             type: string
@@ -6151,6 +6159,7 @@ paths:
               - terminated
               - pending
               - canceled
+              - incomplete
             example: active
             default: active
       responses:
@@ -6181,7 +6190,7 @@ paths:
         - name: status
           in: query
           description: |
-            By default, this endpoint only return `active` subscriptions. If you want to update a subscription with a different `status`, you can specify it here.
+            By default, this endpoint only updates `active` subscriptions. If you want to update a subscription with a different `status`, you can specify it here.
           required: false
           schema:
             type: string
@@ -6196,7 +6205,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscription'
+                $ref: '#/components/schemas/SubscriptionExtended'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -6233,6 +6242,7 @@ paths:
 
             - `credit`: A credit note is generated for the unused subscription time. The unused amount is credited back to the customer.
             - `refund`: A credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is credited back to the customer.
+            - `offset`: A credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is applied to the invoice reducing its amount due.
             - `skip`: No credit note is generated for the unused subscription time.
 
             _Note: This field is only applicable to pay-in-advance plans and is ignored for pay-in-arrears plans._
@@ -6242,6 +6252,7 @@ paths:
             enum:
               - credit
               - refund
+              - offset
               - skip
             example: credit
         - name: on_termination_invoice
@@ -6265,7 +6276,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscription'
+                $ref: '#/components/schemas/SubscriptionExtended'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -10892,7 +10903,7 @@ components:
       name: subscription_status
       in: query
       description: |
-        Filter by subscription status. When provided, the subscription is looked up with this status instead of the default `active` status. Possible values are `pending`, `active`, `terminated`, or `canceled`.
+        Filter by subscription status. When provided, the subscription is looked up with this status instead of the default `active` status. Possible values are `pending`, `active`, `terminated`, `canceled`, or `incomplete`.
       required: false
       schema:
         type: string
@@ -10901,6 +10912,7 @@ components:
           - active
           - terminated
           - canceled
+          - incomplete
         default: active
         example: active
     subscription_external_id_path:
@@ -17391,6 +17403,14 @@ components:
 
             - `true` (default): the subscription is included in the customer's standard invoice grouping (by billing entity, currency and payment method).
             - `false`: the subscription is excluded from consolidation and always billed on its own dedicated invoice, regardless of other grouping criteria.
+        progressive_billing_disabled:
+          type: boolean
+          default: false
+          example: false
+          description: |
+            Indicates whether progressive billing is switched off for this subscription, regardless of any usage thresholds defined on the plan (including thresholds inherited from a parent plan when the subscription runs on a plan override).
+
+            When `true`, no progressive billing invoice is issued for this subscription.
         cancellation_reason:
           type:
             - string
@@ -24505,6 +24525,117 @@ components:
                 $ref: '#/components/schemas/SubscriptionActivationRuleInput'
               description: |
                 Optional list of activation rules that gate the subscription activation. When a `payment` rule is provided and the plan is paid in advance (and the subscription is not in a trial), the subscription is created in the `incomplete` state and is only activated once the gating payment succeeds. If the payment fails or the rule's `timeout_hours` elapses, the subscription is canceled.
+    SubscriptionEntitlementPrivilegeObject:
+      allOf:
+        - $ref: '#/components/schemas/FeaturePrivilegeObject'
+        - type: object
+          required:
+            - value
+            - plan_value
+            - override_value
+          properties:
+            value:
+              oneOf:
+                - type: integer
+                  description: Value for integer type privileges
+                - type: boolean
+                  description: Value for boolean type privileges
+                - type: string
+                  description: Value for string or select type privileges
+              example: 10
+              description: Applicable value for this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type.
+            plan_value:
+              oneOf:
+                - type: integer
+                  description: Value for integer type privileges
+                - type: boolean
+                  description: Value for boolean type privileges
+                - type: string
+                  description: Value for string or select type privileges
+                - type: 'null'
+                  description: No plan value set
+              example: 10
+              description: Value assigned to this privilege in the plan. Type depends on the privilege's value_type. Null when the privilege only exists as a subscription override.
+            override_value:
+              oneOf:
+                - type: integer
+                  description: Value for integer type privileges
+                - type: boolean
+                  description: Value for boolean type privileges
+                - type: string
+                  description: Value for string or select type privileges
+                - type: 'null'
+                  description: No override value set
+              example: 10
+              description: Value assigned to this subscription specifically. Type depends on the privilege's value_type. Null if no override is set.
+    SubscriptionEntitlementObject:
+      type: object
+      required:
+        - code
+        - name
+        - description
+        - privileges
+        - overrides
+      properties:
+        code:
+          type: string
+          example: seats
+          description: Unique code used to identify the feature. Max 255 characters.
+        name:
+          type:
+            - string
+            - 'null'
+          example: Number of seats
+          description: Name of the feature. Max 255 characters.
+        description:
+          type:
+            - string
+            - 'null'
+          example: Number of users of the account
+          description: Description of the feature. Max 600 characters.
+        privileges:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionEntitlementPrivilegeObject'
+          example:
+            - code: max
+              name: Maximum
+              value_type: integer
+              config: {}
+              value: 15
+              plan_value: 10
+              override_value: 15
+            - code: max_admins
+              name: Max Admins
+              value_type: integer
+              config: {}
+              value: 5
+              plan_value: 5
+              override_value: null
+            - code: root
+              name: Allow root user
+              value_type: boolean
+              config: {}
+              value: true
+              plan_value: true
+              override_value: null
+            - code: provider
+              name: SSO Provider
+              value_type: select
+              value: okta
+              plan_value: google
+              override_value: okta
+              config:
+                select_options:
+                  - google
+                  - okta
+          description: Privileges associated with this feature. Each privilege shows the plan value and any subscription override.
+        overrides:
+          type: object
+          additionalProperties: true
+          example:
+            max: 15
+            provider: okta
     SubscriptionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
@@ -24516,7 +24647,12 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/ApplicableUsageThreshold'
-              description: List of usage thresholds applicable to this subscription.
+              description: List of usage thresholds applicable to this subscription. Not returned when terminating a subscription.
+            entitlements:
+              type: array
+              items:
+                $ref: '#/components/schemas/SubscriptionEntitlementObject'
+              description: The feature entitlements of the subscription. Only returned when creating or retrieving a subscription.
     SubscriptionExtended:
       type: object
       required:
@@ -24538,8 +24674,6 @@ components:
           description: If the field is not defined and multiple `active` and `pending` subscriptions exists, Lago will update the `active` subscription. However, if you wish to update a `pending` subscription, please ensure that you include the `status` attribute with the `pending` value in your request body.
         subscription:
           type: object
-          required:
-            - ending_at
           properties:
             name:
               type:
@@ -24579,6 +24713,34 @@ components:
               type: string
               example: default
               description: The code of the billing entity associated with the subscription. Updates take effect on future invoices only.
+            on_termination_credit_note:
+              type: string
+              enum:
+                - credit
+                - refund
+                - offset
+                - skip
+              example: credit
+              description: |
+                Sets the default credit note behaviour applied when this subscription is later terminated before the end of its billing period:
+
+                - `credit`: a credit note is generated for the unused subscription time. The unused amount is credited back to the customer.
+                - `refund`: a credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is credited back to the customer.
+                - `offset`: a credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is applied to the invoice reducing its amount due.
+                - `skip`: no credit note is generated for the unused subscription time.
+
+                _Note: This field is only applied to pay-in-advance plans and is ignored for pay-in-arrears plans._
+            on_termination_invoice:
+              type: string
+              enum:
+                - generate
+                - skip
+              example: generate
+              description: |
+                Sets the default invoice behaviour applied when this subscription is later terminated before the end of its billing period:
+
+                - `generate`: an invoice is generated for the unbilled usage.
+                - `skip`: no invoice is generated for the unbilled usage.
             purchase_order_number:
               type:
                 - string
@@ -24607,13 +24769,6 @@ components:
                 $ref: '#/components/schemas/SubscriptionActivationRuleInput'
               description: |
                 Optional list of activation rules that gate the subscription activation. Activation rules can only be set or modified while the subscription is `pending` (future-dated and not yet activated); the request is rejected for `incomplete`, `active`, or `terminated` subscriptions.
-    Subscription:
-      type: object
-      required:
-        - subscription
-      properties:
-        subscription:
-          $ref: '#/components/schemas/SubscriptionObject'
     LifetimeUsageThresholdObject:
       type: object
       required:
@@ -24903,117 +25058,6 @@ components:
                     - 'null'
                   description: The code of the billable metric associated with the alert. Only for alerts based on a billable metric.
                   example: storage_usage
-    SubscriptionEntitlementPrivilegeObject:
-      allOf:
-        - $ref: '#/components/schemas/FeaturePrivilegeObject'
-        - type: object
-          required:
-            - value
-            - plan_value
-            - override_value
-          properties:
-            value:
-              oneOf:
-                - type: integer
-                  description: Value for integer type privileges
-                - type: boolean
-                  description: Value for boolean type privileges
-                - type: string
-                  description: Value for string or select type privileges
-              example: 10
-              description: Applicable value for this subscription (override_value if set, plan_value otherwise). Type depends on the privilege's value_type.
-            plan_value:
-              oneOf:
-                - type: integer
-                  description: Value for integer type privileges
-                - type: boolean
-                  description: Value for boolean type privileges
-                - type: string
-                  description: Value for string or select type privileges
-                - type: 'null'
-                  description: No plan value set
-              example: 10
-              description: Value assigned to this privilege in the plan. Type depends on the privilege's value_type. Null when the privilege only exists as a subscription override.
-            override_value:
-              oneOf:
-                - type: integer
-                  description: Value for integer type privileges
-                - type: boolean
-                  description: Value for boolean type privileges
-                - type: string
-                  description: Value for string or select type privileges
-                - type: 'null'
-                  description: No override value set
-              example: 10
-              description: Value assigned to this subscription specifically. Type depends on the privilege's value_type. Null if no override is set.
-    SubscriptionEntitlementObject:
-      type: object
-      required:
-        - code
-        - name
-        - description
-        - privileges
-        - overrides
-      properties:
-        code:
-          type: string
-          example: seats
-          description: Unique code used to identify the feature. Max 255 characters.
-        name:
-          type:
-            - string
-            - 'null'
-          example: Number of seats
-          description: Name of the feature. Max 255 characters.
-        description:
-          type:
-            - string
-            - 'null'
-          example: Number of users of the account
-          description: Description of the feature. Max 600 characters.
-        privileges:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionEntitlementPrivilegeObject'
-          example:
-            - code: max
-              name: Maximum
-              value_type: integer
-              config: {}
-              value: 15
-              plan_value: 10
-              override_value: 15
-            - code: max_admins
-              name: Max Admins
-              value_type: integer
-              config: {}
-              value: 5
-              plan_value: 5
-              override_value: null
-            - code: root
-              name: Allow root user
-              value_type: boolean
-              config: {}
-              value: true
-              plan_value: true
-              override_value: null
-            - code: provider
-              name: SSO Provider
-              value_type: select
-              value: okta
-              plan_value: google
-              override_value: okta
-              config:
-                select_options:
-                  - google
-                  - okta
-          description: Privileges associated with this feature. Each privilege shows the plan value and any subscription override.
-        overrides:
-          type: object
-          additionalProperties: true
-          example:
-            max: 15
-            provider: okta
     SubscriptionEntitlements:
       type: object
       required:
@@ -26347,6 +26391,13 @@ components:
             - type: string
             - type: object
               additionalProperties: true
+    Subscription:
+      type: object
+      required:
+        - subscription
+      properties:
+        subscription:
+          $ref: '#/components/schemas/SubscriptionObject'
     SubscriptionEntitlement:
       type: object
       required:

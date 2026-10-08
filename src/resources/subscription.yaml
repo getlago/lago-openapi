@@ -16,9 +16,9 @@ get:
     - name: status
       in: query
       description: |
-        By default, this endpoint only return `active` subscriptions. If you want to retrieve a subscription with a different `status`, you can specify it here.
+        By default, this endpoint only returns `active` subscriptions. If you want to retrieve a subscription with a different `status`, you can specify it here.
 
-        _Note: As there may exists multiple `canceled` or `terminated` subscribtions for the same `external_id`, it is recommended to use the "List all subscriptions" endpoint to retrieve those subscriptions._
+        _Note: As there may exist multiple `canceled` or `terminated` subscriptions for the same `external_id`, it is recommended to use the "List all subscriptions" endpoint to retrieve those subscriptions._
       required: false
       schema:
         type: string
@@ -27,6 +27,7 @@ get:
           - terminated
           - pending
           - canceled
+          - incomplete
         example: active
         default: active
   responses:
@@ -57,7 +58,7 @@ put:
     - name: status
       in: query
       description: |
-        By default, this endpoint only return `active` subscriptions. If you want to update a subscription with a different `status`, you can specify it here.
+        By default, this endpoint only updates `active` subscriptions. If you want to update a subscription with a different `status`, you can specify it here.
       required: false
       schema:
         type: string
@@ -72,7 +73,7 @@ put:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Subscription.yaml"
+            $ref: "../schemas/SubscriptionExtended.yaml"
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":
@@ -109,6 +110,7 @@ delete:
 
         - `credit`: A credit note is generated for the unused subscription time. The unused amount is credited back to the customer.
         - `refund`: A credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is credited back to the customer.
+        - `offset`: A credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is applied to the invoice reducing its amount due.
         - `skip`: No credit note is generated for the unused subscription time.
 
         _Note: This field is only applicable to pay-in-advance plans and is ignored for pay-in-arrears plans._
@@ -118,6 +120,7 @@ delete:
         enum:
           - credit
           - refund
+          - offset
           - skip
         example: "credit"
     - name: on_termination_invoice
@@ -141,7 +144,7 @@ delete:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Subscription.yaml"
+            $ref: "../schemas/SubscriptionExtended.yaml"
     "401":
       $ref: "../responses/Unauthorized.yaml"
     "404":

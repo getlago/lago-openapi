@@ -11,8 +11,6 @@ properties:
     description: If the field is not defined and multiple `active` and `pending` subscriptions exists, Lago will update the `active` subscription. However, if you wish to update a `pending` subscription, please ensure that you include the `status` attribute with the `pending` value in your request body.
   subscription:
     type: object
-    required:
-      - ending_at
     properties:
       name:
         type:
@@ -52,6 +50,34 @@ properties:
         type: string
         example: "default"
         description: The code of the billing entity associated with the subscription. Updates take effect on future invoices only.
+      on_termination_credit_note:
+        type: string
+        enum:
+          - credit
+          - refund
+          - offset
+          - skip
+        example: "credit"
+        description: |
+          Sets the default credit note behaviour applied when this subscription is later terminated before the end of its billing period:
+
+          - `credit`: a credit note is generated for the unused subscription time. The unused amount is credited back to the customer.
+          - `refund`: a credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is credited back to the customer.
+          - `offset`: a credit note is generated for the unused subscription time. If the invoice is paid or partially paid, the unused paid amount is refunded; any unpaid unused amount is applied to the invoice reducing its amount due.
+          - `skip`: no credit note is generated for the unused subscription time.
+
+          _Note: This field is only applied to pay-in-advance plans and is ignored for pay-in-arrears plans._
+      on_termination_invoice:
+        type: string
+        enum:
+          - generate
+          - skip
+        example: "generate"
+        description: |
+          Sets the default invoice behaviour applied when this subscription is later terminated before the end of its billing period:
+
+          - `generate`: an invoice is generated for the unbilled usage.
+          - `skip`: no invoice is generated for the unbilled usage.
       purchase_order_number:
         type:
           - string
