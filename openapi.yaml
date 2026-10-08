@@ -1878,7 +1878,7 @@ paths:
       tags:
         - customers
       summary: Create a customer
-      description: This endpoint creates a new customer.
+      description: This endpoint creates a customer. When a customer with the same `external_id` already exists, it is updated instead, and only the fields present in the payload are changed.
       operationId: createCustomer
       requestBody:
         description: Customer payload
@@ -15191,42 +15191,42 @@ components:
             - customer_balance
     Address:
       type: object
-      description: Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.
+      description: The shipping address of the customer.
       properties:
         address_line1:
           type:
             - string
             - 'null'
           example: 5230 Penfield Ave
-          description: The first line of the billing address
+          description: The first line of the shipping address
         address_line2:
           type:
             - string
             - 'null'
           example: null
-          description: The second line of the billing address
+          description: The second line of the shipping address
         city:
           type:
             - string
             - 'null'
           example: Woodland Hills
-          description: The city of the customer's billing address
+          description: The city of the customer's shipping address
         country:
           $ref: '#/components/schemas/CountryOrNull'
-          description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
+          description: Country code of the customer's shipping address. Format must be ISO 3166 (alpha-2)
           example: US
         state:
           type:
             - string
             - 'null'
           example: CA
-          description: The state of the customer's billing address
+          description: The state of the customer's shipping address
         zipcode:
           type:
             - string
             - 'null'
           example: '91364'
-          description: The zipcode of the customer's billing address
+          description: The zipcode of the customer's shipping address
     CustomerMetadata:
       type: object
       description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
@@ -15482,10 +15482,11 @@ components:
           example: netsuite
           description: |-
             The integration type used for accounting, tax and CRM syncs.
-            Accepted values: `netsuite`, `anrok`, `xero`, `hubspot`, `salesforce`.
+            Accepted values: `netsuite`, `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
           enum:
             - netsuite
             - anrok
+            - avalara
             - xero
             - hubspot
             - salesforce
@@ -15493,6 +15494,30 @@ components:
           type: string
           example: netsuite-eu-1
           description: Unique code used to identify an integration connection.
+        code:
+          type:
+            - string
+            - 'null'
+          example: netsuite-eu-1
+          description: Unique code identifying this integration customer. It defaults to the code of the integration connection.
+        is_default:
+          type: boolean
+          example: true
+          description: Whether this integration customer is the default one of its category for the customer.
+        category:
+          type:
+            - string
+            - 'null'
+          example: accounting
+          description: |-
+            The category of the integration connection. It is derived from the integration type.
+            Accepted values: `payment`, `tax`, `accounting`, `crm`.
+          enum:
+            - payment
+            - tax
+            - accounting
+            - crm
+            - null
         external_customer_id:
           type: string
           example: cus_12345
@@ -16380,6 +16405,10 @@ components:
                     type: string
                     example: netsuite-eu-1
                     description: Unique code used to identify an integration connection.
+                  code:
+                    type: string
+                    example: netsuite-eu-1
+                    description: Unique code identifying this integration customer. If it is not provided, the code of the integration connection is used.
                   external_customer_id:
                     type: string
                     example: cus_12345
