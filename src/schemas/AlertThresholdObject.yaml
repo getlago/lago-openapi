@@ -8,7 +8,7 @@ allOf:
     properties:
       value:
         type: string
-        pattern: "^[0-9]+.?[0-9]*$"
+        pattern: "^-?[0-9]+(\\.[0-9]+)?$"
         description: |-
           A value that should trigger this alert, formatted as a BigDecimal.
 
