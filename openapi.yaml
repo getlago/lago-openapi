@@ -2324,7 +2324,7 @@ paths:
             example: '2022-08-09'
         - name: status
           in: query
-          description: Filter invoices by status. Possible values are `draft` or `finalized`.
+          description: Filter invoices by status. Possible values are `draft`, `failed`, `finalized`, `pending` and `voided`.
           required: false
           explode: true
           schema:
@@ -2332,6 +2332,24 @@ paths:
             enum:
               - draft
               - finalized
+              - failed
+              - pending
+              - voided
+        - name: statuses[]
+          in: query
+          description: Filter invoices by statuses. Possible values are `draft`, `failed`, `finalized`, `pending` and `voided`.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - draft
+                - finalized
+                - failed
+                - pending
+                - voided
         - name: payment_status
           in: query
           description: Filter invoices by payment status. Possible values are `pending`, `failed` or `succeeded`.
@@ -2343,6 +2361,19 @@ paths:
               - pending
               - failed
               - succeeded
+        - name: payment_statuses[]
+          in: query
+          description: Filter invoices by payment statuses. Possible values are `pending`, `failed` or `succeeded`.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - pending
+                - failed
+                - succeeded
         - name: payment_overdue
           in: query
           description: Filter invoices by payment_overdue. Possible values are `true` or `false`.
@@ -2389,6 +2420,49 @@ paths:
           schema:
             type: boolean
             example: true
+        - name: currency
+          in: query
+          description: Filter invoices by currency. Possible values ISO 4217 currency codes.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: EUR
+        - name: partially_paid
+          in: query
+          description: Filter invoices that are partially paid. When `true`, only invoices with a non-zero amount paid that is below the total due are returned. When `false`, those invoices are excluded.
+          required: false
+          explode: true
+          schema:
+            type: boolean
+            example: true
+        - name: settlements[]
+          in: query
+          description: Filter invoices settled by at least one of the given settlement types. `payment` matches invoices settled by a payment, `credit_note` matches invoices settled by a credit note.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - payment
+                - credit_note
+            example:
+              - payment
+              - credit_note
+        - name: billing_entity_codes[]
+          in: query
+          description: Filter invoices by billing entity codes. Possible values are the billing entity codes you have created.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - acme_corp
+              - foo_bar
         - name: metadata[key]
           in: query
           description: Filter invoices by metadata. Replace `key` with the actual metadata key you want to match, and provide the corresponding value. Providing empty value will search for invoice without given metadata key. For example, `metadata[color]=blue`.
@@ -4061,7 +4135,9 @@ paths:
       summary: Download an invoice PDF
       parameters:
         - $ref: '#/components/parameters/lago_invoice_id'
-      description: This endpoint is used for downloading a specific invoice PDF document.
+      description: |-
+        This endpoint is used for downloading a specific invoice PDF document. Only `finalized` invoices can be downloaded; any other invoice returns a `404` error.
+        When the PDF has already been generated, the invoice object is returned and its `file_url` points to the document. When it has not been generated yet, the response is a `200` with an empty body and the generation starts in the background. Call the endpoint again to get the invoice object with its `file_url`.
       operationId: downloadInvoice
       responses:
         '200':
@@ -20003,7 +20079,7 @@ components:
                     example: INV-0123456-98765
     InvoicePaymentUrl:
       type: object
-      description: .
+      description: The checkout link generated for an invoice, with the customer and invoice it belongs to.
       properties:
         invoice_payment_details:
           type: object
@@ -20157,6 +20233,19 @@ components:
                   - 'null'
                 pattern: ^[0-9]+.?[0-9]*$
                 description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
+              frequency:
+                type: string
+                enum:
+                  - once
+                  - recurring
+                  - forever
+                description: |-
+                  The frequency of the coupon. It can have three possible values: `once`, `recurring` or `forever`.
+
+                  - If set to `once`, the coupon applies to a single invoice.
+                  - If set to `recurring`, the coupon applies to the number of billing periods set in `frequency_duration`.
+                  - If set to `forever`, the coupon applies to every invoice of the subscription.
+                example: once
               frequency_duration:
                 type:
                   - integer
