@@ -28,7 +28,7 @@ get:
           - example: "USD"
     - name: fee_type
       in: query
-      description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription`, `commitment` or `product`.
+      description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
       required: false
       explode: true
       schema:
@@ -40,7 +40,6 @@ get:
           - subscription
           - credit
           - commitment
-          - product
         example: "charge"
     - name: billable_metric_code
       in: query

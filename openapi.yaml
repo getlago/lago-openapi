@@ -3587,7 +3587,7 @@ paths:
               - example: USD
         - name: fee_type
           in: query
-          description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription`, `commitment` or `product`.
+          description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
           required: false
           explode: true
           schema:
@@ -3599,7 +3599,6 @@ paths:
               - subscription
               - credit
               - commitment
-              - product
             example: charge
         - name: billable_metric_code
           in: query
@@ -14846,12 +14845,11 @@ components:
                 - subscription
                 - credit
                 - commitment
-                - product
-              description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription`, `commitment` or `product`.
+              description: The fee type. Possible values are `add_on`, `charge`, `fixed_charge`, `credit`, `subscription` or `commitment`.
               example: subscription
             code:
               type: string
-              description: The code of the fee item. It can be the code of the `add_on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit`, the code of the `product` or the code of the `subscription`.
+              description: The code of the fee item. It can be the code of the `add_on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
               example: startup
             name:
               type: string
@@ -14862,7 +14860,6 @@ components:
                 - If the fee item is an `add_on`, it is the add-on name.
                 - If the fee item is a `credit`, it is the wallet transaction name if set, or `"credit"` if not.
                 - If the fee item is a `fixed_charge`, it is the fixed charge add-on name.
-                - If the fee item is a `product`, it is the product name.
                 - For all the other fee items, it is the subscription plan name.
               example: Startup
             description:
@@ -14876,7 +14873,6 @@ components:
                 - If the fee item is an `add_on`, it is the add-on description.
                 - If the fee item is a `credit`, it is always `"credit"`.
                 - If the fee item is a `fixed_charge`, it is the fixed charge add-on description.
-                - If the fee item is a `product`, it is the product description.
                 - For all the other fee items, it is the subscription plan description.
               example: Startup
             invoice_display_name:
@@ -14888,7 +14884,6 @@ components:
                 - If the fee item is an `add_on`, we'll fallback to the `invoice_name` of the `add_on` or the `name` of the `add_on`.
                 - If the fee item is a `credit`, we'll fallback to the wallet transaction name if set, or `credit` if not.
                 - If the fee item is a `fixed_charge`, we'll fallback to the `invoice_display_name` of the `fixed_charge` or the `invoice_name` of the `fixed_charge_add_on` if no `invoice_display_name` is set.
-                - If the fee item is a `product`, we'll fallback to the `invoice_display_name` of the product or the `name` of the product.
                 - For all the other fee items, we'll fallback to the `invoice_display_name` of the subscription plan.
               example: Setup Fee (SF1)
             filter_invoice_display_name:
@@ -14916,10 +14911,9 @@ components:
               enum:
                 - AddOn
                 - BillableMetric
-                - Product
                 - Subscription
                 - WalletTransaction
-              description: The type of the fee item. Possible values are `AddOn`, `BillableMetric`, `Product`, `WalletTransaction`, `Subscription`.
+              description: The type of the fee item. Possible values are `AddOn`, `BillableMetric`, `WalletTransaction`, `Subscription`.
               example: Subscription
             grouped_by:
               type: object
