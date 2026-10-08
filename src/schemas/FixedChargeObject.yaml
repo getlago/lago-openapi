@@ -66,12 +66,12 @@ properties:
     $ref: "./FixedChargeProperties.yaml"
     description: List of all thresholds utilized for calculating the fixed charge.
   units:
-    type: number
+    type: string
     description: |-
-      The number of units for the fixed charge.
+      The number of units for the fixed charge, as a decimal string.
 
       When retrieved through a subscription-scoped endpoint (e.g. `GET /subscriptions/{external_id}/fixed_charges`), this reflects the per-subscription unit override when one exists, and falls back to the plan-level units otherwise. Plan-scoped endpoints always return the plan-level units.
-    example: 1
+    example: "1.0"
   lago_parent_id:
     type:
       - string

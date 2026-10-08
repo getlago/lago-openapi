@@ -5,6 +5,15 @@ required:
   - properties
   - values
 properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the charge filter, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  charge_code:
+    type: string
+    description: Unique code identifying the charge this filter belongs to.
+    example: "api_requests_charge"
   invoice_display_name:
     type:
       - string
