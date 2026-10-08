@@ -14793,8 +14793,10 @@ components:
           description: The unit amount of the fee per unit, with precision.
           example: '312.5'
         total_aggregated_units:
-          type: string
-          description: The total number of units that have been aggregated for this specific fee.
+          type:
+            - string
+            - 'null'
+          description: The total number of units that have been aggregated for this specific fee. It is `null` on fees that do not aggregate units, such as `subscription`, `add_on` and `credit` fees.
           example: '0.32'
         total_amount_cents:
           type: integer
