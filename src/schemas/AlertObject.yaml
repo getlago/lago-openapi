@@ -7,6 +7,7 @@ required:
   - alert_type
   - code
   - name
+  - direction
   - previous_value
   - last_processed_at
   - thresholds
@@ -28,11 +29,15 @@ properties:
     example: "sub_1234567890"
   lago_wallet_id:
     type: "null"
+    description: Always null. An alert returned by the subscription endpoints is never attached to a wallet.
   wallet_code:
     type: "null"
+    description: Always null. An alert returned by the subscription endpoints is never attached to a wallet.
   billable_metric:
-    $ref: "./BillableMetricObject.yaml"
-    description: The billable metric associated with the alert. Only for alerts based on a billable metric.
+    oneOf:
+      - $ref: "./BillableMetricObject.yaml"
+      - type: "null"
+    description: The billable metric associated with the alert. Null unless the alert type is based on a billable metric.
   alert_type:
     type: string
     description: The type of alert.
@@ -61,9 +66,9 @@ properties:
       - decreasing
     example: "increasing"
   previous_value:
-    type: number
-    description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds.
-    example: 1000
+    type: string
+    description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds. Returned as a string formatted as a BigDecimal.
+    example: "1000.0"
   last_processed_at:
     type:
       - string

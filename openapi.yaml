@@ -18407,12 +18407,12 @@ components:
           type:
             - string
             - 'null'
-          description: Unique identifier of the usage threshold created by Lago.
+          description: Code identifying the threshold inside the alert. You set it when you create or update the alert.
           example: warn
         recurring:
           type: boolean
           default: false
-          description: This field when set to `true` indicates that the alert will be retrigger when this threshold is reached after the last non-recurring threshold. Only one recurring threshold per alert allowed.
+          description: This field when set to `true` indicates that the alert will be retriggered when this threshold is reached after the last non-recurring threshold. Only one recurring threshold per alert allowed.
           example: false
     AlertThresholdObject:
       allOf:
@@ -18425,7 +18425,7 @@ components:
           properties:
             value:
               type: string
-              pattern: ^[0-9]+.?[0-9]*$
+              pattern: ^-?[0-9]+(\.[0-9]+)?$
               description: |-
                 A value that should trigger this alert, formatted as a BigDecimal.
 
@@ -18441,6 +18441,7 @@ components:
         - alert_type
         - code
         - name
+        - direction
         - previous_value
         - last_processed_at
         - thresholds
@@ -18458,6 +18459,7 @@ components:
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_subscription_id:
           type: 'null'
+          description: Always null. An alert returned by the wallet endpoints is never attached to a subscription.
         lago_wallet_id:
           type: string
           description: Unique identifier of the wallet, created by Lago.
@@ -18468,6 +18470,7 @@ components:
           example: wallet_code
         billable_metric:
           type: 'null'
+          description: Always null. A wallet alert is never based on a billable metric.
         alert_type:
           type: string
           description: The type of alert.
@@ -18495,9 +18498,9 @@ components:
             - decreasing
           example: decreasing
         previous_value:
-          type: number
-          description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds.
-          example: 1000
+          type: string
+          description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds. Returned as a string formatted as a BigDecimal.
+          example: '1000.0'
         last_processed_at:
           type:
             - string
@@ -18535,10 +18538,10 @@ components:
           properties:
             value:
               oneOf:
-                - type: integer
+                - type: number
                 - type: string
               description: |-
-                A value that should trigger this alert. This can be an integer or a string formatted as a BigDecimal.
+                A value that should trigger this alert. This can be a number or a string formatted as a BigDecimal.
 
                 The unit depends on the alert type: `billable_metric_current_usage_units` and `billable_metric_lifetime_usage_units` are expressed in units, `wallet_credits_balance` and `wallet_credits_ongoing_balance` in credits, and all other types in cents.
               example: 99
@@ -24815,6 +24818,7 @@ components:
         - alert_type
         - code
         - name
+        - direction
         - previous_value
         - last_processed_at
         - thresholds
@@ -24838,11 +24842,15 @@ components:
           example: sub_1234567890
         lago_wallet_id:
           type: 'null'
+          description: Always null. An alert returned by the subscription endpoints is never attached to a wallet.
         wallet_code:
           type: 'null'
+          description: Always null. An alert returned by the subscription endpoints is never attached to a wallet.
         billable_metric:
-          $ref: '#/components/schemas/BillableMetricObject'
-          description: The billable metric associated with the alert. Only for alerts based on a billable metric.
+          oneOf:
+            - $ref: '#/components/schemas/BillableMetricObject'
+            - type: 'null'
+          description: The billable metric associated with the alert. Null unless the alert type is based on a billable metric.
         alert_type:
           type: string
           description: The type of alert.
@@ -24871,9 +24879,9 @@ components:
             - decreasing
           example: increasing
         previous_value:
-          type: number
-          description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds.
-          example: 1000
+          type: string
+          description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds. Returned as a string formatted as a BigDecimal.
+          example: '1000.0'
         last_processed_at:
           type:
             - string
