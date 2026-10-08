@@ -8,8 +8,6 @@ properties:
       - value
     properties:
       value:
-        anyOf:
-          - type: string
-          - type: number
-        example: 1.0
-        description: "Result of evaluating the expression"
+        type: string
+        example: "2.0"
+        description: "Result of evaluating the expression. A numeric result is returned as a decimal string."
