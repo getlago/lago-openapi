@@ -6,6 +6,19 @@ properties:
       - "null"
     description: Unique identifier of the usage threshold created by Lago.
     example: "warn"
+  notify_on:
+    type: array
+    description: The transitions this threshold notifies on. `triggered` is always included. Opting in to `resolved` additionally sends an `alert.resolved` webhook when the value returns past the threshold, and requires the threshold to carry a code that is unique within the alert. Not available on recurring thresholds.
+    items:
+      type: string
+      enum:
+        - triggered
+        - resolved
+    default:
+      - triggered
+    example:
+      - triggered
+      - resolved
   recurring:
     type: boolean
     default: false
