@@ -20229,6 +20229,19 @@ components:
                   - 'null'
                 pattern: ^[0-9]+.?[0-9]*$
                 description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
+              frequency:
+                type: string
+                enum:
+                  - once
+                  - recurring
+                  - forever
+                description: |-
+                  The frequency of the coupon. It can have three possible values: `once`, `recurring` or `forever`.
+
+                  - If set to `once`, the coupon applies to a single invoice.
+                  - If set to `recurring`, the coupon applies to the number of billing periods set in `frequency_duration`.
+                  - If set to `forever`, the coupon applies to every invoice of the subscription.
+                example: once
               frequency_duration:
                 type:
                   - integer
