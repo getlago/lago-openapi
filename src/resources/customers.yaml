@@ -2,7 +2,7 @@ post:
   tags:
     - customers
   summary: Create a customer
-  description: This endpoint creates a new customer.
+  description: This endpoint creates a customer. When a customer with the same `external_id` already exists, it is updated instead, and only the fields present in the payload are changed.
   operationId: createCustomer
   requestBody:
     description: Customer payload

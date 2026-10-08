@@ -16,10 +16,11 @@ properties:
     example: "netsuite"
     description: |-
       The integration type used for accounting, tax and CRM syncs.
-      Accepted values: `netsuite`, `anrok`, `xero`, `hubspot`, `salesforce`.
+      Accepted values: `netsuite`, `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
     enum:
       - netsuite
       - anrok
+      - avalara
       - xero
       - hubspot
       - salesforce
@@ -27,6 +28,30 @@ properties:
     type: string
     example: "netsuite-eu-1"
     description: Unique code used to identify an integration connection.
+  code:
+    type:
+      - string
+      - "null"
+    example: "netsuite-eu-1"
+    description: Unique code identifying this integration customer. It defaults to the code of the integration connection.
+  is_default:
+    type: boolean
+    example: true
+    description: Whether this integration customer is the default one of its category for the customer.
+  category:
+    type:
+      - string
+      - "null"
+    example: "accounting"
+    description: |-
+      The category of the integration connection. It is derived from the integration type.
+      Accepted values: `payment`, `tax`, `accounting`, `crm`.
+    enum:
+      - payment
+      - tax
+      - accounting
+      - crm
+      - null
   external_customer_id:
     type: string
     example: "cus_12345"

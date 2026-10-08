@@ -200,6 +200,10 @@ properties:
               type: string
               example: "netsuite-eu-1"
               description: Unique code used to identify an integration connection.
+            code:
+              type: string
+              example: "netsuite-eu-1"
+              description: Unique code identifying this integration customer. If it is not provided, the code of the integration connection is used.
             external_customer_id:
               type: string
               example: "cus_12345"
