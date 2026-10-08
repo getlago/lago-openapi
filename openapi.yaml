@@ -19490,34 +19490,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FeeObject'
+    EventEstimateInstantFeesInputObject:
+      type: object
+      required:
+        - code
+        - external_subscription_id
+      properties:
+        code:
+          type: string
+          example: storage
+          description: The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.
+        external_subscription_id:
+          type: string
+          example: sub_1234567890
+          description: The unique identifier of the subscription within your application.
+        properties:
+          type: object
+          description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
+        transaction_id:
+          type:
+            - string
+            - 'null'
+          example: transaction_1234567890
+          description: This field represents a unique identifier for the event.
     EventEstimateInstantFeesInput:
       type: object
       required:
         - event
       properties:
         event:
-          type: object
-          required:
-            - code
-            - external_subscription_id
-          properties:
-            code:
-              type: string
-              example: storage
-              description: The code that identifies a targeted billable metric. It is essential that this code matches the `code` property of one of your active billable metrics. If the provided code does not correspond to any active billable metric, it will be ignored during the process.
-            external_subscription_id:
-              type: string
-              example: sub_1234567890
-              description: The unique identifier of the subscription within your application.
-            properties:
-              type: object
-              description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
-            transaction_id:
-              type:
-                - string
-                - 'null'
-              example: transaction_1234567890
-              description: This field represents a unique identifier for the event.
+          $ref: '#/components/schemas/EventEstimateInstantFeesInputObject'
     FeeEstimateObject:
       type: object
       required:
@@ -19612,7 +19614,7 @@ components:
           example: 312.5
         precise_coupons_amount_cents:
           type: string
-          description: The coupon amount applied to the estimated instant fee. It will always returns 0
+          description: The coupon amount applied to the estimated instant fee. It is always `0.0`.
           example: '0.0'
         total_amount_cents:
           type: integer
@@ -19638,7 +19640,7 @@ components:
           type: string
           enum:
             - pending
-          description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The value will always `pending`.
+          description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The value is always `pending`.
           example: pending
         created_at:
           type: 'null'
@@ -19679,8 +19681,10 @@ components:
               description: The name of the fee item. It will be the name of the `billable_metric`.
               example: Startup
             description:
-              type: string
-              description: The description of the fee item. It will be the name of the `billable_metric`.
+              type:
+                - string
+                - 'null'
+              description: The description of the fee item. It will be the description of the `billable_metric`.
               example: Startup description
             invoice_display_name:
               type: string
@@ -19710,7 +19714,7 @@ components:
               type: string
               enum:
                 - BillableMetric
-              description: The type of the fee item. Values is `BillableMetric`.
+              description: The type of the fee item. The value is `BillableMetric`.
               example: BillableMetric
             grouped_by:
               type: object
@@ -19734,7 +19738,7 @@ components:
         events:
           type: array
           items:
-            $ref: '#/components/schemas/EventEstimateInstantFeesInput'
+            $ref: '#/components/schemas/EventEstimateInstantFeesInputObject'
     Event:
       type: object
       required:

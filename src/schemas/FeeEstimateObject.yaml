@@ -91,7 +91,7 @@ properties:
     example: 312.5
   precise_coupons_amount_cents:
     type: string
-    description: The coupon amount applied to the estimated instant fee. It will always returns 0
+    description: The coupon amount applied to the estimated instant fee. It is always `0.0`.
     example: "0.0"
   total_amount_cents:
     type: integer
@@ -117,7 +117,7 @@ properties:
     type: string
     enum:
       - pending
-    description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The value will always `pending`.
+    description: Indicates the payment status of the fee. It represents the current status of the payment associated with the fee. The value is always `pending`.
     example: "pending"
   created_at:
     type: "null"
@@ -158,8 +158,10 @@ properties:
         description: The name of the fee item. It will be the name of the `billable_metric`.
         example: "Startup"
       description:
-        type: string
-        description: The description of the fee item. It will be the name of the `billable_metric`.
+        type:
+          - string
+          - "null"
+        description: The description of the fee item. It will be the description of the `billable_metric`.
         example: "Startup description"
       invoice_display_name:
         type: string
@@ -189,7 +191,7 @@ properties:
         type: string
         enum:
           - BillableMetric
-        description: The type of the fee item. Values is `BillableMetric`.
+        description: The type of the fee item. The value is `BillableMetric`.
         example: BillableMetric
       grouped_by:
         type: object
