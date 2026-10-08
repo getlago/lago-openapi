@@ -9,3 +9,8 @@ allOf:
         $ref: "./PlanObject.yaml"
       customer:
         $ref: "./CustomerObject.yaml"
+      entitlements:
+        type: array
+        description: The feature entitlements of the subscription. Only sent with the `subscription.started` and `subscription.updated` webhooks.
+        items:
+          $ref: "./Entitlement/SubscriptionEntitlementObject.yaml"

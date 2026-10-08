@@ -26257,6 +26257,11 @@ components:
               $ref: '#/components/schemas/PlanObject'
             customer:
               $ref: '#/components/schemas/CustomerObject'
+            entitlements:
+              type: array
+              description: The feature entitlements of the subscription. Only sent with the `subscription.started` and `subscription.updated` webhooks.
+              items:
+                $ref: '#/components/schemas/SubscriptionEntitlementObject'
     SubscriptionWithThresholdObject:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
