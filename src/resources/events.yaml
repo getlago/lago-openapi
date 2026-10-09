@@ -1,8 +1,8 @@
 post:
   tags:
     - events
-  summary: Send usage events
-  description: This endpoint is used for transmitting usage measurement events to either a designated customer or a specific subscription.
+  summary: Send a usage event
+  description: This endpoint is used for transmitting a usage measurement event to a subscription.
   operationId: createEvent
   requestBody:
     description: Event payload
@@ -39,7 +39,7 @@ get:
     - $ref: "../parameters/external_subscription_id.yaml"
     - name: code
       in: query
-      description: Filter events by its code.
+      description: Filter events by code.
       required: false
       explode: true
       schema:

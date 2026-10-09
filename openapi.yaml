@@ -3404,8 +3404,8 @@ paths:
     post:
       tags:
         - events
-      summary: Send usage events
-      description: This endpoint is used for transmitting usage measurement events to either a designated customer or a specific subscription.
+      summary: Send a usage event
+      description: This endpoint is used for transmitting a usage measurement event to a subscription.
       operationId: createEvent
       requestBody:
         description: Event payload
@@ -3441,7 +3441,7 @@ paths:
         - $ref: '#/components/parameters/external_subscription_id'
         - name: code
           in: query
-          description: Filter events by its code.
+          description: Filter events by code.
           required: false
           explode: true
           schema:
@@ -3622,7 +3622,7 @@ paths:
         - events
       summary: Retrieve a specific event
       description: |
-        This endpoint is used for retrieving a specific usage measurement event that has been sent to a customer or a subscription.
+        This endpoint is used for retrieving a specific usage measurement event that has been sent to a subscription.
 
         Note that transaction_id is unique per external_subscription_id so multiple subscriptions can share the same transaction_id. This endpoint will only return the first event found with the given transaction_id.
 
