@@ -26401,10 +26401,9 @@ components:
           description: HTTP error description. It will always be "Unprocessable entity"
           example: Unprocessable entity
         message:
-          oneOf:
-            - type: string
-            - type: object
-              additionalProperties: true
+          type: string
+          description: The validation errors that were detected on the event, serialized as a JSON string.
+          example: '{"target_wallet_code":["target_wallet_code_not_found"]}'
         event:
           $ref: '#/components/schemas/EventObject'
     EventsErrorsObject:
@@ -26437,11 +26436,14 @@ components:
           example:
             - transaction_1234567890
         missing_group_key:
-          type: array
+          type:
+            - array
+            - 'null'
           items:
             type: string
-          description: '**Deprecated.** List of event transaction_id with a missing group key.'
+          description: '**Deprecated.** List of event transaction_id with a missing group key. The key is always sent, and its value is always `null`.'
           deprecated: true
+          example: null
     FeeTaxProviderErrorObject:
       type: object
       required:
