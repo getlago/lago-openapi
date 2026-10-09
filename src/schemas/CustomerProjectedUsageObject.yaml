@@ -3,6 +3,8 @@ required:
   - from_datetime
   - to_datetime
   - issuing_date
+  - lago_invoice_id
+  - currency
   - amount_cents
   - projected_amount_cents
   - taxes_amount_cents
@@ -30,7 +32,7 @@ properties:
       - "null"
     format: "uuid"
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
-    description: A unique identifier associated with the invoice related to this particular usage record.
+    description: A unique identifier associated with the invoice related to this particular usage record. It is always `null` here, because the projected usage is not attached to an invoice.
   currency:
     $ref: "./Currency.yaml"
     description: The currency of the customer's current usage.

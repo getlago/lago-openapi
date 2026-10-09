@@ -37,6 +37,7 @@ properties:
     description: Object listing all the properties for a specific charge item.
     required:
       - lago_id
+      - code
       - charge_model
     properties:
       lago_id:
@@ -44,16 +45,12 @@ properties:
         format: "uuid"
         example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
         description: Unique identifier assigned to the charge within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge's record within the Lago system.
-      charge_model:
+      code:
         type: string
-        description: The pricing model applied to this charge. Possible values are standard, `graduated`, `percentage`, `package` or `volume`.
-        enum:
-          - standard
-          - graduated
-          - package
-          - percentage
-          - volume
-        example: graduated
+        example: "storage"
+        description: The code of the charge, unique within the plan.
+      charge_model:
+        $ref: "./ChargeModelEnum.yaml"
       invoice_display_name:
         type:
           - string
@@ -84,7 +81,7 @@ properties:
         description: The code of the billable metric used for this charge.
       aggregation_type:
         type: string
-        description: The aggregation type of the billable metric used for this charge. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.
+        description: The aggregation type of the billable metric used for this charge.
         enum:
           - count_agg
           - sum_agg

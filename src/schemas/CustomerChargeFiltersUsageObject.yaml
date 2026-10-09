@@ -28,14 +28,18 @@ items:
       example: 10
       description: The quantity of usage events that have been recorded for a particular charge filter during the specified time period. These events may also be referred to as the number of transactions in some contexts.
     invoice_display_name:
-      type: string
-      description: Specifies the name that will be displayed on an invoice.
+      type:
+        - string
+        - "null"
+      description: Specifies the name that will be displayed on an invoice. It is `null` for the entry that holds the usage recorded outside of any charge filter.
       example: "AWS eu-east-1"
     pricing_unit_details:
       $ref: "./UsagePricingUnitDetailsObject.yaml"
     values:
-      type: object
-      description: "List of filter values applied to the usage."
+      type:
+        - object
+        - "null"
+      description: "List of filter values applied to the usage. It is `null` for the entry that holds the usage recorded outside of any charge filter."
       additionalProperties:
         type: array
         items:

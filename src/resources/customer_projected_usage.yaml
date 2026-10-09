@@ -29,6 +29,52 @@ get:
         type: boolean
         default: true
         example: true
+    - name: charge_id
+      in: query
+      description: Filter usage to a specific charge by its Lago ID (UUID).
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    - name: charge_code
+      in: query
+      description: Filter usage to a specific charge by its code.
+      required: false
+      schema:
+        type: string
+        example: 'storage'
+    - name: billable_metric_code
+      in: query
+      description: Filter usage to a specific billable metric by its code.
+      required: false
+      schema:
+        type: string
+        example: 'storage'
+    - name: group
+      in: query
+      description: >
+        Filter usage by pricing group. Pass key/value pairs as query parameters,
+        e.g. `group[cloud]=aws`.
+      required: false
+      style: deepObject
+      explode: true
+      schema:
+        type: object
+        additionalProperties:
+          type: string
+        example:
+          cloud: 'aws'
+    - name: filter_by_presentation
+      in: query
+      description: >
+        Filter `presentation_breakdowns` by a JSON-encoded array of presentation group key values.
+        Only breakdowns matching the provided values will be returned.
+        Pass an empty array to disable `presentation_breakdowns` entirely.
+      required: false
+      schema:
+        type: string
+        example: '["engineering", "operations"]'
   operationId: findCustomerProjectedUsage
   responses:
     '200':
@@ -43,3 +89,5 @@ get:
       $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'
