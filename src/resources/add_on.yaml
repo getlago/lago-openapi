@@ -59,7 +59,7 @@ delete:
   tags:
     - add_ons
   summary: Delete an add-on
-  description: This endpoint is used to delete an existing add-on.
+  description: This endpoint is used to delete an existing add-on. The fixed charges that use this add-on are deleted too.
   operationId: destroyAddOn
   responses:
     "200":

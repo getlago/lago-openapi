@@ -16,7 +16,8 @@ properties:
     example: "setup_fee"
   amount_cents:
     type: integer
-    description: The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.
+    minimum: 1
+    description: The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. It must be greater than zero. By creating a one-off invoice, you will be able to override this value.
     example: 50000
   amount_currency:
     $ref: "./Currency.yaml"
