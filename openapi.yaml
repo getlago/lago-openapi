@@ -1217,7 +1217,7 @@ paths:
       tags:
         - features
       summary: Update a feature
-      description: This endpoint updates an existing feature representing an entitlement component of your application.
+      description: This endpoint updates an existing feature representing an entitlement component of your application. Only the fields present in the payload are updated. Privileges are matched by their code, an unknown code adds a new privilege and a known one updates its name and adds the select options of the payload to the existing ones. The value type of an existing privilege cannot be changed. Privileges left out of the payload are kept, use the delete privilege endpoint to remove one.
       operationId: updateFeature
       requestBody:
         description: Feature payload
@@ -6688,7 +6688,7 @@ paths:
       tags:
         - entitlements
       summary: Remove an entitlement from a subscription
-      description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
+      description: This endpoint removes a specific feature entitlement from a subscription. The plan keeps the feature and other subscriptions are not affected, but this subscription stops getting it. It returns the full list of entitlements remaining on the subscription.
       operationId: destroySubscriptionEntitlement
       parameters:
         - $ref: '#/components/parameters/subscription_status'
@@ -6730,7 +6730,7 @@ paths:
       tags:
         - entitlements
       summary: Remove a privilege from a subscription entitlement override
-      description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
+      description: This endpoint removes a specific privilege from a subscription entitlement. The plan keeps the privilege and other subscriptions are not affected, but this subscription stops getting it. It returns the full list of entitlements remaining on the subscription.
       operationId: destroySubscriptionEntitlementPrivilege
       parameters:
         - $ref: '#/components/parameters/subscription_status'
@@ -24897,6 +24897,7 @@ components:
           example:
             max: 15
             provider: okta
+          description: Privilege values set on this subscription only. Each key is a privilege code and each value is the subscription override. Privileges that use the plan value are not listed.
     SubscriptionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'

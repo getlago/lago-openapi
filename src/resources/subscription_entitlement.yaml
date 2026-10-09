@@ -17,7 +17,7 @@ delete:
   tags:
     - entitlements
   summary: Remove an entitlement from a subscription
-  description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
+  description: This endpoint removes a specific feature entitlement from a subscription. The plan keeps the feature and other subscriptions are not affected, but this subscription stops getting it. It returns the full list of entitlements remaining on the subscription.
   operationId: destroySubscriptionEntitlement
   parameters:
     - $ref: "../parameters/subscription_status.yaml"
