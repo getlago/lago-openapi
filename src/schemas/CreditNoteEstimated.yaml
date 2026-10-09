@@ -37,9 +37,9 @@ properties:
         description: The tax amount of the credit note, expressed in cents.
         example: 20
       precise_taxes_amount_cents:
-        type: number
+        type: string
         description: "The precise tax amount of the credit note, expressed in cents with decimal precision."
-        example: 20.1
+        example: "20.1"
       taxes_rate:
         type: number
         description: The tax rate associated with this specific credit note.
@@ -50,24 +50,24 @@ properties:
         example: 100
       max_creditable_amount_cents:
         type: integer
-        description: The credited amount of the credit note, expressed in cents.
+        description: The maximum amount that can be credited to the customer balance for the requested items, taxes included, expressed in cents.
         example: 100
       max_refundable_amount_cents:
         type: integer
-        description: The refunded amount of the credit note, expressed in cents.
+        description: The maximum amount that can be refunded for the requested items, expressed in cents. It is capped by the amount the customer already paid on the invoice, so it is lower than `max_creditable_amount_cents` on an unpaid invoice.
         example: 0
       max_offsettable_amount_cents:
         type: integer
-        description: The ofsetted amount of the credit note, expressed in cents.
+        description: The maximum amount that can be deducted from the invoice balance for the requested items, expressed in cents.
         example: 0
       coupons_adjustment_amount_cents:
         type: integer
         description: The pro-rated amount of the coupons applied to the source invoice.
         example: 20
       precise_coupons_adjustment_amount_cents:
-        type: number
+        type: string
         description: The precise pro-rated amount with decimal precision of the coupons applied to the source invoice.
-        example: 20.1
+        example: "20.1"
       items:
         type: array
         items:
@@ -112,7 +112,7 @@ properties:
               example: 20.0
             tax_description:
               type: string
-              description: Internal description of the taxe
+              description: Internal description of the tax
               example: "French standard VAT"
             base_amount_cents:
               type: integer
