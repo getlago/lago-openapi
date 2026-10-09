@@ -105,7 +105,7 @@ get:
         example: true
     - name: search_term
       in: query
-      description: Search invoices by id, number, customer name, customer external_id or customer email.
+      description: Search the customer's invoices by id or number. Customer attributes are not searched here, because the list is already scoped to one customer.
       required: false
       explode: true
       schema:
