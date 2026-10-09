@@ -46,6 +46,7 @@ OpenAPI 3.1 description of the Lago API. The [lago-api](https://github.com/getla
 
 - Property, parameter and operation descriptions are full sentences that end with a period, including multi-line descriptions and descriptions that end with a code span.
 - Tag, request body, response and webhook descriptions are short labels without a period (`Payment request created`).
+- Descriptions are for API users, who may not use Ruby. They never name lago-api internals: Ruby or Rails types (`BigDecimal`, `nil`, `Hash`), class, serializer or service names, or database tables. Write `null`, "object" or "decimal string" instead.
 - A deprecated property or parameter has `deprecated: true` and a description that starts with `**Deprecated.**` (enforced by `.spectral.yml`).
 
 ## Types, formats and examples
@@ -56,17 +57,19 @@ OpenAPI 3.1 description of the Lago API. The [lago-api](https://github.com/getla
 
 ## Decimal values sent as strings
 
-lago-api sends `BigDecimal` values (units, rates, precise amounts, conversion rates) as JSON strings. Document them as a string with a `pattern` and a string example:
+lago-api sends decimal columns (units, rates, precise amounts, conversion rates, alert values) as JSON strings. Every such value is documented as a string with a `pattern` and a string example, including a value changed from `type: number` to `type: string`:
 
 ```yaml
 type: string
 pattern: "^[0-9]+(\\.[0-9]+)?$"
+description: Number of units consumed, sent as a decimal string.
 example: "12.5"
 ```
 
 - Use `"^-?[0-9]+(\\.[0-9]+)?$"` when lago-api accepts or returns negative values.
 - The same applies when the value is nullable (`type: [string, "null"]`).
 - Older schemas use `"^[0-9]+.?[0-9]*$"`, where the unescaped `.` matches any character. Do not copy it.
+- The description says "sent as a decimal string" (or "a number or a decimal string" for an input that accepts both). Never write `BigDecimal` or other Ruby terms in the spec: some existing descriptions say "formatted as a BigDecimal", and that wording is not copied.
 - Amounts in cents (`*_amount_cents`) are integers, not decimal strings.
 
 ## Nullability
