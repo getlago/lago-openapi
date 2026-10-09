@@ -3161,7 +3161,7 @@ paths:
         - name: full_usage
           in: query
           description: |
-            When `true`, returns usage since subscription start instead of the current billing period. Requires one of `charge_id`, `charge_code`, `group` (or their deprecated `filter_by_*` equivalents) to be set.
+            When `true`, returns usage since the subscription started instead of the current billing period. It requires the granular lifetime usage add-on, at least one of `charge_id`, `charge_code`, `billable_metric_code` or `group` (or their deprecated `filter_by_*` equivalents), and a subscription without prorated charges. The request returns `405` when one of these conditions is not met.
           required: false
           schema:
             type: boolean
@@ -3187,6 +3187,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   /customers/{external_customer_id}/projected_usage:
     get:
       tags:
@@ -3218,6 +3220,49 @@ paths:
             type: boolean
             default: true
             example: true
+        - name: charge_id
+          in: query
+          description: Filter usage to a specific charge by its Lago ID (UUID).
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        - name: charge_code
+          in: query
+          description: Filter usage to a specific charge by its code.
+          required: false
+          schema:
+            type: string
+            example: storage
+        - name: billable_metric_code
+          in: query
+          description: Filter usage to a specific billable metric by its code.
+          required: false
+          schema:
+            type: string
+            example: storage
+        - name: group
+          in: query
+          description: |
+            Filter usage by pricing group. Pass key/value pairs as query parameters, e.g. `group[cloud]=aws`.
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+            example:
+              cloud: aws
+        - name: filter_by_presentation
+          in: query
+          description: |
+            Filter `presentation_breakdowns` by a JSON-encoded array of presentation group key values. Only breakdowns matching the provided values will be returned. Pass an empty array to disable `presentation_breakdowns` entirely.
+          required: false
+          schema:
+            type: string
+            example: '["engineering", "operations"]'
       operationId: findCustomerProjectedUsage
       responses:
         '200':
@@ -3232,6 +3277,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   /customers/{external_customer_id}/past_usage:
     get:
       tags:
@@ -18853,6 +18900,25 @@ components:
           type: string
           example: '0.5'
           description: The conversion rate from pricing units to the plan's currency.
+    ChargeModelEnum:
+      type: string
+      description: |
+        Specifies the pricing model used for the calculation of the final fee. It can be any of the following values:
+          - [`dynamic`](https://docs.getlago.com/guide/plans/charges/charge-models/dynamic)
+          - [`graduated_percentage`](https://docs.getlago.com/guide/plans/charges/charge-models/graduated-percentage)
+          - [`graduated`](https://docs.getlago.com/guide/plans/charges/charge-models/graduated)
+          - [`package`](https://docs.getlago.com/guide/plans/charges/charge-models/package)
+          - [`percentage`](https://docs.getlago.com/guide/plans/charges/charge-models/percentage)
+          - [`standard`](https://docs.getlago.com/guide/plans/charges/charge-models/standard)
+          - [`volume`](https://docs.getlago.com/guide/plans/charges/charge-models/volume)
+      enum:
+        - dynamic
+        - graduated
+        - graduated_percentage
+        - package
+        - percentage
+        - standard
+        - volume
     CustomerChargeFiltersUsageObject:
       type: array
       description: Array of filter object, representing multiple dimensions for a charge item.
@@ -18884,14 +18950,18 @@ components:
             example: 10
             description: The quantity of usage events that have been recorded for a particular charge filter during the specified time period. These events may also be referred to as the number of transactions in some contexts.
           invoice_display_name:
-            type: string
-            description: Specifies the name that will be displayed on an invoice.
+            type:
+              - string
+              - 'null'
+            description: Specifies the name that will be displayed on an invoice. It is `null` for the entry that holds the usage recorded outside of any charge filter.
             example: AWS eu-east-1
           pricing_unit_details:
             $ref: '#/components/schemas/UsagePricingUnitDetailsObject'
           values:
-            type: object
-            description: List of filter values applied to the usage.
+            type:
+              - object
+              - 'null'
+            description: List of filter values applied to the usage. It is `null` for the entry that holds the usage recorded outside of any charge filter.
             additionalProperties:
               type: array
               items:
@@ -18982,6 +19052,7 @@ components:
           description: Object listing all the properties for a specific charge item.
           required:
             - lago_id
+            - code
             - charge_model
           properties:
             lago_id:
@@ -18989,16 +19060,12 @@ components:
               format: uuid
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
               description: Unique identifier assigned to the charge within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge's record within the Lago system.
-            charge_model:
+            code:
               type: string
-              description: The pricing model applied to this charge. Possible values are standard, `graduated`, `percentage`, `package` or `volume`.
-              enum:
-                - standard
-                - graduated
-                - package
-                - percentage
-                - volume
-              example: graduated
+              example: storage
+              description: The code of the charge, unique within the plan.
+            charge_model:
+              $ref: '#/components/schemas/ChargeModelEnum'
             invoice_display_name:
               type:
                 - string
@@ -19029,7 +19096,7 @@ components:
               description: The code of the billable metric used for this charge.
             aggregation_type:
               type: string
-              description: The aggregation type of the billable metric used for this charge. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.
+              description: The aggregation type of the billable metric used for this charge.
               enum:
                 - count_agg
                 - sum_agg
@@ -19050,6 +19117,8 @@ components:
         - from_datetime
         - to_datetime
         - issuing_date
+        - lago_invoice_id
+        - currency
         - amount_cents
         - taxes_amount_cents
         - total_amount_cents
@@ -19076,7 +19145,7 @@ components:
             - 'null'
           format: uuid
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: A unique identifier associated with the invoice related to this particular usage record.
+          description: A unique identifier associated with the invoice related to this particular usage record. It is `null` for the current usage, which is not attached to an invoice yet.
         currency:
           $ref: '#/components/schemas/Currency'
           description: The currency of the customer's current usage.
@@ -19141,14 +19210,18 @@ components:
             example: 10
             description: The quantity of usage events that have been recorded for a particular charge filter during the specified time period. These events may also be referred to as the number of transactions in some contexts.
           invoice_display_name:
-            type: string
-            description: Specifies the name that will be displayed on an invoice.
+            type:
+              - string
+              - 'null'
+            description: Specifies the name that will be displayed on an invoice. It is `null` for the entry that holds the usage recorded outside of any charge filter.
             example: AWS eu-east-1
           pricing_unit_details:
             $ref: '#/components/schemas/UsagePricingUnitDetailsObject'
           values:
-            type: object
-            description: List of filter values applied to the usage.
+            type:
+              - object
+              - 'null'
+            description: List of filter values applied to the usage. It is `null` for the entry that holds the usage recorded outside of any charge filter.
             additionalProperties:
               type: array
               items:
@@ -19219,7 +19292,7 @@ components:
         - amount_currency
         - charge
         - billable_metric
-        - groups
+        - grouped_usage
       properties:
         units:
           type: string
@@ -19262,17 +19335,11 @@ components:
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
               description: Unique identifier assigned to the charge within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge's record within the Lago system.
             charge_model:
-              type: string
-              description: The pricing model applied to this charge. Possible values are standard, `graduated`, `percentage`, `package` or `volume`.
-              enum:
-                - standard
-                - graduated
-                - package
-                - percentage
-                - volume
-              example: graduated
+              $ref: '#/components/schemas/ChargeModelEnum'
             invoice_display_name:
-              type: string
+              type:
+                - string
+                - 'null'
               description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
               example: Setup
         billable_metric:
@@ -19299,7 +19366,7 @@ components:
               description: The code of the billable metric used for this charge.
             aggregation_type:
               type: string
-              description: The aggregation type of the billable metric used for this charge. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.
+              description: The aggregation type of the billable metric used for this charge.
               enum:
                 - count_agg
                 - sum_agg
@@ -19322,6 +19389,8 @@ components:
         - from_datetime
         - to_datetime
         - issuing_date
+        - lago_invoice_id
+        - currency
         - amount_cents
         - projected_amount_cents
         - taxes_amount_cents
@@ -19349,7 +19418,7 @@ components:
             - 'null'
           format: uuid
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: A unique identifier associated with the invoice related to this particular usage record.
+          description: A unique identifier associated with the invoice related to this particular usage record. It is always `null` here, because the projected usage is not attached to an invoice.
         currency:
           $ref: '#/components/schemas/Currency'
           description: The currency of the customer's current usage.
@@ -22088,25 +22157,6 @@ components:
           description: All taxes applied to the minimum commitment.
           items:
             $ref: '#/components/schemas/TaxObject'
-    ChargeModelEnum:
-      type: string
-      description: |
-        Specifies the pricing model used for the calculation of the final fee. It can be any of the following values:
-          - [`dynamic`](https://docs.getlago.com/guide/plans/charges/charge-models/dynamic)
-          - [`graduated_percentage`](https://docs.getlago.com/guide/plans/charges/charge-models/graduated-percentage)
-          - [`graduated`](https://docs.getlago.com/guide/plans/charges/charge-models/graduated)
-          - [`package`](https://docs.getlago.com/guide/plans/charges/charge-models/package)
-          - [`percentage`](https://docs.getlago.com/guide/plans/charges/charge-models/percentage)
-          - [`standard`](https://docs.getlago.com/guide/plans/charges/charge-models/standard)
-          - [`volume`](https://docs.getlago.com/guide/plans/charges/charge-models/volume)
-      enum:
-        - dynamic
-        - graduated
-        - graduated_percentage
-        - package
-        - percentage
-        - standard
-        - volume
     ChargeProperties:
       type: object
       properties:
