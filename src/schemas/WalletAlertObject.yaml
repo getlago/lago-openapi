@@ -3,6 +3,8 @@ required:
   - lago_id
   - lago_organization_id
   - external_subscription_id
+  - lago_wallet_id
+  - wallet_code
   - billable_metric
   - alert_type
   - code
@@ -58,7 +60,7 @@ properties:
     example: "Wallet Balance Alert"
   direction:
     type: string
-    description: Indicates whether the alert is triggered when the monitored metric goes above or below the threshold.
+    description: Indicates whether the alert is triggered when the monitored metric goes above or below the threshold. Lago sets it from the alert type and you cannot change it. A wallet alert is always `decreasing`.
     enum:
       - increasing
       - decreasing
