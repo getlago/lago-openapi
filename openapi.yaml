@@ -2547,7 +2547,7 @@ paths:
               - billing_entity_code_2
       responses:
         '200':
-          description: PaymentRequests
+          description: Payment requests
           content:
             application/json:
               schema:
@@ -4886,10 +4886,10 @@ paths:
       tags:
         - payment_requests
       summary: Create a payment request
-      description: This endpoint is used to create a payment request to collect payments of overdue invoices of a given customer
+      description: This endpoint is used to create a payment request to collect the payment of the overdue invoices of a customer.
       operationId: createPaymentRequest
       requestBody:
-        description: PaymentRequest payload
+        description: Payment request payload
         content:
           application/json:
             schema:
@@ -4897,7 +4897,7 @@ paths:
         required: true
       responses:
         '200':
-          description: PaymentRequest created
+          description: Payment request created
           content:
             application/json:
               schema:
@@ -4906,6 +4906,12 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -4934,13 +4940,15 @@ paths:
               - billing_entity_code_2
       responses:
         '200':
-          description: PaymentRequests
+          description: Payment requests
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaymentRequestsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /payment_requests/{lago_id}:
     parameters:
       - name: lago_id
@@ -4963,7 +4971,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentRequestObject'
+                $ref: '#/components/schemas/PaymentRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
