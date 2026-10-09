@@ -97,7 +97,7 @@ properties:
           - `customer`: the account is a customer, default value.
           - `partner`: the account is a partner.
 
-          This field is only applied when revenue share is enabled on your organization; otherwise it is ignored.
+          This field is only applied when revenue share is enabled on your organization and the customer has no subscription, invoice, add-on, fixed-amount coupon or wallet yet; otherwise it is ignored.
       customer_type:
         type:
           - string
@@ -225,7 +225,8 @@ properties:
 
       metadata:
         type: array
-        description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
+        maxItems: 5
+        description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format. A customer can hold up to 5 key-value pairs.
         items:
           type: object
           required:
@@ -239,12 +240,14 @@ properties:
               description: Identifier for the metadata object, only required when updating a key-value pair
             key:
               type: string
+              maxLength: 20
               example: "Purchase Order"
-              description: The metadata object key
+              description: The metadata object key (20 characters max). It must be unique for the customer.
             value:
               type: string
+              maxLength: 100
               example: "123456789"
-              description: The metadata object value
+              description: The metadata object value (100 characters max).
             display_in_invoice:
               type: boolean
               example: true
