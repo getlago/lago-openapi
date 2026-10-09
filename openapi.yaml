@@ -1335,6 +1335,10 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -1368,7 +1372,10 @@ paths:
       tags:
         - coupons
       summary: Update a coupon
-      description: This endpoint is used to update a coupon that can be then attached to a customer to create a discount.
+      description: |-
+        This endpoint is used to update a coupon that can be then attached to a customer to create a discount.
+
+        Once the coupon has been applied to at least one customer, only `name`, `description`, `expiration` and `expiration_at` are updated. The other fields in the payload are ignored.
       operationId: updateCoupon
       requestBody:
         description: Coupon payload
@@ -1390,6 +1397,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -14256,7 +14265,7 @@ components:
           type:
             - integer
             - 'null'
-          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
+          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type.
           example: 6
         expiration:
           type: string
@@ -14366,7 +14375,7 @@ components:
           type:
             - integer
             - 'null'
-          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
+          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type.
           example: 6
         expiration:
           type: string
@@ -14429,6 +14438,23 @@ components:
       properties:
         coupon:
           $ref: '#/components/schemas/CouponObject'
+    ApiErrorNotAllowed:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 405
+        error:
+          type: string
+          example: Method Not Allowed
+        code:
+          type: string
+          example: not_allowed
     CouponUpdateInput:
       type: object
       required:
@@ -16296,23 +16322,6 @@ components:
                     $ref: '#/components/schemas/Currency'
                     description: Currency of the tax
                     example: USD
-    ApiErrorNotAllowed:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 405
-        error:
-          type: string
-          example: Method Not Allowed
-        code:
-          type: string
-          example: not_allowed
     CreditNoteMetadataResponse:
       type: object
       required:
