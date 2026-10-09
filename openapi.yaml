@@ -171,8 +171,6 @@ paths:
                       $ref: '#/components/schemas/BillingEntityObject'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
     post:
       tags:
         - billing_entities
@@ -237,8 +235,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
     put:
       tags:
         - billing_entities
@@ -11618,10 +11614,30 @@ components:
         - default_currency
         - document_locale
         - document_numbering
+        - document_number_prefix
         - finalize_zero_amount_invoice
+        - invoice_footer
         - invoice_grace_period
+        - subscription_invoice_issuing_date_anchor
+        - subscription_invoice_issuing_date_adjustment
+        - is_default
         - net_payment_term
+        - address_line1
+        - address_line2
+        - phone
+        - city
+        - state
+        - country
+        - zipcode
+        - email
+        - legal_name
+        - legal_number
+        - tax_identification_number
         - timezone
+        - email_settings
+        - eu_tax_management
+        - einvoicing
+        - logo_url
         - created_at
         - updated_at
       properties:
@@ -11645,7 +11661,7 @@ components:
         document_locale:
           type: string
           example: en
-          description: The language of the documents generated for this billing entity
+          description: The language of the documents generated for this billing entity, in the ISO 639-1 format.
         document_numbering:
           type: string
           enum:
@@ -11661,7 +11677,7 @@ components:
             - string
             - 'null'
           example: ABC-123
-          description: The prefix used in document numbers for this billing entity
+          description: The prefix used in document numbers for this billing entity. It is upper cased. When no prefix is given at creation, Lago builds one from the first three letters of the name and the last four characters of the identifier.
         finalize_zero_amount_invoice:
           type: boolean
           example: true
@@ -11776,13 +11792,15 @@ components:
               - payment_receipt.created
           description: The email notification settings for this billing entity
         eu_tax_management:
-          type: boolean
+          type:
+            - boolean
+            - 'null'
           example: false
-          description: Whether EU tax management is enabled for this billing entity
+          description: Whether EU tax management is enabled for this billing entity. It can only be enabled when the billing entity country is in the European Union.
         einvoicing:
           type: boolean
           example: false
-          description: Whether e-invoicing is enabled for this billing entity
+          description: Whether e-invoicing is enabled for this billing entity. It can only be enabled when the billing entity country is `FR` or `DE`.
         logo_url:
           type:
             - string
@@ -11813,26 +11831,6 @@ components:
         error:
           type: string
           example: Unauthorized
-    ApiErrorUnprocessableEntity:
-      type: object
-      required:
-        - status
-        - error
-        - code
-        - error_details
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 422
-        error:
-          type: string
-          example: Unprocessable entity
-        code:
-          type: string
-          example: validation_errors
-        error_details:
-          type: object
     BillingEntityCreateInput:
       type: object
       description: Billing entity create input
@@ -11870,8 +11868,10 @@ components:
               type:
                 - string
                 - 'null'
+              minLength: 1
+              maxLength: 10
               example: ABC-123
-              description: The prefix used in document numbers for this billing entity
+              description: The prefix used in document numbers for this billing entity (1 to 10 characters). It is upper cased. When it is not provided, Lago builds one from the first three letters of the name and the last four characters of the identifier.
             finalize_zero_amount_invoice:
               type: boolean
               example: true
@@ -11881,12 +11881,13 @@ components:
               properties:
                 invoice_footer:
                   type: string
+                  maxLength: 600
                   example: Thank you for your business
-                  description: The footer text to be displayed on invoices for this billing entity
+                  description: The footer text to be displayed on invoices for this billing entity (600 characters max).
                 document_locale:
                   type: string
                   example: en
-                  description: The language of the documents generated for this billing entity
+                  description: The language of the documents generated for this billing entity, in the ISO 639-1 format.
                 invoice_grace_period:
                   type: integer
                   example: 0
@@ -11989,18 +11990,18 @@ components:
             eu_tax_management:
               type: boolean
               example: false
-              description: Whether EU tax management is enabled for this billing entity
+              description: Whether EU tax management is enabled for this billing entity. It can only be enabled when the billing entity country is in the European Union.
             einvoicing:
               type: boolean
               example: false
-              description: Whether e-invoicing is enabled for this billing entity
+              description: Whether e-invoicing is enabled for this billing entity. It can only be enabled when the billing entity country is `FR` or `DE`.
             logo:
               type:
                 - string
                 - 'null'
               format: uri
               example: data:image/png;base64,...
-              description: The base64 encoded logo image for the billing entity
+              description: The base64 encoded logo image for the billing entity. Accepted formats are PNG, JPG and JPEG, up to 800 kB.
     ApiErrorBadRequest:
       type: object
       required:
@@ -12031,6 +12032,26 @@ components:
         code:
           type: string
           example: feature_unavailable
+    ApiErrorUnprocessableEntity:
+      type: object
+      required:
+        - status
+        - error
+        - code
+        - error_details
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 422
+        error:
+          type: string
+          example: Unprocessable entity
+        code:
+          type: string
+          example: validation_errors
+        error_details:
+          type: object
     TaxObject:
       type: object
       required:
@@ -12196,8 +12217,10 @@ components:
               type:
                 - string
                 - 'null'
+              minLength: 1
+              maxLength: 10
               example: ABC-123
-              description: The prefix used in document numbers for this billing entity
+              description: The prefix used in document numbers for this billing entity (1 to 10 characters). It is upper cased.
             finalize_zero_amount_invoice:
               type: boolean
               example: true
@@ -12207,12 +12230,13 @@ components:
               properties:
                 invoice_footer:
                   type: string
+                  maxLength: 600
                   example: Thank you for your business
-                  description: The footer text to be displayed on invoices for this billing entity
+                  description: The footer text to be displayed on invoices for this billing entity (600 characters max).
                 document_locale:
                   type: string
                   example: en
-                  description: The language of the documents generated for this billing entity
+                  description: The language of the documents generated for this billing entity, in the ISO 639-1 format.
                 invoice_grace_period:
                   type: integer
                   example: 0
@@ -12318,18 +12342,18 @@ components:
             eu_tax_management:
               type: boolean
               example: false
-              description: Whether EU tax management is enabled for this billing entity
+              description: Whether EU tax management is enabled for this billing entity. It can only be enabled when the billing entity country is in the European Union.
             einvoicing:
               type: boolean
               example: false
-              description: Whether e-invoicing is enabled for this billing entity
+              description: Whether e-invoicing is enabled for this billing entity. It can only be enabled when the billing entity country is `FR` or `DE`.
             logo:
               type:
                 - string
                 - 'null'
               format: uri
               example: data:image/png;base64,...
-              description: The base64 encoded logo image for the billing entity. Sending "null" will remove the logo, if any exist.
+              description: The base64 encoded logo image for the billing entity. Accepted formats are PNG, JPG and JPEG, up to 800 kB. Sending "null" removes the current logo.
             invoice_custom_section_codes:
               type: array
               items:
@@ -26685,12 +26709,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorUnauthorized'
-    UnprocessableEntity:
-      description: Unprocessable entity error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
     BadRequest:
       description: Bad Request error
       content:
@@ -26703,6 +26721,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorForbidden'
+    UnprocessableEntity:
+      description: Unprocessable entity error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
     NotFound:
       description: Not Found error
       content:
