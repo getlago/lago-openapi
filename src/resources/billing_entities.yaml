@@ -20,8 +20,6 @@ get:
                   $ref: '../schemas/BillingEntityObject.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
-    '422':
-      $ref: '../responses/UnprocessableEntity.yaml'
 post:
   tags:
     - billing_entities
