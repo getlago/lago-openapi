@@ -26362,6 +26362,7 @@ components:
         - dunning_campaign_code
         - overdue_balance_cents
         - overdue_balance_currency
+        - overdue_balances
       properties:
         external_customer_id:
           type: string
@@ -26369,15 +26370,15 @@ components:
           example: cus_0987654321
         dunning_campaign_code:
           type: string
-          description: Identifier of the dunning campaign.
+          description: Unique code used to identify the dunning campaign that finished.
           example: dun_code_1234
         overdue_balance_cents:
           type: integer
-          description: The amount of the overdue balance, expressed in cents.
+          description: The overdue balance held in the customer currency, expressed in cents. Use `overdue_balances` for the amounts held in the other currencies.
           example: 120
         overdue_balance_currency:
           $ref: '#/components/schemas/Currency'
-          description: The currency of the balance.
+          description: The currency of the customer, which is the currency of `overdue_balance_cents`.
           example: EUR
         overdue_balances:
           type: array
