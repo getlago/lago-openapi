@@ -9389,8 +9389,8 @@ webhooks:
   invoice_resynced:
     post:
       operationId: invoiceResynced
-      summary: An invoice has been resynced with salesforce
-      description: An invoice has been resynced with salesforce
+      summary: An invoice has been resynced with Salesforce
+      description: An invoice has been resynced with Salesforce
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -20201,6 +20201,20 @@ components:
           format: date-time
           description: The ending date of the period that covers the charge fees. It is applicable only to the `charge` fees attached to the subscription. This field indicates the end date of the billing period or subscription period associated with the fees.
           example: '2022-05-29T08:59:51Z'
+        fixed_charges_from_datetime:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The beginning date of the period that covers the fixed charge fees. It is `null` when the billing period carries no fixed charge, for example on an `advance_charges` invoice.
+          example: '2022-04-29T08:59:51Z'
+        fixed_charges_to_datetime:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: The ending date of the period that covers the fixed charge fees. It is `null` when the billing period carries no fixed charge, for example on an `advance_charges` invoice.
+          example: '2022-05-29T08:59:51Z'
         invoicing_reason:
           type: string
           enum:
@@ -26473,22 +26487,28 @@ components:
             - type: object
               additionalProperties: true
     InvoicePaymentDisputeLostObject:
-      allOf:
-        - $ref: '#/components/schemas/InvoiceObjectExtended'
-        - type: object
-          properties:
-            provider_error:
-              oneOf:
-                - type: string
-                - type: object
-                  additionalProperties: true
+      type: object
+      required:
+        - invoice
+      properties:
+        invoice:
+          $ref: '#/components/schemas/InvoiceObject'
+          description: The invoice whose payment dispute was lost.
+        provider_error:
+          type: string
+          description: The dispute reason reported by the payment provider. This key is omitted when the dispute is marked as lost without a reason, which is the case when the dispute is lost through the API endpoint.
+          example: fraudulent
     InvoicePaymentFailureObject:
       type: object
       required:
         - lago_invoice_id
         - lago_customer_id
         - external_customer_id
+        - provider_customer_id
         - payment_provider
+        - payment_provider_code
+        - provider_error
+        - error_details
       properties:
         lago_invoice_id:
           type: string
@@ -26505,27 +26525,57 @@ components:
           description: The customer external unique identifier (provided by your own application)
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         provider_customer_id:
-          type: string
-          description: Unique identifier of the customer within the payment provider
+          type:
+            - string
+            - 'null'
+          description: Unique identifier of the customer within the payment provider. It is `null` when the payment failed before the payment provider was called.
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         payment_provider:
-          type: string
+          type:
+            - string
+            - 'null'
           enum:
             - adyen
             - cashfree
             - gocardless
+            - moneyhash
             - stripe
-          description: The type of payment provider code
+            - null
+          description: The payment provider of the customer. It is `null` when the customer has no payment provider.
           example: stripe
         payment_provider_code:
-          type: string
-          description: Code of the payment provider
-          example: Stripe Prod
+          type:
+            - string
+            - 'null'
+          description: Code of the payment provider connection of the customer. It is `null` when the customer has no payment provider.
+          example: stripe-eu-1
         provider_error:
+          description: The error returned by the payment provider. It is `null` when the payment failed before the payment provider was called.
           oneOf:
-            - type: string
+            - type: 'null'
             - type: object
               additionalProperties: true
+              properties:
+                message:
+                  type:
+                    - string
+                    - 'null'
+                  description: The error message returned by the payment provider.
+                  example: Your card was declined.
+                error_code:
+                  type:
+                    - string
+                    - 'null'
+                  description: The error code returned by the payment provider.
+                  example: card_declined
+        error_details:
+          type:
+            - object
+            - 'null'
+          additionalProperties: true
+          description: Extra details about the failure. It carries `code` set to `customer_must_have_payment_provider` when a payment is retried for a customer without a payment provider, and the details of the provider exception when one was raised. It is `null` when the failure carries no extra details.
+          example:
+            code: customer_must_have_payment_provider
     IntegrationProviderErrorObject:
       type: object
       required:
