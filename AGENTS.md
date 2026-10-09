@@ -19,7 +19,7 @@ OpenAPI 3.1 description of the Lago API. The [lago-api](https://github.com/getla
 
 ## Naming
 
-- Resource files are snake_case: `<plural>.yaml` for the collection path, `<singular>.yaml` for one record, `<singular>_<action>.yaml` for an action path. Each path is registered under `paths` in `src/openapi.yaml`.
+- Resource files are snake_case: `<plural>.yaml` for the collection path, `<singular>.yaml` for one record, `<singular>_<action>.yaml` for an action path. New files use the `.yaml` extension; a few older files use `.yml` and are not renamed. Each path is registered under `paths` in `src/openapi.yaml`.
 - Schemas are PascalCase and follow these suffixes:
   - `<Name>Object`: the resource as lago-api returns it.
   - `<Name>`: the response wrapper, `{ <singular>: <Name>Object }`.
@@ -52,7 +52,7 @@ OpenAPI 3.1 description of the Lago API. The [lago-api](https://github.com/getla
 ## Types, formats and examples
 
 - Lago identifiers use `format: uuid`, timestamps `format: date-time` and dates `format: date`.
-- Every scalar property has an `example`. Examples use fake data: the UUID `1a901a90-1a90-1a90-1a90-1a901a901a90`, `.test` email domains, UTC timestamps such as `"2022-04-29T08:59:51Z"`.
+- Every scalar property has an `example`. Examples use fake data: the UUID `1a901a90-1a90-1a90-1a90-1a901a901a90`, `.test` email domains (`dinesh@piedpiper.test`, as in the current spec), UTC timestamps such as `"2022-04-29T08:59:51Z"`.
 - Enum values match the lago-api constant or model enum exactly. Never document internal Ruby class names as enum values or examples.
 
 ## Decimal values sent as strings
@@ -66,7 +66,7 @@ description: Number of units consumed, sent as a decimal string.
 example: "12.5"
 ```
 
-- Use `"^-?[0-9]+(\\.[0-9]+)?$"` when lago-api accepts or returns negative values.
+- Use the pattern above only when the value cannot be negative: lago-api validates it as 0 or more, or computes it from values that cannot be negative. Otherwise, including when lago-api does not check the sign, use `"^-?[0-9]+(\\.[0-9]+)?$"`.
 - The same applies when the value is nullable (`type: [string, "null"]`).
 - Older schemas use `"^[0-9]+.?[0-9]*$"`, where the unescaped `.` matches any character. Do not copy it.
 - The description says "sent as a decimal string" (or "a number or a decimal string" for an input that accepts both). Never write `BigDecimal` or other Ruby terms in the spec: some existing descriptions say "formatted as a BigDecimal", and that wording is not copied.
