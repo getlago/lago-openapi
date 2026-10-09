@@ -5200,7 +5200,7 @@ paths:
       tags:
         - entitlements
       summary: Create an entitlement
-      description: This endpoint creates new entitlements by adding features to a plan. Note that all existing entitlements will be deleted and replaced by the ones provided. To add a new entitlement without removing the existing ones, use PATCH. The feature must exist and all privileges must be valid for the feature.
+      description: This endpoint creates new entitlements by adding features to a plan. Note that all existing entitlements will be deleted and replaced by the ones provided. Sending an empty `entitlements` object, or omitting the key, therefore removes every entitlement of the plan. To add a new entitlement without removing the existing ones, use PATCH. The feature must exist and all privileges must be valid for the feature.
       operationId: createEntitlement
       requestBody:
         description: Entitlement payload
@@ -23862,8 +23862,6 @@ components:
             $ref: '#/components/schemas/PlanEntitlementObject'
     EntitlementUpdateInput:
       type: object
-      required:
-        - entitlements
       properties:
         entitlements:
           type: object
@@ -23882,7 +23880,7 @@ components:
               root: false
             sso:
               provider: okta
-          description: Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values.
+          description: Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values. The key is optional and defaults to an empty object. On the replacing endpoints (POST) an omitted or empty object removes every entitlement. On the partial update endpoints (PATCH) it changes nothing.
     PlanMetadataResponse:
       type: object
       required:
