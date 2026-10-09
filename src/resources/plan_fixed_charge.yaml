@@ -22,7 +22,12 @@ put:
   tags:
     - plans
   summary: Update a fixed charge
-  description: This endpoint updates a specific fixed charge for a plan.
+  description: |-
+    This endpoint updates a specific fixed charge for a plan.
+
+    The payload replaces the fixed charge configuration: `units` and `charge_model` must be sent on every update, and `invoice_display_name` is cleared when it is left out.
+
+    Once the plan is attached to a subscription, `code` and `charge_model` are ignored.
   operationId: updatePlanFixedCharge
   requestBody:
     description: Fixed charge payload

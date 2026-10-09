@@ -92,7 +92,7 @@ properties:
               example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
             code:
               type: string
-              description: Unique code identifying the charge within the plan.
+              description: Unique code identifying the charge within the plan. If not provided, it is generated from the code of the billable metric.
               example: "api_requests_charge"
             charge_model:
               $ref: "./ChargeModelEnum.yaml"

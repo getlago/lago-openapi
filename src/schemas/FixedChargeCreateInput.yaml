@@ -5,6 +5,9 @@ properties:
   fixed_charge:
     allOf:
       - $ref: './FixedChargeInput.yaml'
+      - required:
+          - code
+          - charge_model
       - properties:
           cascade_updates:
             type: boolean
