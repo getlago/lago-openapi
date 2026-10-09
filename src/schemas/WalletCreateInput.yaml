@@ -6,7 +6,6 @@ properties:
     type: object
     required:
       - rate_amount
-      - currency
       - external_customer_id
     properties:
       name:
@@ -34,7 +33,7 @@ properties:
         example: "1.5"
       currency:
         $ref: "./Currency.yaml"
-        description: The currency of the wallet.
+        description: The currency of the wallet. Required when the customer has no currency yet. When omitted, the wallet uses the customer's currency. When provided on a customer without a currency, it also sets the customer's currency.
         example: "USD"
       paid_credits:
         type:

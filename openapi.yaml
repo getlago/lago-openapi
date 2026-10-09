@@ -2698,13 +2698,15 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - wallets
       summary: List all customer's wallets
-      description: This endpoint is used to list all wallets with prepaid credits of a customer
+      description: This endpoint is used to list all wallets with prepaid credits of a customer.
       operationId: findAllCustomerWallets
       parameters:
         - $ref: '#/components/parameters/page'
@@ -7214,6 +7216,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -7257,6 +7261,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /wallets/{lago_id}:
     parameters:
       - name: lago_id
@@ -7503,7 +7509,7 @@ paths:
     parameters:
       - name: lago_id
         in: path
-        description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
+        description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction's record within the Lago system.
         required: true
         schema:
           type: string
@@ -7513,7 +7519,7 @@ paths:
       tags:
         - wallets
       summary: Retrieve a wallet transaction
-      description: This endpoint is used to retrieve a specific wallet transactions.
+      description: This endpoint is used to retrieve a specific wallet transaction.
       operationId: findWalletTransaction
       responses:
         '200':
@@ -7521,7 +7527,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WalletTransactionObject'
+                $ref: '#/components/schemas/WalletTransaction'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -7645,7 +7651,7 @@ paths:
         - $ref: '#/components/parameters/per_page'
         - name: status
           in: query
-          description: The status of the wallet transaction. Possible values are `pending` or `settled`.
+          description: The status of the wallet transaction. Possible values are `pending`, `settled` or `failed`.
           required: false
           explode: true
           schema:
@@ -17741,14 +17747,17 @@ components:
           description: The method used for recurring top-up. Possible values are `fixed` or `target`.
           example: target
         interval:
-          type: string
+          type:
+            - string
+            - 'null'
           enum:
             - weekly
             - monthly
             - quarterly
             - semiannual
             - yearly
-          description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. Required only if trigger is set to `interval`.'
+            - null
+          description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. It is `null` when the trigger is `threshold` and no interval was set.'
           example: monthly
         status:
           type: string
@@ -17796,7 +17805,7 @@ components:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The date of the metadata object creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the metadata object was created
+          description: The date of the recurring transaction rule creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
         expiration_at:
           type:
             - string
@@ -17965,7 +17974,7 @@ components:
             - string
             - 'null'
           format: date-time
-          description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          description: The date of termination of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
           example: '2022-09-14T16:35:31Z'
         invoice_requires_successful_payment:
           type: boolean
@@ -18076,7 +18085,6 @@ components:
           type: object
           required:
             - rate_amount
-            - currency
             - external_customer_id
           properties:
             name:
@@ -18104,7 +18112,7 @@ components:
               example: '1.5'
             currency:
               $ref: '#/components/schemas/Currency'
-              description: The currency of the wallet.
+              description: The currency of the wallet. Required when the customer has no currency yet. When omitted, the wallet uses the customer's currency. When provided on a customer without a currency, it also sets the customer's currency.
               example: USD
             paid_credits:
               type:
@@ -25726,17 +25734,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WalletTransactionObject'
+    WalletTransaction:
+      type: object
+      required:
+        - wallet_transaction
+      properties:
+        wallet_transaction:
+          $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactionPaymentUrl:
       type: object
       required:
-        - lago_wallet_transaction_id
-        - lago_customer_id
-        - external_customer_id
-        - payment_provider
-      description: .
+        - wallet_transaction_payment_details
+      description: The payment details generated for a wallet transaction.
       properties:
         wallet_transaction_payment_details:
           type: object
+          required:
+            - lago_wallet_transaction_id
+            - lago_customer_id
+            - external_customer_id
+            - payment_provider
+            - payment_url
           properties:
             lago_customer_id:
               type: string

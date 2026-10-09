@@ -26,13 +26,15 @@ post:
       $ref: "../responses/Unauthorized.yaml"
     "403":
       $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
     "422":
       $ref: "../responses/UnprocessableEntity.yaml"
 get:
   tags:
     - wallets
   summary: List all customer's wallets
-  description: This endpoint is used to list all wallets with prepaid credits of a customer
+  description: This endpoint is used to list all wallets with prepaid credits of a customer.
   operationId: findAllCustomerWallets
   parameters:
     - $ref: "../parameters/page.yaml"

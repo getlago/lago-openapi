@@ -17,7 +17,7 @@ get:
     - $ref: "../parameters/per_page.yaml"
     - name: status
       in: query
-      description: The status of the wallet transaction. Possible values are `pending` or `settled`.
+      description: The status of the wallet transaction. Possible values are `pending`, `settled` or `failed`.
       required: false
       explode: true
       schema:
