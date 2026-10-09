@@ -33,8 +33,10 @@ properties:
     example: "acme_corp"
     description: The unique code of the billing entity associated with the invoice
   sequential_id:
-    type: integer
-    description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
+    type:
+      - integer
+      - "null"
+    description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context. It is assigned when the invoice is finalized, so it is `null` on draft invoices.
     example: 2
   number:
     type: string

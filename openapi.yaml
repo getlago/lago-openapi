@@ -2384,7 +2384,7 @@ paths:
             example: true
         - name: search_term
           in: query
-          description: Search invoices by id, number, customer name, customer external_id or customer email.
+          description: Search the customer's invoices by id or number. Customer attributes are not searched here, because the list is already scoped to one customer.
           required: false
           explode: true
           schema:
@@ -3970,7 +3970,7 @@ paths:
             example: true
         - name: search_term
           in: query
-          description: Search invoices by id, number, customer name, customer external_id or customer email.
+          description: Search invoices by id, number, purchase order number, or by the name, legal name, first name, last name, external_id or email of the customer.
           required: false
           explode: true
           schema:
@@ -4283,10 +4283,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /invoices/{lago_id}/retry_payment:
     post:
       tags:
@@ -4343,8 +4347,14 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /order_forms:
     get:
       tags:
@@ -16597,8 +16607,10 @@ components:
           example: acme_corp
           description: The unique code of the billing entity associated with the invoice
         sequential_id:
-          type: integer
-          description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
+          type:
+            - integer
+            - 'null'
+          description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context. It is assigned when the invoice is finalized, so it is `null` on draft invoices.
           example: 2
         number:
           type: string
@@ -20200,10 +20212,14 @@ components:
                     type: string
                     example: anrok
                     description: |-
-                      The integration type used for accounting and tax syncs.
-                      Accepted values: `anrok`.
+                      The integration type used for accounting, tax and CRM syncs.
+                      Accepted values: `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
                     enum:
                       - anrok
+                      - avalara
+                      - xero
+                      - hubspot
+                      - salesforce
                   integration_code:
                     type: string
                     example: anrok1
@@ -20222,6 +20238,10 @@ components:
               type: string
               example: CA
               description: The state of the customer's billing address
+            zipcode:
+              type: string
+              example: '91364'
+              description: The zipcode of the customer's billing address
             tax_identification_number:
               type: string
               description: The tax identification number of the customer
