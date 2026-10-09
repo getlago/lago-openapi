@@ -155,17 +155,17 @@ paths:
   /billing_entities/{code}:
     $ref: "./resources/billing_entity.yaml"
   /activity_logs:
-    $ref: "./resources/activity_logs.yml"
+    $ref: "./resources/activity_logs.yaml"
   /activity_logs/{activity_id}:
-    $ref: "./resources/activity_log.yml"
+    $ref: "./resources/activity_log.yaml"
   /add_ons:
     $ref: "./resources/add_ons.yaml"
   /add_ons/{code}:
     $ref: "./resources/add_on.yaml"
   /api_logs:
-    $ref: "./resources/api_logs.yml"
+    $ref: "./resources/api_logs.yaml"
   /api_logs/{request_id}:
-    $ref: "./resources/api_log.yml"
+    $ref: "./resources/api_log.yaml"
   /analytics/gross_revenue:
     $ref: "./resources/gross_revenues.yaml"
   /analytics/invoice_collection:
@@ -191,7 +191,7 @@ paths:
   /features/{code}:
     $ref: "./resources/feature.yaml"
   /features/{code}/privileges/{privilege_code}:
-    $ref: "./resources/feature_privilege.yml"
+    $ref: "./resources/feature_privilege.yaml"
   /coupons:
     $ref: "./resources/coupons.yaml"
   /coupons/{code}:
