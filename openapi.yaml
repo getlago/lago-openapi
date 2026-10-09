@@ -1440,7 +1440,9 @@ paths:
       tags:
         - credit_notes
       summary: Create a credit note
-      description: This endpoint creates a new credit note.
+      description: |-
+        This endpoint creates a new credit note.
+        This is a premium feature.
       operationId: createCreditNote
       requestBody:
         description: Credit note payload
@@ -1460,13 +1462,19 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - credit_notes
       summary: List all credit notes
-      description: This endpoint list all existing credit notes.
+      description: This endpoint lists all existing credit notes.
       operationId: findAllCreditNotes
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1612,6 +1620,8 @@ paths:
                 $ref: '#/components/schemas/CreditNotesPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /credit_notes/{lago_id}:
     parameters:
       - name: lago_id
@@ -1671,7 +1681,9 @@ paths:
       tags:
         - credit_notes
       summary: Download a credit note PDF
-      description: This endpoint downloads the PDF of an existing credit note.
+      description: |-
+        This endpoint downloads the PDF of an existing credit note. Only `finalized` credit notes can be downloaded; any other credit note returns a `404` error.
+        When the PDF has already been generated, the credit note object is returned and its `file_url` points to the document. When it has not been generated yet, the response is a `200` with an empty body and the generation starts in the background. Call the endpoint again to get the credit note object with its `file_url`.
       parameters:
         - name: lago_id
           in: path
@@ -1698,13 +1710,16 @@ paths:
       tags:
         - credit_notes
       summary: Estimate amounts for a new credit note
-      description: This endpoint allows you to retrieve amounts for a new credit note creation.
+      description: |-
+        This endpoint allows you to retrieve amounts for a new credit note creation.
+        This is a premium feature.
       requestBody:
         description: Credit note estimate payload
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreditNoteEstimateInput'
+        required: true
       operationId: estimateCreditNote
       responses:
         '200':
@@ -1717,6 +1732,12 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /credit_notes/{lago_id}/void:
@@ -2172,7 +2193,7 @@ paths:
         - customers
         - credit_notes
       summary: List all customer's credit notes
-      description: This endpoint list all existing credit notes for a customer.
+      description: This endpoint lists all existing credit notes for a customer.
       operationId: findAllCustomerCreditNotes
       parameters:
         - $ref: '#/components/parameters/external_customer_id_path'
@@ -2204,6 +2225,14 @@ paths:
           schema:
             type: string
             example: Jane
+        - name: currency
+          in: query
+          description: Filter credit notes by currency. Possible values ISO 4217 currency codes.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: EUR
         - name: reason
           in: query
           description: Filter credit notes by reasons. Possible values are `product_unsatisfactory`, `order_change`, `order_cancellation`, `fraudulent_charge`, `duplicated_charge` or `other`.
@@ -2220,7 +2249,7 @@ paths:
               - other
         - name: credit_status
           in: query
-          description: Filter credit notes by credit status. Possible values are `available`, `consumed`  or `voided`.
+          description: Filter credit notes by credit status. Possible values are `available`, `consumed` or `voided`.
           required: false
           explode: true
           schema:
@@ -2231,7 +2260,7 @@ paths:
               - voided
         - name: refund_status
           in: query
-          description: Filter credit notes by refund status. Possible values are `pending`, `succeeded`  or `failed`.
+          description: Filter credit notes by refund status. Possible values are `pending`, `succeeded` or `failed`.
           required: false
           explode: true
           schema:
@@ -2265,6 +2294,22 @@ paths:
           schema:
             type: integer
             example: 100000
+        - name: types[]
+          in: query
+          description: Filter credit notes by the kind of amount they carry. `credit` matches credit notes with a credited amount, `refund` those with a refunded amount and `offset` those with an amount deducted from the invoice balance. A credit note can match several types.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - credit
+                - refund
+                - offset
+            example:
+              - credit
+              - refund
         - name: self_billed
           in: query
           description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
@@ -2273,6 +2318,18 @@ paths:
           schema:
             type: boolean
             example: true
+        - name: billing_entity_codes[]
+          in: query
+          description: Filter credit notes by billing entity codes.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - billing_entity_code_1
+              - billing_entity_code_2
       responses:
         '200':
           description: Credit notes
@@ -15148,6 +15205,7 @@ components:
       required:
         - lago_id
         - amount_cents
+        - precise_amount_cents
         - amount_currency
         - fee
       properties:
@@ -15160,6 +15218,10 @@ components:
           type: integer
           description: The credit note's item amount, expressed in cents.
           example: 100
+        precise_amount_cents:
+          type: string
+          description: The credit note's item amount, expressed in cents, with precision.
+          example: '100.0001'
         amount_currency:
           $ref: '#/components/schemas/Currency'
           description: The credit note's item currency.
@@ -15822,20 +15884,29 @@ components:
         - number
         - lago_invoice_id
         - invoice_number
+        - purchase_order_number
         - issuing_date
+        - credit_status
+        - refund_status
         - reason
+        - description
         - currency
         - total_amount_cents
+        - precise_total_amount_cents
         - credit_amount_cents
         - refund_amount_cents
         - offset_amount_cents
         - balance_amount_cents
         - taxes_amount_cents
+        - precise_taxes_amount_cents
         - taxes_rate
         - sub_total_excluding_taxes_amount_cents
         - coupons_adjustment_amount_cents
         - created_at
         - updated_at
+        - file_url
+        - xml_url
+        - self_billed
       properties:
         lago_id:
           type: string
@@ -15934,9 +16005,7 @@ components:
           description: The total amount of the credit note, expressed in cents.
           example: 120
         precise_total_amount_cents:
-          type:
-            - string
-            - 'null'
+          type: string
           description: The total amount of the credit note, expressed in cents, with precision.
           example: '120.0001'
         taxes_amount_cents:
@@ -15944,9 +16013,7 @@ components:
           description: The tax amount of the credit note, expressed in cents.
           example: 20
         precise_taxes_amount_cents:
-          type:
-            - string
-            - 'null'
+          type: string
           description: The tax amount of the credit note, expressed in cents, with precision.
           example: '20.0001'
         taxes_rate:
@@ -16017,9 +16084,8 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataObject'
         error_details:
-          type:
-            - array
-            - 'null'
+          type: array
+          description: The errors raised while the credit note was issued. When the key is present it is always an array, empty when no error was raised.
           items:
             $ref: '#/components/schemas/CreditNoteErrorDetailsObject'
     CreditNotesPaginated:
@@ -16146,8 +16212,6 @@ components:
       properties:
         credit_note:
           type: object
-          required:
-            - refund_status
           properties:
             refund_status:
               type: string
@@ -16250,9 +16314,9 @@ components:
               description: The tax amount of the credit note, expressed in cents.
               example: 20
             precise_taxes_amount_cents:
-              type: number
+              type: string
               description: The precise tax amount of the credit note, expressed in cents with decimal precision.
-              example: 20.1
+              example: '20.1'
             taxes_rate:
               type: number
               description: The tax rate associated with this specific credit note.
@@ -16263,24 +16327,24 @@ components:
               example: 100
             max_creditable_amount_cents:
               type: integer
-              description: The credited amount of the credit note, expressed in cents.
+              description: The maximum amount that can be credited to the customer balance for the requested items, taxes included, expressed in cents.
               example: 100
             max_refundable_amount_cents:
               type: integer
-              description: The refunded amount of the credit note, expressed in cents.
+              description: The maximum amount that can be refunded for the requested items, expressed in cents. It is capped by the amount the customer already paid on the invoice, so it is lower than `max_creditable_amount_cents` on an unpaid invoice.
               example: 0
             max_offsettable_amount_cents:
               type: integer
-              description: The ofsetted amount of the credit note, expressed in cents.
+              description: The maximum amount that can be deducted from the invoice balance for the requested items, expressed in cents.
               example: 0
             coupons_adjustment_amount_cents:
               type: integer
               description: The pro-rated amount of the coupons applied to the source invoice.
               example: 20
             precise_coupons_adjustment_amount_cents:
-              type: number
+              type: string
               description: The precise pro-rated amount with decimal precision of the coupons applied to the source invoice.
-              example: 20.1
+              example: '20.1'
             items:
               type: array
               items:
@@ -16325,7 +16389,7 @@ components:
                     example: 20
                   tax_description:
                     type: string
-                    description: Internal description of the taxe
+                    description: Internal description of the tax
                     example: French standard VAT
                   base_amount_cents:
                     type: integer
