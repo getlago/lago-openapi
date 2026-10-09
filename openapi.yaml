@@ -334,7 +334,7 @@ paths:
             items:
               type: string
             example:
-              - dinesh@piedpiper.test
+              - dinesh@piedpiper.example
         - $ref: '#/components/parameters/external_customer_id'
         - $ref: '#/components/parameters/external_subscription_id'
         - name: resource_ids[]
@@ -12406,7 +12406,7 @@ components:
             - string
             - 'null'
           format: email
-          example: dinesh@piedpiper.test
+          example: dinesh@piedpiper.example
           description: The email of the user who performed the activity
         activity_type:
           type: string
@@ -15545,7 +15545,7 @@ components:
             - string
             - 'null'
           format: email
-          example: dinesh@piedpiper.test
+          example: dinesh@piedpiper.example
           description: The email of the customer
         legal_name:
           type:
@@ -15763,7 +15763,7 @@ components:
           type:
             - string
             - 'null'
-          example: dinesh@piedpiper.test
+          example: dinesh@piedpiper.example
           description: This optional field is present only when working with `hubspot` connection.
     CustomerObject:
       allOf:
@@ -16456,7 +16456,7 @@ components:
                 - string
                 - 'null'
               format: email
-              example: dinesh@piedpiper.test
+              example: dinesh@piedpiper.example
               description: The email of the customer
             legal_name:
               type:
@@ -17280,7 +17280,7 @@ components:
             - string
             - 'null'
           format: email
-          example: dinesh@piedpiper.test
+          example: dinesh@piedpiper.example
           description: The email address used for sending dunning notifications. It defaults to the customer's own email address, and is `null` when the customer has none.
         amount_cents:
           type: integer
@@ -22007,7 +22007,7 @@ components:
             email:
               type: string
               format: email
-              example: dinesh@piedpiper.test
+              example: dinesh@piedpiper.example
               description: The email address used for sending dunning notifications. When omitted, the customer's own email address is used.
             lago_invoice_ids:
               type: array
