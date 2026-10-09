@@ -39,10 +39,14 @@ properties:
               type: string
               example: "anrok"
               description: |-
-                The integration type used for accounting and tax syncs.
-                Accepted values: `anrok`.
+                The integration type used for accounting, tax and CRM syncs.
+                Accepted values: `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
               enum:
                 - anrok
+                - avalara
+                - xero
+                - hubspot
+                - salesforce
             integration_code:
               type: string
               example: "anrok1"
@@ -61,6 +65,10 @@ properties:
         type: string
         example: "CA"
         description: The state of the customer's billing address
+      zipcode:
+        type: string
+        example: "91364"
+        description: The zipcode of the customer's billing address.
       tax_identification_number:
         type: string
         description: The tax identification number of the customer

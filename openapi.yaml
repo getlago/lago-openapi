@@ -171,8 +171,6 @@ paths:
                       $ref: '#/components/schemas/BillingEntityObject'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
     post:
       tags:
         - billing_entities
@@ -237,8 +235,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
     put:
       tags:
         - billing_entities
@@ -512,7 +508,7 @@ paths:
       tags:
         - add_ons
       summary: Delete an add-on
-      description: This endpoint is used to delete an existing add-on.
+      description: This endpoint is used to delete an existing add-on. The fixed charges that use this add-on are deleted too.
       operationId: destroyAddOn
       responses:
         '200':
@@ -1095,7 +1091,10 @@ paths:
       tags:
         - billable_metrics
       summary: Update a billable metric
-      description: This endpoint updates an existing billable metric representing a pricing component of your application.
+      description: |-
+        This endpoint updates an existing billable metric representing a pricing component of your application.
+
+        Once the billable metric is used by a plan charge, only `name`, `description` and `filters` are applied. The other fields are ignored.
       operationId: updateBillableMetric
       requestBody:
         description: Billable metric payload
@@ -1218,7 +1217,7 @@ paths:
       tags:
         - features
       summary: Update a feature
-      description: This endpoint updates an existing feature representing an entitlement component of your application.
+      description: This endpoint updates an existing feature representing an entitlement component of your application. Only the fields present in the payload are updated. Privileges are matched by their code, an unknown code adds a new privilege and a known one updates its name and adds the select options of the payload to the existing ones. The value type of an existing privilege cannot be changed. Privileges left out of the payload are kept, use the delete privilege endpoint to remove one.
       operationId: updateFeature
       requestBody:
         description: Feature payload
@@ -1336,6 +1335,10 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -1369,7 +1372,10 @@ paths:
       tags:
         - coupons
       summary: Update a coupon
-      description: This endpoint is used to update a coupon that can be then attached to a customer to create a discount.
+      description: |-
+        This endpoint is used to update a coupon that can be then attached to a customer to create a discount.
+
+        Once the coupon has been applied to at least one customer, only `name`, `description`, `expiration` and `expiration_at` are updated. The other fields in the payload are ignored.
       operationId: updateCoupon
       requestBody:
         description: Coupon payload
@@ -1391,6 +1397,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -2384,7 +2392,7 @@ paths:
             example: true
         - name: search_term
           in: query
-          description: Search invoices by id, number, customer name, customer external_id or customer email.
+          description: Search the customer's invoices by id or number. Customer attributes are not searched here, because the list is already scoped to one customer.
           required: false
           explode: true
           schema:
@@ -2544,7 +2552,7 @@ paths:
               - billing_entity_code_2
       responses:
         '200':
-          description: PaymentRequests
+          description: Payment requests
           content:
             application/json:
               schema:
@@ -2631,7 +2639,7 @@ paths:
             example: true
         - name: status[]
           in: query
-          description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
+          description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`, `incomplete`.'
           required: false
           explode: true
           schema:
@@ -2643,6 +2651,7 @@ paths:
                 - canceled
                 - terminated
                 - active
+                - incomplete
             example:
               - active
               - pending
@@ -2698,13 +2707,15 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
       tags:
         - wallets
       summary: List all customer's wallets
-      description: This endpoint is used to list all wallets with prepaid credits of a customer
+      description: This endpoint is used to list all wallets with prepaid credits of a customer.
       operationId: findAllCustomerWallets
       parameters:
         - $ref: '#/components/parameters/page'
@@ -3401,8 +3412,8 @@ paths:
     post:
       tags:
         - events
-      summary: Send usage events
-      description: This endpoint is used for transmitting usage measurement events to either a designated customer or a specific subscription.
+      summary: Send a usage event
+      description: This endpoint is used for transmitting a usage measurement event to a subscription.
       operationId: createEvent
       requestBody:
         description: Event payload
@@ -3438,7 +3449,7 @@ paths:
         - $ref: '#/components/parameters/external_subscription_id'
         - name: code
           in: query
-          description: Filter events by its code.
+          description: Filter events by code.
           required: false
           explode: true
           schema:
@@ -3619,7 +3630,7 @@ paths:
         - events
       summary: Retrieve a specific event
       description: |
-        This endpoint is used for retrieving a specific usage measurement event that has been sent to a customer or a subscription.
+        This endpoint is used for retrieving a specific usage measurement event that has been sent to a subscription.
 
         Note that transaction_id is unique per external_subscription_id so multiple subscriptions can share the same transaction_id. This endpoint will only return the first event found with the given transaction_id.
 
@@ -3817,7 +3828,7 @@ paths:
       tags:
         - fees
       summary: Update a fee
-      description: This endpoint is used for updating a specific fee that has been issued.
+      description: This endpoint is used for updating the payment status of a specific fee. Only a fee that is not attached to an invoice can be updated; once the fee is on an invoice, its payment status follows the invoice and the endpoint returns a `405` error.
       operationId: updateFee
       requestBody:
         description: Fee payload
@@ -3825,6 +3836,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FeeUpdateInput'
+        required: true
       responses:
         '200':
           description: Fee updated
@@ -3970,7 +3982,7 @@ paths:
             example: true
         - name: search_term
           in: query
-          description: Search invoices by id, number, customer name, customer external_id or customer email.
+          description: Search invoices by id, number, purchase order number, or by the name, legal name, first name, last name, external_id or email of the customer.
           required: false
           explode: true
           schema:
@@ -4283,10 +4295,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /invoices/{lago_id}/retry_payment:
     post:
       tags:
@@ -4343,8 +4359,14 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /order_forms:
     get:
       tags:
@@ -4826,21 +4848,24 @@ paths:
         - $ref: '#/components/parameters/per_page'
         - name: invoice_id
           in: query
-          description: Filter payment receipts by invoice id.
+          description: Filter payment receipts by invoice. It returns the receipts of the payments made on this invoice, including the payments made through a payment request that covers it.
           required: false
           explode: true
           schema:
             type: string
+            format: uuid
             example: 1a901a90-1a90-1a90-1a90-1a901a901a90
       responses:
         '200':
-          description: PaymentReceipts
+          description: Payment receipts
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaymentReceiptsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /payment_receipts/{lago_id}:
     parameters:
       - name: lago_id
@@ -4873,10 +4898,10 @@ paths:
       tags:
         - payment_requests
       summary: Create a payment request
-      description: This endpoint is used to create a payment request to collect payments of overdue invoices of a given customer
+      description: This endpoint is used to create a payment request to collect the payment of the overdue invoices of a customer.
       operationId: createPaymentRequest
       requestBody:
-        description: PaymentRequest payload
+        description: Payment request payload
         content:
           application/json:
             schema:
@@ -4884,7 +4909,7 @@ paths:
         required: true
       responses:
         '200':
-          description: PaymentRequest created
+          description: Payment request created
           content:
             application/json:
               schema:
@@ -4893,6 +4918,12 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -4921,13 +4952,15 @@ paths:
               - billing_entity_code_2
       responses:
         '200':
-          description: PaymentRequests
+          description: Payment requests
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaymentRequestsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /payment_requests/{lago_id}:
     parameters:
       - name: lago_id
@@ -4950,7 +4983,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentRequestObject'
+                $ref: '#/components/schemas/PaymentRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -5031,7 +5064,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentObject'
+                $ref: '#/components/schemas/Payment'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -5531,7 +5564,12 @@ paths:
       tags:
         - plans
       summary: Update a charge
-      description: This endpoint updates a specific charge for a plan.
+      description: |-
+        This endpoint updates a specific charge for a plan.
+
+        The payload replaces the charge configuration: `charge_model` must be sent on every update, and `invoice_display_name` is cleared when it is left out.
+
+        Once the plan is attached to a subscription, only `invoice_display_name`, `properties`, `filters`, `tax_codes`, `applied_pricing_unit` and `accepts_target_wallet` are applied. The other fields are ignored.
       operationId: updatePlanCharge
       requestBody:
         description: Charge payload
@@ -5779,7 +5817,12 @@ paths:
       tags:
         - plans
       summary: Update a fixed charge
-      description: This endpoint updates a specific fixed charge for a plan.
+      description: |-
+        This endpoint updates a specific fixed charge for a plan.
+
+        The payload replaces the fixed charge configuration: `units` and `charge_model` must be sent on every update, and `invoice_display_name` is cleared when it is left out.
+
+        Once the plan is attached to a subscription, `code` and `charge_model` are ignored.
       operationId: updatePlanFixedCharge
       requestBody:
         description: Fixed charge payload
@@ -6125,6 +6168,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -6169,7 +6214,7 @@ paths:
             example: true
         - name: status[]
           in: query
-          description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
+          description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`, `incomplete`.'
           required: false
           explode: true
           schema:
@@ -6179,6 +6224,7 @@ paths:
               enum:
                 - active
                 - canceled
+                - incomplete
                 - pending
                 - terminated
             example:
@@ -6286,6 +6332,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -6654,7 +6702,7 @@ paths:
       tags:
         - entitlements
       summary: Remove an entitlement from a subscription
-      description: This endpoint removes a specific feature entitlement from a subscription. The entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
+      description: This endpoint removes a specific feature entitlement from a subscription. The plan keeps the feature and other subscriptions are not affected, but this subscription stops getting it. It returns the full list of entitlements remaining on the subscription.
       operationId: destroySubscriptionEntitlement
       parameters:
         - $ref: '#/components/parameters/subscription_status'
@@ -6696,7 +6744,7 @@ paths:
       tags:
         - entitlements
       summary: Remove a privilege from a subscription entitlement override
-      description: This endpoint removes a specific privilege from a subscription entitlement. The privilege entitlement remains available from the plan. It returns the full list of entitlements remaining on the subscription.
+      description: This endpoint removes a specific privilege from a subscription entitlement. The plan keeps the privilege and other subscriptions are not affected, but this subscription stops getting it. It returns the full list of entitlements remaining on the subscription.
       operationId: destroySubscriptionEntitlementPrivilege
       parameters:
         - $ref: '#/components/parameters/subscription_status'
@@ -7020,7 +7068,7 @@ paths:
       tags:
         - taxes
       summary: Create a tax
-      description: This endpoint creates a new tax representing a customizable tax rate applicable to either the organization or a specific customer.
+      description: This endpoint creates a new tax representing a customizable tax rate applicable to either a billing entity or a specific customer.
       operationId: createTax
       requestBody:
         description: Tax creation payload
@@ -7046,7 +7094,7 @@ paths:
       tags:
         - taxes
       summary: List all taxes
-      description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either the organization or a specific customer.
+      description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either a billing entity or a specific customer.
       operationId: findAllTaxes
       parameters:
         - $ref: '#/components/parameters/page'
@@ -7066,13 +7114,16 @@ paths:
                     description: French standard VAT
                     rate: 20
                     applied_to_organization: true
+                    applied_to_billing_entities_codes:
+                      - acme_corp
                     created_at: '2023-07-06T14:35:58Z'
                   - lago_id: 2e034a10-6652-4daf-a600-b085184f93ad
                     name: TVA
                     code: french_reduced_vat
-                    description: French reduce VAT
+                    description: French reduced VAT
                     rate: 5
                     applied_to_organization: false
+                    applied_to_billing_entities_codes: []
                     created_at: '2023-07-06T14:45:23Z'
                 meta:
                   current_page: 1
@@ -7095,7 +7146,7 @@ paths:
       tags:
         - taxes
       summary: Update a tax
-      description: This endpoint updates an existing tax representing a customizable tax rate applicable to either the organization or a specific customer.
+      description: This endpoint updates an existing tax representing a customizable tax rate applicable to either a billing entity or a specific customer.
       operationId: updateTax
       requestBody:
         description: Tax update payload
@@ -7122,8 +7173,8 @@ paths:
     get:
       tags:
         - taxes
-      summary: Retrieve a Tax
-      description: This endpoint retrieves an existing tax representing a customizable tax rate applicable to either the organization or a specific customer. The tax is identified by its unique code.
+      summary: Retrieve a tax
+      description: This endpoint retrieves an existing tax representing a customizable tax rate applicable to either a billing entity or a specific customer. The tax is identified by its unique code.
       operationId: findTax
       responses:
         '200':
@@ -7180,6 +7231,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -7223,6 +7276,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /wallets/{lago_id}:
     parameters:
       - name: lago_id
@@ -7469,7 +7524,7 @@ paths:
     parameters:
       - name: lago_id
         in: path
-        description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet's record within the Lago system.
+        description: Unique identifier assigned to the wallet transaction within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the wallet transaction's record within the Lago system.
         required: true
         schema:
           type: string
@@ -7479,7 +7534,7 @@ paths:
       tags:
         - wallets
       summary: Retrieve a wallet transaction
-      description: This endpoint is used to retrieve a specific wallet transactions.
+      description: This endpoint is used to retrieve a specific wallet transaction.
       operationId: findWalletTransaction
       responses:
         '200':
@@ -7487,7 +7542,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WalletTransactionObject'
+                $ref: '#/components/schemas/WalletTransaction'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -7611,7 +7666,7 @@ paths:
         - $ref: '#/components/parameters/per_page'
         - name: status
           in: query
-          description: The status of the wallet transaction. Possible values are `pending` or `settled`.
+          description: The status of the wallet transaction. Possible values are `pending`, `settled` or `failed`.
           required: false
           explode: true
           schema:
@@ -8021,6 +8076,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - customer
               properties:
                 webhook_type:
@@ -8044,8 +8100,8 @@ webhooks:
   customer_accounting_provider_created:
     post:
       operationId: customerAccountingProviderCreated
-      summary: A customer was created on an accouting integration
-      description: A customer was created on an accouting integration
+      summary: A customer was created on an accounting integration
+      description: A customer was created on an accounting integration
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -11580,10 +11636,30 @@ components:
         - default_currency
         - document_locale
         - document_numbering
+        - document_number_prefix
         - finalize_zero_amount_invoice
+        - invoice_footer
         - invoice_grace_period
+        - subscription_invoice_issuing_date_anchor
+        - subscription_invoice_issuing_date_adjustment
+        - is_default
         - net_payment_term
+        - address_line1
+        - address_line2
+        - phone
+        - city
+        - state
+        - country
+        - zipcode
+        - email
+        - legal_name
+        - legal_number
+        - tax_identification_number
         - timezone
+        - email_settings
+        - eu_tax_management
+        - einvoicing
+        - logo_url
         - created_at
         - updated_at
       properties:
@@ -11607,7 +11683,7 @@ components:
         document_locale:
           type: string
           example: en
-          description: The language of the documents generated for this billing entity
+          description: The language of the documents generated for this billing entity, in the ISO 639-1 format.
         document_numbering:
           type: string
           enum:
@@ -11623,7 +11699,7 @@ components:
             - string
             - 'null'
           example: ABC-123
-          description: The prefix used in document numbers for this billing entity
+          description: The prefix used in document numbers for this billing entity. It is upper cased. When no prefix is given at creation, Lago builds one from the first three letters of the name and the last four characters of the identifier.
         finalize_zero_amount_invoice:
           type: boolean
           example: true
@@ -11738,13 +11814,15 @@ components:
               - payment_receipt.created
           description: The email notification settings for this billing entity
         eu_tax_management:
-          type: boolean
+          type:
+            - boolean
+            - 'null'
           example: false
-          description: Whether EU tax management is enabled for this billing entity
+          description: Whether EU tax management is enabled for this billing entity. It can only be enabled when the billing entity country is in the European Union.
         einvoicing:
           type: boolean
           example: false
-          description: Whether e-invoicing is enabled for this billing entity
+          description: Whether e-invoicing is enabled for this billing entity. It can only be enabled when the billing entity country is `FR` or `DE`.
         logo_url:
           type:
             - string
@@ -11775,26 +11853,6 @@ components:
         error:
           type: string
           example: Unauthorized
-    ApiErrorUnprocessableEntity:
-      type: object
-      required:
-        - status
-        - error
-        - code
-        - error_details
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 422
-        error:
-          type: string
-          example: Unprocessable entity
-        code:
-          type: string
-          example: validation_errors
-        error_details:
-          type: object
     BillingEntityCreateInput:
       type: object
       description: Billing entity create input
@@ -11832,8 +11890,10 @@ components:
               type:
                 - string
                 - 'null'
+              minLength: 1
+              maxLength: 10
               example: ABC-123
-              description: The prefix used in document numbers for this billing entity
+              description: The prefix used in document numbers for this billing entity (1 to 10 characters). It is upper cased. When it is not provided, Lago builds one from the first three letters of the name and the last four characters of the identifier.
             finalize_zero_amount_invoice:
               type: boolean
               example: true
@@ -11843,12 +11903,13 @@ components:
               properties:
                 invoice_footer:
                   type: string
+                  maxLength: 600
                   example: Thank you for your business
-                  description: The footer text to be displayed on invoices for this billing entity
+                  description: The footer text to be displayed on invoices for this billing entity (600 characters max).
                 document_locale:
                   type: string
                   example: en
-                  description: The language of the documents generated for this billing entity
+                  description: The language of the documents generated for this billing entity, in the ISO 639-1 format.
                 invoice_grace_period:
                   type: integer
                   example: 0
@@ -11951,18 +12012,18 @@ components:
             eu_tax_management:
               type: boolean
               example: false
-              description: Whether EU tax management is enabled for this billing entity
+              description: Whether EU tax management is enabled for this billing entity. It can only be enabled when the billing entity country is in the European Union.
             einvoicing:
               type: boolean
               example: false
-              description: Whether e-invoicing is enabled for this billing entity
+              description: Whether e-invoicing is enabled for this billing entity. It can only be enabled when the billing entity country is `FR` or `DE`.
             logo:
               type:
                 - string
                 - 'null'
               format: uri
               example: data:image/png;base64,...
-              description: The base64 encoded logo image for the billing entity
+              description: The base64 encoded logo image for the billing entity. Accepted formats are PNG, JPG and JPEG, up to 800 kB.
     ApiErrorBadRequest:
       type: object
       required:
@@ -11993,12 +12054,33 @@ components:
         code:
           type: string
           example: feature_unavailable
+    ApiErrorUnprocessableEntity:
+      type: object
+      required:
+        - status
+        - error
+        - code
+        - error_details
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 422
+        error:
+          type: string
+          example: Unprocessable entity
+        code:
+          type: string
+          example: validation_errors
+        error_details:
+          type: object
     TaxObject:
       type: object
       required:
         - lago_id
         - name
         - code
+        - description
         - rate
         - applied_to_organization
         - created_at
@@ -12020,11 +12102,11 @@ components:
           type:
             - string
             - 'null'
-          description: Internal description of the tax
+          description: Internal description of the tax.
           example: French standard VAT
         rate:
           type: number
-          description: The percentage rate of the tax
+          description: The percentage rate of the tax.
           example: 20
         applied_to_organization:
           type: boolean
@@ -12035,7 +12117,7 @@ components:
           type: array
           items:
             type: string
-          description: The codes of the billing entities the tax is applied to, sorted alphabetically. It is empty when the tax is only attached to customers.
+          description: The codes of the billing entities the tax is applied to, sorted alphabetically. It is empty when the tax is only attached to customers. This field is only returned by the tax endpoints, not by taxes nested in another object.
           example:
             - acme_corp
             - foo_bar
@@ -12158,8 +12240,10 @@ components:
               type:
                 - string
                 - 'null'
+              minLength: 1
+              maxLength: 10
               example: ABC-123
-              description: The prefix used in document numbers for this billing entity
+              description: The prefix used in document numbers for this billing entity (1 to 10 characters). It is upper cased.
             finalize_zero_amount_invoice:
               type: boolean
               example: true
@@ -12169,12 +12253,13 @@ components:
               properties:
                 invoice_footer:
                   type: string
+                  maxLength: 600
                   example: Thank you for your business
-                  description: The footer text to be displayed on invoices for this billing entity
+                  description: The footer text to be displayed on invoices for this billing entity (600 characters max).
                 document_locale:
                   type: string
                   example: en
-                  description: The language of the documents generated for this billing entity
+                  description: The language of the documents generated for this billing entity, in the ISO 639-1 format.
                 invoice_grace_period:
                   type: integer
                   example: 0
@@ -12280,18 +12365,18 @@ components:
             eu_tax_management:
               type: boolean
               example: false
-              description: Whether EU tax management is enabled for this billing entity
+              description: Whether EU tax management is enabled for this billing entity. It can only be enabled when the billing entity country is in the European Union.
             einvoicing:
               type: boolean
               example: false
-              description: Whether e-invoicing is enabled for this billing entity
+              description: Whether e-invoicing is enabled for this billing entity. It can only be enabled when the billing entity country is `FR` or `DE`.
             logo:
               type:
                 - string
                 - 'null'
               format: uri
               example: data:image/png;base64,...
-              description: The base64 encoded logo image for the billing entity. Sending "null" will remove the logo, if any exist.
+              description: The base64 encoded logo image for the billing entity. Accepted formats are PNG, JPG and JPEG, up to 800 kB. Sending "null" removes the current logo.
             invoice_custom_section_codes:
               type: array
               items:
@@ -12445,6 +12530,7 @@ components:
         - amount_currency
         - description
         - created_at
+        - taxes
       properties:
         lago_id:
           type: string
@@ -12520,7 +12606,8 @@ components:
           example: setup_fee
         amount_cents:
           type: integer
-          description: The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. By creating a one-off invoice, you will be able to override this value.
+          minimum: 1
+          description: The cost of the add-on in cents, excluding any applicable taxes, that is billed to a customer. It must be greater than zero. By creating a one-off invoice, you will be able to override this value.
           example: 50000
         amount_currency:
           $ref: '#/components/schemas/Currency'
@@ -13802,6 +13889,7 @@ components:
           description: Parameter exclusively utilized in conjunction with the `weighted_sum_agg` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. It is required when `aggregation_type` is `weighted_sum_agg`, and `seconds` is the only accepted value.
         filters:
           type: array
+          description: 'List of filters of the billable metric. On update, this list replaces the existing filters: a filter that is not sent is deleted.'
           items:
             $ref: '#/components/schemas/BillableMetricFilterInput'
     BillableMetricCreateInput:
@@ -14193,7 +14281,7 @@ components:
           type:
             - integer
             - 'null'
-          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
+          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type.
           example: 6
         expiration:
           type: string
@@ -14303,7 +14391,7 @@ components:
           type:
             - integer
             - 'null'
-          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
+          description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type.
           example: 6
         expiration:
           type: string
@@ -14366,6 +14454,23 @@ components:
       properties:
         coupon:
           $ref: '#/components/schemas/CouponObject'
+    ApiErrorNotAllowed:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 405
+        error:
+          type: string
+          example: Method Not Allowed
+        code:
+          type: string
+          example: not_allowed
     CouponUpdateInput:
       type: object
       required:
@@ -14921,8 +15026,13 @@ components:
             - type
             - code
             - name
+            - description
+            - invoice_display_name
+            - filters
+            - filter_invoice_display_name
             - lago_item_id
             - item_type
+            - grouped_by
           properties:
             type:
               type: string
@@ -14937,7 +15047,13 @@ components:
               example: subscription
             code:
               type: string
-              description: The code of the fee item. It can be the code of the `add_on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
+              description: |
+                The code of the fee item. The value depends on the type of the fee item:
+
+                - If the fee item is a `charge`, it is the billable metric code.
+                - If the fee item is an `add_on` or a `fixed_charge`, it is the add-on code.
+                - If the fee item is a `credit`, it is always `"credit"`.
+                - For all the other fee items, it is the subscription plan code.
               example: startup
             name:
               type: string
@@ -14992,7 +15108,13 @@ components:
             lago_item_id:
               type: string
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add_on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+              description: |
+                Unique identifier of the fee item, created by Lago. The object it points to is given by `item_type`:
+
+                - If the fee item is a `charge`, it is the billable metric identifier.
+                - If the fee item is an `add_on` or a `fixed_charge`, it is the add-on identifier.
+                - If the fee item is a `credit`, it is the wallet transaction identifier.
+                - For all the other fee items, it is the subscription identifier.
               format: uuid
             item_type:
               type: string
@@ -15205,9 +15327,11 @@ components:
       description: Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.
       properties:
         invoice_grace_period:
-          type: integer
+          type:
+            - integer
+            - 'null'
           example: 3
-          description: The grace period, expressed in days, for the invoice. This period refers to the additional time granted to the customer beyond the invoice due date to adjust usage and line items
+          description: The grace period, expressed in days, for the invoice. This period refers to the additional time granted to the customer beyond the invoice due date to adjust usage and line items. It is null when the customer has no grace period of its own and falls back to the billing entity.
         subscription_invoice_issuing_date_anchor:
           type:
             - string
@@ -15231,11 +15355,13 @@ components:
             - null
           default: null
         payment_provider:
-          type: string
+          type:
+            - string
+            - 'null'
           example: stripe
           description: |-
             The payment provider utilized to initiate payments for invoices issued by Lago.
-            Accepted values: `stripe`, `adyen`, `cashfree`, `flutterwave`, `gocardless`, `moneyhash` or null. This field is required if you intend to assign a `provider_customer_id`.
+            Accepted values: `stripe`, `adyen`, `cashfree`, `flutterwave`, `gocardless`, `moneyhash` or null. This field is required if you intend to assign a `provider_customer_id`. Send null to detach the customer from its current payment provider.
           enum:
             - stripe
             - adyen
@@ -15243,8 +15369,11 @@ components:
             - flutterwave
             - gocardless
             - moneyhash
+            - null
         payment_provider_code:
-          type: string
+          type:
+            - string
+            - 'null'
           example: stripe-eu-1
           description: Unique code used to identify a payment provider connection.
         provider_customer_id:
@@ -15260,7 +15389,9 @@ components:
           example: true
           description: Set this field to `true` if you want to create a customer record in the payment provider's system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
         document_locale:
-          type: string
+          type:
+            - string
+            - 'null'
           example: fr
           description: The document locale, specified in the ISO 639-1 format. This field represents the language or locale used for the documents issued by Lago
         provider_payment_methods:
@@ -16207,23 +16338,6 @@ components:
                     $ref: '#/components/schemas/Currency'
                     description: Currency of the tax
                     example: USD
-    ApiErrorNotAllowed:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 405
-        error:
-          type: string
-          example: Method Not Allowed
-        code:
-          type: string
-          example: not_allowed
     CreditNoteMetadataResponse:
       type: object
       required:
@@ -16392,7 +16506,7 @@ components:
                 - `customer`: the account is a customer, default value.
                 - `partner`: the account is a partner.
 
-                This field is only applied when revenue share is enabled on your organization; otherwise it is ignored.
+                This field is only applied when revenue share is enabled on your organization and the customer has no subscription, invoice, add-on, fixed-amount coupon or wallet yet; otherwise it is ignored.
             customer_type:
               type:
                 - string
@@ -16519,7 +16633,8 @@ components:
                     description: This optional field is needed only when working with `hubspot` connection.
             metadata:
               type: array
-              description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format
+              maxItems: 5
+              description: Set of key-value pairs that you can attach to a customer. This can be useful for storing additional information about the customer in a structured format. A customer can hold up to 5 key-value pairs.
               items:
                 type: object
                 required:
@@ -16533,12 +16648,14 @@ components:
                     description: Identifier for the metadata object, only required when updating a key-value pair
                   key:
                     type: string
+                    maxLength: 20
                     example: Purchase Order
-                    description: The metadata object key
+                    description: The metadata object key (20 characters max). It must be unique for the customer.
                   value:
                     type: string
+                    maxLength: 100
                     example: '123456789'
-                    description: The metadata object value
+                    description: The metadata object value (100 characters max).
                   display_in_invoice:
                     type: boolean
                     example: true
@@ -16566,8 +16683,14 @@ components:
       required:
         - lago_id
         - billing_entity_code
+        - sequential_id
         - number
+        - purchase_order_number
         - issuing_date
+        - payment_dispute_lost_at
+        - payment_due_date
+        - payment_overdue
+        - net_payment_term
         - invoice_type
         - status
         - payment_status
@@ -16579,11 +16702,21 @@ components:
         - taxes_amount_cents
         - sub_total_including_taxes_amount_cents
         - prepaid_credit_amount_cents
+        - prepaid_granted_credit_amount_cents
+        - prepaid_purchased_credit_amount_cents
         - progressive_billing_credit_amount_cents
         - total_amount_cents
+        - total_paid_amount_cents
+        - total_offsetted_credit_note_amount_cents
+        - total_due_amount_cents
         - version_number
+        - self_billed
+        - file_url
+        - xml_url
+        - web_url
         - created_at
         - updated_at
+        - voided_at
       properties:
         lago_id:
           type: string
@@ -16597,8 +16730,10 @@ components:
           example: acme_corp
           description: The unique code of the billing entity associated with the invoice
         sequential_id:
-          type: integer
-          description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context.
+          type:
+            - integer
+            - 'null'
+          description: This ID helps in uniquely identifying and organizing the invoices associated with a specific customer. It provides a sequential numbering system specific to the customer, allowing for easy tracking and management of invoices within the customer's context. It is assigned when the invoice is finalized, so it is `null` on draft invoices.
           example: 2
         number:
           type: string
@@ -17037,7 +17172,7 @@ components:
           example: USD
         status:
           type: string
-          description: The status of the payment within the payment provider. This can be very different from a payment provider to another.
+          description: The status of the payment within the payment provider. It differs from one payment provider to another.
           example: Completed
         payment_status:
           type: string
@@ -17082,7 +17217,9 @@ components:
           type:
             - string
             - 'null'
-          description: 'DEPRECATED: use provider_payment_id'
+          deprecated: true
+          description: '**Deprecated.** Use `provider_payment_id` instead. It holds the same value.'
+          example: pi_5eb0285741bc6ba
         provider_payment_id:
           type:
             - string
@@ -17295,8 +17432,12 @@ components:
     SubscriptionObject:
       type: object
       required:
+        - activated_at
+        - activation_rules
         - billing_time
         - canceled_at
+        - cancellation_reason
+        - consolidate_invoice
         - created_at
         - current_billing_period_ending_at
         - current_billing_period_started_at
@@ -17310,8 +17451,13 @@ components:
         - next_plan_code
         - on_termination_credit_note
         - on_termination_invoice
+        - payment_method
+        - plan_amount_cents
+        - plan_amount_currency
         - plan_code
         - previous_plan_code
+        - progressive_billing_disabled
+        - purchase_order_number
         - started_at
         - status
         - subscription_at
@@ -17494,7 +17640,7 @@ components:
             - `generate`: An invoice is generated for the unbilled usage.
             - `skip`: No invoice is generated for the unbilled usage.
         applied_invoice_custom_sections:
-          description: The invoice custom sections applied to invoices generated by this subscription.
+          description: The invoice custom sections applied to invoices generated by this subscription. Only returned when creating, retrieving, updating or terminating a subscription, not when listing subscriptions and not in subscription webhooks.
           type: array
           items:
             $ref: '#/components/schemas/AppliedInvoiceCustomSectionObject'
@@ -17620,14 +17766,17 @@ components:
           description: The method used for recurring top-up. Possible values are `fixed` or `target`.
           example: target
         interval:
-          type: string
+          type:
+            - string
+            - 'null'
           enum:
             - weekly
             - monthly
             - quarterly
             - semiannual
             - yearly
-          description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. Required only if trigger is set to `interval`.'
+            - null
+          description: 'The interval used for recurring top-up. It represents the frequency at which automatic top-up occurs. The interval can be one of the following values: `weekly`, `monthly`, `quarterly`, `semiannual` or `yearly`. It is `null` when the trigger is `threshold` and no interval was set.'
           example: monthly
         status:
           type: string
@@ -17675,7 +17824,7 @@ components:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The date of the metadata object creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the metadata object was created
+          description: The date of the recurring transaction rule creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
         expiration_at:
           type:
             - string
@@ -17844,7 +17993,7 @@ components:
             - string
             - 'null'
           format: date-time
-          description: The date of terminaison of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
+          description: The date of termination of the wallet. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC).
           example: '2022-09-14T16:35:31Z'
         invoice_requires_successful_payment:
           type: boolean
@@ -17955,7 +18104,6 @@ components:
           type: object
           required:
             - rate_amount
-            - currency
             - external_customer_id
           properties:
             name:
@@ -17983,7 +18131,7 @@ components:
               example: '1.5'
             currency:
               $ref: '#/components/schemas/Currency'
-              description: The currency of the wallet.
+              description: The currency of the wallet. Required when the customer has no currency yet. When omitted, the wallet uses the customer's currency. When provided on a customer without a currency, it also sets the customer's currency.
               example: USD
             paid_credits:
               type:
@@ -20200,10 +20348,14 @@ components:
                     type: string
                     example: anrok
                     description: |-
-                      The integration type used for accounting and tax syncs.
-                      Accepted values: `anrok`.
+                      The integration type used for accounting, tax and CRM syncs.
+                      Accepted values: `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
                     enum:
                       - anrok
+                      - avalara
+                      - xero
+                      - hubspot
+                      - salesforce
                   integration_code:
                     type: string
                     example: anrok1
@@ -20222,6 +20374,10 @@ components:
               type: string
               example: CA
               description: The state of the customer's billing address
+            zipcode:
+              type: string
+              example: '91364'
+              description: The zipcode of the customer's billing address.
             tax_identification_number:
               type: string
               description: The tax identification number of the customer
@@ -21782,6 +21938,8 @@ components:
         - lago_id
         - created_at
         - number
+        - file_url
+        - xml_url
         - payment
       properties:
         lago_id:
@@ -21886,8 +22044,9 @@ components:
               description: Unique identifier assigned to the invoice
             amount_cents:
               type: integer
+              minimum: 1
               example: 100
-              description: The payment amount in cents
+              description: The payment amount in cents. It must be greater than zero.
             reference:
               type: string
               maxLength: 40
@@ -23073,7 +23232,7 @@ components:
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   code:
                     type: string
-                    description: Unique code identifying the charge within the plan.
+                    description: Unique code identifying the charge within the plan. If not provided, it is generated from the code of the billable metric.
                     example: api_requests_charge
                   charge_model:
                     $ref: '#/components/schemas/ChargeModelEnum'
@@ -23426,7 +23585,7 @@ components:
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   code:
                     type: string
-                    description: Unique code identifying the charge within the plan.
+                    description: Unique code identifying the charge within the plan. On a new charge, if not provided, it is generated from the code of the billable metric.
                     example: api_requests_charge
                   charge_model:
                     $ref: '#/components/schemas/ChargeModelEnum'
@@ -23850,6 +24009,7 @@ components:
             - required:
                 - billable_metric_id
                 - charge_model
+                - code
             - properties:
                 cascade_updates:
                   type: boolean
@@ -23948,7 +24108,7 @@ components:
           properties:
             cascade_updates:
               type: boolean
-              description: This field determines whether the creation of the filter should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
+              description: This field determines whether the creation of the filter should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`. This field only applies to plan charge filters and is ignored on the subscription charge filter endpoints.
               example: true
             invoice_display_name:
               type:
@@ -23986,7 +24146,7 @@ components:
           properties:
             cascade_updates:
               type: boolean
-              description: This field determines whether the changes made to the filter should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
+              description: This field determines whether the changes made to the filter should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`. This field only applies to plan charge filters and is ignored on the subscription charge filter endpoints.
               example: true
             invoice_display_name:
               type:
@@ -24103,6 +24263,9 @@ components:
         fixed_charge:
           allOf:
             - $ref: '#/components/schemas/FixedChargeInput'
+            - required:
+                - code
+                - charge_model
             - properties:
                 cascade_updates:
                   type: boolean
@@ -24763,6 +24926,7 @@ components:
           example:
             max: 15
             provider: okta
+          description: Privilege values set on this subscription only. Each key is a privilege code and each value is the subscription override. Privileges that use the plan value are not listed.
     SubscriptionObjectExtended:
       allOf:
         - $ref: '#/components/schemas/SubscriptionObject'
@@ -24787,6 +24951,37 @@ components:
       properties:
         subscription:
           $ref: '#/components/schemas/SubscriptionObjectExtended'
+        authorization:
+          type: object
+          description: |
+            The Stripe payment intent created for the pre-authorization. Only returned when creating a subscription with an `authorization` payload.
+          required:
+            - id
+            - object
+            - amount
+            - amount_capturable
+            - status
+          properties:
+            id:
+              type: string
+              example: pi_1a901a901a901a901a901a90
+              description: The identifier of the Stripe payment intent.
+            object:
+              type: string
+              example: payment_intent
+              description: The Stripe object type. Always `payment_intent`.
+            amount:
+              type: integer
+              example: 5000
+              description: The authorized amount, in cents.
+            amount_capturable:
+              type: integer
+              example: 5000
+              description: The amount that can still be captured from the authorization, in cents.
+            status:
+              type: string
+              example: requires_capture
+              description: The status of the Stripe payment intent. `requires_capture` means the amount is held and about to be released. `requires_action` means 3D Secure was requested, and the subscription is still created.
     SubscriptionUpdateInput:
       type: object
       required:
@@ -24970,7 +25165,7 @@ components:
           description: The recording end date and time of the subscription lifetime usage. The date and time must be in ISO 8601 format.
         usage_thresholds:
           type: array
-          description: Array of usage thresholds attached to the subscription's plan.
+          description: Array of usage thresholds that apply to the subscription. Thresholds attached to the subscription take precedence over the ones attached to its plan. This array is returned only when at least one threshold applies.
           items:
             $ref: '#/components/schemas/LifetimeUsageThresholdObject'
     LifetimeUsage:
@@ -25239,13 +25434,13 @@ components:
         rate:
           type: string
           pattern: ^[0-9]+.?[0-9]*$
-          description: The percentage rate of the tax
+          description: The percentage rate of the tax.
           example: '20.0'
         description:
           type:
             - string
             - 'null'
-          description: Internal description of the tax
+          description: Internal description of the tax.
           example: French standard VAT
         applied_to_organization:
           type: boolean
@@ -25561,17 +25756,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WalletTransactionObject'
+    WalletTransaction:
+      type: object
+      required:
+        - wallet_transaction
+      properties:
+        wallet_transaction:
+          $ref: '#/components/schemas/WalletTransactionObject'
     WalletTransactionPaymentUrl:
       type: object
       required:
-        - lago_wallet_transaction_id
-        - lago_customer_id
-        - external_customer_id
-        - payment_provider
-      description: .
+        - wallet_transaction_payment_details
+      description: The payment details generated for a wallet transaction.
       properties:
         wallet_transaction_payment_details:
           type: object
+          required:
+            - lago_wallet_transaction_id
+            - lago_customer_id
+            - external_customer_id
+            - payment_provider
+            - payment_url
           properties:
             lago_customer_id:
               type: string
@@ -25866,6 +26071,7 @@ components:
         - lago_alert_id
         - lago_subscription_id
         - external_subscription_id
+        - lago_wallet_id
         - external_customer_id
         - billable_metric_code
         - alert_type
@@ -25879,7 +26085,7 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier of the alert, created by Lago.
+          description: Unique identifier of the triggered alert, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_organization_id:
           type: string
@@ -25892,14 +26098,25 @@ components:
           description: Unique identifier of the alert, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_subscription_id:
-          type: string
+          type:
+            - string
+            - 'null'
           format: uuid
-          description: Unique identifier of the subscription, created by Lago.
+          description: Unique identifier of the subscription, created by Lago. Null when the alert is attached to a wallet.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_subscription_id:
-          type: string
-          description: The subscription external unique identifier (provided by your own application).
+          type:
+            - string
+            - 'null'
+          description: The subscription external unique identifier (provided by your own application). Null when the alert is attached to a wallet.
           example: sub_1234567890
+        lago_wallet_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the wallet, created by Lago. Null when the alert is attached to a subscription.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_customer_id:
           type: string
           description: The customer external unique identifier (provided by your own application).
@@ -25935,17 +26152,15 @@ components:
           description: The name of the alert triggered.
           example: Storage Usage Alert
         current_value:
-          type: number
-          description: When the system checked if this alert should be triggered, this value was retrieved and checked if any threshold were crossed between this value and previous value.
-          example: 1200
+          type: string
+          description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds crossed since the previous value. Returned as a string formatted as a BigDecimal.
+          example: '1200.0'
         previous_value:
-          type: number
-          description: During the previous run, this value was retrieved.
-          example: 900
+          type: string
+          description: During the previous run, this value was retrieved. Returned as a string formatted as a BigDecimal.
+          example: '900.0'
         triggered_at:
-          type:
-            - string
-            - 'null'
+          type: string
           format: date-time
           description: The date and time in UTC (ISO 8601) when the system triggered the alert.
           example: '2025-05-19T10:04:21Z'
@@ -25978,11 +26193,9 @@ components:
             - anrok
             - hubspot
             - netsuite
-            - okta
-            - salesforce
             - xero
-          description: The type of accounting provider code
-          example: anrok
+          description: The type of provider that failed. The CRM error webhook sends `hubspot` under this same key.
+          example: netsuite
         accounting_provider_code:
           type: string
           description: Code of the accounting provider
@@ -26016,6 +26229,7 @@ components:
             - adyen
             - cashfree
             - gocardless
+            - moneyhash
             - stripe
           description: The type of payment provider
           example: stripe
@@ -26049,18 +26263,14 @@ components:
         tax_provider:
           type: string
           enum:
-            - anrock
-            - hubspot
-            - netsuite
-            - okta
-            - salesforce
-            - xero
+            - anrok
+            - avalara
           description: The type of tax provider
-          example: anrock
+          example: anrok
         tax_provider_code:
           type: string
           description: Code of the tax provider
-          example: Stripe Prod
+          example: Anrok Prod
         provider_error:
           oneOf:
             - type: string
@@ -26073,11 +26283,20 @@ components:
           properties:
             vies_check:
               type: object
+              description: Result of the VIES lookup. When VIES answers with a match, the object also carries the details returned by VIES, such as the country code and the VAT number.
               properties:
                 valid:
                   type: boolean
-                  description: Whether the VIES check was successful
+                  description: Whether VIES recognises the tax identification number of the customer as a valid VAT number.
                   example: true
+                valid_format:
+                  type: boolean
+                  description: Whether the tax identification number of the customer has the format of a VAT number. Sent when VIES returned no match or could not be reached.
+                  example: true
+                error:
+                  type: string
+                  description: Message returned when the VIES service could not be reached. Sent only in that case.
+                  example: 'The VIES web service returned the error: rate limit exceeded'
     CreditNotePaymentProviderRefundError:
       type: object
       required:
@@ -26544,12 +26763,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorUnauthorized'
-    UnprocessableEntity:
-      description: Unprocessable entity error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
     BadRequest:
       description: Bad Request error
       content:
@@ -26562,6 +26775,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorForbidden'
+    UnprocessableEntity:
+      description: Unprocessable entity error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
     NotFound:
       description: Not Found error
       content:

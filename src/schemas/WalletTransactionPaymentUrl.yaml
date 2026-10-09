@@ -1,13 +1,16 @@
 type: object
 required:
-  - lago_wallet_transaction_id
-  - lago_customer_id
-  - external_customer_id
-  - payment_provider
-description: .
+  - wallet_transaction_payment_details
+description: The payment details generated for a wallet transaction.
 properties:
   wallet_transaction_payment_details:
     type: object
+    required:
+      - lago_wallet_transaction_id
+      - lago_customer_id
+      - external_customer_id
+      - payment_provider
+      - payment_url
     properties:
       lago_customer_id:
         type: string

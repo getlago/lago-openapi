@@ -4,3 +4,34 @@ required:
 properties:
   subscription:
     $ref: './SubscriptionObjectExtended.yaml'
+  authorization:
+    type: object
+    description: |
+      The Stripe payment intent created for the pre-authorization. Only returned when creating a subscription with an `authorization` payload.
+    required:
+      - id
+      - object
+      - amount
+      - amount_capturable
+      - status
+    properties:
+      id:
+        type: string
+        example: "pi_1a901a901a901a901a901a90"
+        description: The identifier of the Stripe payment intent.
+      object:
+        type: string
+        example: "payment_intent"
+        description: The Stripe object type. Always `payment_intent`.
+      amount:
+        type: integer
+        example: 5000
+        description: The authorized amount, in cents.
+      amount_capturable:
+        type: integer
+        example: 5000
+        description: The amount that can still be captured from the authorization, in cents.
+      status:
+        type: string
+        example: "requires_capture"
+        description: The status of the Stripe payment intent. `requires_capture` means the amount is held and about to be released. `requires_action` means 3D Secure was requested, and the subscription is still created.

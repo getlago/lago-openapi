@@ -18,18 +18,14 @@ properties:
   tax_provider:
     type: string
     enum:
-      - anrock
-      - hubspot
-      - netsuite
-      - okta
-      - salesforce
-      - xero
+      - anrok
+      - avalara
     description: The type of tax provider
-    example: "anrock"
+    example: "anrok"
   tax_provider_code:
     type: string
     description: Code of the tax provider
-    example: "Stripe Prod"
+    example: "Anrok Prod"
   provider_error:
     oneOf:
       - type: string

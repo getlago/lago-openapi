@@ -78,5 +78,6 @@ properties:
     description: "Parameter exclusively utilized in conjunction with the `weighted_sum_agg` aggregation type. It serves to adjust the aggregation result by assigning weights and proration to the result based on time intervals. It is required when `aggregation_type` is `weighted_sum_agg`, and `seconds` is the only accepted value."
   filters:
     type: array
+    description: "List of filters of the billable metric. On update, this list replaces the existing filters: a filter that is not sent is deleted."
     items:
       $ref: "./BillableMetricFilterInput.yaml"

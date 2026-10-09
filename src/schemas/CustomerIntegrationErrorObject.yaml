@@ -21,11 +21,9 @@ properties:
       - anrok
       - hubspot
       - netsuite
-      - okta
-      - salesforce
       - xero
-    description: The type of accounting provider code
-    example: "anrok"
+    description: The type of provider that failed. The CRM error webhook sends `hubspot` under this same key.
+    example: "netsuite"
   accounting_provider_code:
     type: string
     description: Code of the accounting provider

@@ -22,6 +22,8 @@ post:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
     '422':
@@ -66,7 +68,7 @@ get:
         example: true
     - name: status[]
       in: query
-      description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`.'
+      description: 'If the field is not defined, Lago will return only `active` subscriptions. However, if you wish to fetch subscriptions by different status you can define them in a status[] query param. Available filter values: `pending`, `canceled`, `terminated`, `active`, `incomplete`.'
       required: false
       explode: true
       schema:
@@ -76,6 +78,7 @@ get:
           enum:
             - active
             - canceled
+            - incomplete
             - pending
             - terminated
         example: [active,pending]
