@@ -2,10 +2,10 @@ post:
   tags:
     - payment_requests
   summary: Create a payment request
-  description: This endpoint is used to create a payment request to collect payments of overdue invoices of a given customer
+  description: This endpoint is used to create a payment request to collect the payment of the overdue invoices of a customer.
   operationId: createPaymentRequest
   requestBody:
-    description: PaymentRequest payload
+    description: Payment request payload
     content:
       application/json:
         schema:
@@ -13,7 +13,7 @@ post:
     required: true
   responses:
     '200':
-      description: PaymentRequest created
+      description: Payment request created
       content:
         application/json:
           schema:
@@ -22,6 +22,10 @@ post:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
 get:
@@ -48,10 +52,12 @@ get:
         example: [billing_entity_code_1, billing_entity_code_2]
   responses:
     '200':
-      description: PaymentRequests
+      description: Payment requests
       content:
         application/json:
           schema:
             $ref: '../schemas/PaymentRequestsPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
