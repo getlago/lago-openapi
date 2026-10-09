@@ -5031,7 +5031,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentObject'
+                $ref: '#/components/schemas/Payment'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -17037,7 +17037,7 @@ components:
           example: USD
         status:
           type: string
-          description: The status of the payment within the payment provider. This can be very different from a payment provider to another.
+          description: The status of the payment within the payment provider. It differs from one payment provider to another.
           example: Completed
         payment_status:
           type: string
@@ -17082,7 +17082,9 @@ components:
           type:
             - string
             - 'null'
-          description: 'DEPRECATED: use provider_payment_id'
+          deprecated: true
+          description: '**Deprecated.** Use `provider_payment_id` instead. It holds the same value.'
+          example: pi_5eb0285741bc6ba
         provider_payment_id:
           type:
             - string
@@ -21886,8 +21888,9 @@ components:
               description: Unique identifier assigned to the invoice
             amount_cents:
               type: integer
+              minimum: 1
               example: 100
-              description: The payment amount in cents
+              description: The payment amount in cents. It must be greater than zero.
             reference:
               type: string
               maxLength: 40
