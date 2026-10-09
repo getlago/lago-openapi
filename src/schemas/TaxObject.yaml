@@ -3,6 +3,7 @@ required:
   - lago_id
   - name
   - code
+  - description
   - rate
   - applied_to_organization
   - created_at
@@ -24,11 +25,11 @@ properties:
     type:
       - string
       - "null"
-    description: Internal description of the tax
+    description: Internal description of the tax.
     example: "French standard VAT"
   rate:
     type: number
-    description: The percentage rate of the tax
+    description: The percentage rate of the tax.
     example: 20.0
   applied_to_organization:
     type: boolean
@@ -39,7 +40,7 @@ properties:
     type: array
     items:
       type: string
-    description: The codes of the billing entities the tax is applied to, sorted alphabetically. It is empty when the tax is only attached to customers.
+    description: The codes of the billing entities the tax is applied to, sorted alphabetically. It is empty when the tax is only attached to customers. This field is only returned by the tax endpoints, not by taxes nested in another object.
     example:
       - acme_corp
       - foo_bar

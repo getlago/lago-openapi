@@ -7054,7 +7054,7 @@ paths:
       tags:
         - taxes
       summary: Create a tax
-      description: This endpoint creates a new tax representing a customizable tax rate applicable to either the organization or a specific customer.
+      description: This endpoint creates a new tax representing a customizable tax rate applicable to either a billing entity or a specific customer.
       operationId: createTax
       requestBody:
         description: Tax creation payload
@@ -7080,7 +7080,7 @@ paths:
       tags:
         - taxes
       summary: List all taxes
-      description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either the organization or a specific customer.
+      description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either a billing entity or a specific customer.
       operationId: findAllTaxes
       parameters:
         - $ref: '#/components/parameters/page'
@@ -7100,13 +7100,16 @@ paths:
                     description: French standard VAT
                     rate: 20
                     applied_to_organization: true
+                    applied_to_billing_entities_codes:
+                      - acme_corp
                     created_at: '2023-07-06T14:35:58Z'
                   - lago_id: 2e034a10-6652-4daf-a600-b085184f93ad
                     name: TVA
                     code: french_reduced_vat
-                    description: French reduce VAT
+                    description: French reduced VAT
                     rate: 5
                     applied_to_organization: false
+                    applied_to_billing_entities_codes: []
                     created_at: '2023-07-06T14:45:23Z'
                 meta:
                   current_page: 1
@@ -7129,7 +7132,7 @@ paths:
       tags:
         - taxes
       summary: Update a tax
-      description: This endpoint updates an existing tax representing a customizable tax rate applicable to either the organization or a specific customer.
+      description: This endpoint updates an existing tax representing a customizable tax rate applicable to either a billing entity or a specific customer.
       operationId: updateTax
       requestBody:
         description: Tax update payload
@@ -7156,8 +7159,8 @@ paths:
     get:
       tags:
         - taxes
-      summary: Retrieve a Tax
-      description: This endpoint retrieves an existing tax representing a customizable tax rate applicable to either the organization or a specific customer. The tax is identified by its unique code.
+      summary: Retrieve a tax
+      description: This endpoint retrieves an existing tax representing a customizable tax rate applicable to either a billing entity or a specific customer. The tax is identified by its unique code.
       operationId: findTax
       responses:
         '200':
@@ -12058,6 +12061,7 @@ components:
         - lago_id
         - name
         - code
+        - description
         - rate
         - applied_to_organization
         - created_at
@@ -12079,11 +12083,11 @@ components:
           type:
             - string
             - 'null'
-          description: Internal description of the tax
+          description: Internal description of the tax.
           example: French standard VAT
         rate:
           type: number
-          description: The percentage rate of the tax
+          description: The percentage rate of the tax.
           example: 20
         applied_to_organization:
           type: boolean
@@ -12094,7 +12098,7 @@ components:
           type: array
           items:
             type: string
-          description: The codes of the billing entities the tax is applied to, sorted alphabetically. It is empty when the tax is only attached to customers.
+          description: The codes of the billing entities the tax is applied to, sorted alphabetically. It is empty when the tax is only attached to customers. This field is only returned by the tax endpoints, not by taxes nested in another object.
           example:
             - acme_corp
             - foo_bar
@@ -25404,13 +25408,13 @@ components:
         rate:
           type: string
           pattern: ^[0-9]+.?[0-9]*$
-          description: The percentage rate of the tax
+          description: The percentage rate of the tax.
           example: '20.0'
         description:
           type:
             - string
             - 'null'
-          description: Internal description of the tax
+          description: Internal description of the tax.
           example: French standard VAT
         applied_to_organization:
           type: boolean
