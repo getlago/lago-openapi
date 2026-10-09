@@ -2,7 +2,7 @@ post:
   tags:
     - taxes
   summary: Create a tax
-  description: This endpoint creates a new tax representing a customizable tax rate applicable to either the organization or a specific customer.
+  description: This endpoint creates a new tax representing a customizable tax rate applicable to either a billing entity or a specific customer.
   operationId: createTax
   requestBody:
     description: Tax creation payload
@@ -28,7 +28,7 @@ get:
   tags:
     - taxes
   summary: List all taxes
-  description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either the organization or a specific customer.
+  description: This endpoint retrieves all existing taxes representing a customizable tax rate applicable to either a billing entity or a specific customer.
   operationId: findAllTaxes
   parameters:
     - $ref: "../parameters/page.yaml"
@@ -48,13 +48,16 @@ get:
                 description: "French standard VAT"
                 rate: 20.0
                 applied_to_organization: true
+                applied_to_billing_entities_codes:
+                  - "acme_corp"
                 created_at: "2023-07-06T14:35:58Z"
               - lago_id: "2e034a10-6652-4daf-a600-b085184f93ad"
                 name: "TVA"
                 code: "french_reduced_vat"
-                description: "French reduce VAT"
+                description: "French reduced VAT"
                 rate: 5.0
                 applied_to_organization: false
+                applied_to_billing_entities_codes: []
                 created_at: "2023-07-06T14:45:23Z"
             meta:
               current_page: 1

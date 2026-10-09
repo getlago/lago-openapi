@@ -10,7 +10,7 @@ put:
   tags:
     - taxes
   summary: Update a tax
-  description: This endpoint updates an existing tax representing a customizable tax rate applicable to either the organization or a specific customer.
+  description: This endpoint updates an existing tax representing a customizable tax rate applicable to either a billing entity or a specific customer.
   operationId: updateTax
   requestBody:
     description: Tax update payload
@@ -37,8 +37,8 @@ put:
 get:
   tags:
     - taxes
-  summary: Retrieve a Tax
-  description: This endpoint retrieves an existing tax representing a customizable tax rate applicable to either the organization or a specific customer. The tax is identified by its unique code.
+  summary: Retrieve a tax
+  description: This endpoint retrieves an existing tax representing a customizable tax rate applicable to either a billing entity or a specific customer. The tax is identified by its unique code.
   operationId: findTax
   responses:
     '200':
