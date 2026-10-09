@@ -8076,6 +8076,7 @@ webhooks:
               required:
                 - webhook_type
                 - object_type
+                - organization_id
                 - customer
               properties:
                 webhook_type:
@@ -8099,8 +8100,8 @@ webhooks:
   customer_accounting_provider_created:
     post:
       operationId: customerAccountingProviderCreated
-      summary: A customer was created on an accouting integration
-      description: A customer was created on an accouting integration
+      summary: A customer was created on an accounting integration
+      description: A customer was created on an accounting integration
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -26192,11 +26193,9 @@ components:
             - anrok
             - hubspot
             - netsuite
-            - okta
-            - salesforce
             - xero
-          description: The type of accounting provider code
-          example: anrok
+          description: The type of provider that failed. The CRM error webhook sends `hubspot` under this same key.
+          example: netsuite
         accounting_provider_code:
           type: string
           description: Code of the accounting provider
@@ -26230,6 +26229,7 @@ components:
             - adyen
             - cashfree
             - gocardless
+            - moneyhash
             - stripe
           description: The type of payment provider
           example: stripe
@@ -26263,18 +26263,14 @@ components:
         tax_provider:
           type: string
           enum:
-            - anrock
-            - hubspot
-            - netsuite
-            - okta
-            - salesforce
-            - xero
+            - anrok
+            - avalara
           description: The type of tax provider
-          example: anrock
+          example: anrok
         tax_provider_code:
           type: string
           description: Code of the tax provider
-          example: Stripe Prod
+          example: Anrok Prod
         provider_error:
           oneOf:
             - type: string
@@ -26287,11 +26283,20 @@ components:
           properties:
             vies_check:
               type: object
+              description: Result of the VIES lookup. When VIES answers with a match, the object also carries the details returned by VIES, such as the country code and the VAT number.
               properties:
                 valid:
                   type: boolean
-                  description: Whether the VIES check was successful
+                  description: Whether VIES recognises the tax identification number of the customer as a valid VAT number.
                   example: true
+                valid_format:
+                  type: boolean
+                  description: Whether the tax identification number of the customer has the format of a VAT number. Sent when VIES returned no match or could not be reached.
+                  example: true
+                error:
+                  type: string
+                  description: Message returned when the VIES service could not be reached. Sent only in that case.
+                  example: 'The VIES web service returned the error: rate limit exceeded'
     CreditNotePaymentProviderRefundError:
       type: object
       required:
