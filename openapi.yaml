@@ -10385,8 +10385,8 @@ webhooks:
   subscription_started:
     post:
       operationId: subscriptionStarted
-      summary: An subscription has started
-      description: An subscription has started
+      summary: A subscription has started
+      description: A subscription has started
       parameters:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
@@ -17374,6 +17374,7 @@ components:
         - type
         - timeout_hours
         - status
+        - expires_at
         - created_at
         - updated_at
       properties:
@@ -26679,6 +26680,7 @@ components:
             - plan
             - customer
             - usage_threshold
+            - applicable_usage_thresholds
           properties:
             plan:
               $ref: '#/components/schemas/PlanObject'

@@ -5,6 +5,7 @@ allOf:
       - plan
       - customer
       - usage_threshold
+      - applicable_usage_thresholds
     properties:
       plan:
         $ref: "./PlanObject.yaml"
