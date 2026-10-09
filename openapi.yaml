@@ -3820,7 +3820,7 @@ paths:
       tags:
         - fees
       summary: Update a fee
-      description: This endpoint is used for updating a specific fee that has been issued.
+      description: This endpoint is used for updating the payment status of a specific fee. Only a fee that is not attached to an invoice can be updated; once the fee is on an invoice, its payment status follows the invoice and the endpoint returns a `405` error.
       operationId: updateFee
       requestBody:
         description: Fee payload
@@ -3828,6 +3828,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FeeUpdateInput'
+        required: true
       responses:
         '200':
           description: Fee updated
@@ -14953,8 +14954,13 @@ components:
             - type
             - code
             - name
+            - description
+            - invoice_display_name
+            - filters
+            - filter_invoice_display_name
             - lago_item_id
             - item_type
+            - grouped_by
           properties:
             type:
               type: string
@@ -14969,7 +14975,13 @@ components:
               example: subscription
             code:
               type: string
-              description: The code of the fee item. It can be the code of the `add_on`, the code of the `charge`, the code of the `fixed_charge`, the code of the `credit` or the code of the `subscription`.
+              description: |
+                The code of the fee item. The value depends on the type of the fee item:
+
+                - If the fee item is a `charge`, it is the billable metric code.
+                - If the fee item is an `add_on` or a `fixed_charge`, it is the add-on code.
+                - If the fee item is a `credit`, it is always `"credit"`.
+                - For all the other fee items, it is the subscription plan code.
               example: startup
             name:
               type: string
@@ -15024,7 +15036,13 @@ components:
             lago_item_id:
               type: string
               example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-              description: Unique identifier of the fee item, created by Lago. It can be the identifier of the `add_on`, the `charge`, the `credit`, the `subscription` or the `commitment`.
+              description: |
+                Unique identifier of the fee item, created by Lago. The object it points to is given by `item_type`:
+
+                - If the fee item is a `charge`, it is the billable metric identifier.
+                - If the fee item is an `add_on` or a `fixed_charge`, it is the add-on identifier.
+                - If the fee item is a `credit`, it is the wallet transaction identifier.
+                - For all the other fee items, it is the subscription identifier.
               format: uuid
             item_type:
               type: string
