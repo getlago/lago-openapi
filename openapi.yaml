@@ -25135,7 +25135,7 @@ components:
           description: The recording end date and time of the subscription lifetime usage. The date and time must be in ISO 8601 format.
         usage_thresholds:
           type: array
-          description: Array of usage thresholds attached to the subscription's plan.
+          description: Array of usage thresholds that apply to the subscription. Thresholds attached to the subscription take precedence over the ones attached to its plan. This array is returned only when at least one threshold applies.
           items:
             $ref: '#/components/schemas/LifetimeUsageThresholdObject'
     LifetimeUsage:
