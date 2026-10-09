@@ -10,7 +10,10 @@ put:
   tags:
     - billable_metrics
   summary: Update a billable metric
-  description: This endpoint updates an existing billable metric representing a pricing component of your application.
+  description: |-
+    This endpoint updates an existing billable metric representing a pricing component of your application.
+
+    Once the billable metric is used by a plan charge, only `name`, `description` and `filters` are applied. The other fields are ignored.
   operationId: updateBillableMetric
   requestBody:
     description: Billable metric payload
