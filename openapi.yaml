@@ -26031,6 +26031,7 @@ components:
         - lago_alert_id
         - lago_subscription_id
         - external_subscription_id
+        - lago_wallet_id
         - external_customer_id
         - billable_metric_code
         - alert_type
@@ -26044,7 +26045,7 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier of the alert, created by Lago.
+          description: Unique identifier of the triggered alert, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_organization_id:
           type: string
@@ -26057,14 +26058,25 @@ components:
           description: Unique identifier of the alert, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         lago_subscription_id:
-          type: string
+          type:
+            - string
+            - 'null'
           format: uuid
-          description: Unique identifier of the subscription, created by Lago.
+          description: Unique identifier of the subscription, created by Lago. Null when the alert is attached to a wallet.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_subscription_id:
-          type: string
-          description: The subscription external unique identifier (provided by your own application).
+          type:
+            - string
+            - 'null'
+          description: The subscription external unique identifier (provided by your own application). Null when the alert is attached to a wallet.
           example: sub_1234567890
+        lago_wallet_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the wallet, created by Lago. Null when the alert is attached to a subscription.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_customer_id:
           type: string
           description: The customer external unique identifier (provided by your own application).
@@ -26100,17 +26112,15 @@ components:
           description: The name of the alert triggered.
           example: Storage Usage Alert
         current_value:
-          type: number
-          description: When the system checked if this alert should be triggered, this value was retrieved and checked if any threshold were crossed between this value and previous value.
-          example: 1200
+          type: string
+          description: When the system checked if this alert should be triggered, this value was retrieved and checked against the thresholds crossed since the previous value. Returned as a string formatted as a BigDecimal.
+          example: '1200.0'
         previous_value:
-          type: number
-          description: During the previous run, this value was retrieved.
-          example: 900
+          type: string
+          description: During the previous run, this value was retrieved. Returned as a string formatted as a BigDecimal.
+          example: '900.0'
         triggered_at:
-          type:
-            - string
-            - 'null'
+          type: string
           format: date-time
           description: The date and time in UTC (ISO 8601) when the system triggered the alert.
           example: '2025-05-19T10:04:21Z'
