@@ -2,8 +2,14 @@ type: object
 required:
   - lago_id
   - billing_entity_code
+  - sequential_id
   - number
+  - purchase_order_number
   - issuing_date
+  - payment_dispute_lost_at
+  - payment_due_date
+  - payment_overdue
+  - net_payment_term
   - invoice_type
   - status
   - payment_status
@@ -15,11 +21,21 @@ required:
   - taxes_amount_cents
   - sub_total_including_taxes_amount_cents
   - prepaid_credit_amount_cents
+  - prepaid_granted_credit_amount_cents
+  - prepaid_purchased_credit_amount_cents
   - progressive_billing_credit_amount_cents
   - total_amount_cents
+  - total_paid_amount_cents
+  - total_offsetted_credit_note_amount_cents
+  - total_due_amount_cents
   - version_number
+  - self_billed
+  - file_url
+  - xml_url
+  - web_url
   - created_at
   - updated_at
+  - voided_at
 properties:
   lago_id:
     type: string
