@@ -15,8 +15,9 @@ properties:
         description: Unique identifier assigned to the invoice
       amount_cents:
         type: integer
+        minimum: 1
         example: 100
-        description: The payment amount in cents
+        description: The payment amount in cents. It must be greater than zero.
       reference:
         type: string
         maxLength: 40

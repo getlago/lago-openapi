@@ -70,7 +70,7 @@ properties:
     example: "USD"
   status:
     type: string
-    description: "The status of the payment within the payment provider. This can be very different from a payment provider to another."
+    description: "The status of the payment within the payment provider. It differs from one payment provider to another."
     example: "Completed"
   payment_status:
     type: string
@@ -115,7 +115,9 @@ properties:
     type:
       - string
       - "null"
-    description: "DEPRECATED: use provider_payment_id"
+    deprecated: true
+    description: "**Deprecated.** Use `provider_payment_id` instead. It holds the same value."
+    example: "pi_5eb0285741bc6ba"
   provider_payment_id:
     type:
       - string
