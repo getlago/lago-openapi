@@ -8,6 +8,12 @@ properties:
     type: object
     description: |
       The Stripe payment intent created for the pre-authorization. Only returned when creating a subscription with an `authorization` payload.
+    required:
+      - id
+      - object
+      - amount
+      - amount_capturable
+      - status
     properties:
       id:
         type: string
