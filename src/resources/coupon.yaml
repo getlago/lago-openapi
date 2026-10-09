@@ -10,7 +10,10 @@ put:
   tags:
     - coupons
   summary: Update a coupon
-  description: This endpoint is used to update a coupon that can be then attached to a customer to create a discount.
+  description: |-
+    This endpoint is used to update a coupon that can be then attached to a customer to create a discount.
+
+    Once the coupon has been applied to at least one customer, only `name`, `description`, `expiration` and `expiration_at` are updated. The other fields in the payload are ignored.
   operationId: updateCoupon
   requestBody:
     description: Coupon payload
@@ -32,6 +35,8 @@ put:
       $ref: '../responses/Unauthorized.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
 get:
