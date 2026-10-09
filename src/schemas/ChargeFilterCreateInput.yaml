@@ -10,7 +10,7 @@ properties:
     properties:
       cascade_updates:
         type: boolean
-        description: This field determines whether the creation of the filter should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`.
+        description: This field determines whether the creation of the filter should be cascaded to the children plans. When set to `true`, the changes will be cascaded into children. Conversely, when set to `false`, the changes will only be applied to the plan itself. If not defined in the request, default value is `false`. This field only applies to plan charge filters and is ignored on the subscription charge filter endpoints.
         example: true
       invoice_display_name:
         type:
