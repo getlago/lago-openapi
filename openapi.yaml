@@ -5534,7 +5534,12 @@ paths:
       tags:
         - plans
       summary: Update a charge
-      description: This endpoint updates a specific charge for a plan.
+      description: |-
+        This endpoint updates a specific charge for a plan.
+
+        The payload replaces the charge configuration: `charge_model` must be sent on every update, and `invoice_display_name` is cleared when it is left out.
+
+        Once the plan is attached to a subscription, only `invoice_display_name`, `properties`, `filters`, `tax_codes`, `applied_pricing_unit` and `accepts_target_wallet` are applied. The other fields are ignored.
       operationId: updatePlanCharge
       requestBody:
         description: Charge payload
@@ -5782,7 +5787,12 @@ paths:
       tags:
         - plans
       summary: Update a fixed charge
-      description: This endpoint updates a specific fixed charge for a plan.
+      description: |-
+        This endpoint updates a specific fixed charge for a plan.
+
+        The payload replaces the fixed charge configuration: `units` and `charge_model` must be sent on every update, and `invoice_display_name` is cleared when it is left out.
+
+        Once the plan is attached to a subscription, `code` and `charge_model` are ignored.
       operationId: updatePlanFixedCharge
       requestBody:
         description: Fixed charge payload
@@ -23092,7 +23102,7 @@ components:
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   code:
                     type: string
-                    description: Unique code identifying the charge within the plan.
+                    description: Unique code identifying the charge within the plan. If not provided, it is generated from the code of the billable metric.
                     example: api_requests_charge
                   charge_model:
                     $ref: '#/components/schemas/ChargeModelEnum'
@@ -23445,7 +23455,7 @@ components:
                     example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                   code:
                     type: string
-                    description: Unique code identifying the charge within the plan.
+                    description: Unique code identifying the charge within the plan. On a new charge, if not provided, it is generated from the code of the billable metric.
                     example: api_requests_charge
                   charge_model:
                     $ref: '#/components/schemas/ChargeModelEnum'
@@ -23869,6 +23879,7 @@ components:
             - required:
                 - billable_metric_id
                 - charge_model
+                - code
             - properties:
                 cascade_updates:
                   type: boolean
@@ -24122,6 +24133,9 @@ components:
         fixed_charge:
           allOf:
             - $ref: '#/components/schemas/FixedChargeInput'
+            - required:
+                - code
+                - charge_model
             - properties:
                 cascade_updates:
                   type: boolean
