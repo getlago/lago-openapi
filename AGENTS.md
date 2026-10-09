@@ -19,7 +19,7 @@ OpenAPI 3.1 description of the Lago API. The [lago-api](https://github.com/getla
 
 ## Naming
 
-- Resource files are snake_case: `<plural>.yaml` for the collection path, `<singular>.yaml` for one record, `<singular>_<action>.yaml` for an action path. New files use the `.yaml` extension; a few older files use `.yml` and are not renamed. Each path is registered under `paths` in `src/openapi.yaml`.
+- Resource files are snake_case: `<plural>.yaml` for the collection path, `<singular>.yaml` for one record, `<singular>_<action>.yaml` for an action path. Every file under `src/` uses the `.yaml` extension, never `.yml`. Each path is registered under `paths` in `src/openapi.yaml`.
 - Schemas are PascalCase and follow these suffixes:
   - `<Name>Object`: the resource as lago-api returns it.
   - `<Name>`: the response wrapper, `{ <singular>: <Name>Object }`.
@@ -52,7 +52,7 @@ OpenAPI 3.1 description of the Lago API. The [lago-api](https://github.com/getla
 ## Types, formats and examples
 
 - Lago identifiers use `format: uuid`, timestamps `format: date-time` and dates `format: date`.
-- Every scalar property has an `example`. Examples use fake data: the UUID `1a901a90-1a90-1a90-1a90-1a901a901a90`, `.test` email domains (`dinesh@piedpiper.test`, as in the current spec), UTC timestamps such as `"2022-04-29T08:59:51Z"`.
+- Every scalar property has an `example`. Examples use fake data: the UUID `1a901a90-1a90-1a90-1a90-1a901a901a90`, `.example` email domains (`dinesh@piedpiper.example`), which RFC 2606 reserves for documentation, UTC timestamps such as `"2022-04-29T08:59:51Z"`.
 - Enum values match the lago-api constant or model enum exactly. Never document internal Ruby class names as enum values or examples.
 
 ## Decimal values sent as strings
