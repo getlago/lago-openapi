@@ -8,22 +8,22 @@ required:
 properties:
   month:
     type: string
-    description: Identifies the month to analyze revenue.
+    description: Identifies the month of the payment due date of the overdue invoices.
     example: '2023-11-01T00:00:00.000Z'
   amount_cents:
     type: integer
-    description: The total amount of revenue for a period, expressed in cents.
+    description: The amount still due for this month, expressed in cents. It is the total of the overdue invoices minus the amounts already paid and minus the credits applied by finalized credit notes.
     example: 50000
   currency:
     $ref: './Currency.yaml'
-    description: The currency of revenue analytics. Format must be ISO 4217.
+    description: The currency of the overdue invoices. Format must be ISO 4217.
     example: 'USD'
   lago_invoice_ids:
     type: array
     items:
       type: string
       format: uuid
-    description: The Lago invoice IDs associated with the revenue.
+    description: Unique identifiers of the overdue invoices included in this amount, created by Lago.
     example: ['5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba']
   billing_entity_id:
     type: string

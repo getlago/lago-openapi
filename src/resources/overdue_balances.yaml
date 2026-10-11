@@ -2,12 +2,12 @@ get:
   tags:
     - analytics
   summary: List overdue balance
-  description: Overdue balance is the total amount associated with overdue invoices (invoices with pending or failed payments which are past their due dates).
+  description: Overdue balance is the amount still due on invoices that are past their payment due date. Each entry covers one month of payment due dates and sums the invoice totals minus the amounts already paid and minus the credits applied by finalized credit notes. Self-billed invoices are excluded.
   operationId: findAllOverdueBalances
   parameters:
     - name: currency
       in: query
-      description: Currency of revenue analytics. Format must be ISO 4217.
+      description: Filter the overdue balances by the currency of the invoices. Format must be ISO 4217.
       required: false
       explode: true
       schema:
@@ -16,7 +16,7 @@ get:
           - example: "USD"
     - name: external_customer_id
       in: query
-      description: The customer external unique identifier (provided by your own application). Use it to filter revenue analytics at the customer level.
+      description: The customer external unique identifier (provided by your own application). Use it to restrict the overdue balances to a single customer.
       required: false
       explode: true
       schema:
