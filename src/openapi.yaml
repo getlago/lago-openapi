@@ -423,6 +423,8 @@ paths:
   /webhook_endpoints/{lago_id}:
     $ref: "./resources/webhook_endpoint.yaml"
 webhooks:
+  alert_resolved:
+    $ref: "./webhooks/alert_resolved.yaml"
   alert_triggered:
     $ref: "./webhooks/alert_triggered.yaml"
   billable_metric_created:
