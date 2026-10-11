@@ -2,7 +2,7 @@ get:
   tags:
     - webhooks
   summary: Retrieve webhook public key (JSON)
-  description: This endpoint is used to retrieve the public key used to verify the webhooks signature, wrapped in a JSON object. Prefer this endpoint over the deprecated GET /webhooks/public_key.
+  description: This endpoint is used to retrieve the public key used to verify the webhook signature, wrapped in a JSON object. Prefer this endpoint over the deprecated `GET /webhooks/public_key`.
   operationId: fetchJsonPublicKey
   responses:
     '200':

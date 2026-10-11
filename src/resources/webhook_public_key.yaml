@@ -2,7 +2,7 @@ get:
   tags:
     - webhooks
   summary: Retrieve webhook public key
-  description: This endpoint is used to retrieve the public key used to verify the webhooks signature
+  description: '**Deprecated.** Use `GET /webhooks/json_public_key` instead. This endpoint is used to retrieve the public key used to verify the webhook signature.'
   deprecated: true
   operationId: fetchPublicKey
   responses:
@@ -12,6 +12,18 @@ get:
         text/plain:
           schema:
             type: string
-            example: 'MEgCQQCo9+BpMRYQ/dL3DS2CyJxRF+j6ctbT3/Qp84+KeFhnii7NT7fELilKUSnxS30WAvQCCo2yU1orfgqr41mM70MBAgMBAAE='
+            description: The RSA public key used to verify webhook signatures. The key is PEM encoded, then Base64 encoded with line breaks.
+            example: |
+              LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3
+              MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFyRVBKd3hlZUJwSmRGSXFyRTBO
+              MQpnTWxUamNaaTRSeGlwN2FsZ0RqQ3B1M2VlUDU5clZ4TUxmb3ZxVnNndENn
+              aWZYWGp0WmpFc3NnZVJRejh4TW9MCks1YWY5YjhjTjJlaTNMVlRPMDdxaFRF
+              YjBjakM3NmhON1NabnF1aTVvS3haNGVOVml4MTZCWXNLb3pyamd2eWEKWDB2
+              cUtNNDlGNzM3dloyTld5M1luS2w3cXNTaGs5NGM5bVlFM1creUNMMERSUFQ5
+              Z1AxYlliQ1FHc0hZdVV3TgpIQjVxdlM3OFhhUFY5d1doUGNsNzBYSWlreXhR
+              L3BiZGtpOEhoRUhtRTAxVnJwSFhNQW1zNzBXQkQyT0toVTJICm1rdGZaZVpJ
+              VmROeU5MUXNacGx3TmphUjZOdWxrdUFyOUZnRStWWXVmL01jUEZYZ1ViRUFt
+              MkM3emU4Ulp1eUkKb1FJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0t
+              Cg==
     '401':
       $ref: '../responses/Unauthorized.yaml'
