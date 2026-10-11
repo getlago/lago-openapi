@@ -5,6 +5,7 @@ required:
   - payment_provider_code
   - provider_error
   - source
+  - action
 properties:
   lago_payment_provider_id:
     type: string
@@ -13,25 +14,26 @@ properties:
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   payment_provider_name:
     type: string
-    description: The name of payment provider
+    description: The name of the payment provider connection.
     example: "Stripe Prod"
   payment_provider_code:
     type: string
-    description: Code of the payment provider
+    description: Code of the payment provider connection.
     example: "stripe"
   source:
     type: string
     enum:
       - stripe
-    description: The source of the error
+    description: The payment provider that raised the error.
     example: "stripe"
   action:
     type: string
     enum:
       - payment_provider.register_webhook
-    description: The action that was being performed when the error occurred
+    description: The action that was being performed when the error occurred.
     example: "payment_provider.register_webhook"
   provider_error:
+    description: The error returned by the payment provider. It carries a `message` and a `code` key.
     oneOf:
       - type: string
       - type: object
