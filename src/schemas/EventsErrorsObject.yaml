@@ -27,8 +27,11 @@ properties:
     example:
       - transaction_1234567890
   missing_group_key:
-    type: array
+    type:
+      - array
+      - "null"
     items:
       type: string
-    description: '**Deprecated.** List of event transaction_id with a missing group key.'
+    description: '**Deprecated.** List of event transaction_id with a missing group key. The key is always sent, and its value is always `null`.'
     deprecated: true
+    example: null

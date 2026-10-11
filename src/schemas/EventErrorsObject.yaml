@@ -14,9 +14,8 @@ properties:
     description: HTTP error description. It will always be "Unprocessable entity"
     example: Unprocessable entity
   message:
-    oneOf:
-      - type: string
-      - type: object
-        additionalProperties: true
+    type: string
+    description: The validation errors that were detected on the event, serialized as a JSON string.
+    example: '{"target_wallet_code":["target_wallet_code_not_found"]}'
   event:
     $ref: "./EventObject.yaml"
