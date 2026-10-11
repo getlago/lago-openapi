@@ -1,10 +1,11 @@
 parameters:
   - name: activity_id
     in: path
-    description: The Activity Id of the existing activity log.
+    description: The unique identifier of the activity log, created by Lago.
     required: true
     schema:
       type: string
+      format: 'uuid'
       example: 'bdc0eda6-ea52-4f72-a46a-94f47a89b546'
 get:
   tags:
@@ -14,12 +15,14 @@ get:
   operationId: findActivityLog
   responses:
     '200':
-      description: Activity Log
+      description: Activity log
       content:
         application/json:
           schema:
             $ref: '../schemas/ActivityLog.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
