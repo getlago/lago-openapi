@@ -789,12 +789,12 @@ paths:
       tags:
         - analytics
       summary: List overdue balance
-      description: Overdue balance is the total amount associated with overdue invoices (invoices with pending or failed payments which are past their due dates).
+      description: Overdue balance is the amount still due on invoices that are past their payment due date. Each entry covers one month of payment due dates and sums the invoice totals minus the amounts already paid and minus the credits applied by finalized credit notes. Self-billed invoices are excluded.
       operationId: findAllOverdueBalances
       parameters:
         - name: currency
           in: query
-          description: Currency of revenue analytics. Format must be ISO 4217.
+          description: Filter the overdue balances by the currency of the invoices. Format must be ISO 4217.
           required: false
           explode: true
           schema:
@@ -803,7 +803,7 @@ paths:
               - example: USD
         - name: external_customer_id
           in: query
-          description: The customer external unique identifier (provided by your own application). Use it to filter revenue analytics at the customer level.
+          description: The customer external unique identifier (provided by your own application). Use it to restrict the overdue balances to a single customer.
           required: false
           explode: true
           schema:
@@ -12990,22 +12990,22 @@ components:
       properties:
         month:
           type: string
-          description: Identifies the month to analyze revenue.
+          description: Identifies the month of the payment due date of the overdue invoices.
           example: '2023-11-01T00:00:00.000Z'
         amount_cents:
           type: integer
-          description: The total amount of revenue for a period, expressed in cents.
+          description: The amount still due for this month, expressed in cents. It is the total of the overdue invoices minus the amounts already paid and minus the credits applied by finalized credit notes.
           example: 50000
         currency:
           $ref: '#/components/schemas/Currency'
-          description: The currency of revenue analytics. Format must be ISO 4217.
+          description: The currency of the overdue invoices. Format must be ISO 4217.
           example: USD
         lago_invoice_ids:
           type: array
           items:
             type: string
             format: uuid
-          description: The Lago invoice IDs associated with the revenue.
+          description: Unique identifiers of the overdue invoices included in this amount, created by Lago.
           example:
             - 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         billing_entity_id:
