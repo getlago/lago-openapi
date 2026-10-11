@@ -9,7 +9,7 @@ get:
     - $ref: '../parameters/per_page.yaml'
     - name: from_date
       in: query
-      description: Filter activity logs from a specific date.
+      description: Filter activity logs logged at or after this date. A date or a full ISO 8601 datetime is accepted.
       required: false
       explode: true
       schema:
@@ -18,7 +18,7 @@ get:
         example: '2022-08-09'
     - name: to_date
       in: query
-      description: Filter activity logs up to a specific date.
+      description: Filter activity logs logged at or before this date. A date or a full ISO 8601 datetime is accepted.
       required: false
       explode: true
       schema:
@@ -27,7 +27,7 @@ get:
         example: '2022-08-09'
     - name: activity_types[]
       in: query
-      description: Filter results by activity types
+      description: Filter results by activity types.
       required: false
       explode: true
       schema:
@@ -37,7 +37,7 @@ get:
         example: [billable_metric.created, billable_metric.updated]
     - name: activity_sources[]
       in: query
-      description: Filter results by activity sources
+      description: Filter results by activity sources.
       required: false
       explode: true
       schema:
@@ -51,7 +51,7 @@ get:
         example: [api, front]
     - name: user_emails[]
       in: query
-      description: Filter results by user emails
+      description: Filter results by the email of the user who performed the activity.
       required: false
       explode: true
       schema:
@@ -63,7 +63,7 @@ get:
     - $ref: "../parameters/external_subscription_id.yaml"
     - name: resource_ids[]
       in: query
-      description: Filter results by resources unique identifiers
+      description: Filter results by the unique identifiers of the resources the actions were applied to.
       required: false
       explode: true
       schema:
@@ -74,7 +74,7 @@ get:
         example: [5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba, 1a901a90-1a90-1a90-1a90-1a901a901a90]
     - name: resource_types[]
       in: query
-      description: Filter results by resource class types
+      description: Filter results by resource types.
       required: false
       explode: true
       schema:
@@ -91,3 +91,5 @@ get:
             $ref: '../schemas/ActivityLogsPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
