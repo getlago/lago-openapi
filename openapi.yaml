@@ -3439,7 +3439,7 @@ paths:
       tags:
         - payment_methods
       summary: List all customer payment methods
-      description: This endpoint retrieves all payment methods of a Customer.
+      description: This endpoint retrieves all payment methods of a customer.
       operationId: findAllCustomersPaymentMethods
       parameters:
         - $ref: '#/components/parameters/external_customer_id_path'
@@ -3484,6 +3484,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /customers/{external_customer_id}/payment_methods/{lago_id}:
     parameters:
       - name: lago_id
