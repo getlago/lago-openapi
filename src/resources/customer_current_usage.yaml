@@ -100,8 +100,10 @@ get:
     - name: full_usage
       in: query
       description: >
-        When `true`, returns usage since subscription start instead of the current billing period.
-        Requires one of `charge_id`, `charge_code`, `group` (or their deprecated `filter_by_*` equivalents) to be set.
+        When `true`, returns usage since the subscription started instead of the current billing period.
+        It requires the granular lifetime usage add-on, at least one of `charge_id`, `charge_code`,
+        `billable_metric_code` or `group` (or their deprecated `filter_by_*` equivalents), and a subscription
+        without prorated charges. The request returns `405` when one of these conditions is not met.
       required: false
       schema:
         type: boolean
@@ -129,3 +131,5 @@ get:
       $ref: '../responses/Unauthorized.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'

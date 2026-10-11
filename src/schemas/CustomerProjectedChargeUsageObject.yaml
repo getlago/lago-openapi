@@ -8,7 +8,7 @@ required:
   - amount_currency
   - charge
   - billable_metric
-  - groups
+  - grouped_usage
 properties:
   units:
     type: string
@@ -51,17 +51,11 @@ properties:
         example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
         description: Unique identifier assigned to the charge within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the charge's record within the Lago system.
       charge_model:
-        type: string
-        description: The pricing model applied to this charge. Possible values are standard, `graduated`, `percentage`, `package` or `volume`.
-        enum:
-          - standard
-          - graduated
-          - package
-          - percentage
-          - volume
-        example: graduated
+        $ref: "./ChargeModelEnum.yaml"
       invoice_display_name:
-        type: string
+        type:
+          - string
+          - "null"
         description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
         example: Setup
   billable_metric:
@@ -88,7 +82,7 @@ properties:
         description: The code of the billable metric used for this charge.
       aggregation_type:
         type: string
-        description: The aggregation type of the billable metric used for this charge. Possible values are `count_agg`, `sum_agg`, `max_agg` or `unique_count_agg`.
+        description: The aggregation type of the billable metric used for this charge.
         enum:
           - count_agg
           - sum_agg
