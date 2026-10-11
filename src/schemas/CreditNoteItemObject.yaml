@@ -2,6 +2,7 @@ type: object
 required:
   - lago_id
   - amount_cents
+  - precise_amount_cents
   - amount_currency
   - fee
 properties:
@@ -14,6 +15,10 @@ properties:
     type: integer
     description: The credit note's item amount, expressed in cents.
     example: 100
+  precise_amount_cents:
+    type: string
+    description: The credit note's item amount, expressed in cents, with precision.
+    example: '100.0001'
   amount_currency:
     $ref: './Currency.yaml'
     description: The credit note's item currency.

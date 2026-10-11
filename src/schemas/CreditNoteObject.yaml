@@ -6,20 +6,29 @@ required:
   - number
   - lago_invoice_id
   - invoice_number
+  - purchase_order_number
   - issuing_date
+  - credit_status
+  - refund_status
   - reason
+  - description
   - currency
   - total_amount_cents
+  - precise_total_amount_cents
   - credit_amount_cents
   - refund_amount_cents
   - offset_amount_cents
   - balance_amount_cents
   - taxes_amount_cents
+  - precise_taxes_amount_cents
   - taxes_rate
   - sub_total_excluding_taxes_amount_cents
   - coupons_adjustment_amount_cents
   - created_at
   - updated_at
+  - file_url
+  - xml_url
+  - self_billed
 properties:
   lago_id:
     type: string
@@ -118,9 +127,7 @@ properties:
     description: The total amount of the credit note, expressed in cents.
     example: 120
   precise_total_amount_cents:
-    type:
-      - string
-      - "null"
+    type: string
     description: The total amount of the credit note, expressed in cents, with precision.
     example: "120.0001"
   taxes_amount_cents:
@@ -128,9 +135,7 @@ properties:
     description: The tax amount of the credit note, expressed in cents.
     example: 20
   precise_taxes_amount_cents:
-    type:
-      - string
-      - "null"
+    type: string
     description: The tax amount of the credit note, expressed in cents, with precision.
     example: "20.0001"
   taxes_rate:
@@ -201,8 +206,7 @@ properties:
   metadata:
     $ref: "./CreditNoteMetadataObject.yaml"
   error_details:
-    type:
-      - array
-      - "null"
+    type: array
+    description: The errors raised while the credit note was issued. When the key is present it is always an array, empty when no error was raised.
     items:
       $ref: "./CreditNoteErrorDetailsObject.yaml"

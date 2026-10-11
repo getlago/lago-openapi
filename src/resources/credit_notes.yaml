@@ -2,7 +2,9 @@ post:
   tags:
     - credit_notes
   summary: Create a credit note
-  description: This endpoint creates a new credit note.
+  description: |-
+    This endpoint creates a new credit note.
+    This is a premium feature.
   operationId: createCreditNote
   requestBody:
     description: Credit note payload
@@ -22,13 +24,19 @@ post:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '405':
+      $ref: '../responses/NotAllowed.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
 get:
   tags:
     - credit_notes
   summary: List all credit notes
-  description: This endpoint list all existing credit notes.
+  description: This endpoint lists all existing credit notes.
   operationId: findAllCreditNotes
   parameters:
     - $ref: '../parameters/page.yaml'
@@ -172,3 +180,5 @@ get:
             $ref: '../schemas/CreditNotesPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

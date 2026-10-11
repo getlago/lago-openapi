@@ -3,7 +3,7 @@ get:
     - customers
     - credit_notes
   summary: List all customer's credit notes
-  description: This endpoint list all existing credit notes for a customer.
+  description: This endpoint lists all existing credit notes for a customer.
   operationId: findAllCustomerCreditNotes
   parameters:
     - $ref: "../parameters/external_customer_id_path.yaml"
@@ -35,6 +35,14 @@ get:
       schema:
         type: string
         example: "Jane"
+    - name: currency
+      in: query
+      description: Filter credit notes by currency. Possible values ISO 4217 currency codes.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "EUR"
     - name: reason
       in: query
       description: Filter credit notes by reasons. Possible values are `product_unsatisfactory`, `order_change`, `order_cancellation`, `fraudulent_charge`, `duplicated_charge` or `other`.
@@ -51,7 +59,7 @@ get:
           - other
     - name: credit_status
       in: query
-      description: Filter credit notes by credit status. Possible values are `available`, `consumed`  or `voided`.
+      description: Filter credit notes by credit status. Possible values are `available`, `consumed` or `voided`.
       required: false
       explode: true
       schema:
@@ -62,7 +70,7 @@ get:
           - voided
     - name: refund_status
       in: query
-      description: Filter credit notes by refund status. Possible values are `pending`, `succeeded`  or `failed`.
+      description: Filter credit notes by refund status. Possible values are `pending`, `succeeded` or `failed`.
       required: false
       explode: true
       schema:
@@ -96,6 +104,22 @@ get:
       schema:
         type: integer
         example: 100000
+    - name: types[]
+      in: query
+      description: Filter credit notes by the kind of amount they carry. `credit` matches credit notes with a credited amount, `refund` those with a refunded amount and `offset` those with an amount deducted from the invoice balance. A credit note can match several types.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - credit
+            - refund
+            - offset
+        example:
+          - credit
+          - refund
     - name: self_billed
       in: query
       description: Filter credit notes belonging to a self billed invoice. Possible values are `true` or `false`.
@@ -104,6 +128,16 @@ get:
       schema:
         type: boolean
         example: true
+    - name: billing_entity_codes[]
+      in: query
+      description: Filter credit notes by billing entity codes.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example: [billing_entity_code_1, billing_entity_code_2]
   responses:
     "200":
       description: Credit notes
