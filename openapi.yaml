@@ -827,7 +827,9 @@ paths:
       tags:
         - analytics
       summary: List usage
-      description: Returns usages.
+      description: |-
+        Returns the usage billed by each billable metric, aggregated over the requested period and time granularity.
+        This is a premium feature. On a non-premium license the response always covers the last 30 days with a daily granularity, and only the `billable_metric_code` filter is applied.
       operationId: findAllUsages
       parameters:
         - name: time_granularity
@@ -13281,6 +13283,7 @@ components:
         - organization_id
         - amount_cents
         - amount_currency
+        - is_billable_metric_deleted
       properties:
         organization_id:
           type: string
@@ -13316,7 +13319,7 @@ components:
           example: '1.0'
         is_billable_metric_deleted:
           type: boolean
-          description: Indicates whether the billable metric associated with the usage is deleted.
+          description: Indicates whether the billable metric associated with the usage has been deleted. It is set on every entry of the response.
           example: false
     Usages:
       type: object
