@@ -1,6 +1,4 @@
 type: object
-required:
-  - entitlements
 properties:
   entitlements:
     type: object
@@ -19,4 +17,4 @@ properties:
         root: false
       sso:
         provider: "okta"
-    description: "Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values."
+    description: "Feature entitlements with their privilege values. Each key is a feature code, and the value is an object containing privilege codes with their associated values. The key is optional and defaults to an empty object. On the replacing endpoints (POST) an omitted or empty object removes every entitlement. On the partial update endpoints (PATCH) it changes nothing."
