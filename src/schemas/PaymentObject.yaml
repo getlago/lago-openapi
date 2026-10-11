@@ -101,15 +101,18 @@ properties:
     description: "Code of the payment provider. It is `null` for manual payments, which are not attached to a payment provider."
     example: "stripe_prod"
   payment_provider_type:
-    type: string
+    type:
+      - string
+      - "null"
     enum:
+      - null
       - adyen
       - cashfree
       - gocardless
       - stripe
       - flutterwave
       - moneyhash
-    description: The type of payment provider
+    description: "The type of payment provider. It is `null` for manual payments, which are not attached to a payment provider."
     example: "stripe"
   external_payment_id:
     type:
@@ -144,3 +147,6 @@ properties:
     format: date-time
     description: "Timestamp when the payment was created in Lago's database, not on the payment provider."
     example: "2025-01-21T00:10:29Z"
+  payment_method:
+    $ref: "./PaymentMethodObject.yaml"
+    description: "The payment method used for the payment. It is only sent on the `payment.succeeded` webhook, and only when a payment method is attached to the payment."
