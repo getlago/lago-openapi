@@ -17719,11 +17719,13 @@ components:
           - `subscription`
           - `commitment`
           - `fixed_charge`
+          - `credit`
       enum:
         - charge
         - subscription
         - commitment
         - fixed_charge
+        - credit
     WalletRecurringTransactionRule:
       type: object
       description: Object that represents rule for wallet recurring transactions.
