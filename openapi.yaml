@@ -658,7 +658,7 @@ paths:
       tags:
         - analytics
       summary: List gross revenue
-      description: Gross revenue is the sum of monthly `finalized` invoice payments and fees paid in advance that are not invoiceable. This total is calculated after deducting taxes and discounts.
+      description: Gross revenue is the monthly sum of the totals of `finalized` invoices and of the amounts of the fees paid in advance that are not attached to an invoice. Invoice totals include taxes, are net of coupons, and are reduced by the amounts refunded through credit notes. Self-billed invoices and invoices with a lost payment dispute are excluded.
       operationId: findAllGrossRevenues
       parameters:
         - name: currency
@@ -12868,7 +12868,8 @@ components:
       properties:
         month:
           type: string
-          description: Identifies the month to analyze revenue.
+          format: date-time
+          description: The month the revenue is reported for, returned as the first instant of that month in UTC.
           example: '2023-11-01T00:00:00.000Z'
         amount_cents:
           type: integer
@@ -12880,7 +12881,7 @@ components:
           example: USD
         invoices_count:
           type: integer
-          description: Contains invoices count.
+          description: The number of `finalized` invoices issued during the month. Fees paid in advance that are not attached to an invoice are not counted.
           example: 10
         billing_entity_id:
           type: string
