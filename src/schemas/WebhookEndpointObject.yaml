@@ -3,6 +3,9 @@ required:
   - lago_id
   - lago_organization_id
   - webhook_url
+  - signature_algo
+  - name
+  - event_types
   - created_at
 properties:
   lago_id:
@@ -21,7 +24,7 @@ properties:
     example: "https://foo.bar"
   signature_algo:
     type: string
-    description: The signature algo for the webhook.
+    description: The algorithm used to sign the webhook payload.
     example: 'hmac'
     enum:
       - jwt
@@ -30,13 +33,13 @@ properties:
     type:
       - string
       - 'null'
-    description: The name of the webhook.
+    description: The name of the webhook endpoint.
     example: EC2-production
   event_types:
     type:
       - array
       - 'null'
-    description: A list of event types that will trigger the webhook. Passing null means that all event types will be sent.
+    description: The list of event types sent to this webhook endpoint. When the value is `null`, every event type is sent. When the value is an empty array, no event is sent.
     items:
       type: string
     example: ['invoice.voided', 'customer.created']
