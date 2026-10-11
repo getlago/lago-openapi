@@ -10,6 +10,7 @@ required:
   - request_path
   - created_at
   - request_id
+  - request_response
 properties:
   api_version:
     type: string
@@ -18,24 +19,25 @@ properties:
   client:
     type: string
     example: "Lago Ruby v1.26.0"
-    description: The client used to make the request to the API.
+    description: The client that made the request, as reported by its user agent.
   http_method:
     type: string
     example: "post"
     enum:
       - post
       - put
+      - patch
       - delete
-    description: This field represents the HTTP method of the request.
+    description: The HTTP method of the request. Requests made with the GET method are not logged.
   http_status:
     type: integer
     example: 200
-    description: This field represents the HTTP status of the requests.
+    description: The HTTP status Lago returned for the request.
   logged_at:
     type: string
     format: "date-time"
     example: "2025-03-31T12:31:44Z"
-    description: The logged date of the api log, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+    description: The date when the request was logged, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
   request_body:
     type: object
     additionalProperties: true
@@ -43,21 +45,21 @@ properties:
     example: { "billable_metric": "{\"name\":\"Storage\",\"code\":\"storage\"}" }
   request_origin:
     type: string
-    description: This field represents the API origin of the requested URL
-    example: "https://app.lago.dev/"
+    description: The base URL the request was sent to.
+    example: "https://api.getlago.com"
   request_path:
     type: string
-    description: This field represents the API path of the requested URL
-    example: "/billable_metrics"
+    description: The path of the request.
+    example: "/api/v1/billable_metrics"
   created_at:
     type: string
     format: "date-time"
     example: "2022-04-29T08:59:51Z"
-    description: The creation date of the api log record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+    description: The creation date of the API log record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
   request_id:
     type: string
     format: "uuid"
-    description: Unique identifier for the api log.
+    description: Unique identifier of the API log. It is the identifier of the request.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   request_response:
     type:

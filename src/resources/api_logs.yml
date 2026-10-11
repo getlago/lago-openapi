@@ -1,15 +1,15 @@
 get:
   tags:
     - api_logs
-  summary: List all api logs
-  description: This endpoint retrieves all existing api logs that represent requests performed to Lago's API.
+  summary: List all API logs
+  description: This endpoint retrieves all existing API logs, which represent the requests made to Lago's API.
   operationId: findAllApiLogs
   parameters:
     - $ref: '../parameters/page.yaml'
     - $ref: '../parameters/per_page.yaml'
     - name: from_date
       in: query
-      description: Filter api logs from a specific date.
+      description: Filter API logs logged at or after this date.
       required: false
       explode: true
       schema:
@@ -18,7 +18,7 @@ get:
         example: '2022-08-09'
     - name: to_date
       in: query
-      description: Filter api logs up to a specific date.
+      description: Filter API logs logged at or before this date.
       required: false
       explode: true
       schema:
@@ -27,7 +27,7 @@ get:
         example: '2022-08-09'
     - name: http_methods[]
       in: query
-      description: Filter results by HTTP methods
+      description: Filter results by HTTP methods.
       required: false
       explode: true
       schema:
@@ -37,11 +37,12 @@ get:
           enum:
              - post
              - put
+             - patch
              - delete
         example: [post, put]
     - name: http_statuses[]
       in: query
-      description: Filter results by HTTP status or by generic request status
+      description: Filter results by HTTP status or by generic request status. When `succeeded` or `failed` is passed, the numeric values of the filter are ignored.
       required: false
       explode: true
       schema:
@@ -58,7 +59,7 @@ get:
         example: [failed, succeeded, 404]
     - name: api_version
       in: query
-      description: Filter results by API version
+      description: Filter results by API version.
       required: false
       explode: true
       schema:
@@ -86,10 +87,12 @@ get:
         example: ['Lago Ruby v1.26.0']
   responses:
     '200':
-      description: List of api logs
+      description: List of API logs
       content:
         application/json:
           schema:
             $ref: '../schemas/ApiLogsPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'

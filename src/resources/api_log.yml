@@ -1,7 +1,7 @@
 parameters:
   - name: request_id
     in: path
-    description: The Request Id of the existing api log.
+    description: The unique identifier of the API log, which is the identifier of the request.
     required: true
     schema:
       type: string
@@ -9,17 +9,19 @@ parameters:
 get:
   tags:
     - api_logs
-  summary: Retrieve an api log
-  description: This endpoint retrieves an existing api log that represents a request made to the API. The api log is identified by its unique request_id.
+  summary: Retrieve an API log
+  description: This endpoint retrieves an existing API log, which represents a request made to Lago's API. The API log is identified by its request id.
   operationId: findApiLog
   responses:
     '200':
-      description: Api Log
+      description: API log
       content:
         application/json:
           schema:
             $ref: '../schemas/ApiLog.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
