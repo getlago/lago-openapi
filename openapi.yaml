@@ -26373,23 +26373,27 @@ components:
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         external_customer_id:
           type: string
-          description: The customer external unique identifier (provided by your own application)
+          description: The customer external unique identifier (provided by your own application).
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         payment_provider:
           type: string
           enum:
             - adyen
             - cashfree
+            - flutterwave
             - gocardless
             - moneyhash
             - stripe
-          description: The type of payment provider
+          description: The type of payment provider the customer is attached to.
           example: stripe
         payment_provider_code:
-          type: string
-          description: Code of the payment provider
-          example: Stripe Prod
+          type:
+            - string
+            - 'null'
+          description: Code of the payment provider connection. It is `null` when no payment provider connection is recorded on the customer, for example when the connection could not be created.
+          example: stripe-eu-1
         provider_error:
+          description: The error returned by the payment provider. It carries a `message` and an `error_code` key.
           oneOf:
             - type: string
             - type: object
@@ -26751,6 +26755,7 @@ components:
         - payment_provider_code
         - provider_error
         - source
+        - action
       properties:
         lago_payment_provider_id:
           type: string
@@ -26759,25 +26764,26 @@ components:
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         payment_provider_name:
           type: string
-          description: The name of payment provider
+          description: The name of the payment provider connection.
           example: Stripe Prod
         payment_provider_code:
           type: string
-          description: Code of the payment provider
+          description: Code of the payment provider connection.
           example: stripe
         source:
           type: string
           enum:
             - stripe
-          description: The source of the error
+          description: The payment provider that raised the error.
           example: stripe
         action:
           type: string
           enum:
             - payment_provider.register_webhook
-          description: The action that was being performed when the error occurred
+          description: The action that was being performed when the error occurred.
           example: payment_provider.register_webhook
         provider_error:
+          description: The error returned by the payment provider. It carries a `message` and a `code` key.
           oneOf:
             - type: string
             - type: object
