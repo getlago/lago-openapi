@@ -8,7 +8,8 @@ required:
 properties:
   month:
     type: string
-    description: Identifies the month to analyze revenue.
+    format: "date-time"
+    description: The month the revenue is reported for, returned as the first instant of that month in UTC.
     example: '2023-11-01T00:00:00.000Z'
   amount_cents:
     type: integer
@@ -20,7 +21,7 @@ properties:
     example: 'USD'
   invoices_count:
     type: integer
-    description: Contains invoices count.
+    description: The number of `finalized` invoices issued during the month. Fees paid in advance that are not attached to an invoice are not counted.
     example: 10
   billing_entity_id:
     type: string

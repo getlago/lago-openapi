@@ -2,7 +2,7 @@ get:
   tags:
     - analytics
   summary: List gross revenue
-  description: Gross revenue is the sum of monthly `finalized` invoice payments and fees paid in advance that are not invoiceable. This total is calculated after deducting taxes and discounts.
+  description: Gross revenue is the monthly sum of the totals of `finalized` invoices and of the amounts of the fees paid in advance that are not attached to an invoice. Invoice totals include taxes, are net of coupons, and are reduced by the amounts refunded through credit notes. Self-billed invoices and invoices with a lost payment dispute are excluded.
   operationId: findAllGrossRevenues
   parameters:
     - name: currency
