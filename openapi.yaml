@@ -12987,15 +12987,20 @@ components:
       properties:
         month:
           type: string
-          description: Identifies the month to analyze MRR.
+          format: date-time
+          description: The month the MRR is reported for, returned as the first instant of that month in UTC.
           example: '2023-11-01T00:00:00.000Z'
         amount_cents:
-          type: integer
-          description: The total amount of MRR, expressed in cents.
+          type:
+            - integer
+            - 'null'
+          description: The total amount of MRR, expressed in cents. It is `null` for a month with no subscription fee.
           example: 50000
         currency:
-          $ref: '#/components/schemas/Currency'
-          description: The currency of MRR analytics. Format must be ISO 4217.
+          oneOf:
+            - $ref: '#/components/schemas/Currency'
+            - type: 'null'
+          description: The currency of MRR analytics. Format must be ISO 4217. It is `null` for a month with no subscription fee.
           example: USD
     Mrrs:
       type: object
