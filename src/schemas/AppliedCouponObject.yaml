@@ -7,6 +7,7 @@ required:
   - external_customer_id
   - lago_customer_id
   - status
+  - coupon_status
   - frequency
   - created_at
 properties:
@@ -68,7 +69,7 @@ properties:
     type:
       - integer
       - "null"
-    description: The amount of the coupon in cents. This field is required only for coupon with `fixed_amount` type.
+    description: The amount of the coupon in cents. It is set for a coupon with the `fixed_amount` type.
     example: 2000
   amount_cents_remaining:
     type:
@@ -78,14 +79,14 @@ properties:
     example: 50
   amount_currency:
     $ref: "./CurrencyOrNull.yaml"
-    description: The currency of the coupon. This field is required only for coupon with `fixed_amount` type.
+    description: The currency of the coupon amount. It is set for a coupon with the `fixed_amount` type.
     example: "EUR"
   percentage_rate:
     type:
       - string
       - "null"
     pattern: "^[0-9]+.?[0-9]*$"
-    description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
+    description: The percentage rate of the coupon. It is set for a coupon with the `percentage` type.
     example: null
   frequency:
     type: string
@@ -104,7 +105,7 @@ properties:
     type:
       - integer
       - "null"
-    description: Specifies the number of billing periods to which the coupon applies. This field is required only for coupons with a `recurring` frequency type
+    description: The number of billing periods to which the coupon applies. It is set when the frequency is `recurring`.
     example: 3
   frequency_duration_remaining:
     type:
