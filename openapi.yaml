@@ -7851,11 +7851,11 @@ paths:
     post:
       tags:
         - webhook_endpoints
-      summary: Create a webhook_endpoint
+      summary: Create a webhook endpoint
       description: This endpoint is used to create a webhook endpoint.
       operationId: createWebhookEndpoint
       requestBody:
-        description: Webhook Endpoint payload
+        description: Webhook endpoint payload
         content:
           application/json:
             schema:
@@ -7863,7 +7863,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Webhook Endpoint created
+          description: Webhook endpoint created
           content:
             application/json:
               schema:
@@ -7885,7 +7885,7 @@ paths:
         - $ref: '#/components/parameters/per_page'
       responses:
         '200':
-          description: WebhookEndpoints
+          description: Webhook endpoints
           content:
             application/json:
               schema:
@@ -7909,7 +7909,7 @@ paths:
       description: This endpoint is used to update an existing webhook endpoint.
       operationId: updateWebhookEndpoint
       requestBody:
-        description: Webhook Endpoint update payload
+        description: Webhook endpoint update payload
         content:
           application/json:
             schema:
@@ -7917,7 +7917,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Webhook Endpoint updated
+          description: Webhook endpoint updated
           content:
             application/json:
               schema:
@@ -7938,7 +7938,7 @@ paths:
       operationId: findWebhookEndpoint
       responses:
         '200':
-          description: WebhookEndpoint
+          description: Webhook endpoint
           content:
             application/json:
               schema:
@@ -7955,7 +7955,7 @@ paths:
       operationId: destroyWebhookEndpoint
       responses:
         '200':
-          description: Webhook Endpoint deleted
+          description: Webhook endpoint deleted
           content:
             application/json:
               schema:
@@ -7964,8 +7964,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-        '405':
-          $ref: '#/components/responses/NotAllowed'
 webhooks:
   alert_triggered:
     post:
@@ -26077,6 +26075,9 @@ components:
         - lago_id
         - lago_organization_id
         - webhook_url
+        - signature_algo
+        - name
+        - event_types
         - created_at
       properties:
         lago_id:
@@ -26095,7 +26096,7 @@ components:
           example: https://foo.bar
         signature_algo:
           type: string
-          description: The signature algo for the webhook.
+          description: The algorithm used to sign the webhook payload.
           example: hmac
           enum:
             - jwt
@@ -26104,13 +26105,13 @@ components:
           type:
             - string
             - 'null'
-          description: The name of the webhook.
+          description: The name of the webhook endpoint.
           example: EC2-production
         event_types:
           type:
             - array
             - 'null'
-          description: A list of event types that will trigger the webhook. Passing null means that all event types will be sent.
+          description: The list of event types sent to this webhook endpoint. When the value is `null`, every event type is sent. When the value is an empty array, no event is sent.
           items:
             type: string
           example:
@@ -26135,6 +26136,8 @@ components:
           $ref: '#/components/schemas/PaginationMeta'
     WebhookEndpointCreateInput:
       type: object
+      required:
+        - webhook_endpoint
       properties:
         webhook_endpoint:
           type: object
@@ -26160,13 +26163,13 @@ components:
               type:
                 - string
                 - 'null'
-              description: The name of the webhook.
+              description: The name of the webhook endpoint.
               example: EC2-production
             event_types:
               type:
                 - array
                 - 'null'
-              description: A list of event types that will trigger the webhook. Passing null means that all event types will be sent.
+              description: The list of event types sent to this webhook endpoint. Pass `null` or `["*"]` to receive every event type. An empty array stops every delivery.
               items:
                 type: string
               example:
@@ -26181,6 +26184,8 @@ components:
           $ref: '#/components/schemas/WebhookEndpointObject'
     WebhookEndpointUpdateInput:
       type: object
+      required:
+        - webhook_endpoint
       properties:
         webhook_endpoint:
           type: object
@@ -26203,13 +26208,13 @@ components:
               type:
                 - string
                 - 'null'
-              description: The name of the webhook.
+              description: The name of the webhook endpoint.
               example: EC2-production
             event_types:
               type:
                 - array
                 - 'null'
-              description: A list of event types that will trigger the webhook. Passing null means that all event types will be sent.
+              description: The list of event types sent to this webhook endpoint. Pass `null` or `["*"]` to receive every event type. An empty array stops every delivery.
               items:
                 type: string
               example:

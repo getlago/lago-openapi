@@ -1,4 +1,6 @@
 type: object
+required:
+  - webhook_endpoint
 properties:
   webhook_endpoint:
     type: object
@@ -24,13 +26,13 @@ properties:
         type:
           - string
           - "null"
-        description: The name of the webhook.
+        description: The name of the webhook endpoint.
         example: EC2-production
       event_types:
         type:
           - array
           - "null"
-        description: A list of event types that will trigger the webhook. Passing null means that all event types will be sent.
+        description: The list of event types sent to this webhook endpoint. Pass `null` or `["*"]` to receive every event type. An empty array stops every delivery.
         items:
           type: string
         example: ["invoice.voided", "customer.created"]

@@ -14,7 +14,7 @@ put:
   description: This endpoint is used to update an existing webhook endpoint.
   operationId: updateWebhookEndpoint
   requestBody:
-    description: Webhook Endpoint update payload
+    description: Webhook endpoint update payload
     content:
       application/json:
         schema:
@@ -22,7 +22,7 @@ put:
     required: true
   responses:
     '200':
-      description: Webhook Endpoint updated
+      description: Webhook endpoint updated
       content:
         application/json:
           schema:
@@ -43,7 +43,7 @@ get:
   operationId: findWebhookEndpoint
   responses:
     '200':
-      description: WebhookEndpoint
+      description: Webhook endpoint
       content:
         application/json:
           schema:
@@ -60,7 +60,7 @@ delete:
   operationId: destroyWebhookEndpoint
   responses:
     '200':
-      description: Webhook Endpoint deleted
+      description: Webhook endpoint deleted
       content:
         application/json:
           schema:
@@ -69,5 +69,3 @@ delete:
       $ref: '../responses/Unauthorized.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
-    '405':
-      $ref: '../responses/NotAllowed.yaml'

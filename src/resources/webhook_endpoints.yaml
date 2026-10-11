@@ -1,11 +1,11 @@
 post:
   tags:
     - webhook_endpoints
-  summary: Create a webhook_endpoint
+  summary: Create a webhook endpoint
   description: This endpoint is used to create a webhook endpoint.
   operationId: createWebhookEndpoint
   requestBody:
-    description: Webhook Endpoint payload
+    description: Webhook endpoint payload
     content:
       application/json:
         schema:
@@ -13,7 +13,7 @@ post:
     required: true
   responses:
     '200':
-      description: Webhook Endpoint created
+      description: Webhook endpoint created
       content:
         application/json:
           schema:
@@ -35,7 +35,7 @@ get:
     - $ref: '../parameters/per_page.yaml'
   responses:
     '200':
-      description: WebhookEndpoints
+      description: Webhook endpoints
       content:
         application/json:
           schema:
