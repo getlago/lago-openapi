@@ -527,15 +527,15 @@ paths:
     get:
       tags:
         - api_logs
-      summary: List all api logs
-      description: This endpoint retrieves all existing api logs that represent requests performed to Lago's API.
+      summary: List all API logs
+      description: This endpoint retrieves all existing API logs, which represent the requests made to Lago's API.
       operationId: findAllApiLogs
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - name: from_date
           in: query
-          description: Filter api logs from a specific date.
+          description: Filter API logs logged at or after this date.
           required: false
           explode: true
           schema:
@@ -544,7 +544,7 @@ paths:
             example: '2022-08-09'
         - name: to_date
           in: query
-          description: Filter api logs up to a specific date.
+          description: Filter API logs logged at or before this date.
           required: false
           explode: true
           schema:
@@ -553,7 +553,7 @@ paths:
             example: '2022-08-09'
         - name: http_methods[]
           in: query
-          description: Filter results by HTTP methods
+          description: Filter results by HTTP methods.
           required: false
           explode: true
           schema:
@@ -563,13 +563,14 @@ paths:
               enum:
                 - post
                 - put
+                - patch
                 - delete
             example:
               - post
               - put
         - name: http_statuses[]
           in: query
-          description: Filter results by HTTP status or by generic request status
+          description: Filter results by HTTP status or by generic request status. When `succeeded` or `failed` is passed, the numeric values of the filter are ignored.
           required: false
           explode: true
           schema:
@@ -589,7 +590,7 @@ paths:
               - 404
         - name: api_version
           in: query
-          description: Filter results by API version
+          description: Filter results by API version.
           required: false
           explode: true
           schema:
@@ -620,18 +621,20 @@ paths:
               - Lago Ruby v1.26.0
       responses:
         '200':
-          description: List of api logs
+          description: List of API logs
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiLogsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /api_logs/{request_id}:
     parameters:
       - name: request_id
         in: path
-        description: The Request Id of the existing api log.
+        description: The unique identifier of the API log, which is the identifier of the request.
         required: true
         schema:
           type: string
@@ -639,18 +642,20 @@ paths:
     get:
       tags:
         - api_logs
-      summary: Retrieve an api log
-      description: This endpoint retrieves an existing api log that represents a request made to the API. The api log is identified by its unique request_id.
+      summary: Retrieve an API log
+      description: This endpoint retrieves an existing API log, which represents a request made to Lago's API. The API log is identified by its request id.
       operationId: findApiLog
       responses:
         '200':
-          description: Api Log
+          description: API log
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiLog'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /analytics/gross_revenue:
@@ -12764,6 +12769,7 @@ components:
         - request_path
         - created_at
         - request_id
+        - request_response
       properties:
         api_version:
           type: string
@@ -12772,24 +12778,25 @@ components:
         client:
           type: string
           example: Lago Ruby v1.26.0
-          description: The client used to make the request to the API.
+          description: The client that made the request, as reported by its user agent.
         http_method:
           type: string
           example: post
           enum:
             - post
             - put
+            - patch
             - delete
-          description: This field represents the HTTP method of the request.
+          description: The HTTP method of the request. Requests made with the GET method are not logged.
         http_status:
           type: integer
           example: 200
-          description: This field represents the HTTP status of the requests.
+          description: The HTTP status Lago returned for the request.
         logged_at:
           type: string
           format: date-time
           example: '2025-03-31T12:31:44Z'
-          description: The logged date of the api log, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+          description: The date when the request was logged, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
         request_body:
           type: object
           additionalProperties: true
@@ -12798,21 +12805,21 @@ components:
             billable_metric: '{"name":"Storage","code":"storage"}'
         request_origin:
           type: string
-          description: This field represents the API origin of the requested URL
-          example: https://app.lago.dev/
+          description: The base URL the request was sent to.
+          example: https://api.getlago.com
         request_path:
           type: string
-          description: This field represents the API path of the requested URL
-          example: /billable_metrics
+          description: The path of the request.
+          example: /api/v1/billable_metrics
         created_at:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The creation date of the api log record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+          description: The creation date of the API log record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
         request_id:
           type: string
           format: uuid
-          description: Unique identifier for the api log.
+          description: Unique identifier of the API log. It is the identifier of the request.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         request_response:
           type:
