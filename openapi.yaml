@@ -696,7 +696,9 @@ paths:
       tags:
         - analytics
       summary: List of finalized invoices
-      description: Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`.
+      description: |-
+        Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`. Self-billed invoices and invoices with a lost payment dispute are excluded.
+        This is a premium feature.
       operationId: findAllInvoiceCollections
       parameters:
         - name: currency
@@ -719,6 +721,8 @@ paths:
                 $ref: '#/components/schemas/InvoiceCollections'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /analytics/invoiced_usage:
     get:
       tags:
@@ -12884,31 +12888,39 @@ components:
       type: object
       required:
         - month
+        - payment_status
         - invoices_count
+        - amount_cents
+        - currency
       properties:
         month:
           type: string
-          description: Identifies the month to analyze revenue.
+          description: Identifies the month of the invoice issuing date.
           example: '2023-11-01T00:00:00.000Z'
         payment_status:
-          type: string
+          type:
+            - string
+            - 'null'
           enum:
             - pending
             - succeeded
             - failed
-          description: The payment status of the invoices.
+            - null
+          description: The payment status of the finalized invoices counted in this row. It is `null` for a month without finalized invoices.
           example: succeeded
         invoices_count:
           type: integer
-          description: Contains invoices count.
+          description: The number of finalized invoices issued during the month with this payment status.
           example: 10
         amount_cents:
           type: integer
-          description: The total amount of revenue for a period, expressed in cents.
+          description: The total amount of the finalized invoices counted in this row, expressed in cents.
           example: 50000
         currency:
-          $ref: '#/components/schemas/Currency'
-          description: The currency of revenue analytics. Format must be ISO 4217.
+          oneOf:
+            - $ref: '#/components/schemas/Currency'
+            - type: 'null'
+          description: The currency of the finalized invoices counted in this row. Format must be ISO 4217. It is `null` for a month without finalized invoices.
           example: USD
     InvoiceCollections:
       type: object
