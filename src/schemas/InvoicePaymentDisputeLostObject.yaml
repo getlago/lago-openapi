@@ -1,9 +1,11 @@
-allOf:
-  - $ref: "./InvoiceObjectExtended.yaml"
-  - type: object
-    properties:
-      provider_error:
-        oneOf:
-          - type: string
-          - type: object
-            additionalProperties: true
+type: object
+required:
+  - invoice
+properties:
+  invoice:
+    $ref: "./InvoiceObject.yaml"
+    description: The invoice whose payment dispute was lost.
+  provider_error:
+    type: string
+    description: The dispute reason reported by the payment provider. This key is omitted when the dispute is marked as lost without a reason, which is the case when the dispute is lost through the API endpoint.
+    example: "fraudulent"

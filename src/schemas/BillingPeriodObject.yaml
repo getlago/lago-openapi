@@ -43,6 +43,20 @@ properties:
     format: "date-time"
     description: The ending date of the period that covers the charge fees. It is applicable only to the `charge` fees attached to the subscription. This field indicates the end date of the billing period or subscription period associated with the fees.
     example: "2022-05-29T08:59:51Z"
+  fixed_charges_from_datetime:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The beginning date of the period that covers the fixed charge fees. It is `null` when the billing period carries no fixed charge, for example on an `advance_charges` invoice.
+    example: "2022-04-29T08:59:51Z"
+  fixed_charges_to_datetime:
+    type:
+      - string
+      - "null"
+    format: "date-time"
+    description: The ending date of the period that covers the fixed charge fees. It is `null` when the billing period carries no fixed charge, for example on an `advance_charges` invoice.
+    example: "2022-05-29T08:59:51Z"
   invoicing_reason:
     type: string
     enum:
