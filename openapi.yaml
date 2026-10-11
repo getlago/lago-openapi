@@ -25604,6 +25604,7 @@ components:
         - metadata
         - name
         - payment_method
+        - purchase_order_number
       properties:
         lago_id:
           type: string
@@ -26711,6 +26712,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/WalletTransactionObject'
         - type: object
+          required:
+            - wallet
           properties:
             wallet:
               $ref: '#/components/schemas/WalletObject'
@@ -26746,8 +26749,9 @@ components:
             - adyen
             - cashfree
             - gocardless
+            - moneyhash
             - stripe
-          description: The type of payment provider code
+          description: The type of payment provider
           example: stripe
         payment_provider_code:
           type: string
