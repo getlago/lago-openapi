@@ -2,7 +2,9 @@ get:
   tags:
     - analytics
   summary: List of finalized invoices
-  description: Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`.
+  description: |-
+    Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`. Self-billed invoices and invoices with a lost payment dispute are excluded.
+    This is a premium feature.
   operationId: findAllInvoiceCollections
   parameters:
     - name: currency
@@ -25,3 +27,5 @@ get:
             $ref: '../schemas/InvoiceCollections.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
