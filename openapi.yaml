@@ -2639,7 +2639,9 @@ paths:
       description: |-
         Retrieves an embeddable link for displaying a customer portal.
 
-        This endpoint allows you to fetch the URL that can be embedded to provide customers access to a dedicated portal
+        This endpoint allows you to fetch the URL that can be embedded to provide customers access to a dedicated portal.
+
+        The portal lets the customer update their information and top up their wallets, so when API key permissions are enabled, the API key needs the `write` permission on `customer`.
       parameters:
         - name: external_customer_id
           in: path
@@ -2670,6 +2672,8 @@ paths:
                         description: An embeddable link for displaying a customer portal
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/subscriptions:
