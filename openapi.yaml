@@ -7996,6 +7996,48 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 webhooks:
+  alert_resolved:
+    post:
+      operationId: alertResolved
+      summary: An alert was resolved
+      description: |-
+        One or more thresholds that had triggered the alert are no longer in alarm.
+
+        Only thresholds with `resolved` in their `notify_on` are announced, and only when Lago recorded an alarm for their code. A threshold that was already in alarm when it was created or opted in is recorded silently, so its first recovery is announced without an earlier `alert.triggered`. Pairing is by threshold code: a threshold replaced by another one with the same code resolves the alarm the first one raised.
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the resolved alert
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - resolved_alert
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - alert.resolved
+                object_type:
+                  type: string
+                  enum:
+                    - resolved_alert
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                resolved_alert:
+                  $ref: '#/components/schemas/ResolvedAlertObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   alert_triggered:
     post:
       operationId: alertTriggered
@@ -26281,6 +26323,138 @@ components:
               example:
                 - invoice.voided
                 - customer.created
+    ResolvedAlertObject:
+      type: object
+      required:
+        - lago_id
+        - lago_organization_id
+        - lago_alert_id
+        - lago_subscription_id
+        - external_subscription_id
+        - lago_wallet_id
+        - external_customer_id
+        - billable_metric_code
+        - alert_type
+        - alert_code
+        - alert_name
+        - current_value
+        - previous_value
+        - recovered_thresholds
+        - in_alarm_thresholds
+        - fully_resolved
+        - reason
+        - resolved_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the resolution, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_alert_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the alert, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_subscription_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the subscription, created by Lago. Null when the alert is attached to a wallet.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_subscription_id:
+          type:
+            - string
+            - 'null'
+          description: The subscription external unique identifier (provided by your own application). Null when the alert is attached to a wallet.
+          example: sub_1234567890
+        lago_wallet_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the wallet, created by Lago. Null when the alert is attached to a subscription.
+          example: null
+        external_customer_id:
+          type: string
+          description: The customer external unique identifier (provided by your own application).
+          example: cust_1234567890
+        billable_metric_code:
+          type:
+            - string
+            - 'null'
+          description: The code of the billable metric associated with the alert. Only for alerts based on a billable metric.
+          example: storage_usage
+        alert_type:
+          type: string
+          description: The type of the resolved alert.
+          enum:
+            - current_usage_amount
+            - billable_metric_current_usage_amount
+            - billable_metric_current_usage_units
+            - lifetime_usage_amount
+            - billable_metric_lifetime_usage_units
+            - wallet_balance_amount
+            - wallet_credits_balance
+            - wallet_ongoing_balance_amount
+            - wallet_credits_ongoing_balance
+          example: billable_metric_current_usage_amount
+        alert_code:
+          type: string
+          description: Unique code used to identify the alert.
+          example: storage_threshold_alert
+        alert_name:
+          type:
+            - string
+            - 'null'
+          description: The name of the alert.
+          example: Storage Usage Alert
+        current_value:
+          type: string
+          description: The value checked when the alert was resolved. For a resolution caused by an alert update, it is the last value checked before the update. Returned as a string formatted as a BigDecimal.
+          example: '700.0'
+        previous_value:
+          type: string
+          description: The value checked during the previous run. Returned as a string formatted as a BigDecimal.
+          example: '1200.0'
+        recovered_thresholds:
+          type: array
+          description: The thresholds that are no longer in alarm and are announced by this resolution. Recurring thresholds never resolve and are never listed.
+          items:
+            $ref: '#/components/schemas/AlertThresholdObject'
+        in_alarm_thresholds:
+          type: array
+          description: Every threshold of the alert still in alarm after this resolution, whether or not it asked for resolutions, named by its code, or by its value when it has no code. The first line of a recurring threshold is included when it is in alarm. The list is empty exactly when `fully_resolved` is true.
+          items:
+            type: string
+          example:
+            - warning
+        fully_resolved:
+          type: boolean
+          description: True when no threshold of the alert is in alarm anymore. A consumer that releases a block only when nothing is in alarm can rely on it.
+          example: false
+        reason:
+          type: string
+          description: |-
+            Why the alarm was resolved:
+            - `recovered`: the checked value moved back to the safe side of the thresholds.
+            - `threshold_updated`: an update of the alert moved the thresholds, so they are no longer in alarm at the last checked value. Nothing changed in the usage or the balance.
+            - `threshold_removed`: an update of the alert removed the thresholds.
+          enum:
+            - recovered
+            - threshold_updated
+            - threshold_removed
+          example: recovered
+        resolved_at:
+          type: string
+          format: date-time
+          description: The date and time in UTC (ISO 8601) when Lago resolved the alert.
+          example: '2025-05-19T10:04:21Z'
     TriggeredAlertObject:
       type: object
       required:
