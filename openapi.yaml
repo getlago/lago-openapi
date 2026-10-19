@@ -4021,6 +4021,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -4067,6 +4069,19 @@ paths:
             type: string
             format: date
             example: '2022-08-09'
+        - name: status
+          in: query
+          description: Filter invoices by status. Possible values are `draft`, `failed`, `finalized`, `pending` and `voided`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - draft
+              - finalized
+              - failed
+              - pending
+              - voided
         - name: statuses[]
           in: query
           description: Filter invoices by statuses. Possible values are `draft`, `failed`, `finalized`, `pending` and `voided`.
@@ -4082,6 +4097,17 @@ paths:
                 - failed
                 - pending
                 - voided
+        - name: payment_status
+          in: query
+          description: Filter invoices by payment status. Possible values are `pending`, `failed` or `succeeded`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - pending
+              - failed
+              - succeeded
         - name: payment_statuses[]
           in: query
           description: Filter invoices by payment statuses. Possible values are `pending`, `failed` or `succeeded`.
@@ -4202,6 +4228,10 @@ paths:
                 $ref: '#/components/schemas/InvoicesPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /invoices/{lago_id}:
     parameters:
       - $ref: '#/components/parameters/lago_invoice_id'
@@ -4311,6 +4341,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /invoices/{lago_id}/lose_dispute:
@@ -4353,6 +4385,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /invoices/{lago_id}/retry:
@@ -4375,6 +4409,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   /invoices/{lago_id}/payment_url:
     post:
       tags:
@@ -16883,14 +16919,12 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
+          description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         billing_entity_code:
-          type:
-            - string
-            - 'null'
+          type: string
           example: acme_corp
-          description: The unique code of the billing entity associated with the invoice
+          description: The unique code of the billing entity the invoice was issued from.
         sequential_id:
           type:
             - integer
@@ -16971,7 +17005,7 @@ components:
             - failed
           description: |-
             The status of the payment associated with the invoice. It can have one of the following values:
-            - `pending`: the payment is pending, waiting for payment processing in Stripe or when the invoice is emitted but users have not updated the payment status through the endpoint.
+            - `pending`: the payment is pending, waiting for processing by the payment provider, or the invoice has been issued and its payment status has not been updated through the update endpoint.
             - `succeeded`: the payment of the invoice has been successfully processed.
             - `failed`: the payment of the invoice has failed or encountered an error during processing.
           example: succeeded
@@ -16998,7 +17032,7 @@ components:
             This field depends on the version number. Here are the definitions based on the version:
             - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
             - Version 2: is equal to the `fees_amount_cents`.
-            - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
+            - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`.
           example: 100
         taxes_amount_cents:
           type: integer
@@ -17011,7 +17045,7 @@ components:
             This field depends on the version number. Here are the definitions based on the version:
             - Version 1: is equal to the `total_amount_cents`.
             - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
-            - Version 3 & 4: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
+            - Version 3 & 4: is equal to the sum of `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`.
           example: 120
         prepaid_credit_amount_cents:
           type: integer
@@ -17052,6 +17086,7 @@ components:
         version_number:
           type: integer
           example: 3
+          description: The version of the invoice calculation rules applied to this invoice. It determines how the subtotals are computed.
         self_billed:
           type: boolean
           example: false
@@ -17081,12 +17116,12 @@ components:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the invoice object was created
+          description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It provides a standardized and internationally recognized timestamp for when the invoice object was created.
         updated_at:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
+          description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It provides a standardized and internationally recognized timestamp for when the invoice object was last updated.
         voided_at:
           type:
             - string
@@ -20325,7 +20360,7 @@ components:
                       - number
                       - 'null'
                     pattern: ^[0-9]+.?[0-9]*$
-                    description: The quantity of units associated with the fee. Accepts a number or a string formatted as a BigDecimal. By default, only 1 unit is added to the invoice.
+                    description: The quantity of units associated with the fee. Accepts a number or a decimal string. By default, only 1 unit is added to the invoice.
                     example: '2.5'
                   description:
                     type:
