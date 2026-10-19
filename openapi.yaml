@@ -17507,7 +17507,7 @@ components:
           description: The email address used for sending dunning notifications. It defaults to the customer's own email address, and is `null` when the customer has none.
         amount_cents:
           type: integer
-          description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.
+          description: The amount the payment request collects, expressed in cents. It is the sum of the amounts still due on the invoices it covers, minus the credit notes offset against those invoices.
           example: 100
         amount_currency:
           $ref: '#/components/schemas/Currency'
@@ -17521,7 +17521,7 @@ components:
             - failed
           description: |-
             The status of the payment associated with the payment request. It can have one of the following values:
-            - `pending`: the payment is pending, waiting for payment processing in the payment provider or when the invoice is emitted but users have not updated the payment status through the endpoint.
+            - `pending`: the payment has not been processed yet. A payment request starts with this status.
             - `succeeded`: the payment of the payment request has been successfully processed.
             - `failed`: the payment of the payment request has failed or encountered an error during processing.
           example: succeeded
@@ -17535,6 +17535,7 @@ components:
           description: The customer on which the payment request applies. It refers to the customer account or entity associated with the payment request.
         invoices:
           type: array
+          description: The overdue invoices the payment request collects the payment for.
           items:
             $ref: '#/components/schemas/InvoiceBaseObject'
     PaymentRequestsPaginated:
@@ -22223,7 +22224,7 @@ components:
             external_customer_id:
               type: string
               example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-              description: The customer external unique identifier (provided by your own application)
+              description: The customer external unique identifier (provided by your own application).
             email:
               type: string
               format: email
@@ -22231,9 +22232,10 @@ components:
               description: The email address used for sending dunning notifications. When omitted, the customer's own email address is used.
             lago_invoice_ids:
               type: array
-              description: A list of Lago IDs for the customer's overdue invoices to start the dunning process
+              description: A list of Lago IDs for the customer's overdue invoices to start the dunning process.
               items:
                 type: string
+                format: uuid
                 example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
             payment_method:
