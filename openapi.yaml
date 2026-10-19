@@ -280,7 +280,7 @@ paths:
         - $ref: '#/components/parameters/per_page'
         - name: from_date
           in: query
-          description: Filter activity logs from a specific date.
+          description: Filter activity logs logged at or after this date. A date or a full ISO 8601 datetime is accepted.
           required: false
           explode: true
           schema:
@@ -289,7 +289,7 @@ paths:
             example: '2022-08-09'
         - name: to_date
           in: query
-          description: Filter activity logs up to a specific date.
+          description: Filter activity logs logged at or before this date. A date or a full ISO 8601 datetime is accepted.
           required: false
           explode: true
           schema:
@@ -298,7 +298,7 @@ paths:
             example: '2022-08-09'
         - name: activity_types[]
           in: query
-          description: Filter results by activity types
+          description: Filter results by activity types.
           required: false
           explode: true
           schema:
@@ -310,7 +310,7 @@ paths:
               - billable_metric.updated
         - name: activity_sources[]
           in: query
-          description: Filter results by activity sources
+          description: Filter results by activity sources.
           required: false
           explode: true
           schema:
@@ -326,7 +326,7 @@ paths:
               - front
         - name: user_emails[]
           in: query
-          description: Filter results by user emails
+          description: Filter results by the email of the user who performed the activity.
           required: false
           explode: true
           schema:
@@ -339,7 +339,7 @@ paths:
         - $ref: '#/components/parameters/external_subscription_id'
         - name: resource_ids[]
           in: query
-          description: Filter results by resources unique identifiers
+          description: Filter results by the unique identifiers of the resources the actions were applied to.
           required: false
           explode: true
           schema:
@@ -352,7 +352,7 @@ paths:
               - 1a901a90-1a90-1a90-1a90-1a901a901a90
         - name: resource_types[]
           in: query
-          description: Filter results by resource class types
+          description: Filter results by resource types.
           required: false
           explode: true
           schema:
@@ -371,14 +371,17 @@ paths:
                 $ref: '#/components/schemas/ActivityLogsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /activity_logs/{activity_id}:
     parameters:
       - name: activity_id
         in: path
-        description: The Activity Id of the existing activity log.
+        description: The unique identifier of the activity log, created by Lago.
         required: true
         schema:
           type: string
+          format: uuid
           example: bdc0eda6-ea52-4f72-a46a-94f47a89b546
     get:
       tags:
@@ -388,13 +391,15 @@ paths:
       operationId: findActivityLog
       responses:
         '200':
-          description: Activity Log
+          description: Activity log
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActivityLog'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /add_ons:
@@ -12846,6 +12851,11 @@ components:
         - activity_id
         - activity_source
         - activity_type
+        - activity_object
+        - activity_object_changes
+        - user_email
+        - external_customer_id
+        - external_subscription_id
         - logged_at
         - resource_id
         - resource_type
@@ -12855,18 +12865,18 @@ components:
           type: string
           format: uuid
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier assigned to the activity log within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the activity log record within the Lago system
+          description: Unique identifier assigned to the activity log within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the activity log record within the Lago system.
         user_email:
           type:
             - string
             - 'null'
           format: email
           example: dinesh@piedpiper.example
-          description: The email of the user who performed the activity
+          description: The email of the user who performed the activity. It is null when the action was performed with an API key or by the system.
         activity_type:
           type: string
           example: billable_metric.created
-          description: This field stores the activity action that was performed on the activity_object.
+          description: The action that was performed on the resource.
         activity_source:
           type: string
           example: api
@@ -12874,30 +12884,27 @@ components:
             - api
             - front
             - system
-          description: This field represents the source of the activity log, the interaction source that triggered the action.
+          description: The source that triggered the action.
         activity_object:
           type:
             - object
             - 'null'
-          format: object
           example:
             lago_id: dad68bc7-c01a-4ad8-a87b-13e78693a5bc
             plan_id: b9155544-e261-4e92-b54e-f65d7609294c
-          description: This field represents the final state of the object that the action was applied.
+          description: The state of the resource after the action, keyed by top-level attribute name. Nested values are returned JSON-encoded.
         activity_object_changes:
           type:
             - object
             - 'null'
-          format: object
           example:
-            plan_id:
-              - null
-              - b9155544-e261-4e92-b54e-f65d7609294c
+            plan_id: '[null,"b9155544-e261-4e92-b54e-f65d7609294c"]'
+          description: The attributes the action changed, keyed by attribute name. Each value is the JSON-encoded pair of the previous and the new value. It is empty when the activity type is not an update.
         external_customer_id:
           type:
             - string
             - 'null'
-          description: The customer external unique identifier (provided by your own application)
+          description: The customer external unique identifier (provided by your own application).
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         external_subscription_id:
           type:
@@ -12907,23 +12914,23 @@ components:
           example: external_id
         resource_id:
           type: string
-          description: The resource id of the object that the action was applied.
+          description: The unique identifier of the resource the action was applied to.
           format: uuid
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         resource_type:
           type: string
-          description: The resource type of the resource_id record.
+          description: The type of the resource the action was applied to.
           example: BillableMetric
         logged_at:
           type: string
           format: date-time
           example: '2025-03-31T12:31:44Z'
-          description: The logged date of the activity, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+          description: The date when the action happened, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
         created_at:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The creation date of the activity record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+          description: The creation date of the activity log record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
     PaginationMeta:
       type: object
       required:
