@@ -1203,11 +1203,12 @@ paths:
         - $ref: '#/components/parameters/per_page'
         - name: search_term
           in: query
-          description: Search in name, code and description.
+          description: Filter features by search term. The term is matched against the name, the code and the description of the feature.
           required: false
           explode: true
           schema:
             type: string
+            example: seats
       responses:
         '200':
           description: List of features
@@ -14431,9 +14432,10 @@ components:
             - string
             - select
           example: integer
-          description: 'Data type of the privilege value. Default: string'
+          description: Data type of the privilege value. It defaults to `string`.
         config:
           type: object
+          description: Extra configuration of the privilege. It is empty unless the value type is `select`.
           properties:
             select_options:
               type: array
@@ -14442,7 +14444,7 @@ components:
               example:
                 - google
                 - okta
-              description: Array of string, required only when value_type is `select`.
+              description: The values the privilege accepts. It is only sent when the value type is `select`.
     FeatureObject:
       type: object
       required:
@@ -14517,14 +14519,16 @@ components:
           type:
             - string
             - 'null'
+          maxLength: 255
           example: Number of seats
-          description: Name of the feature.
+          description: Name of the feature. Max 255 characters.
         description:
           type:
             - string
             - 'null'
+          maxLength: 600
           example: Number of users of the account
-          description: Internal description of the feature.
+          description: Internal description of the feature. Max 600 characters.
         privileges:
           type: array
           items:
@@ -14534,14 +14538,16 @@ components:
             properties:
               code:
                 type: string
+                maxLength: 255
                 example: max
-                description: Unique code for the privilege.
+                description: Unique code for the privilege. Max 255 characters.
               name:
                 type:
                   - string
                   - 'null'
+                maxLength: 255
                 example: Maximum
-                description: Display name for the privilege.
+                description: Display name for the privilege. Max 255 characters.
               value_type:
                 type: string
                 enum:
@@ -14550,9 +14556,10 @@ components:
                   - string
                   - select
                 example: integer
-                description: 'Data type of the privilege value. Default: string'
+                description: Data type of the privilege value. It defaults to `string`. It cannot be changed once the privilege exists.
               config:
                 type: object
+                description: Extra configuration of the privilege. It must be left out unless the value type is `select`.
                 properties:
                   select_options:
                     type: array
@@ -14561,7 +14568,7 @@ components:
                     example:
                       - google
                       - okta
-                    description: Array of string, required only when value_type is `select`.
+                    description: The values the privilege accepts. It is required when the value type is `select`, must hold at least one value, and must be left out for the other value types.
           example:
             - code: max
               name: Maximum
@@ -14594,8 +14601,9 @@ components:
               properties:
                 code:
                   type: string
+                  maxLength: 255
                   example: seats
-                  description: Unique code used to identify the feature.
+                  description: Unique code used to identify the feature. Max 255 characters.
     Feature:
       type: object
       required:

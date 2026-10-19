@@ -23,13 +23,14 @@ properties:
       - string
       - select
     example: "integer"
-    description: "Data type of the privilege value. Default: string"
+    description: "Data type of the privilege value. It defaults to `string`."
   config:
     type: object
+    description: "Extra configuration of the privilege. It is empty unless the value type is `select`."
     properties:
       select_options:
         type: array
         items:
           type: string
         example: ["google", "okta"]
-        description: "Array of string, required only when value_type is `select`."
+        description: "The values the privilege accepts. It is only sent when the value type is `select`."

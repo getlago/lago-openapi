@@ -4,14 +4,16 @@ properties:
     type:
       - string
       - "null"
+    maxLength: 255
     example: "Number of seats"
-    description: "Name of the feature."
+    description: "Name of the feature. Max 255 characters."
   description:
     type:
       - string
       - "null"
+    maxLength: 600
     example: "Number of users of the account"
-    description: "Internal description of the feature."
+    description: "Internal description of the feature. Max 600 characters."
   privileges:
     type: array
     items:
@@ -21,14 +23,16 @@ properties:
       properties:
         code:
           type: string
+          maxLength: 255
           example: "max"
-          description: "Unique code for the privilege."
+          description: "Unique code for the privilege. Max 255 characters."
         name:
           type:
             - string
             - "null"
+          maxLength: 255
           example: "Maximum"
-          description: "Display name for the privilege."
+          description: "Display name for the privilege. Max 255 characters."
         value_type:
           type: string
           enum:
@@ -37,16 +41,17 @@ properties:
             - string
             - select
           example: "integer"
-          description: "Data type of the privilege value. Default: string"
+          description: "Data type of the privilege value. It defaults to `string`. It cannot be changed once the privilege exists."
         config:
           type: object
+          description: "Extra configuration of the privilege. It must be left out unless the value type is `select`."
           properties:
             select_options:
               type: array
               items:
                 type: string
               example: [ "google", "okta" ]
-              description: "Array of string, required only when value_type is `select`."
+              description: "The values the privilege accepts. It is required when the value type is `select`, must hold at least one value, and must be left out for the other value types."
     example:
       - code: "max"
         name: "Maximum"
