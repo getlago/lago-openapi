@@ -1,6 +1,7 @@
 type: object
 description: Object that represents rule for wallet recurring transactions.
 required:
+  - applied_invoice_custom_sections
   - created_at
   - expiration_at
   - granted_credits
@@ -11,6 +12,8 @@ required:
   - lago_id
   - method
   - paid_credits
+  - payment_method
+  - purchase_order_number
   - started_at
   - status
   - target_ongoing_balance
