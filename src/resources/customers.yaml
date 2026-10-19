@@ -22,6 +22,8 @@ post:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
 get:
@@ -151,3 +153,5 @@ get:
             $ref: '../schemas/CustomersPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

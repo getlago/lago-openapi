@@ -1940,6 +1940,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -2081,6 +2083,8 @@ paths:
                 $ref: '#/components/schemas/CustomersPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}:
     parameters:
       - name: external_customer_id
@@ -15920,8 +15924,37 @@ components:
         - sequential_id
         - slug
         - external_id
+        - billing_entity_code
+        - address_line1
+        - address_line2
         - applicable_timezone
+        - city
+        - country
+        - currency
+        - email
+        - legal_name
+        - legal_number
+        - logo_url
+        - name
+        - firstname
+        - lastname
+        - account_type
+        - customer_type
+        - phone
+        - state
+        - tax_identification_number
+        - timezone
+        - url
+        - zipcode
+        - net_payment_term
+        - external_salesforce_id
         - created_at
+        - updated_at
+        - finalize_zero_amount_invoice
+        - skip_invoice_custom_sections
+        - billing_configuration
+        - shipping_address
+        - metadata
       properties:
         lago_id:
           type: string
@@ -16034,6 +16067,7 @@ components:
             - company
             - individual
             - null
+          example: company
           description: |-
             The type of the customer. It can have one of the following values:
             - `company`: the customer is a company.
@@ -16124,6 +16158,9 @@ components:
         - type
         - external_customer_id
         - integration_code
+        - code
+        - is_default
+        - category
       description: Configuration specific to the accounting and tax integrations. This object contains settings and parameters necessary for syncing documents and payments.
       properties:
         lago_id:
@@ -16173,9 +16210,11 @@ components:
             - crm
             - null
         external_customer_id:
-          type: string
+          type:
+            - string
+            - 'null'
           example: cus_12345
-          description: The customer ID within the integration's system. If this field is not provided, Lago has the option to create a new customer record within the integration's system on behalf of the customer.
+          description: The customer ID within the integration's system. It is `null` when the customer has not been created in the integration's system yet.
         sync_with_provider:
           type:
             - boolean
@@ -16950,6 +16989,7 @@ components:
                 - company
                 - individual
                 - null
+              example: company
               description: |-
                 The type of the customer. It can have one of the following values:
                 - `company`: the customer is a company.
