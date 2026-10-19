@@ -35,11 +35,12 @@ get:
     - $ref: '../parameters/per_page.yaml'
     - name: search_term
       in: query
-      description: Search in name, code and description.
+      description: Filter features by search term. The term is matched against the name, the code and the description of the feature.
       required: false
       explode: true
       schema:
         type: string
+        example: "seats"
   responses:
     '200':
       description: List of features
