@@ -8815,6 +8815,162 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+  coupon_created:
+    post:
+      operationId: couponCreated
+      summary: A new coupon has been created
+      description: A new coupon has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new coupon
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - coupon
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - coupon.created
+                object_type:
+                  type: string
+                  enum:
+                    - coupon
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                coupon:
+                  $ref: '#/components/schemas/CouponObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  coupon_updated:
+    post:
+      operationId: couponUpdated
+      summary: A coupon has been updated
+      description: A coupon has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the updated coupon
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - coupon
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - coupon.updated
+                object_type:
+                  type: string
+                  enum:
+                    - coupon
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                coupon:
+                  $ref: '#/components/schemas/CouponObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  coupon_deleted:
+    post:
+      operationId: couponDeleted
+      summary: A coupon has been deleted
+      description: A coupon has been deleted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the coupon
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - coupon
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - coupon.deleted
+                object_type:
+                  type: string
+                  enum:
+                    - coupon
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                coupon:
+                  $ref: '#/components/schemas/CouponObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  coupon_terminated:
+    post:
+      operationId: couponTerminated
+      summary: A coupon has been terminated
+      description: A coupon has been terminated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the terminated coupon
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - coupon
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - coupon.terminated
+                object_type:
+                  type: string
+                  enum:
+                    - coupon
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                coupon:
+                  $ref: '#/components/schemas/CouponObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   dunning_campaign_finished:
     post:
       operationId: dunningCampaignFinished
