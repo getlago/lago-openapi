@@ -21887,7 +21887,7 @@ components:
         slug:
           type: string
           example: name1
-          description: A concise and unique identifier for your organization, derived from its `name`. It contains between 3 and 40 characters, limited to lowercase letters, digits and hyphens.
+          description: A concise and unique identifier for your organization, derived from its `name`. It contains between 3 and 40 characters, limited to lowercase letters, digits and hyphens, and it starts and ends with a letter or a digit.
         created_at:
           type: string
           format: date-time
@@ -22151,7 +22151,7 @@ components:
             slug:
               type: string
               example: name1
-              description: A concise and unique identifier for your organization. It must contain between 3 and 40 characters, limited to lowercase letters, digits and hyphens. Lago trims it and converts it to lowercase before saving it.
+              description: A concise and unique identifier for your organization. It must contain between 3 and 40 characters, limited to lowercase letters, digits and hyphens, and it must start and end with a letter or a digit. Lago trims it and converts it to lowercase before saving it. A value already taken by another organization, or one of the names Lago reserves for its own routes, is rejected.
     PaymentReceiptObject:
       type: object
       required:
