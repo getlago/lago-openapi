@@ -11,8 +11,9 @@ properties:
     properties:
       invoice_id:
         type: string
+        format: uuid
         example: "486b147a-02a1-4ccf-8603-f3541fc25e7a"
-        description: Unique identifier assigned to the invoice
+        description: Unique identifier of the invoice the payment is recorded on, created by Lago.
       amount_cents:
         type: integer
         minimum: 1
@@ -22,9 +23,9 @@ properties:
         type: string
         maxLength: 40
         example: "ref1"
-        description: Reference for the payment
+        description: Reference for the payment, such as the bank transfer or cheque number.
       paid_at:
         type: string
         format: date
         example: "2025-02-20"
-        description: The date the payment was made
+        description: The date the payment was made. When omitted, the current date and time is used.

@@ -34,7 +34,7 @@ properties:
   external_customer_id:
     type: string
     example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
-    description: "The customer external unique identifier (provided by your own application)"
+    description: "The customer external unique identifier (provided by your own application)."
   invoice_ids:
     type: array
     description: "List of invoice IDs associated with the payment."
@@ -70,11 +70,11 @@ properties:
     example: "USD"
   status:
     type: string
-    description: "The status of the payment within the payment provider. It differs from one payment provider to another."
+    description: "The status of the payment within the payment provider. It differs from one payment provider to another. It is always `succeeded` for a manual payment."
     example: "Completed"
   payment_status:
     type: string
-    description: "The normalized payment status by Lago."
+    description: "The payment status, normalized by Lago so that it is the same for every payment provider."
     enum:
       - succeeded
       - failed
