@@ -2594,6 +2594,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /customers/{external_customer_id}/payment_requests:
     get:
       tags:
@@ -5136,6 +5138,10 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -5165,6 +5171,8 @@ paths:
                 $ref: '#/components/schemas/PaymentsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /payments/{lago_id}:
     parameters:
       - name: lago_id
@@ -17353,7 +17361,7 @@ components:
         external_customer_id:
           type: string
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-          description: The customer external unique identifier (provided by your own application)
+          description: The customer external unique identifier (provided by your own application).
         invoice_ids:
           type: array
           description: List of invoice IDs associated with the payment.
@@ -17389,11 +17397,11 @@ components:
           example: USD
         status:
           type: string
-          description: The status of the payment within the payment provider. It differs from one payment provider to another.
+          description: The status of the payment within the payment provider. It differs from one payment provider to another. It is always `succeeded` for a manual payment.
           example: Completed
         payment_status:
           type: string
-          description: The normalized payment status by Lago.
+          description: The payment status, normalized by Lago so that it is the same for every payment provider.
           enum:
             - succeeded
             - failed
@@ -22260,8 +22268,9 @@ components:
           properties:
             invoice_id:
               type: string
+              format: uuid
               example: 486b147a-02a1-4ccf-8603-f3541fc25e7a
-              description: Unique identifier assigned to the invoice
+              description: Unique identifier of the invoice the payment is recorded on, created by Lago.
             amount_cents:
               type: integer
               minimum: 1
@@ -22271,12 +22280,12 @@ components:
               type: string
               maxLength: 40
               example: ref1
-              description: Reference for the payment
+              description: Reference for the payment, such as the bank transfer or cheque number.
             paid_at:
               type: string
               format: date
               example: '2025-02-20'
-              description: The date the payment was made
+              description: The date the payment was made. When omitted, the current date and time is used.
     Payment:
       type: object
       required:
