@@ -18862,7 +18862,7 @@ components:
               type:
                 - array
                 - 'null'
-              description: Available with Lago Premium. Only one recurring rule is allowed per wallet. Rules sent from an unlicensed organization are ignored, and the wallet is still created.
+              description: List of recurring transaction rules. Only one recurring rule is allowed per wallet. This is a premium feature, the rules are ignored without a premium license.
               items:
                 type: object
                 description: Object that represents rule for wallet recurring transactions.
@@ -19054,7 +19054,7 @@ components:
               $ref: '#/components/schemas/InvoiceCustomSectionInput'
             recurring_transaction_rules:
               type: array
-              description: Available with Lago Premium. Only one recurring rule is allowed per wallet. Rules sent from an unlicensed organization are ignored, and the wallet is still updated.
+              description: List of recurring transaction rules. Only one recurring rule is allowed per wallet. This is a premium feature, the rules are ignored without a premium license.
               items:
                 type: object
                 description: Object that represents rule for wallet recurring transactions.
