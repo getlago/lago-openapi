@@ -25181,26 +25181,29 @@ components:
           $ref: '#/components/schemas/MinimumCommitmentInput'
         charges:
           type: array
-          description: Additional usage-based charges for this plan.
+          description: |-
+            Usage-based charges to override. On the first override of the subscription's plan, each entry is matched to a plan charge by `id`, and the plan charges that are not listed are kept as they are.
+            When the subscription already uses an overridden plan (`PUT /subscriptions/{external_id}`), the list is applied to that plan: an entry with a known `id` updates the charge, an entry without one creates a new charge from `billable_metric_id`, and a charge missing from the list is removed.
           items:
             type: object
             properties:
               id:
                 type: string
                 format: uuid
-                description: Unique identifier of the charge created by Lago.
+                description: Unique identifier of the plan charge to override, created by Lago.
                 example: 1a901a90-1a90-1a90-1a90-1a901a901a90
               billable_metric_id:
                 type: string
                 format: uuid
-                description: Unique identifier of the billable metric created by Lago.
+                description: Unique identifier of the billable metric created by Lago. Only used to create a new charge on a plan that is already overridden (see `charges`). Ignored on the first override.
                 example: 1a901a90-1a90-1a90-1a90-1a901a901a90
               code:
                 type: string
-                description: Unique code identifying the charge within the plan.
+                description: Unique code identifying the charge within the plan. Only used when a new charge is created on a plan that is already overridden, and generated from the billable metric when it is omitted. Ignored on the first override.
                 example: api_requests_charge
               charge_model:
                 $ref: '#/components/schemas/ChargeModelEnum'
+                description: The charge model. Ignored on the first override, where the charge keeps the charge model of the plan.
               invoice_display_name:
                 type: string
                 description: Specifies the name that will be displayed on an invoice. If no value is set for this field, the name of the actual charge will be used as the default display name.
