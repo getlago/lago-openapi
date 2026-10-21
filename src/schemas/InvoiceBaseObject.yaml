@@ -40,14 +40,12 @@ properties:
   lago_id:
     type: string
     format: "uuid"
-    description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
+    description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   billing_entity_code:
-    type:
-      - string
-      - "null"
+    type: string
     example: "acme_corp"
-    description: The unique code of the billing entity associated with the invoice
+    description: The unique code of the billing entity the invoice was issued from.
   sequential_id:
     type:
       - integer
@@ -128,7 +126,7 @@ properties:
       - failed
     description: |-
       The status of the payment associated with the invoice. It can have one of the following values:
-      - `pending`: the payment is pending, waiting for payment processing in Stripe or when the invoice is emitted but users have not updated the payment status through the endpoint.
+      - `pending`: the payment is pending, waiting for processing by the payment provider, or the invoice has been issued and its payment status has not been updated through the update endpoint.
       - `succeeded`: the payment of the invoice has been successfully processed.
       - `failed`: the payment of the invoice has failed or encountered an error during processing.
     example: succeeded
@@ -155,7 +153,7 @@ properties:
       This field depends on the version number. Here are the definitions based on the version:
       - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
       - Version 2: is equal to the `fees_amount_cents`.
-      - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
+      - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`.
     example: 100
   taxes_amount_cents:
     type: integer
@@ -168,7 +166,7 @@ properties:
       This field depends on the version number. Here are the definitions based on the version:
       - Version 1: is equal to the `total_amount_cents`.
       - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
-      - Version 3 & 4: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
+      - Version 3 & 4: is equal to the sum of `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`.
     example: 120
   prepaid_credit_amount_cents:
     type: integer
@@ -209,6 +207,7 @@ properties:
   version_number:
     type: integer
     example: 3
+    description: The version of the invoice calculation rules applied to this invoice. It determines how the subtotals are computed.
   self_billed:
     type: boolean
     example: false
@@ -238,12 +237,12 @@ properties:
     type: string
     format: "date-time"
     example: "2022-04-29T08:59:51Z"
-    description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the invoice object was created
+    description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It provides a standardized and internationally recognized timestamp for when the invoice object was created.
   updated_at:
     type: string
     format: "date-time"
     example: "2022-04-29T08:59:51Z"
-    description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
+    description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It provides a standardized and internationally recognized timestamp for when the invoice object was last updated.
   voided_at:
     type:
       - string

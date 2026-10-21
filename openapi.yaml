@@ -280,7 +280,7 @@ paths:
         - $ref: '#/components/parameters/per_page'
         - name: from_date
           in: query
-          description: Filter activity logs from a specific date.
+          description: Filter activity logs logged at or after this date. A date or a full ISO 8601 datetime is accepted.
           required: false
           explode: true
           schema:
@@ -289,7 +289,7 @@ paths:
             example: '2022-08-09'
         - name: to_date
           in: query
-          description: Filter activity logs up to a specific date.
+          description: Filter activity logs logged at or before this date. A date or a full ISO 8601 datetime is accepted.
           required: false
           explode: true
           schema:
@@ -298,7 +298,7 @@ paths:
             example: '2022-08-09'
         - name: activity_types[]
           in: query
-          description: Filter results by activity types
+          description: Filter results by activity types.
           required: false
           explode: true
           schema:
@@ -310,7 +310,7 @@ paths:
               - billable_metric.updated
         - name: activity_sources[]
           in: query
-          description: Filter results by activity sources
+          description: Filter results by activity sources.
           required: false
           explode: true
           schema:
@@ -326,7 +326,7 @@ paths:
               - front
         - name: user_emails[]
           in: query
-          description: Filter results by user emails
+          description: Filter results by the email of the user who performed the activity.
           required: false
           explode: true
           schema:
@@ -339,7 +339,7 @@ paths:
         - $ref: '#/components/parameters/external_subscription_id'
         - name: resource_ids[]
           in: query
-          description: Filter results by resources unique identifiers
+          description: Filter results by the unique identifiers of the resources the actions were applied to.
           required: false
           explode: true
           schema:
@@ -352,7 +352,7 @@ paths:
               - 1a901a90-1a90-1a90-1a90-1a901a901a90
         - name: resource_types[]
           in: query
-          description: Filter results by resource class types
+          description: Filter results by resource types.
           required: false
           explode: true
           schema:
@@ -371,14 +371,17 @@ paths:
                 $ref: '#/components/schemas/ActivityLogsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /activity_logs/{activity_id}:
     parameters:
       - name: activity_id
         in: path
-        description: The Activity Id of the existing activity log.
+        description: The unique identifier of the activity log, created by Lago.
         required: true
         schema:
           type: string
+          format: uuid
           example: bdc0eda6-ea52-4f72-a46a-94f47a89b546
     get:
       tags:
@@ -388,13 +391,15 @@ paths:
       operationId: findActivityLog
       responses:
         '200':
-          description: Activity Log
+          description: Activity log
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActivityLog'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /add_ons:
@@ -528,7 +533,7 @@ paths:
       tags:
         - api_logs
       summary: List all API logs
-      description: This endpoint retrieves all existing API logs, which represent the requests made to Lago's API.
+      description: This endpoint retrieves all existing API logs, which represent the requests made to Lago's API. Logs older than the retention period of your organization are left out. The retention period is 30 days unless another one was set for your organization.
       operationId: findAllApiLogs
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1203,11 +1208,12 @@ paths:
         - $ref: '#/components/parameters/per_page'
         - name: search_term
           in: query
-          description: Search in name, code and description.
+          description: Filter features by search term. The term is matched against the name, the code and the description of the feature.
           required: false
           explode: true
           schema:
             type: string
+            example: seats
       responses:
         '200':
           description: List of features
@@ -1940,6 +1946,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -2081,6 +2089,8 @@ paths:
                 $ref: '#/components/schemas/CustomersPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}:
     parameters:
       - name: external_customer_id
@@ -2594,6 +2604,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /customers/{external_customer_id}/payment_requests:
     get:
       tags:
@@ -4021,6 +4033,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -4067,6 +4081,19 @@ paths:
             type: string
             format: date
             example: '2022-08-09'
+        - name: status
+          in: query
+          description: Filter invoices by status. Possible values are `draft`, `failed`, `finalized`, `pending` and `voided`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - draft
+              - finalized
+              - failed
+              - pending
+              - voided
         - name: statuses[]
           in: query
           description: Filter invoices by statuses. Possible values are `draft`, `failed`, `finalized`, `pending` and `voided`.
@@ -4082,6 +4109,17 @@ paths:
                 - failed
                 - pending
                 - voided
+        - name: payment_status
+          in: query
+          description: Filter invoices by payment status. Possible values are `pending`, `failed` or `succeeded`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - pending
+              - failed
+              - succeeded
         - name: payment_statuses[]
           in: query
           description: Filter invoices by payment statuses. Possible values are `pending`, `failed` or `succeeded`.
@@ -4202,6 +4240,10 @@ paths:
                 $ref: '#/components/schemas/InvoicesPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /invoices/{lago_id}:
     parameters:
       - $ref: '#/components/parameters/lago_invoice_id'
@@ -4311,6 +4353,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /invoices/{lago_id}/lose_dispute:
@@ -4353,6 +4397,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /invoices/{lago_id}/retry:
@@ -4375,6 +4421,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
   /invoices/{lago_id}/payment_url:
     post:
       tags:
@@ -5136,6 +5184,10 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -5165,6 +5217,8 @@ paths:
                 $ref: '#/components/schemas/PaymentsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
   /payments/{lago_id}:
     parameters:
       - name: lago_id
@@ -7996,6 +8050,123 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 webhooks:
+  add_on_created:
+    post:
+      operationId: addOnCreated
+      summary: A new add-on has been created
+      description: A new add-on has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new add-on
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - add_on
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - add_on.created
+                object_type:
+                  type: string
+                  enum:
+                    - add_on
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                add_on:
+                  $ref: '#/components/schemas/AddOnObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  add_on_updated:
+    post:
+      operationId: addOnUpdated
+      summary: An add-on has been updated
+      description: An add-on has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the updated add-on
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - add_on
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - add_on.updated
+                object_type:
+                  type: string
+                  enum:
+                    - add_on
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                add_on:
+                  $ref: '#/components/schemas/AddOnObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  add_on_deleted:
+    post:
+      operationId: addOnDeleted
+      summary: An add-on has been deleted
+      description: An add-on has been deleted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the add-on
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - add_on
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - add_on.deleted
+                object_type:
+                  type: string
+                  enum:
+                    - add_on
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                add_on:
+                  $ref: '#/components/schemas/AddOnObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
   alert_triggered:
     post:
       operationId: alertTriggered
@@ -8695,6 +8866,162 @@ webhooks:
                   example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 credit_note_payment_provider_refund_error:
                   $ref: '#/components/schemas/CreditNotePaymentProviderRefundError'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  coupon_created:
+    post:
+      operationId: couponCreated
+      summary: A new coupon has been created
+      description: A new coupon has been created
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the new coupon
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - coupon
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - coupon.created
+                object_type:
+                  type: string
+                  enum:
+                    - coupon
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                coupon:
+                  $ref: '#/components/schemas/CouponObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  coupon_updated:
+    post:
+      operationId: couponUpdated
+      summary: A coupon has been updated
+      description: A coupon has been updated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the updated coupon
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - coupon
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - coupon.updated
+                object_type:
+                  type: string
+                  enum:
+                    - coupon
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                coupon:
+                  $ref: '#/components/schemas/CouponObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  coupon_deleted:
+    post:
+      operationId: couponDeleted
+      summary: A coupon has been deleted
+      description: A coupon has been deleted
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the coupon
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - coupon
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - coupon.deleted
+                object_type:
+                  type: string
+                  enum:
+                    - coupon
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                coupon:
+                  $ref: '#/components/schemas/CouponObject'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  coupon_terminated:
+    post:
+      operationId: couponTerminated
+      summary: A coupon has been terminated
+      description: A coupon has been terminated
+      parameters:
+        - $ref: '#/components/parameters/webhook_signature'
+        - $ref: '#/components/parameters/webhook_signature_algorithm'
+        - $ref: '#/components/parameters/webhook_unique_key'
+      requestBody:
+        description: Details of the terminated coupon
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - webhook_type
+                - object_type
+                - organization_id
+                - coupon
+              properties:
+                webhook_type:
+                  type: string
+                  enum:
+                    - coupon.terminated
+                object_type:
+                  type: string
+                  enum:
+                    - coupon
+                organization_id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the organization, created by Lago.
+                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                coupon:
+                  $ref: '#/components/schemas/CouponObject'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -12524,6 +12851,11 @@ components:
         - activity_id
         - activity_source
         - activity_type
+        - activity_object
+        - activity_object_changes
+        - user_email
+        - external_customer_id
+        - external_subscription_id
         - logged_at
         - resource_id
         - resource_type
@@ -12533,18 +12865,18 @@ components:
           type: string
           format: uuid
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          description: Unique identifier assigned to the activity log within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the activity log record within the Lago system
+          description: Unique identifier assigned to the activity log within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the activity log record within the Lago system.
         user_email:
           type:
             - string
             - 'null'
           format: email
           example: dinesh@piedpiper.example
-          description: The email of the user who performed the activity
+          description: The email of the user who performed the activity. It is null when the action was performed with an API key or by the system.
         activity_type:
           type: string
           example: billable_metric.created
-          description: This field stores the activity action that was performed on the activity_object.
+          description: The action that was performed on the resource.
         activity_source:
           type: string
           example: api
@@ -12552,30 +12884,27 @@ components:
             - api
             - front
             - system
-          description: This field represents the source of the activity log, the interaction source that triggered the action.
+          description: The source that triggered the action.
         activity_object:
           type:
             - object
             - 'null'
-          format: object
           example:
             lago_id: dad68bc7-c01a-4ad8-a87b-13e78693a5bc
             plan_id: b9155544-e261-4e92-b54e-f65d7609294c
-          description: This field represents the final state of the object that the action was applied.
+          description: The state of the resource after the action, keyed by top-level attribute name. Nested values are returned JSON-encoded.
         activity_object_changes:
           type:
             - object
             - 'null'
-          format: object
           example:
-            plan_id:
-              - null
-              - b9155544-e261-4e92-b54e-f65d7609294c
+            plan_id: '[null,"b9155544-e261-4e92-b54e-f65d7609294c"]'
+          description: The attributes the action changed, keyed by attribute name. Each value is the JSON-encoded pair of the previous and the new value. It is empty when the activity type is not an update.
         external_customer_id:
           type:
             - string
             - 'null'
-          description: The customer external unique identifier (provided by your own application)
+          description: The customer external unique identifier (provided by your own application).
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         external_subscription_id:
           type:
@@ -12585,23 +12914,23 @@ components:
           example: external_id
         resource_id:
           type: string
-          description: The resource id of the object that the action was applied.
+          description: The unique identifier of the resource the action was applied to.
           format: uuid
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
         resource_type:
           type: string
-          description: The resource type of the resource_id record.
+          description: The type of the resource the action was applied to.
           example: BillableMetric
         logged_at:
           type: string
           format: date-time
           example: '2025-03-31T12:31:44Z'
-          description: The logged date of the activity, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+          description: The date when the action happened, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
         created_at:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The creation date of the activity record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC). It provides the precise timestamp of when the event's record was created within the Lago application
+          description: The creation date of the activity log record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
     PaginationMeta:
       type: object
       required:
@@ -12824,7 +13153,7 @@ components:
         request_body:
           type: object
           additionalProperties: true
-          description: The parameters of the request, keyed by their top-level name. Nested values are returned JSON-encoded.
+          description: The parameters of the request, keyed by their top-level name. Nested values are returned JSON-encoded. When the log is too large to be stored, this object is replaced by a `truncated` key set to `"true"` and an `original_bytesize` key holding the size of the log before truncation.
           example:
             billable_metric: '{"name":"Storage","code":"storage"}'
         request_origin:
@@ -12842,15 +13171,14 @@ components:
           description: The creation date of the API log record in the Lago application, presented in the ISO 8601 datetime format, specifically in Coordinated Universal Time (UTC).
         request_id:
           type: string
-          format: uuid
-          description: Unique identifier of the API log. It is the identifier of the request.
+          description: Unique identifier of the API log. It is the identifier of the request, taken from the `X-Request-Id` header when the request carries one, and generated by Lago otherwise.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         request_response:
           type:
             - object
             - 'null'
           additionalProperties: true
-          description: The body Lago returned for the request, keyed by its top-level name. Nested values are returned JSON-encoded. Null when the response had no body.
+          description: The body Lago returned for the request, keyed by its top-level name. Nested values are returned JSON-encoded. It is `null` when the response had no body. When the log is too large to be stored, this object is replaced by a `truncated` key set to `"true"` and an `original_bytesize` key holding the size of the log before truncation.
           example:
             billable_metric: '{"lago_id":"b9155544-e261-4e92-b54e-f65d7609294c"}'
     ApiLogsPaginated:
@@ -14154,9 +14482,10 @@ components:
             - string
             - select
           example: integer
-          description: 'Data type of the privilege value. Default: string'
+          description: Data type of the privilege value. It defaults to `string`.
         config:
           type: object
+          description: Extra configuration of the privilege. It is empty unless the value type is `select`.
           properties:
             select_options:
               type: array
@@ -14165,7 +14494,7 @@ components:
               example:
                 - google
                 - okta
-              description: Array of string, required only when value_type is `select`.
+              description: The values the privilege accepts. It is only sent when the value type is `select`.
     FeatureObject:
       type: object
       required:
@@ -14240,14 +14569,16 @@ components:
           type:
             - string
             - 'null'
+          maxLength: 255
           example: Number of seats
-          description: Name of the feature.
+          description: Name of the feature. Max 255 characters.
         description:
           type:
             - string
             - 'null'
+          maxLength: 600
           example: Number of users of the account
-          description: Internal description of the feature.
+          description: Internal description of the feature. Max 600 characters.
         privileges:
           type: array
           items:
@@ -14257,14 +14588,16 @@ components:
             properties:
               code:
                 type: string
+                maxLength: 255
                 example: max
-                description: Unique code for the privilege.
+                description: Unique code for the privilege. Max 255 characters.
               name:
                 type:
                   - string
                   - 'null'
+                maxLength: 255
                 example: Maximum
-                description: Display name for the privilege.
+                description: Display name for the privilege. Max 255 characters.
               value_type:
                 type: string
                 enum:
@@ -14273,9 +14606,10 @@ components:
                   - string
                   - select
                 example: integer
-                description: 'Data type of the privilege value. Default: string'
+                description: Data type of the privilege value. It defaults to `string`. It cannot be changed once the privilege exists.
               config:
                 type: object
+                description: Extra configuration of the privilege. It must be left out unless the value type is `select`.
                 properties:
                   select_options:
                     type: array
@@ -14284,7 +14618,7 @@ components:
                     example:
                       - google
                       - okta
-                    description: Array of string, required only when value_type is `select`.
+                    description: The values the privilege accepts. It is required when the value type is `select`, must hold at least one value, and must be left out for the other value types.
           example:
             - code: max
               name: Maximum
@@ -14317,8 +14651,9 @@ components:
               properties:
                 code:
                   type: string
+                  maxLength: 255
                   example: seats
-                  description: Unique code used to identify the feature.
+                  description: Unique code used to identify the feature. Max 255 characters.
     Feature:
       type: object
       required:
@@ -15647,8 +15982,37 @@ components:
         - sequential_id
         - slug
         - external_id
+        - billing_entity_code
+        - address_line1
+        - address_line2
         - applicable_timezone
+        - city
+        - country
+        - currency
+        - email
+        - legal_name
+        - legal_number
+        - logo_url
+        - name
+        - firstname
+        - lastname
+        - account_type
+        - customer_type
+        - phone
+        - state
+        - tax_identification_number
+        - timezone
+        - url
+        - zipcode
+        - net_payment_term
+        - external_salesforce_id
         - created_at
+        - updated_at
+        - finalize_zero_amount_invoice
+        - skip_invoice_custom_sections
+        - billing_configuration
+        - shipping_address
+        - metadata
       properties:
         lago_id:
           type: string
@@ -15761,6 +16125,7 @@ components:
             - company
             - individual
             - null
+          example: company
           description: |-
             The type of the customer. It can have one of the following values:
             - `company`: the customer is a company.
@@ -15851,6 +16216,9 @@ components:
         - type
         - external_customer_id
         - integration_code
+        - code
+        - is_default
+        - category
       description: Configuration specific to the accounting and tax integrations. This object contains settings and parameters necessary for syncing documents and payments.
       properties:
         lago_id:
@@ -15900,9 +16268,11 @@ components:
             - crm
             - null
         external_customer_id:
-          type: string
+          type:
+            - string
+            - 'null'
           example: cus_12345
-          description: The customer ID within the integration's system. If this field is not provided, Lago has the option to create a new customer record within the integration's system on behalf of the customer.
+          description: The customer ID within the integration's system. It is `null` when the customer has not been created in the integration's system yet.
         sync_with_provider:
           type:
             - boolean
@@ -16677,6 +17047,7 @@ components:
                 - company
                 - individual
                 - null
+              example: company
               description: |-
                 The type of the customer. It can have one of the following values:
                 - `company`: the customer is a company.
@@ -16883,14 +17254,12 @@ components:
         lago_id:
           type: string
           format: uuid
-          description: Unique identifier assigned to the fee within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the fee's record within the Lago system.
+          description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         billing_entity_code:
-          type:
-            - string
-            - 'null'
+          type: string
           example: acme_corp
-          description: The unique code of the billing entity associated with the invoice
+          description: The unique code of the billing entity the invoice was issued from.
         sequential_id:
           type:
             - integer
@@ -16971,7 +17340,7 @@ components:
             - failed
           description: |-
             The status of the payment associated with the invoice. It can have one of the following values:
-            - `pending`: the payment is pending, waiting for payment processing in Stripe or when the invoice is emitted but users have not updated the payment status through the endpoint.
+            - `pending`: the payment is pending, waiting for processing by the payment provider, or the invoice has been issued and its payment status has not been updated through the update endpoint.
             - `succeeded`: the payment of the invoice has been successfully processed.
             - `failed`: the payment of the invoice has failed or encountered an error during processing.
           example: succeeded
@@ -16998,7 +17367,7 @@ components:
             This field depends on the version number. Here are the definitions based on the version:
             - Version 1: is equal to the sum of `fees_amount_cents`, minus `coupons_amount_cents`, and minus `prepaid_credit_amount_cents`.
             - Version 2: is equal to the `fees_amount_cents`.
-            - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`
+            - Version 3 & 4: is equal to the `fees_amount_cents`, minus `coupons_amount_cents`.
           example: 100
         taxes_amount_cents:
           type: integer
@@ -17011,7 +17380,7 @@ components:
             This field depends on the version number. Here are the definitions based on the version:
             - Version 1: is equal to the `total_amount_cents`.
             - Version 2: is equal to the sum of `fees_amount_cents` and `taxes_amount_cents`.
-            - Version 3 & 4: is equal to the sum `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`
+            - Version 3 & 4: is equal to the sum of `sub_total_excluding_taxes_amount_cents` and `taxes_amount_cents`.
           example: 120
         prepaid_credit_amount_cents:
           type: integer
@@ -17052,6 +17421,7 @@ components:
         version_number:
           type: integer
           example: 3
+          description: The version of the invoice calculation rules applied to this invoice. It determines how the subtotals are computed.
         self_billed:
           type: boolean
           example: false
@@ -17081,12 +17451,12 @@ components:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The creation_date provides a standardized and internationally recognized timestamp for when the invoice object was created
+          description: The date of the invoice creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It provides a standardized and internationally recognized timestamp for when the invoice object was created.
         updated_at:
           type: string
           format: date-time
           example: '2022-04-29T08:59:51Z'
-          description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). The update_date provides a standardized and internationally recognized timestamp for when the invoice object was updated
+          description: The date of the invoice update, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC). It provides a standardized and internationally recognized timestamp for when the invoice object was last updated.
         voided_at:
           type:
             - string
@@ -17353,7 +17723,7 @@ components:
         external_customer_id:
           type: string
           example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-          description: The customer external unique identifier (provided by your own application)
+          description: The customer external unique identifier (provided by your own application).
         invoice_ids:
           type: array
           description: List of invoice IDs associated with the payment.
@@ -17389,11 +17759,11 @@ components:
           example: USD
         status:
           type: string
-          description: The status of the payment within the payment provider. It differs from one payment provider to another.
+          description: The status of the payment within the payment provider. It differs from one payment provider to another. It is always `succeeded` for a manual payment.
           example: Completed
         payment_status:
           type: string
-          description: The normalized payment status by Lago.
+          description: The payment status, normalized by Lago so that it is the same for every payment provider.
           enum:
             - succeeded
             - failed
@@ -17507,7 +17877,7 @@ components:
           description: The email address used for sending dunning notifications. It defaults to the customer's own email address, and is `null` when the customer has none.
         amount_cents:
           type: integer
-          description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.
+          description: The amount the payment request collects, expressed in cents. It is the sum of the amounts still due on the invoices it covers, minus the credit notes offset against those invoices.
           example: 100
         amount_currency:
           $ref: '#/components/schemas/Currency'
@@ -17521,7 +17891,7 @@ components:
             - failed
           description: |-
             The status of the payment associated with the payment request. It can have one of the following values:
-            - `pending`: the payment is pending, waiting for payment processing in the payment provider or when the invoice is emitted but users have not updated the payment status through the endpoint.
+            - `pending`: the payment has not been processed yet. A payment request starts with this status.
             - `succeeded`: the payment of the payment request has been successfully processed.
             - `failed`: the payment of the payment request has failed or encountered an error during processing.
           example: succeeded
@@ -17535,6 +17905,7 @@ components:
           description: The customer on which the payment request applies. It refers to the customer account or entity associated with the payment request.
         invoices:
           type: array
+          description: The overdue invoices the payment request collects the payment for.
           items:
             $ref: '#/components/schemas/InvoiceBaseObject'
     PaymentRequestsPaginated:
@@ -17954,6 +18325,7 @@ components:
       type: object
       description: Object that represents rule for wallet recurring transactions.
       required:
+        - applied_invoice_custom_sections
         - created_at
         - expiration_at
         - granted_credits
@@ -17964,6 +18336,8 @@ components:
         - lago_id
         - method
         - paid_credits
+        - payment_method
+        - purchase_order_number
         - started_at
         - status
         - target_ongoing_balance
@@ -18109,18 +18483,30 @@ components:
         - lago_id
         - lago_customer_id
         - external_customer_id
+        - billing_entity_code
         - status
         - currency
+        - name
+        - code
+        - purchase_order_number
         - rate_amount
         - credits_balance
-        - balance_cents
-        - consumed_credits
-        - created_at
-        - ongoing_balance_cents
-        - invoice_requires_successful_payment
-        - ongoing_usage_balance_cents
         - credits_ongoing_balance
         - credits_ongoing_usage_balance
+        - balance_cents
+        - ongoing_balance_cents
+        - ongoing_usage_balance_cents
+        - consumed_credits
+        - created_at
+        - expiration_at
+        - last_balance_sync_at
+        - last_consumed_credit_at
+        - terminated_at
+        - invoice_requires_successful_payment
+        - paid_top_up_min_amount_cents
+        - paid_top_up_max_amount_cents
+        - priority
+        - payment_method
       properties:
         lago_id:
           type: string
@@ -20325,7 +20711,7 @@ components:
                       - number
                       - 'null'
                     pattern: ^[0-9]+.?[0-9]*$
-                    description: The quantity of units associated with the fee. Accepts a number or a string formatted as a BigDecimal. By default, only 1 unit is added to the invoice.
+                    description: The quantity of units associated with the fee. Accepts a number or a decimal string. By default, only 1 unit is added to the invoice.
                     example: '2.5'
                   description:
                     type:
@@ -21887,7 +22273,7 @@ components:
         slug:
           type: string
           example: name1
-          description: A concise and unique identifier for your organization, derived from its `name`. It contains between 3 and 40 characters, limited to lowercase letters, digits and hyphens.
+          description: A concise and unique identifier for your organization, derived from its `name`. It contains between 3 and 40 characters, limited to lowercase letters, digits and hyphens, and it starts and ends with a letter or a digit.
         created_at:
           type: string
           format: date-time
@@ -22151,7 +22537,7 @@ components:
             slug:
               type: string
               example: name1
-              description: A concise and unique identifier for your organization. It must contain between 3 and 40 characters, limited to lowercase letters, digits and hyphens. Lago trims it and converts it to lowercase before saving it.
+              description: A concise and unique identifier for your organization. It must contain between 3 and 40 characters, limited to lowercase letters, digits and hyphens, and it must start and end with a letter or a digit. Lago trims it and converts it to lowercase before saving it. A value already taken by another organization, or one of the names Lago reserves for its own routes, is rejected.
     PaymentReceiptObject:
       type: object
       required:
@@ -22223,7 +22609,7 @@ components:
             external_customer_id:
               type: string
               example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
-              description: The customer external unique identifier (provided by your own application)
+              description: The customer external unique identifier (provided by your own application).
             email:
               type: string
               format: email
@@ -22231,9 +22617,10 @@ components:
               description: The email address used for sending dunning notifications. When omitted, the customer's own email address is used.
             lago_invoice_ids:
               type: array
-              description: A list of Lago IDs for the customer's overdue invoices to start the dunning process
+              description: A list of Lago IDs for the customer's overdue invoices to start the dunning process.
               items:
                 type: string
+                format: uuid
                 example: 1a901a90-1a90-1a90-1a90-1a901a901a90
                 description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
             payment_method:
@@ -22260,8 +22647,9 @@ components:
           properties:
             invoice_id:
               type: string
+              format: uuid
               example: 486b147a-02a1-4ccf-8603-f3541fc25e7a
-              description: Unique identifier assigned to the invoice
+              description: Unique identifier of the invoice the payment is recorded on, created by Lago.
             amount_cents:
               type: integer
               minimum: 1
@@ -22271,12 +22659,12 @@ components:
               type: string
               maxLength: 40
               example: ref1
-              description: Reference for the payment
+              description: Reference for the payment, such as the bank transfer or cheque number.
             paid_at:
               type: string
               format: date
               example: '2025-02-20'
-              description: The date the payment was made
+              description: The date the payment was made. When omitted, the current date and time is used.
     Payment:
       type: object
       required:
@@ -25775,6 +26163,7 @@ components:
         - lago_invoice_id
         - lago_credit_note_id
         - lago_voided_invoice_id
+        - billing_entity_code
         - status
         - source
         - transaction_status

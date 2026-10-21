@@ -38,7 +38,7 @@ properties:
   slug:
     type: string
     example: "name1"
-    description: A concise and unique identifier for your organization, derived from its `name`. It contains between 3 and 40 characters, limited to lowercase letters, digits and hyphens.
+    description: A concise and unique identifier for your organization, derived from its `name`. It contains between 3 and 40 characters, limited to lowercase letters, digits and hyphens, and it starts and ends with a letter or a digit.
   created_at:
     type: string
     format: "date-time"

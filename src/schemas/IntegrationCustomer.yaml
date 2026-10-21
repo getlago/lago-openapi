@@ -4,6 +4,9 @@ required:
   - type
   - external_customer_id
   - integration_code
+  - code
+  - is_default
+  - category
 description: Configuration specific to the accounting and tax integrations. This object contains settings and parameters necessary for syncing documents and payments.
 properties:
   lago_id:
@@ -53,9 +56,11 @@ properties:
       - crm
       - null
   external_customer_id:
-    type: string
+    type:
+      - string
+      - "null"
     example: "cus_12345"
-    description: The customer ID within the integration's system. If this field is not provided, Lago has the option to create a new customer record within the integration's system on behalf of the customer.
+    description: The customer ID within the integration's system. It is `null` when the customer has not been created in the integration's system yet.
   sync_with_provider:
     type:
       - boolean

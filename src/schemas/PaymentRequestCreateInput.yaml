@@ -11,7 +11,7 @@ properties:
       external_customer_id:
         type: string
         example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
-        description: The customer external unique identifier (provided by your own application)
+        description: The customer external unique identifier (provided by your own application).
       email:
         type: string
         format: "email"
@@ -19,9 +19,10 @@ properties:
         description: The email address used for sending dunning notifications. When omitted, the customer's own email address is used.
       lago_invoice_ids:
         type: array
-        description: A list of Lago IDs for the customer's overdue invoices to start the dunning process
+        description: A list of Lago IDs for the customer's overdue invoices to start the dunning process.
         items:
           type: string
+          format: "uuid"
           example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
           description: Unique identifier assigned to the invoice within the Lago application. This ID is exclusively created by Lago and serves as a unique identifier for the invoice's record within the Lago system.
       payment_method:

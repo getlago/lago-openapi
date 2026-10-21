@@ -1,0 +1,38 @@
+post:
+  operationId: addOnUpdated
+  summary: An add-on has been updated
+  description: An add-on has been updated
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the updated add-on
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - add_on
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - add_on.updated
+            object_type:
+              type: string
+              enum:
+                - add_on
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            add_on:
+              $ref: "../schemas/AddOnObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully

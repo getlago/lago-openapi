@@ -23,7 +23,7 @@ properties:
     description: The email address used for sending dunning notifications. It defaults to the customer's own email address, and is `null` when the customer has none.
   amount_cents:
     type: integer
-    description: The sum of the total amounts of all the invoices included in the payment request, expressed in cents.
+    description: The amount the payment request collects, expressed in cents. It is the sum of the amounts still due on the invoices it covers, minus the credit notes offset against those invoices.
     example: 100
   amount_currency:
     $ref: "./Currency.yaml"
@@ -37,7 +37,7 @@ properties:
       - failed
     description: |-
       The status of the payment associated with the payment request. It can have one of the following values:
-      - `pending`: the payment is pending, waiting for payment processing in the payment provider or when the invoice is emitted but users have not updated the payment status through the endpoint.
+      - `pending`: the payment has not been processed yet. A payment request starts with this status.
       - `succeeded`: the payment of the payment request has been successfully processed.
       - `failed`: the payment of the payment request has failed or encountered an error during processing.
     example: succeeded
@@ -51,5 +51,6 @@ properties:
     description: The customer on which the payment request applies. It refers to the customer account or entity associated with the payment request.
   invoices:
     type: array
+    description: The overdue invoices the payment request collects the payment for.
     items:
       $ref: "./InvoiceBaseObject.yaml"

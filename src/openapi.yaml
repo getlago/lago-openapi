@@ -423,6 +423,12 @@ paths:
   /webhook_endpoints/{lago_id}:
     $ref: "./resources/webhook_endpoint.yaml"
 webhooks:
+  add_on_created:
+    $ref: "./webhooks/add_on_created.yaml"
+  add_on_updated:
+    $ref: "./webhooks/add_on_updated.yaml"
+  add_on_deleted:
+    $ref: "./webhooks/add_on_deleted.yaml"
   alert_triggered:
     $ref: "./webhooks/alert_triggered.yaml"
   billable_metric_created:
@@ -459,6 +465,14 @@ webhooks:
     $ref: "./webhooks/credit_note_generated.yaml"
   credit_note_provider_refund_failure:
     $ref: "./webhooks/credit_note_provider_refund_failure.yaml"
+  coupon_created:
+    $ref: "./webhooks/coupon_created.yaml"
+  coupon_updated:
+    $ref: "./webhooks/coupon_updated.yaml"
+  coupon_deleted:
+    $ref: "./webhooks/coupon_deleted.yaml"
+  coupon_terminated:
+    $ref: "./webhooks/coupon_terminated.yaml"
   dunning_campaign_finished:
     $ref: "./webhooks/dunning_campaign_finished.yaml"
   event_error:
