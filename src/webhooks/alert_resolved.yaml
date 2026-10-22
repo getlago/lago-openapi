@@ -1,0 +1,41 @@
+post:
+  operationId: alertResolved
+  summary: An alert was resolved
+  description: |-
+    One or more thresholds that had triggered the alert are no longer in alarm.
+
+    Only thresholds with `resolved` in their `notify_on` are announced, and only when Lago recorded an alarm for their code. A threshold that was already in alarm when it was created or opted in is recorded silently, so its first recovery is announced without an earlier `alert.triggered`. Pairing is by threshold code: a threshold replaced by another one with the same code resolves the alarm the first one raised.
+  parameters:
+    - $ref: "../parameters/webhook_signature.yaml"
+    - $ref: "../parameters/webhook_signature_algorithm.yaml"
+    - $ref: "../parameters/webhook_unique_key.yaml"
+  requestBody:
+    description: Details of the resolved alert
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - webhook_type
+            - object_type
+            - organization_id
+            - resolved_alert
+          properties:
+            webhook_type:
+              type: string
+              enum:
+                - alert.resolved
+            object_type:
+              type: string
+              enum:
+                - resolved_alert
+            organization_id:
+              type: string
+              format: "uuid"
+              description: Unique identifier of the organization, created by Lago.
+              example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+            resolved_alert:
+              $ref: "../schemas/ResolvedAlertObject.yaml"
+  responses:
+    "200":
+      description: Return a 200 status to indicate that the data was received successfully
