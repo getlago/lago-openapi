@@ -148,6 +148,8 @@ tags:
     description: Everything about Order form collection
   - name: orders
     description: Everything about Order collection
+  - name: usage_attribution_types
+    description: Everything about Usage attribution type collection
 
 paths:
   /billing_entities:
@@ -248,6 +250,8 @@ paths:
     $ref: "./resources/customer_projected_usage.yaml"
   /customers/{external_customer_id}/past_usage:
     $ref: "./resources/customer_past_usage.yaml"
+  /customers/{external_customer_id}/attributed_usage:
+    $ref: "./resources/customer_attributed_usage.yaml"
   /customers/{external_customer_id}/checkout_url:
     $ref: "./resources/customer_checkout_url.yaml"
   /customers/{external_customer_id}/payment_methods:
@@ -394,6 +398,10 @@ paths:
     $ref: "./resources/taxes.yaml"
   /taxes/{code}:
     $ref: "./resources/tax.yaml"
+  /usage_attribution_types:
+    $ref: "./resources/usage_attribution_types.yaml"
+  /usage_attribution_types/{code}:
+    $ref: "./resources/usage_attribution_type.yaml"
   /wallets:
     $ref: "./resources/wallets.yaml"
   /wallets/{lago_id}:

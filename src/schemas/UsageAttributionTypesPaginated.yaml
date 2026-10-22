@@ -1,0 +1,11 @@
+type: object
+required:
+  - usage_attribution_types
+  - meta
+properties:
+  usage_attribution_types:
+    type: array
+    items:
+      $ref: "./UsageAttributionTypeObject.yaml"
+  meta:
+    $ref: "./PaginationMeta.yaml"
