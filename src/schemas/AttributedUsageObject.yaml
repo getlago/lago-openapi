@@ -1,0 +1,58 @@
+type: object
+required:
+  - lago_subscription_id
+  - external_subscription_id
+  - group_by
+  - basis
+  - from_datetime
+  - to_datetime
+  - currency
+  - rows
+  - unattributed
+  - totals
+properties:
+  lago_subscription_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the subscription, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  external_subscription_id:
+    type: string
+    description: Unique identifier of the subscription in your application.
+    example: "sub_1234567890"
+  group_by:
+    type: string
+    description: Code of the usage attribution type the usage is grouped by.
+    example: "team"
+  basis:
+    type: string
+    enum:
+      - units
+      - amount
+    description: Basis of the breakdown. With `units`, amounts are `null` and values are ranked by number of events. With `amount`, amounts are computed and values are ranked by amount.
+    example: "amount"
+  from_datetime:
+    type: string
+    format: date-time
+    description: Start of the period of the usage, in UTC.
+    example: "2022-04-01T00:00:00Z"
+  to_datetime:
+    type: string
+    format: date-time
+    description: End of the period of the usage, in UTC.
+    example: "2022-04-30T23:59:59Z"
+  currency:
+    $ref: "./Currency.yaml"
+  rows:
+    type: array
+    items:
+      $ref: "./AttributedUsageRowObject.yaml"
+    description: Usage of each attribution value of the page, ordered by rank.
+  unattributed:
+    allOf:
+      - $ref: "./AttributedUsageTotalsObject.yaml"
+    description: Usage of the events that carry no value for the `group_by` usage attribution type.
+  totals:
+    allOf:
+      - $ref: "./AttributedUsageTotalsObject.yaml"
+    description: Usage of the whole level, attributed and unattributed, for all pages. A `search_term` does not narrow the totals.
