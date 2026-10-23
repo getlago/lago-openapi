@@ -9143,7 +9143,7 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
-  feature.created:
+  feature_created:
     post:
       operationId: featureCreated
       summary: A new feature has been created
@@ -9182,7 +9182,7 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
-  feature.updated:
+  feature_updated:
     post:
       operationId: featureUpdated
       summary: A feature has been updated
@@ -9221,7 +9221,7 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
-  feature.deleted:
+  feature_deleted:
     post:
       operationId: featureDeleted
       summary: A feature has been deleted
