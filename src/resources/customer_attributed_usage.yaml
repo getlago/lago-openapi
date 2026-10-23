@@ -1,0 +1,146 @@
+get:
+  tags:
+    - customers
+  summary: Retrieve customer attributed usage
+  description: >-
+    This endpoint retrieves the usage of an active subscription broken down by the values of a usage attribution type,
+    one level of the account tree at a time. Only charges whose billable metric uses the `count_agg` or `sum_agg`
+    aggregation and is not recurring are included. By default, the usage covers the current billing period, narrowed
+    to its last 31 days when the period is longer.
+  operationId: findCustomerAttributedUsage
+  parameters:
+    - $ref: '../parameters/external_customer_id_path.yaml'
+    - name: external_subscription_id
+      in: query
+      description: The unique identifier of the subscription within your application. The subscription must be active.
+      required: true
+      explode: true
+      schema:
+        type: string
+        example: 'sub_1234567890'
+    - name: group_by
+      in: query
+      description: >-
+        Code of the usage attribution type to group the usage by. When the type has a parent, `filters` must include a
+        value of the parent type, so the tree is read one level at a time.
+      required: true
+      explode: true
+      schema:
+        type: string
+        example: 'team'
+    - name: filters
+      in: query
+      description: >-
+        Values of usage attribution types to filter the usage by, keyed by type code, e.g.
+        `filters[department]=rnd&filters[model][]=opus&filters[model][]=haiku`. Each type accepts up to 20 values, and up
+        to 3 `flat` types can be filtered on.
+      required: false
+      style: deepObject
+      explode: true
+      schema:
+        type: object
+        additionalProperties:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        example:
+          department: 'rnd'
+    - name: from_datetime
+      in: query
+      description: >-
+        Start of the period, in ISO 8601 format. It must be sent together with `to_datetime`, and the period cannot be
+        longer than 31 days. It is moved to the start of the subscription when earlier.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: date-time
+        example: '2022-04-01T00:00:00Z'
+    - name: to_datetime
+      in: query
+      description: End of the period, in ISO 8601 format. It must be sent together with `from_datetime`.
+      required: false
+      explode: true
+      schema:
+        type: string
+        format: date-time
+        example: '2022-04-30T23:59:59Z'
+    - name: charge_codes[]
+      in: query
+      description: Codes of the charges of the plan to include. All the supported charges are included when it is not sent.
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+          - 'tokens'
+    - name: split_charge_code
+      in: query
+      description: >-
+        Code of a charge of the plan to split by charge filter, with one entry per filter in `charges_usage`. The charge
+        must have between 1 and 10 filters, and must be part of `charge_codes[]` when it is sent.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: 'tokens'
+    - name: search_term
+      in: query
+      description: Filter the attribution values by search term, up to 100 characters. The totals are not affected by the search.
+      required: false
+      explode: true
+      schema:
+        type: string
+        maxLength: 100
+        example: 'eng'
+    - name: basis
+      in: query
+      description: >-
+        Basis of the breakdown. With `units`, values are ranked by number of events and no amount is computed. With
+        `amount`, amounts are computed and values are ranked by amount.
+      required: false
+      explode: true
+      schema:
+        type: string
+        enum:
+          - units
+          - amount
+        default: units
+        example: 'amount'
+    - $ref: '../parameters/page.yaml'
+    - name: per_page
+      in: query
+      description: Number of attribution values per page, between 1 and 100.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 50
+        example: 20
+  responses:
+    '200':
+      description: Customer attributed usage
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/AttributedUsage.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      description: Unprocessable entity error
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../schemas/ApiErrorUnprocessableEntity.yaml'
+              - $ref: '../schemas/ApiErrorAttributedUsageQueryLimit.yaml'

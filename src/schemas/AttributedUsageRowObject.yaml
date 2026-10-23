@@ -1,0 +1,39 @@
+type: object
+required:
+  - value
+  - rank
+  - amount_cents
+  - precise_amount_cents
+  - events_count
+  - charges_usage
+properties:
+  value:
+    type: string
+    description: Attribution value the usage is attributed to, at the level of the `group_by` usage attribution type.
+    example: "engineering"
+  rank:
+    type: integer
+    description: Rank of the value in the level, starting at 1. Values are ranked by amount when `basis` is `amount`, and by number of events otherwise.
+    example: 1
+  amount_cents:
+    type:
+      - integer
+      - "null"
+    description: Amount of the usage in cents, rounded to the nearest cent. It is `null` when `basis` is `units`.
+    example: 1200
+  precise_amount_cents:
+    type:
+      - string
+      - "null"
+    pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+    description: Amount of the usage in cents, sent as a decimal string. It is `null` when `basis` is `units`.
+    example: "1200.4567"
+  events_count:
+    type: integer
+    description: Number of events.
+    example: 42
+  charges_usage:
+    type: array
+    items:
+      $ref: "./AttributedUsageChargeUsageObject.yaml"
+    description: Usage of each charge of the plan, in the order of the charges. A charge split by `split_charge_code` has one entry per filter, then one for the usage that matches none of its filters.
