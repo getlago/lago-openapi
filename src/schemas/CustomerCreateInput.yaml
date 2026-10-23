@@ -21,20 +21,23 @@ properties:
         type:
           - string
           - "null"
+        maxLength: 500
         example: "5230 Penfield Ave"
-        description: The first line of the billing address
+        description: "The first line of the billing address (500 characters max)."
       address_line2:
         type:
           - string
           - "null"
+        maxLength: 500
         example: ""
-        description: The second line of the billing address
+        description: "The second line of the billing address (500 characters max)."
       city:
         type:
           - string
           - "null"
+        maxLength: 255
         example: "Woodland Hills"
-        description: The city of the customer's billing address
+        description: "The city of the customer's billing address (255 characters max)."
       country:
         $ref: "./CountryOrNull.yaml"
         description: Country code of the customer's billing address. Format must be ISO 3166 (alpha-2)
@@ -53,8 +56,9 @@ properties:
         type:
           - string
           - "null"
+        maxLength: 255
         example: "Coleman-Blair"
-        description: The legal company name of the customer
+        description: "The legal company name of the customer (255 characters max)."
       legal_number:
         type:
           - string
@@ -78,14 +82,16 @@ properties:
         type:
           - string
           - "null"
+        maxLength: 255
         example: "Gavin"
-        description: "First name of the customer"
+        description: "First name of the customer (255 characters max)."
       lastname:
         type:
           - string
           - "null"
+        maxLength: 255
         example: "Belson"
-        description: "Last name of the customer"
+        description: "Last name of the customer (255 characters max)."
       account_type:
         type: string
         enum:
@@ -121,16 +127,18 @@ properties:
         type:
           - string
           - "null"
+        maxLength: 255
         example: "CA"
-        description: The state of the customer's billing address
+        description: "The state of the customer's billing address (255 characters max)."
       tax_codes:
         $ref: "./TaxCodes.yaml"
       tax_identification_number:
         type:
           - string
           - "null"
+        maxLength: 255
         example: "EU123456789"
-        description: The tax identification number of the customer
+        description: "The tax identification number of the customer (255 characters max)."
       timezone:
         $ref: "./TimezoneOrNull.yaml"
         description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
@@ -144,8 +152,9 @@ properties:
         type:
           - string
           - "null"
+        maxLength: 255
         example: "91364"
-        description: The zipcode of the customer's billing address
+        description: "The zipcode of the customer's billing address (255 characters max)."
       net_payment_term:
         type:
           - integer
@@ -173,7 +182,20 @@ properties:
       billing_configuration:
         $ref: "./CustomerBillingConfiguration.yaml"
       shipping_address:
-        $ref: "./Address.yaml"
+        allOf:
+          - $ref: "./Address.yaml"
+          - properties:
+              address_line1:
+                maxLength: 500
+              address_line2:
+                maxLength: 500
+              city:
+                maxLength: 255
+              state:
+                maxLength: 255
+              zipcode:
+                maxLength: 255
+        description: The shipping address of the customer. The address lines accept up to 500 characters, the city, state and zipcode up to 255.
       integration_customers:
         type: array
         items:
