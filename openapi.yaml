@@ -11324,11 +11324,12 @@ components:
     per_page:
       name: per_page
       in: query
-      description: Number of records per page.
+      description: Number of records per page. The maximum is 200. A larger value returns a `422` error with `value_is_out_of_range` on `per_page`.
       required: false
       explode: true
       schema:
         type: integer
+        maximum: 200
         example: 20
     external_customer_id:
       name: external_customer_id
