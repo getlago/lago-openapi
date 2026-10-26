@@ -11324,7 +11324,7 @@ components:
     per_page:
       name: per_page
       in: query
-      description: Number of records per page.
+      description: Number of records per page. The maximum is 200, unless a higher limit was set for your organization. A larger value returns a `422` error with `value_is_out_of_range` on `per_page`.
       required: false
       explode: true
       schema:
