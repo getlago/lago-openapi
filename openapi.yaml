@@ -15871,7 +15871,7 @@ components:
             - integer
             - 'null'
           example: 3
-          description: The grace period, expressed in days, for the invoice. This period refers to the additional time granted to the customer beyond the invoice due date to adjust usage and line items. It is null when the customer has no grace period of its own and falls back to the billing entity.
+          description: The grace period, expressed in days, for the invoice. This period refers to the additional time granted to the customer beyond the invoice due date to adjust usage and line items. It is null when the customer has no grace period of its own and falls back to the billing entity. This is a premium feature, the value is ignored without a premium license.
         subscription_invoice_issuing_date_anchor:
           type:
             - string
@@ -17127,7 +17127,7 @@ components:
               description: The tax identification number of the customer (255 characters max).
             timezone:
               $ref: '#/components/schemas/TimezoneOrNull'
-              description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
+              description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone. This is a premium feature, the value is ignored without a premium license.
             url:
               type:
                 - string
@@ -17184,6 +17184,7 @@ components:
               description: The shipping address of the customer. The address lines accept up to 500 characters, the city, state and zipcode up to 255.
             integration_customers:
               type: array
+              description: The integration customers to create or update for this customer. Only one entry per `integration_type` is accepted; sending two entries with the same type returns a `422` error with `invalid_count_per_integration_type` on `integration_customers`.
               items:
                 type: object
                 properties:

@@ -141,7 +141,7 @@ properties:
         description: "The tax identification number of the customer (255 characters max)."
       timezone:
         $ref: "./TimezoneOrNull.yaml"
-        description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone
+        description: The customer's timezone, used for billing purposes in their local time. Overrides the organization's timezone. This is a premium feature, the value is ignored without a premium license.
       url:
         type:
           - string
@@ -198,6 +198,7 @@ properties:
         description: The shipping address of the customer. The address lines accept up to 500 characters, the city, state and zipcode up to 255.
       integration_customers:
         type: array
+        description: The integration customers to create or update for this customer. Only one entry per `integration_type` is accepted; sending two entries with the same type returns a `422` error with `invalid_count_per_integration_type` on `integration_customers`.
         items:
           type: object
           properties:
