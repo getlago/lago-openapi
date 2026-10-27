@@ -3117,7 +3117,7 @@ paths:
       tags:
         - wallets
       summary: Update a wallet alert
-      description: This endpoint allows you to update an existing alert for a wallet.
+      description: This endpoint allows you to update an existing alert for a wallet. A non-empty `thresholds` array replaces the whole set of thresholds on the alert. When `thresholds` is left out, or sent as an empty array, the thresholds already on the alert are kept. A threshold sent with a `code` it already had, and without `notify_on`, keeps the `notify_on` it had.
       operationId: updateCustomerWalletAlert
       requestBody:
         description: Update an existing alert for a wallet
@@ -6758,7 +6758,7 @@ paths:
       summary: Update a subscription alert
       parameters:
         - $ref: '#/components/parameters/subscription_status'
-      description: This endpoint allows you to update an existing alert for a subscription.
+      description: This endpoint allows you to update an existing alert for a subscription. A non-empty `thresholds` array replaces the whole set of thresholds on the alert. When `thresholds` is left out, or sent as an empty array, the thresholds already on the alert are kept. A threshold sent with a `code` it already had, and without `notify_on`, keeps the `notify_on` it had.
       operationId: updateSubscriptionAlert
       requestBody:
         description: Update an existing alert for a subscription
@@ -19452,7 +19452,7 @@ components:
           example: Storage Usage Alert
         thresholds:
           type: array
-          description: Array of thresholds associated with the alert.
+          description: Array of thresholds associated with the alert. An alert accepts at most 20 thresholds, and a larger array returns a `422` error with `too_many_thresholds` on `thresholds`. Two thresholds cannot share the same value and the same `recurring` flag. The value of a recurring threshold must be positive.
           items:
             $ref: '#/components/schemas/AlertThresholdInput'
     WalletAlertCreateInput:

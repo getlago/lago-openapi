@@ -29,7 +29,11 @@ put:
   tags:
     - wallets
   summary: Update a wallet alert
-  description: This endpoint allows you to update an existing alert for a wallet.
+  description: >-
+    This endpoint allows you to update an existing alert for a wallet.
+    A non-empty `thresholds` array replaces the whole set of thresholds on the alert.
+    When `thresholds` is left out, or sent as an empty array, the thresholds already on the alert are kept.
+    A threshold sent with a `code` it already had, and without `notify_on`, keeps the `notify_on` it had.
   operationId: updateCustomerWalletAlert
   requestBody:
     description: Update an existing alert for a wallet

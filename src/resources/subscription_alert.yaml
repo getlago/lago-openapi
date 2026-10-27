@@ -38,7 +38,11 @@ put:
   summary: Update a subscription alert
   parameters:
     - $ref: "../parameters/subscription_status.yaml"
-  description: This endpoint allows you to update an existing alert for a subscription.
+  description: >-
+    This endpoint allows you to update an existing alert for a subscription.
+    A non-empty `thresholds` array replaces the whole set of thresholds on the alert.
+    When `thresholds` is left out, or sent as an empty array, the thresholds already on the alert are kept.
+    A threshold sent with a `code` it already had, and without `notify_on`, keeps the `notify_on` it had.
   operationId: updateSubscriptionAlert
   requestBody:
     description: Update an existing alert for a subscription
