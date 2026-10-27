@@ -73,6 +73,10 @@ properties:
           type: object
           description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
           properties:
+            code:
+              type: string
+              description: The code of the pricing unit.
+              example: "credits"
             conversion_rate:
               type: string
               description: |-

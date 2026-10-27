@@ -6411,7 +6411,7 @@ paths:
               - pending
         - name: billing_entity_codes[]
           in: query
-          description: Filter subscriptions by billing entity codes.
+          description: Filter subscriptions by billing entity codes. A code that does not match a billing entity of the organization returns a `404` error.
           required: false
           explode: true
           schema:
@@ -6430,6 +6430,8 @@ paths:
                 $ref: '#/components/schemas/SubscriptionsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /subscriptions/{external_id}:
     parameters:
       - name: external_id
@@ -6515,6 +6517,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     delete:
@@ -6584,6 +6588,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /subscriptions/{external_id}/lifetime_usage:
@@ -25302,6 +25308,10 @@ components:
                 type: object
                 description: Updates the pricing unit conversion rate for this charge. Only applies if the charge has applied pricing unit.
                 properties:
+                  code:
+                    type: string
+                    description: The code of the pricing unit.
+                    example: credits
                   conversion_rate:
                     type: string
                     description: |-
