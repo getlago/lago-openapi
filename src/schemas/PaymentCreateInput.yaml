@@ -28,4 +28,4 @@ properties:
         type: string
         format: date
         example: "2025-02-20"
-        description: The date the payment was made. When omitted, the current date and time is used.
+        description: The date the payment was made. It is returned as the payment's `created_at`. When omitted, the date and time of the request is used.

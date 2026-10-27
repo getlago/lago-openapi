@@ -145,7 +145,7 @@ properties:
   created_at:
     type: string
     format: date-time
-    description: "Timestamp when the payment was created in Lago's database, not on the payment provider."
+    description: "Timestamp of the payment in Lago's database, not on the payment provider. On a manual payment recorded with `paid_at`, it holds the `paid_at` value instead of the time the payment was recorded."
     example: "2025-01-21T00:10:29Z"
   payment_method:
     $ref: "./PaymentMethodObject.yaml"
