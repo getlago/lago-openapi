@@ -84,7 +84,7 @@ get:
         example: [active,pending]
     - name: billing_entity_codes[]
       in: query
-      description: Filter subscriptions by billing entity codes.
+      description: Filter subscriptions by billing entity codes. A code that does not match a billing entity of the organization returns a `404` error.
       required: false
       explode: true
       schema:
@@ -102,3 +102,5 @@ get:
             $ref: '../schemas/SubscriptionsPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
