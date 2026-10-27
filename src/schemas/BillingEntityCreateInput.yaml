@@ -57,7 +57,7 @@ properties:
           invoice_grace_period:
             type: integer
             example: 0
-            description: The grace period (in days) for invoice finalization
+            description: The grace period (in days) for invoice finalization. This is a premium feature, the value is ignored without a premium license.
           subscription_invoice_issuing_date_anchor:
             type: string
             description: |-
@@ -144,7 +144,7 @@ properties:
         description: The tax identification number of the billing entity
       timezone:
         $ref: './Timezone.yaml'
-        description: The timezone of the billing entity
+        description: The timezone of the billing entity. This is a premium feature, the value is ignored without a premium license.
         example: "UTC"
       email_settings:
         type: array
@@ -154,7 +154,7 @@ properties:
             - invoice.finalized
             - credit_note.created
             - payment_receipt.created
-        description: The email notification settings for this billing entity
+        description: The email notification settings for this billing entity. This is a premium feature, the value is ignored without a premium license.
       eu_tax_management:
         type: boolean
         example: false

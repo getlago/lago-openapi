@@ -24,13 +24,11 @@ properties:
           - `per_customer`: document numbers are unique per customer
           - `per_billing_entity`: document numbers are unique per billing entity
       document_number_prefix:
-        type:
-          - string
-          - "null"
+        type: string
         minLength: 1
         maxLength: 10
         example: "ABC-123"
-        description: The prefix used in document numbers for this billing entity (1 to 10 characters). It is upper cased.
+        description: The prefix used in document numbers for this billing entity (1 to 10 characters). It is upper cased. It cannot be removed once the billing entity exists, and sending `null` returns a `422` error.
       finalize_zero_amount_invoice:
         type: boolean
         example: true
@@ -50,7 +48,7 @@ properties:
           invoice_grace_period:
             type: integer
             example: 0
-            description: The grace period (in days) for invoice finalization
+            description: The grace period (in days) for invoice finalization. This is a premium feature, the value is ignored without a premium license.
           subscription_invoice_issuing_date_anchor:
             type: string
             description: |-
@@ -137,11 +135,11 @@ properties:
         description: The tax identification number of the billing entity
       timezone:
         $ref: "./Timezone.yaml"
-        description: The timezone of the billing entity
+        description: The timezone of the billing entity. This is a premium feature, the value is ignored without a premium license.
         example: "UTC"
       tax_codes:
         $ref: "./TaxCodes.yaml"
-        description: The tax codes that should be associated with this billing entity
+        description: The tax codes that should be associated with this billing entity. Codes are matched without case sensitivity, and two codes that differ only by case count as one. An unknown code returns a `404` error.
       email_settings:
         type: array
         items:
@@ -150,7 +148,7 @@ properties:
             - invoice.finalized
             - credit_note.created
             - payment_receipt.created
-        description: The email notification settings for this billing entity
+        description: The email notification settings for this billing entity. This is a premium feature, the value is ignored without a premium license.
       eu_tax_management:
         type: boolean
         example: false
