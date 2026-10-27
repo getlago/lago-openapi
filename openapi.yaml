@@ -23639,7 +23639,7 @@ components:
               filters: []
         fixed_charges:
           type: array
-          description: List of fixed charges for this plan.
+          description: List of fixed charges for this plan. Only returned when creating, retrieving, updating or deleting a plan. It is not returned when listing plans, in the plan webhooks, or on the plan nested in a subscription.
           items:
             $ref: '#/components/schemas/FixedChargeObject'
           example:
@@ -23720,12 +23720,12 @@ components:
             $ref: '#/components/schemas/UsageThresholdObject'
         applicable_usage_thresholds:
           type: array
-          description: List of usage thresholds that actually apply to the plan. For an overriding plan these are inherited from its parent plan; for a standard plan they match `usage_thresholds`.
+          description: List of usage thresholds that actually apply to the plan. For an overriding plan these are inherited from its parent plan; for a standard plan they match `usage_thresholds`. It is not returned in the plan webhooks.
           items:
             $ref: '#/components/schemas/ApplicableUsageThreshold'
         entitlements:
           type: array
-          description: List of all feature entitlements and their privileges available for this plan.
+          description: List of all feature entitlements and their privileges available for this plan. It is not returned with the `plan.deleted` webhook, nor on the plan nested in a subscription.
           items:
             $ref: '#/components/schemas/PlanEntitlement'
         metadata:
