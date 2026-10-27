@@ -17,7 +17,7 @@ put:
   tags:
     - organizations
   summary: Update your organization
-  description: This endpoint is used to update your own organization's settings.
+  description: This endpoint is used to update your own organization's settings. The same payload is also applied to the default billing entity of your organization.
   operationId: updateOrganization
   requestBody:
     description: Update an existing organization
