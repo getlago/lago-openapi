@@ -1,6 +1,6 @@
 name: page
 in: query
-description: Page number.
+description: Page number. Defaults to 1. A value that is not a positive integer, such as `0`, returns the first page.
 required: false
 explode: true
 schema:
