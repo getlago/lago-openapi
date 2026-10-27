@@ -15475,14 +15475,14 @@ components:
             - string
             - 'null'
           format: date-time
-          description: The beginning date of the period that the fee covers. It is applicable only to `subscription`, `charge`, `fixed_charge` and `commitment` fees. This field indicates the start date of the billing period or subscription period associated with the fee.
+          description: The beginning date of the period that the fee covers. It is returned only for `subscription`, `charge`, `add_on` and `fixed_charge` fees. This field indicates the start date of the billing period or subscription period associated with the fee.
           example: '2022-04-29T08:59:51Z'
         to_date:
           type:
             - string
             - 'null'
           format: date-time
-          description: The ending date of the period that the fee covers. It is applicable only to `subscription`, `charge`, `fixed_charge` and `commitment` fees. This field indicates the end date of the billing period or subscription period associated with the fee.
+          description: The ending date of the period that the fee covers. It is returned only for `subscription`, `charge`, `add_on` and `fixed_charge` fees. This field indicates the end date of the billing period or subscription period associated with the fee.
           example: '2022-05-29T08:59:51Z'
         payment_status:
           type: string
