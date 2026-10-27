@@ -1,0 +1,25 @@
+type: object
+description: A threshold line of the alert, as it was recorded when the webhook was sent.
+required:
+  - code
+  - value
+  - recurring
+properties:
+  code:
+    type:
+      - string
+      - "null"
+    description: Code identifying the threshold inside the alert. Null when the threshold has no code.
+    example: "warn"
+  value:
+    type: string
+    pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+    description: |-
+      The value of the threshold line, formatted as a BigDecimal.
+
+      The unit depends on the alert type: `billable_metric_current_usage_units` and `billable_metric_lifetime_usage_units` are expressed in units, `wallet_credits_balance` and `wallet_credits_ongoing_balance` in credits, and all other types in cents.
+    example: "99.0"
+  recurring:
+    type: boolean
+    description: True when the line comes from the recurring threshold of the alert. A recurring threshold produces one line per step, so several lines can share the same code.
+    example: false
