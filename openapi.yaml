@@ -26750,6 +26750,32 @@ components:
               example:
                 - invoice.voided
                 - customer.created
+    AlertCrossedThresholdObject:
+      type: object
+      description: A threshold line of the alert, as it was recorded when the webhook was sent.
+      required:
+        - code
+        - value
+        - recurring
+      properties:
+        code:
+          type:
+            - string
+            - 'null'
+          description: Code identifying the threshold inside the alert. Null when the threshold has no code.
+          example: warn
+        value:
+          type: string
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: |-
+            The value of the threshold line, formatted as a BigDecimal.
+
+            The unit depends on the alert type: `billable_metric_current_usage_units` and `billable_metric_lifetime_usage_units` are expressed in units, `wallet_credits_balance` and `wallet_credits_ongoing_balance` in credits, and all other types in cents.
+          example: '99.0'
+        recurring:
+          type: boolean
+          description: True when the line comes from the recurring threshold of the alert. A recurring threshold produces one line per step, so several lines can share the same code.
+          example: false
     ResolvedAlertObject:
       type: object
       required:
@@ -26851,9 +26877,9 @@ components:
           example: '1200.0'
         recovered_thresholds:
           type: array
-          description: The thresholds that are no longer in alarm and are announced by this resolution. Recurring thresholds never resolve and are never listed.
+          description: The threshold lines that are no longer in alarm and are announced by this resolution. Recurring thresholds never resolve and are never listed.
           items:
-            $ref: '#/components/schemas/AlertThresholdObject'
+            $ref: '#/components/schemas/AlertCrossedThresholdObject'
         in_alarm_thresholds:
           type: array
           description: Every threshold of the alert still in alarm after this resolution, whether or not it asked for resolutions, named by its code, or by its value when it has no code. The first line of a recurring threshold is included when it is in alarm. The list is empty exactly when `fully_resolved` is true.
@@ -26985,9 +27011,9 @@ components:
           example: '2025-05-19T10:04:21Z'
         crossed_thresholds:
           type: array
-          description: Array of thresholds crossed. All the recurring threshold values are present.
+          description: The threshold lines crossed since the previous check. Every recurring line crossed in that interval is present, so one recurring threshold can appear several times.
           items:
-            $ref: '#/components/schemas/AlertThresholdObject'
+            $ref: '#/components/schemas/AlertCrossedThresholdObject'
     CustomerIntegrationErrorObject:
       type: object
       required:

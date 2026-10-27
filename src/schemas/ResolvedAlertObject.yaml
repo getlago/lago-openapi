@@ -98,9 +98,9 @@ properties:
     example: "1200.0"
   recovered_thresholds:
     type: array
-    description: The thresholds that are no longer in alarm and are announced by this resolution. Recurring thresholds never resolve and are never listed.
+    description: The threshold lines that are no longer in alarm and are announced by this resolution. Recurring thresholds never resolve and are never listed.
     items:
-      $ref: "./AlertThresholdObject.yaml"
+      $ref: "./AlertCrossedThresholdObject.yaml"
   in_alarm_thresholds:
     type: array
     description: Every threshold of the alert still in alarm after this resolution, whether or not it asked for resolutions, named by its code, or by its value when it has no code. The first line of a recurring threshold is included when it is in alarm. The list is empty exactly when `fully_resolved` is true.

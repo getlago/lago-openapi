@@ -100,7 +100,7 @@ properties:
     example: "2025-05-19T10:04:21Z"
   crossed_thresholds:
     type: array
-    description: Array of thresholds crossed. All the recurring threshold values are present.
+    description: The threshold lines crossed since the previous check. Every recurring line crossed in that interval is present, so one recurring threshold can appear several times.
     items:
-      $ref: "./AlertThresholdObject.yaml"
+      $ref: "./AlertCrossedThresholdObject.yaml"
 
