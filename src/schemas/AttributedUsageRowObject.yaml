@@ -36,4 +36,4 @@ properties:
     type: array
     items:
       $ref: "./AttributedUsageChargeUsageObject.yaml"
-    description: Usage of each charge of the plan, in the order of the charges. A charge split by `split_charge_code` has one entry per filter, then one for the usage that matches none of its filters.
+    description: Usage of each charge of the plan, in the order of the charges. A charge split by `split_charge_code` has one entry per filter of the page selected by `split_filters_offset`, then one for the usage that matches none of its filters. The filters of other pages have no entry, but their usage still counts in the amount.

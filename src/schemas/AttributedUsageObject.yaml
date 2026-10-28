@@ -7,6 +7,7 @@ required:
   - from_datetime
   - to_datetime
   - currency
+  - split_filters_count
   - rows
   - unattributed
   - totals
@@ -43,6 +44,12 @@ properties:
     example: "2022-04-30T23:59:59Z"
   currency:
     $ref: "./Currency.yaml"
+  split_filters_count:
+    type:
+      - integer
+      - "null"
+    description: Number of filters of the charge split by `split_charge_code`, across all pages. Each response returns up to 10 of them, starting at `split_filters_offset`. It is `null` when no charge is split.
+    example: 42
   rows:
     type: array
     items:
