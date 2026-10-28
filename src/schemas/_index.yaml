@@ -16,6 +16,8 @@ AddOnsPaginated:
   $ref: "./AddOnsPaginated.yaml"
 AddOnUpdateInput:
   $ref: "./AddOnUpdateInput.yaml"
+ApiErrorAttributedUsageQueryLimit:
+  $ref: "./ApiErrorAttributedUsageQueryLimit.yaml"
 ApiErrorBadRequest:
   $ref: "./ApiErrorBadRequest.yaml"
 ApiErrorForbidden:
@@ -40,6 +42,16 @@ AppliedCouponsPaginated:
   $ref: "./AppliedCouponsPaginated.yaml"
 AppliedUsageThresholdObject:
   $ref: "./AppliedUsageThresholdObject.yaml"
+AttributedUsage:
+  $ref: "./AttributedUsage.yaml"
+AttributedUsageChargeUsageObject:
+  $ref: "./AttributedUsageChargeUsageObject.yaml"
+AttributedUsageObject:
+  $ref: "./AttributedUsageObject.yaml"
+AttributedUsageRowObject:
+  $ref: "./AttributedUsageRowObject.yaml"
+AttributedUsageTotalsObject:
+  $ref: "./AttributedUsageTotalsObject.yaml"
 BaseAppliedTax:
   $ref: "./BaseAppliedTax.yaml"
 BillableMetric:
@@ -370,6 +382,20 @@ Timezone:
   $ref: "./Timezone.yaml"
 TimezoneOrNull:
   $ref: "./TimezoneOrNull.yaml"
+UsageAttributionType:
+  $ref: "./UsageAttributionType.yaml"
+UsageAttributionTypeBaseInput:
+  $ref: "./UsageAttributionTypeBaseInput.yaml"
+UsageAttributionTypeCreateInput:
+  $ref: "./UsageAttributionTypeCreateInput.yaml"
+UsageAttributionTypeObject:
+  $ref: "./UsageAttributionTypeObject.yaml"
+UsageAttributionTypeRoleEnum:
+  $ref: "./UsageAttributionTypeRoleEnum.yaml"
+UsageAttributionTypeUpdateInput:
+  $ref: "./UsageAttributionTypeUpdateInput.yaml"
+UsageAttributionTypesPaginated:
+  $ref: "./UsageAttributionTypesPaginated.yaml"
 UsageThresholdInput:
   $ref: "./UsageThresholdInput.yaml"
 UsageThresholdObject:

@@ -144,6 +144,8 @@ tags:
     description: Everything about Order form collection
   - name: orders
     description: Everything about Order collection
+  - name: usage_attribution_types
+    description: Everything about Usage attribution type collection
 externalDocs:
   description: Lago Github
   url: https://github.com/getlago
@@ -3432,6 +3434,149 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{external_customer_id}/attributed_usage:
+    get:
+      tags:
+        - customers
+      summary: Retrieve customer attributed usage
+      description: This endpoint retrieves the usage of an active subscription broken down by the values of a usage attribution type, one level of the account tree at a time. Only charges whose billable metric uses the `count_agg` or `sum_agg` aggregation and is not recurring are included. By default, the usage covers the current billing period, narrowed to its last 31 days when the period is longer.
+      operationId: findCustomerAttributedUsage
+      parameters:
+        - $ref: '#/components/parameters/external_customer_id_path'
+        - name: external_subscription_id
+          in: query
+          description: The unique identifier of the subscription within your application. The subscription must be active.
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: sub_1234567890
+        - name: group_by
+          in: query
+          description: Code of the usage attribution type to group the usage by. When the type has a parent, `filters` must include a value of the parent type, so the tree is read one level at a time.
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: team
+        - name: filters
+          in: query
+          description: Values of usage attribution types to filter the usage by, keyed by type code, e.g. `filters[department]=rnd&filters[model][]=opus&filters[model][]=haiku`. Each type accepts up to 20 values, and up to 3 `flat` types can be filtered on.
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              oneOf:
+                - type: string
+                - type: array
+                  items:
+                    type: string
+            example:
+              department: rnd
+        - name: from_datetime
+          in: query
+          description: Start of the period, in ISO 8601 format. It must be sent together with `to_datetime`, and the period cannot be longer than 31 days. It is moved to the start of the subscription when earlier.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2022-04-01T00:00:00Z'
+        - name: to_datetime
+          in: query
+          description: End of the period, in ISO 8601 format. It must be sent together with `from_datetime`.
+          required: false
+          explode: true
+          schema:
+            type: string
+            format: date-time
+            example: '2022-04-30T23:59:59Z'
+        - name: charge_codes[]
+          in: query
+          description: Codes of the charges of the plan to include. All the supported charges are included when it is not sent.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - tokens
+        - name: split_charge_code
+          in: query
+          description: Code of a charge of the plan to split by charge filter, with one entry per filter in `charges_usage`. The filters are returned 10 at a time, in the order of the charge, starting at `split_filters_offset`. The charge must have at least 1 filter, and must be part of `charge_codes[]` when it is sent. A `too_many_filters` validation error is returned when the filter values of the charge are too many to match events.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: tokens
+        - name: split_filters_offset
+          in: query
+          description: Index of the first filter of the split charge to return, starting at 0. Use it with `split_filters_count` to page through the filters 10 at a time. It is ignored when `split_charge_code` is not sent.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 20000
+            default: 0
+            example: 10
+        - name: search_term
+          in: query
+          description: Filter the attribution values by search term, up to 100 characters. The totals are not affected by the search.
+          required: false
+          explode: true
+          schema:
+            type: string
+            maxLength: 100
+            example: eng
+        - name: basis
+          in: query
+          description: Basis of the breakdown. With `units`, values are ranked by number of events and no amount is computed. With `amount`, amounts are computed and values are ranked by amount.
+          required: false
+          explode: true
+          schema:
+            type: string
+            enum:
+              - units
+              - amount
+            default: units
+            example: amount
+        - $ref: '#/components/parameters/page'
+        - name: per_page
+          in: query
+          description: Number of attribution values per page, between 1 and 100.
+          required: false
+          explode: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+            example: 20
+      responses:
+        '200':
+          description: Customer attributed usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttributedUsage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Unprocessable entity error
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ApiErrorUnprocessableEntity'
+                  - $ref: '#/components/schemas/ApiErrorAttributedUsageQueryLimit'
   /customers/{external_customer_id}/checkout_url:
     post:
       tags:
@@ -7387,6 +7532,151 @@ paths:
                 $ref: '#/components/schemas/Tax'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /usage_attribution_types:
+    post:
+      tags:
+        - usage_attribution_types
+      summary: Create a usage attribution type
+      description: This endpoint creates a usage attribution type. A usage attribution type is a level of the account tree that usage can be attributed to, based on the keys of the event properties.
+      operationId: createUsageAttributionType
+      requestBody:
+        description: Usage attribution type payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsageAttributionTypeCreateInput'
+        required: true
+      responses:
+        '200':
+          description: Usage attribution type created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageAttributionType'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - usage_attribution_types
+      summary: List all usage attribution types
+      description: This endpoint retrieves all the usage attribution types of the organization.
+      operationId: findAllUsageAttributionTypes
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - name: role
+          in: query
+          description: Filter usage attribution types by role.
+          required: false
+          explode: true
+          schema:
+            $ref: '#/components/schemas/UsageAttributionTypeRoleEnum'
+        - name: search_term
+          in: query
+          description: Filter usage attribution types by search term. The term is matched against the code and the name of the type.
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: team
+      responses:
+        '200':
+          description: List of usage attribution types
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageAttributionTypesPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /usage_attribution_types/{code}:
+    parameters:
+      - name: code
+        in: path
+        description: Code of the existing usage attribution type.
+        required: true
+        schema:
+          type: string
+          example: team
+    put:
+      tags:
+        - usage_attribution_types
+      summary: Update a usage attribution type
+      description: This endpoint updates an existing usage attribution type. Only the fields present in the payload are updated. Once usage is attributed to the type, only its `name`, `description` and `attribution_keys` can be changed.
+      operationId: updateUsageAttributionType
+      requestBody:
+        description: Usage attribution type payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsageAttributionTypeUpdateInput'
+        required: true
+      responses:
+        '200':
+          description: Usage attribution type updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageAttributionType'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    get:
+      tags:
+        - usage_attribution_types
+      summary: Retrieve a usage attribution type
+      description: This endpoint retrieves an existing usage attribution type by its code.
+      operationId: findUsageAttributionType
+      responses:
+        '200':
+          description: Usage attribution type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageAttributionType'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - usage_attribution_types
+      summary: Delete a usage attribution type
+      description: This endpoint deletes an existing usage attribution type, along with the attribution values recorded for it. Its children are kept.
+      operationId: destroyUsageAttributionType
+      responses:
+        '200':
+          description: Usage attribution type deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageAttributionType'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /wallets:
@@ -20142,6 +20432,248 @@ components:
             $ref: '#/components/schemas/CustomerUsageObject'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    AttributedUsageChargeUsageObject:
+      type: object
+      required:
+        - lago_charge_id
+        - charge_code
+        - billable_metric_code
+        - lago_charge_filter_id
+        - charge_filter_values
+        - charge_filter_invoice_display_name
+        - units
+        - amount_cents
+        - precise_amount_cents
+        - events_count
+      properties:
+        lago_charge_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the charge, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        charge_code:
+          type: string
+          description: Code of the charge.
+          example: tokens
+        billable_metric_code:
+          type: string
+          description: Code of the billable metric of the charge.
+          example: tokens
+        lago_charge_filter_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the charge filter, created by Lago. It is set only for the charge split by `split_charge_code`, and is `null` for the usage that matches none of its filters.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        charge_filter_values:
+          type:
+            - object
+            - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: Values of the charge filter, by billable metric filter key. It is `null` when `lago_charge_filter_id` is `null`.
+          example:
+            model:
+              - opus
+        charge_filter_invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Name of the charge filter displayed on the invoice. It is `null` when `lago_charge_filter_id` is `null` or when the filter has no display name.
+          example: Opus tokens
+        units:
+          type: string
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: Number of units consumed, sent as a decimal string.
+          example: '1250.5'
+        amount_cents:
+          type:
+            - integer
+            - 'null'
+          description: Amount of the usage in cents, rounded to the nearest cent. It is `null` when `basis` is `units`, or when the charge cannot be priced (only charges with the `standard` charge model are priced).
+          example: 1200
+        precise_amount_cents:
+          type:
+            - string
+            - 'null'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: Amount of the usage in cents, sent as a decimal string. It is `null` in the same cases as `amount_cents`.
+          example: '1200.4567'
+        events_count:
+          type: integer
+          description: Number of events.
+          example: 42
+    AttributedUsageRowObject:
+      type: object
+      required:
+        - value
+        - rank
+        - amount_cents
+        - precise_amount_cents
+        - events_count
+        - charges_usage
+      properties:
+        value:
+          type: string
+          description: Attribution value the usage is attributed to, at the level of the `group_by` usage attribution type.
+          example: engineering
+        rank:
+          type: integer
+          description: Rank of the value in the level, starting at 1. Values are ranked by amount when `basis` is `amount`, and by number of events otherwise.
+          example: 1
+        amount_cents:
+          type:
+            - integer
+            - 'null'
+          description: Amount of the usage in cents, rounded to the nearest cent. It is `null` when `basis` is `units`.
+          example: 1200
+        precise_amount_cents:
+          type:
+            - string
+            - 'null'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: Amount of the usage in cents, sent as a decimal string. It is `null` when `basis` is `units`.
+          example: '1200.4567'
+        events_count:
+          type: integer
+          description: Number of events.
+          example: 42
+        charges_usage:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributedUsageChargeUsageObject'
+          description: Usage of each charge of the plan, in the order of the charges. A charge split by `split_charge_code` has one entry per filter of the page selected by `split_filters_offset`, then one for the usage that matches none of its filters. The filters of other pages have no entry, but their usage still counts in the amount.
+    AttributedUsageTotalsObject:
+      type: object
+      required:
+        - amount_cents
+        - precise_amount_cents
+        - events_count
+        - charges_usage
+      properties:
+        amount_cents:
+          type:
+            - integer
+            - 'null'
+          description: Amount of the usage in cents, rounded to the nearest cent. It is `null` when `basis` is `units`.
+          example: 1200
+        precise_amount_cents:
+          type:
+            - string
+            - 'null'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: Amount of the usage in cents, sent as a decimal string. It is `null` when `basis` is `units`.
+          example: '1200.4567'
+        events_count:
+          type: integer
+          description: Number of events.
+          example: 42
+        charges_usage:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributedUsageChargeUsageObject'
+          description: Usage of each charge of the plan, in the order of the charges. A charge split by `split_charge_code` has one entry per filter of the page selected by `split_filters_offset`, then one for the usage that matches none of its filters. The filters of other pages have no entry, but their usage still counts in the amount.
+    AttributedUsageObject:
+      type: object
+      required:
+        - lago_subscription_id
+        - external_subscription_id
+        - group_by
+        - basis
+        - from_datetime
+        - to_datetime
+        - currency
+        - split_filters_count
+        - rows
+        - unattributed
+        - totals
+      properties:
+        lago_subscription_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the subscription, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_subscription_id:
+          type: string
+          description: Unique identifier of the subscription in your application.
+          example: sub_1234567890
+        group_by:
+          type: string
+          description: Code of the usage attribution type the usage is grouped by.
+          example: team
+        basis:
+          type: string
+          enum:
+            - units
+            - amount
+          description: Basis of the breakdown. With `units`, amounts are `null` and values are ranked by number of events. With `amount`, amounts are computed and values are ranked by amount.
+          example: amount
+        from_datetime:
+          type: string
+          format: date-time
+          description: Start of the period of the usage, in UTC.
+          example: '2022-04-01T00:00:00Z'
+        to_datetime:
+          type: string
+          format: date-time
+          description: End of the period of the usage, in UTC.
+          example: '2022-04-30T23:59:59Z'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        split_filters_count:
+          type:
+            - integer
+            - 'null'
+          description: Number of filters of the charge split by `split_charge_code`, across all pages. Each response returns up to 10 of them, starting at `split_filters_offset`. It is `null` when no charge is split.
+          example: 42
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributedUsageRowObject'
+          description: Usage of each attribution value of the page, ordered by rank.
+        unattributed:
+          allOf:
+            - $ref: '#/components/schemas/AttributedUsageTotalsObject'
+          description: Usage of the events that carry no value for the `group_by` usage attribution type.
+        totals:
+          allOf:
+            - $ref: '#/components/schemas/AttributedUsageTotalsObject'
+          description: Usage of the whole level, attributed and unattributed, for all pages. A `search_term` does not narrow the totals.
+    AttributedUsage:
+      type: object
+      required:
+        - attributed_usage
+        - meta
+      properties:
+        attributed_usage:
+          $ref: '#/components/schemas/AttributedUsageObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    ApiErrorAttributedUsageQueryLimit:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 422
+        error:
+          type: string
+          example: Unprocessable Entity
+        code:
+          type: string
+          enum:
+            - too_many_groups
+            - query_timeout
+            - memory_limit_exceeded
+          description: Reason why the query exceeded its limits. Narrow the period or add filters, then retry.
+          example: too_many_groups
     CustomerCheckoutUrl:
       type: object
       required:
@@ -26150,6 +26682,169 @@ components:
       properties:
         tax:
           $ref: '#/components/schemas/TaxBaseInput'
+    UsageAttributionTypeRoleEnum:
+      type: string
+      description: |-
+        Role of the usage attribution type:
+        - `hierarchical`: the type can have a parent and children, and forms a level of the account tree.
+        - `flat`: the type stands on its own. It cannot have a parent or children.
+      enum:
+        - hierarchical
+        - flat
+      example: hierarchical
+    UsageAttributionTypeObject:
+      type: object
+      required:
+        - lago_id
+        - lago_organization_id
+        - code
+        - name
+        - description
+        - attribution_keys
+        - role
+        - lago_parent_id
+        - parent_code
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the usage attribution type, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_organization_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the organization, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        code:
+          type: string
+          description: Unique code used to identify the usage attribution type within the organization.
+          example: team
+        name:
+          type:
+            - string
+            - 'null'
+          description: Name of the usage attribution type.
+          example: Team
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description of the usage attribution type.
+          example: Team that consumed the usage.
+        attribution_keys:
+          type: array
+          items:
+            type: string
+          description: Keys of the event properties that attribute usage to this type. A key belongs to a single usage attribution type of the organization.
+          example:
+            - team
+            - team_id
+        role:
+          $ref: '#/components/schemas/UsageAttributionTypeRoleEnum'
+        lago_parent_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the parent usage attribution type, created by Lago. It is `null` when the type has no parent.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        parent_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the parent usage attribution type. It is `null` when the type has no parent.
+          example: department
+        created_at:
+          type: string
+          format: date-time
+          description: Creation date of the usage attribution type, in UTC.
+          example: '2022-04-29T08:59:51Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Date of the last update of the usage attribution type, in UTC.
+          example: '2022-04-29T08:59:51Z'
+    UsageAttributionTypesPaginated:
+      type: object
+      required:
+        - usage_attribution_types
+        - meta
+      properties:
+        usage_attribution_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageAttributionTypeObject'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    UsageAttributionTypeBaseInput:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 255
+          description: Unique code used to identify the usage attribution type within the organization. Once usage is attributed to the type, the code cannot be changed.
+          example: team
+        name:
+          type:
+            - string
+            - 'null'
+          maxLength: 255
+          description: Name of the usage attribution type.
+          example: Team
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description of the usage attribution type.
+          example: Team that consumed the usage.
+        attribution_keys:
+          type: array
+          minItems: 1
+          maxItems: 4
+          items:
+            type: string
+            maxLength: 255
+          description: Keys of the event properties that attribute usage to this type, up to 4. Blank and duplicate keys are removed. A key already used by another usage attribution type of the organization is rejected.
+          example:
+            - team
+            - team_id
+        role:
+          allOf:
+            - $ref: '#/components/schemas/UsageAttributionTypeRoleEnum'
+          description: Role of the usage attribution type. A `flat` type cannot have a parent, and a type with children cannot become `flat`. Once usage is attributed to the type, the role cannot be changed.
+        parent_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the parent usage attribution type, which must be `hierarchical`. Send `null` or an empty string to remove the parent. Once usage is attributed to the type, the parent cannot be changed.
+          example: department
+    UsageAttributionTypeCreateInput:
+      type: object
+      required:
+        - usage_attribution_type
+      properties:
+        usage_attribution_type:
+          $ref: '#/components/schemas/UsageAttributionTypeBaseInput'
+          required:
+            - code
+            - attribution_keys
+            - role
+    UsageAttributionType:
+      type: object
+      required:
+        - usage_attribution_type
+      properties:
+        usage_attribution_type:
+          $ref: '#/components/schemas/UsageAttributionTypeObject'
+    UsageAttributionTypeUpdateInput:
+      type: object
+      required:
+        - usage_attribution_type
+      properties:
+        usage_attribution_type:
+          $ref: '#/components/schemas/UsageAttributionTypeBaseInput'
     WalletTransactionCreateInput:
       type: object
       required:
