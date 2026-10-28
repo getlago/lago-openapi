@@ -81,13 +81,28 @@ get:
     - name: split_charge_code
       in: query
       description: >-
-        Code of a charge of the plan to split by charge filter, with one entry per filter in `charges_usage`. The charge
-        must have between 1 and 10 filters, and must be part of `charge_codes[]` when it is sent.
+        Code of a charge of the plan to split by charge filter, with one entry per filter in `charges_usage`. The
+        filters are returned 10 at a time, in the order of the charge, starting at `split_filters_offset`. The charge
+        must have at least 1 filter, and must be part of `charge_codes[]` when it is sent. A `too_many_filters`
+        validation error is returned when the filter values of the charge are too many to match events.
       required: false
       explode: true
       schema:
         type: string
         example: 'tokens'
+    - name: split_filters_offset
+      in: query
+      description: >-
+        Index of the first filter of the split charge to return, starting at 0. Use it with `split_filters_count` to
+        page through the filters 10 at a time. It is ignored when `split_charge_code` is not sent.
+      required: false
+      explode: true
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 20000
+        default: 0
+        example: 10
     - name: search_term
       in: query
       description: Filter the attribution values by search term, up to 100 characters. The totals are not affected by the search.
