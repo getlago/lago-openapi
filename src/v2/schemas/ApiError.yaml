@@ -1,0 +1,31 @@
+type: object
+required:
+  - code
+  - details
+properties:
+  code:
+    type: string
+    description: Code identifying the error. The HTTP response carries the status.
+    example: validation_errors
+  details:
+    type: array
+    description: Details of the failure. This array is empty when no field details are available.
+    items:
+      type: object
+      required:
+        - code
+        - field
+        - meta
+      properties:
+        code:
+          type: string
+          description: Error code or validation message for this field.
+          example: value_is_invalid
+        field:
+          type: string
+          description: Name of the offending field or parameter, or base for a resource-level failure.
+          example: lago_invoice_id
+        meta:
+          type: object
+          description: Additional information about the failure, such as the missing resource or allowed values.
+          additionalProperties: true

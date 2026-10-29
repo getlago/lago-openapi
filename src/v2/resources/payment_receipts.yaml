@@ -1,0 +1,55 @@
+get:
+  tags:
+    - payment_receipts
+  summary: List all payment receipts
+  description: |-
+    Lists the organization's receipts for catalog invoices, including receipts for payment requests covering at least one catalog invoice.
+    Requires the product catalog to be enabled and the API key to have `payment_receipt` read permission.
+    Receipts are ordered by creation time, newest first, with a stable identifier tiebreaker.
+    Use `after` or `before` to navigate; `page` and `per_page` are rejected with a 400 response.
+    Relationship expansion is not supported; a nonempty `expands[]` returns a 400 response.
+  operationId: findAllPaymentReceipts
+  parameters:
+    - $ref: '../parameters/limit.yaml'
+    - $ref: '../parameters/after.yaml'
+    - $ref: '../parameters/before.yaml'
+    - $ref: '../parameters/include_total_count.yaml'
+    - name: lago_invoice_id
+      in: query
+      description: Filters receipts by invoice, including payments made through a payment request covering that invoice. An unknown invoice returns an empty list. Only receipts eligible for API v2 are returned.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  responses:
+    '200':
+      description: Payment receipts
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PaymentReceiptsPaginated.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '422':
+      description: Invalid invoice filter
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ApiError.yaml'
+          example:
+            code: validation_errors
+            details:
+              - code: value_is_invalid
+                field: lago_invoice_id
+                meta: {}

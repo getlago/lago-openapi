@@ -1,0 +1,30 @@
+parameters:
+  - $ref: '../parameters/lago_payment_receipt_id.yaml'
+get:
+  tags:
+    - payment_receipts
+  summary: Retrieve a payment receipt
+  description: |-
+    Retrieves a receipt for a catalog invoice or a payment request covering at least one catalog invoice.
+    Requires the product catalog to be enabled and the API key to have `payment_receipt` read permission.
+    A receipt from another organization, a legacy-only receipt or an unknown receipt returns 404.
+    Payment relationships are returned as identifiers. Relationship expansion is not supported; a nonempty `expands[]` returns a 400 response.
+  operationId: findPaymentReceipt
+  responses:
+    '200':
+      description: Payment receipt
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/PaymentReceipt.yaml'
+    '400':
+      $ref: '../responses/InvalidExpansion.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

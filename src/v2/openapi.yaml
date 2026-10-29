@@ -1,0 +1,34 @@
+openapi: 3.1.0
+info:
+  title: Lago API v2 documentation
+  description: |-
+    Beta API for the Lago product catalog. These endpoints require the product catalog to be enabled for the organization.
+    Payment receipts for legacy invoices remain available through API v1.
+  version: 2.0.0-beta
+  license:
+    name: AGPLv3
+    url: https://github.com/getlago/lago-openapi/blob/main/LICENSE
+  contact:
+    email: tech@getlago.com
+servers:
+  - url: https://api.getlago.com/api/v2
+    description: US Lago cluster
+  - url: https://api.eu.getlago.com/api/v2
+    description: EU Lago cluster
+security:
+  - bearerAuth: []
+tags:
+  - name: payment_receipts
+    description: Payment receipts for catalog invoices
+paths:
+  /payment_receipts:
+    $ref: './resources/payment_receipts.yaml'
+  /payment_receipts/{lago_id}:
+    $ref: './resources/payment_receipt.yaml'
+  /payment_receipts/{lago_id}/resend_email:
+    $ref: './resources/payment_receipt_resend_email.yaml'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

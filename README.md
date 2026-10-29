@@ -41,6 +41,11 @@ You may also need Docker to run some commands.
 
 ### Build openapi.yaml
 
+The v1 definition is in `src/openapi.yaml` and bundles to `openapi.yaml`.
+The beta v2 definition is in `src/v2/openapi.yaml` and bundles to `openapi-v2.yaml`.
+The build and test commands cover both versions. Use `npm run build:v1` or
+`npm run build:v2` to build one version. The existing Swagger UI continues to display v1.
+
 ```
 npm run build
 ```

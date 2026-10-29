@@ -1,0 +1,56 @@
+type: object
+required:
+  - lago_id
+  - number
+  - lago_payment_id
+  - pdf_url
+  - pdf_url_expires_at
+  - xml_url
+  - xml_url_expires_at
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the payment receipt, created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  number:
+    type: string
+    description: Unique number assigned to the payment receipt.
+    example: LAG-1234-001-002
+  lago_payment_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the associated payment, created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  pdf_url:
+    type: [string, 'null']
+    format: uri
+    description: Expiring download URL for the receipt PDF. It is null while no PDF is available. Retrieve the receipt again to obtain a current link.
+    example: https://api.getlago.com/documents/example/receipt.pdf
+  pdf_url_expires_at:
+    type: [string, 'null']
+    format: date-time
+    description: UTC timestamp when the PDF download URL expires, with microsecond precision. It is null when pdf_url is null.
+    example: '2026-10-31T23:59:59.999999Z'
+  xml_url:
+    type: [string, 'null']
+    format: uri
+    description: Expiring download URL for the receipt XML. It is null while no XML is available. Retrieve the receipt again to obtain a current link.
+    example: https://api.getlago.com/documents/example/receipt.xml
+  xml_url_expires_at:
+    type: [string, 'null']
+    format: date-time
+    description: UTC timestamp when the XML download URL expires, with microsecond precision. It is null when xml_url is null.
+    example: '2026-10-31T23:59:59.999999Z'
+  created_at:
+    type: string
+    format: date-time
+    description: UTC timestamp when the receipt was created, with microsecond precision.
+    example: '2022-04-29T08:59:51.123456Z'
+  updated_at:
+    type: string
+    format: date-time
+    description: UTC timestamp when the receipt was last updated, with microsecond precision.
+    example: '2022-04-29T08:59:51.123456Z'

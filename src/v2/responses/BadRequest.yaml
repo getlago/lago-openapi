@@ -1,0 +1,55 @@
+description: Invalid pagination or unsupported relationship expansion
+headers:
+  X-Lago-Endpoint-Status:
+    $ref: '../headers/EndpointStatus.yaml'
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/ApiError.yaml'
+    examples:
+      invalidLimit:
+        value:
+          code: invalid_pagination_limit
+          details:
+            - code: invalid_pagination_limit
+              field: limit
+              meta:
+                value: '101'
+                min: 1
+                max: 100
+      offsetPagination:
+        value:
+          code: invalid_pagination_parameter
+          details:
+            - code: replaced_by_cursor
+              field: page
+              meta: {}
+      invalidCursor:
+        value:
+          code: invalid_pagination_cursor
+          details:
+            - code: malformed
+              field: after
+              meta: {}
+      expiredCursor:
+        value:
+          code: pagination_cursor_expired
+          details:
+            - code: sort_changed
+              field: after
+              meta: {}
+      countOnLaterPage:
+        value:
+          code: total_count_first_page_only
+          details:
+            - code: first_page_only
+              field: include_total_count
+              meta: {}
+      unsupportedExpansion:
+        value:
+          code: expand_not_supported
+          details:
+            - code: not_expandable
+              field: expands
+              meta:
+                invalid_values: [payment]

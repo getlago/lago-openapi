@@ -1,0 +1,15 @@
+description: Unknown receipt, receipt from another organization, or receipt for legacy invoices only
+headers:
+  X-Lago-Endpoint-Status:
+    $ref: '../headers/EndpointStatus.yaml'
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/ApiError.yaml'
+    example:
+      code: resource_not_found
+      details:
+        - code: resource_not_found
+          field: base
+          meta:
+            resource: payment_receipt
