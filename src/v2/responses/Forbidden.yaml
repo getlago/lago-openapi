@@ -1,0 +1,25 @@
+description: Product catalog disabled, missing receipt permission, or missing premium license for email resend
+headers:
+  X-Lago-Endpoint-Status:
+    $ref: '../headers/EndpointStatus.yaml'
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/ApiError.yaml'
+    examples:
+      productCatalogDisabled:
+        value:
+          code: feature_unavailable
+          details: []
+      readPermissionRequired:
+        value:
+          code: read_action_not_allowed_for_payment_receipt
+          details: []
+      writePermissionRequired:
+        value:
+          code: write_action_not_allowed_for_payment_receipt
+          details: []
+      premiumLicenseRequired:
+        value:
+          code: premium_license_required
+          details: []

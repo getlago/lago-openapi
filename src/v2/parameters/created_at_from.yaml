@@ -1,0 +1,7 @@
+name: created_at_from
+in: query
+required: false
+description: Returns the records created at or after this UTC date and time. A date without a time starts at midnight UTC. An invalid value returns 422.
+schema:
+  type: string
+  example: '2022-04-29T08:59:51.123456Z'

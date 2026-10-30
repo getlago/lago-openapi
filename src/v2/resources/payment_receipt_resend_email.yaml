@@ -1,0 +1,52 @@
+parameters:
+  - $ref: '../parameters/lago_payment_receipt_id.yaml'
+post:
+  tags:
+    - payment_receipts
+  summary: Resend a payment receipt email
+  description: |-
+    Queues an email for a receipt of the organization.
+    Requires the product catalog to be enabled, a premium license and the API key to have `payment_receipt` write permission.
+    The billing entity must have an email and a sender address configured, and all recipients must be valid email addresses.
+    A receipt from another organization or an unknown receipt returns 404.
+    A successful response has no body and confirms that the email was queued, not delivered.
+    Relationship expansion is not supported on this action; a nonempty `expands[]` returns a 400 response.
+  operationId: resendPaymentReceiptEmail
+  requestBody:
+    required: false
+    description: Email recipients
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/PaymentReceiptResendEmailInput.yaml'
+  responses:
+    '200':
+      description: Payment receipt email queued
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+    '400':
+      $ref: '../responses/InvalidExpansion.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      description: Invalid email configuration or recipients
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/ApiError.yaml'
+          examples:
+            missingRecipient:
+              value:
+                code: validation_errors
+                details:
+                  - code: must have at least one recipient
+                    field: to
+                    meta: {}

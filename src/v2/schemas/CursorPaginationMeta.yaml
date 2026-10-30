@@ -1,0 +1,23 @@
+type: object
+required:
+  - next_cursor
+  - prev_cursor
+properties:
+  next_cursor:
+    type: [string, 'null']
+    description: Opaque cursor to pass as after for the next page. It is null when no next page is available.
+    example: null
+  prev_cursor:
+    type: [string, 'null']
+    description: Opaque cursor to pass as before for the previous page. It is null when no previous page is available.
+    example: null
+  total_count:
+    type: integer
+    minimum: 0
+    description: Number of matching receipts, returned only when include_total_count is true on the first page. It can be an estimate.
+    example: 42
+  total_count_estimated:
+    type: boolean
+    enum: [true]
+    description: Present and true only when total_count is an estimate. It is omitted for an exact count.
+    example: true

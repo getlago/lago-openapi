@@ -1,0 +1,10 @@
+name: limit
+in: query
+required: false
+description: Maximum number of receipts per page. Values outside 1 through 100 are rejected with a 400 response.
+schema:
+  type: integer
+  minimum: 1
+  maximum: 100
+  default: 20
+  example: 20
