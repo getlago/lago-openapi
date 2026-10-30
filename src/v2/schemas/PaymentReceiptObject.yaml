@@ -54,3 +54,6 @@ properties:
     format: date-time
     description: UTC timestamp when the receipt was last updated, with microsecond precision.
     example: '2022-04-29T08:59:51.123456Z'
+  payment:
+    $ref: './PaymentObject.yaml'
+    description: Payment of the receipt. It is present only when a single receipt is retrieved with `expands[]=payment`.

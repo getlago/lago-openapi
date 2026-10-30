@@ -1,4 +1,4 @@
-description: Malformed or unsupported relationship expansion
+description: Malformed, unknown or unsupported relationship expansion
 headers:
   X-Lago-Endpoint-Status:
     $ref: '../headers/EndpointStatus.yaml'
@@ -7,19 +7,31 @@ content:
     schema:
       $ref: '../schemas/ApiError.yaml'
     examples:
-      unsupportedExpansion:
+      unknownExpansion:
+        summary: Expansion other than payment on a receipt retrieval
+        value:
+          code: invalid_expand
+          details:
+            - code: invalid_expand
+              field: expands
+              meta:
+                invalid_values: [customer]
+                allowed_values: [payment]
+      actionNotExpandable:
+        summary: Expansion on an email resend
         value:
           code: expand_not_supported
           details:
-            - code: not_expandable
+            - code: action_not_expandable
               field: expands
               meta:
                 invalid_values: [payment]
       malformedExpansion:
+        summary: Expansion not sent as an array
         value:
           code: invalid_expand
           details:
             - code: malformed
               field: expands
               meta:
-                allowed_values: []
+                allowed_values: [payment]

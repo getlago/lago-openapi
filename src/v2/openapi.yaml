@@ -3,7 +3,6 @@ info:
   title: Lago API v2 documentation
   description: |-
     Beta API for the Lago product catalog. These endpoints require the product catalog to be enabled for the organization.
-    Payment receipts for legacy invoices remain available through API v1.
   version: 2.0.0-beta
   license:
     name: AGPLv3
@@ -19,7 +18,7 @@ security:
   - bearerAuth: []
 tags:
   - name: payment_receipts
-    description: Payment receipts for catalog invoices
+    description: Payment receipts
 paths:
   /payment_receipts:
     $ref: './resources/payment_receipts.yaml'

@@ -5,11 +5,25 @@ get:
     - payment_receipts
   summary: Retrieve a payment receipt
   description: |-
-    Retrieves a receipt for a catalog invoice or a payment request covering at least one catalog invoice.
+    Retrieves a receipt of the organization, whether its payment pays an invoice or a payment request.
     Requires the product catalog to be enabled and the API key to have `payment_receipt` read permission.
-    A receipt from another organization, a legacy-only receipt or an unknown receipt returns 404.
-    Payment relationships are returned as identifiers. Relationship expansion is not supported; a nonempty `expands[]` returns a 400 response.
+    A receipt from another organization or an unknown receipt returns 404.
+    The payment is returned as `lago_payment_id`; `expands[]=payment` also embeds it as `payment`. Any other expansion returns a 400 response.
   operationId: findPaymentReceipt
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Related records to embed in the receipt. `payment` embeds the payment of the receipt.
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - payment
+          example: payment
   responses:
     '200':
       description: Payment receipt
