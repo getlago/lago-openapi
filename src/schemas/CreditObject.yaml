@@ -54,6 +54,12 @@ properties:
         type: string
         description: The name of the credit applied. It can be the name of the coupon attached to the credit, the initial invoice's number linked to the credit note or the `progressive_billing` invoice number.
         example: "Startup Deal"
+      description:
+        type:
+          - string
+          - "null"
+        description: The description of the credit applied. It is the description of the coupon attached to the credit or the description of the credit note. It is null for a `progressive_billing` invoice.
+        example: "I am a coupon description"
   invoice:
     type: object
     required:
