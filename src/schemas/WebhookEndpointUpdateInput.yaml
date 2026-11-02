@@ -7,7 +7,7 @@ properties:
     properties:
       webhook_url:
         type: string
-        description: The URL of the webhook endpoint.
+        description: The URL of the webhook endpoint. It must be unique within the organization.
         example: "https://foo.bar"
       signature_algo:
         type:
