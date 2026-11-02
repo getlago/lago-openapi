@@ -3412,7 +3412,7 @@ paths:
             example: cpu
         - name: periods_count
           in: query
-          description: Number of past billing period to returns in the result
+          description: Number of past billing periods to return in the result.
           required: false
           explode: true
           schema:
@@ -19600,7 +19600,7 @@ components:
         - volume
     CustomerChargeFiltersUsageObject:
       type: array
-      description: Array of filter object, representing multiple dimensions for a charge item.
+      description: Array of filter objects, representing multiple dimensions for a charge item.
       items:
         type: object
         required:
@@ -19853,9 +19853,36 @@ components:
       properties:
         customer_usage:
           $ref: '#/components/schemas/CustomerUsageObject'
+    ProjectedUsagePricingUnitDetailsObject:
+      type:
+        - object
+        - 'null'
+      required:
+        - amount_cents
+        - projected_amount_cents
+        - short_name
+        - conversion_rate
+      description: Details about the pricing unit used for charge usage.
+      properties:
+        amount_cents:
+          type: integer
+          example: 200
+          description: The amount in cents in the pricing unit.
+        projected_amount_cents:
+          type: integer
+          example: 400
+          description: The projected amount in cents in the pricing unit.
+        short_name:
+          type: string
+          example: CR
+          description: The short name of the pricing unit.
+        conversion_rate:
+          type: string
+          example: '0.5'
+          description: The conversion rate from pricing units to the plan's currency.
     CustomerProjectedChargeFiltersUsageObject:
       type: array
-      description: Array of filter object, representing multiple dimensions for a charge item.
+      description: Array of filter objects, representing multiple dimensions for a charge item.
       items:
         type: object
         required:
@@ -19895,7 +19922,7 @@ components:
             description: Specifies the name that will be displayed on an invoice. It is `null` for the entry that holds the usage recorded outside of any charge filter.
             example: AWS eu-east-1
           pricing_unit_details:
-            $ref: '#/components/schemas/UsagePricingUnitDetailsObject'
+            $ref: '#/components/schemas/ProjectedUsagePricingUnitDetailsObject'
           values:
             type:
               - object
@@ -19948,7 +19975,7 @@ components:
             example: '1.8'
             description: The projected number of units that can be consumed for a specific group related to a charge item.
           pricing_unit_details:
-            $ref: '#/components/schemas/UsagePricingUnitDetailsObject'
+            $ref: '#/components/schemas/ProjectedUsagePricingUnitDetailsObject'
           grouped_by:
             type: object
             description: Key value list of event properties aggregated by the charge model
@@ -20000,7 +20027,7 @@ components:
           description: The currency of a usage item consumed by the customer.
           example: EUR
         pricing_unit_details:
-          $ref: '#/components/schemas/UsagePricingUnitDetailsObject'
+          $ref: '#/components/schemas/ProjectedUsagePricingUnitDetailsObject'
         charge:
           type: object
           description: Object listing all the properties for a specific charge item.

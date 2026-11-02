@@ -1,5 +1,5 @@
 type: array
-description: Array of filter object, representing multiple dimensions for a charge item.
+description: Array of filter objects, representing multiple dimensions for a charge item.
 items:
   type: object
   required:
@@ -39,7 +39,7 @@ items:
       description: Specifies the name that will be displayed on an invoice. It is `null` for the entry that holds the usage recorded outside of any charge filter.
       example: "AWS eu-east-1"
     pricing_unit_details:
-      $ref: "./UsagePricingUnitDetailsObject.yaml"
+      $ref: "./ProjectedUsagePricingUnitDetailsObject.yaml"
     values:
       type:
         - object
