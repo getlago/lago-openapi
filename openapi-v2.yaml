@@ -1,0 +1,739 @@
+openapi: 3.1.0
+info:
+  title: Lago API v2 documentation
+  description: Beta API for the Lago product catalog. These endpoints require the product catalog to be enabled for the organization.
+  version: 2.0.0-beta
+  license:
+    name: AGPLv3
+    url: https://github.com/getlago/lago-openapi/blob/main/LICENSE
+  contact:
+    email: tech@getlago.com
+servers:
+  - url: https://api.getlago.com/api/v2
+    description: US Lago cluster
+  - url: https://api.eu.getlago.com/api/v2
+    description: EU Lago cluster
+security:
+  - bearerAuth: []
+tags:
+  - name: payment_receipts
+    description: Payment receipts
+paths:
+  /payment_receipts:
+    get:
+      tags:
+        - payment_receipts
+      summary: List all payment receipts
+      description: |-
+        Lists every receipt of the organization, including receipts of payments made through a payment request.
+        Requires the product catalog to be enabled and the API key to have `payment_receipt` read permission.
+        Receipts are ordered by creation time, newest first, with a stable identifier tiebreaker.
+        Use `after` or `before` to navigate; `page` and `per_page` are rejected with a 400 response.
+        Relationship expansion is not supported on the list; a nonempty `expands[]` returns a 400 response.
+      operationId: findAllPaymentReceipts
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: invoice_id
+          in: query
+          description: Filters receipts by invoice, including payments made through a payment request covering that invoice. An unknown invoice returns an empty list.
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      responses:
+        '200':
+          description: Payment receipts
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReceiptsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          description: Invalid filter
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                invalidInvoiceId:
+                  value:
+                    code: validation_errors
+                    details:
+                      - code: value_is_invalid
+                        field: invoice_id
+                        meta: {}
+                invalidDate:
+                  value:
+                    code: validation_errors
+                    details:
+                      - code: invalid_date
+                        field: created_at_from
+                        meta: {}
+  /payment_receipts/{lago_id}:
+    parameters:
+      - $ref: '#/components/parameters/lago_payment_receipt_id'
+    get:
+      tags:
+        - payment_receipts
+      summary: Retrieve a payment receipt
+      description: |-
+        Retrieves a receipt of the organization, whether its payment pays an invoice or a payment request.
+        Requires the product catalog to be enabled and the API key to have `payment_receipt` read permission.
+        A receipt from another organization or an unknown receipt returns 404.
+        The payment is returned as `lago_payment_id`; `expands[]=payment` also embeds it as `payment`. Any other expansion returns a 400 response.
+      operationId: findPaymentReceipt
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Related records to embed in the receipt. `payment` embeds the payment of the receipt.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - payment
+              example: payment
+      responses:
+        '200':
+          description: Payment receipt
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReceipt'
+        '400':
+          $ref: '#/components/responses/InvalidExpansion'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /payment_receipts/{lago_id}/resend_email:
+    parameters:
+      - $ref: '#/components/parameters/lago_payment_receipt_id'
+    post:
+      tags:
+        - payment_receipts
+      summary: Resend a payment receipt email
+      description: |-
+        Queues an email for a receipt of the organization.
+        Requires the product catalog to be enabled, a premium license and the API key to have `payment_receipt` write permission.
+        The billing entity must have an email and a sender address configured, and all recipients must be valid email addresses.
+        A receipt from another organization or an unknown receipt returns 404.
+        A successful response has no body and confirms that the email was queued, not delivered.
+        Relationship expansion is not supported on this action; a nonempty `expands[]` returns a 400 response.
+      operationId: resendPaymentReceiptEmail
+      requestBody:
+        required: false
+        description: Email recipients
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReceiptResendEmailInput'
+      responses:
+        '200':
+          description: Payment receipt email queued
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+        '400':
+          $ref: '#/components/responses/InvalidExpansion'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Invalid email configuration or recipients
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              examples:
+                missingRecipient:
+                  value:
+                    code: validation_errors
+                    details:
+                      - code: must have at least one recipient
+                        field: to
+                        meta: {}
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of receipts per page. Values outside 1 through 100 are rejected with a 400 response.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+        example: 20
+    after:
+      name: after
+      in: query
+      required: false
+      description: Opaque next_cursor from a previous response. Cannot be combined with before. Keep the same filters when navigating pages.
+      schema:
+        type: string
+        maxLength: 512
+        example: eyJ2IjoxLCJvIjp7InQiOiJwYXltZW50X3JlY2VpcHRzIiwicyI6ImNyZWF0ZWRfYXQ6ZGVzYyxpZDpkZXNjIn0sImsiOlsiMjAyMi0wNC0yOVQwODo1OTo1MS4xMjM0NTZaIiwiMWE5MDFhOTAtMWE5MC0xYTkwLTFhOTAtMWE5MDFhOTAxYTkwIl19
+    before:
+      name: before
+      in: query
+      required: false
+      description: Opaque prev_cursor from a previous response. Cannot be combined with after. Keep the same filters when navigating pages.
+      schema:
+        type: string
+        maxLength: 512
+        example: eyJ2IjoxLCJvIjp7InQiOiJwYXltZW50X3JlY2VpcHRzIiwicyI6ImNyZWF0ZWRfYXQ6ZGVzYyxpZDpkZXNjIn0sImsiOlsiMjAyMi0wNC0yOVQwODo1OTo1MS4xMjM0NTZaIiwiMWE5MDFhOTAtMWE5MC0xYTkwLTFhOTAtMWE5MDFhOTAxYTkwIl19
+    include_total_count:
+      name: include_total_count
+      in: query
+      required: false
+      description: Requests a total count on the first page only. Combining true with after or before returns 400. A count may be estimated, as indicated by total_count_estimated.
+      schema:
+        type: boolean
+        default: false
+        example: true
+    created_at_from:
+      name: created_at_from
+      in: query
+      required: false
+      description: Returns the records created at or after this UTC date and time. A date without a time starts at midnight UTC. An invalid value returns 422.
+      schema:
+        type: string
+        example: '2022-04-29T08:59:51.123456Z'
+    created_at_to:
+      name: created_at_to
+      in: query
+      required: false
+      description: Returns the records created at or before this UTC date and time. A date without a time covers the whole day in UTC. An invalid value returns 422.
+      schema:
+        type: string
+        example: '2022-04-30'
+    lago_payment_receipt_id:
+      name: lago_id
+      in: path
+      required: true
+      description: Unique identifier of the payment receipt.
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  headers:
+    EndpointStatus:
+      description: Indicates that this API endpoint is in beta.
+      schema:
+        type: string
+        enum:
+          - beta
+        example: beta
+  schemas:
+    PaymentObject:
+      type: object
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - lago_payable_id
+        - payable_type
+        - lago_invoice_ids
+        - amount_cents
+        - currency
+        - status
+        - payment_status
+        - payment_type
+        - reference
+        - payment_provider_code
+        - payment_provider_type
+        - provider_payment_id
+        - provider_customer_id
+        - next_action
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the payment, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        lago_customer_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the customer, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        external_customer_id:
+          type: string
+          description: Unique identifier of the customer in your application.
+          example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+        lago_payable_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Unique identifier of the paid invoice or payment request, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        payable_type:
+          type: string
+          enum:
+            - Invoice
+            - PaymentRequest
+          description: Type of the paid resource identified by `lago_payable_id`.
+          example: Invoice
+        lago_invoice_ids:
+          type: array
+          description: Unique identifiers of the invoices the payment pays. A payment on a payment request lists every invoice the request covers.
+          items:
+            type: string
+            format: uuid
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        amount_cents:
+          type: integer
+          description: Amount of the payment, in cents.
+          example: 1099
+        currency:
+          type: string
+          description: Currency of the payment amount, as an ISO 4217 code.
+          example: USD
+        status:
+          type: string
+          description: Status of the payment within the payment provider. It differs from one payment provider to another.
+          example: succeeded
+        payment_status:
+          type:
+            - string
+            - 'null'
+          enum:
+            - pending
+            - processing
+            - succeeded
+            - failed
+            - null
+          description: Status of the payment, normalized by Lago so that it is the same for every payment provider.
+          example: succeeded
+        payment_type:
+          type: string
+          enum:
+            - provider
+            - manual
+            - x402
+          description: How the payment was collected.
+          example: provider
+        reference:
+          type:
+            - string
+            - 'null'
+          description: Reference of a manual payment. It is `null` for payments collected through a payment provider.
+          example: ref1
+        payment_provider_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the payment provider. It is `null` for manual payments.
+          example: stripe_prod
+        payment_provider_type:
+          type:
+            - string
+            - 'null'
+          enum:
+            - adyen
+            - cashfree
+            - gocardless
+            - stripe
+            - flutterwave
+            - moneyhash
+            - null
+          description: Type of the payment provider. It is `null` for manual payments.
+          example: stripe
+        provider_payment_id:
+          type:
+            - string
+            - 'null'
+          description: Unique identifier of the payment within the payment provider.
+          example: pi_5eb0285741bc6ba
+        provider_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Unique identifier of the customer within the payment provider. It is `null` for manual payments.
+          example: cus_5eb0285bcf941bc6ba
+        next_action:
+          type:
+            - object
+            - 'null'
+          additionalProperties: true
+          description: Next action the customer must take to complete the payment. It is usually empty.
+          example:
+            type: redirect_to_url
+            redirect_to_url:
+              url: https://payments.example/3d_secure
+              return_url: https://app.example.com
+        created_at:
+          type: string
+          format: date-time
+          description: UTC timestamp when the payment was created in Lago, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC timestamp when the payment was last updated, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+    PaymentReceiptObject:
+      type: object
+      required:
+        - lago_id
+        - number
+        - lago_payment_id
+        - pdf_url
+        - pdf_url_expires_at
+        - xml_url
+        - xml_url_expires_at
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the payment receipt, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        number:
+          type: string
+          description: Unique number assigned to the payment receipt.
+          example: LAG-1234-001-002
+        lago_payment_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the associated payment, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        pdf_url:
+          type:
+            - string
+            - 'null'
+          format: uri
+          description: Expiring download URL for the receipt PDF. It is null while no PDF is available. Retrieve the receipt again to obtain a current link.
+          example: https://api.getlago.com/documents/example/receipt.pdf
+        pdf_url_expires_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: UTC timestamp when the PDF download URL expires, with microsecond precision. It is null when pdf_url is null.
+          example: '2026-10-31T23:59:59.999999Z'
+        xml_url:
+          type:
+            - string
+            - 'null'
+          format: uri
+          description: Expiring download URL for the receipt XML. It is null while no XML is available. Retrieve the receipt again to obtain a current link.
+          example: https://api.getlago.com/documents/example/receipt.xml
+        xml_url_expires_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: UTC timestamp when the XML download URL expires, with microsecond precision. It is null when xml_url is null.
+          example: '2026-10-31T23:59:59.999999Z'
+        created_at:
+          type: string
+          format: date-time
+          description: UTC timestamp when the receipt was created, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC timestamp when the receipt was last updated, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+        payment:
+          $ref: '#/components/schemas/PaymentObject'
+          description: Payment of the receipt. It is present only when a single receipt is retrieved with `expands[]=payment`.
+    CursorPaginationMeta:
+      type: object
+      required:
+        - next_cursor
+        - prev_cursor
+      properties:
+        next_cursor:
+          type:
+            - string
+            - 'null'
+          description: Opaque cursor to pass as after for the next page. It is null when no next page is available.
+          example: null
+        prev_cursor:
+          type:
+            - string
+            - 'null'
+          description: Opaque cursor to pass as before for the previous page. It is null when no previous page is available.
+          example: null
+        total_count:
+          type: integer
+          minimum: 0
+          description: Number of matching receipts, returned only when include_total_count is true on the first page. It can be an estimate.
+          example: 42
+        total_count_estimated:
+          type: boolean
+          enum:
+            - true
+          description: Present and true only when total_count is an estimate. It is omitted for an exact count.
+          example: true
+    PaymentReceiptsPaginated:
+      type: object
+      required:
+        - payment_receipts
+        - meta
+      properties:
+        payment_receipts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentReceiptObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ApiError:
+      type: object
+      required:
+        - code
+        - details
+      properties:
+        code:
+          type: string
+          description: Code identifying the error. The HTTP response carries the status.
+          example: validation_errors
+        details:
+          type: array
+          description: Details of the failure. This array is empty when no field details are available.
+          items:
+            type: object
+            required:
+              - code
+              - field
+              - meta
+            properties:
+              code:
+                type: string
+                description: Error code or validation message for this field.
+                example: value_is_invalid
+              field:
+                type: string
+                description: Name of the offending field or parameter, or base for a resource-level failure.
+                example: invoice_id
+              meta:
+                type: object
+                description: Additional information about the failure, such as the missing resource or allowed values.
+                additionalProperties: true
+    PaymentReceipt:
+      type: object
+      required:
+        - payment_receipt
+      properties:
+        payment_receipt:
+          $ref: '#/components/schemas/PaymentReceiptObject'
+    PaymentReceiptResendEmailInput:
+      type: object
+      properties:
+        to:
+          type: array
+          description: Primary recipients. When omitted or empty, the customer's email is used. At least one recipient is required after applying that default.
+          items:
+            type: string
+            format: email
+            example: dinesh@piedpiper.example
+        cc:
+          type: array
+          description: Copy recipients. Defaults to an empty list.
+          items:
+            type: string
+            format: email
+            example: billing@piedpiper.example
+        bcc:
+          type: array
+          description: Blind copy recipients. Defaults to an empty list.
+          items:
+            type: string
+            format: email
+            example: accounting@piedpiper.example
+  responses:
+    BadRequest:
+      description: Invalid pagination or unsupported relationship expansion
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            invalidLimit:
+              value:
+                code: invalid_pagination_limit
+                details:
+                  - code: invalid_pagination_limit
+                    field: limit
+                    meta:
+                      value: '101'
+                      min: 1
+                      max: 100
+            offsetPagination:
+              value:
+                code: invalid_pagination_parameter
+                details:
+                  - code: replaced_by_cursor
+                    field: page
+                    meta: {}
+            invalidCursor:
+              value:
+                code: invalid_pagination_cursor
+                details:
+                  - code: malformed
+                    field: after
+                    meta: {}
+            expiredCursor:
+              value:
+                code: pagination_cursor_expired
+                details:
+                  - code: sort_changed
+                    field: after
+                    meta: {}
+            countOnLaterPage:
+              value:
+                code: total_count_first_page_only
+                details:
+                  - code: first_page_only
+                    field: include_total_count
+                    meta: {}
+            unsupportedExpansion:
+              value:
+                code: expand_not_supported
+                details:
+                  - code: action_not_expandable
+                    field: expands
+                    meta:
+                      invalid_values:
+                        - payment
+    Unauthorized:
+      description: Missing or invalid API key
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: unauthorized
+            details: []
+    Forbidden:
+      description: Product catalog disabled, missing receipt permission, or missing premium license for email resend
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            productCatalogDisabled:
+              value:
+                code: feature_unavailable
+                details: []
+            readPermissionRequired:
+              value:
+                code: read_action_not_allowed_for_payment_receipt
+                details: []
+            writePermissionRequired:
+              value:
+                code: write_action_not_allowed_for_payment_receipt
+                details: []
+            premiumLicenseRequired:
+              value:
+                code: premium_license_required
+                details: []
+    InvalidExpansion:
+      description: Malformed, unknown or unsupported relationship expansion
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          examples:
+            unknownExpansion:
+              summary: Expansion other than payment on a receipt retrieval
+              value:
+                code: invalid_expand
+                details:
+                  - code: invalid_expand
+                    field: expands
+                    meta:
+                      invalid_values:
+                        - customer
+                      allowed_values:
+                        - payment
+            actionNotExpandable:
+              summary: Expansion on an email resend
+              value:
+                code: expand_not_supported
+                details:
+                  - code: action_not_expandable
+                    field: expands
+                    meta:
+                      invalid_values:
+                        - payment
+            malformedExpansion:
+              summary: Expansion not sent as an array
+              value:
+                code: invalid_expand
+                details:
+                  - code: malformed
+                    field: expands
+                    meta:
+                      allowed_values:
+                        - payment
+    NotFound:
+      description: Unknown receipt or receipt from another organization
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: resource_not_found
+            details:
+              - code: resource_not_found
+                field: base
+                meta:
+                  resource: payment_receipt

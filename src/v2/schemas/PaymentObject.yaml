@@ -1,0 +1,132 @@
+type: object
+required:
+  - lago_id
+  - lago_customer_id
+  - external_customer_id
+  - lago_payable_id
+  - payable_type
+  - lago_invoice_ids
+  - amount_cents
+  - currency
+  - status
+  - payment_status
+  - payment_type
+  - reference
+  - payment_provider_code
+  - payment_provider_type
+  - provider_payment_id
+  - provider_customer_id
+  - next_action
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the payment, created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  lago_customer_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the customer, created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  external_customer_id:
+    type: string
+    description: Unique identifier of the customer in your application.
+    example: 5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba
+  lago_payable_id:
+    type: [string, 'null']
+    format: uuid
+    description: Unique identifier of the paid invoice or payment request, created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  payable_type:
+    type: string
+    enum:
+      - Invoice
+      - PaymentRequest
+    description: Type of the paid resource identified by `lago_payable_id`.
+    example: Invoice
+  lago_invoice_ids:
+    type: array
+    description: Unique identifiers of the invoices the payment pays. A payment on a payment request lists every invoice the request covers.
+    items:
+      type: string
+      format: uuid
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  amount_cents:
+    type: integer
+    description: Amount of the payment, in cents.
+    example: 1099
+  currency:
+    type: string
+    description: Currency of the payment amount, as an ISO 4217 code.
+    example: USD
+  status:
+    type: string
+    description: Status of the payment within the payment provider. It differs from one payment provider to another.
+    example: succeeded
+  payment_status:
+    type: [string, 'null']
+    enum:
+      - pending
+      - processing
+      - succeeded
+      - failed
+      - null
+    description: Status of the payment, normalized by Lago so that it is the same for every payment provider.
+    example: succeeded
+  payment_type:
+    type: string
+    enum:
+      - provider
+      - manual
+      - x402
+    description: How the payment was collected.
+    example: provider
+  reference:
+    type: [string, 'null']
+    description: Reference of a manual payment. It is `null` for payments collected through a payment provider.
+    example: ref1
+  payment_provider_code:
+    type: [string, 'null']
+    description: Code of the payment provider. It is `null` for manual payments.
+    example: stripe_prod
+  payment_provider_type:
+    type: [string, 'null']
+    enum:
+      - adyen
+      - cashfree
+      - gocardless
+      - stripe
+      - flutterwave
+      - moneyhash
+      - null
+    description: Type of the payment provider. It is `null` for manual payments.
+    example: stripe
+  provider_payment_id:
+    type: [string, 'null']
+    description: Unique identifier of the payment within the payment provider.
+    example: pi_5eb0285741bc6ba
+  provider_customer_id:
+    type: [string, 'null']
+    description: Unique identifier of the customer within the payment provider. It is `null` for manual payments.
+    example: cus_5eb0285bcf941bc6ba
+  next_action:
+    type: [object, 'null']
+    additionalProperties: true
+    description: Next action the customer must take to complete the payment. It is usually empty.
+    example:
+      type: redirect_to_url
+      redirect_to_url:
+        url: https://payments.example/3d_secure
+        return_url: https://app.example.com
+  created_at:
+    type: string
+    format: date-time
+    description: UTC timestamp when the payment was created in Lago, with microsecond precision.
+    example: '2022-04-29T08:59:51.123456Z'
+  updated_at:
+    type: string
+    format: date-time
+    description: UTC timestamp when the payment was last updated, with microsecond precision.
+    example: '2022-04-29T08:59:51.123456Z'

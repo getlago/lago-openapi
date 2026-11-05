@@ -1,0 +1,8 @@
+name: include_total_count
+in: query
+required: false
+description: Requests a total count on the first page only. Combining true with after or before returns 400. A count may be estimated, as indicated by total_count_estimated.
+schema:
+  type: boolean
+  default: false
+  example: true

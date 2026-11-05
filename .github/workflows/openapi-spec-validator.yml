@@ -24,10 +24,13 @@ jobs:
       - name: Ensure ./openapi.yaml is up-to-date
         run: |
           cp openapi.yaml openapi-before.yaml
+          cp openapi-v2.yaml openapi-v2-before.yaml
           npm install
           npm run build
           diff openapi.yaml openapi-before.yaml
+          diff openapi-v2.yaml openapi-v2-before.yaml
 
       - name: Run tests
         run: |
           python -m openapi_spec_validator "openapi.yaml"
+          python -m openapi_spec_validator "openapi-v2.yaml"

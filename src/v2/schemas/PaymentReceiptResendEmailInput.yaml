@@ -1,0 +1,23 @@
+type: object
+properties:
+  to:
+    type: array
+    description: Primary recipients. When omitted or empty, the customer's email is used. At least one recipient is required after applying that default.
+    items:
+      type: string
+      format: email
+      example: dinesh@piedpiper.example
+  cc:
+    type: array
+    description: Copy recipients. Defaults to an empty list.
+    items:
+      type: string
+      format: email
+      example: billing@piedpiper.example
+  bcc:
+    type: array
+    description: Blind copy recipients. Defaults to an empty list.
+    items:
+      type: string
+      format: email
+      example: accounting@piedpiper.example

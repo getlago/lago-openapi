@@ -1,0 +1,8 @@
+name: after
+in: query
+required: false
+description: Opaque next_cursor from a previous response. Cannot be combined with before. Keep the same filters when navigating pages.
+schema:
+  type: string
+  maxLength: 512
+  example: eyJ2IjoxLCJvIjp7InQiOiJwYXltZW50X3JlY2VpcHRzIiwicyI6ImNyZWF0ZWRfYXQ6ZGVzYyxpZDpkZXNjIn0sImsiOlsiMjAyMi0wNC0yOVQwODo1OTo1MS4xMjM0NTZaIiwiMWE5MDFhOTAtMWE5MC0xYTkwLTFhOTAtMWE5MDFhOTAxYTkwIl19
