@@ -3,9 +3,15 @@ required:
   - lago_id
   - name
   - code
-  - aggregation_type
+  - description
   - recurring
+  - rounding_function
+  - rounding_precision
   - created_at
+  - expression
+  - field_name
+  - aggregation_type
+  - weighted_interval
   - filters
 properties:
   lago_id:
@@ -46,13 +52,13 @@ properties:
       - round
       - null
     example: "round"
-    description: "Refers to the numeric value or mathematical expression that will be rounded based on the calculated number of billing units. Possible values are `round`, `ceil` and `floor`."
+    description: "Rounding applied to the aggregated number of units. Possible values are `round`, `ceil` and `floor`. When it is not set, the units are not rounded."
   rounding_precision:
     type:
       - integer
       - "null"
     example: 2
-    description: "Specifies the number of decimal places to which the `rounding_function` will be rounded. It can be a positive or negative value."
+    description: "Number of decimal places kept when `rounding_function` is applied. It can be a positive or negative value, and it defaults to 0."
   created_at:
     type: string
     format: "date-time"
@@ -69,7 +75,7 @@ properties:
       - string
       - "null"
     example: "gb"
-    description: "Property of the billable metric used for aggregating usage data. This field is not required for `count_agg`."
+    description: "Property of the billable metric used for aggregating usage data. It is `null` when `aggregation_type` is `count_agg`."
   aggregation_type:
     type: string
     description: "Aggregation method used to compute usage for this billable metric."
