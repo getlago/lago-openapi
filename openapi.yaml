@@ -273,7 +273,7 @@ paths:
       tags:
         - activity_logs
       summary: List all activity logs
-      description: This endpoint retrieves all existing activity logs that represent actions performed on application resources.
+      description: This endpoint retrieves all existing activity logs that represent actions performed on application resources. Logs are returned from the most recent to the oldest.
       operationId: findAllActivityLogs
       parameters:
         - $ref: '#/components/parameters/page'
@@ -12938,20 +12938,16 @@ components:
             - system
           description: The source that triggered the action.
         activity_object:
-          type:
-            - object
-            - 'null'
+          type: object
           example:
             lago_id: dad68bc7-c01a-4ad8-a87b-13e78693a5bc
             plan_id: b9155544-e261-4e92-b54e-f65d7609294c
           description: The state of the resource after the action, keyed by top-level attribute name. Nested values are returned JSON-encoded.
         activity_object_changes:
-          type:
-            - object
-            - 'null'
+          type: object
           example:
             plan_id: '[null,"b9155544-e261-4e92-b54e-f65d7609294c"]'
-          description: The attributes the action changed, keyed by attribute name. Each value is the JSON-encoded pair of the previous and the new value. It is empty when the activity type is not an update.
+          description: The attributes the action changed, keyed by attribute name. Each value is the JSON-encoded pair of the previous and the new value. It is an empty object when the activity type is not an update.
         external_customer_id:
           type:
             - string

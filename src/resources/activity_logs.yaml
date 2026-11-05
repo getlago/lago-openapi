@@ -2,7 +2,7 @@ get:
   tags:
     - activity_logs
   summary: List all activity logs
-  description: This endpoint retrieves all existing activity logs that represent actions performed on application resources.
+  description: This endpoint retrieves all existing activity logs that represent actions performed on application resources. Logs are returned from the most recent to the oldest.
   operationId: findAllActivityLogs
   parameters:
     - $ref: '../parameters/page.yaml'
