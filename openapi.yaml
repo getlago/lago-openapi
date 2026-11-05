@@ -14908,9 +14908,10 @@ components:
         percentage_rate:
           type:
             - string
+            - number
             - 'null'
           pattern: ^[0-9]+.?[0-9]*$
-          description: The percentage rate of the coupon. This field is required only for coupons with a `percentage` coupon type.
+          description: The percentage rate of the coupon. Accepts a number or a decimal string. This field is required only for coupons with a `percentage` coupon type.
           example: null
         frequency:
           type: string
