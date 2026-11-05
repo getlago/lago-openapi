@@ -1199,6 +1199,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -1227,6 +1229,8 @@ paths:
                 $ref: '#/components/schemas/FeaturesPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /features/{code}:
     parameters:
       - name: code
@@ -1281,6 +1285,8 @@ paths:
                 $ref: '#/components/schemas/Feature'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     get:
@@ -1298,6 +1304,8 @@ paths:
                 $ref: '#/components/schemas/Feature'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /features/{code}/privileges/{privilege_code}:
@@ -1324,13 +1332,15 @@ paths:
       operationId: deleteFeaturePrivilege
       responses:
         '200':
-          description: Feature with deleted privilege.
+          description: The feature without the deleted privilege.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Feature'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /coupons:
@@ -14712,7 +14722,7 @@ components:
                 select_options:
                   - google
                   - okta
-          description: Privileges associated with this feature. Can be empty.
+          description: Privileges associated with this feature. Can be empty. Each privilege code must appear only once in the list.
     FeatureCreateInput:
       type: object
       required:

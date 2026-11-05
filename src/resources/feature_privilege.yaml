@@ -21,12 +21,14 @@ delete:
   operationId: deleteFeaturePrivilege
   responses:
     '200':
-      description: Feature with deleted privilege.
+      description: The feature without the deleted privilege.
       content:
         application/json:
           schema:
             $ref: '../schemas/Entitlement/Feature.yaml'
     "401":
       $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
     "404":
       $ref: "../responses/NotFound.yaml"
