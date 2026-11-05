@@ -7945,7 +7945,7 @@ paths:
       tags:
         - webhook_endpoints
       summary: Create a webhook endpoint
-      description: This endpoint is used to create a webhook endpoint.
+      description: This endpoint is used to create a webhook endpoint. An organization can have at most 10 webhook endpoints.
       operationId: createWebhookEndpoint
       requestBody:
         description: Webhook endpoint payload
@@ -26689,7 +26689,7 @@ components:
           properties:
             webhook_url:
               type: string
-              description: The URL of the webhook endpoint.
+              description: The URL of the webhook endpoint. It must be unique within the organization.
               example: https://foo.bar
             signature_algo:
               type:
@@ -26735,7 +26735,7 @@ components:
           properties:
             webhook_url:
               type: string
-              description: The URL of the webhook endpoint.
+              description: The URL of the webhook endpoint. It must be unique within the organization.
               example: https://foo.bar
             signature_algo:
               type:
