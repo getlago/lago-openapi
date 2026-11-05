@@ -973,6 +973,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -14018,7 +14020,7 @@ components:
             - string
             - 'null'
           format: date-time
-          description: The date and time after which the coupon will stop applying to customer's invoices. Once the expiration date is reached, the coupon will no longer be applicable, and any further invoices generated for the customer will not include the coupon discount.
+          description: The date and time after which the coupon will stop applying to customer's invoices. Once the expiration date is reached, the coupon will no longer be applicable, and any further invoices generated for the customer will not include the coupon discount. This value comes from the parent coupon.
           example: '2022-04-29T08:59:51Z'
         created_at:
           type: string
@@ -14089,6 +14091,12 @@ components:
               type: string
               description: The name of the credit applied. It can be the name of the coupon attached to the credit, the initial invoice's number linked to the credit note or the `progressive_billing` invoice number.
               example: Startup Deal
+            description:
+              type:
+                - string
+                - 'null'
+              description: The description of the credit applied. It is the description of the coupon attached to the credit or the description of the credit note. It is null for a `progressive_billing` invoice.
+              example: I am a coupon description
         invoice:
           type: object
           required:
@@ -14185,9 +14193,10 @@ components:
             percentage_rate:
               type:
                 - string
+                - number
                 - 'null'
               pattern: ^[0-9]+.?[0-9]*$
-              description: The percentage rate of the coupon. If it is not set, the percentage rate of the coupon is used.
+              description: The percentage rate of the coupon. Accepts a number or a decimal string. If it is not set, the percentage rate of the coupon is used.
               example: null
     AppliedCoupon:
       type: object
@@ -14196,6 +14205,23 @@ components:
       properties:
         applied_coupon:
           $ref: '#/components/schemas/AppliedCouponObject'
+    ApiErrorNotAllowed:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 405
+        error:
+          type: string
+          example: Method Not Allowed
+        code:
+          type: string
+          example: not_allowed
     BillableMetricFilterObject:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
@@ -14997,23 +15023,6 @@ components:
       properties:
         coupon:
           $ref: '#/components/schemas/CouponObject'
-    ApiErrorNotAllowed:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 405
-        error:
-          type: string
-          example: Method Not Allowed
-        code:
-          type: string
-          example: not_allowed
     CouponUpdateInput:
       type: object
       required:

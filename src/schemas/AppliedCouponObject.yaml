@@ -118,7 +118,7 @@ properties:
       - string
       - "null"
     format: "date-time"
-    description: The date and time after which the coupon will stop applying to customer's invoices. Once the expiration date is reached, the coupon will no longer be applicable, and any further invoices generated for the customer will not include the coupon discount.
+    description: The date and time after which the coupon will stop applying to customer's invoices. Once the expiration date is reached, the coupon will no longer be applicable, and any further invoices generated for the customer will not include the coupon discount. This value comes from the parent coupon.
     example: "2022-04-29T08:59:51Z"
   created_at:
     type: string
