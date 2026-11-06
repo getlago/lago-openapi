@@ -1,0 +1,5 @@
+allOf:
+  - $ref: ./CustomerObject.yaml
+  - type: object
+    required:
+      - shipping_address

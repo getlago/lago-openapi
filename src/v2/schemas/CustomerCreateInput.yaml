@@ -1,0 +1,9 @@
+type: object
+description: Create customer.
+required:
+  - customer
+properties:
+  customer:
+    $ref: ./CustomerBaseInput.yaml
+    required:
+      - external_id

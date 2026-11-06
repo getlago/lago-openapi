@@ -1,0 +1,41 @@
+type: object
+description: Usage event.
+required:
+  - transaction_id
+  - external_contract_id
+  - code
+  - precise_total_amount_cents
+  - properties
+  - timestamp
+properties:
+  transaction_id:
+    type: string
+    description: Transaction identifier supplied by the sender. It can occur on more
+      than one event.
+    example: transaction_123
+  external_contract_id:
+    type:
+      - string
+      - "null"
+    description: External contract identifier.
+    example: contract_123
+  code:
+    type: string
+    description: Event code.
+    example: compute
+  precise_total_amount_cents:
+    type:
+      - string
+      - "null"
+    description: Total event amount, in cents. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  properties:
+    type: object
+    description: Event properties.
+    additionalProperties: true
+  timestamp:
+    type: string
+    description: Event timestamp, in UTC with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

@@ -1,0 +1,35 @@
+type: object
+minProperties: 1
+properties:
+  name:
+    type:
+      - string
+      - "null"
+    description: Endpoint name.
+    example: Billing webhooks
+  webhook_url:
+    type: string
+    description: Public URL receiving webhook requests. Private addresses are rejected.
+    example: https://hooks.acme.example/lago
+    format: uri
+  signature_algo:
+    type: string
+    description: Webhook signature algorithm.
+    example: jwt
+    enum:
+      - jwt
+      - hmac
+    default: jwt
+  event_types:
+    type:
+      - array
+      - "null"
+    items:
+      anyOf:
+        - $ref: ./WebhookEventTypeEnum.yaml
+        - type: string
+          enum:
+            - "*"
+          example: "*"
+    description: Event types to deliver. Null or ["*"] selects all events. Names are
+      trimmed, lowercased and deduplicated. An empty array selects none.

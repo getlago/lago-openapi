@@ -1,0 +1,124 @@
+get:
+  tags:
+    - activity_logs
+  summary: List activity logs
+  description: >-
+    Returns a cursor-paginated list ordered by log time, newest first. Use after
+    or before to navigate. The page and per_page parameters are rejected.
+
+    Requires a premium license and available log storage. Results are ordered by logged_at and activity_id, both descending, within the configured retention period.
+
+    Requires the product catalog to be enabled and activity_log read permission on the API key.
+  operationId: findAllActivityLogs
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - name: from_date
+      in: query
+      required: false
+      description: From date.
+      schema:
+        type: string
+        description: Inclusive lower log-time bound.
+        example: 2022-04-29T08:59:51.123456Z
+        format: date-time
+    - name: to_date
+      in: query
+      required: false
+      description: To date.
+      schema:
+        type: string
+        description: Inclusive upper log-time bound.
+        example: 2022-04-29T08:59:51.123456Z
+        format: date-time
+    - name: activity_types[]
+      in: query
+      required: false
+      description: Activity types[].
+      schema:
+        type: array
+        description: Activity types.
+        items:
+          type: string
+          description: Activity types.
+          example: example
+    - name: activity_sources[]
+      in: query
+      required: false
+      description: Activity sources[].
+      schema:
+        type: array
+        description: Activity sources.
+        items:
+          type: string
+          description: Activity sources.
+          example: example
+    - name: user_emails[]
+      in: query
+      required: false
+      description: User emails[].
+      schema:
+        type: array
+        description: User emails.
+        items:
+          type: string
+          description: User emails.
+          example: example
+    - name: resource_ids[]
+      in: query
+      required: false
+      description: Resource ids[].
+      schema:
+        type: array
+        description: Resource ids.
+        items:
+          type: string
+          description: Resource ids.
+          example: example
+    - name: resource_types[]
+      in: query
+      required: false
+      description: Resource types[].
+      schema:
+        type: array
+        description: Resource types.
+        items:
+          type: string
+          description: Resource types.
+          example: example
+    - name: external_customer_id
+      in: query
+      required: false
+      description: External customer id.
+      schema:
+        type: string
+        description: External customer id.
+        example: example
+    - name: external_subscription_id
+      in: query
+      required: false
+      description: External subscription id.
+      schema:
+        type: string
+        description: External subscription id.
+        example: example
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ActivityLogsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

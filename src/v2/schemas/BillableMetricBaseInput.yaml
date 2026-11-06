@@ -1,0 +1,95 @@
+type: object
+minProperties: 1
+properties:
+  name:
+    type: string
+    description: Name.
+    example: example
+  code:
+    type: string
+    description: Code.
+    example: example
+  description:
+    type:
+      - string
+      - "null"
+    description: Description.
+    example: example
+  field_name:
+    type:
+      - string
+      - "null"
+    description: Field name.
+    example: example
+  expression:
+    type:
+      - string
+      - "null"
+    description: Expression.
+    example: example
+  rounding_precision:
+    type:
+      - integer
+      - "null"
+    description: Rounding precision.
+    example: 1
+  aggregation_type:
+    type: string
+    description: Aggregation method. field_name is required except for count_agg.
+    example: count_agg
+    enum:
+      - count_agg
+      - sum_agg
+      - max_agg
+      - unique_count_agg
+      - weighted_sum_agg
+      - latest_agg
+  weighted_interval:
+    type:
+      - string
+      - "null"
+    description: Weighting interval. Required for weighted_sum_agg.
+    example: seconds
+    enum:
+      - seconds
+      - null
+  recurring:
+    type: boolean
+    description: Whether values carry over between billing periods.
+    example: false
+  rounding_function:
+    type:
+      - string
+      - "null"
+    description: Rounding applied to aggregated values.
+    example: ceil
+    enum:
+      - ceil
+      - floor
+      - round
+      - null
+  filters:
+    type: array
+    description: Complete filter definitions. An empty array removes existing
+      filters. Null, malformed filters and non-string values are rejected before
+      any changes are saved.
+    items:
+      type: object
+      description: Billable metric filter.
+      required:
+        - key
+        - values
+      properties:
+        key:
+          type: string
+          description: Unique, nonempty filter key.
+          example: region
+          minLength: 1
+        values:
+          type: array
+          description: Allowed string values.
+          items:
+            type: string
+            description: Allowed filter value.
+            example: eu
+          minItems: 1

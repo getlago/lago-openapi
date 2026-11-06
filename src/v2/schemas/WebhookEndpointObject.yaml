@@ -1,0 +1,52 @@
+type: object
+description: Webhook Endpoint.
+required:
+  - lago_id
+  - name
+  - webhook_url
+  - signature_algo
+  - event_types
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  name:
+    type:
+      - string
+      - "null"
+    description: Name.
+    example: example
+  webhook_url:
+    type: string
+    description: Public URL receiving webhook requests.
+    example: https://hooks.acme.example/lago
+    format: uri
+  signature_algo:
+    type: string
+    description: Webhook signature algorithm.
+    example: jwt
+    enum:
+      - jwt
+      - hmac
+  event_types:
+    type:
+      - array
+      - "null"
+    items:
+      $ref: ./WebhookEventTypeEnum.yaml
+    description: Event types delivered to this endpoint. Null means all events; an
+      empty array selects none.
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

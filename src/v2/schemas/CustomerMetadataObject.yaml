@@ -1,0 +1,37 @@
+type: object
+description: Customer Metadata.
+required:
+  - lago_id
+  - key
+  - value
+  - display_on_invoice
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  key:
+    type: string
+    description: Key.
+    example: example
+  value:
+    type: string
+    description: Value.
+    example: example
+  display_on_invoice:
+    type: boolean
+    description: Whether this value is displayed on invoices.
+    example: false
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

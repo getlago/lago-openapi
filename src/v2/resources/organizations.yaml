@@ -1,0 +1,61 @@
+get:
+  tags:
+    - organizations
+  summary: Retrieve the organization
+  description: >-
+    Returns the organization associated with the API key. No expansions are
+    supported.
+
+    Requires the product catalog to be enabled and organization read permission on the API key.
+  operationId: findOrganization
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Organization.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+put:
+  tags:
+    - organizations
+  summary: Update the organization
+  description: >-
+    Updates email and slug. Omitted fields are unchanged. Name and events_store
+    are read-only.
+
+    Requires the product catalog to be enabled and organization write permission on the API key.
+  operationId: updateOrganization
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/OrganizationUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Organization.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
