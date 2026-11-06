@@ -1,0 +1,173 @@
+get:
+  tags:
+    - fees
+  summary: List fees
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+    Only product fees are returned. Fees can be listed before they have an invoice. Legacy fees are excluded.
+
+    Requires the product catalog to be enabled and fee read permission on the API key.
+  operationId: findAllFees
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+    - name: lago_invoice_id
+      in: query
+      required: false
+      description: Lago invoice id.
+      schema:
+        type: string
+        description: Invoice identifier.
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        format: uuid
+    - name: payment_status
+      in: query
+      required: false
+      description: Payment status.
+      schema:
+        type: string
+        description: Payment status of the fee.
+        example: pending
+        enum:
+          - pending
+          - succeeded
+          - failed
+          - refunded
+    - name: external_customer_id
+      in: query
+      required: false
+      description: External customer id.
+      schema:
+        type: string
+        description: External customer id.
+        example: example
+    - name: external_contract_id
+      in: query
+      required: false
+      description: External contract id.
+      schema:
+        type: string
+        description: External contract id.
+        example: example
+    - name: product_code
+      in: query
+      required: false
+      description: Product code.
+      schema:
+        type: string
+        description: Product code.
+        example: example
+    - name: rate_card_code
+      in: query
+      required: false
+      description: Rate card code.
+      schema:
+        type: string
+        description: Rate card code.
+        example: example
+    - name: currency
+      in: query
+      required: false
+      description: Currency as an ISO 4217 code.
+      schema:
+        type: string
+        description: Currency as an ISO 4217 code.
+        example: example
+    - name: event_transaction_id
+      in: query
+      required: false
+      description: Event transaction id.
+      schema:
+        type: string
+        description: Event transaction id.
+        example: example
+    - name: succeeded_at_from
+      in: query
+      required: false
+      description: Inclusive lower bound on succeeded at. A date-only upper bound
+        includes the whole UTC day.
+      schema:
+        type: string
+        oneOf:
+          - format: date
+          - format: date-time
+        example: 2022-04-29T00:00:00Z
+    - name: succeeded_at_to
+      in: query
+      required: false
+      description: Inclusive upper bound on succeeded at. A date-only upper bound
+        includes the whole UTC day.
+      schema:
+        type: string
+        oneOf:
+          - format: date
+          - format: date-time
+        example: 2022-04-29T00:00:00Z
+    - name: failed_at_from
+      in: query
+      required: false
+      description: Inclusive lower bound on failed at. A date-only upper bound
+        includes the whole UTC day.
+      schema:
+        type: string
+        oneOf:
+          - format: date
+          - format: date-time
+        example: 2022-04-29T00:00:00Z
+    - name: failed_at_to
+      in: query
+      required: false
+      description: Inclusive upper bound on failed at. A date-only upper bound
+        includes the whole UTC day.
+      schema:
+        type: string
+        oneOf:
+          - format: date
+          - format: date-time
+        example: 2022-04-29T00:00:00Z
+    - name: refunded_at_from
+      in: query
+      required: false
+      description: Inclusive lower bound on refunded at. A date-only upper bound
+        includes the whole UTC day.
+      schema:
+        type: string
+        oneOf:
+          - format: date
+          - format: date-time
+        example: 2022-04-29T00:00:00Z
+    - name: refunded_at_to
+      in: query
+      required: false
+      description: Inclusive upper bound on refunded at. A date-only upper bound
+        includes the whole UTC day.
+      schema:
+        type: string
+        oneOf:
+          - format: date
+          - format: date-time
+        example: 2022-04-29T00:00:00Z
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/FeesPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

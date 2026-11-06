@@ -1,0 +1,68 @@
+type: object
+description: Payment Receipt.
+required:
+  - lago_id
+  - number
+  - lago_payment_id
+  - pdf_url
+  - xml_url
+  - pdf_url_expires_at
+  - xml_url_expires_at
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  number:
+    type: string
+    description: Number.
+    example: example
+  lago_payment_id:
+    type: string
+    description: Payment identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  pdf_url:
+    type:
+      - string
+      - "null"
+    description: Document download URL, or null while the document is unavailable.
+    example: https://documents.example/invoice.pdf
+    format: uri
+  xml_url:
+    type:
+      - string
+      - "null"
+    description: Document download URL, or null while the document is unavailable.
+    example: https://documents.example/invoice.pdf
+    format: uri
+  pdf_url_expires_at:
+    type:
+      - string
+      - "null"
+    description: Expiry of the PDF URL. Null when no PDF URL is available.
+    example: null
+    format: date-time
+  xml_url_expires_at:
+    type:
+      - string
+      - "null"
+    description: Expiry of the XML URL. Null when no XML URL is available.
+    example: null
+    format: date-time
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  payment:
+    $ref: ./PaymentObject.yaml
+    description: Present only with expands[]=payment on retrieval.

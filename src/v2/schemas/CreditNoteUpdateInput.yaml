@@ -1,0 +1,26 @@
+type: object
+description: Update a credit note.
+required:
+  - credit_note
+properties:
+  credit_note:
+    type: object
+    minProperties: 1
+    properties:
+      refund_status:
+        type:
+          - string
+          - "null"
+        description: Refund status.
+        example: pending
+        enum:
+          - pending
+          - succeeded
+          - failed
+          - null
+      metadata:
+        type:
+          - object
+          - "null"
+        description: Metadata as an object of key-value pairs.
+        additionalProperties: true

@@ -1,0 +1,44 @@
+type: object
+description: Credit Note Applied Tax.
+required:
+  - lago_tax_id
+  - tax_name
+  - tax_code
+  - tax_rate
+  - tax_description
+  - base_amount_cents
+  - amount_cents
+properties:
+  lago_tax_id:
+    type:
+      - string
+      - "null"
+    description: Tax identifier, when a local tax still exists.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  tax_name:
+    type: string
+    description: Tax name.
+    example: example
+  tax_code:
+    type: string
+    description: Tax code.
+    example: example
+  tax_rate:
+    type: number
+    description: Tax rate.
+    example: 20
+  tax_description:
+    type:
+      - string
+      - "null"
+    description: Tax description.
+    example: example
+  base_amount_cents:
+    type: integer
+    description: Base amount cents.
+    example: 100
+  amount_cents:
+    type: integer
+    description: Amount cents.
+    example: 100

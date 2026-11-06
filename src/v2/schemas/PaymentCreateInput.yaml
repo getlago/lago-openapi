@@ -1,0 +1,11 @@
+type: object
+description: Create payment.
+required:
+  - payment
+properties:
+  payment:
+    $ref: ./PaymentBaseInput.yaml
+    required:
+      - invoice_id
+      - amount_cents
+      - reference
