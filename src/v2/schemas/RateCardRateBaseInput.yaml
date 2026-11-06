@@ -32,16 +32,15 @@ properties:
     $ref: ./RatePropertiesInput.yaml
   min_amount_cents:
     type: integer
-    description: Minimum charge in cents. Allowed only for arrears billing.
+    description: Minimum charge in cents. Allowed only for arrears billing. Defaults
+      to 0 on creation.
     example: 0
     minimum: 0
-    default: 0
   billing_interval_count:
     type: integer
-    description: Number of billing interval units.
+    description: Number of billing interval units. Defaults to 1 on creation.
     example: 1
     minimum: 1
-    default: 1
   billing_interval_unit:
     type: string
     description: Unit of the billing interval.

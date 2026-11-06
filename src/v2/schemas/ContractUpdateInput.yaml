@@ -27,7 +27,6 @@ properties:
         enum:
           - calendar
           - anniversary
-        default: calendar
       billing_anchor_date:
         type:
           - string
@@ -39,8 +38,9 @@ properties:
         type:
           - string
           - "null"
-        description: Start timestamp. Defaults to now. A future start creates a pending
-          contract.
+        description: Start timestamp. Editable only on a pending contract, where a start
+          of today or earlier activates it. An active contract accepts only its
+          stored value.
         example: null
         format: date-time
       ended_at:

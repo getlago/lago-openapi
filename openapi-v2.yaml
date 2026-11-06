@@ -4428,16 +4428,14 @@ components:
           $ref: '#/components/schemas/RatePropertiesInput'
         min_amount_cents:
           type: integer
-          description: Minimum charge in cents. Allowed only for arrears billing.
+          description: Minimum charge in cents. Allowed only for arrears billing. Defaults to 0 on creation.
           example: 0
           minimum: 0
-          default: 0
         billing_interval_count:
           type: integer
-          description: Number of billing interval units.
+          description: Number of billing interval units. Defaults to 1 on creation.
           example: 1
           minimum: 1
-          default: 1
         billing_interval_unit:
           type: string
           description: Unit of the billing interval.
@@ -4596,17 +4594,14 @@ components:
               enum:
                 - arrears
                 - advance
-              default: arrears
             proration:
               type: boolean
               description: Whether charges are prorated.
               example: false
-              default: false
             display_on_invoice:
               type: boolean
               description: Whether generated fees are shown on invoices.
               example: true
-              default: true
             regroup_paid_fees:
               type:
                 - string
@@ -5994,7 +5989,6 @@ components:
               enum:
                 - calendar
                 - anniversary
-              default: calendar
             billing_anchor_date:
               type:
                 - string
@@ -6006,7 +6000,7 @@ components:
               type:
                 - string
                 - 'null'
-              description: Start timestamp. Defaults to now. A future start creates a pending contract.
+              description: Start timestamp. Editable only on a pending contract, where a start of today or earlier activates it. An active contract accepts only its stored value.
               example: null
               format: date-time
             ended_at:
