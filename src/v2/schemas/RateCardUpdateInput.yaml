@@ -34,17 +34,14 @@ properties:
         enum:
           - arrears
           - advance
-        default: arrears
       proration:
         type: boolean
         description: Whether charges are prorated.
         example: false
-        default: false
       display_on_invoice:
         type: boolean
         description: Whether generated fees are shown on invoices.
         example: true
-        default: true
       regroup_paid_fees:
         type:
           - string
