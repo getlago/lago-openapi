@@ -1,0 +1,62 @@
+type: object
+description: An estimate, not a persisted credit note.
+required:
+  - lago_invoice_id
+  - invoice_number
+  - currency
+  - sub_total_excluding_taxes_amount_cents
+  - taxes_amount_cents
+  - sub_total_including_taxes_amount_cents
+  - total_amount_cents
+  - max_creditable_amount_cents
+  - max_refundable_amount_cents
+  - items
+  - applied_taxes
+properties:
+  lago_invoice_id:
+    type: string
+    description: Invoice identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  invoice_number:
+    type: string
+    description: Invoice number.
+    example: INV-001
+  currency:
+    type: string
+    description: Currency as an ISO 4217 code.
+    example: USD
+  sub_total_excluding_taxes_amount_cents:
+    type: integer
+    description: Estimated amount excluding tax, in cents.
+    example: 100
+  taxes_amount_cents:
+    type: integer
+    description: Estimated tax amount, in cents.
+    example: 20
+  sub_total_including_taxes_amount_cents:
+    type: integer
+    description: Estimated amount including tax, in cents.
+    example: 120
+  total_amount_cents:
+    type: integer
+    description: Estimated total amount, in cents.
+    example: 120
+  max_creditable_amount_cents:
+    type: integer
+    description: Maximum amount that can be credited, in cents.
+    example: 120
+  max_refundable_amount_cents:
+    type: integer
+    description: Maximum refundable amount, in cents.
+    example: 120
+  items:
+    type: array
+    description: Estimated fee credits. Always included.
+    items:
+      $ref: ./CreditNoteItemObject.yaml
+  applied_taxes:
+    type: array
+    description: Estimated taxes. Always included.
+    items:
+      $ref: ./CreditNoteAppliedTaxObject.yaml

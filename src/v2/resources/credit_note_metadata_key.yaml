@@ -1,0 +1,48 @@
+parameters:
+  - name: credit_note_id
+    in: path
+    required: true
+    description: Credit note identifier.
+    schema:
+      type: string
+      description: Credit note identifier.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+  - name: key
+    in: path
+    required: true
+    description: Metadata key.
+    schema:
+      type: string
+      description: Metadata key.
+      example: example_code
+delete:
+  tags:
+    - credit_notes
+  summary: Delete one credit note metadata key
+  description: >-
+    Deletes one metadata key from a finalized credit note and returns the
+    remaining metadata.
+
+    Requires the product catalog to be enabled and credit_note write permission on the API key.
+  operationId: deleteCreditNoteMetadataKey
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Metadata.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

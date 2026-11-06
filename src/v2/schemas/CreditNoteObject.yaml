@@ -1,0 +1,195 @@
+type: object
+description: Credit Note.
+required:
+  - lago_id
+  - billing_entity_code
+  - sequential_id
+  - number
+  - lago_invoice_id
+  - invoice_number
+  - purchase_order_number
+  - issuing_date
+  - credit_status
+  - refund_status
+  - reason
+  - description
+  - currency
+  - sub_total_excluding_taxes_amount_cents
+  - taxes_amount_cents
+  - sub_total_including_taxes_amount_cents
+  - total_amount_cents
+  - balance_amount_cents
+  - credit_amount_cents
+  - refund_amount_cents
+  - offset_amount_cents
+  - file_url
+  - xml_url
+  - self_billed
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  billing_entity_code:
+    type: string
+    description: Code of the invoice billing entity.
+    example: main
+  sequential_id:
+    type: integer
+    description: Sequential id.
+    example: 1
+  number:
+    type: string
+    description: Number.
+    example: example
+  lago_invoice_id:
+    type: string
+    description: Invoice identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  invoice_number:
+    type: string
+    description: Invoice number.
+    example: INV-001
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    description: Purchase order reference.
+    example: PO-123
+  issuing_date:
+    type: string
+    description: Issuing date.
+    example: 2022-04-29
+    format: date
+  credit_status:
+    type:
+      - string
+      - "null"
+    description: Credit balance status.
+    example: available
+    enum:
+      - available
+      - consumed
+      - voided
+      - null
+  refund_status:
+    type:
+      - string
+      - "null"
+    description: Refund status.
+    example: pending
+    enum:
+      - pending
+      - succeeded
+      - failed
+      - null
+  reason:
+    type: string
+    description: Reason for issuing the credit note.
+    example: duplicated_charge
+    enum:
+      - duplicated_charge
+      - product_unsatisfactory
+      - order_change
+      - order_cancellation
+      - fraudulent_charge
+      - other
+  description:
+    type:
+      - string
+      - "null"
+    description: Description.
+    example: Example
+  currency:
+    type: string
+    description: Currency as an ISO 4217 code.
+    example: USD
+  sub_total_excluding_taxes_amount_cents:
+    type: integer
+    description: Credited amount excluding tax, in cents.
+    example: 100
+  taxes_amount_cents:
+    type: integer
+    description: Taxes amount cents.
+    example: 100
+  sub_total_including_taxes_amount_cents:
+    type: integer
+    description: Credited amount including tax, in cents.
+    example: 120
+  total_amount_cents:
+    type: integer
+    description: Total amount cents.
+    example: 100
+  balance_amount_cents:
+    type: integer
+    description: Balance amount cents.
+    example: 100
+  credit_amount_cents:
+    type: integer
+    description: Credit amount cents.
+    example: 100
+  refund_amount_cents:
+    type: integer
+    description: Refund amount cents.
+    example: 100
+  offset_amount_cents:
+    type: integer
+    description: Offset amount cents.
+    example: 100
+  file_url:
+    type:
+      - string
+      - "null"
+    description: Document download URL, or null while the document is unavailable.
+    example: https://documents.example/invoice.pdf
+    format: uri
+  xml_url:
+    type:
+      - string
+      - "null"
+    description: Document download URL, or null while the document is unavailable.
+    example: https://documents.example/invoice.pdf
+    format: uri
+  self_billed:
+    type: boolean
+    description: Whether the invoice is self-billed.
+    example: false
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  items:
+    type: array
+    description: Present only with expands[]=items.
+    items:
+      $ref: ./CreditNoteItemObject.yaml
+  applied_taxes:
+    type: array
+    description: Present only with expands[]=applied_taxes.
+    items:
+      $ref: ./CreditNoteAppliedTaxObject.yaml
+  customer:
+    $ref: ./CustomerObject.yaml
+    description: Present only with expands[]=customer.
+  error_details:
+    type: array
+    description: Present only with expands[]=error_details. These entries do not
+      include timestamps.
+    items:
+      $ref: ./CreditNoteErrorDetailObject.yaml
+  metadata:
+    type:
+      - object
+      - "null"
+    description: Present only with expands[]=metadata. Null when no metadata exists.
+    additionalProperties: true

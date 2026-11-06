@@ -3,8 +3,8 @@ info:
   title: Lago API v2 documentation
   description: |-
     Beta API for organizations using the product catalog.
-    This document covers taxes, catalog resources and contracts. Other native v2 endpoints will be added separately.
-    Native v2 endpoints use structured errors and support only the expansions documented for each action.
+    This document covers taxes, the product catalog, contracts and billing. Other native v2 endpoints will be added separately.
+    Only the documented actions and expansions are supported. Some lists, such as rates and phases, are returned without pagination.
   version: 2.0.0-beta
   license:
     name: AGPLv3
@@ -43,6 +43,18 @@ tags:
     description: contract rate phases operations
   - name: contracts
     description: contracts operations
+  - name: invoices
+    description: invoices operations
+  - name: fees
+    description: fees operations
+  - name: payments
+    description: payments operations
+  - name: payment_requests
+    description: payment requests operations
+  - name: payment_receipts
+    description: payment receipts operations
+  - name: credit_notes
+    description: credit notes operations
 externalDocs:
   description: Lago documentation
   url: https://getlago.com/docs
@@ -2980,6 +2992,2183 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContractUsage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices:
+    get:
+      tags:
+        - invoices
+      summary: List invoices
+      description: |-
+        Returns a cursor-paginated list. Use after or before to navigate. The page and per_page parameters are rejected.
+        Only contract invoices and invoices containing contract fees are returned. The order is issuing_date descending, then created_at and identifier descending.
+        Requires the product catalog to be enabled and invoice read permission on the API key.
+      operationId: findAllInvoices
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: invoice_type
+          in: query
+          required: false
+          description: Invoice type.
+          schema:
+            type: string
+            description: Type of catalog invoice to list.
+            example: contract
+            enum:
+              - contract
+              - advance_fees
+        - name: billing_entity_codes[]
+          in: query
+          required: false
+          description: Billing entity codes[].
+          schema:
+            type: array
+            description: Billing entity codes.
+            items:
+              type: string
+              description: Billing entity code.
+              example: main
+        - name: payment_status[]
+          in: query
+          required: false
+          description: Payment statuses. Also accepts scalar payment_status or the payment_statuses[] alias.
+          schema:
+            type: array
+            description: Payment statuses.
+            items:
+              type: string
+              description: Payment status.
+              example: pending
+              enum:
+                - pending
+                - succeeded
+                - failed
+        - name: status[]
+          in: query
+          required: false
+          description: Invoice statuses. Also accepts scalar status or the statuses[] alias.
+          schema:
+            type: array
+            description: Invoice statuses.
+            items:
+              type: string
+              description: Invoice status.
+              example: finalized
+        - name: external_customer_id
+          in: query
+          required: false
+          description: External customer id.
+          schema:
+            type: string
+            description: External customer id.
+            example: example
+        - name: customer_external_id
+          in: query
+          required: false
+          description: Customer external id.
+          schema:
+            type: string
+            description: Customer external id.
+            example: example
+        - name: currency
+          in: query
+          required: false
+          description: Currency as an ISO 4217 code.
+          schema:
+            type: string
+            description: Currency as an ISO 4217 code.
+            example: example
+        - name: purchase_order_number
+          in: query
+          required: false
+          description: Purchase order number.
+          schema:
+            type: string
+            description: Purchase order number.
+            example: example
+        - name: search_term
+          in: query
+          required: false
+          description: Search term.
+          schema:
+            type: string
+            description: Search term.
+            example: example
+        - name: partially_paid
+          in: query
+          required: false
+          description: Partially paid.
+          schema:
+            type: boolean
+            description: Partially paid.
+            example: false
+        - name: payment_dispute_lost
+          in: query
+          required: false
+          description: Payment dispute lost.
+          schema:
+            type: boolean
+            description: Payment dispute lost.
+            example: false
+        - name: payment_overdue
+          in: query
+          required: false
+          description: Payment overdue.
+          schema:
+            type: boolean
+            description: Payment overdue.
+            example: false
+        - name: amount_from
+          in: query
+          required: false
+          description: Amount from.
+          schema:
+            type: integer
+            description: Invoice total amount bound, in cents.
+            example: 1000
+        - name: amount_to
+          in: query
+          required: false
+          description: Amount to.
+          schema:
+            type: integer
+            description: Invoice total amount bound, in cents.
+            example: 1000
+        - name: issuing_date_from
+          in: query
+          required: false
+          description: Issuing date from.
+          schema:
+            type: string
+            description: Inclusive issuing date bound.
+            example: '2022-04-29'
+            format: date
+        - name: issuing_date_to
+          in: query
+          required: false
+          description: Issuing date to.
+          schema:
+            type: string
+            description: Inclusive issuing date bound.
+            example: '2022-04-29'
+            format: date
+        - name: settlements[]
+          in: query
+          required: false
+          description: Settlements[].
+          schema:
+            type: array
+            description: Settlement types.
+            items:
+              type: string
+              description: Settlement type.
+              example: payment
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicesPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    get:
+      tags:
+        - invoices
+      summary: Retrieve invoice
+      description: |-
+        Returns a product-catalog invoice. Legacy-only invoices return 404. Expanding more than 1000 fees returns 400 expansion_too_large.
+        Requires the product catalog to be enabled and invoice read permission on the API key.
+      operationId: findInvoice
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - fees
+                - applied_taxes
+                - customer
+                - contracts
+                - applied_invoice_custom_sections
+                - error_details
+              example: fees
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - invoices
+      summary: Update invoice
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Only payment_status is editable. Voided invoices reject updates.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: updateInvoice
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - invoices
+      summary: Update invoice
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Only payment_status is editable. Voided invoices reject updates.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: patchInvoice
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - invoices
+      summary: Delete invoice
+      description: |-
+        Only draft invoices not synchronized to an external integration can be deleted. The response has status deleted; the invoice object does not expose deleted_at.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: destroyInvoice
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /fees:
+    get:
+      tags:
+        - fees
+      summary: List fees
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Only product fees are returned. Fees can be listed before they have an invoice. Legacy fees are excluded.
+        Requires the product catalog to be enabled and fee read permission on the API key.
+      operationId: findAllFees
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: lago_invoice_id
+          in: query
+          required: false
+          description: Lago invoice id.
+          schema:
+            type: string
+            description: Invoice identifier.
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            format: uuid
+        - name: payment_status
+          in: query
+          required: false
+          description: Payment status.
+          schema:
+            type: string
+            description: Payment status of the fee.
+            example: pending
+            enum:
+              - pending
+              - succeeded
+              - failed
+              - refunded
+        - name: external_customer_id
+          in: query
+          required: false
+          description: External customer id.
+          schema:
+            type: string
+            description: External customer id.
+            example: example
+        - name: external_contract_id
+          in: query
+          required: false
+          description: External contract id.
+          schema:
+            type: string
+            description: External contract id.
+            example: example
+        - name: product_code
+          in: query
+          required: false
+          description: Product code.
+          schema:
+            type: string
+            description: Product code.
+            example: example
+        - name: rate_card_code
+          in: query
+          required: false
+          description: Rate card code.
+          schema:
+            type: string
+            description: Rate card code.
+            example: example
+        - name: currency
+          in: query
+          required: false
+          description: Currency as an ISO 4217 code.
+          schema:
+            type: string
+            description: Currency as an ISO 4217 code.
+            example: example
+        - name: event_transaction_id
+          in: query
+          required: false
+          description: Event transaction id.
+          schema:
+            type: string
+            description: Event transaction id.
+            example: example
+        - name: succeeded_at_from
+          in: query
+          required: false
+          description: Inclusive lower bound on succeeded at. A date-only upper bound includes the whole UTC day.
+          schema:
+            type: string
+            oneOf:
+              - format: date
+              - format: date-time
+            example: '2022-04-29T00:00:00Z'
+        - name: succeeded_at_to
+          in: query
+          required: false
+          description: Inclusive upper bound on succeeded at. A date-only upper bound includes the whole UTC day.
+          schema:
+            type: string
+            oneOf:
+              - format: date
+              - format: date-time
+            example: '2022-04-29T00:00:00Z'
+        - name: failed_at_from
+          in: query
+          required: false
+          description: Inclusive lower bound on failed at. A date-only upper bound includes the whole UTC day.
+          schema:
+            type: string
+            oneOf:
+              - format: date
+              - format: date-time
+            example: '2022-04-29T00:00:00Z'
+        - name: failed_at_to
+          in: query
+          required: false
+          description: Inclusive upper bound on failed at. A date-only upper bound includes the whole UTC day.
+          schema:
+            type: string
+            oneOf:
+              - format: date
+              - format: date-time
+            example: '2022-04-29T00:00:00Z'
+        - name: refunded_at_from
+          in: query
+          required: false
+          description: Inclusive lower bound on refunded at. A date-only upper bound includes the whole UTC day.
+          schema:
+            type: string
+            oneOf:
+              - format: date
+              - format: date-time
+            example: '2022-04-29T00:00:00Z'
+        - name: refunded_at_to
+          in: query
+          required: false
+          description: Inclusive upper bound on refunded at. A date-only upper bound includes the whole UTC day.
+          schema:
+            type: string
+            oneOf:
+              - format: date
+              - format: date-time
+            example: '2022-04-29T00:00:00Z'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeesPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /fees/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    get:
+      tags:
+        - fees
+      summary: Retrieve fee
+      description: |-
+        Legacy fees return 404. Related products, filters and rates can identify deleted catalog records for historical fees.
+        Requires the product catalog to be enabled and fee read permission on the API key.
+      operationId: findFee
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - applied_taxes
+                - invoice
+                - product
+                - product_filter
+                - rate_card
+                - rate
+                - contract
+                - customer
+              example: applied_taxes
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fee'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - fees
+      summary: Update fee
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Updates only payment_status.
+        Requires the product catalog to be enabled and fee write permission on the API key.
+      operationId: updateFee
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeeUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fee'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - fees
+      summary: Update fee
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Updates only payment_status.
+        Requires the product catalog to be enabled and fee write permission on the API key.
+      operationId: patchFee
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeeUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fee'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - fees
+      summary: Delete fee
+      description: |-
+        Only uninvoiced fees can be deleted. A fee already attached to an invoice returns 422 invoiced_fee.
+        Requires the product catalog to be enabled and fee write permission on the API key.
+      operationId: destroyFee
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fee'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/void:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - invoices
+      summary: Void an invoice
+      description: |-
+        Voids an eligible invoice. Optional credit note creation requires a premium license.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: voidInvoice
+      requestBody:
+        required: false
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidInvoiceInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/lose_dispute:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - invoices
+      summary: Mark an invoice dispute as lost
+      description: |-
+        Marks the payment dispute as lost.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: loseDisputeInvoice
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/download_pdf:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - invoices
+      summary: Download an invoice PDF
+      description: |-
+        For finalized invoices only. Returns the invoice if its PDF already exists; otherwise queues generation and returns an empty body.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: downloadPdfInvoice
+      responses:
+        '200':
+          description: Record returned if the document exists; otherwise an empty body while generation is queued
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/resend_email:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - invoices
+      summary: Resend an invoice email
+      description: |-
+        Queues an email for a finalized invoice. Requires a premium license, valid recipients and billing entity email configuration.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: resendEmailInvoice
+      requestBody:
+        required: false
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendEmailInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/retry_taxes:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - invoices
+      summary: Retry invoice taxes
+      description: |-
+        Retries failed tax processing for an eligible invoice.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: retryTaxesInvoice
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/retry_payment:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - invoices
+      summary: Retry invoice payment
+      description: |-
+        Retries collection using the selected or default payment method.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: retryPaymentInvoice
+      requestBody:
+        required: false
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryInvoicePaymentInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/finalize:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    put:
+      tags:
+        - invoices
+      summary: Finalize a draft invoice
+      description: |-
+        Refreshes and finalizes a draft invoice. A non-draft invoice returns 404.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: finalizeInvoice
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/refresh:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    put:
+      tags:
+        - invoices
+      summary: Refresh a draft invoice
+      description: |-
+        Refreshes a draft invoice and recalculates fees, taxes and totals.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: refreshInvoice
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /invoices/{lago_id}/payment_url:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - invoices
+      summary: Create an invoice payment URL
+      description: |-
+        Creates a payment URL for a catalog invoice. A payment provider rate limit returns 429.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: createInvoicePaymentUrl
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicePaymentUrl'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /payments:
+    get:
+      tags:
+        - payments
+      summary: List payments
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Lists organization payments, including manual and provider payments and payments attached to a payment request.
+        Requires the product catalog to be enabled and payment read permission on the API key.
+      operationId: findAllPayments
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: invoice_id
+          in: query
+          required: false
+          description: Includes payments made through a payment request that covers this invoice.
+          schema:
+            type: string
+            description: Invoice identifier.
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            format: uuid
+        - name: external_customer_id
+          in: query
+          required: false
+          description: External customer id.
+          schema:
+            type: string
+            description: External customer identifier.
+            example: customer_123
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - payments
+      summary: Create payment
+      description: |-
+        Records a manual payment against an existing invoice. A reference and positive integer amount are required. Premium access and invoice eligibility are checked, except for supported advance-fee payments.
+        Requires the product catalog to be enabled and payment write permission on the API key.
+      operationId: createPayment
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /payments/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    get:
+      tags:
+        - payments
+      summary: Retrieve payment
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and payment read permission on the API key.
+      operationId: findPayment
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /payment_requests:
+    get:
+      tags:
+        - payment_requests
+      summary: List payment requests
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and payment_request read permission on the API key.
+      operationId: findAllPaymentRequests
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: external_customer_id
+          in: query
+          required: false
+          description: External customer id.
+          schema:
+            type: string
+            description: External customer identifier.
+            example: customer_123
+        - name: payment_status
+          in: query
+          required: false
+          description: Payment status.
+          schema:
+            type: string
+            description: Payment status.
+            example: pending
+            enum:
+              - pending
+              - succeeded
+              - failed
+        - name: currency
+          in: query
+          required: false
+          description: Currency as an ISO 4217 code.
+          schema:
+            type: string
+            description: Currency as an ISO 4217 code.
+            example: USD
+        - name: billing_entity_codes[]
+          in: query
+          required: false
+          description: Also accepts a scalar billing_entity_codes. Unknown codes return 404.
+          schema:
+            type: array
+            description: Billing entity codes.
+            items:
+              type: string
+              description: Billing entity code.
+              example: main
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequestsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - payment_requests
+      summary: Create payment request
+      description: |-
+        Requires a premium license. Selected customer invoices must be overdue, ready for payment processing, and share the same currency and billing entity. Payment collection and email delivery are asynchronous.
+        Requires the product catalog to be enabled and payment_request write permission on the API key.
+      operationId: createPaymentRequest
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequestCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /payment_requests/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    get:
+      tags:
+        - payment_requests
+      summary: Retrieve payment request
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and payment_request read permission on the API key.
+      operationId: findPaymentRequest
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /payment_receipts:
+    get:
+      tags:
+        - payment_receipts
+      summary: List payment receipts
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Lists every receipt of the organization. Current receipt authorization uses invoice read permission.
+        Requires the product catalog to be enabled and invoice read permission on the API key.
+      operationId: findAllPaymentReceipts
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: invoice_id
+          in: query
+          required: false
+          description: Includes receipts for payments through a payment request covering the invoice. An unknown invoice returns an empty list.
+          schema:
+            type: string
+            description: Invoice identifier.
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReceiptsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /payment_receipts/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    get:
+      tags:
+        - payment_receipts
+      summary: Retrieve payment receipt
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and invoice read permission on the API key.
+      operationId: findPaymentReceipt
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - payment
+              example: payment
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReceipt'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /payment_receipts/{lago_id}/resend_email:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - payment_receipts
+      summary: Resend a payment receipt email
+      description: |-
+        Queues an email for a receipt. Requires a premium license, valid recipients and billing entity email configuration. Returns an empty success body. Authorization uses invoice write permission.
+        Requires the product catalog to be enabled and invoice write permission on the API key.
+      operationId: resendPaymentReceiptEmail
+      requestBody:
+        required: false
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendEmailInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes:
+    get:
+      tags:
+        - credit_notes
+      summary: List credit notes
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Lists finalized credit notes of the organization, including credit notes for legacy invoices. This list does not support created_at_from or created_at_to.
+        Requires the product catalog to be enabled and credit_note read permission on the API key.
+      operationId: findAllCreditNotes
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - name: search_term
+          in: query
+          required: false
+          description: Search term.
+          schema:
+            type: string
+            description: Search term.
+            example: example
+        - name: external_customer_id
+          in: query
+          required: false
+          description: External customer id.
+          schema:
+            type: string
+            description: External customer id.
+            example: example
+        - name: currency
+          in: query
+          required: false
+          description: Currency as an ISO 4217 code.
+          schema:
+            type: string
+            description: Currency as an ISO 4217 code.
+            example: example
+        - name: invoice_number
+          in: query
+          required: false
+          description: Invoice number.
+          schema:
+            type: string
+            description: Invoice number.
+            example: example
+        - name: purchase_order_number
+          in: query
+          required: false
+          description: Purchase order number.
+          schema:
+            type: string
+            description: Purchase order number.
+            example: example
+        - name: credit_status
+          in: query
+          required: false
+          description: Credit status.
+          schema:
+            type: string
+            description: Credit status.
+            example: available
+            enum:
+              - available
+              - consumed
+              - voided
+        - name: refund_status
+          in: query
+          required: false
+          description: Refund status.
+          schema:
+            type:
+              - string
+              - 'null'
+            description: Refund status.
+            example: pending
+            enum:
+              - pending
+              - succeeded
+              - failed
+              - null
+        - name: reason
+          in: query
+          required: false
+          description: Reason.
+          schema:
+            type: string
+            description: Reason for issuing the credit note.
+            example: duplicated_charge
+            enum:
+              - duplicated_charge
+              - product_unsatisfactory
+              - order_change
+              - order_cancellation
+              - fraudulent_charge
+              - other
+        - name: self_billed
+          in: query
+          required: false
+          description: Self billed.
+          schema:
+            type: boolean
+            description: Whether the invoice is self-billed.
+            example: false
+        - name: issuing_date_from
+          in: query
+          required: false
+          description: Issuing date from.
+          schema:
+            type: string
+            description: Issuing date bound.
+            example: '2022-04-29'
+            format: date
+        - name: issuing_date_to
+          in: query
+          required: false
+          description: Issuing date to.
+          schema:
+            type: string
+            description: Issuing date bound.
+            example: '2022-04-29'
+            format: date
+        - name: amount_from
+          in: query
+          required: false
+          description: Amount from.
+          schema:
+            type: integer
+            description: Credit note amount bound, in cents.
+            example: 100
+        - name: amount_to
+          in: query
+          required: false
+          description: Amount to.
+          schema:
+            type: integer
+            description: Credit note amount bound, in cents.
+            example: 100
+        - name: billing_entity_codes[]
+          in: query
+          required: false
+          description: Billing entity codes[].
+          schema:
+            type: array
+            description: Billing entities.
+            items:
+              type: string
+              description: Billing entity code.
+              example: main
+        - name: types[]
+          in: query
+          required: false
+          description: Types[].
+          schema:
+            type: array
+            description: Amount types to include.
+            items:
+              type: string
+              description: Credit note amount type.
+              example: credit
+              enum:
+                - credit
+                - refund
+                - offset
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNotesPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - credit_notes
+      summary: Create credit note
+      description: |-
+        Requires a premium license and an eligible invoice. Credits are allocated across credit, refund and offset amounts. Product and legacy invoice fees can be credited.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: createCreditNote
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    get:
+      tags:
+        - credit_notes
+      summary: Retrieve credit note
+      description: |-
+        Retrieves a finalized credit note. Draft or unknown credit notes return 404.
+        Requires the product catalog to be enabled and credit_note read permission on the API key.
+      operationId: findCreditNote
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - items
+                - applied_taxes
+                - customer
+                - error_details
+                - metadata
+              example: items
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - credit_notes
+      summary: Update credit note
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Only refund_status and metadata are accepted. Metadata updates merge keys. Draft credit notes return 404.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: updateCreditNote
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - credit_notes
+      summary: Update credit note
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Only refund_status and metadata are accepted. Metadata updates merge keys. Draft credit notes return 404.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: patchCreditNote
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes/estimate:
+    post:
+      tags:
+        - credit_notes
+      summary: Estimate a credit note
+      description: |-
+        Computes the amounts and taxes without creating a credit note. Items and applied taxes are always included; no expands[] parameter is needed.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: estimateCreditNote
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteEstimateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstimatedCreditNote'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes/{lago_id}/download_pdf:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - credit_notes
+      summary: Download a credit note PDF
+      description: |-
+        Returns the finalized credit note if its PDF exists; otherwise queues generation and returns an empty body.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: downloadPdfCreditNote
+      responses:
+        '200':
+          description: Record returned if the document exists; otherwise an empty body while generation is queued
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes/{lago_id}/download_xml:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - credit_notes
+      summary: Download a credit note XML
+      description: |-
+        Returns the finalized credit note if its XML exists; otherwise queues generation and returns an empty body.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: downloadXmlCreditNote
+      responses:
+        '200':
+          description: Record returned if the document exists; otherwise an empty body while generation is queued
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes/{lago_id}/resend_email:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - credit_notes
+      summary: Resend a credit note email
+      description: |-
+        Queues an email for a finalized credit note. Requires a premium license and valid billing entity email settings.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: resendEmailCreditNote
+      requestBody:
+        required: false
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendEmailInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes/{lago_id}/void:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    put:
+      tags:
+        - credit_notes
+      summary: Void a credit note
+      description: |-
+        Voids an eligible credit note.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: voidCreditNote
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNote'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes/{credit_note_id}/metadata:
+    parameters:
+      - name: credit_note_id
+        in: path
+        required: true
+        description: Credit note identifier.
+        schema:
+          type: string
+          description: Credit note identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    post:
+      tags:
+        - credit_notes
+      summary: Replace credit note metadata
+      description: |-
+        The credit note must be finalized. POST replaces all metadata; PUT and PATCH merge keys; DELETE clears all metadata. The response contains only the metadata object or null.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: postCreditNoteMetadata
+      requestBody:
+        required: false
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetadataInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    put:
+      tags:
+        - credit_notes
+      summary: Merge credit note metadata
+      description: |-
+        The credit note must be finalized. POST replaces all metadata; PUT and PATCH merge keys; DELETE clears all metadata. The response contains only the metadata object or null.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: putCreditNoteMetadata
+      requestBody:
+        required: false
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetadataInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - credit_notes
+      summary: Merge credit note metadata
+      description: |-
+        The credit note must be finalized. POST replaces all metadata; PUT and PATCH merge keys; DELETE clears all metadata. The response contains only the metadata object or null.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: patchCreditNoteMetadata
+      requestBody:
+        required: false
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetadataInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - credit_notes
+      summary: Delete all credit note metadata
+      description: |-
+        The credit note must be finalized. POST replaces all metadata; PUT and PATCH merge keys; DELETE clears all metadata. The response contains only the metadata object or null.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: deleteCreditNoteMetadata
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /credit_notes/{credit_note_id}/metadata/{key}:
+    parameters:
+      - name: credit_note_id
+        in: path
+        required: true
+        description: Credit note identifier.
+        schema:
+          type: string
+          description: Credit note identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+      - name: key
+        in: path
+        required: true
+        description: Metadata key.
+        schema:
+          type: string
+          description: Metadata key.
+          example: example_code
+    delete:
+      tags:
+        - credit_notes
+      summary: Delete one credit note metadata key
+      description: |-
+        Deletes one metadata key from a finalized credit note and returns the remaining metadata.
+        Requires the product catalog to be enabled and credit_note write permission on the API key.
+      operationId: deleteCreditNoteMetadataKey
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -6184,6 +8373,2040 @@ components:
       properties:
         current_usage:
           $ref: '#/components/schemas/ContractUsageObject'
+    FeePricingUnitDetailsObject:
+      type: object
+      description: Fee Pricing Unit Details.
+      required:
+        - lago_pricing_unit_id
+        - pricing_unit_code
+        - short_name
+        - amount_cents
+        - precise_amount_cents
+        - unit_amount_cents
+        - precise_unit_amount
+        - conversion_rate
+      properties:
+        lago_pricing_unit_id:
+          type: string
+          description: Pricing unit identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        pricing_unit_code:
+          type: string
+          description: Pricing unit code.
+          example: tokens
+        short_name:
+          type: string
+          description: Short name.
+          example: example
+        amount_cents:
+          type: integer
+          description: Amount cents.
+          example: 100
+        precise_amount_cents:
+          type: string
+          description: Precise amount cents. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        unit_amount_cents:
+          type: integer
+          description: Unit amount cents.
+          example: 100
+        precise_unit_amount:
+          type: string
+          description: Precise unit amount. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        conversion_rate:
+          type: string
+          description: Conversion rate. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+    FeeAppliedTaxObject:
+      type: object
+      description: Fee Applied Tax.
+      required:
+        - lago_id
+        - lago_fee_id
+        - lago_tax_id
+        - tax_name
+        - tax_code
+        - tax_rate
+        - tax_description
+        - amount_cents
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_fee_id:
+          type: string
+          description: Identifier of the taxed record.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_tax_id:
+          type:
+            - string
+            - 'null'
+          description: Tax identifier. Null when the tax was removed or supplied by a provider.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        tax_name:
+          type: string
+          description: Tax name.
+          example: example
+        tax_code:
+          type: string
+          description: Tax code.
+          example: example
+        tax_rate:
+          type: number
+          description: Tax rate.
+          example: 20
+        tax_description:
+          type:
+            - string
+            - 'null'
+          description: Tax description.
+          example: example
+        amount_cents:
+          type: integer
+          description: Amount cents.
+          example: 100
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    InvoiceObject:
+      type: object
+      description: Invoice.
+      required:
+        - lago_id
+        - number
+        - invoice_type
+        - status
+        - payment_status
+        - billing_entity_code
+        - lago_customer_id
+        - external_customer_id
+        - currency
+        - issuing_date
+        - payment_due_date
+        - payment_overdue
+        - purchase_order_number
+        - fees_amount_cents
+        - sub_total_excluding_taxes_amount_cents
+        - taxes_amount_cents
+        - sub_total_including_taxes_amount_cents
+        - credit_notes_amount_cents
+        - total_amount_cents
+        - total_offsetted_credit_note_amount_cents
+        - total_paid_amount_cents
+        - total_due_amount_cents
+        - pdf_url
+        - xml_url
+        - payment_dispute_lost_at
+        - voided_at
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        number:
+          type: string
+          description: Number.
+          example: example
+        invoice_type:
+          type: string
+          description: Type of invoice. Advance fees are named advance_fees rather than the v1 advance_charges value.
+          example: contract
+          enum:
+            - contract
+            - advance_fees
+            - subscription
+            - add_on
+            - credit
+            - one_off
+            - progressive_billing
+        status:
+          type: string
+          description: Invoice lifecycle status.
+          example: generating
+          enum:
+            - generating
+            - draft
+            - open
+            - finalized
+            - voided
+            - failed
+            - closed
+            - pending
+            - deleted
+        payment_status:
+          type: string
+          description: Payment status.
+          example: pending
+          enum:
+            - pending
+            - succeeded
+            - failed
+        billing_entity_code:
+          type: string
+          description: Code of the invoice billing entity.
+          example: main
+        lago_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Customer identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type: string
+          description: External customer identifier.
+          example: customer_123
+        currency:
+          type:
+            - string
+            - 'null'
+          description: Currency as an ISO 4217 code.
+          example: USD
+        issuing_date:
+          type:
+            - string
+            - 'null'
+          description: Issuing date.
+          example: null
+          format: date
+        payment_due_date:
+          type:
+            - string
+            - 'null'
+          description: Payment due date.
+          example: null
+          format: date
+        payment_overdue:
+          type:
+            - boolean
+            - 'null'
+          description: Payment overdue.
+          example: false
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          description: Purchase order number.
+          example: example
+        fees_amount_cents:
+          type: integer
+          description: Fees amount cents.
+          example: 100
+        sub_total_excluding_taxes_amount_cents:
+          type: integer
+          description: Sub total excluding taxes amount cents.
+          example: 100
+        taxes_amount_cents:
+          type: integer
+          description: Taxes amount cents.
+          example: 100
+        sub_total_including_taxes_amount_cents:
+          type: integer
+          description: Sub total including taxes amount cents.
+          example: 100
+        credit_notes_amount_cents:
+          type: integer
+          description: Credit notes amount cents.
+          example: 100
+        total_amount_cents:
+          type: integer
+          description: Total amount cents.
+          example: 100
+        total_offsetted_credit_note_amount_cents:
+          type: integer
+          description: Total applied credit note offsets, in cents.
+          example: 0
+        total_paid_amount_cents:
+          type: integer
+          description: Total paid amount cents.
+          example: 100
+        total_due_amount_cents:
+          type: integer
+          description: Amount still due, in cents.
+          example: 1000
+        pdf_url:
+          type:
+            - string
+            - 'null'
+          description: Document download URL, or null while the document is unavailable.
+          example: https://documents.example/invoice.pdf
+          format: uri
+        xml_url:
+          type:
+            - string
+            - 'null'
+          description: Document download URL, or null while the document is unavailable.
+          example: https://documents.example/invoice.pdf
+          format: uri
+        payment_dispute_lost_at:
+          type:
+            - string
+            - 'null'
+          description: Payment dispute lost at.
+          example: null
+          format: date-time
+        voided_at:
+          type:
+            - string
+            - 'null'
+          description: Voided at.
+          example: null
+          format: date-time
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        fees:
+          type: array
+          description: Present only with expands[]=fees. At most 1000 fees may be expanded; use GET /fees for larger invoices.
+          items:
+            $ref: '#/components/schemas/FeeObject'
+        applied_taxes:
+          type: array
+          description: Present only with expands[]=applied_taxes.
+          items:
+            $ref: '#/components/schemas/InvoiceAppliedTaxObject'
+        customer:
+          $ref: '#/components/schemas/CustomerObject'
+          description: Present only with expands[]=customer.
+        contracts:
+          type: array
+          description: Present only with expands[]=contracts. Contracts are derived from fee provenance.
+          items:
+            $ref: '#/components/schemas/ContractObject'
+        applied_invoice_custom_sections:
+          type: array
+          description: Present only with expands[]=applied_invoice_custom_sections.
+          items:
+            $ref: '#/components/schemas/AppliedInvoiceCustomSectionObject'
+        error_details:
+          type: array
+          description: Present only with expands[]=error_details.
+          items:
+            $ref: '#/components/schemas/ErrorDetailObject'
+    FeeObject:
+      type: object
+      description: Fee.
+      required:
+        - lago_id
+        - lago_invoice_id
+        - fee_type
+        - lago_customer_id
+        - external_customer_id
+        - lago_contract_id
+        - external_contract_id
+        - lago_product_id
+        - product_code
+        - lago_product_category_id
+        - product_category_code
+        - lago_product_filter_id
+        - product_filter_code
+        - lago_rate_card_id
+        - rate_card_code
+        - lago_rate_id
+        - rate_code
+        - lago_rate_override_id
+        - lago_true_up_parent_fee_id
+        - lago_true_up_fee_id
+        - event_transaction_id
+        - display_on_invoice
+        - product_invoice_display_name
+        - product_category_invoice_display_name
+        - product_filter_invoice_display_name
+        - filters
+        - billing_timing
+        - grouped_by
+        - currency
+        - units
+        - total_aggregated_units
+        - events_count
+        - unit_amount_cents
+        - precise_unit_amount_cents
+        - amount_cents
+        - sub_total_excluding_taxes_amount_cents
+        - taxes_amount_cents
+        - total_amount_cents
+        - amount_details
+        - pricing_unit_details
+        - payment_status
+        - from_datetime
+        - to_datetime
+        - succeeded_at
+        - failed_at
+        - refunded_at
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_invoice_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related invoice.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        fee_type:
+          type: string
+          description: Fee type. Only product fees are available from these endpoints.
+          example: product
+          enum:
+            - product
+        lago_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related customer.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type:
+            - string
+            - 'null'
+          description: External customer id.
+          example: example
+        lago_contract_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related contract.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_contract_id:
+          type:
+            - string
+            - 'null'
+          description: External contract id.
+          example: example
+        lago_product_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related product.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        product_code:
+          type:
+            - string
+            - 'null'
+          description: Product code.
+          example: example
+        lago_product_category_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related product category.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        product_category_code:
+          type:
+            - string
+            - 'null'
+          description: Product category code.
+          example: example
+        lago_product_filter_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related product filter.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        product_filter_code:
+          type:
+            - string
+            - 'null'
+          description: Product filter code.
+          example: example
+        lago_rate_card_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related rate card.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        rate_card_code:
+          type:
+            - string
+            - 'null'
+          description: Rate card code.
+          example: example
+        lago_rate_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related rate.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        rate_code:
+          type:
+            - string
+            - 'null'
+          description: Rate code.
+          example: example
+        lago_rate_override_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related rate override.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_true_up_parent_fee_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related true up parent fee.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_true_up_fee_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the related true up fee.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        event_transaction_id:
+          type:
+            - string
+            - 'null'
+          description: Transaction identifier of the advance-billing event.
+          example: event_123
+        display_on_invoice:
+          type:
+            - boolean
+            - 'null'
+          description: Whether the rate card displays this fee on invoices.
+          example: true
+        product_invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Product invoice display name.
+          example: example
+        product_category_invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Product category invoice display name.
+          example: example
+        product_filter_invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Product filter invoice display name.
+          example: example
+        filters:
+          type:
+            - object
+            - 'null'
+          description: Product filter matches saved with the fee. Older fees can fall back to current filter values.
+          additionalProperties:
+            type: array
+            description: Values selected for this key.
+            items:
+              type:
+                - string
+                - 'null'
+              description: Selected filter value.
+              example: eu
+        billing_timing:
+          type: string
+          description: When the fee is billed.
+          example: advance
+          enum:
+            - advance
+            - arrears
+        grouped_by:
+          type: object
+          description: Grouped by.
+          additionalProperties: true
+        currency:
+          type: string
+          description: Currency as an ISO 4217 code.
+          example: USD
+        units:
+          type: string
+          description: Quantity. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        total_aggregated_units:
+          type:
+            - string
+            - 'null'
+          description: Total aggregated units. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        events_count:
+          type:
+            - integer
+            - 'null'
+          description: Events count.
+          example: 1
+        unit_amount_cents:
+          type: integer
+          description: Unit amount cents.
+          example: 100
+        precise_unit_amount_cents:
+          type: string
+          description: Precise unit amount in cents. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        amount_cents:
+          type: integer
+          description: Amount cents.
+          example: 100
+        sub_total_excluding_taxes_amount_cents:
+          type: integer
+          description: Fee amount after discounts and before tax, in cents.
+          example: 1000
+        taxes_amount_cents:
+          type: integer
+          description: Taxes amount cents.
+          example: 100
+        total_amount_cents:
+          type: integer
+          description: Fee amount including tax, in cents.
+          example: 1200
+        amount_details:
+          type: object
+          description: Amount details.
+          additionalProperties: true
+        pricing_unit_details:
+          anyOf:
+            - $ref: '#/components/schemas/FeePricingUnitDetailsObject'
+            - type: 'null'
+          description: Pricing unit amounts, or null when no pricing unit is used.
+        payment_status:
+          type: string
+          description: Payment status of the fee.
+          example: pending
+          enum:
+            - pending
+            - succeeded
+            - failed
+            - refunded
+        from_datetime:
+          type:
+            - string
+            - 'null'
+          description: Start of the billed period, when available.
+          example: null
+          format: date-time
+        to_datetime:
+          type:
+            - string
+            - 'null'
+          description: End of the billed period, when available.
+          example: null
+          format: date-time
+        succeeded_at:
+          type:
+            - string
+            - 'null'
+          description: Succeeded at.
+          example: null
+          format: date-time
+        failed_at:
+          type:
+            - string
+            - 'null'
+          description: Failed at.
+          example: null
+          format: date-time
+        refunded_at:
+          type:
+            - string
+            - 'null'
+          description: Refunded at.
+          example: null
+          format: date-time
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+        applied_taxes:
+          type: array
+          description: Present only with expands[]=applied_taxes.
+          items:
+            $ref: '#/components/schemas/FeeAppliedTaxObject'
+        invoice:
+          anyOf:
+            - $ref: '#/components/schemas/InvoiceObject'
+            - type: 'null'
+          description: Present only with expands[]=invoice.
+        product:
+          anyOf:
+            - $ref: '#/components/schemas/ProductObject'
+            - type: 'null'
+          description: Present only with expands[]=product.
+        product_filter:
+          anyOf:
+            - $ref: '#/components/schemas/ProductFilterObject'
+            - type: 'null'
+          description: Present only with expands[]=product_filter.
+        rate_card:
+          anyOf:
+            - $ref: '#/components/schemas/RateCardObject'
+            - type: 'null'
+          description: Present only with expands[]=rate_card.
+        rate:
+          anyOf:
+            - $ref: '#/components/schemas/RateCardRateObject'
+            - type: 'null'
+          description: Present only with expands[]=rate.
+        contract:
+          anyOf:
+            - $ref: '#/components/schemas/ContractObject'
+            - type: 'null'
+          description: Present only with expands[]=contract.
+        customer:
+          anyOf:
+            - $ref: '#/components/schemas/CustomerObject'
+            - type: 'null'
+          description: Present only with expands[]=customer.
+    InvoiceAppliedTaxObject:
+      type: object
+      description: Invoice Applied Tax.
+      required:
+        - lago_id
+        - lago_invoice_id
+        - lago_tax_id
+        - tax_name
+        - tax_code
+        - tax_rate
+        - tax_description
+        - amount_cents
+        - fees_amount_cents
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_invoice_id:
+          type: string
+          description: Identifier of the taxed record.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_tax_id:
+          type:
+            - string
+            - 'null'
+          description: Tax identifier. Null when the tax was removed or supplied by a provider.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        tax_name:
+          type: string
+          description: Tax name.
+          example: example
+        tax_code:
+          type: string
+          description: Tax code.
+          example: example
+        tax_rate:
+          type: number
+          description: Tax rate.
+          example: 20
+        tax_description:
+          type:
+            - string
+            - 'null'
+          description: Tax description.
+          example: example
+        amount_cents:
+          type: integer
+          description: Amount cents.
+          example: 100
+        fees_amount_cents:
+          type: integer
+          description: Fees amount cents.
+          example: 100
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    AppliedInvoiceCustomSectionObject:
+      type: object
+      description: Applied Invoice Custom Section.
+      required:
+        - lago_id
+        - lago_invoice_id
+        - code
+        - details
+        - display_name
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_invoice_id:
+          type: string
+          description: Invoice identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        code:
+          type: string
+          description: Code.
+          example: example
+        details:
+          type:
+            - string
+            - 'null'
+          description: Details.
+          example: example
+        display_name:
+          type:
+            - string
+            - 'null'
+          description: Display name.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    ErrorDetailObject:
+      type: object
+      description: Error attached to an invoice.
+      required:
+        - lago_id
+        - error_code
+        - details
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        error_code:
+          type: string
+          description: Error category.
+          example: not_provided
+          enum:
+            - not_provided
+            - tax_error
+            - tax_voiding_error
+            - invoice_generation_error
+        details:
+          type: object
+          description: Details.
+          additionalProperties: true
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    InvoicesPaginated:
+      type: object
+      description: invoices list.
+      required:
+        - invoices
+        - meta
+      properties:
+        invoices:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/InvoiceObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    Invoice:
+      type: object
+      description: invoice response.
+      required:
+        - invoice
+      properties:
+        invoice:
+          $ref: '#/components/schemas/InvoiceObject'
+    InvoiceBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        payment_status:
+          type: string
+          description: Payment status.
+          example: pending
+          enum:
+            - pending
+            - succeeded
+            - failed
+    InvoiceUpdateInput:
+      type: object
+      description: Update invoice.
+      required:
+        - invoice
+      properties:
+        invoice:
+          $ref: '#/components/schemas/InvoiceBaseInput'
+    FeesPaginated:
+      type: object
+      description: fees list.
+      required:
+        - fees
+        - meta
+      properties:
+        fees:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/FeeObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    Fee:
+      type: object
+      description: fee response.
+      required:
+        - fee
+      properties:
+        fee:
+          $ref: '#/components/schemas/FeeObject'
+    FeeBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        payment_status:
+          type: string
+          description: Payment status of the fee.
+          example: pending
+          enum:
+            - pending
+            - succeeded
+            - failed
+            - refunded
+    FeeUpdateInput:
+      type: object
+      description: Update fee.
+      required:
+        - fee
+      properties:
+        fee:
+          $ref: '#/components/schemas/FeeBaseInput'
+    VoidInvoiceInput:
+      type: object
+      properties:
+        generate_credit_note:
+          type: boolean
+          description: Whether to generate credit notes. Requires a premium license.
+          example: false
+        refund_amount:
+          type: integer
+          description: Requested refund amount, in cents.
+          example: 0
+        credit_amount:
+          type: integer
+          description: Requested credit amount, in cents.
+          example: 0
+    ResendEmailInput:
+      type: object
+      properties:
+        to:
+          type: array
+          description: Recipients. When omitted or empty, the customer email is used.
+          items:
+            type: string
+            description: Email recipient.
+            example: billing@acme.example
+            format: email
+        cc:
+          type: array
+          description: Additional recipients.
+          items:
+            type: string
+            description: Email recipient.
+            example: billing@acme.example
+            format: email
+        bcc:
+          type: array
+          description: Additional recipients.
+          items:
+            type: string
+            description: Email recipient.
+            example: billing@acme.example
+            format: email
+    PaymentMethodSelectionInput:
+      type: object
+      description: Payment method selection. Omit to use the configured default.
+      properties:
+        payment_method_type:
+          type: string
+          description: How the payment is collected.
+          example: provider
+          enum:
+            - provider
+            - manual
+        payment_method_id:
+          type: string
+          description: Identifier of a payment method belonging to the customer.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    RetryInvoicePaymentInput:
+      type: object
+      properties:
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodSelectionInput'
+    InvoicePaymentUrlObject:
+      type: object
+      description: Invoice payment URL.
+      required:
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
+        - lago_invoice_id
+        - payment_url
+      properties:
+        lago_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Customer identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type: string
+          description: External customer identifier.
+          example: customer_123
+        payment_provider:
+          type:
+            - string
+            - 'null'
+          description: Payment provider.
+          example: stripe
+        lago_invoice_id:
+          type: string
+          description: Invoice identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        payment_url:
+          type: string
+          description: URL where the customer can pay.
+          example: https://payments.example/invoice
+          format: uri
+    InvoicePaymentUrl:
+      type: object
+      description: payment url response.
+      required:
+        - payment_url
+      properties:
+        payment_url:
+          $ref: '#/components/schemas/InvoicePaymentUrlObject'
+    PaymentObject:
+      type: object
+      description: Payment.
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - lago_payable_id
+        - payable_type
+        - lago_invoice_ids
+        - amount_cents
+        - currency
+        - status
+        - payment_status
+        - payment_type
+        - reference
+        - payment_provider_code
+        - payment_provider_type
+        - provider_payment_id
+        - provider_customer_id
+        - next_action
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_customer_id:
+          type: string
+          description: Customer identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type: string
+          description: External customer identifier.
+          example: customer_123
+        lago_payable_id:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the invoice or payment request being paid.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        payable_type:
+          type: string
+          description: Type of payable record.
+          example: Invoice
+          enum:
+            - Invoice
+            - PaymentRequest
+        lago_invoice_ids:
+          type: array
+          description: Invoices covered by the payment.
+          items:
+            type: string
+            description: Invoice identifier.
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            format: uuid
+        amount_cents:
+          type: integer
+          description: Amount cents.
+          example: 100
+        currency:
+          type: string
+          description: Currency as an ISO 4217 code.
+          example: USD
+        status:
+          type: string
+          description: Status.
+          example: example
+        payment_status:
+          type:
+            - string
+            - 'null'
+          description: Normalized payment status.
+          example: pending
+          enum:
+            - pending
+            - processing
+            - succeeded
+            - failed
+            - null
+        payment_type:
+          type: string
+          description: How the payment was collected.
+          example: provider
+          enum:
+            - provider
+            - manual
+            - x402
+        reference:
+          type:
+            - string
+            - 'null'
+          description: Reference.
+          example: example
+        payment_provider_code:
+          type:
+            - string
+            - 'null'
+          description: Payment provider code.
+          example: stripe_main
+        payment_provider_type:
+          type:
+            - string
+            - 'null'
+          description: Payment provider type.
+          example: stripe
+        provider_payment_id:
+          type:
+            - string
+            - 'null'
+          description: Provider payment id.
+          example: example
+        provider_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Customer identifier within the payment provider.
+          example: cus_example
+        next_action:
+          type:
+            - object
+            - 'null'
+          description: Provider instructions needed to complete the payment.
+          additionalProperties: true
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    PaymentsPaginated:
+      type: object
+      description: payments list.
+      required:
+        - payments
+        - meta
+      properties:
+        payments:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/PaymentObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    PaymentBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        invoice_id:
+          type: string
+          description: Identifier of the invoice being paid.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        amount_cents:
+          type: integer
+          description: Amount paid, in cents.
+          example: 1000
+          minimum: 1
+        reference:
+          type: string
+          description: Manual payment reference.
+          example: wire_transfer_123
+          minLength: 1
+          maxLength: 40
+        paid_at:
+          type:
+            - string
+            - 'null'
+          description: Payment timestamp. Defaults to now.
+          example: null
+          format: date-time
+    PaymentCreateInput:
+      type: object
+      description: Create payment.
+      required:
+        - payment
+      properties:
+        payment:
+          $ref: '#/components/schemas/PaymentBaseInput'
+          required:
+            - invoice_id
+            - amount_cents
+            - reference
+    Payment:
+      type: object
+      description: payment response.
+      required:
+        - payment
+      properties:
+        payment:
+          $ref: '#/components/schemas/PaymentObject'
+    PaymentRequestObject:
+      type: object
+      description: Payment Request.
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - email
+        - amount_cents
+        - currency
+        - payment_status
+        - lago_invoice_ids
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_customer_id:
+          type: string
+          description: Customer identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type: string
+          description: External customer identifier.
+          example: customer_123
+        email:
+          type:
+            - string
+            - 'null'
+          description: Email.
+          example: billing@acme.example
+        amount_cents:
+          type: integer
+          description: Amount cents.
+          example: 100
+        currency:
+          type: string
+          description: Currency as an ISO 4217 code.
+          example: USD
+        payment_status:
+          type: string
+          description: Payment status.
+          example: pending
+          enum:
+            - pending
+            - succeeded
+            - failed
+        lago_invoice_ids:
+          type: array
+          description: Invoices included in the payment request.
+          items:
+            type: string
+            description: Invoice identifier.
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            format: uuid
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    PaymentRequestsPaginated:
+      type: object
+      description: payment requests list.
+      required:
+        - payment_requests
+        - meta
+      properties:
+        payment_requests:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/PaymentRequestObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    PaymentRequestBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        external_customer_id:
+          type: string
+          description: External customer identifier.
+          example: customer_123
+        lago_invoice_ids:
+          type: array
+          description: Customer invoices to include.
+          items:
+            type: string
+            description: Invoice identifier.
+            example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+            format: uuid
+          minItems: 1
+        email:
+          type:
+            - string
+            - 'null'
+          description: Recipient email. Defaults to the customer email.
+          example: billing@acme.example
+          format: email
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodSelectionInput'
+    PaymentRequestCreateInput:
+      type: object
+      description: Create payment request.
+      required:
+        - payment_request
+      properties:
+        payment_request:
+          $ref: '#/components/schemas/PaymentRequestBaseInput'
+          required:
+            - external_customer_id
+            - lago_invoice_ids
+    PaymentRequest:
+      type: object
+      description: payment request response.
+      required:
+        - payment_request
+      properties:
+        payment_request:
+          $ref: '#/components/schemas/PaymentRequestObject'
+    PaymentReceiptObject:
+      type: object
+      description: Payment Receipt.
+      required:
+        - lago_id
+        - number
+        - lago_payment_id
+        - pdf_url
+        - xml_url
+        - pdf_url_expires_at
+        - xml_url_expires_at
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        number:
+          type: string
+          description: Number.
+          example: example
+        lago_payment_id:
+          type: string
+          description: Payment identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        pdf_url:
+          type:
+            - string
+            - 'null'
+          description: Document download URL, or null while the document is unavailable.
+          example: https://documents.example/invoice.pdf
+          format: uri
+        xml_url:
+          type:
+            - string
+            - 'null'
+          description: Document download URL, or null while the document is unavailable.
+          example: https://documents.example/invoice.pdf
+          format: uri
+        pdf_url_expires_at:
+          type:
+            - string
+            - 'null'
+          description: Expiry of the PDF URL. Null when no PDF URL is available.
+          example: null
+          format: date-time
+        xml_url_expires_at:
+          type:
+            - string
+            - 'null'
+          description: Expiry of the XML URL. Null when no XML URL is available.
+          example: null
+          format: date-time
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        payment:
+          $ref: '#/components/schemas/PaymentObject'
+          description: Present only with expands[]=payment on retrieval.
+    PaymentReceiptsPaginated:
+      type: object
+      description: payment receipts list.
+      required:
+        - payment_receipts
+        - meta
+      properties:
+        payment_receipts:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/PaymentReceiptObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    PaymentReceipt:
+      type: object
+      description: payment receipt response.
+      required:
+        - payment_receipt
+      properties:
+        payment_receipt:
+          $ref: '#/components/schemas/PaymentReceiptObject'
+    CreditNoteItemObject:
+      type: object
+      description: A fee credited by the credit note.
+      required:
+        - lago_fee_id
+        - amount_cents
+      properties:
+        lago_fee_id:
+          type: string
+          description: Credited fee identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        amount_cents:
+          type: integer
+          description: Credited fee amount excluding tax, in cents.
+          example: 100
+    CreditNoteAppliedTaxObject:
+      type: object
+      description: Credit Note Applied Tax.
+      required:
+        - lago_tax_id
+        - tax_name
+        - tax_code
+        - tax_rate
+        - tax_description
+        - base_amount_cents
+        - amount_cents
+      properties:
+        lago_tax_id:
+          type:
+            - string
+            - 'null'
+          description: Tax identifier, when a local tax still exists.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        tax_name:
+          type: string
+          description: Tax name.
+          example: example
+        tax_code:
+          type: string
+          description: Tax code.
+          example: example
+        tax_rate:
+          type: number
+          description: Tax rate.
+          example: 20
+        tax_description:
+          type:
+            - string
+            - 'null'
+          description: Tax description.
+          example: example
+        base_amount_cents:
+          type: integer
+          description: Base amount cents.
+          example: 100
+        amount_cents:
+          type: integer
+          description: Amount cents.
+          example: 100
+    CreditNoteErrorDetailObject:
+      type: object
+      description: Error attached to a credit note.
+      required:
+        - lago_id
+        - error_code
+        - details
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        error_code:
+          type: string
+          description: Error category.
+          example: not_provided
+          enum:
+            - not_provided
+            - tax_error
+            - tax_voiding_error
+            - invoice_generation_error
+        details:
+          type: object
+          description: Details.
+          additionalProperties: true
+    CreditNoteObject:
+      type: object
+      description: Credit Note.
+      required:
+        - lago_id
+        - billing_entity_code
+        - sequential_id
+        - number
+        - lago_invoice_id
+        - invoice_number
+        - purchase_order_number
+        - issuing_date
+        - credit_status
+        - refund_status
+        - reason
+        - description
+        - currency
+        - sub_total_excluding_taxes_amount_cents
+        - taxes_amount_cents
+        - sub_total_including_taxes_amount_cents
+        - total_amount_cents
+        - balance_amount_cents
+        - credit_amount_cents
+        - refund_amount_cents
+        - offset_amount_cents
+        - file_url
+        - xml_url
+        - self_billed
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        billing_entity_code:
+          type: string
+          description: Code of the invoice billing entity.
+          example: main
+        sequential_id:
+          type: integer
+          description: Sequential id.
+          example: 1
+        number:
+          type: string
+          description: Number.
+          example: example
+        lago_invoice_id:
+          type: string
+          description: Invoice identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        invoice_number:
+          type: string
+          description: Invoice number.
+          example: INV-001
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          description: Purchase order reference.
+          example: PO-123
+        issuing_date:
+          type: string
+          description: Issuing date.
+          example: '2022-04-29'
+          format: date
+        credit_status:
+          type:
+            - string
+            - 'null'
+          description: Credit balance status.
+          example: available
+          enum:
+            - available
+            - consumed
+            - voided
+            - null
+        refund_status:
+          type:
+            - string
+            - 'null'
+          description: Refund status.
+          example: pending
+          enum:
+            - pending
+            - succeeded
+            - failed
+            - null
+        reason:
+          type: string
+          description: Reason for issuing the credit note.
+          example: duplicated_charge
+          enum:
+            - duplicated_charge
+            - product_unsatisfactory
+            - order_change
+            - order_cancellation
+            - fraudulent_charge
+            - other
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: Example
+        currency:
+          type: string
+          description: Currency as an ISO 4217 code.
+          example: USD
+        sub_total_excluding_taxes_amount_cents:
+          type: integer
+          description: Credited amount excluding tax, in cents.
+          example: 100
+        taxes_amount_cents:
+          type: integer
+          description: Taxes amount cents.
+          example: 100
+        sub_total_including_taxes_amount_cents:
+          type: integer
+          description: Credited amount including tax, in cents.
+          example: 120
+        total_amount_cents:
+          type: integer
+          description: Total amount cents.
+          example: 100
+        balance_amount_cents:
+          type: integer
+          description: Balance amount cents.
+          example: 100
+        credit_amount_cents:
+          type: integer
+          description: Credit amount cents.
+          example: 100
+        refund_amount_cents:
+          type: integer
+          description: Refund amount cents.
+          example: 100
+        offset_amount_cents:
+          type: integer
+          description: Offset amount cents.
+          example: 100
+        file_url:
+          type:
+            - string
+            - 'null'
+          description: Document download URL, or null while the document is unavailable.
+          example: https://documents.example/invoice.pdf
+          format: uri
+        xml_url:
+          type:
+            - string
+            - 'null'
+          description: Document download URL, or null while the document is unavailable.
+          example: https://documents.example/invoice.pdf
+          format: uri
+        self_billed:
+          type: boolean
+          description: Whether the invoice is self-billed.
+          example: false
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        items:
+          type: array
+          description: Present only with expands[]=items.
+          items:
+            $ref: '#/components/schemas/CreditNoteItemObject'
+        applied_taxes:
+          type: array
+          description: Present only with expands[]=applied_taxes.
+          items:
+            $ref: '#/components/schemas/CreditNoteAppliedTaxObject'
+        customer:
+          $ref: '#/components/schemas/CustomerObject'
+          description: Present only with expands[]=customer.
+        error_details:
+          type: array
+          description: Present only with expands[]=error_details. These entries do not include timestamps.
+          items:
+            $ref: '#/components/schemas/CreditNoteErrorDetailObject'
+        metadata:
+          type:
+            - object
+            - 'null'
+          description: Present only with expands[]=metadata. Null when no metadata exists.
+          additionalProperties: true
+    CreditNotesPaginated:
+      type: object
+      description: credit notes list.
+      required:
+        - credit_notes
+        - meta
+      properties:
+        credit_notes:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/CreditNoteObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    CreditNoteItemInput:
+      type: object
+      description: A fee to credit.
+      required:
+        - fee_id
+        - amount_cents
+      properties:
+        fee_id:
+          type: string
+          description: Identifier of a fee belonging to the invoice.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        amount_cents:
+          type:
+            - number
+            - string
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: Amount in cents, accepted as a number or a decimal string.
+          example: 100
+    CreditNoteBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        invoice_id:
+          type: string
+          description: Invoice identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        reason:
+          type: string
+          description: Reason for issuing the credit note.
+          example: duplicated_charge
+          enum:
+            - duplicated_charge
+            - product_unsatisfactory
+            - order_change
+            - order_cancellation
+            - fraudulent_charge
+            - other
+          default: other
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description of the adjustment.
+          example: Partial credit
+        credit_amount_cents:
+          type: integer
+          description: Amount credited to the customer balance, in cents.
+          example: 100
+        refund_amount_cents:
+          type: integer
+          description: Amount to refund, in cents.
+          example: 0
+        offset_amount_cents:
+          type: integer
+          description: Amount offset against the invoice balance, in cents.
+          example: 0
+        metadata:
+          type:
+            - object
+            - 'null'
+          description: Metadata as an object of key-value pairs.
+          additionalProperties: true
+        items:
+          type: array
+          description: Invoice fees to credit.
+          items:
+            $ref: '#/components/schemas/CreditNoteItemInput'
+    CreditNoteCreateInput:
+      type: object
+      description: Create credit note.
+      required:
+        - credit_note
+      properties:
+        credit_note:
+          $ref: '#/components/schemas/CreditNoteBaseInput'
+          required:
+            - invoice_id
+            - items
+    CreditNote:
+      type: object
+      description: credit note response.
+      required:
+        - credit_note
+      properties:
+        credit_note:
+          $ref: '#/components/schemas/CreditNoteObject'
+    CreditNoteUpdateInput:
+      type: object
+      description: Update a credit note.
+      required:
+        - credit_note
+      properties:
+        credit_note:
+          type: object
+          minProperties: 1
+          properties:
+            refund_status:
+              type:
+                - string
+                - 'null'
+              description: Refund status.
+              example: pending
+              enum:
+                - pending
+                - succeeded
+                - failed
+                - null
+            metadata:
+              type:
+                - object
+                - 'null'
+              description: Metadata as an object of key-value pairs.
+              additionalProperties: true
+    CreditNoteEstimateInput:
+      type: object
+      description: Estimate a credit note.
+      required:
+        - credit_note
+      properties:
+        credit_note:
+          type: object
+          description: Invoice and fee credits.
+          required:
+            - invoice_id
+            - items
+          properties:
+            invoice_id:
+              type: string
+              description: Invoice identifier.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              format: uuid
+            items:
+              type: array
+              description: Fees to credit.
+              items:
+                $ref: '#/components/schemas/CreditNoteItemInput'
+    EstimatedCreditNoteObject:
+      type: object
+      description: An estimate, not a persisted credit note.
+      required:
+        - lago_invoice_id
+        - invoice_number
+        - currency
+        - sub_total_excluding_taxes_amount_cents
+        - taxes_amount_cents
+        - sub_total_including_taxes_amount_cents
+        - total_amount_cents
+        - max_creditable_amount_cents
+        - max_refundable_amount_cents
+        - items
+        - applied_taxes
+      properties:
+        lago_invoice_id:
+          type: string
+          description: Invoice identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        invoice_number:
+          type: string
+          description: Invoice number.
+          example: INV-001
+        currency:
+          type: string
+          description: Currency as an ISO 4217 code.
+          example: USD
+        sub_total_excluding_taxes_amount_cents:
+          type: integer
+          description: Estimated amount excluding tax, in cents.
+          example: 100
+        taxes_amount_cents:
+          type: integer
+          description: Estimated tax amount, in cents.
+          example: 20
+        sub_total_including_taxes_amount_cents:
+          type: integer
+          description: Estimated amount including tax, in cents.
+          example: 120
+        total_amount_cents:
+          type: integer
+          description: Estimated total amount, in cents.
+          example: 120
+        max_creditable_amount_cents:
+          type: integer
+          description: Maximum amount that can be credited, in cents.
+          example: 120
+        max_refundable_amount_cents:
+          type: integer
+          description: Maximum refundable amount, in cents.
+          example: 120
+        items:
+          type: array
+          description: Estimated fee credits. Always included.
+          items:
+            $ref: '#/components/schemas/CreditNoteItemObject'
+        applied_taxes:
+          type: array
+          description: Estimated taxes. Always included.
+          items:
+            $ref: '#/components/schemas/CreditNoteAppliedTaxObject'
+    EstimatedCreditNote:
+      type: object
+      description: estimated credit note response.
+      required:
+        - estimated_credit_note
+      properties:
+        estimated_credit_note:
+          $ref: '#/components/schemas/EstimatedCreditNoteObject'
+    MetadataInput:
+      type: object
+      properties:
+        metadata:
+          type: object
+          description: Metadata keys and values. Omitted metadata defaults to an empty object.
+          additionalProperties: true
+          example:
+            reference: example
+    Metadata:
+      type: object
+      description: Metadata response.
+      required:
+        - metadata
+      properties:
+        metadata:
+          type:
+            - object
+            - 'null'
+          description: Metadata as an object of key-value pairs.
+          additionalProperties: true
   responses:
     BadRequest:
       description: Invalid request body, pagination or relationship expansion
@@ -6250,3 +10473,19 @@ components:
                 field: base
                 meta:
                   resource: tax
+    TooManyRequests:
+      description: Payment provider rate limit exceeded
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: too_many_provider_requests
+            details:
+              - code: too_many_provider_requests
+                field: base
+                meta:
+                  provider_name: stripe

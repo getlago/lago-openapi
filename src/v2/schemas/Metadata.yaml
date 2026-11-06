@@ -1,0 +1,11 @@
+type: object
+description: Metadata response.
+required:
+  - metadata
+properties:
+  metadata:
+    type:
+      - object
+      - "null"
+    description: Metadata as an object of key-value pairs.
+    additionalProperties: true

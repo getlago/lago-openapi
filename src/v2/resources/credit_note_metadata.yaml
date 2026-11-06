@@ -1,0 +1,155 @@
+parameters:
+  - name: credit_note_id
+    in: path
+    required: true
+    description: Credit note identifier.
+    schema:
+      type: string
+      description: Credit note identifier.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+post:
+  tags:
+    - credit_notes
+  summary: Replace credit note metadata
+  description: >-
+    The credit note must be finalized. POST replaces all metadata; PUT and PATCH
+    merge keys; DELETE clears all metadata. The response contains only the
+    metadata object or null.
+
+    Requires the product catalog to be enabled and credit_note write permission on the API key.
+  operationId: postCreditNoteMetadata
+  requestBody:
+    required: false
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/MetadataInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Metadata.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+put:
+  tags:
+    - credit_notes
+  summary: Merge credit note metadata
+  description: >-
+    The credit note must be finalized. POST replaces all metadata; PUT and PATCH
+    merge keys; DELETE clears all metadata. The response contains only the
+    metadata object or null.
+
+    Requires the product catalog to be enabled and credit_note write permission on the API key.
+  operationId: putCreditNoteMetadata
+  requestBody:
+    required: false
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/MetadataInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Metadata.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - credit_notes
+  summary: Merge credit note metadata
+  description: >-
+    The credit note must be finalized. POST replaces all metadata; PUT and PATCH
+    merge keys; DELETE clears all metadata. The response contains only the
+    metadata object or null.
+
+    Requires the product catalog to be enabled and credit_note write permission on the API key.
+  operationId: patchCreditNoteMetadata
+  requestBody:
+    required: false
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/MetadataInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Metadata.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - credit_notes
+  summary: Delete all credit note metadata
+  description: >-
+    The credit note must be finalized. POST replaces all metadata; PUT and PATCH
+    merge keys; DELETE clears all metadata. The response contains only the
+    metadata object or null.
+
+    Requires the product catalog to be enabled and credit_note write permission on the API key.
+  operationId: deleteCreditNoteMetadata
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Metadata.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

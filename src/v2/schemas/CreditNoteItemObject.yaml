@@ -1,0 +1,15 @@
+type: object
+description: A fee credited by the credit note.
+required:
+  - lago_fee_id
+  - amount_cents
+properties:
+  lago_fee_id:
+    type: string
+    description: Credited fee identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  amount_cents:
+    type: integer
+    description: Credited fee amount excluding tax, in cents.
+    example: 100
