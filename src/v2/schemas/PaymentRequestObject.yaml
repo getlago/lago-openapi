@@ -1,0 +1,68 @@
+type: object
+description: Payment Request.
+required:
+  - lago_id
+  - lago_customer_id
+  - external_customer_id
+  - email
+  - amount_cents
+  - currency
+  - payment_status
+  - lago_invoice_ids
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_customer_id:
+    type: string
+    description: Customer identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_customer_id:
+    type: string
+    description: External customer identifier.
+    example: customer_123
+  email:
+    type:
+      - string
+      - "null"
+    description: Email.
+    example: billing@acme.example
+  amount_cents:
+    type: integer
+    description: Amount cents.
+    example: 100
+  currency:
+    type: string
+    description: Currency as an ISO 4217 code.
+    example: USD
+  payment_status:
+    type: string
+    description: Payment status.
+    example: pending
+    enum:
+      - pending
+      - succeeded
+      - failed
+  lago_invoice_ids:
+    type: array
+    description: Invoices included in the payment request.
+    items:
+      type: string
+      description: Invoice identifier.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

@@ -1,0 +1,13 @@
+type: object
+description: payment receipts list.
+required:
+  - payment_receipts
+  - meta
+properties:
+  payment_receipts:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./PaymentReceiptObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

@@ -1,0 +1,26 @@
+type: object
+minProperties: 1
+properties:
+  invoice_id:
+    type: string
+    description: Identifier of the invoice being paid.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  amount_cents:
+    type: integer
+    description: Amount paid, in cents.
+    example: 1000
+    minimum: 1
+  reference:
+    type: string
+    description: Manual payment reference.
+    example: wire_transfer_123
+    minLength: 1
+    maxLength: 40
+  paid_at:
+    type:
+      - string
+      - "null"
+    description: Payment timestamp. Defaults to now.
+    example: null
+    format: date-time

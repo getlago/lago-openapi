@@ -1,0 +1,49 @@
+type: object
+minProperties: 1
+properties:
+  invoice_id:
+    type: string
+    description: Invoice identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  reason:
+    type: string
+    description: Reason for issuing the credit note.
+    example: duplicated_charge
+    enum:
+      - duplicated_charge
+      - product_unsatisfactory
+      - order_change
+      - order_cancellation
+      - fraudulent_charge
+      - other
+    default: other
+  description:
+    type:
+      - string
+      - "null"
+    description: Description of the adjustment.
+    example: Partial credit
+  credit_amount_cents:
+    type: integer
+    description: Amount credited to the customer balance, in cents.
+    example: 100
+  refund_amount_cents:
+    type: integer
+    description: Amount to refund, in cents.
+    example: 0
+  offset_amount_cents:
+    type: integer
+    description: Amount offset against the invoice balance, in cents.
+    example: 0
+  metadata:
+    type:
+      - object
+      - "null"
+    description: Metadata as an object of key-value pairs.
+    additionalProperties: true
+  items:
+    type: array
+    description: Invoice fees to credit.
+    items:
+      $ref: ./CreditNoteItemInput.yaml
