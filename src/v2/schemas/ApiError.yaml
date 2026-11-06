@@ -1,0 +1,34 @@
+type: object
+required:
+  - code
+  - details
+properties:
+  code:
+    type: string
+    pattern: '^[a-z][a-z0-9_]*$'
+    description: Code identifying the failure. The HTTP status is carried by the response, not the body.
+    example: validation_errors
+  details:
+    type: array
+    description: Details of the failure. The array is empty when no field details are available.
+    items:
+      type: object
+      required:
+        - code
+        - field
+        - meta
+      properties:
+        code:
+          type: string
+          pattern: '^[a-z][a-z0-9_]*$'
+          description: Code identifying the field error or the reason a request parameter was rejected.
+          example: value_is_mandatory
+        field:
+          type: string
+          description: Request field or parameter. Nested fields use dots and zero-based array indexes. A resource-level failure uses base.
+          example: name
+        meta:
+          type: object
+          description: Information about the failure, such as the missing resource, allowed values or bounds. The object is empty when no metadata is available.
+          additionalProperties: true
+          example: {}

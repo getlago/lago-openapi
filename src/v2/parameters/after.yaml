@@ -1,0 +1,7 @@
+name: after
+in: query
+description: Opaque next_cursor from a previous response. Returns the next page. Cannot be combined with before or include_total_count=true. Keep the same filters when paging.
+required: false
+schema:
+  type: string
+  example: eyJ2IjoxLCJvIjp7InQiOiJ0YXhlcyIsInMiOiJjcmVhdGVkX2F0OmRlc2MsaWQ6ZGVzYyJ9LCJrIjpbIjIwMjItMDQtMjlUMDg6NTk6NTEuMDAwMDAwWiIsIjFhOTAxYTkwLTFhOTAtMWE5MC0xYTkwLTFhOTAxYTkwMWE5MCJdfQ
