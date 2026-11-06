@@ -4847,10 +4847,9 @@ components:
           type:
             - integer
             - 'null'
-          description: Number of billing interval units.
+          description: Number of billing interval units. Omit or set to null to inherit the rate interval count.
           example: 1
           minimum: 1
-          default: 1
         billing_interval_unit:
           type:
             - string
@@ -6098,7 +6097,10 @@ components:
         rate_source:
           type: string
           description: Source of the price used for this window.
-          example: rate_card
+          example: rate
+          enum:
+            - rate
+            - phase_override
         rate_model:
           type: string
           description: Pricing model. Fixed products support standard, graduated and volume. Volume cannot be billed in advance; dynamic requires a sum metric. Proration and aggregation can impose further restrictions.

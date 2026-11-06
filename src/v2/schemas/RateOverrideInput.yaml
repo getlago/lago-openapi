@@ -27,10 +27,9 @@ properties:
     type:
       - integer
       - "null"
-    description: Number of billing interval units.
+    description: Number of billing interval units. Omit or set to null to inherit the rate interval count.
     example: 1
     minimum: 1
-    default: 1
   billing_interval_unit:
     type:
       - string
