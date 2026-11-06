@@ -105,8 +105,3 @@ properties:
     description: UTC deletion timestamp, with microsecond precision. Null until deletion.
     example: null
     format: date-time
-  filters:
-    type: array
-    description: Filters defined by this metric. Included only with expands[]=filters.
-    items:
-      $ref: ./BillableMetricFilterObject.yaml

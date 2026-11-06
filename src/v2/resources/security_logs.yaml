@@ -26,8 +26,8 @@ get:
         format: date-time
     - name: to_date
       in: query
-      required: false
-      description: To date.
+      required: true
+      description: To date. A request without it returns 422.
       schema:
         type: string
         description: Inclusive upper log-time bound.

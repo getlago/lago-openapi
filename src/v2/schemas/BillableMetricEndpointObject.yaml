@@ -1,0 +1,9 @@
+allOf:
+  - $ref: ./BillableMetricObject.yaml
+  - type: object
+    properties:
+      filters:
+        type: array
+        description: Filters defined by this metric. Included only with expands[]=filters.
+        items:
+          $ref: ./BillableMetricFilterObject.yaml

@@ -5261,11 +5261,14 @@ paths:
         - name: metadata
           in: query
           required: false
-          description: Metadata.
+          description: Metadata key and value pairs to match, sent as metadata[key]=value.
+          style: deepObject
+          explode: true
           schema:
             type: object
             description: Metadata key and value pairs to match.
-            additionalProperties: true
+            additionalProperties:
+              type: string
         - name: currencies[]
           in: query
           required: false
@@ -7119,8 +7122,8 @@ paths:
             format: date-time
         - name: to_date
           in: query
-          required: false
-          description: To date.
+          required: true
+          description: To date. A request without it returns 422.
           schema:
             type: string
             description: Inclusive upper log-time bound.
@@ -7871,50 +7874,6 @@ components:
       properties:
         product_category:
           $ref: '#/components/schemas/ProductCategoryBaseInput'
-    BillableMetricFilterObject:
-      type: object
-      description: Billable Metric Filter.
-      required:
-        - lago_id
-        - key
-        - values
-        - created_at
-        - updated_at
-        - deleted_at
-      properties:
-        lago_id:
-          type: string
-          description: Unique identifier created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          format: uuid
-        key:
-          type: string
-          description: Key.
-          example: example
-        values:
-          type: array
-          description: Allowed values, sorted alphabetically.
-          items:
-            type: string
-            description: Allowed values, sorted alphabetically.
-            example: eu
-        created_at:
-          type: string
-          description: UTC creation timestamp, with microsecond precision.
-          example: '2022-04-29T08:59:51.123456Z'
-          format: date-time
-        updated_at:
-          type: string
-          description: UTC timestamp of the last update, with microsecond precision.
-          example: '2022-04-29T08:59:51.123456Z'
-          format: date-time
-        deleted_at:
-          type:
-            - string
-            - 'null'
-          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
-          example: null
-          format: date-time
     BillableMetricObject:
       type: object
       description: Billable Metric.
@@ -8023,11 +7982,6 @@ components:
           description: UTC deletion timestamp, with microsecond precision. Null until deletion.
           example: null
           format: date-time
-        filters:
-          type: array
-          description: Filters defined by this metric. Included only with expands[]=filters.
-          items:
-            $ref: '#/components/schemas/BillableMetricFilterObject'
     ProductObject:
       type: object
       description: Product.
@@ -9856,157 +9810,6 @@ components:
       properties:
         rate_phase:
           $ref: '#/components/schemas/RatePhaseObject'
-    ShippingAddressObject:
-      type: object
-      description: Shipping address.
-      required:
-        - address_line1
-        - address_line2
-        - city
-        - zipcode
-        - state
-        - country
-      properties:
-        address_line1:
-          type:
-            - string
-            - 'null'
-          description: Address line1.
-          example: example
-        address_line2:
-          type:
-            - string
-            - 'null'
-          description: Address line2.
-          example: example
-        city:
-          type:
-            - string
-            - 'null'
-          description: City.
-          example: example
-        zipcode:
-          type:
-            - string
-            - 'null'
-          description: Zipcode.
-          example: example
-        state:
-          type:
-            - string
-            - 'null'
-          description: State.
-          example: example
-        country:
-          type:
-            - string
-            - 'null'
-          description: Country.
-          example: FR
-    CustomerMetadataObject:
-      type: object
-      description: Customer Metadata.
-      required:
-        - lago_id
-        - key
-        - value
-        - display_on_invoice
-        - created_at
-        - updated_at
-      properties:
-        lago_id:
-          type: string
-          description: Unique identifier created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          format: uuid
-        key:
-          type: string
-          description: Key.
-          example: example
-        value:
-          type: string
-          description: Value.
-          example: example
-        display_on_invoice:
-          type: boolean
-          description: Whether this value is displayed on invoices.
-          example: false
-        created_at:
-          type: string
-          description: UTC creation timestamp, with microsecond precision.
-          example: '2022-04-29T08:59:51.123456Z'
-          format: date-time
-        updated_at:
-          type: string
-          description: UTC timestamp of the last update, with microsecond precision.
-          example: '2022-04-29T08:59:51.123456Z'
-          format: date-time
-    IntegrationCustomerObject:
-      type: object
-      description: Customer mapping to an integration. Provider-specific settings are included as additional top-level fields.
-      required:
-        - lago_id
-        - external_customer_id
-        - type
-        - integration_code
-        - code
-        - is_default
-        - category
-      properties:
-        lago_id:
-          type: string
-          description: Unique identifier created by Lago.
-          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-          format: uuid
-        external_customer_id:
-          type:
-            - string
-            - 'null'
-          description: Customer identifier in the integration.
-          example: customer_123
-        type:
-          type:
-            - string
-            - 'null'
-          description: Integration type.
-          example: netsuite
-          enum:
-            - netsuite
-            - anrok
-            - avalara
-            - xero
-            - hubspot
-            - salesforce
-            - null
-        integration_code:
-          type:
-            - string
-            - 'null'
-          description: Integration code.
-          example: anrok
-        code:
-          type:
-            - string
-            - 'null'
-          description: Mapping code.
-          example: default
-        is_default:
-          type: boolean
-          description: Whether this mapping is the default.
-          example: false
-        category:
-          type:
-            - string
-            - 'null'
-          description: Integration category.
-          example: payment
-          enum:
-            - payment
-            - tax
-            - accounting
-            - crm
-            - null
-      additionalProperties: true
     CustomerObject:
       type: object
       description: Customer.
@@ -10298,24 +10101,6 @@ components:
             - 'null'
           description: Agent address. Present only when x402 payments are enabled.
           example: '0x0000000000000000000000000000000000000000'
-        shipping_address:
-          $ref: '#/components/schemas/ShippingAddressObject'
-          description: Included by customer endpoints, but omitted from customers embedded in other resources.
-        metadata:
-          type: array
-          description: Customer metadata. Included only with expands[]=metadata.
-          items:
-            $ref: '#/components/schemas/CustomerMetadataObject'
-        taxes:
-          type: array
-          description: Customer taxes. Included only with expands[]=taxes.
-          items:
-            $ref: '#/components/schemas/TaxObject'
-        integration_customers:
-          type: array
-          description: Integration mappings. Included only with expands[]=integration_customers.
-          items:
-            $ref: '#/components/schemas/IntegrationCustomerObject'
     InvoiceCustomSectionObject:
       type: object
       description: Invoice Custom Section.
@@ -12988,12 +12773,182 @@ components:
             - 'null'
           description: Metadata as an object of key-value pairs.
           additionalProperties: true
+    ShippingAddressObject:
+      type: object
+      description: Shipping address.
+      required:
+        - address_line1
+        - address_line2
+        - city
+        - zipcode
+        - state
+        - country
+      properties:
+        address_line1:
+          type:
+            - string
+            - 'null'
+          description: Address line1.
+          example: example
+        address_line2:
+          type:
+            - string
+            - 'null'
+          description: Address line2.
+          example: example
+        city:
+          type:
+            - string
+            - 'null'
+          description: City.
+          example: example
+        zipcode:
+          type:
+            - string
+            - 'null'
+          description: Zipcode.
+          example: example
+        state:
+          type:
+            - string
+            - 'null'
+          description: State.
+          example: example
+        country:
+          type:
+            - string
+            - 'null'
+          description: Country.
+          example: FR
+    CustomerMetadataObject:
+      type: object
+      description: Customer Metadata.
+      required:
+        - lago_id
+        - key
+        - value
+        - display_on_invoice
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        key:
+          type: string
+          description: Key.
+          example: example
+        value:
+          type: string
+          description: Value.
+          example: example
+        display_on_invoice:
+          type: boolean
+          description: Whether this value is displayed on invoices.
+          example: false
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    IntegrationCustomerObject:
+      type: object
+      description: Customer mapping to an integration. Provider-specific settings are included as additional top-level fields.
+      required:
+        - lago_id
+        - external_customer_id
+        - type
+        - integration_code
+        - code
+        - is_default
+        - category
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Customer identifier in the integration.
+          example: customer_123
+        type:
+          type:
+            - string
+            - 'null'
+          description: Integration type.
+          example: netsuite
+          enum:
+            - netsuite
+            - anrok
+            - avalara
+            - xero
+            - hubspot
+            - salesforce
+            - null
+        integration_code:
+          type:
+            - string
+            - 'null'
+          description: Integration code.
+          example: anrok
+        code:
+          type:
+            - string
+            - 'null'
+          description: Mapping code.
+          example: default
+        is_default:
+          type: boolean
+          description: Whether this mapping is the default.
+          example: false
+        category:
+          type:
+            - string
+            - 'null'
+          description: Integration category.
+          example: payment
+          enum:
+            - payment
+            - tax
+            - accounting
+            - crm
+            - null
+      additionalProperties: true
     CustomerEndpointObject:
       allOf:
         - $ref: '#/components/schemas/CustomerObject'
         - type: object
           required:
             - shipping_address
+          properties:
+            shipping_address:
+              $ref: '#/components/schemas/ShippingAddressObject'
+              description: Shipping address of the customer.
+            metadata:
+              type: array
+              description: Customer metadata. Included only with expands[]=metadata.
+              items:
+                $ref: '#/components/schemas/CustomerMetadataObject'
+            taxes:
+              type: array
+              description: Customer taxes. Included only with expands[]=taxes.
+              items:
+                $ref: '#/components/schemas/TaxObject'
+            integration_customers:
+              type: array
+              description: Integration mappings. Included only with expands[]=integration_customers.
+              items:
+                $ref: '#/components/schemas/IntegrationCustomerObject'
     CustomersPaginated:
       type: object
       description: customers list.
@@ -13856,31 +13811,23 @@ components:
           description: Document locale.
           example: example
         eu_tax_management:
-          type:
-            - boolean
-            - 'null'
+          type: boolean
           description: Eu tax management.
           example: false
         periodic_invoice_issuing_date_anchor:
-          type:
-            - string
-            - 'null'
+          type: string
           description: Date used to issue periodic invoices.
           example: current_period_end
           enum:
             - current_period_end
             - next_period_start
-            - null
         periodic_invoice_issuing_date_adjustment:
-          type:
-            - string
-            - 'null'
+          type: string
           description: Adjustment applied to periodic invoice issuing dates.
           example: keep_anchor
           enum:
             - keep_anchor
             - align_with_finalization_date
-            - null
         logo:
           type: string
           description: PNG or JPEG logo encoded as a base64 data URL.
@@ -13927,6 +13874,60 @@ components:
       properties:
         billing_entity:
           $ref: '#/components/schemas/BillingEntityBaseInput'
+    BillableMetricFilterObject:
+      type: object
+      description: Billable Metric Filter.
+      required:
+        - lago_id
+        - key
+        - values
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        key:
+          type: string
+          description: Key.
+          example: example
+        values:
+          type: array
+          description: Allowed values, sorted alphabetically.
+          items:
+            type: string
+            description: Allowed values, sorted alphabetically.
+            example: eu
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    BillableMetricEndpointObject:
+      allOf:
+        - $ref: '#/components/schemas/BillableMetricObject'
+        - type: object
+          properties:
+            filters:
+              type: array
+              description: Filters defined by this metric. Included only with expands[]=filters.
+              items:
+                $ref: '#/components/schemas/BillableMetricFilterObject'
     BillableMetricsPaginated:
       type: object
       description: billable metrics list.
@@ -13938,7 +13939,7 @@ components:
           type: array
           description: Records in this response.
           items:
-            $ref: '#/components/schemas/BillableMetricObject'
+            $ref: '#/components/schemas/BillableMetricEndpointObject'
         meta:
           $ref: '#/components/schemas/CursorPaginationMeta'
     BillableMetricBaseInput:
@@ -14054,7 +14055,7 @@ components:
         - billable_metric
       properties:
         billable_metric:
-          $ref: '#/components/schemas/BillableMetricObject'
+          $ref: '#/components/schemas/BillableMetricEndpointObject'
     BillableMetricUpdateInput:
       type: object
       description: Update billable metric.
