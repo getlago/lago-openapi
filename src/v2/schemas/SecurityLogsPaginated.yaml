@@ -1,0 +1,13 @@
+type: object
+description: security logs list.
+required:
+  - security_logs
+  - meta
+properties:
+  security_logs:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./SecurityLogObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

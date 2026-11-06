@@ -1,0 +1,13 @@
+type: object
+description: activity logs list.
+required:
+  - activity_logs
+  - meta
+properties:
+  activity_logs:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./ActivityLogObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

@@ -1,0 +1,13 @@
+type: object
+description: billing entities list.
+required:
+  - billing_entities
+  - meta
+properties:
+  billing_entities:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./BillingEntityObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

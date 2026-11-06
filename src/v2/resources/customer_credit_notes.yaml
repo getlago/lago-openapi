@@ -1,0 +1,186 @@
+parameters:
+  - name: customer_external_id
+    in: path
+    required: true
+    description: Customer external identifier.
+    schema:
+      type: string
+      description: Customer external identifier.
+      example: external_123
+get:
+  tags:
+    - customers
+  summary: List customer credit notes
+  description: >-
+    Returns a cursor-paginated list for the customer identified in the path. No
+    expansions are supported.
+
+    Requires the product catalog to be enabled and credit_note read permission on the API key.
+  operationId: findAllCustomerCreditNotes
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - name: search_term
+      in: query
+      required: false
+      description: Search term.
+      schema:
+        type: string
+        description: Search term.
+        example: example
+    - name: currency
+      in: query
+      required: false
+      description: Currency as an ISO 4217 code.
+      schema:
+        type: string
+        description: Currency as an ISO 4217 code.
+        example: example
+    - name: invoice_number
+      in: query
+      required: false
+      description: Invoice number.
+      schema:
+        type: string
+        description: Invoice number.
+        example: example
+    - name: purchase_order_number
+      in: query
+      required: false
+      description: Purchase order number.
+      schema:
+        type: string
+        description: Purchase order number.
+        example: example
+    - name: credit_status
+      in: query
+      required: false
+      description: Credit status.
+      schema:
+        type: string
+        description: Credit status.
+        example: available
+        enum:
+          - available
+          - consumed
+          - voided
+    - name: refund_status
+      in: query
+      required: false
+      description: Refund status.
+      schema:
+        type:
+          - string
+          - "null"
+        description: Refund status.
+        example: pending
+        enum:
+          - pending
+          - succeeded
+          - failed
+          - null
+    - name: reason
+      in: query
+      required: false
+      description: Reason.
+      schema:
+        type: string
+        description: Reason for issuing the credit note.
+        example: duplicated_charge
+        enum:
+          - duplicated_charge
+          - product_unsatisfactory
+          - order_change
+          - order_cancellation
+          - fraudulent_charge
+          - other
+    - name: self_billed
+      in: query
+      required: false
+      description: Self billed.
+      schema:
+        type: boolean
+        description: Whether the invoice is self-billed.
+        example: false
+    - name: issuing_date_from
+      in: query
+      required: false
+      description: Issuing date from.
+      schema:
+        type: string
+        description: Issuing date bound.
+        example: 2022-04-29
+        format: date
+    - name: issuing_date_to
+      in: query
+      required: false
+      description: Issuing date to.
+      schema:
+        type: string
+        description: Issuing date bound.
+        example: 2022-04-29
+        format: date
+    - name: amount_from
+      in: query
+      required: false
+      description: Amount from.
+      schema:
+        type: integer
+        description: Credit note amount bound, in cents.
+        example: 100
+    - name: amount_to
+      in: query
+      required: false
+      description: Amount to.
+      schema:
+        type: integer
+        description: Credit note amount bound, in cents.
+        example: 100
+    - name: billing_entity_codes[]
+      in: query
+      required: false
+      description: Billing entity codes[].
+      schema:
+        type: array
+        description: Billing entities.
+        items:
+          type: string
+          description: Billing entity code.
+          example: main
+    - name: types[]
+      in: query
+      required: false
+      description: Types[].
+      schema:
+        type: array
+        description: Amount types to include.
+        items:
+          type: string
+          description: Credit note amount type.
+          example: credit
+          enum:
+            - credit
+            - refund
+            - offset
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/CreditNotesPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

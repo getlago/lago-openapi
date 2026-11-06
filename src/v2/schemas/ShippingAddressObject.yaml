@@ -1,0 +1,46 @@
+type: object
+description: Shipping address.
+required:
+  - address_line1
+  - address_line2
+  - city
+  - zipcode
+  - state
+  - country
+properties:
+  address_line1:
+    type:
+      - string
+      - "null"
+    description: Address line1.
+    example: example
+  address_line2:
+    type:
+      - string
+      - "null"
+    description: Address line2.
+    example: example
+  city:
+    type:
+      - string
+      - "null"
+    description: City.
+    example: example
+  zipcode:
+    type:
+      - string
+      - "null"
+    description: Zipcode.
+    example: example
+  state:
+    type:
+      - string
+      - "null"
+    description: State.
+    example: example
+  country:
+    type:
+      - string
+      - "null"
+    description: Country.
+    example: FR

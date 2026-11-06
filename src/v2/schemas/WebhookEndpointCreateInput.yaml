@@ -1,0 +1,9 @@
+type: object
+description: Create webhook endpoint.
+required:
+  - webhook_endpoint
+properties:
+  webhook_endpoint:
+    $ref: ./WebhookEndpointBaseInput.yaml
+    required:
+      - webhook_url

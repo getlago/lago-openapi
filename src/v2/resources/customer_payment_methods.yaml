@@ -1,0 +1,46 @@
+parameters:
+  - name: customer_external_id
+    in: path
+    required: true
+    description: Customer external identifier.
+    schema:
+      type: string
+      description: Customer external identifier.
+      example: external_123
+get:
+  tags:
+    - customers
+  summary: List customer payment methods
+  description: >-
+    Returns a cursor-paginated list for the customer identified in the path. No
+    expansions are supported.
+
+    Requires the product catalog to be enabled and payment_method read permission on the API key.
+  operationId: findAllCustomerPaymentMethods
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PaymentMethodsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

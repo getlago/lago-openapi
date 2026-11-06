@@ -1,0 +1,197 @@
+get:
+  tags:
+    - customers
+  summary: List customers
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+
+    Requires the product catalog to be enabled and customer read permission on the API key.
+  operationId: findAllCustomers
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+    - name: search_term
+      in: query
+      required: false
+      description: Search term.
+      schema:
+        type: string
+        description: Text to search.
+        example: Acme
+    - name: external_id
+      in: query
+      required: false
+      description: External id.
+      schema:
+        type: string
+        description: Exact customer external identifier.
+        example: customer_123
+    - name: has_tax_identification_number
+      in: query
+      required: false
+      description: Has tax identification number.
+      schema:
+        type: boolean
+        description: Filter customers with or without a tax identifier.
+        example: false
+    - name: has_customer_type
+      in: query
+      required: false
+      description: Has customer type.
+      schema:
+        type: boolean
+        description: Filter customers with or without a customer type.
+        example: false
+    - name: customer_type
+      in: query
+      required: false
+      description: Customer type.
+      schema:
+        type: string
+        description: Customer type.
+        example: company
+        enum:
+          - company
+          - individual
+    - name: metadata
+      in: query
+      required: false
+      description: Metadata key and value pairs to match, sent as metadata[key]=value.
+      style: deepObject
+      explode: true
+      schema:
+        type: object
+        description: Metadata key and value pairs to match.
+        additionalProperties:
+          type: string
+    - name: currencies[]
+      in: query
+      required: false
+      description: Currencies.
+      schema:
+        type: array
+        description: Currencies.
+        items:
+          type: string
+          description: Currencies.
+          example: example
+    - name: countries[]
+      in: query
+      required: false
+      description: Countries.
+      schema:
+        type: array
+        description: Countries.
+        items:
+          type: string
+          description: Countries.
+          example: example
+    - name: states[]
+      in: query
+      required: false
+      description: States.
+      schema:
+        type: array
+        description: States.
+        items:
+          type: string
+          description: States.
+          example: example
+    - name: zipcodes[]
+      in: query
+      required: false
+      description: Zipcodes.
+      schema:
+        type: array
+        description: Zipcodes.
+        items:
+          type: string
+          description: Zipcodes.
+          example: example
+    - name: billing_entity_codes[]
+      in: query
+      required: false
+      description: Billing entity codes.
+      schema:
+        type: array
+        description: Billing entity codes.
+        items:
+          type: string
+          description: Billing entity codes.
+          example: example
+    - name: account_type[]
+      in: query
+      required: false
+      description: Account type.
+      schema:
+        type: array
+        description: Account type.
+        items:
+          type: string
+          description: Account type.
+          example: example
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/CustomersPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - customers
+  summary: Create customer
+  description: >-
+    Creates a new customer. An existing external_id returns 422 rather than
+    updating that customer. Billing and payment settings are top-level fields,
+    not a billing_configuration object. Relationships are omitted from the
+    response unless retrieved later with a supported expansion.
+
+    Requires the product catalog to be enabled and customer write permission on the API key.
+  operationId: createCustomer
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/CustomerCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Customer.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

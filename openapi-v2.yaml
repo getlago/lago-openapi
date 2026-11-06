@@ -1,10 +1,7 @@
 openapi: 3.1.0
 info:
   title: Lago API v2 documentation
-  description: |-
-    Beta API for organizations using the product catalog.
-    This document covers taxes, the product catalog, contracts and billing. Other native v2 endpoints will be added separately.
-    Only the documented actions and expansions are supported. Some lists, such as rates and phases, are returned without pagination.
+  description: Lago API v2. Documents native v2 endpoints for the product catalog, billing, customers, organizations, billing entities, billable metrics, events, logs and webhook endpoints. Native v2 endpoints use cursor pagination, opt-in relationship expansions and structured error responses. Some other /api/v2 paths still fall back to v1 controllers and are not described here.
   version: 2.0.0-beta
   license:
     name: AGPLv3
@@ -55,6 +52,24 @@ tags:
     description: payment receipts operations
   - name: credit_notes
     description: credit notes operations
+  - name: customers
+    description: customers operations
+  - name: organizations
+    description: Organization operations
+  - name: billing_entities
+    description: billing entities operations
+  - name: billable_metrics
+    description: billable metrics operations
+  - name: events
+    description: Event operations
+  - name: activity_logs
+    description: activity logs operations
+  - name: api_logs
+    description: api logs operations
+  - name: security_logs
+    description: security logs operations
+  - name: webhook_endpoints
+    description: webhook endpoints operations
 externalDocs:
   description: Lago documentation
   url: https://getlago.com/docs
@@ -5169,6 +5184,2242 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Metadata'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers:
+    get:
+      tags:
+        - customers
+      summary: List customers
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and customer read permission on the API key.
+      operationId: findAllCustomers
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: search_term
+          in: query
+          required: false
+          description: Search term.
+          schema:
+            type: string
+            description: Text to search.
+            example: Acme
+        - name: external_id
+          in: query
+          required: false
+          description: External id.
+          schema:
+            type: string
+            description: Exact customer external identifier.
+            example: customer_123
+        - name: has_tax_identification_number
+          in: query
+          required: false
+          description: Has tax identification number.
+          schema:
+            type: boolean
+            description: Filter customers with or without a tax identifier.
+            example: false
+        - name: has_customer_type
+          in: query
+          required: false
+          description: Has customer type.
+          schema:
+            type: boolean
+            description: Filter customers with or without a customer type.
+            example: false
+        - name: customer_type
+          in: query
+          required: false
+          description: Customer type.
+          schema:
+            type: string
+            description: Customer type.
+            example: company
+            enum:
+              - company
+              - individual
+        - name: metadata
+          in: query
+          required: false
+          description: Metadata key and value pairs to match, sent as metadata[key]=value.
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            description: Metadata key and value pairs to match.
+            additionalProperties:
+              type: string
+        - name: currencies[]
+          in: query
+          required: false
+          description: Currencies.
+          schema:
+            type: array
+            description: Currencies.
+            items:
+              type: string
+              description: Currencies.
+              example: example
+        - name: countries[]
+          in: query
+          required: false
+          description: Countries.
+          schema:
+            type: array
+            description: Countries.
+            items:
+              type: string
+              description: Countries.
+              example: example
+        - name: states[]
+          in: query
+          required: false
+          description: States.
+          schema:
+            type: array
+            description: States.
+            items:
+              type: string
+              description: States.
+              example: example
+        - name: zipcodes[]
+          in: query
+          required: false
+          description: Zipcodes.
+          schema:
+            type: array
+            description: Zipcodes.
+            items:
+              type: string
+              description: Zipcodes.
+              example: example
+        - name: billing_entity_codes[]
+          in: query
+          required: false
+          description: Billing entity codes.
+          schema:
+            type: array
+            description: Billing entity codes.
+            items:
+              type: string
+              description: Billing entity codes.
+              example: example
+        - name: account_type[]
+          in: query
+          required: false
+          description: Account type.
+          schema:
+            type: array
+            description: Account type.
+            items:
+              type: string
+              description: Account type.
+              example: example
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomersPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - customers
+      summary: Create customer
+      description: |-
+        Creates a new customer. An existing external_id returns 422 rather than updating that customer. Billing and payment settings are top-level fields, not a billing_configuration object. Relationships are omitted from the response unless retrieved later with a supported expansion.
+        Requires the product catalog to be enabled and customer write permission on the API key.
+      operationId: createCustomer
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{external_id}:
+    parameters:
+      - name: external_id
+        in: path
+        required: true
+        description: External id.
+        schema:
+          type: string
+          description: External id.
+          example: external_123
+    get:
+      tags:
+        - customers
+      summary: Retrieve customer
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and customer read permission on the API key.
+      operationId: findCustomer
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - metadata
+                - taxes
+                - integration_customers
+              example: metadata
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - customers
+      summary: Update customer
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        The path identifies the existing customer. A missing customer returns 404. Billing and payment settings are top-level fields. Relationships are not expanded in the update response.
+        Requires the product catalog to be enabled and customer write permission on the API key.
+      operationId: updateCustomer
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - customers
+      summary: Update customer
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        The path identifies the existing customer. A missing customer returns 404. Billing and payment settings are top-level fields. Relationships are not expanded in the update response.
+        Requires the product catalog to be enabled and customer write permission on the API key.
+      operationId: patchCustomer
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - customers
+      summary: Delete customer
+      description: |-
+        Soft-deletes the customer and queues the related termination work. The response includes deleted_at.
+        Requires the product catalog to be enabled and customer write permission on the API key.
+      operationId: destroyCustomer
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /organizations:
+    get:
+      tags:
+        - organizations
+      summary: Retrieve the organization
+      description: |-
+        Returns the organization associated with the API key. No expansions are supported.
+        Requires the product catalog to be enabled and organization read permission on the API key.
+      operationId: findOrganization
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    put:
+      tags:
+        - organizations
+      summary: Update the organization
+      description: |-
+        Updates email and slug. Omitted fields are unchanged. Name and events_store are read-only.
+        Requires the product catalog to be enabled and organization write permission on the API key.
+      operationId: updateOrganization
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /billing_entities:
+    get:
+      tags:
+        - billing_entities
+      summary: List billing entities
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Lists active billing entities only.
+        Requires the product catalog to be enabled and billing_entity read permission on the API key.
+      operationId: findAllBillingEntities
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingEntitiesPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - billing_entities
+      summary: Create billing entity
+      description: |-
+        Creating additional billing entities requires the relevant entitlement. Grace periods, timezones, email settings and periodic invoice settings may require a premium license.
+        Requires the product catalog to be enabled and billing_entity write permission on the API key.
+      operationId: createBillingEntity
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingEntityCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingEntity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /billing_entities/{code}:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - billing_entities
+      summary: Retrieve billing entity
+      description: |-
+        Returns an active entity matching the code, or an archived entity if no active entity has that code. Relationships are included only when requested with expands[].
+        Requires the product catalog to be enabled and billing_entity read permission on the API key.
+      operationId: findBillingEntity
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - taxes
+                - selected_invoice_custom_sections
+              example: taxes
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingEntity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - billing_entities
+      summary: Update billing entity
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        The code cannot be changed. Billing configuration fields are top-level fields. Empty tax_codes or invoice_custom_section_codes arrays remove the corresponding assignments.
+        Requires the product catalog to be enabled and billing_entity write permission on the API key.
+      operationId: updateBillingEntity
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingEntityUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingEntity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - billing_entities
+      summary: Update billing entity
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        The code cannot be changed. Billing configuration fields are top-level fields. Empty tax_codes or invoice_custom_section_codes arrays remove the corresponding assignments.
+        Requires the product catalog to be enabled and billing_entity write permission on the API key.
+      operationId: patchBillingEntity
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingEntityUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingEntity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /billable_metrics:
+    get:
+      tags:
+        - billable_metrics
+      summary: List billable metrics
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and billable_metric read permission on the API key.
+      operationId: findAllBillableMetrics
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetricsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - billable_metrics
+      summary: Create billable metric
+      description: Requires the product catalog to be enabled and billable_metric write permission on the API key.
+      operationId: createBillableMetric
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillableMetricCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /billable_metrics/{code}:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - billable_metrics
+      summary: Retrieve billable metric
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and billable_metric read permission on the API key.
+      operationId: findBillableMetric
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - filters
+              example: filters
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - billable_metrics
+      summary: Update billable metric
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        When attached to a plan, only the name, description and permitted filter changes can be updated. Changes to locked fields return 422. Filter values referenced by product filters cannot be removed.
+        Requires the product catalog to be enabled and billable_metric write permission on the API key.
+      operationId: updateBillableMetric
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillableMetricUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - billable_metrics
+      summary: Update billable metric
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        When attached to a plan, only the name, description and permitted filter changes can be updated. Changes to locked fields return 422. Filter values referenced by product filters cannot be removed.
+        Requires the product catalog to be enabled and billable_metric write permission on the API key.
+      operationId: patchBillableMetric
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillableMetricUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - billable_metrics
+      summary: Delete billable metric
+      description: |-
+        Soft-deletes the metric. A metric referenced by a product filter cannot be deleted.
+        Requires the product catalog to be enabled and billable_metric write permission on the API key.
+      operationId: destroyBillableMetric
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillableMetric'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /events:
+    get:
+      tags:
+        - events
+      summary: List events
+      description: |-
+        Lists events using event-time filters. ClickHouse returns enriched events ordered by timestamp, external_contract_id, code and transaction_id, all descending. PostgreSQL orders by creation time and identifier, both descending. Cursors are opaque and must not be constructed from response fields. external_subscription_id, created_at_from and created_at_to are rejected. No expansions are supported.
+        Requires the product catalog to be enabled and event read permission on the API key.
+      operationId: findAllEvents
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - name: code
+          in: query
+          required: false
+          description: Code.
+          schema:
+            type: string
+            description: Code.
+            example: compute
+        - name: transaction_id
+          in: query
+          required: false
+          description: Transaction id.
+          schema:
+            type: string
+            description: Transaction id.
+            example: transaction_id_123
+        - name: external_contract_id
+          in: query
+          required: false
+          description: External contract id.
+          schema:
+            type: string
+            description: External contract id.
+            example: external_contract_id_123
+        - name: timestamp_from_started_at
+          in: query
+          required: false
+          description: Timestamp from started at.
+          schema:
+            type: boolean
+            description: Use the contract start time as the lower event-time bound. Requires external_contract_id and cannot be combined with timestamp_from.
+            example: false
+        - name: timestamp_from
+          in: query
+          required: false
+          description: Timestamp from.
+          schema:
+            type: string
+            description: Inclusive lower event-time bound.
+            example: '2022-04-29T08:59:51.123456Z'
+            format: date-time
+        - name: timestamp_to
+          in: query
+          required: false
+          description: Timestamp to.
+          schema:
+            type: string
+            description: Inclusive upper event-time bound.
+            example: '2022-04-29T08:59:51.123456Z'
+            format: date-time
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - events
+      summary: Ingest an event
+      description: |-
+        Accepts product-catalog events. external_subscription_id is not supported and returns 422. For ClickHouse organizations, the product event pipeline must be configured, and success acknowledges ingestion rather than completed enrichment. Newly accepted events may not appear in the list immediately.
+        Requires the product catalog to be enabled and event write permission on the API key.
+      operationId: createEvent
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /events/batch:
+    post:
+      tags:
+        - events
+      summary: Ingest a batch of events
+      description: |-
+        Accepts product-catalog events. external_subscription_id is not supported and returns 422. For ClickHouse organizations, the product event pipeline must be configured, and success acknowledges ingestion rather than completed enrichment. Newly accepted events may not appear in the list immediately.
+        Requires the product catalog to be enabled and event write permission on the API key.
+      operationId: createEventsBatch
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventBatchCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsCollection'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{customer_external_id}/checkout_url:
+    parameters:
+      - name: customer_external_id
+        in: path
+        required: true
+        description: Customer external identifier.
+        schema:
+          type: string
+          description: Customer external identifier.
+          example: external_123
+    post:
+      tags:
+        - customers
+      summary: Create a customer checkout URL
+      description: |-
+        Creates a checkout URL using the customer payment provider. No request body is required.
+        Requires the product catalog to be enabled and customer write permission on the API key.
+      operationId: createCustomerCheckoutUrl
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutUrl'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{customer_external_id}/invoices:
+    parameters:
+      - name: customer_external_id
+        in: path
+        required: true
+        description: Customer external identifier.
+        schema:
+          type: string
+          description: Customer external identifier.
+          example: external_123
+    get:
+      tags:
+        - customers
+      summary: List customer invoices
+      description: |-
+        Returns a cursor-paginated list for the customer identified in the path. No expansions are supported.
+        Requires the product catalog to be enabled and invoice read permission on the API key.
+      operationId: findAllCustomerInvoices
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: invoice_type
+          in: query
+          required: false
+          description: Invoice type.
+          schema:
+            type: string
+            description: Type of catalog invoice to list.
+            example: contract
+            enum:
+              - contract
+              - advance_fees
+        - name: billing_entity_codes[]
+          in: query
+          required: false
+          description: Billing entity codes[].
+          schema:
+            type: array
+            description: Billing entity codes.
+            items:
+              type: string
+              description: Billing entity code.
+              example: main
+        - name: payment_status[]
+          in: query
+          required: false
+          description: Payment statuses. Also accepts scalar payment_status or the payment_statuses[] alias.
+          schema:
+            type: array
+            description: Payment statuses.
+            items:
+              type: string
+              description: Payment status.
+              example: pending
+              enum:
+                - pending
+                - succeeded
+                - failed
+        - name: status[]
+          in: query
+          required: false
+          description: Invoice statuses. Also accepts scalar status or the statuses[] alias.
+          schema:
+            type: array
+            description: Invoice statuses.
+            items:
+              type: string
+              description: Invoice status.
+              example: finalized
+        - name: currency
+          in: query
+          required: false
+          description: Currency as an ISO 4217 code.
+          schema:
+            type: string
+            description: Currency as an ISO 4217 code.
+            example: example
+        - name: purchase_order_number
+          in: query
+          required: false
+          description: Purchase order number.
+          schema:
+            type: string
+            description: Purchase order number.
+            example: example
+        - name: search_term
+          in: query
+          required: false
+          description: Search term.
+          schema:
+            type: string
+            description: Search term.
+            example: example
+        - name: partially_paid
+          in: query
+          required: false
+          description: Partially paid.
+          schema:
+            type: boolean
+            description: Partially paid.
+            example: false
+        - name: payment_dispute_lost
+          in: query
+          required: false
+          description: Payment dispute lost.
+          schema:
+            type: boolean
+            description: Payment dispute lost.
+            example: false
+        - name: payment_overdue
+          in: query
+          required: false
+          description: Payment overdue.
+          schema:
+            type: boolean
+            description: Payment overdue.
+            example: false
+        - name: amount_from
+          in: query
+          required: false
+          description: Amount from.
+          schema:
+            type: integer
+            description: Invoice total amount bound, in cents.
+            example: 1000
+        - name: amount_to
+          in: query
+          required: false
+          description: Amount to.
+          schema:
+            type: integer
+            description: Invoice total amount bound, in cents.
+            example: 1000
+        - name: issuing_date_from
+          in: query
+          required: false
+          description: Issuing date from.
+          schema:
+            type: string
+            description: Inclusive issuing date bound.
+            example: '2022-04-29'
+            format: date
+        - name: issuing_date_to
+          in: query
+          required: false
+          description: Issuing date to.
+          schema:
+            type: string
+            description: Inclusive issuing date bound.
+            example: '2022-04-29'
+            format: date
+        - name: settlements[]
+          in: query
+          required: false
+          description: Settlements[].
+          schema:
+            type: array
+            description: Settlement types.
+            items:
+              type: string
+              description: Settlement type.
+              example: payment
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicesPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{customer_external_id}/credit_notes:
+    parameters:
+      - name: customer_external_id
+        in: path
+        required: true
+        description: Customer external identifier.
+        schema:
+          type: string
+          description: Customer external identifier.
+          example: external_123
+    get:
+      tags:
+        - customers
+      summary: List customer credit notes
+      description: |-
+        Returns a cursor-paginated list for the customer identified in the path. No expansions are supported.
+        Requires the product catalog to be enabled and credit_note read permission on the API key.
+      operationId: findAllCustomerCreditNotes
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - name: search_term
+          in: query
+          required: false
+          description: Search term.
+          schema:
+            type: string
+            description: Search term.
+            example: example
+        - name: currency
+          in: query
+          required: false
+          description: Currency as an ISO 4217 code.
+          schema:
+            type: string
+            description: Currency as an ISO 4217 code.
+            example: example
+        - name: invoice_number
+          in: query
+          required: false
+          description: Invoice number.
+          schema:
+            type: string
+            description: Invoice number.
+            example: example
+        - name: purchase_order_number
+          in: query
+          required: false
+          description: Purchase order number.
+          schema:
+            type: string
+            description: Purchase order number.
+            example: example
+        - name: credit_status
+          in: query
+          required: false
+          description: Credit status.
+          schema:
+            type: string
+            description: Credit status.
+            example: available
+            enum:
+              - available
+              - consumed
+              - voided
+        - name: refund_status
+          in: query
+          required: false
+          description: Refund status.
+          schema:
+            type:
+              - string
+              - 'null'
+            description: Refund status.
+            example: pending
+            enum:
+              - pending
+              - succeeded
+              - failed
+              - null
+        - name: reason
+          in: query
+          required: false
+          description: Reason.
+          schema:
+            type: string
+            description: Reason for issuing the credit note.
+            example: duplicated_charge
+            enum:
+              - duplicated_charge
+              - product_unsatisfactory
+              - order_change
+              - order_cancellation
+              - fraudulent_charge
+              - other
+        - name: self_billed
+          in: query
+          required: false
+          description: Self billed.
+          schema:
+            type: boolean
+            description: Whether the invoice is self-billed.
+            example: false
+        - name: issuing_date_from
+          in: query
+          required: false
+          description: Issuing date from.
+          schema:
+            type: string
+            description: Issuing date bound.
+            example: '2022-04-29'
+            format: date
+        - name: issuing_date_to
+          in: query
+          required: false
+          description: Issuing date to.
+          schema:
+            type: string
+            description: Issuing date bound.
+            example: '2022-04-29'
+            format: date
+        - name: amount_from
+          in: query
+          required: false
+          description: Amount from.
+          schema:
+            type: integer
+            description: Credit note amount bound, in cents.
+            example: 100
+        - name: amount_to
+          in: query
+          required: false
+          description: Amount to.
+          schema:
+            type: integer
+            description: Credit note amount bound, in cents.
+            example: 100
+        - name: billing_entity_codes[]
+          in: query
+          required: false
+          description: Billing entity codes[].
+          schema:
+            type: array
+            description: Billing entities.
+            items:
+              type: string
+              description: Billing entity code.
+              example: main
+        - name: types[]
+          in: query
+          required: false
+          description: Types[].
+          schema:
+            type: array
+            description: Amount types to include.
+            items:
+              type: string
+              description: Credit note amount type.
+              example: credit
+              enum:
+                - credit
+                - refund
+                - offset
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNotesPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{customer_external_id}/payments:
+    parameters:
+      - name: customer_external_id
+        in: path
+        required: true
+        description: Customer external identifier.
+        schema:
+          type: string
+          description: Customer external identifier.
+          example: external_123
+    get:
+      tags:
+        - customers
+      summary: List customer payments
+      description: |-
+        Returns a cursor-paginated list for the customer identified in the path. No expansions are supported.
+        Requires the product catalog to be enabled and payment read permission on the API key.
+      operationId: findAllCustomerPayments
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{customer_external_id}/payment_requests:
+    parameters:
+      - name: customer_external_id
+        in: path
+        required: true
+        description: Customer external identifier.
+        schema:
+          type: string
+          description: Customer external identifier.
+          example: external_123
+    get:
+      tags:
+        - customers
+      summary: List customer payment requests
+      description: |-
+        Returns a cursor-paginated list for the customer identified in the path. No expansions are supported.
+        Requires the product catalog to be enabled and payment_request read permission on the API key.
+      operationId: findAllCustomerPaymentRequests
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequestsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{customer_external_id}/payment_methods:
+    parameters:
+      - name: customer_external_id
+        in: path
+        required: true
+        description: Customer external identifier.
+        schema:
+          type: string
+          description: Customer external identifier.
+          example: external_123
+    get:
+      tags:
+        - customers
+      summary: List customer payment methods
+      description: |-
+        Returns a cursor-paginated list for the customer identified in the path. No expansions are supported.
+        Requires the product catalog to be enabled and payment_method read permission on the API key.
+      operationId: findAllCustomerPaymentMethods
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethodsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{customer_external_id}/payment_methods/{lago_id}:
+    parameters:
+      - name: customer_external_id
+        in: path
+        required: true
+        description: Customer external identifier.
+        schema:
+          type: string
+          description: Customer external identifier.
+          example: external_123
+      - name: lago_id
+        in: path
+        required: true
+        description: Payment method identifier created by Lago.
+        schema:
+          type: string
+          description: Payment method identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    delete:
+      tags:
+        - customers
+      summary: Delete a customer payment method
+      description: |-
+        Deletes the payment method and returns it with deleted_at set.
+        Requires the product catalog to be enabled and payment_method write permission on the API key.
+      operationId: destroyCustomerPaymentMethod
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /customers/{customer_external_id}/payment_methods/{lago_id}/set_as_default:
+    parameters:
+      - name: customer_external_id
+        in: path
+        required: true
+        description: Customer external identifier.
+        schema:
+          type: string
+          description: Customer external identifier.
+          example: external_123
+      - name: lago_id
+        in: path
+        required: true
+        description: Payment method identifier created by Lago.
+        schema:
+          type: string
+          description: Payment method identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    put:
+      tags:
+        - customers
+      summary: Set the default customer payment method
+      description: |-
+        Sets this payment method as the customer default. No request body is required.
+        Requires the product catalog to be enabled and payment_method write permission on the API key.
+      operationId: setDefaultCustomerPaymentMethod
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /activity_logs:
+    get:
+      tags:
+        - activity_logs
+      summary: List activity logs
+      description: |-
+        Returns a cursor-paginated list ordered by log time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Requires a premium license and available log storage. Results are ordered by logged_at and activity_id, both descending, within the configured retention period.
+        Requires the product catalog to be enabled and activity_log read permission on the API key.
+      operationId: findAllActivityLogs
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - name: from_date
+          in: query
+          required: false
+          description: From date.
+          schema:
+            type: string
+            description: Inclusive lower log-time bound.
+            example: '2022-04-29T08:59:51.123456Z'
+            format: date-time
+        - name: to_date
+          in: query
+          required: false
+          description: To date.
+          schema:
+            type: string
+            description: Inclusive upper log-time bound.
+            example: '2022-04-29T08:59:51.123456Z'
+            format: date-time
+        - name: activity_types[]
+          in: query
+          required: false
+          description: Activity types[].
+          schema:
+            type: array
+            description: Activity types.
+            items:
+              type: string
+              description: Activity types.
+              example: example
+        - name: activity_sources[]
+          in: query
+          required: false
+          description: Activity sources[].
+          schema:
+            type: array
+            description: Activity sources.
+            items:
+              type: string
+              description: Activity sources.
+              example: example
+        - name: user_emails[]
+          in: query
+          required: false
+          description: User emails[].
+          schema:
+            type: array
+            description: User emails.
+            items:
+              type: string
+              description: User emails.
+              example: example
+        - name: resource_ids[]
+          in: query
+          required: false
+          description: Resource ids[].
+          schema:
+            type: array
+            description: Resource ids.
+            items:
+              type: string
+              description: Resource ids.
+              example: example
+        - name: resource_types[]
+          in: query
+          required: false
+          description: Resource types[].
+          schema:
+            type: array
+            description: Resource types.
+            items:
+              type: string
+              description: Resource types.
+              example: example
+        - name: external_customer_id
+          in: query
+          required: false
+          description: External customer id.
+          schema:
+            type: string
+            description: External customer id.
+            example: example
+        - name: external_subscription_id
+          in: query
+          required: false
+          description: External subscription id.
+          schema:
+            type: string
+            description: External subscription id.
+            example: example
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLogsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /activity_logs/{activity_id}:
+    parameters:
+      - name: activity_id
+        in: path
+        required: true
+        description: Activity id.
+        schema:
+          type: string
+          description: Activity id.
+          example: example_code
+    get:
+      tags:
+        - activity_logs
+      summary: Retrieve activity log
+      description: |-
+        Requires a premium license and available log storage. No expansions are supported.
+        Requires the product catalog to be enabled and activity_log read permission on the API key.
+      operationId: findActivityLog
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api_logs:
+    get:
+      tags:
+        - api_logs
+      summary: List api logs
+      description: |-
+        Returns a cursor-paginated list ordered by log time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Requires a premium license and available log storage. Results are ordered by logged_at and request_id, both descending, within the configured retention period.
+        Requires the product catalog to be enabled and api_log read permission on the API key.
+      operationId: findAllApiLogs
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - name: from_date
+          in: query
+          required: false
+          description: From date.
+          schema:
+            type: string
+            description: Inclusive lower log-time bound.
+            example: '2022-04-29T08:59:51.123456Z'
+            format: date-time
+        - name: to_date
+          in: query
+          required: false
+          description: To date.
+          schema:
+            type: string
+            description: Inclusive upper log-time bound.
+            example: '2022-04-29T08:59:51.123456Z'
+            format: date-time
+        - name: http_methods[]
+          in: query
+          required: false
+          description: Http methods[].
+          schema:
+            type: array
+            description: Http methods.
+            items:
+              type: string
+              description: Http methods.
+              example: example
+        - name: http_statuses[]
+          in: query
+          required: false
+          description: Http statuses[].
+          schema:
+            type: array
+            description: Http statuses.
+            items:
+              type: integer
+              description: HTTP status.
+              example: 200
+        - name: request_paths[]
+          in: query
+          required: false
+          description: Request paths[].
+          schema:
+            type: array
+            description: Request paths.
+            items:
+              type: string
+              description: Request paths.
+              example: example
+        - name: clients[]
+          in: query
+          required: false
+          description: Clients[].
+          schema:
+            type: array
+            description: Clients.
+            items:
+              type: string
+              description: Clients.
+              example: example
+        - name: api_version
+          in: query
+          required: false
+          description: Api version.
+          schema:
+            type: string
+            description: Api version.
+            example: example
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiLogsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /api_logs/{request_id}:
+    parameters:
+      - name: request_id
+        in: path
+        required: true
+        description: Request id.
+        schema:
+          type: string
+          description: Request id.
+          example: example_code
+    get:
+      tags:
+        - api_logs
+      summary: Retrieve api log
+      description: |-
+        Requires a premium license and available log storage. No expansions are supported.
+        Requires the product catalog to be enabled and api_log read permission on the API key.
+      operationId: findApiLog
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /security_logs:
+    get:
+      tags:
+        - security_logs
+      summary: List security logs
+      description: |-
+        Returns a cursor-paginated list ordered by log time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Requires a premium license and available log storage. Security logs must also be enabled for the organization. Results are ordered by logged_at and log_id, both descending, within the configured retention period.
+        Requires the product catalog to be enabled and security_log read permission on the API key.
+      operationId: findAllSecurityLogs
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - name: from_date
+          in: query
+          required: false
+          description: From date.
+          schema:
+            type: string
+            description: Inclusive lower log-time bound.
+            example: '2022-04-29T08:59:51.123456Z'
+            format: date-time
+        - name: to_date
+          in: query
+          required: true
+          description: To date. A request without it returns 422.
+          schema:
+            type: string
+            description: Inclusive upper log-time bound.
+            example: '2022-04-29T08:59:51.123456Z'
+            format: date-time
+        - name: user_ids[]
+          in: query
+          required: false
+          description: User ids[].
+          schema:
+            type: array
+            description: User ids.
+            items:
+              type: string
+              description: User ids.
+              example: example
+        - name: api_key_ids[]
+          in: query
+          required: false
+          description: Api key ids[].
+          schema:
+            type: array
+            description: Api key ids.
+            items:
+              type: string
+              description: Api key ids.
+              example: example
+        - name: log_types[]
+          in: query
+          required: false
+          description: Log types[].
+          schema:
+            type: array
+            description: Log types.
+            items:
+              type: string
+              description: Log types.
+              example: example
+        - name: log_events[]
+          in: query
+          required: false
+          description: Log events[].
+          schema:
+            type: array
+            description: Log events.
+            items:
+              type: string
+              description: Log events.
+              example: example
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityLogsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /security_logs/{log_id}:
+    parameters:
+      - name: log_id
+        in: path
+        required: true
+        description: Log id.
+        schema:
+          type: string
+          description: Log id.
+          example: example_code
+    get:
+      tags:
+        - security_logs
+      summary: Retrieve security log
+      description: |-
+        Requires a premium license and available log storage. No expansions are supported.
+        Requires the product catalog to be enabled and security_log read permission on the API key.
+      operationId: findSecurityLog
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /webhook_endpoints:
+    get:
+      tags:
+        - webhook_endpoints
+      summary: List webhook endpoints
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and webhook_endpoint read permission on the API key.
+      operationId: findAllWebhookEndpoints
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpointsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - webhook_endpoints
+      summary: Create webhook endpoint
+      description: |-
+        Creates a webhook endpoint. The organization can have at most ten endpoints, each with a distinct URL.
+        Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
+      operationId: createWebhookEndpoint
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEndpointCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /webhook_endpoints/{lago_id}:
+    parameters:
+      - name: lago_id
+        in: path
+        required: true
+        description: Unique identifier created by Lago.
+        schema:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    get:
+      tags:
+        - webhook_endpoints
+      summary: Retrieve webhook endpoint
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and webhook_endpoint read permission on the API key.
+      operationId: findWebhookEndpoint
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - webhook_endpoints
+      summary: Update webhook endpoint
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+        Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
+      operationId: updateWebhookEndpoint
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEndpointUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - webhook_endpoints
+      summary: Update webhook endpoint
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+        Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
+      operationId: patchWebhookEndpoint
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEndpointUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - webhook_endpoints
+      summary: Delete webhook endpoint
+      description: |-
+        Permanently deletes the endpoint and its delivery records. Returns the deleted endpoint configuration without a deleted_at field.
+        Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
+      operationId: destroyWebhookEndpoint
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -10407,6 +12658,2066 @@ components:
             - 'null'
           description: Metadata as an object of key-value pairs.
           additionalProperties: true
+    ShippingAddressObject:
+      type: object
+      description: Shipping address.
+      required:
+        - address_line1
+        - address_line2
+        - city
+        - zipcode
+        - state
+        - country
+      properties:
+        address_line1:
+          type:
+            - string
+            - 'null'
+          description: Address line1.
+          example: example
+        address_line2:
+          type:
+            - string
+            - 'null'
+          description: Address line2.
+          example: example
+        city:
+          type:
+            - string
+            - 'null'
+          description: City.
+          example: example
+        zipcode:
+          type:
+            - string
+            - 'null'
+          description: Zipcode.
+          example: example
+        state:
+          type:
+            - string
+            - 'null'
+          description: State.
+          example: example
+        country:
+          type:
+            - string
+            - 'null'
+          description: Country.
+          example: FR
+    CustomerMetadataObject:
+      type: object
+      description: Customer Metadata.
+      required:
+        - lago_id
+        - key
+        - value
+        - display_on_invoice
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        key:
+          type: string
+          description: Key.
+          example: example
+        value:
+          type: string
+          description: Value.
+          example: example
+        display_on_invoice:
+          type: boolean
+          description: Whether this value is displayed on invoices.
+          example: false
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    IntegrationCustomerObject:
+      type: object
+      description: Customer mapping to an integration. Provider-specific settings are included as additional top-level fields.
+      required:
+        - lago_id
+        - external_customer_id
+        - type
+        - integration_code
+        - code
+        - is_default
+        - category
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Customer identifier in the integration.
+          example: customer_123
+        type:
+          type:
+            - string
+            - 'null'
+          description: Integration type.
+          example: netsuite
+          enum:
+            - netsuite
+            - anrok
+            - avalara
+            - xero
+            - hubspot
+            - salesforce
+            - null
+        integration_code:
+          type:
+            - string
+            - 'null'
+          description: Integration code.
+          example: anrok
+        code:
+          type:
+            - string
+            - 'null'
+          description: Mapping code.
+          example: default
+        is_default:
+          type: boolean
+          description: Whether this mapping is the default.
+          example: false
+        category:
+          type:
+            - string
+            - 'null'
+          description: Integration category.
+          example: payment
+          enum:
+            - payment
+            - tax
+            - accounting
+            - crm
+            - null
+      additionalProperties: true
+    CustomerEndpointObject:
+      allOf:
+        - $ref: '#/components/schemas/CustomerObject'
+        - type: object
+          required:
+            - shipping_address
+          properties:
+            shipping_address:
+              $ref: '#/components/schemas/ShippingAddressObject'
+              description: Shipping address of the customer.
+            metadata:
+              type: array
+              description: Customer metadata. Included only with expands[]=metadata.
+              items:
+                $ref: '#/components/schemas/CustomerMetadataObject'
+            taxes:
+              type: array
+              description: Customer taxes. Included only with expands[]=taxes.
+              items:
+                $ref: '#/components/schemas/TaxObject'
+            integration_customers:
+              type: array
+              description: Integration mappings. Included only with expands[]=integration_customers.
+              items:
+                $ref: '#/components/schemas/IntegrationCustomerObject'
+    CustomersPaginated:
+      type: object
+      description: customers list.
+      required:
+        - customers
+        - meta
+      properties:
+        customers:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/CustomerEndpointObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ShippingAddressInput:
+      type: object
+      description: Shipping address.
+      required: []
+      properties:
+        address_line1:
+          type:
+            - string
+            - 'null'
+          description: Address line1.
+          example: example
+        address_line2:
+          type:
+            - string
+            - 'null'
+          description: Address line2.
+          example: example
+        city:
+          type:
+            - string
+            - 'null'
+          description: City.
+          example: example
+        zipcode:
+          type:
+            - string
+            - 'null'
+          description: Zipcode.
+          example: example
+        state:
+          type:
+            - string
+            - 'null'
+          description: State.
+          example: example
+        country:
+          type:
+            - string
+            - 'null'
+          description: Country.
+          example: FR
+    CustomerBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        external_id:
+          type: string
+          description: Unique customer identifier in your application.
+          example: customer_123
+        name:
+          type:
+            - string
+            - 'null'
+          description: Name.
+          example: example
+        firstname:
+          type:
+            - string
+            - 'null'
+          description: Firstname.
+          example: example
+        lastname:
+          type:
+            - string
+            - 'null'
+          description: Lastname.
+          example: example
+        customer_type:
+          type:
+            - string
+            - 'null'
+          description: Type of customer.
+          example: company
+          enum:
+            - company
+            - individual
+            - null
+        account_type:
+          type: string
+          description: Account type.
+          example: customer
+          enum:
+            - customer
+            - partner
+        email:
+          type:
+            - string
+            - 'null'
+          description: Email.
+          example: billing@acme.example
+        phone:
+          type:
+            - string
+            - 'null'
+          description: Phone.
+          example: example
+        url:
+          type:
+            - string
+            - 'null'
+          description: Url.
+          example: example
+        logo_url:
+          type:
+            - string
+            - 'null'
+          description: Logo url.
+          example: example
+        address_line1:
+          type:
+            - string
+            - 'null'
+          description: Address line1.
+          example: example
+        address_line2:
+          type:
+            - string
+            - 'null'
+          description: Address line2.
+          example: example
+        city:
+          type:
+            - string
+            - 'null'
+          description: City.
+          example: example
+        state:
+          type:
+            - string
+            - 'null'
+          description: State.
+          example: example
+        zipcode:
+          type:
+            - string
+            - 'null'
+          description: Zipcode.
+          example: example
+        country:
+          type:
+            - string
+            - 'null'
+          description: Country.
+          example: example
+        legal_name:
+          type:
+            - string
+            - 'null'
+          description: Legal name.
+          example: example
+        legal_number:
+          type:
+            - string
+            - 'null'
+          description: Legal number.
+          example: example
+        tax_identification_number:
+          type:
+            - string
+            - 'null'
+          description: Tax identification number.
+          example: example
+        currency:
+          type:
+            - string
+            - 'null'
+          description: Currency as an ISO 4217 code.
+          example: USD
+        timezone:
+          type:
+            - string
+            - 'null'
+          description: Timezone.
+          example: example
+        finalize_zero_amount_invoice:
+          type:
+            - string
+            - 'null'
+          description: Whether to finalize zero-amount invoices. Null resets this setting to inherit.
+          example: inherit
+          enum:
+            - inherit
+            - skip
+            - finalize
+            - null
+        skip_invoice_custom_sections:
+          type: boolean
+          description: Skip invoice custom sections.
+          example: false
+        external_salesforce_id:
+          type:
+            - string
+            - 'null'
+          description: External salesforce id.
+          example: example
+        billing_entity_code:
+          type: string
+          description: Code of the customer billing entity.
+          example: main
+        invoice_grace_period:
+          type:
+            - integer
+            - 'null'
+          description: Invoice grace period.
+          example: 1
+        payment_provider:
+          type:
+            - string
+            - 'null'
+          description: Payment provider.
+          example: example
+        payment_provider_code:
+          type:
+            - string
+            - 'null'
+          description: Payment provider code.
+          example: example
+        provider_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Customer identifier in the payment provider.
+          example: cus_example
+        provider_payment_methods:
+          type:
+            - array
+            - 'null'
+          description: Payment methods allowed by the provider.
+          items:
+            type: string
+            description: Payment method type.
+            example: card
+        document_locale:
+          type:
+            - string
+            - 'null'
+          description: Document locale.
+          example: example
+        periodic_invoice_issuing_date_anchor:
+          type:
+            - string
+            - 'null'
+          description: Date used to issue periodic invoices.
+          example: current_period_end
+          enum:
+            - current_period_end
+            - next_period_start
+            - null
+        periodic_invoice_issuing_date_adjustment:
+          type:
+            - string
+            - 'null'
+          description: Adjustment applied to periodic invoice issuing dates.
+          example: keep_anchor
+          enum:
+            - keep_anchor
+            - align_with_finalization_date
+            - null
+        sync:
+          type: boolean
+          description: Whether to run payment-provider synchronization before returning the response rather than in a background job.
+          example: false
+        sync_with_provider:
+          type: boolean
+          description: Whether to create or synchronize the customer with the selected payment provider.
+          example: false
+        shipping_address:
+          $ref: '#/components/schemas/ShippingAddressInput'
+        tax_codes:
+          type: array
+          description: Tax codes to assign. An empty array removes the assignments.
+          items:
+            type: string
+            description: Tax codes to assign. An empty array removes the assignments.
+            example: vat
+        invoice_custom_section_codes:
+          type: array
+          description: Invoice custom section codes to assign. An empty array removes the assignments.
+          items:
+            type: string
+            description: Invoice custom section codes to assign. An empty array removes the assignments.
+            example: legal
+        metadata:
+          type: array
+          description: Customer metadata. At most five entries.
+          items:
+            type: object
+            description: Metadata value.
+            required:
+              - key
+              - value
+            properties:
+              id:
+                type:
+                  - string
+                  - 'null'
+                description: Existing metadata identifier.
+                example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                format: uuid
+              key:
+                type: string
+                description: Metadata key.
+                example: reference
+                maxLength: 20
+              value:
+                type: string
+                description: Metadata value.
+                example: '123'
+                maxLength: 100
+              display_on_invoice:
+                type: boolean
+                description: Whether to display the value on invoices.
+                example: false
+          maxItems: 5
+        integration_customers:
+          type: array
+          description: Integration mappings. Only one entry per integration type is accepted.
+          items:
+            type: object
+            description: Customer integration mapping.
+            required: []
+            properties:
+              id:
+                type:
+                  - string
+                  - 'null'
+                description: Existing mapping identifier.
+                example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                format: uuid
+              code:
+                type: string
+                description: Mapping code.
+                example: default
+              external_customer_id:
+                type: string
+                description: Customer identifier in the integration.
+                example: customer_123
+              integration_type:
+                type: string
+                description: Integration type.
+                example: netsuite
+                enum:
+                  - netsuite
+                  - okta
+                  - anrok
+                  - avalara
+                  - xero
+                  - hubspot
+                  - salesforce
+              integration_code:
+                type: string
+                description: Integration code.
+                example: anrok
+              subsidiary_id:
+                type: string
+                description: Provider subsidiary identifier.
+                example: subsidiary_123
+              sync_with_provider:
+                type: boolean
+                description: Whether to synchronize the mapping with the provider.
+                example: false
+              targeted_object:
+                type: string
+                description: Object targeted in the integration.
+                example: customer
+    CustomerCreateInput:
+      type: object
+      description: Create customer.
+      required:
+        - customer
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerBaseInput'
+          required:
+            - external_id
+    Customer:
+      type: object
+      description: customer response.
+      required:
+        - customer
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerEndpointObject'
+    CustomerUpdateInput:
+      type: object
+      description: Update customer.
+      required:
+        - customer
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerBaseInput'
+    OrganizationObject:
+      type: object
+      description: Organization.
+      required:
+        - lago_id
+        - name
+        - slug
+        - email
+        - events_store
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        name:
+          type: string
+          description: Name.
+          example: example
+        slug:
+          type: string
+          description: Slug.
+          example: example
+        email:
+          type:
+            - string
+            - 'null'
+          description: Email.
+          example: billing@acme.example
+        events_store:
+          type: string
+          description: Event storage used by the organization.
+          example: clickhouse
+          enum:
+            - clickhouse
+            - postgres
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    Organization:
+      type: object
+      description: organization response.
+      required:
+        - organization
+      properties:
+        organization:
+          $ref: '#/components/schemas/OrganizationObject'
+    OrganizationUpdateInput:
+      type: object
+      description: Organization update.
+      required:
+        - organization
+      properties:
+        organization:
+          type: object
+          minProperties: 1
+          properties:
+            email:
+              type:
+                - string
+                - 'null'
+              description: Organization email.
+              example: billing@acme.example
+            slug:
+              type: string
+              description: Organization slug.
+              example: acme
+    BillingEntityObject:
+      type: object
+      description: Billing Entity.
+      required:
+        - code
+        - name
+        - default_currency
+        - country
+        - address_line1
+        - address_line2
+        - phone
+        - city
+        - state
+        - zipcode
+        - einvoicing
+        - email
+        - legal_name
+        - legal_number
+        - timezone
+        - email_settings
+        - document_numbering
+        - document_number_prefix
+        - tax_identification_number
+        - finalize_zero_amount_invoice
+        - invoice_footer
+        - invoice_grace_period
+        - document_locale
+        - eu_tax_management
+        - periodic_invoice_issuing_date_anchor
+        - periodic_invoice_issuing_date_adjustment
+        - lago_id
+        - is_default
+        - logo_url
+        - created_at
+        - updated_at
+        - archived_at
+        - deleted_at
+      properties:
+        code:
+          type: string
+          description: Code.
+          example: example
+        name:
+          type: string
+          description: Name.
+          example: example
+        default_currency:
+          type: string
+          description: Default currency.
+          example: example
+        country:
+          type:
+            - string
+            - 'null'
+          description: Country.
+          example: example
+        address_line1:
+          type:
+            - string
+            - 'null'
+          description: Address line1.
+          example: example
+        address_line2:
+          type:
+            - string
+            - 'null'
+          description: Address line2.
+          example: example
+        phone:
+          type:
+            - string
+            - 'null'
+          description: Phone.
+          example: example
+        city:
+          type:
+            - string
+            - 'null'
+          description: City.
+          example: example
+        state:
+          type:
+            - string
+            - 'null'
+          description: State.
+          example: example
+        zipcode:
+          type:
+            - string
+            - 'null'
+          description: Zipcode.
+          example: example
+        einvoicing:
+          type: boolean
+          description: Einvoicing.
+          example: false
+        email:
+          type:
+            - string
+            - 'null'
+          description: Email.
+          example: billing@acme.example
+        legal_name:
+          type:
+            - string
+            - 'null'
+          description: Legal name.
+          example: example
+        legal_number:
+          type:
+            - string
+            - 'null'
+          description: Legal number.
+          example: example
+        timezone:
+          type: string
+          description: Timezone.
+          example: example
+        email_settings:
+          type: array
+          description: Enabled email notification types.
+          items:
+            type: string
+            description: Enabled email notification types.
+            example: invoice.finalized
+        document_numbering:
+          type: string
+          description: Document numbering scope.
+          example: per_customer
+          enum:
+            - per_customer
+            - per_billing_entity
+        document_number_prefix:
+          type:
+            - string
+            - 'null'
+          description: Document number prefix.
+          example: example
+        tax_identification_number:
+          type:
+            - string
+            - 'null'
+          description: Tax identification number.
+          example: example
+        finalize_zero_amount_invoice:
+          type: boolean
+          description: Finalize zero amount invoice.
+          example: false
+        invoice_footer:
+          type:
+            - string
+            - 'null'
+          description: Invoice footer.
+          example: Example
+        invoice_grace_period:
+          type: integer
+          description: Invoice grace period.
+          example: 1
+        document_locale:
+          type: string
+          description: Document locale.
+          example: example
+        eu_tax_management:
+          type:
+            - boolean
+            - 'null'
+          description: Eu tax management.
+          example: false
+        periodic_invoice_issuing_date_anchor:
+          type:
+            - string
+            - 'null'
+          description: Date used to issue periodic invoices.
+          example: current_period_end
+          enum:
+            - current_period_end
+            - next_period_start
+            - null
+        periodic_invoice_issuing_date_adjustment:
+          type:
+            - string
+            - 'null'
+          description: Adjustment applied to periodic invoice issuing dates.
+          example: keep_anchor
+          enum:
+            - keep_anchor
+            - align_with_finalization_date
+            - null
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        is_default:
+          type: boolean
+          description: Whether this is the organization default billing entity.
+          example: false
+        logo_url:
+          type:
+            - string
+            - 'null'
+          description: Logo URL.
+          example: https://cdn.acme.example/logo.png
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        archived_at:
+          type:
+            - string
+            - 'null'
+          description: Archived at.
+          example: null
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+        taxes:
+          type: array
+          description: Assigned taxes. Included only with expands[]=taxes.
+          items:
+            $ref: '#/components/schemas/TaxObject'
+        selected_invoice_custom_sections:
+          type: array
+          description: Selected sections. Included only with expands[]=selected_invoice_custom_sections.
+          items:
+            $ref: '#/components/schemas/InvoiceCustomSectionObject'
+    BillingEntitiesPaginated:
+      type: object
+      description: billing entities list.
+      required:
+        - billing_entities
+        - meta
+      properties:
+        billing_entities:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/BillingEntityObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    BillingEntityBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        code:
+          type: string
+          description: Unique code within the organization.
+          example: example_code
+          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+        name:
+          type: string
+          description: Name.
+          example: example
+        default_currency:
+          type: string
+          description: Default currency.
+          example: example
+        country:
+          type:
+            - string
+            - 'null'
+          description: Country.
+          example: example
+        address_line1:
+          type:
+            - string
+            - 'null'
+          description: Address line1.
+          example: example
+        address_line2:
+          type:
+            - string
+            - 'null'
+          description: Address line2.
+          example: example
+        phone:
+          type:
+            - string
+            - 'null'
+          description: Phone.
+          example: example
+        city:
+          type:
+            - string
+            - 'null'
+          description: City.
+          example: example
+        state:
+          type:
+            - string
+            - 'null'
+          description: State.
+          example: example
+        zipcode:
+          type:
+            - string
+            - 'null'
+          description: Zipcode.
+          example: example
+        einvoicing:
+          type: boolean
+          description: Einvoicing.
+          example: false
+        email:
+          type:
+            - string
+            - 'null'
+          description: Email.
+          example: billing@acme.example
+        legal_name:
+          type:
+            - string
+            - 'null'
+          description: Legal name.
+          example: example
+        legal_number:
+          type:
+            - string
+            - 'null'
+          description: Legal number.
+          example: example
+        timezone:
+          type: string
+          description: Timezone.
+          example: example
+        email_settings:
+          type: array
+          description: Enabled email notification types.
+          items:
+            type: string
+            description: Enabled email notification types.
+            example: invoice.finalized
+        document_numbering:
+          type: string
+          description: Document numbering scope.
+          example: per_customer
+          enum:
+            - per_customer
+            - per_billing_entity
+        document_number_prefix:
+          type:
+            - string
+            - 'null'
+          description: Document number prefix.
+          example: example
+        tax_identification_number:
+          type:
+            - string
+            - 'null'
+          description: Tax identification number.
+          example: example
+        finalize_zero_amount_invoice:
+          type: boolean
+          description: Finalize zero amount invoice.
+          example: false
+        invoice_footer:
+          type:
+            - string
+            - 'null'
+          description: Invoice footer.
+          example: Example
+        invoice_grace_period:
+          type: integer
+          description: Invoice grace period.
+          example: 1
+        document_locale:
+          type: string
+          description: Document locale.
+          example: example
+        eu_tax_management:
+          type: boolean
+          description: Eu tax management.
+          example: false
+        periodic_invoice_issuing_date_anchor:
+          type: string
+          description: Date used to issue periodic invoices.
+          example: current_period_end
+          enum:
+            - current_period_end
+            - next_period_start
+        periodic_invoice_issuing_date_adjustment:
+          type: string
+          description: Adjustment applied to periodic invoice issuing dates.
+          example: keep_anchor
+          enum:
+            - keep_anchor
+            - align_with_finalization_date
+        logo:
+          type: string
+          description: PNG or JPEG logo encoded as a base64 data URL.
+          example: data:image/png;base64,aGVsbG8=
+          pattern: ^data:image/(png|jpe?g);base64,[A-Za-z0-9+/=\s]+$
+        tax_codes:
+          type: array
+          description: Tax codes to assign. An empty array removes the assignments.
+          items:
+            type: string
+            description: Tax codes to assign. An empty array removes the assignments.
+            example: vat
+        invoice_custom_section_codes:
+          type: array
+          description: Invoice custom section codes to assign. An empty array removes the assignments.
+          items:
+            type: string
+            description: Invoice custom section codes to assign. An empty array removes the assignments.
+            example: legal
+    BillingEntityCreateInput:
+      type: object
+      description: Create billing entity.
+      required:
+        - billing_entity
+      properties:
+        billing_entity:
+          $ref: '#/components/schemas/BillingEntityBaseInput'
+          required:
+            - code
+            - name
+    BillingEntity:
+      type: object
+      description: billing entity response.
+      required:
+        - billing_entity
+      properties:
+        billing_entity:
+          $ref: '#/components/schemas/BillingEntityObject'
+    BillingEntityUpdateInput:
+      type: object
+      description: Update billing entity.
+      required:
+        - billing_entity
+      properties:
+        billing_entity:
+          $ref: '#/components/schemas/BillingEntityBaseInput'
+    BillableMetricFilterObject:
+      type: object
+      description: Billable Metric Filter.
+      required:
+        - lago_id
+        - key
+        - values
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        key:
+          type: string
+          description: Key.
+          example: example
+        values:
+          type: array
+          description: Allowed values, sorted alphabetically.
+          items:
+            type: string
+            description: Allowed values, sorted alphabetically.
+            example: eu
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    BillableMetricEndpointObject:
+      allOf:
+        - $ref: '#/components/schemas/BillableMetricObject'
+        - type: object
+          properties:
+            filters:
+              type: array
+              description: Filters defined by this metric. Included only with expands[]=filters.
+              items:
+                $ref: '#/components/schemas/BillableMetricFilterObject'
+    BillableMetricsPaginated:
+      type: object
+      description: billable metrics list.
+      required:
+        - billable_metrics
+        - meta
+      properties:
+        billable_metrics:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/BillableMetricEndpointObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    BillableMetricBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          description: Name.
+          example: example
+        code:
+          type: string
+          description: Code.
+          example: example
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: example
+        field_name:
+          type:
+            - string
+            - 'null'
+          description: Field name.
+          example: example
+        expression:
+          type:
+            - string
+            - 'null'
+          description: Expression.
+          example: example
+        rounding_precision:
+          type:
+            - integer
+            - 'null'
+          description: Rounding precision.
+          example: 1
+        aggregation_type:
+          type: string
+          description: Aggregation method. field_name is required except for count_agg.
+          example: count_agg
+          enum:
+            - count_agg
+            - sum_agg
+            - max_agg
+            - unique_count_agg
+            - weighted_sum_agg
+            - latest_agg
+        weighted_interval:
+          type:
+            - string
+            - 'null'
+          description: Weighting interval. Required for weighted_sum_agg.
+          example: seconds
+          enum:
+            - seconds
+            - null
+        recurring:
+          type: boolean
+          description: Whether values carry over between billing periods.
+          example: false
+        rounding_function:
+          type:
+            - string
+            - 'null'
+          description: Rounding applied to aggregated values.
+          example: ceil
+          enum:
+            - ceil
+            - floor
+            - round
+            - null
+        filters:
+          type: array
+          description: Complete filter definitions. An empty array removes existing filters. Null, malformed filters and non-string values are rejected before any changes are saved.
+          items:
+            type: object
+            description: Billable metric filter.
+            required:
+              - key
+              - values
+            properties:
+              key:
+                type: string
+                description: Unique, nonempty filter key.
+                example: region
+                minLength: 1
+              values:
+                type: array
+                description: Allowed string values.
+                items:
+                  type: string
+                  description: Allowed filter value.
+                  example: eu
+                minItems: 1
+    BillableMetricCreateInput:
+      type: object
+      description: Create billable metric.
+      required:
+        - billable_metric
+      properties:
+        billable_metric:
+          $ref: '#/components/schemas/BillableMetricBaseInput'
+          required:
+            - name
+            - code
+            - aggregation_type
+    BillableMetric:
+      type: object
+      description: billable metric response.
+      required:
+        - billable_metric
+      properties:
+        billable_metric:
+          $ref: '#/components/schemas/BillableMetricEndpointObject'
+    BillableMetricUpdateInput:
+      type: object
+      description: Update billable metric.
+      required:
+        - billable_metric
+      properties:
+        billable_metric:
+          $ref: '#/components/schemas/BillableMetricBaseInput'
+    EventObject:
+      type: object
+      description: Usage event.
+      required:
+        - transaction_id
+        - external_contract_id
+        - code
+        - precise_total_amount_cents
+        - properties
+        - timestamp
+      properties:
+        transaction_id:
+          type: string
+          description: Transaction identifier supplied by the sender. It can occur on more than one event.
+          example: transaction_123
+        external_contract_id:
+          type:
+            - string
+            - 'null'
+          description: External contract identifier.
+          example: contract_123
+        code:
+          type: string
+          description: Event code.
+          example: compute
+        precise_total_amount_cents:
+          type:
+            - string
+            - 'null'
+          description: Total event amount, in cents. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        properties:
+          type: object
+          description: Event properties.
+          additionalProperties: true
+        timestamp:
+          type: string
+          description: Event timestamp, in UTC with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    EventsPaginated:
+      type: object
+      description: events list.
+      required:
+        - events
+        - meta
+      properties:
+        events:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/EventObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    EventInput:
+      type: object
+      description: Event to ingest.
+      required:
+        - transaction_id
+        - code
+      properties:
+        transaction_id:
+          type: string
+          description: Transaction identifier supplied by the sender.
+          example: transaction_123
+          minLength: 1
+          maxLength: 1000
+        code:
+          type: string
+          description: Event code.
+          example: compute
+          minLength: 1
+        external_contract_id:
+          type:
+            - string
+            - 'null'
+          description: External contract identifier.
+          example: contract_123
+        timestamp:
+          type:
+            - number
+            - string
+          description: Unix timestamp in seconds. Defaults to the request time. Must be on or after 1970-01-01 and before 2300-01-01; deployment-specific time limits may also apply.
+          example: 1651222791.123456
+        precise_total_amount_cents:
+          type:
+            - number
+            - string
+            - 'null'
+          description: Finite amount in cents, as a number or decimal string.
+          example: '125.5'
+        properties:
+          type:
+            - object
+            - 'null'
+          additionalProperties: true
+          description: Event properties. Defaults to an empty object.
+    EventCreateInput:
+      type: object
+      description: Event ingestion request.
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/EventInput'
+    Event:
+      type: object
+      description: event response.
+      required:
+        - event
+      properties:
+        event:
+          $ref: '#/components/schemas/EventObject'
+    EventBatchCreateInput:
+      type: object
+      description: Batch event ingestion request.
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          description: Events to ingest. The default maximum is 100; deployments can configure a different maximum.
+          items:
+            $ref: '#/components/schemas/EventInput'
+          minItems: 1
+    EventsCollection:
+      type: object
+      description: events list.
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/EventObject'
+    CheckoutUrlObject:
+      type: object
+      description: Customer checkout URL.
+      required:
+        - lago_customer_id
+        - external_customer_id
+        - payment_provider
+        - payment_provider_code
+        - checkout_url
+      properties:
+        lago_customer_id:
+          type: string
+          description: Customer identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type: string
+          description: Customer external identifier.
+          example: customer_123
+        payment_provider:
+          type: string
+          description: Payment provider.
+          example: stripe
+        payment_provider_code:
+          type: string
+          description: Payment provider code.
+          example: stripe
+        checkout_url:
+          type: string
+          description: URL of the provider checkout page.
+          example: https://pay.acme.example/checkout
+          format: uri
+    CheckoutUrl:
+      type: object
+      description: checkout url response.
+      required:
+        - checkout_url
+      properties:
+        checkout_url:
+          $ref: '#/components/schemas/CheckoutUrlObject'
+    PaymentMethodObject:
+      type: object
+      description: Payment Method.
+      required:
+        - lago_id
+        - lago_customer_id
+        - external_customer_id
+        - is_default
+        - payment_provider_code
+        - payment_provider_name
+        - payment_provider_type
+        - provider_method_id
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        lago_customer_id:
+          type: string
+          description: Customer identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type: string
+          description: Customer external identifier.
+          example: customer_123
+        is_default:
+          type: boolean
+          description: Is default.
+          example: false
+        payment_provider_code:
+          type:
+            - string
+            - 'null'
+          description: Payment provider code.
+          example: stripe
+        payment_provider_name:
+          type:
+            - string
+            - 'null'
+          description: Payment provider name.
+          example: Stripe
+        payment_provider_type:
+          type:
+            - string
+            - 'null'
+          description: Payment provider type.
+          example: stripe
+        provider_method_id:
+          type: string
+          description: Provider method id.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    PaymentMethodsPaginated:
+      type: object
+      description: payment methods list.
+      required:
+        - payment_methods
+        - meta
+      properties:
+        payment_methods:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/PaymentMethodObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    PaymentMethod:
+      type: object
+      description: payment method response.
+      required:
+        - payment_method
+      properties:
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodObject'
+    ActivityLogObject:
+      type: object
+      description: Recorded log entry.
+      required:
+        - activity_id
+        - activity_type
+        - activity_source
+        - activity_object
+        - activity_object_changes
+        - user_email
+        - resource_id
+        - resource_type
+        - external_customer_id
+        - external_subscription_id
+        - logged_at
+        - created_at
+      properties:
+        activity_id:
+          type: string
+          description: Activity identifier.
+          example: activity_123
+        activity_type:
+          type: string
+          description: Activity type.
+          example: customer.created
+        activity_source:
+          type: string
+          description: Activity source.
+          example: api
+        activity_object:
+          type: object
+          description: Recorded object. JSON-encoded object and array values are parsed one level deep.
+          additionalProperties: true
+        activity_object_changes:
+          type: object
+          description: Recorded changes. JSON-encoded object and array values are parsed one level deep.
+          additionalProperties: true
+        user_email:
+          type:
+            - string
+            - 'null'
+          description: Email of the user, if known.
+          example: user@acme.example
+        resource_id:
+          type: string
+          description: Affected resource identifier.
+          example: resource_123
+        resource_type:
+          type: string
+          description: Affected resource type.
+          example: Customer
+        external_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Customer external identifier.
+          example: customer_123
+        external_subscription_id:
+          type:
+            - string
+            - 'null'
+          description: Subscription external identifier.
+          example: subscription_123
+        logged_at:
+          type: string
+          description: Time the event was logged.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        created_at:
+          type: string
+          description: Time the log record was created.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    ActivityLogsPaginated:
+      type: object
+      description: activity logs list.
+      required:
+        - activity_logs
+        - meta
+      properties:
+        activity_logs:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/ActivityLogObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ActivityLog:
+      type: object
+      description: activity log response.
+      required:
+        - activity_log
+      properties:
+        activity_log:
+          $ref: '#/components/schemas/ActivityLogObject'
+    ApiLogObject:
+      type: object
+      description: Recorded log entry.
+      required:
+        - request_id
+        - client
+        - http_method
+        - http_status
+        - request_origin
+        - request_path
+        - request_body
+        - request_response
+        - api_version
+        - logged_at
+        - created_at
+      properties:
+        request_id:
+          type: string
+          description: Request identifier.
+          example: request_123
+        client:
+          type: string
+          description: API client.
+          example: curl
+        http_method:
+          type: string
+          description: HTTP method.
+          example: get
+          enum:
+            - get
+            - post
+            - put
+            - delete
+            - patch
+        http_status:
+          type: integer
+          description: HTTP response status.
+          example: 200
+        request_origin:
+          type: string
+          description: Request origin.
+          example: https://app.acme.example
+        request_path:
+          type: string
+          description: Request path.
+          example: /api/v2/customers
+        request_body:
+          type: object
+          description: Request body. JSON-encoded object and array values are parsed one level deep.
+          additionalProperties: true
+        request_response:
+          type: object
+          description: Response body. JSON-encoded object and array values are parsed one level deep.
+          additionalProperties: true
+        api_version:
+          type: string
+          description: API version.
+          example: v2
+        logged_at:
+          type: string
+          description: Time the event was logged.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        created_at:
+          type: string
+          description: Time the log record was created.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    ApiLogsPaginated:
+      type: object
+      description: api logs list.
+      required:
+        - api_logs
+        - meta
+      properties:
+        api_logs:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/ApiLogObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ApiLog:
+      type: object
+      description: api log response.
+      required:
+        - api_log
+      properties:
+        api_log:
+          $ref: '#/components/schemas/ApiLogObject'
+    SecurityLogObject:
+      type: object
+      description: Recorded log entry.
+      required:
+        - log_id
+        - log_type
+        - log_event
+        - user_email
+        - resources
+        - device_info
+        - logged_at
+        - created_at
+      properties:
+        log_id:
+          type: string
+          description: Log identifier.
+          example: log_123
+        log_type:
+          type: string
+          description: Security log type.
+          example: user
+        log_event:
+          type: string
+          description: Security event.
+          example: user.login
+        user_email:
+          type:
+            - string
+            - 'null'
+          description: User email, if known.
+          example: user@acme.example
+        resources:
+          type: object
+          description: Resources associated with the event.
+          additionalProperties: true
+        device_info:
+          type: object
+          description: Device information associated with the event.
+          additionalProperties: true
+        logged_at:
+          type: string
+          description: Time the event was logged.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        created_at:
+          type: string
+          description: Time the log record was created.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    SecurityLogsPaginated:
+      type: object
+      description: security logs list.
+      required:
+        - security_logs
+        - meta
+      properties:
+        security_logs:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/SecurityLogObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    SecurityLog:
+      type: object
+      description: security log response.
+      required:
+        - security_log
+      properties:
+        security_log:
+          $ref: '#/components/schemas/SecurityLogObject'
+    WebhookEventTypeEnum:
+      type: string
+      description: Webhook event type.
+      example: add_on.created
+      enum:
+        - add_on.created
+        - add_on.updated
+        - add_on.deleted
+        - alert.resolved
+        - alert.triggered
+        - billable_metric.created
+        - billable_metric.updated
+        - billable_metric.deleted
+        - customer.created
+        - customer.updated
+        - customer.accounting_provider_created
+        - customer.accounting_provider_error
+        - customer.crm_provider_created
+        - customer.crm_provider_error
+        - customer.payment_provider_created
+        - customer.payment_provider_error
+        - customer.checkout_url_generated
+        - customer.tax_provider_error
+        - customer.vies_check
+        - credit_note.created
+        - credit_note.generated
+        - credit_note.refund_failure
+        - coupon.created
+        - coupon.updated
+        - coupon.deleted
+        - coupon.terminated
+        - dunning_campaign.finished
+        - event.error
+        - events.errors
+        - feature.created
+        - feature.updated
+        - feature.deleted
+        - fee.created
+        - fee.tax_provider_error
+        - invoice.created
+        - invoice.one_off_created
+        - invoice.paid_credit_added
+        - invoice.generated
+        - invoice.drafted
+        - invoice.ready_to_finalize
+        - invoice.voided
+        - invoice.deleted
+        - invoice.payment_dispute_lost
+        - invoice.payment_status_updated
+        - invoice.payment_overdue
+        - invoice.payment_failure
+        - invoice.resynced
+        - integration.provider_error
+        - order.created
+        - order.executed
+        - order_form.created
+        - order_form.signed
+        - order_form.expired
+        - order_form.voided
+        - payment.succeeded
+        - payment.requires_action
+        - payment_provider.error
+        - payment_receipt.created
+        - payment_receipt.generated
+        - payment_request.created
+        - payment_request.payment_failure
+        - payment_request.payment_status_updated
+        - plan.created
+        - plan.updated
+        - plan.deleted
+        - product_category.created
+        - product_category.updated
+        - product_category.deleted
+        - product.created
+        - product.updated
+        - product.deleted
+        - product_filter.created
+        - product_filter.updated
+        - product_filter.deleted
+        - rate_card.created
+        - rate_card.updated
+        - rate_card.deleted
+        - rate_card_rate.created
+        - rate_card_rate.updated
+        - rate_card_rate.deleted
+        - plan_rate_card.created
+        - plan_rate_card.updated
+        - plan_rate_card.deleted
+        - contract_rate_card.created
+        - contract_rate_card.updated
+        - contract_rate_card.deleted
+        - contract.created
+        - contract.updated
+        - contract.started
+        - contract.terminated
+        - contract.canceled
+        - quote.created
+        - quote.approved
+        - quote.voided
+        - subscription.canceled
+        - subscription.incomplete
+        - subscription.terminated
+        - subscription.started
+        - subscription.updated
+        - subscription.termination_alert
+        - subscription.trial_ended
+        - subscription.usage_threshold_reached
+        - wallet.created
+        - wallet.depleted_ongoing_balance
+        - wallet.terminated
+        - wallet.updated
+        - wallet_transaction.created
+        - wallet_transaction.updated
+        - wallet_transaction.payment_failure
+    WebhookEndpointObject:
+      type: object
+      description: Webhook Endpoint.
+      required:
+        - lago_id
+        - name
+        - webhook_url
+        - signature_algo
+        - event_types
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        name:
+          type:
+            - string
+            - 'null'
+          description: Name.
+          example: example
+        webhook_url:
+          type: string
+          description: Public URL receiving webhook requests.
+          example: https://hooks.acme.example/lago
+          format: uri
+        signature_algo:
+          type: string
+          description: Webhook signature algorithm.
+          example: jwt
+          enum:
+            - jwt
+            - hmac
+        event_types:
+          type:
+            - array
+            - 'null'
+          items:
+            $ref: '#/components/schemas/WebhookEventTypeEnum'
+          description: Event types delivered to this endpoint. Null means all events; an empty array selects none.
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    WebhookEndpointsPaginated:
+      type: object
+      description: webhook endpoints list.
+      required:
+        - webhook_endpoints
+        - meta
+      properties:
+        webhook_endpoints:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/WebhookEndpointObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    WebhookEndpointBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type:
+            - string
+            - 'null'
+          description: Endpoint name.
+          example: Billing webhooks
+        webhook_url:
+          type: string
+          description: Public URL receiving webhook requests. Private addresses are rejected.
+          example: https://hooks.acme.example/lago
+          format: uri
+        signature_algo:
+          type: string
+          description: Webhook signature algorithm.
+          example: jwt
+          enum:
+            - jwt
+            - hmac
+          default: jwt
+        event_types:
+          type:
+            - array
+            - 'null'
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/WebhookEventTypeEnum'
+              - type: string
+                enum:
+                  - '*'
+                example: '*'
+          description: Event types to deliver. Null or ["*"] selects all events. Names are trimmed, lowercased and deduplicated. An empty array selects none.
+    WebhookEndpointCreateInput:
+      type: object
+      description: Create webhook endpoint.
+      required:
+        - webhook_endpoint
+      properties:
+        webhook_endpoint:
+          $ref: '#/components/schemas/WebhookEndpointBaseInput'
+          required:
+            - webhook_url
+    WebhookEndpoint:
+      type: object
+      description: webhook endpoint response.
+      required:
+        - webhook_endpoint
+      properties:
+        webhook_endpoint:
+          $ref: '#/components/schemas/WebhookEndpointObject'
+    WebhookEndpointUpdateInput:
+      type: object
+      description: Update webhook endpoint.
+      required:
+        - webhook_endpoint
+      properties:
+        webhook_endpoint:
+          $ref: '#/components/schemas/WebhookEndpointBaseInput'
   responses:
     BadRequest:
       description: Invalid request body, pagination or relationship expansion

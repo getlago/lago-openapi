@@ -1,0 +1,129 @@
+parameters:
+  - name: code
+    in: path
+    required: true
+    description: Code.
+    schema:
+      type: string
+      description: Code.
+      example: example_code
+get:
+  tags:
+    - billing_entities
+  summary: Retrieve billing entity
+  description: >-
+    Returns an active entity matching the code, or an archived entity if no
+    active entity has that code. Relationships are included only when requested
+    with expands[].
+
+    Requires the product catalog to be enabled and billing_entity read permission on the API key.
+  operationId: findBillingEntity
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - taxes
+            - selected_invoice_custom_sections
+          example: taxes
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/BillingEntity.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - billing_entities
+  summary: Update billing entity
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    The code cannot be changed. Billing configuration fields are top-level fields. Empty tax_codes or invoice_custom_section_codes arrays remove the corresponding assignments.
+
+    Requires the product catalog to be enabled and billing_entity write permission on the API key.
+  operationId: updateBillingEntity
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/BillingEntityUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/BillingEntity.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - billing_entities
+  summary: Update billing entity
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    The code cannot be changed. Billing configuration fields are top-level fields. Empty tax_codes or invoice_custom_section_codes arrays remove the corresponding assignments.
+
+    Requires the product catalog to be enabled and billing_entity write permission on the API key.
+  operationId: patchBillingEntity
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/BillingEntityUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/BillingEntity.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
