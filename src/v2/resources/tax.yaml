@@ -42,7 +42,7 @@ put:
     Updates a non-deleted tax identified by the code in the path.
     Requires the product catalog to be enabled and tax write permission on the API key.
     Both PUT and PATCH accept partial updates. Omitted fields keep their current values.
-    The tax wrapper must be nonempty. The code field can rename the tax if the new code is available.
+    The tax wrapper must be nonempty. The code field can rename the tax if no other tax of the organization, including a deleted one, uses the new code.
     The applied_to_organization parameter is ignored and existing assignments are not changed by this parameter.
     Taxes have no supported expansions; a nonempty expands[] returns 400 before updating the tax.
   operationId: updateTax

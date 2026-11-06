@@ -9,7 +9,7 @@ properties:
   code:
     type: string
     minLength: 1
-    description: Unique code of the tax within the organization. It cannot be blank.
+    description: Unique code of the tax within the organization, including deleted taxes. It cannot be blank.
     example: standard_vat
   rate:
     type: [number, string]

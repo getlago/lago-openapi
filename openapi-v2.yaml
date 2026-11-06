@@ -83,7 +83,7 @@ paths:
       description: |-
         Creates a tax rate for the organization.
         Requires the product catalog to be enabled and tax write permission on the API key.
-        Name, code and rate are required. A code already used by a non-deleted tax returns 422 without updating that tax.
+        Name, code and rate are required. A code already used by another tax of the organization, including a deleted one, returns 422.
         The applied_to_organization parameter is ignored and is not returned. Creating a tax does not assign it to any resource.
         Taxes have no supported expansions; a nonempty expands[] returns 400 before creation.
       operationId: createTax
@@ -163,7 +163,7 @@ paths:
         Updates a non-deleted tax identified by the code in the path.
         Requires the product catalog to be enabled and tax write permission on the API key.
         Both PUT and PATCH accept partial updates. Omitted fields keep their current values.
-        The tax wrapper must be nonempty. The code field can rename the tax if the new code is available.
+        The tax wrapper must be nonempty. The code field can rename the tax if no other tax of the organization, including a deleted one, uses the new code.
         The applied_to_organization parameter is ignored and existing assignments are not changed by this parameter.
         Taxes have no supported expansions; a nonempty expands[] returns 400 before updating the tax.
       operationId: updateTax
@@ -503,7 +503,7 @@ components:
         code:
           type: string
           minLength: 1
-          description: Unique code of the tax within the organization. It cannot be blank.
+          description: Unique code of the tax within the organization, including deleted taxes. It cannot be blank.
           example: standard_vat
         rate:
           type:
