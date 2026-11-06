@@ -1,0 +1,12 @@
+type: object
+description: Batch event ingestion request.
+required:
+  - events
+properties:
+  events:
+    type: array
+    description: Events to ingest. The default maximum is 100; deployments can
+      configure a different maximum.
+    items:
+      $ref: ./EventInput.yaml
+    minItems: 1

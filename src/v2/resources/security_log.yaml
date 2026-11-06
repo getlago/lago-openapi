@@ -1,0 +1,37 @@
+parameters:
+  - name: log_id
+    in: path
+    required: true
+    description: Log id.
+    schema:
+      type: string
+      description: Log id.
+      example: example_code
+get:
+  tags:
+    - security_logs
+  summary: Retrieve security log
+  description: >-
+    Requires a premium license and available log storage. No expansions are
+    supported.
+
+    Requires the product catalog to be enabled and security_log read permission on the API key.
+  operationId: findSecurityLog
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/SecurityLog.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml

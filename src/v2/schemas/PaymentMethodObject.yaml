@@ -1,0 +1,72 @@
+type: object
+description: Payment Method.
+required:
+  - lago_id
+  - lago_customer_id
+  - external_customer_id
+  - is_default
+  - payment_provider_code
+  - payment_provider_name
+  - payment_provider_type
+  - provider_method_id
+  - created_at
+  - updated_at
+  - deleted_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_customer_id:
+    type: string
+    description: Customer identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_customer_id:
+    type: string
+    description: Customer external identifier.
+    example: customer_123
+  is_default:
+    type: boolean
+    description: Is default.
+    example: false
+  payment_provider_code:
+    type:
+      - string
+      - "null"
+    description: Payment provider code.
+    example: stripe
+  payment_provider_name:
+    type:
+      - string
+      - "null"
+    description: Payment provider name.
+    example: Stripe
+  payment_provider_type:
+    type:
+      - string
+      - "null"
+    description: Payment provider type.
+    example: stripe
+  provider_method_id:
+    type: string
+    description: Provider method id.
+    example: example
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time

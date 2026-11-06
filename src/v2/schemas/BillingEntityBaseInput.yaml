@@ -1,0 +1,175 @@
+type: object
+minProperties: 1
+properties:
+  code:
+    type: string
+    description: Unique code within the organization.
+    example: example_code
+    pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+  name:
+    type: string
+    description: Name.
+    example: example
+  default_currency:
+    type: string
+    description: Default currency.
+    example: example
+  country:
+    type:
+      - string
+      - "null"
+    description: Country.
+    example: example
+  address_line1:
+    type:
+      - string
+      - "null"
+    description: Address line1.
+    example: example
+  address_line2:
+    type:
+      - string
+      - "null"
+    description: Address line2.
+    example: example
+  phone:
+    type:
+      - string
+      - "null"
+    description: Phone.
+    example: example
+  city:
+    type:
+      - string
+      - "null"
+    description: City.
+    example: example
+  state:
+    type:
+      - string
+      - "null"
+    description: State.
+    example: example
+  zipcode:
+    type:
+      - string
+      - "null"
+    description: Zipcode.
+    example: example
+  einvoicing:
+    type: boolean
+    description: Einvoicing.
+    example: false
+  email:
+    type:
+      - string
+      - "null"
+    description: Email.
+    example: billing@acme.example
+  legal_name:
+    type:
+      - string
+      - "null"
+    description: Legal name.
+    example: example
+  legal_number:
+    type:
+      - string
+      - "null"
+    description: Legal number.
+    example: example
+  timezone:
+    type: string
+    description: Timezone.
+    example: example
+  email_settings:
+    type: array
+    description: Enabled email notification types.
+    items:
+      type: string
+      description: Enabled email notification types.
+      example: invoice.finalized
+  document_numbering:
+    type: string
+    description: Document numbering scope.
+    example: per_customer
+    enum:
+      - per_customer
+      - per_billing_entity
+  document_number_prefix:
+    type:
+      - string
+      - "null"
+    description: Document number prefix.
+    example: example
+  tax_identification_number:
+    type:
+      - string
+      - "null"
+    description: Tax identification number.
+    example: example
+  finalize_zero_amount_invoice:
+    type: boolean
+    description: Finalize zero amount invoice.
+    example: false
+  invoice_footer:
+    type:
+      - string
+      - "null"
+    description: Invoice footer.
+    example: Example
+  invoice_grace_period:
+    type: integer
+    description: Invoice grace period.
+    example: 1
+  document_locale:
+    type: string
+    description: Document locale.
+    example: example
+  eu_tax_management:
+    type:
+      - boolean
+      - "null"
+    description: Eu tax management.
+    example: false
+  periodic_invoice_issuing_date_anchor:
+    type:
+      - string
+      - "null"
+    description: Date used to issue periodic invoices.
+    example: current_period_end
+    enum:
+      - current_period_end
+      - next_period_start
+      - null
+  periodic_invoice_issuing_date_adjustment:
+    type:
+      - string
+      - "null"
+    description: Adjustment applied to periodic invoice issuing dates.
+    example: keep_anchor
+    enum:
+      - keep_anchor
+      - align_with_finalization_date
+      - null
+  logo:
+    type: string
+    description: PNG or JPEG logo encoded as a base64 data URL.
+    example: data:image/png;base64,aGVsbG8=
+    pattern: ^data:image/(png|jpe?g);base64,[A-Za-z0-9+/=\s]+$
+  tax_codes:
+    type: array
+    description: Tax codes to assign. An empty array removes the assignments.
+    items:
+      type: string
+      description: Tax codes to assign. An empty array removes the assignments.
+      example: vat
+  invoice_custom_section_codes:
+    type: array
+    description: Invoice custom section codes to assign. An empty array removes the
+      assignments.
+    items:
+      type: string
+      description: Invoice custom section codes to assign. An empty array removes the
+        assignments.
+      example: legal
