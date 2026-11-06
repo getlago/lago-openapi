@@ -1,0 +1,10 @@
+name: created_at_from
+in: query
+description: Inclusive lower bound on the creation time, as an ISO 8601 date or timestamp. A date starts at midnight UTC. Invalid values return 422.
+required: false
+schema:
+  type: string
+  oneOf:
+    - format: date
+    - format: date-time
+  example: '2022-04-01T00:00:00Z'

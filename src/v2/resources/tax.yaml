@@ -1,0 +1,158 @@
+parameters:
+  - name: code
+    in: path
+    required: true
+    description: Code of the tax within the organization.
+    schema:
+      type: string
+      example: standard_vat
+get:
+  tags:
+    - taxes
+  summary: Retrieve a tax
+  description: |-
+    Retrieves a non-deleted tax by its code.
+    Requires the product catalog to be enabled and tax read permission on the API key.
+    Unknown taxes and taxes belonging to another organization return 404.
+    Assignments and relationship counts are not returned. Taxes have no supported expansions; a nonempty expands[] returns 400.
+  operationId: findTax
+  responses:
+    '200':
+      description: Tax
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+put:
+  tags:
+    - taxes
+  summary: Update a tax
+  description: |-
+    Updates a non-deleted tax identified by the code in the path.
+    Requires the product catalog to be enabled and tax write permission on the API key.
+    Both PUT and PATCH accept partial updates. Omitted fields keep their current values.
+    The tax wrapper must be nonempty. The code field can rename the tax if the new code is available.
+    The applied_to_organization parameter is ignored and existing assignments are not changed by this parameter.
+    Taxes have no supported expansions; a nonempty expands[] returns 400 before updating the tax.
+  operationId: updateTax
+  requestBody:
+    required: true
+    description: Tax update payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/TaxUpdateInput.yaml'
+        example:
+          tax:
+            rate: '5.5'
+            description: Reduced VAT
+  responses:
+    '200':
+      description: Tax updated
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+patch:
+  tags:
+    - taxes
+  summary: Partially update a tax
+  description: |-
+    Updates only the supplied fields of a non-deleted tax identified by its code.
+    Requires the product catalog to be enabled and tax write permission on the API key.
+    Behaves the same as PUT. The tax wrapper must be nonempty, and omitted fields keep their current values.
+    The applied_to_organization parameter is ignored and existing assignments are not changed by this parameter.
+    Taxes have no supported expansions; a nonempty expands[] returns 400 before updating the tax.
+  operationId: patchTax
+  requestBody:
+    required: true
+    description: Tax update payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/TaxUpdateInput.yaml'
+        example:
+          tax:
+            name: Reduced VAT
+  responses:
+    '200':
+      description: Tax updated
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+delete:
+  tags:
+    - taxes
+  summary: Delete a tax
+  description: |-
+    Deletes a tax identified by its code and returns it with a non-null deleted_at timestamp.
+    Requires the product catalog to be enabled and tax write permission on the API key.
+    Deleted taxes are no longer returned by listing or retrieval. An unknown or already deleted tax returns 404.
+    Taxes have no supported expansions; a nonempty expands[] returns 400 before deletion.
+  operationId: destroyTax
+  responses:
+    '200':
+      description: Tax deleted
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+          example:
+            tax:
+              lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              name: VAT
+              code: standard_vat
+              rate: 20
+              description: Standard VAT
+              created_at: '2022-04-29T08:59:51.123456Z'
+              updated_at: '2022-04-30T10:00:00.123456Z'
+              deleted_at: '2022-04-30T10:00:00.123456Z'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

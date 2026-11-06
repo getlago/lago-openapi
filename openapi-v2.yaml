@@ -1,0 +1,611 @@
+openapi: 3.1.0
+info:
+  title: Lago API v2 documentation
+  description: |-
+    Beta API for organizations using the product catalog.
+    This document currently covers taxes. Other v2 resources will be added separately.
+    Native v2 endpoints use flat responses, cursor pagination and structured errors.
+  version: 2.0.0-beta
+  license:
+    name: AGPLv3
+    url: https://github.com/getlago/lago-openapi/blob/main/LICENSE
+  contact:
+    email: tech@getlago.com
+servers:
+  - url: https://api.getlago.com/api/v2
+    description: US Lago cluster
+  - url: https://api.eu.getlago.com/api/v2
+    description: EU Lago cluster
+security:
+  - bearerAuth: []
+tags:
+  - name: taxes
+    description: Tax rates
+externalDocs:
+  description: Lago documentation
+  url: https://getlago.com/docs
+paths:
+  /taxes:
+    get:
+      tags:
+        - taxes
+      summary: List all taxes
+      description: |-
+        Lists the organization's taxes, excluding deleted taxes.
+        Requires the product catalog to be enabled and tax read permission on the API key.
+        Results are ordered by creation time, newest first, with the tax identifier as a tiebreaker.
+        Use after or before to navigate. The page and per_page parameters return 400.
+        Relationships and assignment counts are not returned. Taxes have no supported expansions; a nonempty expands[] returns 400.
+        Invalid date filters return 422.
+      operationId: findAllTaxes
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Taxes
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxesPaginated'
+              example:
+                taxes:
+                  - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                    name: VAT
+                    code: standard_vat
+                    rate: 20
+                    description: Standard VAT
+                    created_at: '2022-04-29T08:59:51.123456Z'
+                    updated_at: '2022-04-29T09:30:00.123456Z'
+                    deleted_at: null
+                meta:
+                  next_cursor: null
+                  prev_cursor: null
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - taxes
+      summary: Create a tax
+      description: |-
+        Creates a tax rate for the organization.
+        Requires the product catalog to be enabled and tax write permission on the API key.
+        Name, code and rate are required. A code already used by a non-deleted tax returns 422 without updating that tax.
+        The applied_to_organization parameter is ignored and is not returned. Creating a tax does not assign it to any resource.
+        Taxes have no supported expansions; a nonempty expands[] returns 400 before creation.
+      operationId: createTax
+      requestBody:
+        required: true
+        description: Tax creation payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxCreateInput'
+            example:
+              tax:
+                name: VAT
+                code: standard_vat
+                rate: 20
+                description: Standard VAT
+      responses:
+        '200':
+          description: Tax created
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /taxes/{code}:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Code of the tax within the organization.
+        schema:
+          type: string
+          example: standard_vat
+    get:
+      tags:
+        - taxes
+      summary: Retrieve a tax
+      description: |-
+        Retrieves a non-deleted tax by its code.
+        Requires the product catalog to be enabled and tax read permission on the API key.
+        Unknown taxes and taxes belonging to another organization return 404.
+        Assignments and relationship counts are not returned. Taxes have no supported expansions; a nonempty expands[] returns 400.
+      operationId: findTax
+      responses:
+        '200':
+          description: Tax
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - taxes
+      summary: Update a tax
+      description: |-
+        Updates a non-deleted tax identified by the code in the path.
+        Requires the product catalog to be enabled and tax write permission on the API key.
+        Both PUT and PATCH accept partial updates. Omitted fields keep their current values.
+        The tax wrapper must be nonempty. The code field can rename the tax if the new code is available.
+        The applied_to_organization parameter is ignored and existing assignments are not changed by this parameter.
+        Taxes have no supported expansions; a nonempty expands[] returns 400 before updating the tax.
+      operationId: updateTax
+      requestBody:
+        required: true
+        description: Tax update payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxUpdateInput'
+            example:
+              tax:
+                rate: '5.5'
+                description: Reduced VAT
+      responses:
+        '200':
+          description: Tax updated
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - taxes
+      summary: Partially update a tax
+      description: |-
+        Updates only the supplied fields of a non-deleted tax identified by its code.
+        Requires the product catalog to be enabled and tax write permission on the API key.
+        Behaves the same as PUT. The tax wrapper must be nonempty, and omitted fields keep their current values.
+        The applied_to_organization parameter is ignored and existing assignments are not changed by this parameter.
+        Taxes have no supported expansions; a nonempty expands[] returns 400 before updating the tax.
+      operationId: patchTax
+      requestBody:
+        required: true
+        description: Tax update payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxUpdateInput'
+            example:
+              tax:
+                name: Reduced VAT
+      responses:
+        '200':
+          description: Tax updated
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - taxes
+      summary: Delete a tax
+      description: |-
+        Deletes a tax identified by its code and returns it with a non-null deleted_at timestamp.
+        Requires the product catalog to be enabled and tax write permission on the API key.
+        Deleted taxes are no longer returned by listing or retrieval. An unknown or already deleted tax returns 404.
+        Taxes have no supported expansions; a nonempty expands[] returns 400 before deletion.
+      operationId: destroyTax
+      responses:
+        '200':
+          description: Tax deleted
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tax'
+              example:
+                tax:
+                  lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                  name: VAT
+                  code: standard_vat
+                  rate: 20
+                  description: Standard VAT
+                  created_at: '2022-04-29T08:59:51.123456Z'
+                  updated_at: '2022-04-30T10:00:00.123456Z'
+                  deleted_at: '2022-04-30T10:00:00.123456Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    limit:
+      name: limit
+      in: query
+      description: Maximum number of records per page. Values outside the supported range return 400.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+        example: 20
+    after:
+      name: after
+      in: query
+      description: Opaque next_cursor from a previous response. Returns the next page. Cannot be combined with before or include_total_count=true. Keep the same filters when paging.
+      required: false
+      schema:
+        type: string
+        example: eyJ2IjoxLCJvIjp7InQiOiJ0YXhlcyIsInMiOiJjcmVhdGVkX2F0OmRlc2MsaWQ6ZGVzYyJ9LCJrIjpbIjIwMjItMDQtMjlUMDg6NTk6NTEuMDAwMDAwWiIsIjFhOTAxYTkwLTFhOTAtMWE5MC0xYTkwLTFhOTAxYTkwMWE5MCJdfQ
+    before:
+      name: before
+      in: query
+      description: Opaque prev_cursor from a previous response. Returns the previous page in the same list order. Cannot be combined with after or include_total_count=true. Keep the same filters when paging.
+      required: false
+      schema:
+        type: string
+        example: eyJ2IjoxLCJvIjp7InQiOiJ0YXhlcyIsInMiOiJjcmVhdGVkX2F0OmRlc2MsaWQ6ZGVzYyJ9LCJrIjpbIjIwMjItMDQtMjlUMDg6NTk6NTEuMDAwMDAwWiIsIjFhOTAxYTkwLTFhOTAtMWE5MC0xYTkwLTFhOTAxYTkwMWE5MCJdfQ
+    include_total_count:
+      name: include_total_count
+      in: query
+      description: Requests the total number of matching records. Supported only on the first page, without after or before. The count can be estimated; total_count_estimated is then present and true.
+      required: false
+      schema:
+        type: boolean
+        default: false
+        example: true
+    created_at_from:
+      name: created_at_from
+      in: query
+      description: Inclusive lower bound on the creation time, as an ISO 8601 date or timestamp. A date starts at midnight UTC. Invalid values return 422.
+      required: false
+      schema:
+        type: string
+        oneOf:
+          - format: date
+          - format: date-time
+        example: '2022-04-01T00:00:00Z'
+    created_at_to:
+      name: created_at_to
+      in: query
+      description: Inclusive upper bound on the creation time, as an ISO 8601 date or timestamp. A date includes that whole UTC day. Invalid values return 422.
+      required: false
+      schema:
+        type: string
+        oneOf:
+          - format: date
+          - format: date-time
+        example: '2022-04-30T23:59:59Z'
+  headers:
+    EndpointStatus:
+      description: Indicates that the endpoint is in beta.
+      schema:
+        type: string
+        enum:
+          - beta
+        example: beta
+  schemas:
+    TaxObject:
+      type: object
+      required:
+        - lago_id
+        - name
+        - code
+        - rate
+        - description
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the tax, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        name:
+          type: string
+          description: Name of the tax.
+          example: VAT
+        code:
+          type: string
+          description: Unique code of the tax within the organization.
+          example: standard_vat
+        rate:
+          type: number
+          description: Percentage rate of the tax, returned as a JSON number.
+          example: 20
+        description:
+          type:
+            - string
+            - 'null'
+          description: Internal description of the tax.
+          example: Standard VAT
+        created_at:
+          type: string
+          format: date-time
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T09:30:00.123456Z'
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          description: UTC deletion timestamp, with microsecond precision. It is null until the tax is deleted.
+          example: null
+      example:
+        lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        name: VAT
+        code: standard_vat
+        rate: 20
+        description: Standard VAT
+        created_at: '2022-04-29T08:59:51.123456Z'
+        updated_at: '2022-04-29T09:30:00.123456Z'
+        deleted_at: null
+    CursorPaginationMeta:
+      type: object
+      required:
+        - next_cursor
+        - prev_cursor
+      dependentRequired:
+        total_count_estimated:
+          - total_count
+      properties:
+        next_cursor:
+          type:
+            - string
+            - 'null'
+          description: Opaque cursor to pass as after for the next page. It is null when there is no next page.
+          example: null
+        prev_cursor:
+          type:
+            - string
+            - 'null'
+          description: Opaque cursor to pass as before for the previous page. It is null when there is no previous page.
+          example: null
+        total_count:
+          type: integer
+          minimum: 0
+          description: Number of matching records, returned only when include_total_count is true on the first page. The count can be estimated.
+          example: 42
+        total_count_estimated:
+          type: boolean
+          enum:
+            - true
+          description: Present and true only when total_count is an estimate. Omitted for an exact count.
+          example: true
+    TaxesPaginated:
+      type: object
+      required:
+        - taxes
+        - meta
+      properties:
+        taxes:
+          type: array
+          description: Tax rates on the requested page.
+          items:
+            $ref: '#/components/schemas/TaxObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ApiError:
+      type: object
+      required:
+        - code
+        - details
+      properties:
+        code:
+          type: string
+          pattern: ^[a-z][a-z0-9_]*$
+          description: Code identifying the failure. The HTTP status is carried by the response, not the body.
+          example: validation_errors
+        details:
+          type: array
+          description: Details of the failure. The array is empty when no field details are available.
+          items:
+            type: object
+            required:
+              - code
+              - field
+              - meta
+            properties:
+              code:
+                type: string
+                pattern: ^[a-z][a-z0-9_]*$
+                description: Code identifying the field error or the reason a request parameter was rejected.
+                example: value_is_mandatory
+              field:
+                type: string
+                description: Request field or parameter. Nested fields use dots and zero-based array indexes. A resource-level failure uses base.
+                example: name
+              meta:
+                type: object
+                description: Information about the failure, such as the missing resource, allowed values or bounds. The object is empty when no metadata is available.
+                additionalProperties: true
+                example: {}
+    TaxBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Name of the tax. It cannot be blank.
+          example: VAT
+        code:
+          type: string
+          minLength: 1
+          description: Unique code of the tax within the organization. It cannot be blank.
+          example: standard_vat
+        rate:
+          type:
+            - number
+            - string
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: Percentage rate of the tax. Accepts a number or a decimal string.
+          example: 20
+        description:
+          type:
+            - string
+            - 'null'
+          description: Internal description of the tax. Set to null to clear it.
+          example: Standard VAT
+    TaxCreateInput:
+      type: object
+      required:
+        - tax
+      properties:
+        tax:
+          $ref: '#/components/schemas/TaxBaseInput'
+          required:
+            - name
+            - code
+            - rate
+    Tax:
+      type: object
+      required:
+        - tax
+      properties:
+        tax:
+          $ref: '#/components/schemas/TaxObject'
+    TaxUpdateInput:
+      type: object
+      required:
+        - tax
+      properties:
+        tax:
+          $ref: '#/components/schemas/TaxBaseInput'
+  responses:
+    BadRequest:
+      description: Invalid request body, pagination or relationship expansion
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: invalid_expand
+            details:
+              - code: malformed
+                field: expands
+                meta:
+                  allowed_values: []
+    Unauthorized:
+      description: Missing or invalid API key
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: unauthorized
+            details: []
+    Forbidden:
+      description: Feature unavailable or insufficient API permissions
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: feature_unavailable
+            details: []
+    UnprocessableEntity:
+      description: Invalid fields or filters
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    NotFound:
+      description: Unknown resource or resource from another organization
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '#/components/headers/EndpointStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            code: resource_not_found
+            details:
+              - code: resource_not_found
+                field: base
+                meta:
+                  resource: tax

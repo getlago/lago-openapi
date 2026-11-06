@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: Lago API v2 documentation
+  description: |-
+    Beta API for organizations using the product catalog.
+    This document currently covers taxes. Other v2 resources will be added separately.
+    Native v2 endpoints use flat responses, cursor pagination and structured errors.
+  version: 2.0.0-beta
+  license:
+    name: AGPLv3
+    url: https://github.com/getlago/lago-openapi/blob/main/LICENSE
+  contact:
+    email: tech@getlago.com
+externalDocs:
+  description: Lago documentation
+  url: https://getlago.com/docs
+servers:
+  - url: https://api.getlago.com/api/v2
+    description: US Lago cluster
+  - url: https://api.eu.getlago.com/api/v2
+    description: EU Lago cluster
+security:
+  - bearerAuth: []
+tags:
+  - name: taxes
+    description: Tax rates
+paths:
+  /taxes:
+    $ref: './resources/taxes.yaml'
+  /taxes/{code}:
+    $ref: './resources/tax.yaml'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

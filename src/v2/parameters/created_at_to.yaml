@@ -1,0 +1,10 @@
+name: created_at_to
+in: query
+description: Inclusive upper bound on the creation time, as an ISO 8601 date or timestamp. A date includes that whole UTC day. Invalid values return 422.
+required: false
+schema:
+  type: string
+  oneOf:
+    - format: date
+    - format: date-time
+  example: '2022-04-30T23:59:59Z'
