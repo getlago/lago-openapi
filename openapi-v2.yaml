@@ -3008,7 +3008,7 @@ paths:
         - invoices
       summary: List invoices
       description: |-
-        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Returns a cursor-paginated list. Use after or before to navigate. The page and per_page parameters are rejected.
         Only contract invoices and invoices containing contract fees are returned. The order is issuing_date descending, then created_at and identifier descending.
         Requires the product catalog to be enabled and invoice read permission on the API key.
       operationId: findAllInvoices
