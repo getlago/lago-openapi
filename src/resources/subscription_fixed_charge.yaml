@@ -32,7 +32,7 @@ put:
     This endpoint creates or updates a fixed charge override for a subscription, without affecting the original plan fixed charge.
     When the body contains only `units` (and optionally `apply_units_immediately`), the change is recorded as a per-subscription unit override. When the body also sets `invoice_display_name`, `properties`, or `tax_codes`, it is applied as a full plan override for the subscription instead.
     With `apply_units_immediately: true` on a pay-in-advance fixed charge the change is billed mid-period; otherwise it takes effect at the next billing period.
-    This is a premium feature.
+    A units-only change is available without a premium license. Setting `invoice_display_name`, `properties` or `tax_codes` is a premium feature: without a premium license, the whole request is refused with a `403`.
   operationId: overrideSubscriptionFixedCharge
   requestBody:
     description: Fixed charge override payload
