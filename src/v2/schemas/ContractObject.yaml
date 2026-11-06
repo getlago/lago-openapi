@@ -1,0 +1,153 @@
+type: object
+description: Contract.
+required:
+  - lago_id
+  - external_id
+  - lago_customer_id
+  - external_customer_id
+  - name
+  - plan_code
+  - status
+  - billing_time
+  - consolidate_invoice
+  - purchase_order_number
+  - billing_anchor_date
+  - effective_billing_anchor_date
+  - skip_invoice_custom_sections
+  - started_at
+  - ended_at
+  - terminated_at
+  - canceled_at
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_id:
+    type: string
+    description: External id.
+    example: example
+  lago_customer_id:
+    type: string
+    description: Customer identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_customer_id:
+    type: string
+    description: External customer identifier.
+    example: customer_123
+  name:
+    type:
+      - string
+      - "null"
+    description: Name.
+    example: example
+  plan_code:
+    type:
+      - string
+      - "null"
+    description: Optional plan code. Plan-less contracts use directly attached rate cards.
+    example: standard
+  status:
+    type: string
+    description: Lifecycle status.
+    example: pending
+    enum:
+      - pending
+      - active
+      - terminated
+      - canceled
+  billing_time:
+    type: string
+    description: Whether billing aligns to the calendar or contract anniversary.
+    example: calendar
+    enum:
+      - calendar
+      - anniversary
+  consolidate_invoice:
+    type: boolean
+    description: Consolidate invoice.
+    example: false
+  purchase_order_number:
+    type:
+      - string
+      - "null"
+    description: Purchase order number.
+    example: example
+  billing_anchor_date:
+    type:
+      - string
+      - "null"
+    description: Optional billing anchor.
+    example: null
+    format: date
+  effective_billing_anchor_date:
+    type:
+      - string
+      - "null"
+    description: Resolved billing anchor.
+    example: null
+    format: date
+  skip_invoice_custom_sections:
+    type: boolean
+    description: Skip invoice custom sections.
+    example: false
+  started_at:
+    type:
+      - string
+      - "null"
+    description: Started at.
+    example: null
+    format: date-time
+  ended_at:
+    type:
+      - string
+      - "null"
+    description: Ended at.
+    example: null
+    format: date-time
+  terminated_at:
+    type:
+      - string
+      - "null"
+    description: Terminated at.
+    example: null
+    format: date-time
+  canceled_at:
+    type:
+      - string
+      - "null"
+    description: Canceled at.
+    example: null
+    format: date-time
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  applied_rate_cards:
+    type: array
+    description: Present only with expands[]=applied_rate_cards.
+    items:
+      $ref: ./ContractAppliedRateCardObject.yaml
+  plan:
+    anyOf:
+      - $ref: ./CatalogPlanObject.yaml
+      - type: "null"
+    description: Present only with expands[]=plan.
+  customer:
+    $ref: ./CustomerObject.yaml
+    description: Present only with expands[]=customer.
+  invoice_custom_sections:
+    type: array
+    description: Present only with expands[]=invoice_custom_sections.
+    items:
+      $ref: ./InvoiceCustomSectionObject.yaml

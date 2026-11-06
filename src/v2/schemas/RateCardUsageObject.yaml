@@ -1,0 +1,149 @@
+type: object
+description: Usage in one applied rate card billing window.
+required:
+  - rate_card_code
+  - rate_card_name
+  - product_code
+  - product_name
+  - product_category_code
+  - product_category_name
+  - product_filter_code
+  - product_filter_name
+  - invoice_display_name
+  - product_type
+  - billable_metric_code
+  - billing_timing
+  - rate_phase_code
+  - rate_phase_name
+  - rate_source
+  - rate_model
+  - rate_properties
+  - units
+  - events_count
+  - amount_cents
+  - from_datetime
+  - to_datetime
+properties:
+  rate_card_code:
+    type: string
+    description: Rate card code.
+    example: compute_usd
+  rate_card_name:
+    type: string
+    description: Rate card name.
+    example: Compute USD
+  product_code:
+    type: string
+    description: Product code.
+    example: api_requests
+  product_name:
+    type: string
+    description: Product name.
+    example: API requests
+  product_category_code:
+    type:
+      - string
+      - "null"
+    description: Category code.
+    example: compute
+  product_category_name:
+    type:
+      - string
+      - "null"
+    description: Category name.
+    example: Compute
+  product_filter_code:
+    type:
+      - string
+      - "null"
+    description: Filter code.
+    example: eu
+  product_filter_name:
+    type:
+      - string
+      - "null"
+    description: Filter name.
+    example: EU
+  invoice_display_name:
+    type: string
+    description: Name displayed on invoices.
+    example: API requests
+  product_type:
+    type: string
+    description: Type of product. Metered products require a billable metric; fixed
+      products must not reference one.
+    example: metered
+    enum:
+      - metered
+      - fixed
+  billable_metric_code:
+    type:
+      - string
+      - "null"
+    description: Billable metric code.
+    example: api_requests
+  billing_timing:
+    type: string
+    description: Billing timing.
+    example: arrears
+    enum:
+      - arrears
+      - advance
+  rate_phase_code:
+    type:
+      - string
+      - "null"
+    description: Rate phase code.
+    example: default
+  rate_phase_name:
+    type:
+      - string
+      - "null"
+    description: Rate phase name.
+    example: Default
+  rate_source:
+    type: string
+    description: Source of the price used for this window.
+    example: rate_card
+  rate_model:
+    type: string
+    description: Pricing model. Fixed products support standard, graduated and
+      volume. Volume cannot be billed in advance; dynamic requires a sum metric.
+      Proration and aggregation can impose further restrictions.
+    example: standard
+    enum:
+      - standard
+      - graduated
+      - package
+      - percentage
+      - volume
+      - graduated_percentage
+      - custom
+      - dynamic
+  rate_properties:
+    type: object
+    description: Effective pricing properties used by billing.
+    additionalProperties: true
+  units:
+    type: string
+    description: Quantity billed. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  events_count:
+    type: integer
+    description: Number of matching events.
+    example: 42
+  amount_cents:
+    type: integer
+    description: Amount excluding tax, in cents.
+    example: 1000
+  from_datetime:
+    type: string
+    description: Start of the billing window.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  to_datetime:
+    type: string
+    description: End of the billing window.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

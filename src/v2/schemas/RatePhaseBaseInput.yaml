@@ -1,0 +1,32 @@
+type: object
+minProperties: 1
+properties:
+  code:
+    type: string
+    description: Code unique within the applied rate card.
+    example: introductory
+    pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+  position:
+    type: integer
+    description: One-based sequence position. Omitted positions are inserted automatically.
+    example: 1
+    minimum: 1
+  name:
+    type:
+      - string
+      - "null"
+    description: Name of the phase.
+    example: Introductory period
+  billing_interval_cycle_count:
+    type:
+      - integer
+      - "null"
+    description: Number of billing cycles. Only the final phase is indefinite,
+      represented by null.
+    example: 1
+    minimum: 1
+  rate_override:
+    description: Pricing override. On update, null removes the existing override.
+    anyOf:
+      - $ref: ./RateOverrideInput.yaml
+      - type: "null"

@@ -18,7 +18,7 @@ This repository is used to serve http://swagger.getlago.com/
 The specifications are published separately:
 
 - `openapi.yaml`: API v1. Its URL remains unchanged for existing consumers.
-- `openapi-v2.yaml`: API v2 (beta). It currently documents taxes; other v2 resources will be added separately.
+- `openapi-v2.yaml`: API v2 (beta). It currently documents taxes, product categories, products and filters, rate cards and rates, plans, contracts, applied rate cards, rate phases and contract current usage. Other v2 resources will be added separately.
 
 Swagger UI has a version selector and opens API v1 by default. The v2 specification only lists endpoints that have been checked against their v2 implementation. Do not assume that every v1 endpoint is available in v2 or has the same response format.
 

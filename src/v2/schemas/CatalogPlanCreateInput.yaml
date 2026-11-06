@@ -1,0 +1,11 @@
+type: object
+description: Create plan.
+required:
+  - plan
+properties:
+  plan:
+    $ref: ./CatalogPlanBaseInput.yaml
+    required:
+      - name
+      - code
+      - currency

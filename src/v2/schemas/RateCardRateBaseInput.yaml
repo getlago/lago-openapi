@@ -1,0 +1,61 @@
+type: object
+minProperties: 1
+properties:
+  code:
+    type: string
+    description: Code unique within the rate card.
+    example: standard_2030
+    pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+  effective_from:
+    type: string
+    description: Effective timestamp. It cannot be before today in the organization
+      timezone, must be unique on the card, and must be after the active rate.
+      Arrears rates start at the beginning of the day.
+    example: 2030-01-01T00:00:00Z
+    format: date-time
+  rate_model:
+    type: string
+    description: Pricing model. Fixed products support standard, graduated and
+      volume. Volume cannot be billed in advance; dynamic requires a sum metric.
+      Proration and aggregation can impose further restrictions.
+    example: standard
+    enum:
+      - standard
+      - graduated
+      - package
+      - percentage
+      - volume
+      - graduated_percentage
+      - custom
+      - dynamic
+  rate_properties:
+    $ref: ./RatePropertiesInput.yaml
+  min_amount_cents:
+    type: integer
+    description: Minimum charge in cents. Allowed only for arrears billing.
+    example: 0
+    minimum: 0
+    default: 0
+  billing_interval_count:
+    type: integer
+    description: Number of billing interval units.
+    example: 1
+    minimum: 1
+    default: 1
+  billing_interval_unit:
+    type: string
+    description: Unit of the billing interval.
+    example: day
+    enum:
+      - day
+      - week
+      - month
+      - year
+  applied_pricing_unit_conversion_rate:
+    type:
+      - string
+      - "null"
+    description: Conversion rate for the applied pricing unit. Required when the
+      card uses a pricing unit. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
