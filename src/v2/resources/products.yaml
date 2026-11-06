@@ -1,0 +1,116 @@
+get:
+  tags:
+    - products
+  summary: List products
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+
+    Requires the product catalog to be enabled and product read permission on the API key.
+  operationId: findAllProducts
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+    - name: search_term
+      in: query
+      required: false
+      description: Searches names and codes.
+      schema:
+        type: string
+        description: Text to search.
+        example: example
+    - name: product_category_code[]
+      in: query
+      required: false
+      description: Filter by category codes. A scalar product_category_code is also
+        accepted. Unknown categories return 404.
+      schema:
+        type: array
+        description: Category codes.
+        items:
+          type: string
+          description: Category code.
+          example: compute
+    - name: without_product_category
+      in: query
+      required: false
+      description: Include uncategorized products, alone or alongside the requested
+        categories.
+      schema:
+        type: boolean
+        description: Include uncategorized products.
+        example: false
+    - name: product_type
+      in: query
+      required: false
+      description: Product type.
+      schema:
+        type: string
+        description: Type of product. Metered products require a billable metric; fixed
+          products must not reference one.
+        example: metered
+        enum:
+          - metered
+          - fixed
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ProductsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - products
+  summary: Create product
+  description: >-
+    Creates a fixed or metered product. Metered products require
+    billable_metric_code; fixed products reject it.
+
+    Requires the product catalog to be enabled and product write permission on the API key.
+  operationId: createProduct
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ProductCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Product.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

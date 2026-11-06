@@ -1,0 +1,9 @@
+type: object
+description: Create applied rate card.
+required:
+  - applied_rate_card
+properties:
+  applied_rate_card:
+    $ref: ./ContractAppliedRateCardBaseInput.yaml
+    required:
+      - rate_card_code

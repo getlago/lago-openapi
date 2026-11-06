@@ -1,0 +1,72 @@
+type: object
+description: Product Filter.
+required:
+  - lago_id
+  - name
+  - code
+  - description
+  - invoice_display_name
+  - created_at
+  - updated_at
+  - deleted_at
+  - product_code
+  - product_category_code
+  - values
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  name:
+    type: string
+    description: Name.
+    example: example
+  code:
+    type: string
+    description: Code.
+    example: example
+  description:
+    type:
+      - string
+      - "null"
+    description: Description.
+    example: example
+  invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Invoice display name.
+    example: example
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time
+  product_code:
+    type: string
+    description: Code of the parent product.
+    example: api_requests
+  product_category_code:
+    type:
+      - string
+      - "null"
+    description: Code of the product category.
+    example: compute
+  values:
+    type: array
+    description: Filter key and value matches. An empty list is returned after deletion.
+    items:
+      $ref: ./ProductFilterValueObject.yaml

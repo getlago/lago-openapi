@@ -1,0 +1,150 @@
+parameters:
+  - name: plan_code
+    in: path
+    required: true
+    description: Plan code.
+    schema:
+      type: string
+      description: Plan code.
+      example: example_code
+  - name: code
+    in: path
+    required: true
+    description: Code.
+    schema:
+      type: string
+      description: Code.
+      example: example_code
+get:
+  tags:
+    - plan_applied_rate_cards
+  summary: Retrieve applied rate card
+  description: >-
+    Returns the record without nested relationships unless a supported expansion
+    is requested.
+
+    Requires the product catalog to be enabled and plan_rate_card read permission on the API key.
+  operationId: findPlanAppliedRateCard
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PlanAppliedRateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - plan_applied_rate_cards
+  summary: Update applied rate card
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Plans attached to contracts are locked.
+
+    Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+  operationId: updatePlanAppliedRateCard
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/PlanAppliedRateCardUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PlanAppliedRateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - plan_applied_rate_cards
+  summary: Update applied rate card
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Plans attached to contracts are locked.
+
+    Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+  operationId: patchPlanAppliedRateCard
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/PlanAppliedRateCardUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PlanAppliedRateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - plan_applied_rate_cards
+  summary: Delete applied rate card
+  description: >-
+    Removes the rate card from an editable plan.
+
+    Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+  operationId: destroyPlanAppliedRateCard
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PlanAppliedRateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

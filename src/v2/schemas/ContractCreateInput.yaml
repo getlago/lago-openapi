@@ -1,0 +1,10 @@
+type: object
+description: Create contract.
+required:
+  - contract
+properties:
+  contract:
+    $ref: ./ContractBaseInput.yaml
+    required:
+      - external_id
+      - external_customer_id

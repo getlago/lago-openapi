@@ -3,8 +3,8 @@ info:
   title: Lago API v2 documentation
   description: |-
     Beta API for organizations using the product catalog.
-    This document currently covers taxes. Other v2 resources will be added separately.
-    Native v2 endpoints use flat responses, cursor pagination and structured errors.
+    This document covers taxes, catalog resources and contracts. Other native v2 endpoints will be added separately.
+    Native v2 endpoints use structured errors and support only the expansions documented for each action.
   version: 2.0.0-beta
   license:
     name: AGPLv3
@@ -21,6 +21,28 @@ security:
 tags:
   - name: taxes
     description: Tax rates
+  - name: product_categories
+    description: product categories operations
+  - name: products
+    description: products operations
+  - name: product_filters
+    description: product filters operations
+  - name: rate_cards
+    description: rate cards operations
+  - name: rate_card_rates
+    description: rate card rates operations
+  - name: catalog_plans
+    description: catalog plans operations
+  - name: plan_applied_rate_cards
+    description: plan applied rate cards operations
+  - name: plan_rate_phases
+    description: plan rate phases operations
+  - name: contract_applied_rate_cards
+    description: contract applied rate cards operations
+  - name: contract_rate_phases
+    description: contract rate phases operations
+  - name: contracts
+    description: contracts operations
 externalDocs:
   description: Lago documentation
   url: https://getlago.com/docs
@@ -277,6 +299,2697 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+  /product_categories:
+    get:
+      tags:
+        - product_categories
+      summary: List product categories
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and product_category read permission on the API key.
+      operationId: findAllProductCategories
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: search_term
+          in: query
+          required: false
+          description: Searches names and codes.
+          schema:
+            type: string
+            description: Text to search.
+            example: example
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategoriesPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - product_categories
+      summary: Create product category
+      description: Requires the product catalog to be enabled and product_category write permission on the API key.
+      operationId: createProductCategory
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCategoryCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /product_categories/{code}:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - product_categories
+      summary: Retrieve product category
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and product_category read permission on the API key.
+      operationId: findProductCategory
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - product_categories
+      summary: Update product category
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+        Requires the product catalog to be enabled and product_category write permission on the API key.
+      operationId: updateProductCategory
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCategoryUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - product_categories
+      summary: Update product category
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+        Requires the product catalog to be enabled and product_category write permission on the API key.
+      operationId: patchProductCategory
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCategoryUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - product_categories
+      summary: Delete product category
+      description: |-
+        Deletes the category and its products, filters, rate cards and rates. A category attached to a plan or subscription cannot be deleted.
+        Requires the product catalog to be enabled and product_category write permission on the API key.
+      operationId: destroyProductCategory
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /products:
+    get:
+      tags:
+        - products
+      summary: List products
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and product read permission on the API key.
+      operationId: findAllProducts
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: search_term
+          in: query
+          required: false
+          description: Searches names and codes.
+          schema:
+            type: string
+            description: Text to search.
+            example: example
+        - name: product_category_code[]
+          in: query
+          required: false
+          description: Filter by category codes. A scalar product_category_code is also accepted. Unknown categories return 404.
+          schema:
+            type: array
+            description: Category codes.
+            items:
+              type: string
+              description: Category code.
+              example: compute
+        - name: without_product_category
+          in: query
+          required: false
+          description: Include uncategorized products, alone or alongside the requested categories.
+          schema:
+            type: boolean
+            description: Include uncategorized products.
+            example: false
+        - name: product_type
+          in: query
+          required: false
+          description: Product type.
+          schema:
+            type: string
+            description: Type of product. Metered products require a billable metric; fixed products must not reference one.
+            example: metered
+            enum:
+              - metered
+              - fixed
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - products
+      summary: Create product
+      description: |-
+        Creates a fixed or metered product. Metered products require billable_metric_code; fixed products reject it.
+        Requires the product catalog to be enabled and product write permission on the API key.
+      operationId: createProduct
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /products/{code}:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - products
+      summary: Retrieve product
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and product read permission on the API key.
+      operationId: findProduct
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - product_category
+                - billable_metric
+              example: product_category
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - products
+      summary: Update product
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Product type and billable metric cannot be changed through this endpoint. A blank product_category_code detaches the category.
+        Requires the product catalog to be enabled and product write permission on the API key.
+      operationId: updateProduct
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - products
+      summary: Update product
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Product type and billable metric cannot be changed through this endpoint. A blank product_category_code detaches the category.
+        Requires the product catalog to be enabled and product write permission on the API key.
+      operationId: patchProduct
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - products
+      summary: Delete product
+      description: |-
+        Deletes the product, its filters, rate cards and rates. Products attached to a plan or subscription cannot be deleted.
+        Requires the product catalog to be enabled and product write permission on the API key.
+      operationId: destroyProduct
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /products/{product_code}/filters:
+    parameters:
+      - name: product_code
+        in: path
+        required: true
+        description: Product code.
+        schema:
+          type: string
+          description: Product code.
+          example: example_code
+    get:
+      tags:
+        - product_filters
+      summary: List product filters
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and product read permission on the API key.
+      operationId: findAllProductFilters
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: search_term
+          in: query
+          required: false
+          description: Searches names and codes.
+          schema:
+            type: string
+            description: Text to search.
+            example: example
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFiltersPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - product_filters
+      summary: Create filter
+      description: |-
+        Creates a filter for a metered product only. Values must refer to keys and configured values of its billable metric. A key-only entry cannot be combined with specific values for the same key.
+        Requires the product catalog to be enabled and product write permission on the API key.
+      operationId: createProductFilter
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductFilterCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFilter'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /products/{product_code}/filters/{code}:
+    parameters:
+      - name: product_code
+        in: path
+        required: true
+        description: Product code.
+        schema:
+          type: string
+          description: Product code.
+          example: example_code
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - product_filters
+      summary: Retrieve filter
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and product read permission on the API key.
+      operationId: findProductFilter
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFilter'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - product_filters
+      summary: Update filter
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Supplying values replaces the existing value set. Omitting values preserves it.
+        Requires the product catalog to be enabled and product write permission on the API key.
+      operationId: updateProductFilter
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductFilterUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFilter'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - product_filters
+      summary: Update filter
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Supplying values replaces the existing value set. Omitting values preserves it.
+        Requires the product catalog to be enabled and product write permission on the API key.
+      operationId: patchProductFilter
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductFilterUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFilter'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - product_filters
+      summary: Delete filter
+      description: |-
+        Deletes the record and returns it with deleted_at set. Deleted records are excluded from subsequent reads.
+        Requires the product catalog to be enabled and product write permission on the API key.
+      operationId: destroyProductFilter
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFilter'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /rate_cards:
+    get:
+      tags:
+        - rate_cards
+      summary: List rate cards
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and rate_card read permission on the API key.
+      operationId: findAllRateCards
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: search_term
+          in: query
+          required: false
+          description: Searches names and codes.
+          schema:
+            type: string
+            description: Text to search.
+            example: example
+        - name: product_id[]
+          in: query
+          required: false
+          description: Filter by matching resource identifiers.
+          schema:
+            type: array
+            description: Resource identifiers.
+            items:
+              type: string
+              description: Resource identifier.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              format: uuid
+        - name: product_filter_id[]
+          in: query
+          required: false
+          description: Filter by matching resource identifiers.
+          schema:
+            type: array
+            description: Resource identifiers.
+            items:
+              type: string
+              description: Resource identifier.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              format: uuid
+        - name: code
+          in: query
+          required: false
+          description: Code.
+          schema:
+            type: string
+            description: Exact code.
+            example: example_code
+        - name: product_code
+          in: query
+          required: false
+          description: Product code.
+          schema:
+            type: string
+            description: Exact code.
+            example: example_code
+        - name: product_filter_code
+          in: query
+          required: false
+          description: Product filter code.
+          schema:
+            type: string
+            description: Exact code.
+            example: example_code
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCardsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - rate_cards
+      summary: Create rate card
+      description: Requires the product catalog to be enabled and rate_card write permission on the API key.
+      operationId: createRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateCardCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /rate_cards/{code}:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - rate_cards
+      summary: Retrieve rate card
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and rate_card read permission on the API key.
+      operationId: findRateCard
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - active_rate
+                - taxes
+                - rates
+                - product
+                - product_filter
+              example: active_rate
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - rate_cards
+      summary: Update rate card
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Product and product filter are fixed at creation. Structural edits can be restricted when a card is already attached. Tax assignments remain editable.
+        Requires the product catalog to be enabled and rate_card write permission on the API key.
+      operationId: updateRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateCardUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - rate_cards
+      summary: Update rate card
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Product and product filter are fixed at creation. Structural edits can be restricted when a card is already attached. Tax assignments remain editable.
+        Requires the product catalog to be enabled and rate_card write permission on the API key.
+      operationId: patchRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateCardUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - rate_cards
+      summary: Delete rate card
+      description: |-
+        Deletes an unused rate card and its rates. Cards attached to plans or subscriptions cannot be deleted.
+        Requires the product catalog to be enabled and rate_card write permission on the API key.
+      operationId: destroyRateCard
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /rate_cards/{rate_card_code}/rates:
+    parameters:
+      - name: rate_card_code
+        in: path
+        required: true
+        description: Rate card code.
+        schema:
+          type: string
+          description: Rate card code.
+          example: example_code
+    get:
+      tags:
+        - rate_card_rates
+      summary: List rate card rates
+      description: |-
+        Returns the complete list without cursor metadata.
+        Rates are ordered by effective_from, newest first. Offset pagination parameters are rejected.
+        Requires the product catalog to be enabled and rate_card read permission on the API key.
+      operationId: findAllRateCardRates
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCardRatesCollection'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      tags:
+        - rate_card_rates
+      summary: Create rate
+      description: |-
+        Adds a rate after the currently active rate, with a unique effective timestamp. Amount and range fields must match rate_model.
+        Requires the product catalog to be enabled and rate_card write permission on the API key.
+      operationId: createRateCardRate
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateCardRateCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCardRate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /rate_cards/{rate_card_code}/rates/{code}:
+    parameters:
+      - name: rate_card_code
+        in: path
+        required: true
+        description: Rate card code.
+        schema:
+          type: string
+          description: Rate card code.
+          example: example_code
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - rate_card_rates
+      summary: Retrieve rate
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and rate_card read permission on the API key.
+      operationId: findRateCardRate
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCardRate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - rate_card_rates
+      summary: Update rate
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Terminated rates are frozen. Active rates reject effective_from, rate_model, min_amount_cents and billing interval fields, even when unchanged. Pending rates are fully editable; attachment and identity restrictions also apply.
+        Requires the product catalog to be enabled and rate_card write permission on the API key.
+      operationId: updateRateCardRate
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateCardRateUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCardRate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - rate_card_rates
+      summary: Update rate
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Terminated rates are frozen. Active rates reject effective_from, rate_model, min_amount_cents and billing interval fields, even when unchanged. Pending rates are fully editable; attachment and identity restrictions also apply.
+        Requires the product catalog to be enabled and rate_card write permission on the API key.
+      operationId: patchRateCardRate
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateCardRateUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCardRate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - rate_card_rates
+      summary: Delete rate
+      description: |-
+        Only pending rates can be deleted. Active and terminated rates remain for history.
+        Requires the product catalog to be enabled and rate_card write permission on the API key.
+      operationId: destroyRateCardRate
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateCardRate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /plans:
+    get:
+      tags:
+        - catalog_plans
+      summary: List catalog plans
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and plan read permission on the API key.
+      operationId: findAllCatalogPlans
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: search_term
+          in: query
+          required: false
+          description: Searches names and codes.
+          schema:
+            type: string
+            description: Text to search.
+            example: example
+        - name: product_id[]
+          in: query
+          required: false
+          description: Product id[].
+          schema:
+            type: array
+            description: Resource identifiers.
+            items:
+              type: string
+              description: Resource identifier.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              format: uuid
+        - name: product_filter_id[]
+          in: query
+          required: false
+          description: Product filter id[].
+          schema:
+            type: array
+            description: Resource identifiers.
+            items:
+              type: string
+              description: Resource identifier.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              format: uuid
+        - name: product_category_id[]
+          in: query
+          required: false
+          description: Product category id[].
+          schema:
+            type: array
+            description: Resource identifiers.
+            items:
+              type: string
+              description: Resource identifier.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              format: uuid
+        - name: rate_card_id[]
+          in: query
+          required: false
+          description: Rate card id[].
+          schema:
+            type: array
+            description: Resource identifiers.
+            items:
+              type: string
+              description: Resource identifier.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              format: uuid
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogPlansPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - catalog_plans
+      summary: Create plan
+      description: Requires the product catalog to be enabled and plan write permission on the API key.
+      operationId: createCatalogPlan
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatalogPlanCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogPlan'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /plans/{code}:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - catalog_plans
+      summary: Retrieve plan
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and plan read permission on the API key.
+      operationId: findCatalogPlan
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - taxes
+              example: taxes
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogPlan'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - catalog_plans
+      summary: Update plan
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Tax codes can be changed after a plan is in use. Other fields are subject to plan locking rules.
+        Requires the product catalog to be enabled and plan write permission on the API key.
+      operationId: updateCatalogPlan
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatalogPlanUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogPlan'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - catalog_plans
+      summary: Update plan
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Tax codes can be changed after a plan is in use. Other fields are subject to plan locking rules.
+        Requires the product catalog to be enabled and plan write permission on the API key.
+      operationId: patchCatalogPlan
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatalogPlanUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogPlan'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /plans/{plan_code}/applied_rate_cards:
+    parameters:
+      - name: plan_code
+        in: path
+        required: true
+        description: Plan code.
+        schema:
+          type: string
+          description: Plan code.
+          example: example_code
+    get:
+      tags:
+        - plan_applied_rate_cards
+      summary: List plan applied rate cards
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and plan_rate_card read permission on the API key.
+      operationId: findAllPlanAppliedRateCards
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanAppliedRateCardsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - plan_applied_rate_cards
+      summary: Create applied rate card
+      description: |-
+        Attaches a rate card in the same currency. Only one rate card may price each product/filter combination. Plans attached to contracts are locked.
+        Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+      operationId: createPlanAppliedRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanAppliedRateCardCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /plans/{plan_code}/applied_rate_cards/{code}:
+    parameters:
+      - name: plan_code
+        in: path
+        required: true
+        description: Plan code.
+        schema:
+          type: string
+          description: Plan code.
+          example: example_code
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - plan_applied_rate_cards
+      summary: Retrieve applied rate card
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and plan_rate_card read permission on the API key.
+      operationId: findPlanAppliedRateCard
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - plan_applied_rate_cards
+      summary: Update applied rate card
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Plans attached to contracts are locked.
+        Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+      operationId: updatePlanAppliedRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanAppliedRateCardUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - plan_applied_rate_cards
+      summary: Update applied rate card
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Plans attached to contracts are locked.
+        Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+      operationId: patchPlanAppliedRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanAppliedRateCardUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - plan_applied_rate_cards
+      summary: Delete applied rate card
+      description: |-
+        Removes the rate card from an editable plan.
+        Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+      operationId: destroyPlanAppliedRateCard
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /plans/{plan_code}/applied_rate_cards/{applied_rate_card_code}/rate_phases:
+    parameters:
+      - name: plan_code
+        in: path
+        required: true
+        description: Plan code.
+        schema:
+          type: string
+          description: Plan code.
+          example: example_code
+      - name: applied_rate_card_code
+        in: path
+        required: true
+        description: Applied rate card code.
+        schema:
+          type: string
+          description: Applied rate card code.
+          example: example_code
+    get:
+      tags:
+        - plan_rate_phases
+      summary: List plan rate phases
+      description: |-
+        Returns the complete list without cursor metadata.
+        Phases are returned in position order.
+        Requires the product catalog to be enabled and plan_rate_card read permission on the API key.
+      operationId: findAllPlanRatePhases
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanRatePhasesCollection'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      tags:
+        - plan_rate_phases
+      summary: Create rate phase
+      description: |-
+        Inserts a phase and renumbers later positions. The last phase must be indefinite and no earlier phase may be indefinite. Parent locking rules apply.
+        Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+      operationId: createPlanRatePhase
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePhaseCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanRatePhase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /plans/{plan_code}/applied_rate_cards/{applied_rate_card_code}/rate_phases/{code}:
+    parameters:
+      - name: plan_code
+        in: path
+        required: true
+        description: Plan code.
+        schema:
+          type: string
+          description: Plan code.
+          example: example_code
+      - name: applied_rate_card_code
+        in: path
+        required: true
+        description: Applied rate card code.
+        schema:
+          type: string
+          description: Applied rate card code.
+          example: example_code
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    put:
+      tags:
+        - plan_rate_phases
+      summary: Update rate phase
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        A null rate_override removes the override. Structural rate card fields are not overridable. Parent locking rules apply.
+        Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+      operationId: updatePlanRatePhase
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePhaseUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanRatePhase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - plan_rate_phases
+      summary: Update rate phase
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        A null rate_override removes the override. Structural rate card fields are not overridable. Parent locking rules apply.
+        Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+      operationId: patchPlanRatePhase
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePhaseUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanRatePhase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - plan_rate_phases
+      summary: Delete rate phase
+      description: |-
+        Removes the phase and renumbers later positions. The final indefinite phase cannot be removed when that would leave an invalid sequence.
+        Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+      operationId: destroyPlanRatePhase
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanRatePhase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /contracts/{contract_external_id}/applied_rate_cards:
+    parameters:
+      - name: contract_external_id
+        in: path
+        required: true
+        description: Contract external id.
+        schema:
+          type: string
+          description: Contract external id.
+          example: external_123
+    get:
+      tags:
+        - contract_applied_rate_cards
+      summary: List contract applied rate cards
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and contract_rate_card read permission on the API key.
+      operationId: findAllContractAppliedRateCards
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractAppliedRateCardsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - contract_applied_rate_cards
+      summary: Create applied rate card
+      description: |-
+        Attaches a rate card in the same currency. Only one rate card may price each product/filter combination. Only pending contracts can be edited.
+        Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+      operationId: createContractAppliedRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractAppliedRateCardCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /contracts/{contract_external_id}/applied_rate_cards/{code}:
+    parameters:
+      - name: contract_external_id
+        in: path
+        required: true
+        description: Contract external id.
+        schema:
+          type: string
+          description: Contract external id.
+          example: external_123
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    get:
+      tags:
+        - contract_applied_rate_cards
+      summary: Retrieve applied rate card
+      description: |-
+        Returns the record without nested relationships unless a supported expansion is requested.
+        Requires the product catalog to be enabled and contract_rate_card read permission on the API key.
+      operationId: findContractAppliedRateCard
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - contract_applied_rate_cards
+      summary: Update applied rate card
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Only pending contracts can be edited.
+        Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+      operationId: updateContractAppliedRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractAppliedRateCardUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - contract_applied_rate_cards
+      summary: Update applied rate card
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Only pending contracts can be edited.
+        Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+      operationId: patchContractAppliedRateCard
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractAppliedRateCardUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - contract_applied_rate_cards
+      summary: Delete applied rate card
+      description: |-
+        Removes the rate card from a pending contract.
+        Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+      operationId: destroyContractAppliedRateCard
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractAppliedRateCard'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /contracts/{contract_external_id}/applied_rate_cards/{applied_rate_card_code}/rate_phases:
+    parameters:
+      - name: contract_external_id
+        in: path
+        required: true
+        description: Contract external id.
+        schema:
+          type: string
+          description: Contract external id.
+          example: external_123
+      - name: applied_rate_card_code
+        in: path
+        required: true
+        description: Applied rate card code.
+        schema:
+          type: string
+          description: Applied rate card code.
+          example: example_code
+    get:
+      tags:
+        - contract_rate_phases
+      summary: List contract rate phases
+      description: |-
+        Returns the complete list without cursor metadata.
+        Phases are returned as a complete list.
+        Requires the product catalog to be enabled and contract_rate_card read permission on the API key.
+      operationId: findAllContractRatePhases
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractRatePhasesCollection'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      tags:
+        - contract_rate_phases
+      summary: Create rate phase
+      description: |-
+        Inserts a phase and renumbers later positions. The last phase must be indefinite and no earlier phase may be indefinite. Parent locking rules apply.
+        Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+      operationId: createContractRatePhase
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePhaseCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractRatePhase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /contracts/{contract_external_id}/applied_rate_cards/{applied_rate_card_code}/rate_phases/{code}:
+    parameters:
+      - name: contract_external_id
+        in: path
+        required: true
+        description: Contract external id.
+        schema:
+          type: string
+          description: Contract external id.
+          example: external_123
+      - name: applied_rate_card_code
+        in: path
+        required: true
+        description: Applied rate card code.
+        schema:
+          type: string
+          description: Applied rate card code.
+          example: example_code
+      - name: code
+        in: path
+        required: true
+        description: Code.
+        schema:
+          type: string
+          description: Code.
+          example: example_code
+    put:
+      tags:
+        - contract_rate_phases
+      summary: Update rate phase
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        A null rate_override removes the override. Structural rate card fields are not overridable. Parent locking rules apply.
+        Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+      operationId: updateContractRatePhase
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePhaseUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractRatePhase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - contract_rate_phases
+      summary: Update rate phase
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        A null rate_override removes the override. Structural rate card fields are not overridable. Parent locking rules apply.
+        Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+      operationId: patchContractRatePhase
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePhaseUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractRatePhase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - contract_rate_phases
+      summary: Delete rate phase
+      description: |-
+        Removes the phase and renumbers later positions. The final indefinite phase cannot be removed when that would leave an invalid sequence.
+        Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+      operationId: destroyContractRatePhase
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractRatePhase'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /contracts:
+    get:
+      tags:
+        - contracts
+      summary: List contracts
+      description: |-
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+
+        Requires the product catalog to be enabled and contract read permission on the API key.
+      operationId: findAllContracts
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/after'
+        - $ref: '#/components/parameters/before'
+        - $ref: '#/components/parameters/include_total_count'
+        - $ref: '#/components/parameters/created_at_from'
+        - $ref: '#/components/parameters/created_at_to'
+        - name: search_term
+          in: query
+          required: false
+          description: Searches names and codes.
+          schema:
+            type: string
+            description: Text to search.
+            example: example
+        - name: status[]
+          in: query
+          required: false
+          description: Statuses to include. Also accepts scalar status. Defaults to active.
+          schema:
+            type: array
+            description: Contract statuses.
+            items:
+              type: string
+              description: Lifecycle status.
+              example: pending
+              enum:
+                - pending
+                - active
+                - terminated
+                - canceled
+        - name: plan_code
+          in: query
+          required: false
+          description: Plan code.
+          schema:
+            type: string
+            description: Exact identifier.
+            example: example
+        - name: external_customer_id
+          in: query
+          required: false
+          description: External customer id.
+          schema:
+            type: string
+            description: Exact identifier.
+            example: example
+        - name: external_id
+          in: query
+          required: false
+          description: External id.
+          schema:
+            type: string
+            description: Exact identifier.
+            example: example
+        - name: has_rate_overrides
+          in: query
+          required: false
+          description: Has rate overrides.
+          schema:
+            type: boolean
+            description: Whether the contract has a pricing override.
+            example: false
+        - name: billing_entity_ids[]
+          in: query
+          required: false
+          description: Billing entity ids[].
+          schema:
+            type: array
+            description: Billing entities.
+            items:
+              type: string
+              description: Billing entity identifier.
+              example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+              format: uuid
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractsPaginated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      tags:
+        - contracts
+      summary: Create contract
+      description: |-
+        Creates a contract for an existing customer. The plan is optional. One pending or active contract may use an external_id at a time. A plan supplies the initial applied rate cards.
+        Requires the product catalog to be enabled and contract write permission on the API key.
+      operationId: createContract
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractCreateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /contracts/{external_id}:
+    parameters:
+      - name: external_id
+        in: path
+        required: true
+        description: External id.
+        schema:
+          type: string
+          description: External id.
+          example: external_123
+    get:
+      tags:
+        - contracts
+      summary: Retrieve contract
+      description: |-
+        Without status, retrieves the live pending or active contract. A status can select a historical terminated or canceled contract.
+        Requires the product catalog to be enabled and contract read permission on the API key.
+      operationId: findContract
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - applied_rate_cards
+                - plan
+                - customer
+                - invoice_custom_sections
+              example: applied_rate_cards
+        - name: status
+          in: query
+          required: false
+          description: Selects a lifecycle status. An unknown value falls back to active.
+          schema:
+            type: string
+            description: Lifecycle status.
+            example: pending
+            enum:
+              - pending
+              - active
+              - terminated
+              - canceled
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - contracts
+      summary: Update contract
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Identifiers and customer are immutable. Lifecycle status determines which other fields can change.
+        Requires the product catalog to be enabled and contract write permission on the API key.
+      operationId: updateContract
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      tags:
+        - contracts
+      summary: Update contract
+      description: |-
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        Identifiers and customer are immutable. Lifecycle status determines which other fields can change.
+        Requires the product catalog to be enabled and contract write permission on the API key.
+      operationId: patchContract
+      requestBody:
+        required: true
+        description: Request payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractUpdateInput'
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      tags:
+        - contracts
+      summary: Delete contract
+      description: |-
+        DELETE ends the contract lifecycle; it does not delete the record. Active contracts are terminated and pending contracts are canceled.
+        Requires the product catalog to be enabled and contract write permission on the API key.
+      operationId: destroyContract
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /contracts/{external_id}/current_usage:
+    parameters:
+      - name: external_id
+        in: path
+        required: true
+        description: External id.
+        schema:
+          type: string
+          description: External id.
+          example: external_123
+    get:
+      tags:
+        - contracts
+      summary: Retrieve contract current usage
+      description: |-
+        Returns usage across the open billing windows of the active or pending contract. Pending contracts have no usage. Totals may span multiple invoices.
+        Requires the product catalog to be enabled and customer_usage read permission on the API key.
+      operationId: findContractCurrentUsage
+      parameters:
+        - name: apply_taxes
+          in: query
+          required: false
+          description: Apply taxes.
+          schema:
+            type: boolean
+            description: Whether to include tax calculation.
+            example: true
+            default: true
+        - name: rate_card_code
+          in: query
+          required: false
+          description: Rate card code.
+          schema:
+            type: string
+            description: Exact code.
+            example: example_code
+        - name: product_code
+          in: query
+          required: false
+          description: Product code.
+          schema:
+            type: string
+            description: Exact code.
+            example: example_code
+        - name: product_filter_code
+          in: query
+          required: false
+          description: Product filter code.
+          schema:
+            type: string
+            description: Exact code.
+            example: example_code
+        - name: product_type
+          in: query
+          required: false
+          description: Product type.
+          schema:
+            type: string
+            description: Type of product. Metered products require a billable metric; fixed products must not reference one.
+            example: metered
+            enum:
+              - metered
+              - fixed
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractUsage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 components:
   securitySchemes:
     bearerAuth:
@@ -543,6 +3256,2934 @@ components:
       properties:
         tax:
           $ref: '#/components/schemas/TaxBaseInput'
+    ProductCategoryObject:
+      type: object
+      description: Product Category.
+      required:
+        - lago_id
+        - name
+        - code
+        - description
+        - invoice_display_name
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        name:
+          type: string
+          description: Name.
+          example: example
+        code:
+          type: string
+          description: Code.
+          example: example
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: example
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Invoice display name.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    ProductCategoriesPaginated:
+      type: object
+      description: product categories list.
+      required:
+        - product_categories
+        - meta
+      properties:
+        product_categories:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/ProductCategoryObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ProductCategoryBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          description: Name shown in the catalog.
+          example: Compute
+        code:
+          type: string
+          description: Unique code within the organization.
+          example: example_code
+          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+        description:
+          type:
+            - string
+            - 'null'
+          description: Internal description.
+          example: Compute charges.
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Name used on invoices. Defaults to the name when blank.
+          example: Compute
+    ProductCategoryCreateInput:
+      type: object
+      description: Create product category.
+      required:
+        - product_category
+      properties:
+        product_category:
+          $ref: '#/components/schemas/ProductCategoryBaseInput'
+          required:
+            - name
+            - code
+    ProductCategory:
+      type: object
+      description: product category response.
+      required:
+        - product_category
+      properties:
+        product_category:
+          $ref: '#/components/schemas/ProductCategoryObject'
+    ProductCategoryUpdateInput:
+      type: object
+      description: Update product category.
+      required:
+        - product_category
+      properties:
+        product_category:
+          $ref: '#/components/schemas/ProductCategoryBaseInput'
+    BillableMetricObject:
+      type: object
+      description: Billable Metric.
+      required:
+        - lago_id
+        - name
+        - code
+        - description
+        - aggregation_type
+        - weighted_interval
+        - recurring
+        - rounding_function
+        - rounding_precision
+        - field_name
+        - expression
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        name:
+          type: string
+          description: Name.
+          example: example
+        code:
+          type: string
+          description: Code.
+          example: example
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: example
+        aggregation_type:
+          type: string
+          description: How event values are aggregated.
+          example: count_agg
+          enum:
+            - count_agg
+            - sum_agg
+            - max_agg
+            - unique_count_agg
+            - weighted_sum_agg
+            - latest_agg
+        weighted_interval:
+          type:
+            - string
+            - 'null'
+          description: Weighting interval for weighted_sum_agg.
+          example: seconds
+          enum:
+            - seconds
+            - null
+        recurring:
+          type: boolean
+          description: Recurring.
+          example: false
+        rounding_function:
+          type:
+            - string
+            - 'null'
+          description: Rounding applied to the aggregated quantity.
+          example: round
+          enum:
+            - round
+            - ceil
+            - floor
+            - null
+        rounding_precision:
+          type:
+            - integer
+            - 'null'
+          description: Rounding precision.
+          example: 1
+        field_name:
+          type:
+            - string
+            - 'null'
+          description: Field name.
+          example: example
+        expression:
+          type:
+            - string
+            - 'null'
+          description: Expression.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    ProductObject:
+      type: object
+      description: Product.
+      required:
+        - lago_id
+        - name
+        - code
+        - description
+        - invoice_display_name
+        - created_at
+        - updated_at
+        - deleted_at
+        - product_category_code
+        - billable_metric_code
+        - product_type
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        name:
+          type: string
+          description: Name.
+          example: example
+        code:
+          type: string
+          description: Code.
+          example: example
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: Example
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Invoice display name.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+        product_category_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the category, or null for an uncategorized product.
+          example: compute
+        billable_metric_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the billable metric. Required for metered products and absent for fixed products.
+          example: api_requests
+        product_type:
+          type: string
+          description: Type of product. Metered products require a billable metric; fixed products must not reference one.
+          example: metered
+          enum:
+            - metered
+            - fixed
+        product_category:
+          anyOf:
+            - $ref: '#/components/schemas/ProductCategoryObject'
+            - type: 'null'
+          description: Present only with expands[]=product_category on retrieval.
+        billable_metric:
+          anyOf:
+            - $ref: '#/components/schemas/BillableMetricObject'
+            - type: 'null'
+          description: Present only with expands[]=billable_metric on retrieval.
+    ProductsPaginated:
+      type: object
+      description: products list.
+      required:
+        - products
+        - meta
+      properties:
+        products:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/ProductObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ProductBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          description: Name shown in the catalog.
+          example: Compute
+        code:
+          type: string
+          description: Unique code within the organization.
+          example: example_code
+          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+        description:
+          type:
+            - string
+            - 'null'
+          description: Internal description.
+          example: Compute charges.
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Name used on invoices. Defaults to the name when blank.
+          example: Compute
+        product_type:
+          type: string
+          description: Type of product. Metered products require a billable metric; fixed products must not reference one.
+          example: metered
+          enum:
+            - metered
+            - fixed
+        product_category_code:
+          type:
+            - string
+            - 'null'
+          description: Category code. Omit or clear it to leave the product uncategorized.
+          example: compute
+        billable_metric_code:
+          type: string
+          description: Billable metric code. Required for metered products and not allowed for fixed products.
+          example: api_requests
+    ProductCreateInput:
+      type: object
+      description: Create product.
+      required:
+        - product
+      properties:
+        product:
+          $ref: '#/components/schemas/ProductBaseInput'
+          required:
+            - name
+            - code
+            - product_type
+    Product:
+      type: object
+      description: product response.
+      required:
+        - product
+      properties:
+        product:
+          $ref: '#/components/schemas/ProductObject'
+    ProductUpdateInput:
+      type: object
+      description: Update a product.
+      required:
+        - product
+      properties:
+        product:
+          type: object
+          minProperties: 1
+          properties:
+            name:
+              type: string
+              description: Name shown in the catalog.
+              example: Compute
+            code:
+              type: string
+              description: Unique code within the organization.
+              example: example_code
+              pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+            description:
+              type:
+                - string
+                - 'null'
+              description: Internal description.
+              example: Compute charges.
+            invoice_display_name:
+              type:
+                - string
+                - 'null'
+              description: Name used on invoices. Defaults to the name when blank.
+              example: Compute
+            product_category_code:
+              type:
+                - string
+                - 'null'
+              description: Category code. Null or an empty string removes the category.
+              example: compute
+    ProductFilterValueObject:
+      type: object
+      description: A value matched against a filter key defined by the product billable metric.
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+          description: Billable metric filter key.
+          example: region
+        value:
+          type:
+            - string
+            - 'null'
+          description: Value to match. Null or an omitted value selects all configured values for this key.
+          example: eu
+    ProductFilterObject:
+      type: object
+      description: Product Filter.
+      required:
+        - lago_id
+        - name
+        - code
+        - description
+        - invoice_display_name
+        - created_at
+        - updated_at
+        - deleted_at
+        - product_code
+        - product_category_code
+        - values
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        name:
+          type: string
+          description: Name.
+          example: example
+        code:
+          type: string
+          description: Code.
+          example: example
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: example
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Invoice display name.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+        product_code:
+          type: string
+          description: Code of the parent product.
+          example: api_requests
+        product_category_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the product category.
+          example: compute
+        values:
+          type: array
+          description: Filter key and value matches. An empty list is returned after deletion.
+          items:
+            $ref: '#/components/schemas/ProductFilterValueObject'
+    ProductFiltersPaginated:
+      type: object
+      description: filters list.
+      required:
+        - filters
+        - meta
+      properties:
+        filters:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/ProductFilterObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ProductFilterValueInput:
+      type: object
+      description: A value matched against a filter key defined by the product billable metric.
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          description: Billable metric filter key.
+          example: region
+        value:
+          type:
+            - string
+            - 'null'
+          description: Value to match. Null or an omitted value selects all configured values for this key.
+          example: eu
+    ProductFilterBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          description: Name shown in the catalog.
+          example: Compute
+        code:
+          type: string
+          description: Unique code within the organization.
+          example: example_code
+          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+        description:
+          type:
+            - string
+            - 'null'
+          description: Internal description.
+          example: Compute charges.
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Name used on invoices. Defaults to the name when blank.
+          example: Compute
+        values:
+          type: array
+          description: Matches against keys of the product billable metric. Cannot be empty.
+          items:
+            $ref: '#/components/schemas/ProductFilterValueInput'
+          minItems: 1
+    ProductFilterCreateInput:
+      type: object
+      description: Create filter.
+      required:
+        - filter
+      properties:
+        filter:
+          $ref: '#/components/schemas/ProductFilterBaseInput'
+          required:
+            - name
+            - code
+            - values
+    ProductFilter:
+      type: object
+      description: filter response.
+      required:
+        - filter
+      properties:
+        filter:
+          $ref: '#/components/schemas/ProductFilterObject'
+    ProductFilterUpdateInput:
+      type: object
+      description: Update filter.
+      required:
+        - filter
+      properties:
+        filter:
+          $ref: '#/components/schemas/ProductFilterBaseInput'
+    RateTierObject:
+      type: object
+      description: Pricing tier. Its lower bound is the preceding upper bound; from_value is not returned.
+      required:
+        - to_value
+      properties:
+        to_value:
+          type:
+            - string
+            - 'null'
+          description: Upper bound of this tier, sent as a decimal string. Null marks the final, open-ended tier.
+          example: null
+        flat_amount:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        per_unit_amount:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        rate:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+    RatePropertiesObject:
+      type: object
+      description: Pricing configuration for the selected rate model. Standard requires amount; package also requires package_size. Graduated, volume and graduated_percentage models use their matching ranges array. Custom properties remain model-specific.
+      properties:
+        amount:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        pricing_group_keys:
+          type: array
+          description: Event property keys used to group prices.
+          items:
+            type: string
+            description: Event property key.
+            example: region
+        free_units:
+          type: integer
+          description: Free units per billing period.
+          example: 0
+        package_size:
+          type: integer
+          description: Units in one package.
+          example: 100
+        rate:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        fixed_amount:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        free_units_per_events:
+          type:
+            - integer
+            - 'null'
+          description: Number of free transactions.
+          example: 0
+        free_units_per_total_aggregation:
+          type:
+            - number
+            - string
+            - 'null'
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        per_transaction_min_amount:
+          type:
+            - number
+            - string
+            - 'null'
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        per_transaction_max_amount:
+          type:
+            - number
+            - string
+            - 'null'
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        graduated_ranges:
+          type: array
+          description: Ordered pricing tiers. The final tier is open-ended.
+          items:
+            $ref: '#/components/schemas/RateTierObject'
+        volume_ranges:
+          type: array
+          description: Ordered pricing tiers. The final tier is open-ended.
+          items:
+            $ref: '#/components/schemas/RateTierObject'
+        graduated_percentage_ranges:
+          type: array
+          description: Ordered pricing tiers. The final tier is open-ended.
+          items:
+            $ref: '#/components/schemas/RateTierObject'
+      additionalProperties: true
+    RateCardRateObject:
+      type: object
+      description: Rate Card Rate.
+      required:
+        - lago_id
+        - code
+        - rate_card_code
+        - status
+        - rate_model
+        - rate_properties
+        - min_amount_cents
+        - billing_interval_count
+        - billing_interval_unit
+        - applied_pricing_unit_conversion_rate
+        - effective_from
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        code:
+          type: string
+          description: Code.
+          example: example
+        rate_card_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the parent rate card.
+          example: compute_usd
+        status:
+          type: string
+          description: Status derived from the effective-dated rate timeline.
+          example: pending
+          enum:
+            - pending
+            - active
+            - terminated
+        rate_model:
+          type: string
+          description: Pricing model. Fixed products support standard, graduated and volume. Volume cannot be billed in advance; dynamic requires a sum metric. Proration and aggregation can impose further restrictions.
+          example: standard
+          enum:
+            - standard
+            - graduated
+            - package
+            - percentage
+            - volume
+            - graduated_percentage
+            - custom
+            - dynamic
+        rate_properties:
+          $ref: '#/components/schemas/RatePropertiesObject'
+        min_amount_cents:
+          type: integer
+          description: Minimum amount, in cents.
+          example: 100
+        billing_interval_count:
+          type: integer
+          description: Billing interval count.
+          example: 1
+        billing_interval_unit:
+          type: string
+          description: Unit of the billing interval.
+          example: day
+          enum:
+            - day
+            - week
+            - month
+            - year
+        applied_pricing_unit_conversion_rate:
+          type:
+            - string
+            - 'null'
+          description: Applied pricing unit conversion rate. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        effective_from:
+          type: string
+          description: Effective from.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    RateCardObject:
+      type: object
+      description: Rate Card.
+      required:
+        - lago_id
+        - name
+        - code
+        - description
+        - created_at
+        - updated_at
+        - deleted_at
+        - product_code
+        - product_filter_code
+        - currency
+        - billing_timing
+        - proration
+        - display_on_invoice
+        - regroup_paid_fees
+        - applied_pricing_unit_code
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        name:
+          type: string
+          description: Name.
+          example: example
+        code:
+          type: string
+          description: Code.
+          example: example
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+        product_code:
+          type: string
+          description: Code of the priced product.
+          example: api_requests
+        product_filter_code:
+          type:
+            - string
+            - 'null'
+          description: Code of the priced filter, or null for the product default.
+          example: eu
+        currency:
+          type: string
+          description: Currency as an ISO 4217 code.
+          example: USD
+        billing_timing:
+          type: string
+          description: When fees are billed.
+          example: arrears
+          enum:
+            - arrears
+            - advance
+        proration:
+          type: boolean
+          description: Proration.
+          example: false
+        display_on_invoice:
+          type: boolean
+          description: Display on invoice.
+          example: false
+        regroup_paid_fees:
+          type:
+            - string
+            - 'null'
+          description: Whether paid advance fees are regrouped into an invoice. Null keeps fees standalone.
+          example: invoice
+          enum:
+            - invoice
+            - null
+        applied_pricing_unit_code:
+          type:
+            - string
+            - 'null'
+          description: Applied pricing unit code.
+          example: example
+        active_rate:
+          anyOf:
+            - $ref: '#/components/schemas/RateCardRateObject'
+            - type: 'null'
+          description: Present only with expands[]=active_rate. Null until a rate becomes effective.
+        rates:
+          type: array
+          description: Present only with expands[]=rates. Sorted by effective_from, newest first.
+          items:
+            $ref: '#/components/schemas/RateCardRateObject'
+        taxes:
+          type: array
+          description: Present only with expands[]=taxes.
+          items:
+            $ref: '#/components/schemas/TaxObject'
+        product:
+          $ref: '#/components/schemas/ProductObject'
+          description: Present only with expands[]=product.
+        product_filter:
+          anyOf:
+            - $ref: '#/components/schemas/ProductFilterObject'
+            - type: 'null'
+          description: Present only with expands[]=product_filter.
+    RateCardsPaginated:
+      type: object
+      description: rate cards list.
+      required:
+        - rate_cards
+        - meta
+      properties:
+        rate_cards:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/RateCardObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    RateTierInput:
+      type: object
+      description: Pricing tier. Upper bounds must increase and the final tier must have a null upper bound. Do not send from_value.
+      not:
+        required:
+          - from_value
+        properties:
+          from_value: {}
+      properties:
+        to_value:
+          type:
+            - string
+            - number
+            - 'null'
+          description: Upper bound of this tier, sent as a decimal string. Null marks the final, open-ended tier.
+          example: null
+        flat_amount:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        per_unit_amount:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        rate:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+    RatePropertiesInput:
+      type: object
+      description: Pricing configuration for the selected rate model. Standard requires amount; package also requires package_size. Graduated, volume and graduated_percentage models use their matching ranges array. Custom properties remain model-specific.
+      properties:
+        amount:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        pricing_group_keys:
+          type: array
+          description: Event property keys used to group prices.
+          items:
+            type: string
+            description: Event property key.
+            example: region
+        free_units:
+          type: integer
+          description: Free units per billing period.
+          example: 0
+        package_size:
+          type: integer
+          description: Units in one package.
+          example: 100
+        rate:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        fixed_amount:
+          type:
+            - number
+            - string
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        free_units_per_events:
+          type:
+            - integer
+            - 'null'
+          description: Number of free transactions.
+          example: 0
+        free_units_per_total_aggregation:
+          type:
+            - number
+            - string
+            - 'null'
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        per_transaction_min_amount:
+          type:
+            - number
+            - string
+            - 'null'
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        per_transaction_max_amount:
+          type:
+            - number
+            - string
+            - 'null'
+          description: Amount, as a number or decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        graduated_ranges:
+          type: array
+          description: Ordered pricing tiers. The final tier is open-ended.
+          items:
+            $ref: '#/components/schemas/RateTierInput'
+        volume_ranges:
+          type: array
+          description: Ordered pricing tiers. The final tier is open-ended.
+          items:
+            $ref: '#/components/schemas/RateTierInput'
+        graduated_percentage_ranges:
+          type: array
+          description: Ordered pricing tiers. The final tier is open-ended.
+          items:
+            $ref: '#/components/schemas/RateTierInput'
+      additionalProperties: true
+    RateCardRateBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        code:
+          type: string
+          description: Code unique within the rate card.
+          example: standard_2030
+          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+        effective_from:
+          type: string
+          description: Effective timestamp. It cannot be before today in the organization timezone, must be unique on the card, and must be after the active rate. Arrears rates start at the beginning of the day.
+          example: '2030-01-01T00:00:00Z'
+          format: date-time
+        rate_model:
+          type: string
+          description: Pricing model. Fixed products support standard, graduated and volume. Volume cannot be billed in advance; dynamic requires a sum metric. Proration and aggregation can impose further restrictions.
+          example: standard
+          enum:
+            - standard
+            - graduated
+            - package
+            - percentage
+            - volume
+            - graduated_percentage
+            - custom
+            - dynamic
+        rate_properties:
+          $ref: '#/components/schemas/RatePropertiesInput'
+        min_amount_cents:
+          type: integer
+          description: Minimum charge in cents. Allowed only for arrears billing. Defaults to 0 on creation.
+          example: 0
+          minimum: 0
+        billing_interval_count:
+          type: integer
+          description: Number of billing interval units. Defaults to 1 on creation.
+          example: 1
+          minimum: 1
+        billing_interval_unit:
+          type: string
+          description: Unit of the billing interval.
+          example: day
+          enum:
+            - day
+            - week
+            - month
+            - year
+        applied_pricing_unit_conversion_rate:
+          type:
+            - string
+            - 'null'
+          description: Conversion rate for the applied pricing unit. Required when the card uses a pricing unit. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+    RateCardBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          description: Name shown in the catalog.
+          example: Compute
+        code:
+          type: string
+          description: Unique code within the organization.
+          example: example_code
+          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+        description:
+          type:
+            - string
+            - 'null'
+          description: Internal description.
+          example: Compute charges.
+        currency:
+          type: string
+          description: ISO 4217 billing currency.
+          example: USD
+          pattern: ^[A-Z]{3}$
+        billing_timing:
+          type: string
+          description: When fees are billed.
+          example: arrears
+          enum:
+            - arrears
+            - advance
+          default: arrears
+        proration:
+          type: boolean
+          description: Whether charges are prorated.
+          example: false
+          default: false
+        display_on_invoice:
+          type: boolean
+          description: Whether generated fees are shown on invoices.
+          example: true
+          default: true
+        regroup_paid_fees:
+          type:
+            - string
+            - 'null'
+          description: Only for hidden advance fees. Null keeps paid fees standalone.
+          example: invoice
+          enum:
+            - invoice
+            - null
+        applied_pricing_unit_code:
+          type:
+            - string
+            - 'null'
+          description: Pricing unit code, or null for currency pricing.
+          example: tokens
+        tax_codes:
+          type: array
+          description: Tax codes to assign. An empty array clears the assignments.
+          items:
+            type: string
+            description: Tax code.
+            example: standard_vat
+        product_code:
+          type: string
+          description: Code of the product being priced.
+          example: api_requests
+        product_filter_code:
+          type:
+            - string
+            - 'null'
+          description: Filter code belonging to this product.
+          example: eu
+        rates:
+          type: array
+          description: Initial effective-dated rates. A failure rolls back the card and its rates.
+          items:
+            $ref: '#/components/schemas/RateCardRateBaseInput'
+            required:
+              - code
+              - effective_from
+              - rate_model
+              - billing_interval_unit
+    RateCardCreateInput:
+      type: object
+      description: Create rate card.
+      required:
+        - rate_card
+      properties:
+        rate_card:
+          $ref: '#/components/schemas/RateCardBaseInput'
+          required:
+            - name
+            - code
+            - currency
+            - product_code
+    RateCard:
+      type: object
+      description: rate card response.
+      required:
+        - rate_card
+      properties:
+        rate_card:
+          $ref: '#/components/schemas/RateCardObject'
+    RateCardUpdateInput:
+      type: object
+      description: Update a rate card.
+      required:
+        - rate_card
+      properties:
+        rate_card:
+          type: object
+          minProperties: 1
+          properties:
+            name:
+              type: string
+              description: Name shown in the catalog.
+              example: Compute
+            code:
+              type: string
+              description: Unique code within the organization.
+              example: example_code
+              pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+            description:
+              type:
+                - string
+                - 'null'
+              description: Internal description.
+              example: Compute charges.
+            currency:
+              type: string
+              description: ISO 4217 billing currency.
+              example: USD
+              pattern: ^[A-Z]{3}$
+            billing_timing:
+              type: string
+              description: When fees are billed.
+              example: arrears
+              enum:
+                - arrears
+                - advance
+            proration:
+              type: boolean
+              description: Whether charges are prorated.
+              example: false
+            display_on_invoice:
+              type: boolean
+              description: Whether generated fees are shown on invoices.
+              example: true
+            regroup_paid_fees:
+              type:
+                - string
+                - 'null'
+              description: Only for hidden advance fees. Null keeps paid fees standalone.
+              example: invoice
+              enum:
+                - invoice
+                - null
+            applied_pricing_unit_code:
+              type:
+                - string
+                - 'null'
+              description: Pricing unit code, or null for currency pricing.
+              example: tokens
+            tax_codes:
+              type: array
+              description: Tax codes to assign. An empty array clears the assignments.
+              items:
+                type: string
+                description: Tax code.
+                example: standard_vat
+    RateCardRatesCollection:
+      type: object
+      description: rates list.
+      required:
+        - rates
+      properties:
+        rates:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/RateCardRateObject'
+    RateCardRateCreateInput:
+      type: object
+      description: Create rate.
+      required:
+        - rate
+      properties:
+        rate:
+          $ref: '#/components/schemas/RateCardRateBaseInput'
+          required:
+            - code
+            - effective_from
+            - rate_model
+            - billing_interval_unit
+    RateCardRate:
+      type: object
+      description: rate response.
+      required:
+        - rate
+      properties:
+        rate:
+          $ref: '#/components/schemas/RateCardRateObject'
+    RateCardRateUpdateInput:
+      type: object
+      description: Update rate.
+      required:
+        - rate
+      properties:
+        rate:
+          $ref: '#/components/schemas/RateCardRateBaseInput'
+    CatalogPlanObject:
+      type: object
+      description: Catalog Plan.
+      required:
+        - lago_id
+        - name
+        - code
+        - description
+        - invoice_display_name
+        - currency
+        - created_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        name:
+          type: string
+          description: Name.
+          example: example
+        code:
+          type: string
+          description: Code.
+          example: example
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: example
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Invoice display name.
+          example: example
+        currency:
+          type: string
+          description: Currency as an ISO 4217 code.
+          example: USD
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+        taxes:
+          type: array
+          description: Present only with expands[]=taxes on retrieval.
+          items:
+            $ref: '#/components/schemas/TaxObject'
+    CatalogPlansPaginated:
+      type: object
+      description: plans list.
+      required:
+        - plans
+        - meta
+      properties:
+        plans:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/CatalogPlanObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    CatalogPlanBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          description: Name shown in the catalog.
+          example: Compute
+        code:
+          type: string
+          description: Unique code within the organization.
+          example: example_code
+          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+        description:
+          type:
+            - string
+            - 'null'
+          description: Internal description.
+          example: Compute charges.
+        invoice_display_name:
+          type:
+            - string
+            - 'null'
+          description: Name used on invoices. Defaults to the name when blank.
+          example: Compute
+        currency:
+          type: string
+          description: ISO 4217 billing currency.
+          example: USD
+          pattern: ^[A-Z]{3}$
+        tax_codes:
+          type: array
+          description: Tax codes to assign. An empty array clears the assignments.
+          items:
+            type: string
+            description: Tax code.
+            example: standard_vat
+    CatalogPlanCreateInput:
+      type: object
+      description: Create plan.
+      required:
+        - plan
+      properties:
+        plan:
+          $ref: '#/components/schemas/CatalogPlanBaseInput'
+          required:
+            - name
+            - code
+            - currency
+    CatalogPlan:
+      type: object
+      description: plan response.
+      required:
+        - plan
+      properties:
+        plan:
+          $ref: '#/components/schemas/CatalogPlanObject'
+    CatalogPlanUpdateInput:
+      type: object
+      description: Update plan.
+      required:
+        - plan
+      properties:
+        plan:
+          $ref: '#/components/schemas/CatalogPlanBaseInput'
+    PlanAppliedRateCardObject:
+      type: object
+      description: Plan Applied Rate Card.
+      required:
+        - lago_id
+        - plan_code
+        - rate_card_code
+        - units
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        plan_code:
+          type: string
+          description: Code of the plan.
+          example: standard
+        rate_card_code:
+          type: string
+          description: Code of the applied rate card.
+          example: compute_usd
+        units:
+          type:
+            - string
+            - 'null'
+          description: Quantity. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    PlanAppliedRateCardsPaginated:
+      type: object
+      description: applied rate cards list.
+      required:
+        - applied_rate_cards
+        - meta
+      properties:
+        applied_rate_cards:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/PlanAppliedRateCardObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    RateOverrideInput:
+      type: object
+      properties:
+        rate_model:
+          type: string
+          description: Pricing model. Fixed products support standard, graduated and volume. Volume cannot be billed in advance; dynamic requires a sum metric. Proration and aggregation can impose further restrictions.
+          example: standard
+          enum:
+            - standard
+            - graduated
+            - package
+            - percentage
+            - volume
+            - graduated_percentage
+            - custom
+            - dynamic
+        rate_properties:
+          $ref: '#/components/schemas/RatePropertiesInput'
+        min_amount_cents:
+          type: integer
+          description: Minimum charge in cents. Allowed only for arrears billing.
+          example: 0
+          minimum: 0
+          default: 0
+        billing_interval_count:
+          type:
+            - integer
+            - 'null'
+          description: Number of billing interval units. Omit or set to null to inherit the rate interval count.
+          example: 1
+          minimum: 1
+        billing_interval_unit:
+          type:
+            - string
+            - 'null'
+          description: Unit of the billing interval.
+          example: day
+          enum:
+            - day
+            - week
+            - month
+            - year
+            - null
+        pricing_unit_conversion_rate:
+          type:
+            - string
+            - 'null'
+          description: Conversion rate. Required when the rate card uses a pricing unit. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+      required:
+        - rate_model
+      description: A complete pricing override. Structural fields such as currency, billing timing and proration cannot be overridden.
+    RatePhaseBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        code:
+          type: string
+          description: Code unique within the applied rate card.
+          example: introductory
+          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+        position:
+          type: integer
+          description: One-based sequence position. Omitted positions are inserted automatically.
+          example: 1
+          minimum: 1
+        name:
+          type:
+            - string
+            - 'null'
+          description: Name of the phase.
+          example: Introductory period
+        billing_interval_cycle_count:
+          type:
+            - integer
+            - 'null'
+          description: Number of billing cycles. Only the final phase is indefinite, represented by null.
+          example: 1
+          minimum: 1
+        rate_override:
+          description: Pricing override. On update, null removes the existing override.
+          anyOf:
+            - $ref: '#/components/schemas/RateOverrideInput'
+            - type: 'null'
+    PlanAppliedRateCardBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        rate_card_code:
+          type: string
+          description: Code of the rate card to attach.
+          example: compute_usd
+        units:
+          type:
+            - string
+            - 'null'
+          description: Quantity for fixed pricing. Null uses the default quantity. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^[0-9]+(\.[0-9]+)?$
+        rate_phases:
+          type:
+            - array
+            - 'null'
+          description: Ordered phase sequence. Omitted or null creates one default indefinite phase. An explicit empty list is rejected.
+          items:
+            $ref: '#/components/schemas/RatePhaseBaseInput'
+            required:
+              - code
+          minItems: 1
+    PlanAppliedRateCardCreateInput:
+      type: object
+      description: Create applied rate card.
+      required:
+        - applied_rate_card
+      properties:
+        applied_rate_card:
+          $ref: '#/components/schemas/PlanAppliedRateCardBaseInput'
+          required:
+            - rate_card_code
+    PlanAppliedRateCard:
+      type: object
+      description: applied rate card response.
+      required:
+        - applied_rate_card
+      properties:
+        applied_rate_card:
+          $ref: '#/components/schemas/PlanAppliedRateCardObject'
+    PlanAppliedRateCardUpdateInput:
+      type: object
+      description: Update an applied rate card.
+      required:
+        - applied_rate_card
+      properties:
+        applied_rate_card:
+          type: object
+          minProperties: 1
+          properties:
+            units:
+              type:
+                - string
+                - 'null'
+              description: Quantity for fixed pricing. Null uses the default quantity. Sent as a decimal string.
+              example: '1.5'
+              pattern: ^[0-9]+(\.[0-9]+)?$
+    RateOverrideObject:
+      type: object
+      description: Rate Override.
+      required:
+        - lago_id
+        - rate_model
+        - rate_properties
+        - min_amount_cents
+        - billing_interval_count
+        - billing_interval_unit
+        - pricing_unit_conversion_rate
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        rate_model:
+          type: string
+          description: Pricing model. Fixed products support standard, graduated and volume. Volume cannot be billed in advance; dynamic requires a sum metric. Proration and aggregation can impose further restrictions.
+          example: standard
+          enum:
+            - standard
+            - graduated
+            - package
+            - percentage
+            - volume
+            - graduated_percentage
+            - custom
+            - dynamic
+        rate_properties:
+          $ref: '#/components/schemas/RatePropertiesObject'
+        min_amount_cents:
+          type: integer
+          description: Minimum amount, in cents.
+          example: 100
+        billing_interval_count:
+          type:
+            - integer
+            - 'null'
+          description: Billing interval count.
+          example: 1
+        billing_interval_unit:
+          type:
+            - string
+            - 'null'
+          description: Unit of the billing interval.
+          example: day
+          enum:
+            - day
+            - week
+            - month
+            - year
+            - null
+        pricing_unit_conversion_rate:
+          type:
+            - string
+            - 'null'
+          description: Pricing unit conversion rate. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    RatePhaseObject:
+      type: object
+      description: Rate Phase.
+      required:
+        - lago_id
+        - code
+        - position
+        - name
+        - billing_interval_cycle_count
+        - rate_override
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        code:
+          type: string
+          description: Code.
+          example: example
+        position:
+          type: integer
+          description: Position.
+          example: 1
+        name:
+          type:
+            - string
+            - 'null'
+          description: Name.
+          example: example
+        billing_interval_cycle_count:
+          type:
+            - integer
+            - 'null'
+          description: Billing interval cycle count.
+          example: 1
+        rate_override:
+          anyOf:
+            - $ref: '#/components/schemas/RateOverrideObject'
+            - type: 'null'
+          description: Pricing override, or null to use the effective rate card rate.
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    PlanRatePhasesCollection:
+      type: object
+      description: rate phases list.
+      required:
+        - rate_phases
+      properties:
+        rate_phases:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/RatePhaseObject'
+    RatePhaseCreateInput:
+      type: object
+      description: Create rate phase.
+      required:
+        - rate_phase
+      properties:
+        rate_phase:
+          $ref: '#/components/schemas/RatePhaseBaseInput'
+          required:
+            - code
+    PlanRatePhase:
+      type: object
+      description: rate phase response.
+      required:
+        - rate_phase
+      properties:
+        rate_phase:
+          $ref: '#/components/schemas/RatePhaseObject'
+    RatePhaseUpdateInput:
+      type: object
+      description: Update rate phase.
+      required:
+        - rate_phase
+      properties:
+        rate_phase:
+          $ref: '#/components/schemas/RatePhaseBaseInput'
+    ContractAppliedRateCardObject:
+      type: object
+      description: Contract Applied Rate Card.
+      required:
+        - lago_id
+        - external_contract_id
+        - rate_card_code
+        - units
+        - effective_date
+        - billing_anchor_date
+        - next_billing_at
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_contract_id:
+          type: string
+          description: External identifier of the contract.
+          example: contract_123
+        rate_card_code:
+          type: string
+          description: Code of the applied rate card.
+          example: compute_usd
+        units:
+          type:
+            - string
+            - 'null'
+          description: Quantity. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        effective_date:
+          type: string
+          description: Effective date.
+          example: '2022-04-29'
+          format: date
+        billing_anchor_date:
+          type: string
+          description: Billing anchor date.
+          example: '2022-04-29'
+          format: date
+        next_billing_at:
+          type:
+            - string
+            - 'null'
+          description: Next billing at.
+          example: null
+          format: date-time
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    ContractAppliedRateCardsPaginated:
+      type: object
+      description: applied rate cards list.
+      required:
+        - applied_rate_cards
+        - meta
+      properties:
+        applied_rate_cards:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/ContractAppliedRateCardObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ContractAppliedRateCardBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        rate_card_code:
+          type: string
+          description: Code of the rate card to attach.
+          example: compute_usd
+        units:
+          type:
+            - string
+            - 'null'
+          description: Quantity for fixed pricing. Null uses the default quantity. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^[0-9]+(\.[0-9]+)?$
+        rate_phases:
+          type:
+            - array
+            - 'null'
+          description: Ordered phase sequence. Omitted or null creates one default indefinite phase. An explicit empty list is rejected.
+          items:
+            $ref: '#/components/schemas/RatePhaseBaseInput'
+            required:
+              - code
+          minItems: 1
+        billing_anchor_date:
+          type:
+            - string
+            - 'null'
+          description: Billing anchor for this applied card. Defaults to the contract anchor.
+          example: null
+          format: date
+    ContractAppliedRateCardCreateInput:
+      type: object
+      description: Create applied rate card.
+      required:
+        - applied_rate_card
+      properties:
+        applied_rate_card:
+          $ref: '#/components/schemas/ContractAppliedRateCardBaseInput'
+          required:
+            - rate_card_code
+    ContractAppliedRateCard:
+      type: object
+      description: applied rate card response.
+      required:
+        - applied_rate_card
+      properties:
+        applied_rate_card:
+          $ref: '#/components/schemas/ContractAppliedRateCardObject'
+    ContractAppliedRateCardUpdateInput:
+      type: object
+      description: Update an applied rate card.
+      required:
+        - applied_rate_card
+      properties:
+        applied_rate_card:
+          type: object
+          minProperties: 1
+          properties:
+            units:
+              type:
+                - string
+                - 'null'
+              description: Quantity for fixed pricing. Null uses the default quantity. Sent as a decimal string.
+              example: '1.5'
+              pattern: ^[0-9]+(\.[0-9]+)?$
+            billing_anchor_date:
+              type:
+                - string
+                - 'null'
+              description: Billing anchor for this applied card. Defaults to the contract anchor.
+              example: null
+              format: date
+    ContractRatePhasesCollection:
+      type: object
+      description: rate phases list.
+      required:
+        - rate_phases
+      properties:
+        rate_phases:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/RatePhaseObject'
+    ContractRatePhase:
+      type: object
+      description: rate phase response.
+      required:
+        - rate_phase
+      properties:
+        rate_phase:
+          $ref: '#/components/schemas/RatePhaseObject'
+    CustomerObject:
+      type: object
+      description: Customer.
+      required:
+        - lago_id
+        - billing_entity_code
+        - external_id
+        - account_type
+        - name
+        - firstname
+        - lastname
+        - customer_type
+        - sequential_id
+        - slug
+        - country
+        - address_line1
+        - address_line2
+        - state
+        - zipcode
+        - email
+        - city
+        - url
+        - phone
+        - logo_url
+        - legal_name
+        - legal_number
+        - currency
+        - tax_identification_number
+        - timezone
+        - applicable_timezone
+        - external_salesforce_id
+        - finalize_zero_amount_invoice
+        - skip_invoice_custom_sections
+        - invoice_grace_period
+        - periodic_invoice_issuing_date_anchor
+        - periodic_invoice_issuing_date_adjustment
+        - payment_provider
+        - payment_provider_code
+        - provider_customer_id
+        - provider_payment_methods
+        - document_locale
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        billing_entity_code:
+          type: string
+          description: Code of the customer billing entity.
+          example: main
+        external_id:
+          type: string
+          description: Unique customer identifier in your application.
+          example: customer_123
+        account_type:
+          type: string
+          description: Account type.
+          example: customer
+          enum:
+            - customer
+            - partner
+        name:
+          type:
+            - string
+            - 'null'
+          description: Name.
+          example: example
+        firstname:
+          type:
+            - string
+            - 'null'
+          description: Firstname.
+          example: example
+        lastname:
+          type:
+            - string
+            - 'null'
+          description: Lastname.
+          example: example
+        customer_type:
+          type:
+            - string
+            - 'null'
+          description: Type of customer.
+          example: company
+          enum:
+            - company
+            - individual
+            - null
+        sequential_id:
+          type:
+            - integer
+            - 'null'
+          description: Sequential id.
+          example: 100
+        slug:
+          type:
+            - string
+            - 'null'
+          description: Slug.
+          example: example
+        country:
+          type:
+            - string
+            - 'null'
+          description: Country.
+          example: example
+        address_line1:
+          type:
+            - string
+            - 'null'
+          description: Address line1.
+          example: example
+        address_line2:
+          type:
+            - string
+            - 'null'
+          description: Address line2.
+          example: example
+        state:
+          type:
+            - string
+            - 'null'
+          description: State.
+          example: example
+        zipcode:
+          type:
+            - string
+            - 'null'
+          description: Zipcode.
+          example: example
+        email:
+          type:
+            - string
+            - 'null'
+          description: Email.
+          example: billing@acme.example
+        city:
+          type:
+            - string
+            - 'null'
+          description: City.
+          example: example
+        url:
+          type:
+            - string
+            - 'null'
+          description: Url.
+          example: example
+        phone:
+          type:
+            - string
+            - 'null'
+          description: Phone.
+          example: example
+        logo_url:
+          type:
+            - string
+            - 'null'
+          description: Logo url.
+          example: example
+        legal_name:
+          type:
+            - string
+            - 'null'
+          description: Legal name.
+          example: example
+        legal_number:
+          type:
+            - string
+            - 'null'
+          description: Legal number.
+          example: example
+        currency:
+          type:
+            - string
+            - 'null'
+          description: Currency as an ISO 4217 code.
+          example: USD
+        tax_identification_number:
+          type:
+            - string
+            - 'null'
+          description: Tax identification number.
+          example: example
+        timezone:
+          type:
+            - string
+            - 'null'
+          description: Timezone.
+          example: example
+        applicable_timezone:
+          type: string
+          description: Timezone used for customer billing.
+          example: Europe/Paris
+        external_salesforce_id:
+          type:
+            - string
+            - 'null'
+          description: External salesforce id.
+          example: example
+        finalize_zero_amount_invoice:
+          type: string
+          description: Whether invoices with a zero amount are finalized.
+          example: inherit
+          enum:
+            - inherit
+            - skip
+            - finalize
+        skip_invoice_custom_sections:
+          type: boolean
+          description: Skip invoice custom sections.
+          example: false
+        invoice_grace_period:
+          type:
+            - integer
+            - 'null'
+          description: Invoice grace period.
+          example: 1
+        periodic_invoice_issuing_date_anchor:
+          type:
+            - string
+            - 'null'
+          description: Anchor used to determine the issuing date of periodic invoices.
+          example: current_period_end
+        periodic_invoice_issuing_date_adjustment:
+          type:
+            - string
+            - 'null'
+          description: Adjustment applied to the periodic invoice issuing date.
+          example: keep_anchor
+        payment_provider:
+          type:
+            - string
+            - 'null'
+          description: Payment provider.
+          example: example
+        payment_provider_code:
+          type:
+            - string
+            - 'null'
+          description: Payment provider code.
+          example: example
+        provider_customer_id:
+          type:
+            - string
+            - 'null'
+          description: Customer identifier in the payment provider.
+          example: cus_example
+        provider_payment_methods:
+          type:
+            - array
+            - 'null'
+          description: Payment methods allowed by the provider.
+          items:
+            type: string
+            description: Payment method type.
+            example: card
+        document_locale:
+          type:
+            - string
+            - 'null'
+          description: Document locale.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+        x402_agent_address:
+          type:
+            - string
+            - 'null'
+          description: Agent address. Present only when x402 payments are enabled.
+          example: '0x0000000000000000000000000000000000000000'
+    InvoiceCustomSectionObject:
+      type: object
+      description: Invoice Custom Section.
+      required:
+        - lago_id
+        - code
+        - name
+        - description
+        - details
+        - display_name
+        - created_at
+        - updated_at
+        - deleted_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        code:
+          type: string
+          description: Code.
+          example: example
+        name:
+          type: string
+          description: Name.
+          example: example
+        description:
+          type:
+            - string
+            - 'null'
+          description: Description.
+          example: example
+        details:
+          type:
+            - string
+            - 'null'
+          description: Details.
+          example: example
+        display_name:
+          type:
+            - string
+            - 'null'
+          description: Display name.
+          example: example
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        deleted_at:
+          type:
+            - string
+            - 'null'
+          description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+          example: null
+          format: date-time
+    ContractObject:
+      type: object
+      description: Contract.
+      required:
+        - lago_id
+        - external_id
+        - lago_customer_id
+        - external_customer_id
+        - name
+        - plan_code
+        - status
+        - billing_time
+        - consolidate_invoice
+        - purchase_order_number
+        - billing_anchor_date
+        - effective_billing_anchor_date
+        - skip_invoice_custom_sections
+        - started_at
+        - ended_at
+        - terminated_at
+        - canceled_at
+        - created_at
+        - updated_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_id:
+          type: string
+          description: External id.
+          example: example
+        lago_customer_id:
+          type: string
+          description: Customer identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        external_customer_id:
+          type: string
+          description: External customer identifier.
+          example: customer_123
+        name:
+          type:
+            - string
+            - 'null'
+          description: Name.
+          example: example
+        plan_code:
+          type:
+            - string
+            - 'null'
+          description: Optional plan code. Plan-less contracts use directly attached rate cards.
+          example: standard
+        status:
+          type: string
+          description: Lifecycle status.
+          example: pending
+          enum:
+            - pending
+            - active
+            - terminated
+            - canceled
+        billing_time:
+          type: string
+          description: Whether billing aligns to the calendar or contract anniversary.
+          example: calendar
+          enum:
+            - calendar
+            - anniversary
+        consolidate_invoice:
+          type: boolean
+          description: Consolidate invoice.
+          example: false
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          description: Purchase order number.
+          example: example
+        billing_anchor_date:
+          type:
+            - string
+            - 'null'
+          description: Optional billing anchor.
+          example: null
+          format: date
+        effective_billing_anchor_date:
+          type:
+            - string
+            - 'null'
+          description: Resolved billing anchor.
+          example: null
+          format: date
+        skip_invoice_custom_sections:
+          type: boolean
+          description: Skip invoice custom sections.
+          example: false
+        started_at:
+          type:
+            - string
+            - 'null'
+          description: Started at.
+          example: null
+          format: date-time
+        ended_at:
+          type:
+            - string
+            - 'null'
+          description: Ended at.
+          example: null
+          format: date-time
+        terminated_at:
+          type:
+            - string
+            - 'null'
+          description: Terminated at.
+          example: null
+          format: date-time
+        canceled_at:
+          type:
+            - string
+            - 'null'
+          description: Canceled at.
+          example: null
+          format: date-time
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: UTC timestamp of the last update, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        applied_rate_cards:
+          type: array
+          description: Present only with expands[]=applied_rate_cards.
+          items:
+            $ref: '#/components/schemas/ContractAppliedRateCardObject'
+        plan:
+          anyOf:
+            - $ref: '#/components/schemas/CatalogPlanObject'
+            - type: 'null'
+          description: Present only with expands[]=plan.
+        customer:
+          $ref: '#/components/schemas/CustomerObject'
+          description: Present only with expands[]=customer.
+        invoice_custom_sections:
+          type: array
+          description: Present only with expands[]=invoice_custom_sections.
+          items:
+            $ref: '#/components/schemas/InvoiceCustomSectionObject'
+    ContractsPaginated:
+      type: object
+      description: contracts list.
+      required:
+        - contracts
+        - meta
+      properties:
+        contracts:
+          type: array
+          description: Records in this response.
+          items:
+            $ref: '#/components/schemas/ContractObject'
+        meta:
+          $ref: '#/components/schemas/CursorPaginationMeta'
+    ContractBaseInput:
+      type: object
+      minProperties: 1
+      properties:
+        external_id:
+          type: string
+          description: Unique identifier for a live contract in your application.
+          example: contract_123
+        external_customer_id:
+          type: string
+          description: External customer identifier.
+          example: customer_123
+        name:
+          type:
+            - string
+            - 'null'
+          description: Contract name.
+          example: Annual agreement
+        plan_code:
+          type:
+            - string
+            - 'null'
+          description: Optional plan code. Plan-less contracts use directly attached rate cards.
+          example: standard
+        billing_time:
+          type: string
+          description: Whether billing aligns to the calendar or contract anniversary.
+          example: calendar
+          enum:
+            - calendar
+            - anniversary
+          default: calendar
+        billing_anchor_date:
+          type:
+            - string
+            - 'null'
+          description: Optional billing anchor.
+          example: null
+          format: date
+        started_at:
+          type:
+            - string
+            - 'null'
+          description: Start timestamp. Defaults to now. A future start creates a pending contract.
+          example: null
+          format: date-time
+        ended_at:
+          type:
+            - string
+            - 'null'
+          description: Optional end timestamp. Must be after the start and not already in the past.
+          example: null
+          format: date-time
+        consolidate_invoice:
+          type: boolean
+          description: Whether invoices can consolidate compatible contracts.
+          example: true
+        purchase_order_number:
+          type:
+            - string
+            - 'null'
+          description: Purchase order reference.
+          example: PO-123
+        invoice_custom_section:
+          type: object
+          description: Invoice section selection.
+          required: []
+          properties:
+            skip_invoice_custom_sections:
+              type: boolean
+              description: Whether to skip invoice custom sections.
+              example: false
+            invoice_custom_section_codes:
+              type: array
+              description: Invoice custom section codes.
+              items:
+                type: string
+                description: Section code.
+                example: legal_terms
+    ContractCreateInput:
+      type: object
+      description: Create contract.
+      required:
+        - contract
+      properties:
+        contract:
+          $ref: '#/components/schemas/ContractBaseInput'
+          required:
+            - external_id
+            - external_customer_id
+    Contract:
+      type: object
+      description: contract response.
+      required:
+        - contract
+      properties:
+        contract:
+          $ref: '#/components/schemas/ContractObject'
+    ContractUpdateInput:
+      type: object
+      description: Update a contract.
+      required:
+        - contract
+      properties:
+        contract:
+          type: object
+          minProperties: 1
+          properties:
+            name:
+              type:
+                - string
+                - 'null'
+              description: Contract name.
+              example: Annual agreement
+            plan_code:
+              type:
+                - string
+                - 'null'
+              description: Optional plan code. Plan-less contracts use directly attached rate cards.
+              example: standard
+            billing_time:
+              type: string
+              description: Whether billing aligns to the calendar or contract anniversary.
+              example: calendar
+              enum:
+                - calendar
+                - anniversary
+            billing_anchor_date:
+              type:
+                - string
+                - 'null'
+              description: Optional billing anchor.
+              example: null
+              format: date
+            started_at:
+              type:
+                - string
+                - 'null'
+              description: Start timestamp. Editable only on a pending contract, where a start of today or earlier activates it. An active contract accepts only its stored value.
+              example: null
+              format: date-time
+            ended_at:
+              type:
+                - string
+                - 'null'
+              description: Optional end timestamp. Must be after the start and not already in the past.
+              example: null
+              format: date-time
+            consolidate_invoice:
+              type: boolean
+              description: Whether invoices can consolidate compatible contracts.
+              example: true
+            purchase_order_number:
+              type:
+                - string
+                - 'null'
+              description: Purchase order reference.
+              example: PO-123
+            invoice_custom_section:
+              type: object
+              description: Invoice section selection.
+              required: []
+              properties:
+                skip_invoice_custom_sections:
+                  type: boolean
+                  description: Whether to skip invoice custom sections.
+                  example: false
+                invoice_custom_section_codes:
+                  type: array
+                  description: Invoice custom section codes.
+                  items:
+                    type: string
+                    description: Section code.
+                    example: legal_terms
+    RateCardUsageObject:
+      type: object
+      description: Usage in one applied rate card billing window.
+      required:
+        - rate_card_code
+        - rate_card_name
+        - product_code
+        - product_name
+        - product_category_code
+        - product_category_name
+        - product_filter_code
+        - product_filter_name
+        - invoice_display_name
+        - product_type
+        - billable_metric_code
+        - billing_timing
+        - rate_phase_code
+        - rate_phase_name
+        - rate_source
+        - rate_model
+        - rate_properties
+        - units
+        - events_count
+        - amount_cents
+        - from_datetime
+        - to_datetime
+      properties:
+        rate_card_code:
+          type: string
+          description: Rate card code.
+          example: compute_usd
+        rate_card_name:
+          type: string
+          description: Rate card name.
+          example: Compute USD
+        product_code:
+          type: string
+          description: Product code.
+          example: api_requests
+        product_name:
+          type: string
+          description: Product name.
+          example: API requests
+        product_category_code:
+          type:
+            - string
+            - 'null'
+          description: Category code.
+          example: compute
+        product_category_name:
+          type:
+            - string
+            - 'null'
+          description: Category name.
+          example: Compute
+        product_filter_code:
+          type:
+            - string
+            - 'null'
+          description: Filter code.
+          example: eu
+        product_filter_name:
+          type:
+            - string
+            - 'null'
+          description: Filter name.
+          example: EU
+        invoice_display_name:
+          type: string
+          description: Name displayed on invoices.
+          example: API requests
+        product_type:
+          type: string
+          description: Type of product. Metered products require a billable metric; fixed products must not reference one.
+          example: metered
+          enum:
+            - metered
+            - fixed
+        billable_metric_code:
+          type:
+            - string
+            - 'null'
+          description: Billable metric code.
+          example: api_requests
+        billing_timing:
+          type: string
+          description: Billing timing.
+          example: arrears
+          enum:
+            - arrears
+            - advance
+        rate_phase_code:
+          type:
+            - string
+            - 'null'
+          description: Rate phase code.
+          example: default
+        rate_phase_name:
+          type:
+            - string
+            - 'null'
+          description: Rate phase name.
+          example: Default
+        rate_source:
+          type: string
+          description: Source of the price used for this window.
+          example: rate
+          enum:
+            - rate
+            - phase_override
+        rate_model:
+          type: string
+          description: Pricing model. Fixed products support standard, graduated and volume. Volume cannot be billed in advance; dynamic requires a sum metric. Proration and aggregation can impose further restrictions.
+          example: standard
+          enum:
+            - standard
+            - graduated
+            - package
+            - percentage
+            - volume
+            - graduated_percentage
+            - custom
+            - dynamic
+        rate_properties:
+          type: object
+          description: Effective pricing properties used by billing.
+          additionalProperties: true
+        units:
+          type: string
+          description: Quantity billed. Sent as a decimal string.
+          example: '1.5'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+        events_count:
+          type: integer
+          description: Number of matching events.
+          example: 42
+        amount_cents:
+          type: integer
+          description: Amount excluding tax, in cents.
+          example: 1000
+        from_datetime:
+          type: string
+          description: Start of the billing window.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+        to_datetime:
+          type: string
+          description: End of the billing window.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
+    ContractUsageObject:
+      type: object
+      description: Current usage across the contract open billing windows. This is not a preview of one invoice.
+      required:
+        - external_contract_id
+        - external_customer_id
+        - currency
+        - amount_cents
+        - taxes_amount_cents
+        - total_amount_cents
+        - rate_cards
+      properties:
+        external_contract_id:
+          type: string
+          description: External contract identifier.
+          example: contract_123
+        external_customer_id:
+          type: string
+          description: External customer identifier.
+          example: customer_123
+        currency:
+          type: string
+          description: Billing currency.
+          example: USD
+        amount_cents:
+          type: integer
+          description: Amount excluding tax, in cents.
+          example: 1000
+        taxes_amount_cents:
+          type: integer
+          description: Tax amount, in cents.
+          example: 200
+        total_amount_cents:
+          type: integer
+          description: Amount including tax, in cents.
+          example: 1200
+        rate_cards:
+          type: array
+          description: Usage by applied rate card.
+          items:
+            $ref: '#/components/schemas/RateCardUsageObject'
+    ContractUsage:
+      type: object
+      description: current usage response.
+      required:
+        - current_usage
+      properties:
+        current_usage:
+          $ref: '#/components/schemas/ContractUsageObject'
   responses:
     BadRequest:
       description: Invalid request body, pagination or relationship expansion

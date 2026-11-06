@@ -1,0 +1,142 @@
+get:
+  tags:
+    - contracts
+  summary: List contracts
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+
+    Requires the product catalog to be enabled and contract read permission on the API key.
+  operationId: findAllContracts
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+    - name: search_term
+      in: query
+      required: false
+      description: Searches names and codes.
+      schema:
+        type: string
+        description: Text to search.
+        example: example
+    - name: status[]
+      in: query
+      required: false
+      description: Statuses to include. Also accepts scalar status. Defaults to active.
+      schema:
+        type: array
+        description: Contract statuses.
+        items:
+          type: string
+          description: Lifecycle status.
+          example: pending
+          enum:
+            - pending
+            - active
+            - terminated
+            - canceled
+    - name: plan_code
+      in: query
+      required: false
+      description: Plan code.
+      schema:
+        type: string
+        description: Exact identifier.
+        example: example
+    - name: external_customer_id
+      in: query
+      required: false
+      description: External customer id.
+      schema:
+        type: string
+        description: Exact identifier.
+        example: example
+    - name: external_id
+      in: query
+      required: false
+      description: External id.
+      schema:
+        type: string
+        description: Exact identifier.
+        example: example
+    - name: has_rate_overrides
+      in: query
+      required: false
+      description: Has rate overrides.
+      schema:
+        type: boolean
+        description: Whether the contract has a pricing override.
+        example: false
+    - name: billing_entity_ids[]
+      in: query
+      required: false
+      description: Billing entity ids[].
+      schema:
+        type: array
+        description: Billing entities.
+        items:
+          type: string
+          description: Billing entity identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ContractsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - contracts
+  summary: Create contract
+  description: >-
+    Creates a contract for an existing customer. The plan is optional. One
+    pending or active contract may use an external_id at a time. A plan supplies
+    the initial applied rate cards.
+
+    Requires the product catalog to be enabled and contract write permission on the API key.
+  operationId: createContract
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ContractCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Contract.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

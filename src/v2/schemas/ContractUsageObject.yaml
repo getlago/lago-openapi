@@ -1,0 +1,41 @@
+type: object
+description: Current usage across the contract open billing windows. This is not
+  a preview of one invoice.
+required:
+  - external_contract_id
+  - external_customer_id
+  - currency
+  - amount_cents
+  - taxes_amount_cents
+  - total_amount_cents
+  - rate_cards
+properties:
+  external_contract_id:
+    type: string
+    description: External contract identifier.
+    example: contract_123
+  external_customer_id:
+    type: string
+    description: External customer identifier.
+    example: customer_123
+  currency:
+    type: string
+    description: Billing currency.
+    example: USD
+  amount_cents:
+    type: integer
+    description: Amount excluding tax, in cents.
+    example: 1000
+  taxes_amount_cents:
+    type: integer
+    description: Tax amount, in cents.
+    example: 200
+  total_amount_cents:
+    type: integer
+    description: Amount including tax, in cents.
+    example: 1200
+  rate_cards:
+    type: array
+    description: Usage by applied rate card.
+    items:
+      $ref: ./RateCardUsageObject.yaml

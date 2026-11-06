@@ -1,0 +1,11 @@
+type: object
+description: Create product.
+required:
+  - product
+properties:
+  product:
+    $ref: ./ProductBaseInput.yaml
+    required:
+      - name
+      - code
+      - product_type
