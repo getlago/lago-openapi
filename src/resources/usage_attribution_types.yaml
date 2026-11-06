@@ -1,0 +1,67 @@
+post:
+  tags:
+    - usage_attribution_types
+  summary: Create a usage attribution type
+  description: This endpoint creates a usage attribution type. A usage attribution type is a level of the account tree that usage can be attributed to, based on the keys of the event properties.
+  operationId: createUsageAttributionType
+  requestBody:
+    description: Usage attribution type payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/UsageAttributionTypeCreateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Usage attribution type created
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/UsageAttributionType.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - usage_attribution_types
+  summary: List all usage attribution types
+  description: This endpoint retrieves all the usage attribution types of the organization.
+  operationId: findAllUsageAttributionTypes
+  parameters:
+    - $ref: '../parameters/page.yaml'
+    - $ref: '../parameters/per_page.yaml'
+    - name: role
+      in: query
+      description: Filter usage attribution types by role.
+      required: false
+      explode: true
+      schema:
+        $ref: '../schemas/UsageAttributionTypeRoleEnum.yaml'
+    - name: search_term
+      in: query
+      description: Filter usage attribution types by search term. The term is matched against the code and the name of the type.
+      required: false
+      explode: true
+      schema:
+        type: string
+        example: "team"
+  responses:
+    '200':
+      description: List of usage attribution types
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/UsageAttributionTypesPaginated.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

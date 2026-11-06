@@ -1,0 +1,21 @@
+type: object
+required:
+  - status
+  - error
+  - code
+properties:
+  status:
+    type: integer
+    format: int32
+    example: 422
+  error:
+    type: string
+    example: "Unprocessable Entity"
+  code:
+    type: string
+    enum:
+      - too_many_groups
+      - query_timeout
+      - memory_limit_exceeded
+    description: Reason why the query exceeded its limits. Narrow the period or add filters, then retry.
+    example: "too_many_groups"
