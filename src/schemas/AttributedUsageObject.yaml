@@ -30,7 +30,7 @@ properties:
     enum:
       - units
       - amount
-    description: Basis of the breakdown. With `units`, amounts are `null` and values are ranked by number of events. With `amount`, amounts are computed and values are ranked by amount.
+    description: Basis of the breakdown. With `units`, amounts are `null` and values are ranked by units, summed across the selected charges. With `amount`, amounts are computed and values are ranked by amount.
     example: "amount"
   from_datetime:
     type: string

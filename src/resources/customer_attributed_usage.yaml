@@ -22,7 +22,9 @@ get:
       in: query
       description: >-
         Code of the usage attribution type to group the usage by. When the type has a parent, `filters` must include a
-        value of the parent type, so the tree is read one level at a time.
+        value of the parent type, so the tree is read one level at a time. Lago tracks up to 100,000 values per type for
+        each customer. Once the type reaches this limit, grouping by it returns a `too_many_values` validation error,
+        unless `filters` includes a value of its parent type.
       required: true
       explode: true
       schema:
@@ -33,7 +35,8 @@ get:
       description: >-
         Values of usage attribution types to filter the usage by, keyed by type code, e.g.
         `filters[department]=rnd&filters[model][]=opus&filters[model][]=haiku`. Each type accepts up to 20 values, and up
-        to 3 `flat` types can be filtered on.
+        to 3 `flat` types can be filtered on. More than 20 values for a type returns a `too_many_values` validation
+        error.
       required: false
       style: deepObject
       explode: true
@@ -115,8 +118,8 @@ get:
     - name: basis
       in: query
       description: >-
-        Basis of the breakdown. With `units`, values are ranked by number of events and no amount is computed. With
-        `amount`, amounts are computed and values are ranked by amount.
+        Basis of the breakdown. With `units`, no amount is computed and values are ranked by units, summed across the
+        selected charges. With `amount`, amounts are computed and values are ranked by amount.
       required: false
       explode: true
       schema:

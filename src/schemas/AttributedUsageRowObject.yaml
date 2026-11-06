@@ -5,6 +5,7 @@ required:
   - amount_cents
   - precise_amount_cents
   - events_count
+  - split_charge_units
   - charges_usage
 properties:
   value:
@@ -13,7 +14,7 @@ properties:
     example: "engineering"
   rank:
     type: integer
-    description: Rank of the value in the level, starting at 1. Values are ranked by amount when `basis` is `amount`, and by number of events otherwise.
+    description: Rank of the value in the level, starting at 1. Values are ranked by amount when `basis` is `amount`, and by units, summed across the selected charges, when `basis` is `units`. Values with the same amount or units are ranked by value, in ascending order.
     example: 1
   amount_cents:
     type:
@@ -32,6 +33,13 @@ properties:
     type: integer
     description: Number of events.
     example: 42
+  split_charge_units:
+    type:
+      - string
+      - "null"
+    pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+    description: Units of the charge split by `split_charge_code`, across all its filters and the usage that matches none of them, sent as a decimal string. Unlike `charges_usage`, it covers the filters of every page. It is `null` when no charge is split.
+    example: "15000.5"
   charges_usage:
     type: array
     items:

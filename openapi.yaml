@@ -3467,7 +3467,7 @@ paths:
             example: sub_1234567890
         - name: group_by
           in: query
-          description: Code of the usage attribution type to group the usage by. When the type has a parent, `filters` must include a value of the parent type, so the tree is read one level at a time.
+          description: Code of the usage attribution type to group the usage by. When the type has a parent, `filters` must include a value of the parent type, so the tree is read one level at a time. Lago tracks up to 100,000 values per type for each customer. Once the type reaches this limit, grouping by it returns a `too_many_values` validation error, unless `filters` includes a value of its parent type.
           required: true
           explode: true
           schema:
@@ -3475,7 +3475,7 @@ paths:
             example: team
         - name: filters
           in: query
-          description: Values of usage attribution types to filter the usage by, keyed by type code, e.g. `filters[department]=rnd&filters[model][]=opus&filters[model][]=haiku`. Each type accepts up to 20 values, and up to 3 `flat` types can be filtered on.
+          description: Values of usage attribution types to filter the usage by, keyed by type code, e.g. `filters[department]=rnd&filters[model][]=opus&filters[model][]=haiku`. Each type accepts up to 20 values, and up to 3 `flat` types can be filtered on. More than 20 values for a type returns a `too_many_values` validation error.
           required: false
           style: deepObject
           explode: true
@@ -3548,7 +3548,7 @@ paths:
             example: eng
         - name: basis
           in: query
-          description: Basis of the breakdown. With `units`, values are ranked by number of events and no amount is computed. With `amount`, amounts are computed and values are ranked by amount.
+          description: Basis of the breakdown. With `units`, no amount is computed and values are ranked by units, summed across the selected charges. With `amount`, amounts are computed and values are ranked by amount.
           required: false
           explode: true
           schema:
@@ -20567,6 +20567,7 @@ components:
         - amount_cents
         - precise_amount_cents
         - events_count
+        - split_charge_units
         - charges_usage
       properties:
         value:
@@ -20575,7 +20576,7 @@ components:
           example: engineering
         rank:
           type: integer
-          description: Rank of the value in the level, starting at 1. Values are ranked by amount when `basis` is `amount`, and by number of events otherwise.
+          description: Rank of the value in the level, starting at 1. Values are ranked by amount when `basis` is `amount`, and by units, summed across the selected charges, when `basis` is `units`. Values with the same amount or units are ranked by value, in ascending order.
           example: 1
         amount_cents:
           type:
@@ -20594,6 +20595,13 @@ components:
           type: integer
           description: Number of events.
           example: 42
+        split_charge_units:
+          type:
+            - string
+            - 'null'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: Units of the charge split by `split_charge_code`, across all its filters and the usage that matches none of them, sent as a decimal string. Unlike `charges_usage`, it covers the filters of every page. It is `null` when no charge is split.
+          example: '15000.5'
         charges_usage:
           type: array
           items:
@@ -20605,6 +20613,7 @@ components:
         - amount_cents
         - precise_amount_cents
         - events_count
+        - split_charge_units
         - charges_usage
       properties:
         amount_cents:
@@ -20624,6 +20633,13 @@ components:
           type: integer
           description: Number of events.
           example: 42
+        split_charge_units:
+          type:
+            - string
+            - 'null'
+          pattern: ^-?[0-9]+(\.[0-9]+)?$
+          description: Units of the charge split by `split_charge_code`, across all its filters and the usage that matches none of them, sent as a decimal string. Unlike `charges_usage`, it covers the filters of every page. It is `null` when no charge is split.
+          example: '15000.5'
         charges_usage:
           type: array
           items:
@@ -20662,7 +20678,7 @@ components:
           enum:
             - units
             - amount
-          description: Basis of the breakdown. With `units`, amounts are `null` and values are ranked by number of events. With `amount`, amounts are computed and values are ranked by amount.
+          description: Basis of the breakdown. With `units`, amounts are `null` and values are ranked by units, summed across the selected charges. With `amount`, amounts are computed and values are ranked by amount.
           example: amount
         from_datetime:
           type: string

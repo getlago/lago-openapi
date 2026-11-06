@@ -3,6 +3,7 @@ required:
   - amount_cents
   - precise_amount_cents
   - events_count
+  - split_charge_units
   - charges_usage
 properties:
   amount_cents:
@@ -22,6 +23,13 @@ properties:
     type: integer
     description: Number of events.
     example: 42
+  split_charge_units:
+    type:
+      - string
+      - "null"
+    pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+    description: Units of the charge split by `split_charge_code`, across all its filters and the usage that matches none of them, sent as a decimal string. Unlike `charges_usage`, it covers the filters of every page. It is `null` when no charge is split.
+    example: "15000.5"
   charges_usage:
     type: array
     items:
