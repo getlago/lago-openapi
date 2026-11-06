@@ -1,0 +1,84 @@
+parameters:
+  - name: contract_external_id
+    in: path
+    required: true
+    description: Contract external id.
+    schema:
+      type: string
+      description: Contract external id.
+      example: external_123
+  - name: applied_rate_card_code
+    in: path
+    required: true
+    description: Applied rate card code.
+    schema:
+      type: string
+      description: Applied rate card code.
+      example: example_code
+get:
+  tags:
+    - contract_rate_phases
+  summary: List contract rate phases
+  description: >-
+    Returns the complete list without cursor metadata.
+
+    Phases are returned as a complete list.
+
+    Requires the product catalog to be enabled and contract_rate_card read permission on the API key.
+  operationId: findAllContractRatePhases
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ContractRatePhasesCollection.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+post:
+  tags:
+    - contract_rate_phases
+  summary: Create rate phase
+  description: >-
+    Inserts a phase and renumbers later positions. The last phase must be
+    indefinite and no earlier phase may be indefinite. Parent locking rules
+    apply.
+
+    Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+  operationId: createContractRatePhase
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RatePhaseCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ContractRatePhase.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

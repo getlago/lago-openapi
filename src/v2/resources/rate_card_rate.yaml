@@ -1,0 +1,151 @@
+parameters:
+  - name: rate_card_code
+    in: path
+    required: true
+    description: Rate card code.
+    schema:
+      type: string
+      description: Rate card code.
+      example: example_code
+  - name: code
+    in: path
+    required: true
+    description: Code.
+    schema:
+      type: string
+      description: Code.
+      example: example_code
+get:
+  tags:
+    - rate_card_rates
+  summary: Retrieve rate
+  description: >-
+    Returns the record without nested relationships unless a supported expansion
+    is requested.
+
+    Requires the product catalog to be enabled and rate_card read permission on the API key.
+  operationId: findRateCardRate
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCardRate.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - rate_card_rates
+  summary: Update rate
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Terminated rates are frozen. Active rates reject effective_from, rate_model, min_amount_cents and billing interval fields, even when unchanged. Pending rates are fully editable; attachment and identity restrictions also apply.
+
+    Requires the product catalog to be enabled and rate_card write permission on the API key.
+  operationId: updateRateCardRate
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RateCardRateUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCardRate.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - rate_card_rates
+  summary: Update rate
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Terminated rates are frozen. Active rates reject effective_from, rate_model, min_amount_cents and billing interval fields, even when unchanged. Pending rates are fully editable; attachment and identity restrictions also apply.
+
+    Requires the product catalog to be enabled and rate_card write permission on the API key.
+  operationId: patchRateCardRate
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RateCardRateUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCardRate.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - rate_card_rates
+  summary: Delete rate
+  description: >-
+    Only pending rates can be deleted. Active and terminated rates remain for
+    history.
+
+    Requires the product catalog to be enabled and rate_card write permission on the API key.
+  operationId: destroyRateCardRate
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCardRate.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

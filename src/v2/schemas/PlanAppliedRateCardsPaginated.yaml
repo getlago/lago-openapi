@@ -1,0 +1,13 @@
+type: object
+description: applied rate cards list.
+required:
+  - applied_rate_cards
+  - meta
+properties:
+  applied_rate_cards:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./PlanAppliedRateCardObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

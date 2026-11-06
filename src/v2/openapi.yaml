@@ -1,10 +1,12 @@
 openapi: 3.1.0
 info:
   title: Lago API v2 documentation
-  description: |-
+  description: >-
     Beta API for organizations using the product catalog.
-    This document currently covers taxes. Other v2 resources will be added separately.
-    Native v2 endpoints use flat responses, cursor pagination and structured errors.
+
+    This document covers taxes, catalog resources and contracts. Other native v2 endpoints will be added separately.
+
+    Native v2 endpoints use structured errors and support only the expansions documented for each action.
   version: 2.0.0-beta
   license:
     name: AGPLv3
@@ -24,11 +26,79 @@ security:
 tags:
   - name: taxes
     description: Tax rates
+  - name: product_categories
+    description: product categories operations
+  - name: products
+    description: products operations
+  - name: product_filters
+    description: product filters operations
+  - name: rate_cards
+    description: rate cards operations
+  - name: rate_card_rates
+    description: rate card rates operations
+  - name: catalog_plans
+    description: catalog plans operations
+  - name: plan_applied_rate_cards
+    description: plan applied rate cards operations
+  - name: plan_rate_phases
+    description: plan rate phases operations
+  - name: contract_applied_rate_cards
+    description: contract applied rate cards operations
+  - name: contract_rate_phases
+    description: contract rate phases operations
+  - name: contracts
+    description: contracts operations
 paths:
   /taxes:
     $ref: './resources/taxes.yaml'
-  /taxes/{code}:
+  "/taxes/{code}":
     $ref: './resources/tax.yaml'
+  /product_categories:
+    $ref: ./resources/product_categories.yaml
+  "/product_categories/{code}":
+    $ref: ./resources/product_category.yaml
+  /products:
+    $ref: ./resources/products.yaml
+  "/products/{code}":
+    $ref: ./resources/product.yaml
+  "/products/{product_code}/filters":
+    $ref: ./resources/product_filters.yaml
+  "/products/{product_code}/filters/{code}":
+    $ref: ./resources/product_filter.yaml
+  /rate_cards:
+    $ref: ./resources/rate_cards.yaml
+  "/rate_cards/{code}":
+    $ref: ./resources/rate_card.yaml
+  "/rate_cards/{rate_card_code}/rates":
+    $ref: ./resources/rate_card_rates.yaml
+  "/rate_cards/{rate_card_code}/rates/{code}":
+    $ref: ./resources/rate_card_rate.yaml
+  /plans:
+    $ref: ./resources/catalog_plans.yaml
+  "/plans/{code}":
+    $ref: ./resources/catalog_plan.yaml
+  "/plans/{plan_code}/applied_rate_cards":
+    $ref: ./resources/plan_applied_rate_cards.yaml
+  "/plans/{plan_code}/applied_rate_cards/{code}":
+    $ref: ./resources/plan_applied_rate_card.yaml
+  "/plans/{plan_code}/applied_rate_cards/{applied_rate_card_code}/rate_phases":
+    $ref: ./resources/plan_rate_phases.yaml
+  "/plans/{plan_code}/applied_rate_cards/{applied_rate_card_code}/rate_phases/{code}":
+    $ref: ./resources/plan_rate_phase.yaml
+  "/contracts/{contract_external_id}/applied_rate_cards":
+    $ref: ./resources/contract_applied_rate_cards.yaml
+  "/contracts/{contract_external_id}/applied_rate_cards/{code}":
+    $ref: ./resources/contract_applied_rate_card.yaml
+  "/contracts/{contract_external_id}/applied_rate_cards/{applied_rate_card_code}/rate_phases":
+    $ref: ./resources/contract_rate_phases.yaml
+  "/contracts/{contract_external_id}/applied_rate_cards/{applied_rate_card_code}/rate_phases/{code}":
+    $ref: ./resources/contract_rate_phase.yaml
+  /contracts:
+    $ref: ./resources/contracts.yaml
+  "/contracts/{external_id}":
+    $ref: ./resources/contract.yaml
+  "/contracts/{external_id}/current_usage":
+    $ref: ./resources/contract_current_usage.yaml
 components:
   securitySchemes:
     bearerAuth:

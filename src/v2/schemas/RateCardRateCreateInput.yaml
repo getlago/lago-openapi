@@ -1,0 +1,12 @@
+type: object
+description: Create rate.
+required:
+  - rate
+properties:
+  rate:
+    $ref: ./RateCardRateBaseInput.yaml
+    required:
+      - code
+      - effective_from
+      - rate_model
+      - billing_interval_unit

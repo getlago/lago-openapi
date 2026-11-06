@@ -1,0 +1,13 @@
+type: object
+description: plans list.
+required:
+  - plans
+  - meta
+properties:
+  plans:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./CatalogPlanObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml
