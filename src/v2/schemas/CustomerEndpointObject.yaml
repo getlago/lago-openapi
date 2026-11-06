@@ -3,3 +3,22 @@ allOf:
   - type: object
     required:
       - shipping_address
+    properties:
+      shipping_address:
+        $ref: ./ShippingAddressObject.yaml
+        description: Shipping address of the customer.
+      metadata:
+        type: array
+        description: Customer metadata. Included only with expands[]=metadata.
+        items:
+          $ref: ./CustomerMetadataObject.yaml
+      taxes:
+        type: array
+        description: Customer taxes. Included only with expands[]=taxes.
+        items:
+          $ref: ./TaxObject.yaml
+      integration_customers:
+        type: array
+        description: Integration mappings. Included only with expands[]=integration_customers.
+        items:
+          $ref: ./IntegrationCustomerObject.yaml

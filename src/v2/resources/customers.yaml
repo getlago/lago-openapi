@@ -62,11 +62,14 @@ get:
     - name: metadata
       in: query
       required: false
-      description: Metadata.
+      description: Metadata key and value pairs to match, sent as metadata[key]=value.
+      style: deepObject
+      explode: true
       schema:
         type: object
         description: Metadata key and value pairs to match.
-        additionalProperties: true
+        additionalProperties:
+          type: string
     - name: currencies[]
       in: query
       required: false
