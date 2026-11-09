@@ -1,0 +1,21 @@
+post:
+  tags:
+    - invoices
+  summary: Download an invoice XML
+  parameters:
+    - $ref: '../parameters/lago_invoice_id.yaml'
+  description: |-
+    This endpoint is used for downloading the e-invoicing XML document of a specific invoice. Only `finalized` invoices can be downloaded; any other invoice returns a `404` error.
+    When the XML has already been generated, the invoice object is returned and its `xml_url` points to the document. When it has not been generated yet, the response is a `200` with an empty body and the generation starts in the background. Call the endpoint again to get the invoice object with its `xml_url`.
+  operationId: downloadInvoiceXml
+  responses:
+    '200':
+      description: Invoice XML
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Invoice.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
