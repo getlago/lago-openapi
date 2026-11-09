@@ -9480,46 +9480,6 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
-  invoice_add_on_added:
-    post:
-      deprecated: true
-      operationId: invoiceAddOnAdded
-      summary: A new add on invoice has been emitted
-      description: '**Deprecated.** This webhook is no longer emitted by Lago. Use `invoice.one_off_created` for invoices created from add-ons.'
-      parameters:
-        - $ref: '#/components/parameters/webhook_signature'
-        - $ref: '#/components/parameters/webhook_signature_algorithm'
-        - $ref: '#/components/parameters/webhook_unique_key'
-      requestBody:
-        description: Details of the new invoice
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - webhook_type
-                - object_type
-                - organization_id
-                - invoice
-              properties:
-                webhook_type:
-                  type: string
-                  enum:
-                    - invoice.add_on_added
-                object_type:
-                  type: string
-                  enum:
-                    - invoice
-                organization_id:
-                  type: string
-                  format: uuid
-                  description: Unique identifier of the organization, created by Lago.
-                  example: 1a901a90-1a90-1a90-1a90-1a901a901a90
-                invoice:
-                  $ref: '#/components/schemas/InvoiceObjectExtended'
-      responses:
-        '200':
-          description: Return a 200 status to indicate that the data was received successfully
   invoice_paid_credit_added:
     post:
       operationId: invoicePaidCreditAdded
