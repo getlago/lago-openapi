@@ -3650,7 +3650,7 @@ paths:
       tags:
         - events
       summary: Batch multiple events
-      description: This endpoint can be used to send a batch of usage records. Each request may include up to 100 events.
+      description: This endpoint can be used to send a batch of usage records. Each request must include at least one event and may include up to 100 events.
       operationId: createBatchEvents
       requestBody:
         description: Batch events payload
@@ -3785,7 +3785,7 @@ paths:
 
         Note that transaction_id is unique per external_subscription_id so multiple subscriptions can share the same transaction_id. This endpoint will only return the first event found with the given transaction_id.
 
-        WARNING: If your Lago organization is configured to use the Clickhouse-based event pipeline, multiple events can share the same `transaction_id` (with different timestamps). This endpoint will only return the first event found.
+        WARNING: If your Lago organization is configured to use the ClickHouse-based event pipeline, multiple events can share the same `transaction_id` (with different timestamps). This endpoint will only return the first event found.
       operationId: findEvent
       responses:
         '200':
@@ -20244,12 +20244,16 @@ components:
     EventObject:
       type: object
       required:
+        - lago_id
         - transaction_id
         - lago_customer_id
         - code
         - timestamp
+        - precise_total_amount_cents
+        - properties
         - lago_subscription_id
         - external_subscription_id
+        - created_at
       properties:
         lago_id:
           type:
@@ -20346,7 +20350,7 @@ components:
             This field represents a unique identifier for the event.
             It is crucial for ensuring idempotency, meaning that each event can be uniquely identified and processed without causing any unintended side effects.
 
-            WARNING: If the Lago organization is configured to use the new Clickhouse-based event pipeline (designed for high-volume processing), the idempotency logic is handled differently.
+            WARNING: If the Lago organization is configured to use the new ClickHouse-based event pipeline (designed for high-volume processing), the idempotency logic is handled differently.
             Event uniqueness is maintained with both `transaction_id` and `timestamp` fields.
             If a new event arrives with identical values for these two fields as an existing event, the new one will overwrite the previous event rather than being rejected.
         external_subscription_id:
@@ -20378,6 +20382,14 @@ components:
             - 'null'
           description: This field represents additional properties associated with the event, which are utilized in the calculation of the final fee. This object becomes mandatory when the targeted billable metric employs a `sum_agg`, `max_agg`, or `unique_count_agg` aggregation method. However, when using a simple `count_agg`, this object is not required.
           properties:
+            operation_type:
+              type:
+                - string
+                - 'null'
+              description: The `operation_type` field is only necessary when adding or removing a specific unit when the targeted billable metric adopts a `unique_count_agg` aggregation method. In other cases, the `operation_type` field is not required. The valid values for the `operation_type` field are `add` or `remove`, which indicate whether the unit is being added or removed from the unique count aggregation, respectively. It defaults to `add` when omitted.
+              enum:
+                - add
+                - remove
             target_wallet_code:
               type:
                 - string
@@ -20417,6 +20429,10 @@ components:
                   type: 'null'
                   description: The value will always be null in this response as the event processing is done asynchronously
                   example: null
+                lago_subscription_id:
+                  type: 'null'
+                  description: The value will always be null in this response as the event processing is done asynchronously
+                  example: null
     EventBatchInput:
       type: object
       required:
@@ -20424,6 +20440,9 @@ components:
       properties:
         events:
           type: array
+          minItems: 1
+          maxItems: 100
+          description: The usage events to ingest. An empty list returns a `422` error with `no_events`, and more than 100 events returns a `422` error with `too_many_events`.
           items:
             $ref: '#/components/schemas/EventInputObject'
     EventsCreated:
@@ -20439,6 +20458,10 @@ components:
               - type: object
                 properties:
                   lago_customer_id:
+                    type: 'null'
+                    description: The value will always be null in this response as the event processing is done asynchronously
+                    example: null
+                  lago_subscription_id:
                     type: 'null'
                     description: The value will always be null in this response as the event processing is done asynchronously
                     example: null
@@ -20577,33 +20600,33 @@ components:
           description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge or subscription.
           example: external_id
         amount_cents:
-          type: integer
-          description: The cost of this specific fee, excluding any applicable taxes.
-          example: 100
+          type: string
+          description: The cost of this specific fee, excluding any applicable taxes. On this endpoint the value is a decimal string, not an integer.
+          example: '40.0'
         precise_amount:
-          type: number
-          description: The cost of this specific fee, excluding any applicable taxes, with precision.
-          example: 1.0001
+          type: string
+          description: The cost of this specific fee, in the currency unit and excluding any applicable taxes, with precision.
+          example: '0.4'
         precise_total_amount:
-          type: number
-          description: The cost of this specific fee, including any applicable taxes, with precision.
-          example: 1.0212
+          type: string
+          description: The cost of this specific fee, in the currency unit and including any applicable taxes, with precision. Taxes are not estimated on this endpoint, so it has the same value as `precise_amount`.
+          example: '0.4'
         amount_currency:
           $ref: '#/components/schemas/Currency'
           description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
           example: EUR
         taxes_amount_cents:
           type: integer
-          description: The cost of the tax associated with this specific fee.
+          description: The cost of the tax associated with this specific fee. Taxes are not estimated on this endpoint, so the value is always `0`.
           example: 0
         taxes_precise_amount:
           type: number
-          description: The cost of the tax associated with this specific fee, with precision.
+          description: The cost of the tax associated with this specific fee, with precision. Taxes are not estimated on this endpoint, so the value is always `0`.
           example: 0
         taxes_rate:
           type: number
-          description: The tax rate associated with this specific fee.
-          example: 20
+          description: The tax rate associated with this specific fee. Taxes are not estimated on this endpoint, so the value is always `0`.
+          example: 0
         units:
           type: string
           description: The number of units used to charge the customer. This field indicates the quantity or count of units consumed or utilized in the context of the charge. It helps in determining the basis for calculating the fee or cost associated with the usage of the service or product provided to the customer.
@@ -20611,17 +20634,17 @@ components:
         description:
           type: 'null'
         precise_unit_amount:
-          type: number
-          description: The unit amount of the fee per unit, with precision.
-          example: 312.5
+          type: string
+          description: The cost of one unit of this specific fee, in cents and with precision.
+          example: '0.1'
         precise_coupons_amount_cents:
           type: string
           description: The coupon amount applied to the estimated instant fee. It is always `0.0`.
           example: '0.0'
         total_amount_cents:
-          type: integer
-          description: The cost of this specific fee, including any applicable taxes.
-          example: 120
+          type: string
+          description: The cost of this specific fee, including any applicable taxes. On this endpoint the value is a decimal string, not an integer, and taxes are not estimated, so it has the same value as `amount_cents`.
+          example: '40.0'
         total_amount_currency:
           $ref: '#/components/schemas/Currency'
           description: The currency of this specific fee, including any applicable taxes.
