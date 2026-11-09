@@ -155,6 +155,19 @@ properties:
         maxLength: 255
         example: "91364"
         description: "The zipcode of the customer's billing address (255 characters max)."
+      payment_term:
+        oneOf:
+          - $ref: "./PaymentTermObject.yaml"
+          - type: "null"
+        description: |
+          The structured payment term of the customer. Send `null` to remove the customer's own term, so the term of the billing entity applies.
+
+          It supersedes the legacy `net_payment_term`, which is kept in sync as an alias. When both fields are sent in the same request:
+          - a non-null `payment_term` wins and `net_payment_term` is ignored;
+          - `payment_term: null` with a non-null `net_payment_term` is ignored, and the term becomes a `net` term of `net_payment_term` days;
+          - `payment_term: null` with `net_payment_term` absent or `null` clears both.
+
+          When only `net_payment_term` is sent, a value equal to the current alias leaves the structured term unchanged, a different value replaces it with a `net` term of that many days, and `null` clears both.
       net_payment_term:
         type:
           - integer

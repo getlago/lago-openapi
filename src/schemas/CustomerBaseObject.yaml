@@ -27,6 +27,7 @@ required:
   - url
   - zipcode
   - net_payment_term
+  - payment_term
   - external_salesforce_id
   - created_at
   - updated_at
@@ -185,12 +186,17 @@ properties:
       - "null"
     example: "91364"
     description: The zipcode of the customer's billing address
+  payment_term:
+    oneOf:
+      - $ref: "./PaymentTermObject.yaml"
+      - type: "null"
+    description: The structured payment term of the customer. It is `null` when the customer has no term of its own, in which case the term of its billing entity applies.
   net_payment_term:
     type:
       - integer
       - "null"
     example: 30
-    description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+    description: Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type or when the customer has no term of its own.
   external_salesforce_id:
     type:
       - string

@@ -85,8 +85,10 @@ properties:
         description: Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four characters of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.
       net_payment_term:
         type: integer
+        minimum: 0
+        maximum: 365
         example: 30
-        description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+        description: The net payment term, expressed in days, applied to the organization's default billing entity. It sets the billing entity's `payment_term` to a `net` term of that many days. Structured payment terms cannot be set at the organization level; use the billing entity endpoints instead.
       tax_identification_number:
         type:
           - string
