@@ -67,8 +67,10 @@ properties:
             default: align_with_finalization_date
       net_payment_term:
         type: integer
+        minimum: 0
+        maximum: 365
         example: 0
-        description: The net payment term (in days) for this billing entity
+        description: The net payment term (in days) for this billing entity. It must be between 0 and 365 days. It applies to every customer of the billing entity that has no net payment term of its own.
       address_line1:
         type:
           - string
