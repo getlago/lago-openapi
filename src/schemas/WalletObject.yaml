@@ -23,6 +23,7 @@ required:
   - last_consumed_credit_at
   - terminated_at
   - invoice_requires_successful_payment
+  - invoice_usage_on_expiration
   - paid_top_up_min_amount_cents
   - paid_top_up_max_amount_cents
   - priority
@@ -130,6 +131,10 @@ properties:
   invoice_requires_successful_payment:
     type: boolean
     description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
+    example: false
+  invoice_usage_on_expiration:
+    type: boolean
+    description: Whether a progressive billing invoice for the subscription usage is issued when the wallet expires. The invoice covers usage from the start of the current billing period until `expiration_at` and is paid first with the remaining credits of this wallet, before the wallet is terminated. Remaining usage is billed by the regular period invoice, which deducts this invoice.
     example: false
   applies_to:
     type: object
