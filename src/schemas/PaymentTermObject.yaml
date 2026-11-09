@@ -1,0 +1,40 @@
+type: object
+description: The payment term, which decides the due date of an invoice from its issuing date.
+required:
+  - term_type
+properties:
+  term_type:
+    type: string
+    enum:
+      - due_on_receipt
+      - net
+      - end_of_month
+      - net_end_of_month
+      - days_end_of_month
+      - day_of_month
+    example: "net"
+    description: |-
+      The kind of payment term. It decides which of the other keys are present.
+
+      - `due_on_receipt`: the due date is the issuing date.
+      - `net`: the due date is the issuing date plus `days`.
+      - `end_of_month`: the due date is the last day of the month of the issuing date.
+      - `net_end_of_month`: the due date is the last day of the month of the issuing date, plus `days`.
+      - `days_end_of_month`: the due date is the last day of the month that contains the issuing date plus `days`.
+      - `day_of_month`: the due date is the day `day_of_month` of the month that follows the issuing date by `month_offset` months.
+  days:
+    type: integer
+    minimum: 0
+    example: 30
+    description: The number of days of the term. It is present for the `net`, `net_end_of_month` and `days_end_of_month` term types only.
+  day_of_month:
+    type: integer
+    minimum: 1
+    maximum: 31
+    example: 15
+    description: The day of the month of the due date. It is present for the `day_of_month` term type only. A day after the last day of the target month is moved to the last day of that month.
+  month_offset:
+    type: integer
+    minimum: 0
+    example: 1
+    description: The number of months between the month of the issuing date and the month of the due date. It is present for the `day_of_month` term type only, and defaults to `1`, the following month.
