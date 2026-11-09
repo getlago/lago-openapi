@@ -4,7 +4,9 @@ required:
   - billing_entity
 properties:
   billing_entity:
-    $ref: ./BillingEntityBaseInput.yaml
-    required:
-      - code
-      - name
+    allOf:
+      - $ref: ./BillingEntityBaseInput.yaml
+      - type: object
+        required:
+          - code
+          - name

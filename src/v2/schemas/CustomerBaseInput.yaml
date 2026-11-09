@@ -3,7 +3,9 @@ minProperties: 1
 properties:
   external_id:
     type: string
-    description: Unique customer identifier in your application.
+    description: Unique customer identifier in your application. On update, changes
+      are ignored if the customer has subscriptions, invoices, add-ons, wallets
+      or currency-based coupons.
     example: customer_123
   name:
     type:
@@ -35,7 +37,9 @@ properties:
       - null
   account_type:
     type: string
-    description: Account type.
+    description: Account type. Requires revenue share to be enabled. On update,
+      changes are ignored if the customer has subscriptions, invoices, add-ons,
+      wallets or currency-based coupons.
     example: customer
     enum:
       - customer
@@ -128,7 +132,7 @@ properties:
     type:
       - string
       - "null"
-    description: Timezone.
+    description: Timezone. Requires a premium license; otherwise the value is ignored.
     example: example
   finalize_zero_amount_invoice:
     type:
@@ -160,7 +164,8 @@ properties:
     type:
       - integer
       - "null"
-    description: Invoice grace period.
+    description: Invoice grace period. Requires a premium license; otherwise the
+      value is ignored.
     example: 1
   payment_provider:
     type:
@@ -245,7 +250,10 @@ properties:
       example: legal
   metadata:
     type: array
-    description: Customer metadata. At most five entries.
+    description: Customer metadata. At most five entries. On update, this is a full
+      replacement. Include id for each existing entry to keep or update it.
+      Entries without id are created, not matched by key. Omitted entries are
+      deleted.
     items:
       type: object
       description: Metadata value.
@@ -277,7 +285,9 @@ properties:
     maxItems: 5
   integration_customers:
     type: array
-    description: Integration mappings. Only one entry per integration type is accepted.
+    description: Integration mappings. Only one entry per integration type is
+      accepted. On update, this is a full replacement. Include id for each
+      existing mapping to keep or update it. Omitted mappings are deleted.
     items:
       type: object
       description: Customer integration mapping.

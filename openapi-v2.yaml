@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Lago API v2 documentation
-  description: Lago API v2. Documents native v2 endpoints for the product catalog, billing, customers, organizations, billing entities, billable metrics, events, logs and webhook endpoints. Native v2 endpoints use cursor pagination, opt-in relationship expansions and structured error responses. Some other /api/v2 paths still fall back to v1 controllers and are not described here.
+  description: Lago API v2. Documents native v2 endpoints for the product catalog, billing, customers, organizations, billing entities, billable metrics, events, logs and webhook endpoints. Paginated lists use cursor pagination. Some lists, such as rates and phases, return the complete list without pagination. Native v2 endpoints use opt-in relationship expansions and structured error responses. Only the documented actions and expansions are supported. Some other /api/v2 paths still fall back to v1 controllers and are not described here.
   version: 2.0.0-beta
   license:
     name: AGPLv3
@@ -5261,12 +5261,12 @@ paths:
         - name: metadata
           in: query
           required: false
-          description: Metadata key and value pairs to match, sent as metadata[key]=value.
+          description: Metadata key and value pairs to match. An empty value, such as metadata[reference]=, matches customers without that key.
           style: deepObject
           explode: true
           schema:
             type: object
-            description: Metadata key and value pairs to match.
+            description: Metadata key and value pairs to match. An empty value, such as metadata[reference]=, matches customers without that key.
             additionalProperties:
               type: string
         - name: currencies[]
@@ -5446,7 +5446,7 @@ paths:
         - customers
       summary: Update customer
       description: |-
-        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged. When metadata or integration_customers is supplied, it replaces the entire corresponding list. Send each existing entry with its id to keep or update it; omitted entries are deleted. Use the response lago_id as the request id. An empty array removes all entries.
         The path identifies the existing customer. A missing customer returns 404. Billing and payment settings are top-level fields. Relationships are not expanded in the update response.
         Requires the product catalog to be enabled and customer write permission on the API key.
       operationId: updateCustomer
@@ -5482,7 +5482,7 @@ paths:
         - customers
       summary: Update customer
       description: |-
-        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged. When metadata or integration_customers is supplied, it replaces the entire corresponding list. Send each existing entry with its id to keep or update it; omitted entries are deleted. Use the response lago_id as the request id. An empty array removes all entries.
         The path identifies the existing customer. A missing customer returns 404. Billing and payment settings are top-level fields. Relationships are not expanded in the update response.
         Requires the product catalog to be enabled and customer write permission on the API key.
       operationId: patchCustomer
@@ -5985,7 +5985,7 @@ paths:
         - billable_metrics
       summary: Delete billable metric
       description: |-
-        Soft-deletes the metric. A metric referenced by a product filter cannot be deleted.
+        Soft-deletes the metric and all its charges and alerts. Draft invoices containing those charges are marked for refresh. The deleted charges stop billing that usage. A metric referenced by a product filter cannot be deleted.
         Requires the product catalog to be enabled and billable_metric write permission on the API key.
       operationId: destroyBillableMetric
       responses:
@@ -6272,6 +6272,12 @@ paths:
               type: string
               description: Invoice status.
               example: finalized
+              enum:
+                - draft
+                - finalized
+                - voided
+                - failed
+                - pending
         - name: currency
           in: query
           required: false
@@ -6365,6 +6371,9 @@ paths:
               type: string
               description: Settlement type.
               example: payment
+              enum:
+                - payment
+                - credit_note
       responses:
         '200':
           description: Successful response
@@ -6401,7 +6410,7 @@ paths:
       summary: List customer credit notes
       description: |-
         Returns a cursor-paginated list for the customer identified in the path. No expansions are supported.
-        Requires the product catalog to be enabled and credit_note read permission on the API key.
+        Requires the product catalog to be enabled and credit_note read permission on the API key. Unknown values for credit_status, refund_status, reason and types[] are ignored. If no supported values remain for a filter, that filter is not applied.
       operationId: findAllCustomerCreditNotes
       parameters:
         - $ref: '#/components/parameters/limit'
@@ -6457,16 +6466,13 @@ paths:
           required: false
           description: Refund status.
           schema:
-            type:
-              - string
-              - 'null'
+            type: string
             description: Refund status.
             example: pending
             enum:
               - pending
               - succeeded
               - failed
-              - null
         - name: reason
           in: query
           required: false
@@ -7004,14 +7010,21 @@ paths:
         - name: http_statuses[]
           in: query
           required: false
-          description: Http statuses[].
+          description: HTTP status codes or status groups. succeeded selects codes up to 399; failed selects codes above 399. Groups take precedence over numeric codes. Selecting both groups returns no matches.
           schema:
             type: array
             description: Http statuses.
             items:
-              type: integer
-              description: HTTP status.
-              example: 200
+              anyOf:
+                - type: integer
+                  description: HTTP status code.
+                  example: 200
+                - type: string
+                  description: HTTP status group.
+                  example: succeeded
+                  enum:
+                    - succeeded
+                    - failed
         - name: request_paths[]
           in: query
           required: false
@@ -7103,7 +7116,7 @@ paths:
       summary: List security logs
       description: |-
         Returns a cursor-paginated list ordered by log time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
-        Requires a premium license and available log storage. Security logs must also be enabled for the organization. Results are ordered by logged_at and log_id, both descending, within the configured retention period.
+        Requires a premium license and available log storage. Security logs must also be enabled for the organization. Results are ordered by logged_at and log_id, both descending, within the fixed 90-day retention period.
         Requires the product catalog to be enabled and security_log read permission on the API key.
       operationId: findAllSecurityLogs
       parameters:
@@ -7206,7 +7219,7 @@ paths:
         - security_logs
       summary: Retrieve security log
       description: |-
-        Requires a premium license and available log storage. No expansions are supported.
+        Requires a premium license, available log storage and security logs enabled for the organization. Records older than 90 days are excluded. No expansions are supported.
         Requires the product catalog to be enabled and security_log read permission on the API key.
       operationId: findSecurityLog
       responses:
@@ -13010,7 +13023,7 @@ components:
       properties:
         external_id:
           type: string
-          description: Unique customer identifier in your application.
+          description: Unique customer identifier in your application. On update, changes are ignored if the customer has subscriptions, invoices, add-ons, wallets or currency-based coupons.
           example: customer_123
         name:
           type:
@@ -13042,7 +13055,7 @@ components:
             - null
         account_type:
           type: string
-          description: Account type.
+          description: Account type. Requires revenue share to be enabled. On update, changes are ignored if the customer has subscriptions, invoices, add-ons, wallets or currency-based coupons.
           example: customer
           enum:
             - customer
@@ -13135,7 +13148,7 @@ components:
           type:
             - string
             - 'null'
-          description: Timezone.
+          description: Timezone. Requires a premium license; otherwise the value is ignored.
           example: example
         finalize_zero_amount_invoice:
           type:
@@ -13166,7 +13179,7 @@ components:
           type:
             - integer
             - 'null'
-          description: Invoice grace period.
+          description: Invoice grace period. Requires a premium license; otherwise the value is ignored.
           example: 1
         payment_provider:
           type:
@@ -13247,7 +13260,7 @@ components:
             example: legal
         metadata:
           type: array
-          description: Customer metadata. At most five entries.
+          description: Customer metadata. At most five entries. On update, this is a full replacement. Include id for each existing entry to keep or update it. Entries without id are created, not matched by key. Omitted entries are deleted.
           items:
             type: object
             description: Metadata value.
@@ -13279,7 +13292,7 @@ components:
           maxItems: 5
         integration_customers:
           type: array
-          description: Integration mappings. Only one entry per integration type is accepted.
+          description: Integration mappings. Only one entry per integration type is accepted. On update, this is a full replacement. Include id for each existing mapping to keep or update it. Omitted mappings are deleted.
           items:
             type: object
             description: Customer integration mapping.
@@ -13335,9 +13348,11 @@ components:
         - customer
       properties:
         customer:
-          $ref: '#/components/schemas/CustomerBaseInput'
-          required:
-            - external_id
+          allOf:
+            - $ref: '#/components/schemas/CustomerBaseInput'
+            - type: object
+              required:
+                - external_id
     Customer:
       type: object
       description: customer response.
@@ -13687,9 +13702,8 @@ components:
       properties:
         code:
           type: string
-          description: Unique code within the organization.
+          description: Unique code among active billing entities.
           example: example_code
-          pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
         name:
           type: string
           description: Name.
@@ -13854,10 +13868,12 @@ components:
         - billing_entity
       properties:
         billing_entity:
-          $ref: '#/components/schemas/BillingEntityBaseInput'
-          required:
-            - code
-            - name
+          allOf:
+            - $ref: '#/components/schemas/BillingEntityBaseInput'
+            - type: object
+              required:
+                - code
+                - name
     BillingEntity:
       type: object
       description: billing entity response.
@@ -14043,11 +14059,13 @@ components:
         - billable_metric
       properties:
         billable_metric:
-          $ref: '#/components/schemas/BillableMetricBaseInput'
-          required:
-            - name
-            - code
-            - aggregation_type
+          allOf:
+            - $ref: '#/components/schemas/BillableMetricBaseInput'
+            - type: object
+              required:
+                - name
+                - code
+                - aggregation_type
     BillableMetric:
       type: object
       description: billable metric response.
@@ -14814,9 +14832,11 @@ components:
         - webhook_endpoint
       properties:
         webhook_endpoint:
-          $ref: '#/components/schemas/WebhookEndpointBaseInput'
-          required:
-            - webhook_url
+          allOf:
+            - $ref: '#/components/schemas/WebhookEndpointBaseInput'
+            - type: object
+              required:
+                - webhook_url
     WebhookEndpoint:
       type: object
       description: webhook endpoint response.

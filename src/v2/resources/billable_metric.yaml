@@ -130,7 +130,9 @@ delete:
     - billable_metrics
   summary: Delete billable metric
   description: >-
-    Soft-deletes the metric. A metric referenced by a product filter cannot be
+    Soft-deletes the metric and all its charges and alerts. Draft invoices
+    containing those charges are marked for refresh. The deleted charges stop
+    billing that usage. A metric referenced by a product filter cannot be
     deleted.
 
     Requires the product catalog to be enabled and billable_metric write permission on the API key.

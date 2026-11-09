@@ -12,8 +12,9 @@ get:
     - security_logs
   summary: Retrieve security log
   description: >-
-    Requires a premium license and available log storage. No expansions are
-    supported.
+    Requires a premium license, available log storage and security logs enabled
+    for the organization. Records older than 90 days are excluded. No expansions
+    are supported.
 
     Requires the product catalog to be enabled and security_log read permission on the API key.
   operationId: findSecurityLog

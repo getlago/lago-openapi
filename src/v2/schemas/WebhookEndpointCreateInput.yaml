@@ -4,6 +4,8 @@ required:
   - webhook_endpoint
 properties:
   webhook_endpoint:
-    $ref: ./WebhookEndpointBaseInput.yaml
-    required:
-      - webhook_url
+    allOf:
+      - $ref: ./WebhookEndpointBaseInput.yaml
+      - type: object
+        required:
+          - webhook_url

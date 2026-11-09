@@ -4,6 +4,8 @@ required:
   - customer
 properties:
   customer:
-    $ref: ./CustomerBaseInput.yaml
-    required:
-      - external_id
+    allOf:
+      - $ref: ./CustomerBaseInput.yaml
+      - type: object
+        required:
+          - external_id

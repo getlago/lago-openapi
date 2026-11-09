@@ -62,12 +62,14 @@ get:
     - name: metadata
       in: query
       required: false
-      description: Metadata key and value pairs to match, sent as metadata[key]=value.
+      description: Metadata key and value pairs to match. An empty value, such as
+        metadata[reference]=, matches customers without that key.
       style: deepObject
       explode: true
       schema:
         type: object
-        description: Metadata key and value pairs to match.
+        description: Metadata key and value pairs to match. An empty value, such as
+          metadata[reference]=, matches customers without that key.
         additionalProperties:
           type: string
     - name: currencies[]

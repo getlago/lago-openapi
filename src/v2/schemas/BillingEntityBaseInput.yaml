@@ -3,9 +3,8 @@ minProperties: 1
 properties:
   code:
     type: string
-    description: Unique code within the organization.
+    description: Unique code among active billing entities.
     example: example_code
-    pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
   name:
     type: string
     description: Name.

@@ -3,9 +3,12 @@ info:
   title: Lago API v2 documentation
   description: Lago API v2. Documents native v2 endpoints for the product catalog, billing,
     customers, organizations, billing entities, billable metrics, events, logs
-    and webhook endpoints. Native v2 endpoints use cursor pagination, opt-in
-    relationship expansions and structured error responses. Some other /api/v2
-    paths still fall back to v1 controllers and are not described here.
+    and webhook endpoints. Paginated lists use cursor pagination. Some lists,
+    such as rates and phases, return the complete list without pagination.
+    Native v2 endpoints use opt-in relationship expansions and structured error
+    responses. Only the documented actions and expansions are supported. Some
+    other /api/v2 paths still fall back to v1 controllers and are not described
+    here.
   version: 2.0.0-beta
   license:
     name: AGPLv3

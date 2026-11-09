@@ -4,8 +4,10 @@ required:
   - billable_metric
 properties:
   billable_metric:
-    $ref: ./BillableMetricBaseInput.yaml
-    required:
-      - name
-      - code
-      - aggregation_type
+    allOf:
+      - $ref: ./BillableMetricBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code
+          - aggregation_type

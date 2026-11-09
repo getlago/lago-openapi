@@ -57,6 +57,10 @@ put:
   summary: Update customer
   description: >-
     PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+    When metadata or integration_customers is supplied, it replaces the entire
+    corresponding list. Send each existing entry with its id to keep or update
+    it; omitted entries are deleted. Use the response lago_id as the request id.
+    An empty array removes all entries.
 
     The path identifies the existing customer. A missing customer returns 404. Billing and payment settings are top-level fields. Relationships are not expanded in the update response.
 
@@ -95,6 +99,10 @@ patch:
   summary: Update customer
   description: >-
     PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+    When metadata or integration_customers is supplied, it replaces the entire
+    corresponding list. Send each existing entry with its id to keep or update
+    it; omitted entries are deleted. Use the response lago_id as the request id.
+    An empty array removes all entries.
 
     The path identifies the existing customer. A missing customer returns 404. Billing and payment settings are top-level fields. Relationships are not expanded in the update response.
 

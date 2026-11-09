@@ -47,14 +47,23 @@ get:
     - name: http_statuses[]
       in: query
       required: false
-      description: Http statuses[].
+      description: HTTP status codes or status groups. succeeded selects codes up to
+        399; failed selects codes above 399. Groups take precedence over numeric
+        codes. Selecting both groups returns no matches.
       schema:
         type: array
         description: Http statuses.
         items:
-          type: integer
-          description: HTTP status.
-          example: 200
+          anyOf:
+            - type: integer
+              description: HTTP status code.
+              example: 200
+            - type: string
+              description: HTTP status group.
+              example: succeeded
+              enum:
+                - succeeded
+                - failed
     - name: request_paths[]
       in: query
       required: false

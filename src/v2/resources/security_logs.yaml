@@ -6,7 +6,7 @@ get:
     Returns a cursor-paginated list ordered by log time, newest first. Use after
     or before to navigate. The page and per_page parameters are rejected.
 
-    Requires a premium license and available log storage. Security logs must also be enabled for the organization. Results are ordered by logged_at and log_id, both descending, within the configured retention period.
+    Requires a premium license and available log storage. Security logs must also be enabled for the organization. Results are ordered by logged_at and log_id, both descending, within the fixed 90-day retention period.
 
     Requires the product catalog to be enabled and security_log read permission on the API key.
   operationId: findAllSecurityLogs
