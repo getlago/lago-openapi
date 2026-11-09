@@ -1962,6 +1962,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -2105,6 +2107,8 @@ paths:
                 $ref: '#/components/schemas/CustomersPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}:
@@ -2131,6 +2135,8 @@ paths:
                 $ref: '#/components/schemas/Customer'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     delete:
@@ -2148,6 +2154,8 @@ paths:
                 $ref: '#/components/schemas/Customer'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/applied_coupons:
@@ -3475,6 +3483,8 @@ paths:
                     $ref: '#/components/schemas/CustomerCheckoutUrl'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -17170,8 +17180,10 @@ components:
               type:
                 - integer
                 - 'null'
+              minimum: 0
+              maximum: 365
               example: 30
-              description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+              description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized. It must be between 0 and 365 days. Send `null` to remove the customer's own term, so the term of the billing entity applies.
             external_salesforce_id:
               type:
                 - string

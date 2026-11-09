@@ -159,8 +159,10 @@ properties:
         type:
           - integer
           - "null"
+        minimum: 0
+        maximum: 365
         example: 30
-        description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+        description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized. It must be between 0 and 365 days. Send `null` to remove the customer's own term, so the term of the billing entity applies.
       external_salesforce_id:
         type:
           - string
