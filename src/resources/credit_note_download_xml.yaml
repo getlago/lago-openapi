@@ -1,0 +1,28 @@
+post:
+  tags:
+    - credit_notes
+  summary: Download a credit note XML
+  description: |-
+    This endpoint downloads the e-invoicing XML document of an existing credit note. Only `finalized` credit notes can be downloaded; any other credit note returns a `404` error.
+    When the XML has already been generated, the credit note object is returned and its `xml_url` points to the document. When it has not been generated yet, the response is a `200` with an empty body and the generation starts in the background. Call the endpoint again to get the credit note object with its `xml_url`.
+  parameters:
+    - name: lago_id
+      in: path
+      description: The credit note unique identifier, created by Lago.
+      required: true
+      schema:
+        type: string
+        format: 'uuid'
+        example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
+  operationId: downloadCreditNoteXml
+  responses:
+    '200':
+      description: Credit note XML
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/CreditNote.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
