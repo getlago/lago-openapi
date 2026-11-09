@@ -7979,6 +7979,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     get:
@@ -7999,6 +8001,8 @@ paths:
                 $ref: '#/components/schemas/WebhookEndpointsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /webhook_endpoints/{lago_id}:
     parameters:
       - name: lago_id
@@ -8033,6 +8037,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -8052,6 +8058,8 @@ paths:
                 $ref: '#/components/schemas/WebhookEndpoint'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     delete:
@@ -8069,6 +8077,8 @@ paths:
                 $ref: '#/components/schemas/WebhookEndpoint'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
 webhooks:
@@ -26738,7 +26748,7 @@ components:
           properties:
             webhook_url:
               type: string
-              description: The URL of the webhook endpoint. It must be unique within the organization.
+              description: The URL of the webhook endpoint. It must be an HTTP or HTTPS URL with a host, and it must be unique within the organization.
               example: https://foo.bar
             signature_algo:
               type:
@@ -26761,7 +26771,7 @@ components:
               type:
                 - array
                 - 'null'
-              description: The list of event types sent to this webhook endpoint. Pass `null` or `["*"]` to receive every event type. An empty array stops every delivery.
+              description: The list of event types sent to this webhook endpoint. Pass `null` or `["*"]` to receive every event type. An empty array stops every delivery. Values are trimmed, lowercased and deduplicated, and an unsupported event type is rejected.
               items:
                 type: string
               example:
@@ -26784,18 +26794,15 @@ components:
           properties:
             webhook_url:
               type: string
-              description: The URL of the webhook endpoint. It must be unique within the organization.
+              description: The URL of the webhook endpoint. It must be an HTTP or HTTPS URL with a host, and it must be unique within the organization.
               example: https://foo.bar
             signature_algo:
-              type:
-                - string
-                - 'null'
-              description: The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept.
+              type: string
+              description: The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept. `null` is refused.
               example: hmac
               enum:
                 - jwt
                 - hmac
-                - null
             name:
               type:
                 - string
@@ -26806,7 +26813,7 @@ components:
               type:
                 - array
                 - 'null'
-              description: The list of event types sent to this webhook endpoint. Pass `null` or `["*"]` to receive every event type. An empty array stops every delivery.
+              description: The list of event types sent to this webhook endpoint. Pass `null` or `["*"]` to receive every event type. An empty array stops every delivery. Values are trimmed, lowercased and deduplicated, and an unsupported event type is rejected.
               items:
                 type: string
               example:
