@@ -75,9 +75,11 @@ properties:
     type: array
     description: Initial effective-dated rates. A failure rolls back the card and its rates.
     items:
-      $ref: ./RateCardRateBaseInput.yaml
-      required:
-        - code
-        - effective_from
-        - rate_model
-        - billing_interval_unit
+      allOf:
+        - $ref: ./RateCardRateBaseInput.yaml
+        - type: object
+          required:
+            - code
+            - effective_from
+            - rate_model
+            - billing_interval_unit

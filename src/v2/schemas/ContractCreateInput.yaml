@@ -4,7 +4,9 @@ required:
   - contract
 properties:
   contract:
-    $ref: ./ContractBaseInput.yaml
-    required:
-      - external_id
-      - external_customer_id
+    allOf:
+      - $ref: ./ContractBaseInput.yaml
+      - type: object
+        required:
+          - external_id
+          - external_customer_id

@@ -4,6 +4,8 @@ required:
   - applied_rate_card
 properties:
   applied_rate_card:
-    $ref: ./ContractAppliedRateCardBaseInput.yaml
-    required:
-      - rate_card_code
+    allOf:
+      - $ref: ./ContractAppliedRateCardBaseInput.yaml
+      - type: object
+        required:
+          - rate_card_code

@@ -48,7 +48,9 @@ put:
     - product_filters
   summary: Update filter
   description: >-
-    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged. The
+    code cannot change while the product is used by a plan or contract. Values
+    cannot change while a contract has a rate card scoped to this filter.
 
     Supplying values replaces the existing value set. Omitting values preserves it.
 
@@ -86,7 +88,9 @@ patch:
     - product_filters
   summary: Update filter
   description: >-
-    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged. The
+    code cannot change while the product is used by a plan or contract. Values
+    cannot change while a contract has a rate card scoped to this filter.
 
     Supplying values replaces the existing value set. Omitting values preserves it.
 
@@ -124,8 +128,8 @@ delete:
     - product_filters
   summary: Delete filter
   description: >-
-    Deletes the record and returns it with deleted_at set. Deleted records are
-    excluded from subsequent reads.
+    Soft-deletes the filter, its values, its scoped rate cards and their rates.
+    Deletion is rejected while the product is used by a plan or contract.
 
     Requires the product catalog to be enabled and product write permission on the API key.
   operationId: destroyProductFilter

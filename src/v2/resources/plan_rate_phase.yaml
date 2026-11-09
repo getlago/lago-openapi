@@ -10,11 +10,13 @@ parameters:
   - name: applied_rate_card_code
     in: path
     required: true
-    description: Applied rate card code.
+    description: Code of the rate card applied to the parent, returned as
+      rate_card_code on the applied rate card.
     schema:
       type: string
-      description: Applied rate card code.
-      example: example_code
+      description: Code of the rate card applied to the parent, returned as
+        rate_card_code on the applied rate card.
+      example: compute_usd
   - name: code
     in: path
     required: true
@@ -105,7 +107,7 @@ delete:
   summary: Delete rate phase
   description: >-
     Removes the phase and renumbers later positions. The final indefinite phase
-    cannot be removed when that would leave an invalid sequence.
+    and the only remaining phase cannot be deleted.
 
     Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
   operationId: destroyPlanRatePhase

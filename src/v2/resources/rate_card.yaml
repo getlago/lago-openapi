@@ -60,7 +60,7 @@ put:
   description: >-
     PUT and PATCH both accept partial updates. Omitted fields are unchanged.
 
-    Product and product filter are fixed at creation. Structural edits can be restricted when a card is already attached. Tax assignments remain editable.
+    Product and product filter are fixed at creation. Once any rate exists, currency, applied_pricing_unit_code, billing_timing, proration, regroup_paid_fees and display_on_invoice cannot change. Code and currency also cannot change while the card is attached to a plan or contract. Tax assignments remain editable.
 
     Requires the product catalog to be enabled and rate_card write permission on the API key.
   operationId: updateRateCard
@@ -98,7 +98,7 @@ patch:
   description: >-
     PUT and PATCH both accept partial updates. Omitted fields are unchanged.
 
-    Product and product filter are fixed at creation. Structural edits can be restricted when a card is already attached. Tax assignments remain editable.
+    Product and product filter are fixed at creation. Once any rate exists, currency, applied_pricing_unit_code, billing_timing, proration, regroup_paid_fees and display_on_invoice cannot change. Code and currency also cannot change while the card is attached to a plan or contract. Tax assignments remain editable.
 
     Requires the product catalog to be enabled and rate_card write permission on the API key.
   operationId: patchRateCard

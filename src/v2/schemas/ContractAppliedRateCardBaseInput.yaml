@@ -17,12 +17,16 @@ properties:
     type:
       - array
       - "null"
-    description: Ordered phase sequence. Omitted or null creates one default
-      indefinite phase. An explicit empty list is rejected.
+    description: Complete phase sequence with positions exactly 1 through the number
+      of phases. Omitted or null creates one default indefinite phase. An
+      explicit empty list is rejected.
     items:
-      $ref: ./RatePhaseBaseInput.yaml
-      required:
-        - code
+      allOf:
+        - $ref: ./RatePhaseBaseInput.yaml
+        - type: object
+          required:
+            - code
+            - position
     minItems: 1
   billing_anchor_date:
     type:

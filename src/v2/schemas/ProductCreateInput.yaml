@@ -4,8 +4,10 @@ required:
   - product
 properties:
   product:
-    $ref: ./ProductBaseInput.yaml
-    required:
-      - name
-      - code
-      - product_type
+    allOf:
+      - $ref: ./ProductBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code
+          - product_type

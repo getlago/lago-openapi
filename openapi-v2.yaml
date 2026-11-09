@@ -909,7 +909,7 @@ paths:
         - product_filters
       summary: Update filter
       description: |-
-        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged. The code cannot change while the product is used by a plan or contract. Values cannot change while a contract has a rate card scoped to this filter.
         Supplying values replaces the existing value set. Omitting values preserves it.
         Requires the product catalog to be enabled and product write permission on the API key.
       operationId: updateProductFilter
@@ -945,7 +945,7 @@ paths:
         - product_filters
       summary: Update filter
       description: |-
-        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged. The code cannot change while the product is used by a plan or contract. Values cannot change while a contract has a rate card scoped to this filter.
         Supplying values replaces the existing value set. Omitting values preserves it.
         Requires the product catalog to be enabled and product write permission on the API key.
       operationId: patchProductFilter
@@ -981,7 +981,7 @@ paths:
         - product_filters
       summary: Delete filter
       description: |-
-        Deletes the record and returns it with deleted_at set. Deleted records are excluded from subsequent reads.
+        Soft-deletes the filter, its values, its scoped rate cards and their rates. Deletion is rejected while the product is used by a plan or contract.
         Requires the product catalog to be enabled and product write permission on the API key.
       operationId: destroyProductFilter
       responses:
@@ -1187,7 +1187,7 @@ paths:
       summary: Update rate card
       description: |-
         PUT and PATCH both accept partial updates. Omitted fields are unchanged.
-        Product and product filter are fixed at creation. Structural edits can be restricted when a card is already attached. Tax assignments remain editable.
+        Product and product filter are fixed at creation. Once any rate exists, currency, applied_pricing_unit_code, billing_timing, proration, regroup_paid_fees and display_on_invoice cannot change. Code and currency also cannot change while the card is attached to a plan or contract. Tax assignments remain editable.
         Requires the product catalog to be enabled and rate_card write permission on the API key.
       operationId: updateRateCard
       requestBody:
@@ -1223,7 +1223,7 @@ paths:
       summary: Update rate card
       description: |-
         PUT and PATCH both accept partial updates. Omitted fields are unchanged.
-        Product and product filter are fixed at creation. Structural edits can be restricted when a card is already attached. Tax assignments remain editable.
+        Product and product filter are fixed at creation. Once any rate exists, currency, applied_pricing_unit_code, billing_timing, proration, regroup_paid_fees and display_on_invoice cannot change. Code and currency also cannot change while the card is attached to a plan or contract. Tax assignments remain editable.
         Requires the product catalog to be enabled and rate_card write permission on the API key.
       operationId: patchRateCard
       requestBody:
@@ -1836,11 +1836,11 @@ paths:
       - name: code
         in: path
         required: true
-        description: Code.
+        description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
         schema:
           type: string
-          description: Code.
-          example: example_code
+          description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
+          example: compute_usd
     get:
       tags:
         - plan_applied_rate_cards
@@ -1980,11 +1980,11 @@ paths:
       - name: applied_rate_card_code
         in: path
         required: true
-        description: Applied rate card code.
+        description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
         schema:
           type: string
-          description: Applied rate card code.
-          example: example_code
+          description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
+          example: compute_usd
     get:
       tags:
         - plan_rate_phases
@@ -2060,11 +2060,11 @@ paths:
       - name: applied_rate_card_code
         in: path
         required: true
-        description: Applied rate card code.
+        description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
         schema:
           type: string
-          description: Applied rate card code.
-          example: example_code
+          description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
+          example: compute_usd
       - name: code
         in: path
         required: true
@@ -2150,7 +2150,7 @@ paths:
         - plan_rate_phases
       summary: Delete rate phase
       description: |-
-        Removes the phase and renumbers later positions. The final indefinite phase cannot be removed when that would leave an invalid sequence.
+        Removes the phase and renumbers later positions. The final indefinite phase and the only remaining phase cannot be deleted.
         Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
       operationId: destroyPlanRatePhase
       responses:
@@ -2267,11 +2267,11 @@ paths:
       - name: code
         in: path
         required: true
-        description: Code.
+        description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
         schema:
           type: string
-          description: Code.
-          example: example_code
+          description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
+          example: compute_usd
     get:
       tags:
         - contract_applied_rate_cards
@@ -2411,18 +2411,18 @@ paths:
       - name: applied_rate_card_code
         in: path
         required: true
-        description: Applied rate card code.
+        description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
         schema:
           type: string
-          description: Applied rate card code.
-          example: example_code
+          description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
+          example: compute_usd
     get:
       tags:
         - contract_rate_phases
       summary: List contract rate phases
       description: |-
         Returns the complete list without cursor metadata.
-        Phases are returned as a complete list.
+        Phases are returned in position order.
         Requires the product catalog to be enabled and contract_rate_card read permission on the API key.
       operationId: findAllContractRatePhases
       responses:
@@ -2491,11 +2491,11 @@ paths:
       - name: applied_rate_card_code
         in: path
         required: true
-        description: Applied rate card code.
+        description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
         schema:
           type: string
-          description: Applied rate card code.
-          example: example_code
+          description: Code of the rate card applied to the parent, returned as rate_card_code on the applied rate card.
+          example: compute_usd
       - name: code
         in: path
         required: true
@@ -2581,7 +2581,7 @@ paths:
         - contract_rate_phases
       summary: Delete rate phase
       description: |-
-        Removes the phase and renumbers later positions. The final indefinite phase cannot be removed when that would leave an invalid sequence.
+        Removes the phase and renumbers later positions. The final indefinite phase and the only remaining phase cannot be deleted.
         Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
       operationId: destroyContractRatePhase
       responses:
@@ -2624,10 +2624,10 @@ paths:
         - name: search_term
           in: query
           required: false
-          description: Searches names and codes.
+          description: Searches contract name, external ID and Lago ID; plan name and code; and customer name, email and external ID. Ignored when external_id is provided. Customer fields are not searched when external_customer_id is provided.
           schema:
             type: string
-            description: Text to search.
+            description: Searches contract name, external ID and Lago ID; plan name and code; and customer name, email and external ID. Ignored when external_id is provided. Customer fields are not searched when external_customer_id is provided.
             example: example
         - name: status[]
           in: query
@@ -3408,10 +3408,12 @@ components:
         - product_category
       properties:
         product_category:
-          $ref: '#/components/schemas/ProductCategoryBaseInput'
-          required:
-            - name
-            - code
+          allOf:
+            - $ref: '#/components/schemas/ProductCategoryBaseInput'
+            - type: object
+              required:
+                - name
+                - code
     ProductCategory:
       type: object
       description: product category response.
@@ -3686,11 +3688,13 @@ components:
         - product
       properties:
         product:
-          $ref: '#/components/schemas/ProductBaseInput'
-          required:
-            - name
-            - code
-            - product_type
+          allOf:
+            - $ref: '#/components/schemas/ProductBaseInput'
+            - type: object
+              required:
+                - name
+                - code
+                - product_type
     Product:
       type: object
       description: product response.
@@ -3894,11 +3898,13 @@ components:
         - filter
       properties:
         filter:
-          $ref: '#/components/schemas/ProductFilterBaseInput'
-          required:
-            - name
-            - code
-            - values
+          allOf:
+            - $ref: '#/components/schemas/ProductFilterBaseInput'
+            - type: object
+              required:
+                - name
+                - code
+                - values
     ProductFilter:
       type: object
       description: filter response.
@@ -4530,12 +4536,14 @@ components:
           type: array
           description: Initial effective-dated rates. A failure rolls back the card and its rates.
           items:
-            $ref: '#/components/schemas/RateCardRateBaseInput'
-            required:
-              - code
-              - effective_from
-              - rate_model
-              - billing_interval_unit
+            allOf:
+              - $ref: '#/components/schemas/RateCardRateBaseInput'
+              - type: object
+                required:
+                  - code
+                  - effective_from
+                  - rate_model
+                  - billing_interval_unit
     RateCardCreateInput:
       type: object
       description: Create rate card.
@@ -4543,12 +4551,14 @@ components:
         - rate_card
       properties:
         rate_card:
-          $ref: '#/components/schemas/RateCardBaseInput'
-          required:
-            - name
-            - code
-            - currency
-            - product_code
+          allOf:
+            - $ref: '#/components/schemas/RateCardBaseInput'
+            - type: object
+              required:
+                - name
+                - code
+                - currency
+                - product_code
     RateCard:
       type: object
       description: rate card response.
@@ -4642,12 +4652,14 @@ components:
         - rate
       properties:
         rate:
-          $ref: '#/components/schemas/RateCardRateBaseInput'
-          required:
-            - code
-            - effective_from
-            - rate_model
-            - billing_interval_unit
+          allOf:
+            - $ref: '#/components/schemas/RateCardRateBaseInput'
+            - type: object
+              required:
+                - code
+                - effective_from
+                - rate_model
+                - billing_interval_unit
     RateCardRate:
       type: object
       description: rate response.
@@ -4781,11 +4793,13 @@ components:
         - plan
       properties:
         plan:
-          $ref: '#/components/schemas/CatalogPlanBaseInput'
-          required:
-            - name
-            - code
-            - currency
+          allOf:
+            - $ref: '#/components/schemas/CatalogPlanBaseInput'
+            - type: object
+              required:
+                - name
+                - code
+                - currency
     CatalogPlan:
       type: object
       description: plan response.
@@ -4929,7 +4943,7 @@ components:
           pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
         position:
           type: integer
-          description: One-based sequence position. Omitted positions are inserted automatically.
+          description: One-based sequence position.
           example: 1
           minimum: 1
         name:
@@ -4969,11 +4983,14 @@ components:
           type:
             - array
             - 'null'
-          description: Ordered phase sequence. Omitted or null creates one default indefinite phase. An explicit empty list is rejected.
+          description: Complete phase sequence with positions exactly 1 through the number of phases. Omitted or null creates one default indefinite phase. An explicit empty list is rejected.
           items:
-            $ref: '#/components/schemas/RatePhaseBaseInput'
-            required:
-              - code
+            allOf:
+              - $ref: '#/components/schemas/RatePhaseBaseInput'
+              - type: object
+                required:
+                  - code
+                  - position
           minItems: 1
     PlanAppliedRateCardCreateInput:
       type: object
@@ -4982,9 +4999,11 @@ components:
         - applied_rate_card
       properties:
         applied_rate_card:
-          $ref: '#/components/schemas/PlanAppliedRateCardBaseInput'
-          required:
-            - rate_card_code
+          allOf:
+            - $ref: '#/components/schemas/PlanAppliedRateCardBaseInput'
+            - type: object
+              required:
+                - rate_card_code
     PlanAppliedRateCard:
       type: object
       description: applied rate card response.
@@ -5146,9 +5165,12 @@ components:
         - rate_phase
       properties:
         rate_phase:
-          $ref: '#/components/schemas/RatePhaseBaseInput'
-          required:
-            - code
+          description: Single phase to insert. If position is omitted, a finite phase is inserted before the final indefinite phase; otherwise it is appended.
+          allOf:
+            - $ref: '#/components/schemas/RatePhaseBaseInput'
+            - type: object
+              required:
+                - code
     PlanRatePhase:
       type: object
       description: rate phase response.
@@ -5267,11 +5289,14 @@ components:
           type:
             - array
             - 'null'
-          description: Ordered phase sequence. Omitted or null creates one default indefinite phase. An explicit empty list is rejected.
+          description: Complete phase sequence with positions exactly 1 through the number of phases. Omitted or null creates one default indefinite phase. An explicit empty list is rejected.
           items:
-            $ref: '#/components/schemas/RatePhaseBaseInput'
-            required:
-              - code
+            allOf:
+              - $ref: '#/components/schemas/RatePhaseBaseInput'
+              - type: object
+                required:
+                  - code
+                  - position
           minItems: 1
         billing_anchor_date:
           type:
@@ -5287,9 +5312,11 @@ components:
         - applied_rate_card
       properties:
         applied_rate_card:
-          $ref: '#/components/schemas/ContractAppliedRateCardBaseInput'
-          required:
-            - rate_card_code
+          allOf:
+            - $ref: '#/components/schemas/ContractAppliedRateCardBaseInput'
+            - type: object
+              required:
+                - rate_card_code
     ContractAppliedRateCard:
       type: object
       description: applied rate card response.
@@ -5316,11 +5343,9 @@ components:
               example: '1.5'
               pattern: ^[0-9]+(\.[0-9]+)?$
             billing_anchor_date:
-              type:
-                - string
-                - 'null'
-              description: Billing anchor for this applied card. Defaults to the contract anchor.
-              example: null
+              type: string
+              description: Billing anchor for this applied card. Null is rejected. Omit the field to keep the current anchor.
+              example: '2022-04-29'
               format: date
     ContractRatePhasesCollection:
       type: object
@@ -5948,10 +5973,12 @@ components:
         - contract
       properties:
         contract:
-          $ref: '#/components/schemas/ContractBaseInput'
-          required:
-            - external_id
-            - external_customer_id
+          allOf:
+            - $ref: '#/components/schemas/ContractBaseInput'
+            - type: object
+              required:
+                - external_id
+                - external_customer_id
     Contract:
       type: object
       description: contract response.

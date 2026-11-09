@@ -4,8 +4,10 @@ required:
   - plan
 properties:
   plan:
-    $ref: ./CatalogPlanBaseInput.yaml
-    required:
-      - name
-      - code
-      - currency
+    allOf:
+      - $ref: ./CatalogPlanBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code
+          - currency

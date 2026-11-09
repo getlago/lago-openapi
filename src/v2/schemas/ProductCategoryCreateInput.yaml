@@ -4,7 +4,9 @@ required:
   - product_category
 properties:
   product_category:
-    $ref: ./ProductCategoryBaseInput.yaml
-    required:
-      - name
-      - code
+    allOf:
+      - $ref: ./ProductCategoryBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code

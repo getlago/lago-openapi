@@ -16,9 +16,8 @@ properties:
         example: "1.5"
         pattern: ^[0-9]+(\.[0-9]+)?$
       billing_anchor_date:
-        type:
-          - string
-          - "null"
-        description: Billing anchor for this applied card. Defaults to the contract anchor.
-        example: null
+        type: string
+        description: Billing anchor for this applied card. Null is rejected. Omit the
+          field to keep the current anchor.
+        example: 2022-04-29
         format: date

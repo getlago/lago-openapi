@@ -10,11 +10,13 @@ parameters:
   - name: applied_rate_card_code
     in: path
     required: true
-    description: Applied rate card code.
+    description: Code of the rate card applied to the parent, returned as
+      rate_card_code on the applied rate card.
     schema:
       type: string
-      description: Applied rate card code.
-      example: example_code
+      description: Code of the rate card applied to the parent, returned as
+        rate_card_code on the applied rate card.
+      example: compute_usd
 get:
   tags:
     - contract_rate_phases
@@ -22,7 +24,7 @@ get:
   description: >-
     Returns the complete list without cursor metadata.
 
-    Phases are returned as a complete list.
+    Phases are returned in position order.
 
     Requires the product catalog to be enabled and contract_rate_card read permission on the API key.
   operationId: findAllContractRatePhases

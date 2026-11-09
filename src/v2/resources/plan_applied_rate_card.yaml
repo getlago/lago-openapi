@@ -10,11 +10,13 @@ parameters:
   - name: code
     in: path
     required: true
-    description: Code.
+    description: Code of the rate card applied to the parent, returned as
+      rate_card_code on the applied rate card.
     schema:
       type: string
-      description: Code.
-      example: example_code
+      description: Code of the rate card applied to the parent, returned as
+        rate_card_code on the applied rate card.
+      example: compute_usd
 get:
   tags:
     - plan_applied_rate_cards

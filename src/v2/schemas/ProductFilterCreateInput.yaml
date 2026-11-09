@@ -4,8 +4,10 @@ required:
   - filter
 properties:
   filter:
-    $ref: ./ProductFilterBaseInput.yaml
-    required:
-      - name
-      - code
-      - values
+    allOf:
+      - $ref: ./ProductFilterBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code
+          - values

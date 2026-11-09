@@ -4,9 +4,11 @@ required:
   - rate
 properties:
   rate:
-    $ref: ./RateCardRateBaseInput.yaml
-    required:
-      - code
-      - effective_from
-      - rate_model
-      - billing_interval_unit
+    allOf:
+      - $ref: ./RateCardRateBaseInput.yaml
+      - type: object
+        required:
+          - code
+          - effective_from
+          - rate_model
+          - billing_interval_unit

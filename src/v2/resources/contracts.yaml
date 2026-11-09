@@ -19,10 +19,16 @@ get:
     - name: search_term
       in: query
       required: false
-      description: Searches names and codes.
+      description: Searches contract name, external ID and Lago ID; plan name and
+        code; and customer name, email and external ID. Ignored when external_id
+        is provided. Customer fields are not searched when external_customer_id
+        is provided.
       schema:
         type: string
-        description: Text to search.
+        description: Searches contract name, external ID and Lago ID; plan name and
+          code; and customer name, email and external ID. Ignored when
+          external_id is provided. Customer fields are not searched when
+          external_customer_id is provided.
         example: example
     - name: status[]
       in: query
