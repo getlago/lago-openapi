@@ -171,6 +171,8 @@ paths:
                       $ref: '#/components/schemas/BillingEntityObject'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
     post:
       tags:
         - billing_entities
@@ -233,6 +235,8 @@ paths:
                     $ref: '#/components/schemas/BillingEntityObjectExtended'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     put:
@@ -264,6 +268,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -12377,6 +12383,23 @@ components:
         error:
           type: string
           example: Unauthorized
+    ApiErrorForbidden:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        code:
+          type: string
+          example: feature_unavailable
     BillingEntityCreateInput:
       type: object
       description: Billing entity create input
@@ -12454,8 +12477,10 @@ components:
                   default: align_with_finalization_date
             net_payment_term:
               type: integer
+              minimum: 0
+              maximum: 365
               example: 0
-              description: The net payment term (in days) for this billing entity
+              description: The net payment term (in days) for this billing entity. It must be between 0 and 365 days. It applies to every customer of the billing entity that has no net payment term of its own.
             address_line1:
               type:
                 - string
@@ -12561,23 +12586,6 @@ components:
         error:
           type: string
           example: Bad request
-    ApiErrorForbidden:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 403
-        error:
-          type: string
-          example: Forbidden
-        code:
-          type: string
-          example: feature_unavailable
     ApiErrorUnprocessableEntity:
       type: object
       required:
@@ -12802,8 +12810,10 @@ components:
                   default: align_with_finalization_date
             net_payment_term:
               type: integer
+              minimum: 0
+              maximum: 365
               example: 0
-              description: The net payment term (in days) for this billing entity
+              description: The net payment term (in days) for this billing entity. It must be between 0 and 365 days. It applies to every customer of the billing entity that has no net payment term of its own.
             address_line1:
               type:
                 - string
@@ -27720,18 +27730,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorUnauthorized'
-    BadRequest:
-      description: Bad Request error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorBadRequest'
     Forbidden:
       description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorForbidden'
+    BadRequest:
+      description: Bad Request error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorBadRequest'
     UnprocessableEntity:
       description: Unprocessable entity error
       content:
