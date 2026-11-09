@@ -3927,7 +3927,7 @@ paths:
         - invoices
       summary: Finalize a draft invoice
       description: |-
-        Refreshes and finalizes a draft invoice. A non-draft invoice returns 404. Only subscription and contract invoices support finalization; other invoice types return 403. If provider taxes are already pending, the request returns 403 with cannot_finalize_with_pending_taxes. If this request starts fetching provider taxes, it returns 200 with the invoice still in draft; finalization completes after the taxes are applied.
+        Refreshes and finalizes a draft invoice. A non-draft invoice returns 404. Only subscription and contract invoices support finalization; other invoice types return 403. If provider taxes are already pending, the request returns 403 with cannot_finalize_with_pending_taxes. If this request starts fetching provider taxes, it returns 200 with the invoice in pending status; finalization completes after the taxes are applied.
         Requires the product catalog to be enabled and invoice write permission on the API key.
       operationId: finalizeInvoice
       responses:
