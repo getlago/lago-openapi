@@ -173,6 +173,8 @@ paths:
                       $ref: '#/components/schemas/BillingEntityObject'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
     post:
       tags:
         - billing_entities
@@ -235,6 +237,8 @@ paths:
                     $ref: '#/components/schemas/BillingEntityObjectExtended'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     put:
@@ -266,6 +270,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -12789,6 +12795,23 @@ components:
         error:
           type: string
           example: Unauthorized
+    ApiErrorForbidden:
+      type: object
+      required:
+        - status
+        - error
+        - code
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        code:
+          type: string
+          example: feature_unavailable
     BillingEntityCreateInput:
       type: object
       description: Billing entity create input
@@ -12875,8 +12898,10 @@ components:
             net_payment_term:
               deprecated: true
               type: integer
+              minimum: 0
+              maximum: 365
               example: 0
-              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules.'
+              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules. It must be between 0 and 365 days.'
             address_line1:
               type:
                 - string
@@ -12982,23 +13007,6 @@ components:
         error:
           type: string
           example: Bad request
-    ApiErrorForbidden:
-      type: object
-      required:
-        - status
-        - error
-        - code
-      properties:
-        status:
-          type: integer
-          format: int32
-          example: 403
-        error:
-          type: string
-          example: Forbidden
-        code:
-          type: string
-          example: feature_unavailable
     ApiErrorUnprocessableEntity:
       type: object
       required:
@@ -13234,8 +13242,10 @@ components:
             net_payment_term:
               deprecated: true
               type: integer
+              minimum: 0
+              maximum: 365
               example: 0
-              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules.'
+              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules. It must be between 0 and 365 days.'
             address_line1:
               type:
                 - string
@@ -28652,18 +28662,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorUnauthorized'
-    BadRequest:
-      description: Bad Request error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiErrorBadRequest'
     Forbidden:
       description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorForbidden'
+    BadRequest:
+      description: Bad Request error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorBadRequest'
     UnprocessableEntity:
       description: Unprocessable entity error
       content:
