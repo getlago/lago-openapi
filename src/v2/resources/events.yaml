@@ -53,21 +53,23 @@ get:
     - name: timestamp_from
       in: query
       required: false
-      description: Timestamp from.
+      description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is
+        interpreted as midnight UTC.
       schema:
         type: string
-        description: Inclusive lower event-time bound.
+        description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is
+          interpreted as midnight UTC.
         example: 2022-04-29T08:59:51.123456Z
-        format: date-time
     - name: timestamp_to
       in: query
       required: false
-      description: Timestamp to.
+      description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is
+        interpreted as midnight UTC.
       schema:
         type: string
-        description: Inclusive upper event-time bound.
+        description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is
+          interpreted as midnight UTC.
         example: 2022-04-29T08:59:51.123456Z
-        format: date-time
   responses:
     "200":
       description: Successful response

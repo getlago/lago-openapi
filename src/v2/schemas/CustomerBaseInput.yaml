@@ -256,10 +256,8 @@ properties:
       deleted.
     items:
       type: object
-      description: Metadata value.
-      required:
-        - key
-        - value
+      description: Customer metadata entry. For a new entry, key and value are
+        required. For an existing entry, send its id and any fields to change.
       properties:
         id:
           type:
@@ -280,8 +278,19 @@ properties:
           maxLength: 100
         display_on_invoice:
           type: boolean
-          description: Whether to display the value on invoices.
+          description: Whether to display the value on invoices. Defaults to false when
+            omitted, including when updating an existing entry.
           example: false
+          default: false
+      anyOf:
+        - required:
+            - id
+          properties:
+            id:
+              type: string
+        - required:
+            - key
+            - value
     maxItems: 5
   integration_customers:
     type: array
@@ -291,7 +300,8 @@ properties:
     items:
       type: object
       description: Customer integration mapping.
-      required: []
+      required:
+        - integration_type
       properties:
         id:
           type:

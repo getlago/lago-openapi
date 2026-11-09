@@ -6057,21 +6057,19 @@ paths:
         - name: timestamp_from
           in: query
           required: false
-          description: Timestamp from.
+          description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
           schema:
             type: string
-            description: Inclusive lower event-time bound.
+            description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
             example: '2022-04-29T08:59:51.123456Z'
-            format: date-time
         - name: timestamp_to
           in: query
           required: false
-          description: Timestamp to.
+          description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
           schema:
             type: string
-            description: Inclusive upper event-time bound.
+            description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
             example: '2022-04-29T08:59:51.123456Z'
-            format: date-time
       responses:
         '200':
           description: Successful response
@@ -6823,21 +6821,19 @@ paths:
         - name: from_date
           in: query
           required: false
-          description: From date.
+          description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
           schema:
             type: string
-            description: Inclusive lower log-time bound.
+            description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
             example: '2022-04-29T08:59:51.123456Z'
-            format: date-time
         - name: to_date
           in: query
           required: false
-          description: To date.
+          description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
           schema:
             type: string
-            description: Inclusive upper log-time bound.
+            description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
             example: '2022-04-29T08:59:51.123456Z'
-            format: date-time
         - name: activity_types[]
           in: query
           required: false
@@ -7127,21 +7123,19 @@ paths:
         - name: from_date
           in: query
           required: false
-          description: From date.
+          description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
           schema:
             type: string
-            description: Inclusive lower log-time bound.
+            description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC.
             example: '2022-04-29T08:59:51.123456Z'
-            format: date-time
         - name: to_date
           in: query
           required: true
-          description: To date. A request without it returns 422.
+          description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC. Required; a request without it returns 422.
           schema:
             type: string
-            description: Inclusive upper log-time bound.
+            description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is interpreted as midnight UTC. Required; a request without it returns 422.
             example: '2022-04-29T08:59:51.123456Z'
-            format: date-time
         - name: user_ids[]
           in: query
           required: false
@@ -13263,10 +13257,7 @@ components:
           description: Customer metadata. At most five entries. On update, this is a full replacement. Include id for each existing entry to keep or update it. Entries without id are created, not matched by key. Omitted entries are deleted.
           items:
             type: object
-            description: Metadata value.
-            required:
-              - key
-              - value
+            description: Customer metadata entry. For a new entry, key and value are required. For an existing entry, send its id and any fields to change.
             properties:
               id:
                 type:
@@ -13287,8 +13278,18 @@ components:
                 maxLength: 100
               display_on_invoice:
                 type: boolean
-                description: Whether to display the value on invoices.
+                description: Whether to display the value on invoices. Defaults to false when omitted, including when updating an existing entry.
                 example: false
+                default: false
+            anyOf:
+              - required:
+                  - id
+                properties:
+                  id:
+                    type: string
+              - required:
+                  - key
+                  - value
           maxItems: 5
         integration_customers:
           type: array
@@ -13296,7 +13297,8 @@ components:
           items:
             type: object
             description: Customer integration mapping.
-            required: []
+            required:
+              - integration_type
             properties:
               id:
                 type:
@@ -13353,6 +13355,14 @@ components:
             - type: object
               required:
                 - external_id
+              properties:
+                metadata:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - key
+                      - value
     Customer:
       type: object
       description: customer response.

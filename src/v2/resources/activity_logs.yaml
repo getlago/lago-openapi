@@ -18,21 +18,23 @@ get:
     - name: from_date
       in: query
       required: false
-      description: From date.
+      description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is
+        interpreted as midnight UTC.
       schema:
         type: string
-        description: Inclusive lower log-time bound.
+        description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is
+          interpreted as midnight UTC.
         example: 2022-04-29T08:59:51.123456Z
-        format: date-time
     - name: to_date
       in: query
       required: false
-      description: To date.
+      description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is
+        interpreted as midnight UTC.
       schema:
         type: string
-        description: Inclusive upper log-time bound.
+        description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is
+          interpreted as midnight UTC.
         example: 2022-04-29T08:59:51.123456Z
-        format: date-time
     - name: activity_types[]
       in: query
       required: false
