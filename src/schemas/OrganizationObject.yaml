@@ -19,7 +19,6 @@ required:
   - document_numbering
   - document_number_prefix
   - net_payment_term
-  - payment_term
   - tax_identification_number
   - timezone
   - email_settings
@@ -137,11 +136,6 @@ properties:
     type: integer
     example: 30
     description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
-  payment_term:
-    oneOf:
-      - $ref: "./PaymentTermObject.yaml"
-      - type: "null"
-    description: The payment term of the default billing entity of your organization. It is the structured form of `net_payment_term`, and it also covers the terms that a number of days cannot express. It is `null` when the default billing entity has no payment term.
   tax_identification_number:
     type:
       - string
