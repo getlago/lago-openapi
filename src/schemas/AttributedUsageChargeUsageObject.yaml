@@ -1,0 +1,73 @@
+type: object
+required:
+  - lago_charge_id
+  - charge_code
+  - billable_metric_code
+  - lago_charge_filter_id
+  - charge_filter_values
+  - charge_filter_invoice_display_name
+  - units
+  - amount_cents
+  - precise_amount_cents
+  - events_count
+properties:
+  lago_charge_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the charge, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  charge_code:
+    type: string
+    description: Code of the charge.
+    example: "tokens"
+  billable_metric_code:
+    type: string
+    description: Code of the billable metric of the charge.
+    example: "tokens"
+  lago_charge_filter_id:
+    type:
+      - string
+      - "null"
+    format: uuid
+    description: Unique identifier of the charge filter, created by Lago. It is set only for the charge split by `split_charge_code`, and is `null` for the usage that matches none of its filters.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  charge_filter_values:
+    type:
+      - object
+      - "null"
+    additionalProperties:
+      type: array
+      items:
+        type: string
+    description: Values of the charge filter, by billable metric filter key. It is `null` when `lago_charge_filter_id` is `null`.
+    example:
+      model:
+        - opus
+  charge_filter_invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Name of the charge filter displayed on the invoice. It is `null` when `lago_charge_filter_id` is `null` or when the filter has no display name.
+    example: "Opus tokens"
+  units:
+    type: string
+    pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+    description: Number of units consumed, sent as a decimal string.
+    example: "1250.5"
+  amount_cents:
+    type:
+      - integer
+      - "null"
+    description: Amount of the usage in cents, rounded to the nearest cent. It is `null` when `basis` is `units`, or when the charge cannot be priced (only charges with the `standard` charge model are priced).
+    example: 1200
+  precise_amount_cents:
+    type:
+      - string
+      - "null"
+    pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+    description: Amount of the usage in cents, sent as a decimal string. It is `null` in the same cases as `amount_cents`.
+    example: "1200.4567"
+  events_count:
+    type: integer
+    description: Number of events.
+    example: 42

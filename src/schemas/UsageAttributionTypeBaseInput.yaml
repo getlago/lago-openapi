@@ -1,0 +1,41 @@
+type: object
+properties:
+  code:
+    type: string
+    maxLength: 255
+    description: Unique code used to identify the usage attribution type within the organization. Once usage is attributed to the type, the code cannot be changed.
+    example: "team"
+  name:
+    type:
+      - string
+      - "null"
+    maxLength: 255
+    description: Name of the usage attribution type.
+    example: "Team"
+  description:
+    type:
+      - string
+      - "null"
+    description: Description of the usage attribution type.
+    example: "Team that consumed the usage."
+  attribution_keys:
+    type: array
+    minItems: 1
+    maxItems: 4
+    items:
+      type: string
+      maxLength: 255
+    description: Keys of the event properties that attribute usage to this type, up to 4. Blank and duplicate keys are removed. A key already used by another usage attribution type of the organization is rejected.
+    example:
+      - team
+      - team_id
+  role:
+    allOf:
+      - $ref: "./UsageAttributionTypeRoleEnum.yaml"
+    description: Role of the usage attribution type. A `flat` type cannot have a parent, and a type with children cannot become `flat`. Once usage is attributed to the type, the role cannot be changed.
+  parent_code:
+    type:
+      - string
+      - "null"
+    description: Code of the parent usage attribution type, which must be `hierarchical`. Send `null` or an empty string to remove the parent. Once usage is attributed to the type, the parent cannot be changed.
+    example: "department"
