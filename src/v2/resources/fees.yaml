@@ -90,13 +90,9 @@ get:
     - name: succeeded_at_from
       in: query
       required: false
-      description: Inclusive lower bound on succeeded at. A date-only upper bound
-        includes the whole UTC day.
+      description: Inclusive lower bound on succeeded at. A date starts at midnight UTC.
       schema:
         type: string
-        oneOf:
-          - format: date
-          - format: date-time
         example: 2022-04-29T00:00:00Z
     - name: succeeded_at_to
       in: query
@@ -105,20 +101,13 @@ get:
         includes the whole UTC day.
       schema:
         type: string
-        oneOf:
-          - format: date
-          - format: date-time
         example: 2022-04-29T00:00:00Z
     - name: failed_at_from
       in: query
       required: false
-      description: Inclusive lower bound on failed at. A date-only upper bound
-        includes the whole UTC day.
+      description: Inclusive lower bound on failed at. A date starts at midnight UTC.
       schema:
         type: string
-        oneOf:
-          - format: date
-          - format: date-time
         example: 2022-04-29T00:00:00Z
     - name: failed_at_to
       in: query
@@ -127,20 +116,13 @@ get:
         includes the whole UTC day.
       schema:
         type: string
-        oneOf:
-          - format: date
-          - format: date-time
         example: 2022-04-29T00:00:00Z
     - name: refunded_at_from
       in: query
       required: false
-      description: Inclusive lower bound on refunded at. A date-only upper bound
-        includes the whole UTC day.
+      description: Inclusive lower bound on refunded at. A date starts at midnight UTC.
       schema:
         type: string
-        oneOf:
-          - format: date
-          - format: date-time
         example: 2022-04-29T00:00:00Z
     - name: refunded_at_to
       in: query
@@ -149,9 +131,6 @@ get:
         includes the whole UTC day.
       schema:
         type: string
-        oneOf:
-          - format: date
-          - format: date-time
         example: 2022-04-29T00:00:00Z
   responses:
     "200":

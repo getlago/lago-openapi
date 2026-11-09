@@ -4,7 +4,9 @@ required:
   - credit_note
 properties:
   credit_note:
-    $ref: ./CreditNoteBaseInput.yaml
-    required:
-      - invoice_id
-      - items
+    allOf:
+      - $ref: ./CreditNoteBaseInput.yaml
+      - type: object
+        required:
+          - invoice_id
+          - items

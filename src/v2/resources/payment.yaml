@@ -13,8 +13,8 @@ get:
     - payments
   summary: Retrieve payment
   description: >-
-    Returns the record without nested relationships unless a supported expansion
-    is requested.
+    Returns the payment without nested relationships. No expansions are
+    supported.
 
     Requires the product catalog to be enabled and payment read permission on the API key.
   operationId: findPayment

@@ -66,6 +66,12 @@ get:
           type: string
           description: Invoice status.
           example: finalized
+          enum:
+            - draft
+            - finalized
+            - voided
+            - failed
+            - pending
     - name: external_customer_id
       in: query
       required: false
@@ -175,6 +181,9 @@ get:
           type: string
           description: Settlement type.
           example: payment
+          enum:
+            - payment
+            - credit_note
   responses:
     "200":
       description: Successful response

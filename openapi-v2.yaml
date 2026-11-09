@@ -3067,6 +3067,12 @@ paths:
               type: string
               description: Invoice status.
               example: finalized
+              enum:
+                - draft
+                - finalized
+                - voided
+                - failed
+                - pending
         - name: external_customer_id
           in: query
           required: false
@@ -3176,6 +3182,9 @@ paths:
               type: string
               description: Settlement type.
               example: payment
+              enum:
+                - payment
+                - credit_note
       responses:
         '200':
           description: Successful response
@@ -3441,12 +3450,9 @@ paths:
         - name: succeeded_at_from
           in: query
           required: false
-          description: Inclusive lower bound on succeeded at. A date-only upper bound includes the whole UTC day.
+          description: Inclusive lower bound on succeeded at. A date starts at midnight UTC.
           schema:
             type: string
-            oneOf:
-              - format: date
-              - format: date-time
             example: '2022-04-29T00:00:00Z'
         - name: succeeded_at_to
           in: query
@@ -3454,19 +3460,13 @@ paths:
           description: Inclusive upper bound on succeeded at. A date-only upper bound includes the whole UTC day.
           schema:
             type: string
-            oneOf:
-              - format: date
-              - format: date-time
             example: '2022-04-29T00:00:00Z'
         - name: failed_at_from
           in: query
           required: false
-          description: Inclusive lower bound on failed at. A date-only upper bound includes the whole UTC day.
+          description: Inclusive lower bound on failed at. A date starts at midnight UTC.
           schema:
             type: string
-            oneOf:
-              - format: date
-              - format: date-time
             example: '2022-04-29T00:00:00Z'
         - name: failed_at_to
           in: query
@@ -3474,19 +3474,13 @@ paths:
           description: Inclusive upper bound on failed at. A date-only upper bound includes the whole UTC day.
           schema:
             type: string
-            oneOf:
-              - format: date
-              - format: date-time
             example: '2022-04-29T00:00:00Z'
         - name: refunded_at_from
           in: query
           required: false
-          description: Inclusive lower bound on refunded at. A date-only upper bound includes the whole UTC day.
+          description: Inclusive lower bound on refunded at. A date starts at midnight UTC.
           schema:
             type: string
-            oneOf:
-              - format: date
-              - format: date-time
             example: '2022-04-29T00:00:00Z'
         - name: refunded_at_to
           in: query
@@ -3494,9 +3488,6 @@ paths:
           description: Inclusive upper bound on refunded at. A date-only upper bound includes the whole UTC day.
           schema:
             type: string
-            oneOf:
-              - format: date
-              - format: date-time
             example: '2022-04-29T00:00:00Z'
       responses:
         '200':
@@ -3579,7 +3570,7 @@ paths:
       summary: Update fee
       description: |-
         PUT and PATCH both accept partial updates. Omitted fields are unchanged.
-        Updates only payment_status.
+        Updates only payment_status. An invoiced fee cannot be updated and returns 422 with invoiced_fee.
         Requires the product catalog to be enabled and fee write permission on the API key.
       operationId: updateFee
       requestBody:
@@ -3615,7 +3606,7 @@ paths:
       summary: Update fee
       description: |-
         PUT and PATCH both accept partial updates. Omitted fields are unchanged.
-        Updates only payment_status.
+        Updates only payment_status. An invoiced fee cannot be updated and returns 422 with invoiced_fee.
         Requires the product catalog to be enabled and fee write permission on the API key.
       operationId: patchFee
       requestBody:
@@ -3936,7 +3927,7 @@ paths:
         - invoices
       summary: Finalize a draft invoice
       description: |-
-        Refreshes and finalizes a draft invoice. A non-draft invoice returns 404.
+        Refreshes and finalizes a draft invoice. A non-draft invoice returns 404. Only subscription and contract invoices support finalization; other invoice types return 403. If provider taxes are already pending, the request returns 403 with cannot_finalize_with_pending_taxes. If this request starts fetching provider taxes, it returns 200 with the invoice still in draft; finalization completes after the taxes are applied.
         Requires the product catalog to be enabled and invoice write permission on the API key.
       operationId: finalizeInvoice
       responses:
@@ -3975,7 +3966,7 @@ paths:
         - invoices
       summary: Refresh a draft invoice
       description: |-
-        Refreshes a draft invoice and recalculates fees, taxes and totals.
+        Refreshes a draft invoice and recalculates fees, taxes and totals. Eligible non-draft invoices return 200 unchanged. Only subscription and contract invoices support refresh; other invoice types return 403.
         Requires the product catalog to be enabled and invoice write permission on the API key.
       operationId: refreshInvoice
       responses:
@@ -4142,7 +4133,7 @@ paths:
         - payments
       summary: Retrieve payment
       description: |-
-        Returns the record without nested relationships unless a supported expansion is requested.
+        Returns the payment without nested relationships. No expansions are supported.
         Requires the product catalog to be enabled and payment read permission on the API key.
       operationId: findPayment
       responses:
@@ -4456,6 +4447,7 @@ paths:
         Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
         Lists finalized credit notes of the organization, including credit notes for legacy invoices. This list does not support created_at_from or created_at_to.
         Requires the product catalog to be enabled and credit_note read permission on the API key.
+        Unknown values for credit_status, refund_status, reason and types[] are ignored rather than rejected. If no supported values remain for a filter, that filter is not applied.
       operationId: findAllCreditNotes
       parameters:
         - $ref: '#/components/parameters/limit'
@@ -4519,16 +4511,13 @@ paths:
           required: false
           description: Refund status.
           schema:
-            type:
-              - string
-              - 'null'
+            type: string
             description: Refund status.
             example: pending
             enum:
               - pending
               - succeeded
               - failed
-              - null
         - name: reason
           in: query
           required: false
@@ -9727,11 +9716,13 @@ components:
         - payment
       properties:
         payment:
-          $ref: '#/components/schemas/PaymentBaseInput'
-          required:
-            - invoice_id
-            - amount_cents
-            - reference
+          allOf:
+            - $ref: '#/components/schemas/PaymentBaseInput'
+            - type: object
+              required:
+                - invoice_id
+                - amount_cents
+                - reference
     Payment:
       type: object
       description: payment response.
@@ -9856,10 +9847,12 @@ components:
         - payment_request
       properties:
         payment_request:
-          $ref: '#/components/schemas/PaymentRequestBaseInput'
-          required:
-            - external_customer_id
-            - lago_invoice_ids
+          allOf:
+            - $ref: '#/components/schemas/PaymentRequestBaseInput'
+            - type: object
+              required:
+                - external_customer_id
+                - lago_invoice_ids
     PaymentRequest:
       type: object
       description: payment request response.
@@ -10317,8 +10310,17 @@ components:
           type:
             - object
             - 'null'
-          description: Metadata as an object of key-value pairs.
-          additionalProperties: true
+          description: Metadata as an object of key-value pairs. At most 50 keys are allowed. Keys are limited to 100 characters and values to 255 characters. Values must be strings or null.
+          additionalProperties:
+            type:
+              - string
+              - 'null'
+            description: Metadata value. Null represents an empty value.
+            example: example
+            maxLength: 255
+          maxProperties: 50
+          propertyNames:
+            maxLength: 100
         items:
           type: array
           description: Invoice fees to credit.
@@ -10331,10 +10333,12 @@ components:
         - credit_note
       properties:
         credit_note:
-          $ref: '#/components/schemas/CreditNoteBaseInput'
-          required:
-            - invoice_id
-            - items
+          allOf:
+            - $ref: '#/components/schemas/CreditNoteBaseInput'
+            - type: object
+              required:
+                - invoice_id
+                - items
     CreditNote:
       type: object
       description: credit note response.
@@ -10368,8 +10372,17 @@ components:
               type:
                 - object
                 - 'null'
-              description: Metadata as an object of key-value pairs.
-              additionalProperties: true
+              description: Metadata as an object of key-value pairs. At most 50 keys are allowed. Keys are limited to 100 characters and values to 255 characters. Values must be strings or null.
+              additionalProperties:
+                type:
+                  - string
+                  - 'null'
+                description: Metadata value. Null represents an empty value.
+                example: example
+                maxLength: 255
+              maxProperties: 50
+              propertyNames:
+                maxLength: 100
     CreditNoteEstimateInput:
       type: object
       description: Estimate a credit note.
@@ -10469,10 +10482,19 @@ components:
       properties:
         metadata:
           type: object
-          description: Metadata keys and values. Omitted metadata defaults to an empty object.
-          additionalProperties: true
+          description: Metadata keys and values. Omitted metadata defaults to an empty object. At most 50 keys are allowed. Keys are limited to 100 characters and values to 255 characters. Values must be strings or null.
+          additionalProperties:
+            type:
+              - string
+              - 'null'
+            description: Metadata value. Null represents an empty value.
+            example: example
+            maxLength: 255
           example:
             reference: example
+          maxProperties: 50
+          propertyNames:
+            maxLength: 100
     Metadata:
       type: object
       description: Metadata response.

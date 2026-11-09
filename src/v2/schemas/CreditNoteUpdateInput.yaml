@@ -22,5 +22,16 @@ properties:
         type:
           - object
           - "null"
-        description: Metadata as an object of key-value pairs.
-        additionalProperties: true
+        description: Metadata as an object of key-value pairs. At most 50 keys are
+          allowed. Keys are limited to 100 characters and values to 255
+          characters. Values must be strings or null.
+        additionalProperties:
+          type:
+            - string
+            - "null"
+          description: Metadata value. Null represents an empty value.
+          example: example
+          maxLength: 255
+        maxProperties: 50
+        propertyNames:
+          maxLength: 100

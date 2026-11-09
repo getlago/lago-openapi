@@ -9,6 +9,8 @@ get:
     Lists finalized credit notes of the organization, including credit notes for legacy invoices. This list does not support created_at_from or created_at_to.
 
     Requires the product catalog to be enabled and credit_note read permission on the API key.
+
+    Unknown values for credit_status, refund_status, reason and types[] are ignored rather than rejected. If no supported values remain for a filter, that filter is not applied.
   operationId: findAllCreditNotes
   parameters:
     - $ref: ../parameters/limit.yaml
@@ -72,16 +74,13 @@ get:
       required: false
       description: Refund status.
       schema:
-        type:
-          - string
-          - "null"
+        type: string
         description: Refund status.
         example: pending
         enum:
           - pending
           - succeeded
           - failed
-          - null
     - name: reason
       in: query
       required: false

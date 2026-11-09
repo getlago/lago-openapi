@@ -4,8 +4,10 @@ required:
   - payment
 properties:
   payment:
-    $ref: ./PaymentBaseInput.yaml
-    required:
-      - invoice_id
-      - amount_cents
-      - reference
+    allOf:
+      - $ref: ./PaymentBaseInput.yaml
+      - type: object
+        required:
+          - invoice_id
+          - amount_cents
+          - reference

@@ -64,7 +64,7 @@ put:
   description: >-
     PUT and PATCH both accept partial updates. Omitted fields are unchanged.
 
-    Updates only payment_status.
+    Updates only payment_status. An invoiced fee cannot be updated and returns 422 with invoiced_fee.
 
     Requires the product catalog to be enabled and fee write permission on the API key.
   operationId: updateFee
@@ -102,7 +102,7 @@ patch:
   description: >-
     PUT and PATCH both accept partial updates. Omitted fields are unchanged.
 
-    Updates only payment_status.
+    Updates only payment_status. An invoiced fee cannot be updated and returns 422 with invoiced_fee.
 
     Requires the product catalog to be enabled and fee write permission on the API key.
   operationId: patchFee

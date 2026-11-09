@@ -13,7 +13,9 @@ put:
     - invoices
   summary: Refresh a draft invoice
   description: >-
-    Refreshes a draft invoice and recalculates fees, taxes and totals.
+    Refreshes a draft invoice and recalculates fees, taxes and totals. Eligible
+    non-draft invoices return 200 unchanged. Only subscription and contract
+    invoices support refresh; other invoice types return 403.
 
     Requires the product catalog to be enabled and invoice write permission on the API key.
   operationId: refreshInvoice

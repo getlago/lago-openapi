@@ -4,7 +4,9 @@ required:
   - payment_request
 properties:
   payment_request:
-    $ref: ./PaymentRequestBaseInput.yaml
-    required:
-      - external_customer_id
-      - lago_invoice_ids
+    allOf:
+      - $ref: ./PaymentRequestBaseInput.yaml
+      - type: object
+        required:
+          - external_customer_id
+          - lago_invoice_ids
