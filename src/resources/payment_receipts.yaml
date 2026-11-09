@@ -2,7 +2,7 @@ get:
   tags:
     - payment_receipts
   summary: List all payment receipts
-  description: This endpoint is used to list all existing payment receipts.
+  description: This endpoint is used to list all existing payment receipts. Payment receipts are ordered by creation date, from the most recent to the oldest.
   operationId: findAllPaymentReceipts
   parameters:
     - $ref: '../parameters/page.yaml'
@@ -25,5 +25,7 @@ get:
             $ref: '../schemas/PaymentReceiptsPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
