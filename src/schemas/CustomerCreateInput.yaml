@@ -169,11 +169,12 @@ properties:
 
           When only `net_payment_term` is sent, a value equal to the current alias leaves the structured term unchanged, a different value replaces it with a `net` term of that many days, and `null` clears both.
       net_payment_term:
+        deprecated: true
         type:
           - integer
           - "null"
         example: 30
-        description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+        description: "**Deprecated.** Use `payment_term` instead. The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized."
       external_salesforce_id:
         type:
           - string

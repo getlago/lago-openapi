@@ -86,9 +86,10 @@ properties:
           - `payment_term: null` with a non-null `net_payment_term` is ignored, and the term becomes a `net` term of `net_payment_term` days;
           - `payment_term: null` with `net_payment_term` absent or `null` clears both.
       net_payment_term:
+        deprecated: true
         type: integer
         example: 0
-        description: The net payment term (in days) for this billing entity
+        description: "**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity"
       address_line1:
         type:
           - string

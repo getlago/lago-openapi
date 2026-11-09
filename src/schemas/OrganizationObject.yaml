@@ -137,11 +137,12 @@ properties:
       - type: "null"
     description: The structured payment term of the organization's default billing entity. It can only be changed through the billing entity endpoints.
   net_payment_term:
+    deprecated: true
     type:
       - integer
       - "null"
     example: 30
-    description: Legacy alias of `payment_term`, expressed in days, read from the organization's default billing entity. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type.
+    description: "**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days, read from the organization's default billing entity. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type."
   tax_identification_number:
     type:
       - string

@@ -92,11 +92,12 @@ properties:
       - type: "null"
     description: The payment term applied to the invoice, snapshotted when the invoice was created. It is resolved from the subscription, then the customer, then the billing entity, and defaults to `due_on_receipt`. Invoices created before structured payment terms existed report a `net` term derived from their `net_payment_term`.
   net_payment_term:
+    deprecated: true
     type:
       - integer
       - "null"
     example: 30
-    description: Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type.
+    description: "**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type."
   invoice_type:
     type: string
     enum:
