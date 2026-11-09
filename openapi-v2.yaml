@@ -326,9 +326,6 @@ components:
       required: false
       schema:
         type: string
-        oneOf:
-          - format: date
-          - format: date-time
         example: '2022-04-01T00:00:00Z'
     created_at_to:
       name: created_at_to
@@ -337,9 +334,6 @@ components:
       required: false
       schema:
         type: string
-        oneOf:
-          - format: date
-          - format: date-time
         example: '2022-04-30T23:59:59Z'
   headers:
     EndpointStatus:
@@ -489,8 +483,63 @@ components:
               meta:
                 type: object
                 description: Information about the failure, such as the missing resource, allowed values or bounds. The object is empty when no metadata is available.
-                additionalProperties: true
+                additionalProperties: false
                 example: {}
+                properties:
+                  min:
+                    type: integer
+                    description: Inclusive minimum value.
+                    example: 0
+                  max:
+                    type: integer
+                    description: Inclusive maximum value.
+                    example: 100
+                  min_length:
+                    type: integer
+                    description: Minimum string length, in characters.
+                    example: 1
+                  max_length:
+                    type: integer
+                    description: Maximum string length, in characters.
+                    example: 255
+                  max_items:
+                    type: integer
+                    description: Maximum number of items.
+                    example: 100
+                  allowed_values:
+                    type: array
+                    description: Values accepted for the field.
+                    items:
+                      type: string
+                      description: Allowed value.
+                      example: draft
+                  invalid_values:
+                    type: array
+                    description: Values rejected by request validation.
+                    items:
+                      type: string
+                      description: Rejected value.
+                      example: unknown
+                  value:
+                    type: string
+                    description: Query parameter value received.
+                    example: unknown
+                  resource:
+                    type: string
+                    description: Resource that could not be found.
+                    example: customer
+                  provider_name:
+                    type: string
+                    description: Name of the provider that failed.
+                    example: stripe
+                  provider_code:
+                    type: string
+                    description: Code of the provider connection.
+                    example: stripe_eu
+                  provider_error_code:
+                    type: string
+                    description: Error code returned by the provider.
+                    example: resource_missing
     TaxBaseInput:
       type: object
       minProperties: 1
@@ -524,11 +573,13 @@ components:
         - tax
       properties:
         tax:
-          $ref: '#/components/schemas/TaxBaseInput'
-          required:
-            - name
-            - code
-            - rate
+          allOf:
+            - $ref: '#/components/schemas/TaxBaseInput'
+            - type: object
+              required:
+                - name
+                - code
+                - rate
     Tax:
       type: object
       required:
@@ -608,4 +659,4 @@ components:
               - code: resource_not_found
                 field: base
                 meta:
-                  resource: tax
+                  resource: resource_name

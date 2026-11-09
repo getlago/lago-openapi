@@ -5,12 +5,14 @@ required:
 properties:
   code:
     type: string
-    pattern: '^[a-z][a-z0-9_]*$'
-    description: Code identifying the failure. The HTTP status is carried by the response, not the body.
+    pattern: ^[a-z][a-z0-9_]*$
+    description: Code identifying the failure. The HTTP status is carried by the
+      response, not the body.
     example: validation_errors
   details:
     type: array
-    description: Details of the failure. The array is empty when no field details are available.
+    description: Details of the failure. The array is empty when no field details
+      are available.
     items:
       type: object
       required:
@@ -20,15 +22,74 @@ properties:
       properties:
         code:
           type: string
-          pattern: '^[a-z][a-z0-9_]*$'
-          description: Code identifying the field error or the reason a request parameter was rejected.
+          pattern: ^[a-z][a-z0-9_]*$
+          description: Code identifying the field error or the reason a request parameter
+            was rejected.
           example: value_is_mandatory
         field:
           type: string
-          description: Request field or parameter. Nested fields use dots and zero-based array indexes. A resource-level failure uses base.
+          description: Request field or parameter. Nested fields use dots and zero-based
+            array indexes. A resource-level failure uses base.
           example: name
         meta:
           type: object
-          description: Information about the failure, such as the missing resource, allowed values or bounds. The object is empty when no metadata is available.
-          additionalProperties: true
+          description: Information about the failure, such as the missing resource,
+            allowed values or bounds. The object is empty when no metadata is
+            available.
+          additionalProperties: false
           example: {}
+          properties:
+            min:
+              type: integer
+              description: Inclusive minimum value.
+              example: 0
+            max:
+              type: integer
+              description: Inclusive maximum value.
+              example: 100
+            min_length:
+              type: integer
+              description: Minimum string length, in characters.
+              example: 1
+            max_length:
+              type: integer
+              description: Maximum string length, in characters.
+              example: 255
+            max_items:
+              type: integer
+              description: Maximum number of items.
+              example: 100
+            allowed_values:
+              type: array
+              description: Values accepted for the field.
+              items:
+                type: string
+                description: Allowed value.
+                example: draft
+            invalid_values:
+              type: array
+              description: Values rejected by request validation.
+              items:
+                type: string
+                description: Rejected value.
+                example: unknown
+            value:
+              type: string
+              description: Query parameter value received.
+              example: unknown
+            resource:
+              type: string
+              description: Resource that could not be found.
+              example: customer
+            provider_name:
+              type: string
+              description: Name of the provider that failed.
+              example: stripe
+            provider_code:
+              type: string
+              description: Code of the provider connection.
+              example: stripe_eu
+            provider_error_code:
+              type: string
+              description: Error code returned by the provider.
+              example: resource_missing
