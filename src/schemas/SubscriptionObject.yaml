@@ -20,6 +20,7 @@ required:
   - on_termination_credit_note
   - on_termination_invoice
   - payment_method
+  - payment_term
   - plan_amount_cents
   - plan_amount_currency
   - plan_code
@@ -267,3 +268,8 @@ properties:
       - "null"
     example: "PO-123"
     description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+  payment_term:
+    oneOf:
+      - $ref: "./PaymentTermObject.yaml"
+      - type: "null"
+    description: The structured payment term of the subscription. It is `null` when the subscription has no term of its own, in which case the term of the customer, then of the billing entity, applies to its invoices.

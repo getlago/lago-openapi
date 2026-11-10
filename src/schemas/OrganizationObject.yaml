@@ -19,6 +19,7 @@ required:
   - document_numbering
   - document_number_prefix
   - net_payment_term
+  - payment_term
   - tax_identification_number
   - timezone
   - email_settings
@@ -130,10 +131,18 @@ properties:
     type: string
     example: "ORG-1234"
     description: Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four characters of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.
+  payment_term:
+    oneOf:
+      - $ref: "./PaymentTermObject.yaml"
+      - type: "null"
+    description: The structured payment term of the organization's default billing entity. It can only be changed through the billing entity endpoints.
   net_payment_term:
-    type: integer
+    deprecated: true
+    type:
+      - integer
+      - "null"
     example: 30
-    description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+    description: "**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days, read from the organization's default billing entity. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type."
   tax_identification_number:
     type:
       - string

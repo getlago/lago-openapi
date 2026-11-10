@@ -4611,7 +4611,10 @@ paths:
       tags:
         - invoices
       summary: Create an invoice preview
-      description: This endpoint is used for generating invoice preview.
+      description: |
+        This endpoint is used for generating invoice preview.
+
+        The payment due date of the preview follows the resolved payment term: the subscription's, then the customer's, then the billing entity's, defaulting to `due_on_receipt`. When several subscriptions are previewed, they must resolve to terms giving the same due date, as subscriptions with different terms are billed on separate invoices; otherwise the request fails with a `422` and the error code `subscription_payment_terms_do_not_match`.
       operationId: invoicePreview
       requestBody:
         description: Invoice preview payload
@@ -12045,6 +12048,55 @@ components:
         - YER
         - ZAR
         - ZMW
+    PaymentTermObject:
+      type: object
+      description: |
+        A structured payment term. It defines how the payment due date of an invoice is computed from its issuing date.
+
+        The fields accepted and returned depend on `term_type`:
+        - `due_on_receipt`: no other field. The invoice is due on its issuing date.
+        - `net`: `days`. Due `days` days after the issuing date.
+        - `end_of_month`: no other field. Due on the last day of the issuing month.
+        - `net_end_of_month`: `days`. Due `days` days after the last day of the issuing month.
+        - `days_end_of_month`: `days`. Due on the last day of the month reached `days` days after the issuing date.
+        - `day_of_month`: `day_of_month` and `month_offset`. Due on `day_of_month` of the month `month_offset` months after the issuing month. A day past the end of the target month is clamped to its last day. With a `month_offset` of `0`, a day already past on the issuing date rolls over to the following month.
+
+        Any field not listed for the `term_type` is rejected with a `422` and the error code `unexpected_fields`. Other error codes on this field: `invalid_format`, `invalid_term_type`, `invalid_days`, `invalid_day_of_month`, `invalid_month_offset`.
+
+        The legacy integer field `net_payment_term` is an alias of this object: `days` for a `net` term, `0` for `due_on_receipt`, and `null` for every other term type.
+      required:
+        - term_type
+      properties:
+        term_type:
+          type: string
+          enum:
+            - due_on_receipt
+            - net
+            - end_of_month
+            - net_end_of_month
+            - days_end_of_month
+            - day_of_month
+          example: net
+          description: The type of payment term. It decides which other fields are accepted and returned.
+        days:
+          type: integer
+          minimum: 0
+          maximum: 365
+          example: 30
+          description: The number of days. Required for `net`, `net_end_of_month` and `days_end_of_month`; not accepted for other term types.
+        day_of_month:
+          type: integer
+          minimum: 1
+          maximum: 31
+          example: 15
+          description: The day of the month the invoice is due on. Required for `day_of_month`; not accepted for other term types.
+        month_offset:
+          type: integer
+          minimum: 0
+          maximum: 12
+          default: 1
+          example: 1
+          description: The number of months after the issuing month. Only accepted for `day_of_month`. Defaults to `1` (the following month) when omitted; always returned for a `day_of_month` term.
     CountryOrNull:
       type:
         - string
@@ -12458,6 +12510,7 @@ components:
         - subscription_invoice_issuing_date_adjustment
         - is_default
         - net_payment_term
+        - payment_term
         - address_line1
         - address_line2
         - phone
@@ -12546,10 +12599,18 @@ components:
           type: boolean
           example: false
           description: Whether this billing entity is the organization's default billing entity. The default billing entity is the oldest active one, and is used as a fallback whenever no billing entity is provided, for example when an invoice is created. This flag cannot be changed.
+        payment_term:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentTermObject'
+            - type: 'null'
+          description: The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. New billing entities default to a `net` term of `0` days.
         net_payment_term:
-          type: integer
+          deprecated: true
+          type:
+            - integer
+            - 'null'
           example: 0
-          description: The net payment term (in days) for this billing entity
+          description: '**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type.'
         address_line1:
           type:
             - string
@@ -12742,10 +12803,22 @@ components:
                     - align_with_finalization_date
                     - keep_anchor
                   default: align_with_finalization_date
+            payment_term:
+              oneOf:
+                - $ref: '#/components/schemas/PaymentTermObject'
+                - type: 'null'
+              description: |
+                The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. When neither `payment_term` nor `net_payment_term` is sent, the billing entity gets a `net` term of `0` days.
+
+                It supersedes the legacy `net_payment_term`, which is kept in sync as an alias. When both fields are sent in the same request:
+                - a non-null `payment_term` wins and `net_payment_term` is ignored;
+                - `payment_term: null` with a non-null `net_payment_term` is ignored, and the term becomes a `net` term of `net_payment_term` days;
+                - `payment_term: null` with `net_payment_term` absent or `null` clears both.
             net_payment_term:
+              deprecated: true
               type: integer
               example: 0
-              description: The net payment term (in days) for this billing entity
+              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity'
             address_line1:
               type:
                 - string
@@ -13090,10 +13163,24 @@ components:
                     - align_with_finalization_date
                     - keep_anchor
                   default: align_with_finalization_date
+            payment_term:
+              oneOf:
+                - $ref: '#/components/schemas/PaymentTermObject'
+                - type: 'null'
+              description: |
+                The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. Send `null` to remove it.
+
+                It supersedes the legacy `net_payment_term`, which is kept in sync as an alias. When both fields are sent in the same request:
+                - a non-null `payment_term` wins and `net_payment_term` is ignored;
+                - `payment_term: null` with a non-null `net_payment_term` is ignored, and the term becomes a `net` term of `net_payment_term` days;
+                - `payment_term: null` with `net_payment_term` absent or `null` clears both.
+
+                When only `net_payment_term` is sent, a value equal to the current alias leaves the structured term unchanged, a different value replaces it with a `net` term of that many days, and `null` clears both.
             net_payment_term:
+              deprecated: true
               type: integer
               example: 0
-              description: The net payment term (in days) for this billing entity
+              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity'
             address_line1:
               type:
                 - string
@@ -16365,6 +16452,7 @@ components:
         - url
         - zipcode
         - net_payment_term
+        - payment_term
         - external_salesforce_id
         - created_at
         - updated_at
@@ -16523,12 +16611,18 @@ components:
             - 'null'
           example: '91364'
           description: The zipcode of the customer's billing address
+        payment_term:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentTermObject'
+            - type: 'null'
+          description: The structured payment term of the customer. It is `null` when the customer has no term of its own, in which case the term of its billing entity applies.
         net_payment_term:
+          deprecated: true
           type:
             - integer
             - 'null'
           example: 30
-          description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+          description: '**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type or when the customer has no term of its own.'
         external_salesforce_id:
           type:
             - string
@@ -17456,12 +17550,26 @@ components:
               maxLength: 255
               example: '91364'
               description: The zipcode of the customer's billing address (255 characters max).
+            payment_term:
+              oneOf:
+                - $ref: '#/components/schemas/PaymentTermObject'
+                - type: 'null'
+              description: |
+                The structured payment term of the customer. Send `null` to remove the customer's own term, so the term of the billing entity applies.
+
+                It supersedes the legacy `net_payment_term`, which is kept in sync as an alias. When both fields are sent in the same request:
+                - a non-null `payment_term` wins and `net_payment_term` is ignored;
+                - `payment_term: null` with a non-null `net_payment_term` is ignored, and the term becomes a `net` term of `net_payment_term` days;
+                - `payment_term: null` with `net_payment_term` absent or `null` clears both.
+
+                When only `net_payment_term` is sent, a value equal to the current alias leaves the structured term unchanged, a different value replaces it with a `net` term of that many days, and `null` clears both.
             net_payment_term:
+              deprecated: true
               type:
                 - integer
                 - 'null'
               example: 30
-              description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+              description: '**Deprecated.** Use `payment_term` instead. The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.'
             external_salesforce_id:
               type:
                 - string
@@ -17607,6 +17715,7 @@ components:
         - payment_due_date
         - payment_overdue
         - net_payment_term
+        - payment_term
         - invoice_type
         - status
         - payment_status
@@ -17682,10 +17791,18 @@ components:
           type: boolean
           description: Specifies if the payment is considered as overdue.
           example: true
+        payment_term:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentTermObject'
+            - type: 'null'
+          description: The payment term applied to the invoice, snapshotted when the invoice was created. It is resolved from the subscription, then the customer, then the billing entity, and defaults to `due_on_receipt`. Invoices created before structured payment terms existed report a `net` term derived from their `net_payment_term`.
         net_payment_term:
-          type: integer
+          deprecated: true
+          type:
+            - integer
+            - 'null'
           example: 30
-          description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+          description: '**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type.'
         invoice_type:
           type: string
           enum:
@@ -18433,6 +18550,7 @@ components:
         - on_termination_credit_note
         - on_termination_invoice
         - payment_method
+        - payment_term
         - plan_amount_cents
         - plan_amount_currency
         - plan_code
@@ -18680,6 +18798,11 @@ components:
             - 'null'
           example: PO-123
           description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+        payment_term:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentTermObject'
+            - type: 'null'
+          description: The structured payment term of the subscription. It is `null` when the subscription has no term of its own, in which case the term of the customer, then of the billing entity, applies to its invoices.
     SubscriptionsPaginated:
       type: object
       required:
@@ -21767,6 +21890,11 @@ components:
           type: string
           description: The code of the billing entity to which will be associated a customer if the external_id is not provided. If billing_entity_code is not provided, default billing_entity of organization will be used.
           example: acme_corp
+        payment_term:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentTermObject'
+            - type: 'null'
+          description: The structured payment term of the previewed subscription. When previewing a new subscription (`plan_code` at the top level), it is the term the subscription would have. When previewing a plan change (`subscriptions.plan_code`), it replaces the term of the current subscription, and `null` removes it; when not sent, the current subscription's term is carried over. The term is ignored when previewing an existing subscription or its termination.
     InvoiceVoidInput:
       type: object
       properties:
@@ -22940,6 +23068,7 @@ components:
         - document_numbering
         - document_number_prefix
         - net_payment_term
+        - payment_term
         - tax_identification_number
         - timezone
         - email_settings
@@ -23051,10 +23180,18 @@ components:
           type: string
           example: ORG-1234
           description: Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four characters of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.
+        payment_term:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentTermObject'
+            - type: 'null'
+          description: The structured payment term of the organization's default billing entity. It can only be changed through the billing entity endpoints.
         net_payment_term:
-          type: integer
+          deprecated: true
+          type:
+            - integer
+            - 'null'
           example: 30
-          description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+          description: '**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days, read from the organization''s default billing entity. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type.'
         tax_identification_number:
           type:
             - string
@@ -23189,9 +23326,12 @@ components:
               example: ORG-1234
               description: Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four characters of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.
             net_payment_term:
+              deprecated: true
               type: integer
+              minimum: 0
+              maximum: 365
               example: 30
-              description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+              description: '**Deprecated.** Use `payment_term` on the billing entity endpoints instead. The net payment term, expressed in days, applied to the organization''s default billing entity. It sets the billing entity''s `payment_term` to a `net` term of that many days.'
             tax_identification_number:
               type:
                 - string
@@ -26068,6 +26208,11 @@ components:
                 - 'null'
               example: PO-123
               description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+            payment_term:
+              oneOf:
+                - $ref: '#/components/schemas/PaymentTermObject'
+                - type: 'null'
+              description: The structured payment term of the subscription. It takes precedence over the customer's and the billing entity's terms for the invoices of this subscription. Subscriptions of a customer whose terms give different due dates are billed on separate invoices. When upgrading or downgrading, the term is carried over to the new subscription unless this field is sent.
             progressive_billing_disabled:
               type: boolean
               default: false
@@ -26344,6 +26489,11 @@ components:
                 - 'null'
               example: PO-123
               description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+            payment_term:
+              oneOf:
+                - $ref: '#/components/schemas/PaymentTermObject'
+                - type: 'null'
+              description: The structured payment term of the subscription. It takes precedence over the customer's and the billing entity's terms for the invoices of this subscription. Send `null` to remove it. A pending downgrade of this subscription that shared the previous term gets the new one too.
             progressive_billing_disabled:
               type: boolean
               default: false

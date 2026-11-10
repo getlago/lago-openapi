@@ -15,6 +15,7 @@ required:
   - subscription_invoice_issuing_date_adjustment
   - is_default
   - net_payment_term
+  - payment_term
   - address_line1
   - address_line2
   - phone
@@ -105,10 +106,18 @@ properties:
     type: boolean
     example: false
     description: Whether this billing entity is the organization's default billing entity. The default billing entity is the oldest active one, and is used as a fallback whenever no billing entity is provided, for example when an invoice is created. This flag cannot be changed.
+  payment_term:
+    oneOf:
+      - $ref: "./PaymentTermObject.yaml"
+      - type: "null"
+    description: The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. New billing entities default to a `net` term of `0` days.
   net_payment_term:
-    type: integer
+    deprecated: true
+    type:
+      - integer
+      - "null"
     example: 0
-    description: The net payment term (in days) for this billing entity
+    description: "**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type."
   address_line1:
     type: 
       - string

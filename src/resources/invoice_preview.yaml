@@ -2,7 +2,10 @@ post:
   tags:
     - invoices
   summary: Create an invoice preview
-  description: This endpoint is used for generating invoice preview.
+  description: |
+    This endpoint is used for generating invoice preview.
+
+    The payment due date of the preview follows the resolved payment term: the subscription's, then the customer's, then the billing entity's, defaulting to `due_on_receipt`. When several subscriptions are previewed, they must resolve to terms giving the same due date, as subscriptions with different terms are billed on separate invoices; otherwise the request fails with a `422` and the error code `subscription_payment_terms_do_not_match`.
   operationId: invoicePreview
   requestBody:
     description: Invoice preview payload
