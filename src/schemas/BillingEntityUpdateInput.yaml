@@ -72,17 +72,14 @@ properties:
         description: |
           The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. Send `null` to remove it.
 
-          It supersedes the legacy `net_payment_term`, which is kept in sync as an alias. When both fields are sent in the same request:
-          - a non-null `payment_term` wins and `net_payment_term` is ignored;
-          - `payment_term: null` with a non-null `net_payment_term` is ignored, and the term becomes a `net` term of `net_payment_term` days;
-          - `payment_term: null` with `net_payment_term` absent or `null` clears both.
+          It supersedes the legacy `net_payment_term`, which is kept in sync as an alias. Whenever `payment_term` is sent, it wins and `net_payment_term` is ignored, even when `payment_term` is `null`, which clears both.
 
-          When only `net_payment_term` is sent, a value equal to the current alias leaves the structured term unchanged, a different value replaces it with a `net` term of that many days, and `null` clears both.
+          When only `net_payment_term` is sent, the term becomes a `net` term of that many days, and `null` clears both.
       net_payment_term:
         deprecated: true
         type: integer
         example: 0
-        description: "**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity"
+        description: "**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules."
       address_line1:
         type:
           - string
