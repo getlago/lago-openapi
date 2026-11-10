@@ -1,0 +1,12 @@
+extends:
+  - recommended
+apis:
+  v1:
+    root: src/openapi.yaml
+    output: openapi.yaml
+  v2:
+    root: src/v2/openapi.yaml
+    output: openapi-v2.yaml
+    rules:
+      no-invalid-media-type-examples: error
+      no-invalid-schema-examples: error

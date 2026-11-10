@@ -1,0 +1,165 @@
+parameters:
+  - name: lago_id
+    in: path
+    required: true
+    description: Unique identifier created by Lago.
+    schema:
+      type: string
+      description: Unique identifier created by Lago.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+get:
+  tags:
+    - fees
+  summary: Retrieve fee
+  description: >-
+    Legacy fees return 404. Related products, filters and rates can identify
+    deleted catalog records for historical fees.
+
+    Requires the product catalog to be enabled and fee read permission on the API key.
+  operationId: findFee
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - applied_taxes
+            - invoice
+            - product
+            - product_filter
+            - rate_card
+            - rate
+            - contract
+            - customer
+          example: applied_taxes
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Fee.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - fees
+  summary: Update fee
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Updates only payment_status. An invoiced fee cannot be updated and returns 422 with invoiced_fee.
+
+    Requires the product catalog to be enabled and fee write permission on the API key.
+  operationId: updateFee
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/FeeUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Fee.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - fees
+  summary: Update fee
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Updates only payment_status. An invoiced fee cannot be updated and returns 422 with invoiced_fee.
+
+    Requires the product catalog to be enabled and fee write permission on the API key.
+  operationId: patchFee
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/FeeUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Fee.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - fees
+  summary: Delete fee
+  description: >-
+    Only uninvoiced fees can be deleted. A fee already attached to an invoice
+    returns 422 invoiced_fee.
+
+    Requires the product catalog to be enabled and fee write permission on the API key.
+  operationId: destroyFee
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Fee.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

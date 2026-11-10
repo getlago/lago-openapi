@@ -1,0 +1,76 @@
+parameters:
+  - name: code
+    in: path
+    description: Code of the existing usage attribution type.
+    required: true
+    schema:
+      type: string
+      example: 'team'
+put:
+  tags:
+    - usage_attribution_types
+  summary: Update a usage attribution type
+  description: This endpoint updates an existing usage attribution type. Only the fields present in the payload are updated. Once usage is attributed to the type, only its `name`, `description` and `attribution_keys` can be changed.
+  operationId: updateUsageAttributionType
+  requestBody:
+    description: Usage attribution type payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/UsageAttributionTypeUpdateInput.yaml'
+    required: true
+  responses:
+    '200':
+      description: Usage attribution type updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/UsageAttributionType.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+get:
+  tags:
+    - usage_attribution_types
+  summary: Retrieve a usage attribution type
+  description: This endpoint retrieves an existing usage attribution type by its code.
+  operationId: findUsageAttributionType
+  responses:
+    '200':
+      description: Usage attribution type
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/UsageAttributionType.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'
+delete:
+  tags:
+    - usage_attribution_types
+  summary: Delete a usage attribution type
+  description: This endpoint deletes an existing usage attribution type, along with the attribution values recorded for it. Its children are kept.
+  operationId: destroyUsageAttributionType
+  responses:
+    '200':
+      description: Usage attribution type deleted
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/UsageAttributionType.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '404':
+      $ref: '../responses/NotFound.yaml'

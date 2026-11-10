@@ -1,0 +1,22 @@
+type: object
+minProperties: 1
+properties:
+  name:
+    type: string
+    minLength: 1
+    description: Name of the tax. It cannot be blank.
+    example: VAT
+  code:
+    type: string
+    minLength: 1
+    description: Unique code of the tax within the organization, including deleted taxes. It cannot be blank.
+    example: standard_vat
+  rate:
+    type: [number, string]
+    pattern: '^-?[0-9]+(\.[0-9]+)?$'
+    description: Percentage rate of the tax. Accepts a number or a decimal string.
+    example: 20
+  description:
+    type: [string, 'null']
+    description: Internal description of the tax. Set to null to clear it.
+    example: Standard VAT

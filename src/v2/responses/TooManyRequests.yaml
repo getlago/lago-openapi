@@ -1,0 +1,15 @@
+description: Payment provider rate limit exceeded
+headers:
+  X-Lago-Endpoint-Status:
+    $ref: ../headers/EndpointStatus.yaml
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/ApiError.yaml
+    example:
+      code: too_many_provider_requests
+      details:
+        - code: too_many_provider_requests
+          field: base
+          meta:
+            provider_name: stripe

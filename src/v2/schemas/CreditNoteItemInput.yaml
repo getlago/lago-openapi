@@ -1,0 +1,18 @@
+type: object
+description: A fee to credit.
+required:
+  - fee_id
+  - amount_cents
+properties:
+  fee_id:
+    type: string
+    description: Identifier of a fee belonging to the invoice.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  amount_cents:
+    type:
+      - number
+      - string
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+    description: Amount in cents, accepted as a number or a decimal string.
+    example: 100

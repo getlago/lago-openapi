@@ -1,0 +1,9 @@
+type: string
+description: |-
+  Role of the usage attribution type:
+  - `hierarchical`: the type can have a parent and children, and forms a level of the account tree.
+  - `flat`: the type stands on its own. It cannot have a parent or children.
+enum:
+  - hierarchical
+  - flat
+example: hierarchical

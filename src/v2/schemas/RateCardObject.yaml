@@ -1,0 +1,124 @@
+type: object
+description: Rate Card.
+required:
+  - lago_id
+  - name
+  - code
+  - description
+  - created_at
+  - updated_at
+  - deleted_at
+  - product_code
+  - product_filter_code
+  - currency
+  - billing_timing
+  - proration
+  - display_on_invoice
+  - regroup_paid_fees
+  - applied_pricing_unit_code
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  name:
+    type: string
+    description: Name.
+    example: example
+  code:
+    type: string
+    description: Code.
+    example: example
+  description:
+    type:
+      - string
+      - "null"
+    description: Description.
+    example: example
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time
+  product_code:
+    type: string
+    description: Code of the priced product.
+    example: api_requests
+  product_filter_code:
+    type:
+      - string
+      - "null"
+    description: Code of the priced filter, or null for the product default.
+    example: eu
+  currency:
+    type: string
+    description: Currency as an ISO 4217 code.
+    example: USD
+  billing_timing:
+    type: string
+    description: When fees are billed.
+    example: arrears
+    enum:
+      - arrears
+      - advance
+  proration:
+    type: boolean
+    description: Proration.
+    example: false
+  display_on_invoice:
+    type: boolean
+    description: Display on invoice.
+    example: false
+  regroup_paid_fees:
+    type:
+      - string
+      - "null"
+    description: Whether paid advance fees are regrouped into an invoice. Null keeps
+      fees standalone.
+    example: invoice
+    enum:
+      - invoice
+      - null
+  applied_pricing_unit_code:
+    type:
+      - string
+      - "null"
+    description: Applied pricing unit code.
+    example: example
+  active_rate:
+    anyOf:
+      - $ref: ./RateCardRateObject.yaml
+      - type: "null"
+    description: Present only with expands[]=active_rate. Null until a rate becomes
+      effective.
+  rates:
+    type: array
+    description: Present only with expands[]=rates. Sorted by effective_from, newest first.
+    items:
+      $ref: ./RateCardRateObject.yaml
+  taxes:
+    type: array
+    description: Present only with expands[]=taxes.
+    items:
+      $ref: ./TaxObject.yaml
+  product:
+    $ref: ./ProductObject.yaml
+    description: Present only with expands[]=product.
+  product_filter:
+    anyOf:
+      - $ref: ./ProductFilterObject.yaml
+      - type: "null"
+    description: Present only with expands[]=product_filter.

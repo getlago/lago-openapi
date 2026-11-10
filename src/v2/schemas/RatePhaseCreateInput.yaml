@@ -1,0 +1,13 @@
+type: object
+description: Create rate phase.
+required:
+  - rate_phase
+properties:
+  rate_phase:
+    description: Single phase to insert. If position is omitted, a finite phase is
+      inserted before the final indefinite phase; otherwise it is appended.
+    allOf:
+      - $ref: ./RatePhaseBaseInput.yaml
+      - type: object
+        required:
+          - code

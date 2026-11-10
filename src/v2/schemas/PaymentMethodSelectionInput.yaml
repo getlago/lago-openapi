@@ -1,0 +1,15 @@
+type: object
+description: Payment method selection. Omit to use the configured default.
+properties:
+  payment_method_type:
+    type: string
+    description: How the payment is collected.
+    example: provider
+    enum:
+      - provider
+      - manual
+  payment_method_id:
+    type: string
+    description: Identifier of a payment method belonging to the customer.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid

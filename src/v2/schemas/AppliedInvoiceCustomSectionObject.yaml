@@ -1,0 +1,47 @@
+type: object
+description: Applied Invoice Custom Section.
+required:
+  - lago_id
+  - lago_invoice_id
+  - code
+  - details
+  - display_name
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_invoice_id:
+    type: string
+    description: Invoice identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  code:
+    type: string
+    description: Code.
+    example: example
+  details:
+    type:
+      - string
+      - "null"
+    description: Details.
+    example: example
+  display_name:
+    type:
+      - string
+      - "null"
+    description: Display name.
+    example: example
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

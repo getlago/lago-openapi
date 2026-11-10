@@ -1,0 +1,88 @@
+type: object
+description: Product.
+required:
+  - lago_id
+  - name
+  - code
+  - description
+  - invoice_display_name
+  - created_at
+  - updated_at
+  - deleted_at
+  - product_category_code
+  - billable_metric_code
+  - product_type
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  name:
+    type: string
+    description: Name.
+    example: example
+  code:
+    type: string
+    description: Code.
+    example: example
+  description:
+    type:
+      - string
+      - "null"
+    description: Description.
+    example: Example
+  invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Invoice display name.
+    example: example
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time
+  product_category_code:
+    type:
+      - string
+      - "null"
+    description: Code of the category, or null for an uncategorized product.
+    example: compute
+  billable_metric_code:
+    type:
+      - string
+      - "null"
+    description: Code of the billable metric. Required for metered products and
+      absent for fixed products.
+    example: api_requests
+  product_type:
+    type: string
+    description: Type of product. Metered products require a billable metric; fixed
+      products must not reference one.
+    example: metered
+    enum:
+      - metered
+      - fixed
+  product_category:
+    anyOf:
+      - $ref: ./ProductCategoryObject.yaml
+      - type: "null"
+    description: Present only with expands[]=product_category on retrieval.
+  billable_metric:
+    anyOf:
+      - $ref: ./BillableMetricObject.yaml
+      - type: "null"
+    description: Present only with expands[]=billable_metric on retrieval.

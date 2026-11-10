@@ -1,0 +1,93 @@
+parameters:
+  - name: product_code
+    in: path
+    required: true
+    description: Product code.
+    schema:
+      type: string
+      description: Product code.
+      example: example_code
+get:
+  tags:
+    - product_filters
+  summary: List product filters
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+
+    Requires the product catalog to be enabled and product read permission on the API key.
+  operationId: findAllProductFilters
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+    - name: search_term
+      in: query
+      required: false
+      description: Searches names and codes.
+      schema:
+        type: string
+        description: Text to search.
+        example: example
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ProductFiltersPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - product_filters
+  summary: Create filter
+  description: >-
+    Creates a filter for a metered product only. Values must refer to keys and
+    configured values of its billable metric. A key-only entry cannot be
+    combined with specific values for the same key.
+
+    Requires the product catalog to be enabled and product write permission on the API key.
+  operationId: createProductFilter
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ProductFilterCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ProductFilter.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

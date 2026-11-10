@@ -1,0 +1,11 @@
+type: object
+description: Create applied rate card.
+required:
+  - applied_rate_card
+properties:
+  applied_rate_card:
+    allOf:
+      - $ref: ./PlanAppliedRateCardBaseInput.yaml
+      - type: object
+        required:
+          - rate_card_code

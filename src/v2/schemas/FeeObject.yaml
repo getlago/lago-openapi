@@ -1,0 +1,396 @@
+type: object
+description: Fee.
+required:
+  - lago_id
+  - lago_invoice_id
+  - fee_type
+  - lago_customer_id
+  - external_customer_id
+  - lago_contract_id
+  - external_contract_id
+  - lago_product_id
+  - product_code
+  - lago_product_category_id
+  - product_category_code
+  - lago_product_filter_id
+  - product_filter_code
+  - lago_rate_card_id
+  - rate_card_code
+  - lago_rate_id
+  - rate_code
+  - lago_rate_override_id
+  - lago_true_up_parent_fee_id
+  - lago_true_up_fee_id
+  - event_transaction_id
+  - display_on_invoice
+  - product_invoice_display_name
+  - product_category_invoice_display_name
+  - product_filter_invoice_display_name
+  - filters
+  - billing_timing
+  - grouped_by
+  - currency
+  - units
+  - total_aggregated_units
+  - events_count
+  - unit_amount_cents
+  - precise_unit_amount_cents
+  - amount_cents
+  - sub_total_excluding_taxes_amount_cents
+  - taxes_amount_cents
+  - total_amount_cents
+  - amount_details
+  - pricing_unit_details
+  - payment_status
+  - from_datetime
+  - to_datetime
+  - succeeded_at
+  - failed_at
+  - refunded_at
+  - created_at
+  - updated_at
+  - deleted_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_invoice_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related invoice.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  fee_type:
+    type: string
+    description: Fee type. Only product fees are available from these endpoints.
+    example: product
+    enum:
+      - product
+  lago_customer_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related customer.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_customer_id:
+    type:
+      - string
+      - "null"
+    description: External customer id.
+    example: example
+  lago_contract_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related contract.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_contract_id:
+    type:
+      - string
+      - "null"
+    description: External contract id.
+    example: example
+  lago_product_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related product.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  product_code:
+    type:
+      - string
+      - "null"
+    description: Product code.
+    example: example
+  lago_product_category_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related product category.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  product_category_code:
+    type:
+      - string
+      - "null"
+    description: Product category code.
+    example: example
+  lago_product_filter_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related product filter.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  product_filter_code:
+    type:
+      - string
+      - "null"
+    description: Product filter code.
+    example: example
+  lago_rate_card_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related rate card.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  rate_card_code:
+    type:
+      - string
+      - "null"
+    description: Rate card code.
+    example: example
+  lago_rate_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related rate.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  rate_code:
+    type:
+      - string
+      - "null"
+    description: Rate code.
+    example: example
+  lago_rate_override_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related rate override.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_true_up_parent_fee_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related true up parent fee.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_true_up_fee_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the related true up fee.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  event_transaction_id:
+    type:
+      - string
+      - "null"
+    description: Transaction identifier of the advance-billing event.
+    example: event_123
+  display_on_invoice:
+    type:
+      - boolean
+      - "null"
+    description: Whether the rate card displays this fee on invoices.
+    example: true
+  product_invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Product invoice display name.
+    example: example
+  product_category_invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Product category invoice display name.
+    example: example
+  product_filter_invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Product filter invoice display name.
+    example: example
+  filters:
+    type:
+      - object
+      - "null"
+    description: Product filter matches saved with the fee. Older fees can fall back
+      to current filter values.
+    additionalProperties:
+      type: array
+      description: Values selected for this key.
+      items:
+        type:
+          - string
+          - "null"
+        description: Selected filter value.
+        example: eu
+  billing_timing:
+    type: string
+    description: When the fee is billed.
+    example: advance
+    enum:
+      - advance
+      - arrears
+  grouped_by:
+    type: object
+    description: Grouped by.
+    additionalProperties: true
+  currency:
+    type: string
+    description: Currency as an ISO 4217 code.
+    example: USD
+  units:
+    type: string
+    description: Quantity. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  total_aggregated_units:
+    type:
+      - string
+      - "null"
+    description: Total aggregated units. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  events_count:
+    type:
+      - integer
+      - "null"
+    description: Events count.
+    example: 1
+  unit_amount_cents:
+    type: integer
+    description: Unit amount cents.
+    example: 100
+  precise_unit_amount_cents:
+    type: string
+    description: Precise unit amount in cents. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  amount_cents:
+    type: integer
+    description: Amount cents.
+    example: 100
+  sub_total_excluding_taxes_amount_cents:
+    type: integer
+    description: Fee amount after discounts and before tax, in cents.
+    example: 1000
+  taxes_amount_cents:
+    type: integer
+    description: Taxes amount cents.
+    example: 100
+  total_amount_cents:
+    type: integer
+    description: Fee amount including tax, in cents.
+    example: 1200
+  amount_details:
+    type: object
+    description: Amount details.
+    additionalProperties: true
+  pricing_unit_details:
+    anyOf:
+      - $ref: ./FeePricingUnitDetailsObject.yaml
+      - type: "null"
+    description: Pricing unit amounts, or null when no pricing unit is used.
+  payment_status:
+    type: string
+    description: Payment status of the fee.
+    example: pending
+    enum:
+      - pending
+      - succeeded
+      - failed
+      - refunded
+  from_datetime:
+    type:
+      - string
+      - "null"
+    description: Start of the billed period, when available.
+    example: null
+    format: date-time
+  to_datetime:
+    type:
+      - string
+      - "null"
+    description: End of the billed period, when available.
+    example: null
+    format: date-time
+  succeeded_at:
+    type:
+      - string
+      - "null"
+    description: Succeeded at.
+    example: null
+    format: date-time
+  failed_at:
+    type:
+      - string
+      - "null"
+    description: Failed at.
+    example: null
+    format: date-time
+  refunded_at:
+    type:
+      - string
+      - "null"
+    description: Refunded at.
+    example: null
+    format: date-time
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time
+  applied_taxes:
+    type: array
+    description: Present only with expands[]=applied_taxes.
+    items:
+      $ref: ./FeeAppliedTaxObject.yaml
+  invoice:
+    anyOf:
+      - $ref: ./InvoiceObject.yaml
+      - type: "null"
+    description: Present only with expands[]=invoice.
+  product:
+    anyOf:
+      - $ref: ./ProductObject.yaml
+      - type: "null"
+    description: Present only with expands[]=product.
+  product_filter:
+    anyOf:
+      - $ref: ./ProductFilterObject.yaml
+      - type: "null"
+    description: Present only with expands[]=product_filter.
+  rate_card:
+    anyOf:
+      - $ref: ./RateCardObject.yaml
+      - type: "null"
+    description: Present only with expands[]=rate_card.
+  rate:
+    anyOf:
+      - $ref: ./RateCardRateObject.yaml
+      - type: "null"
+    description: Present only with expands[]=rate.
+  contract:
+    anyOf:
+      - $ref: ./ContractObject.yaml
+      - type: "null"
+    description: Present only with expands[]=contract.
+  customer:
+    anyOf:
+      - $ref: ./CustomerObject.yaml
+      - type: "null"
+    description: Present only with expands[]=customer.

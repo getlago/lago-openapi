@@ -1,0 +1,19 @@
+type: object
+description: Create customer.
+required:
+  - customer
+properties:
+  customer:
+    allOf:
+      - $ref: ./CustomerBaseInput.yaml
+      - type: object
+        required:
+          - external_id
+        properties:
+          metadata:
+            type: array
+            items:
+              type: object
+              required:
+                - key
+                - value

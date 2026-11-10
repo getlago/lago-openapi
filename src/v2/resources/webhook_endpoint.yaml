@@ -1,0 +1,142 @@
+parameters:
+  - name: lago_id
+    in: path
+    required: true
+    description: Unique identifier created by Lago.
+    schema:
+      type: string
+      description: Unique identifier created by Lago.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+get:
+  tags:
+    - webhook_endpoints
+  summary: Retrieve webhook endpoint
+  description: >-
+    Returns the record without nested relationships unless a supported expansion
+    is requested.
+
+    Requires the product catalog to be enabled and webhook_endpoint read permission on the API key.
+  operationId: findWebhookEndpoint
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/WebhookEndpoint.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - webhook_endpoints
+  summary: Update webhook endpoint
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+
+    Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
+  operationId: updateWebhookEndpoint
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/WebhookEndpointUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/WebhookEndpoint.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - webhook_endpoints
+  summary: Update webhook endpoint
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+
+    Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
+  operationId: patchWebhookEndpoint
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/WebhookEndpointUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/WebhookEndpoint.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - webhook_endpoints
+  summary: Delete webhook endpoint
+  description: >-
+    Permanently deletes the endpoint and its delivery records. Returns the
+    deleted endpoint configuration without a deleted_at field.
+
+    Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
+  operationId: destroyWebhookEndpoint
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/WebhookEndpoint.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

@@ -1,0 +1,37 @@
+parameters:
+  - name: activity_id
+    in: path
+    required: true
+    description: Activity id.
+    schema:
+      type: string
+      description: Activity id.
+      example: example_code
+get:
+  tags:
+    - activity_logs
+  summary: Retrieve activity log
+  description: >-
+    Requires a premium license and available log storage. No expansions are
+    supported.
+
+    Requires the product catalog to be enabled and activity_log read permission on the API key.
+  operationId: findActivityLog
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ActivityLog.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml

@@ -1,0 +1,13 @@
+type: object
+description: Create billable metric.
+required:
+  - billable_metric
+properties:
+  billable_metric:
+    allOf:
+      - $ref: ./BillableMetricBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code
+          - aggregation_type

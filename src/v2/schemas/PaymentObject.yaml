@@ -1,0 +1,137 @@
+type: object
+description: Payment.
+required:
+  - lago_id
+  - lago_customer_id
+  - external_customer_id
+  - lago_payable_id
+  - payable_type
+  - lago_invoice_ids
+  - amount_cents
+  - currency
+  - status
+  - payment_status
+  - payment_type
+  - reference
+  - payment_provider_code
+  - payment_provider_type
+  - provider_payment_id
+  - provider_customer_id
+  - next_action
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_customer_id:
+    type: string
+    description: Customer identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_customer_id:
+    type: string
+    description: External customer identifier.
+    example: customer_123
+  lago_payable_id:
+    type:
+      - string
+      - "null"
+    description: Identifier of the invoice or payment request being paid.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  payable_type:
+    type: string
+    description: Type of payable record.
+    example: Invoice
+    enum:
+      - Invoice
+      - PaymentRequest
+  lago_invoice_ids:
+    type: array
+    description: Invoices covered by the payment.
+    items:
+      type: string
+      description: Invoice identifier.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+  amount_cents:
+    type: integer
+    description: Amount cents.
+    example: 100
+  currency:
+    type: string
+    description: Currency as an ISO 4217 code.
+    example: USD
+  status:
+    type: string
+    description: Status.
+    example: example
+  payment_status:
+    type:
+      - string
+      - "null"
+    description: Normalized payment status.
+    example: pending
+    enum:
+      - pending
+      - processing
+      - succeeded
+      - failed
+      - null
+  payment_type:
+    type: string
+    description: How the payment was collected.
+    example: provider
+    enum:
+      - provider
+      - manual
+      - x402
+  reference:
+    type:
+      - string
+      - "null"
+    description: Reference.
+    example: example
+  payment_provider_code:
+    type:
+      - string
+      - "null"
+    description: Payment provider code.
+    example: stripe_main
+  payment_provider_type:
+    type:
+      - string
+      - "null"
+    description: Payment provider type.
+    example: stripe
+  provider_payment_id:
+    type:
+      - string
+      - "null"
+    description: Provider payment id.
+    example: example
+  provider_customer_id:
+    type:
+      - string
+      - "null"
+    description: Customer identifier within the payment provider.
+    example: cus_example
+  next_action:
+    type:
+      - object
+      - "null"
+    description: Provider instructions needed to complete the payment.
+    additionalProperties: true
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

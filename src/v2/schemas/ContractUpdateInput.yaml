@@ -1,0 +1,79 @@
+type: object
+description: Update a contract.
+required:
+  - contract
+properties:
+  contract:
+    type: object
+    minProperties: 1
+    properties:
+      name:
+        type:
+          - string
+          - "null"
+        description: Contract name.
+        example: Annual agreement
+      plan_code:
+        type:
+          - string
+          - "null"
+        description: Optional plan code. Plan-less contracts use directly attached rate
+          cards.
+        example: standard
+      billing_time:
+        type: string
+        description: Whether billing aligns to the calendar or contract anniversary.
+        example: calendar
+        enum:
+          - calendar
+          - anniversary
+      billing_anchor_date:
+        type:
+          - string
+          - "null"
+        description: Optional billing anchor.
+        example: null
+        format: date
+      started_at:
+        type:
+          - string
+          - "null"
+        description: Start timestamp. Editable only on a pending contract, where a start
+          of today or earlier activates it. An active contract accepts only its
+          stored value.
+        example: null
+        format: date-time
+      ended_at:
+        type:
+          - string
+          - "null"
+        description: Optional end timestamp. Must be after the start and not already in
+          the past.
+        example: null
+        format: date-time
+      consolidate_invoice:
+        type: boolean
+        description: Whether invoices can consolidate compatible contracts.
+        example: true
+      purchase_order_number:
+        type:
+          - string
+          - "null"
+        description: Purchase order reference.
+        example: PO-123
+      invoice_custom_section:
+        type: object
+        description: Invoice section selection.
+        required: []
+        properties:
+          skip_invoice_custom_sections:
+            type: boolean
+            description: Whether to skip invoice custom sections.
+            example: false
+          invoice_custom_section_codes:
+            type: array
+            description: Invoice custom section codes.
+            items:
+              type: string
+              description: Section code.
+              example: legal_terms

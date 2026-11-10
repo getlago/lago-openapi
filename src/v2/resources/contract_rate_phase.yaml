@@ -1,0 +1,133 @@
+parameters:
+  - name: contract_external_id
+    in: path
+    required: true
+    description: Contract external id.
+    schema:
+      type: string
+      description: Contract external id.
+      example: external_123
+  - name: applied_rate_card_code
+    in: path
+    required: true
+    description: Code of the rate card applied to the parent, returned as
+      rate_card_code on the applied rate card.
+    schema:
+      type: string
+      description: Code of the rate card applied to the parent, returned as
+        rate_card_code on the applied rate card.
+      example: compute_usd
+  - name: code
+    in: path
+    required: true
+    description: Code.
+    schema:
+      type: string
+      description: Code.
+      example: example_code
+put:
+  tags:
+    - contract_rate_phases
+  summary: Update rate phase
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    A null rate_override removes the override. Structural rate card fields are not overridable. Parent locking rules apply.
+
+    Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+  operationId: updateContractRatePhase
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RatePhaseUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ContractRatePhase.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - contract_rate_phases
+  summary: Update rate phase
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    A null rate_override removes the override. Structural rate card fields are not overridable. Parent locking rules apply.
+
+    Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+  operationId: patchContractRatePhase
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RatePhaseUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ContractRatePhase.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - contract_rate_phases
+  summary: Delete rate phase
+  description: >-
+    Removes the phase and renumbers later positions. The final indefinite phase
+    and the only remaining phase cannot be deleted.
+
+    Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
+  operationId: destroyContractRatePhase
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ContractRatePhase.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
