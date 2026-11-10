@@ -1,0 +1,224 @@
+get:
+  tags:
+    - credit_notes
+  summary: List credit notes
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+    Lists finalized credit notes of the organization, including credit notes for legacy invoices. This list does not support created_at_from or created_at_to.
+
+    Requires the product catalog to be enabled and credit_note read permission on the API key.
+
+    Unknown values for credit_status, refund_status, reason and types[] are ignored rather than rejected. If no supported values remain for a filter, that filter is not applied.
+  operationId: findAllCreditNotes
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - name: search_term
+      in: query
+      required: false
+      description: Search term.
+      schema:
+        type: string
+        description: Search term.
+        example: example
+    - name: external_customer_id
+      in: query
+      required: false
+      description: External customer id.
+      schema:
+        type: string
+        description: External customer id.
+        example: example
+    - name: currency
+      in: query
+      required: false
+      description: Currency as an ISO 4217 code.
+      schema:
+        type: string
+        description: Currency as an ISO 4217 code.
+        example: example
+    - name: invoice_number
+      in: query
+      required: false
+      description: Invoice number.
+      schema:
+        type: string
+        description: Invoice number.
+        example: example
+    - name: purchase_order_number
+      in: query
+      required: false
+      description: Purchase order number.
+      schema:
+        type: string
+        description: Purchase order number.
+        example: example
+    - name: credit_status
+      in: query
+      required: false
+      description: Credit status.
+      schema:
+        type: string
+        description: Credit status.
+        example: available
+        enum:
+          - available
+          - consumed
+          - voided
+    - name: refund_status
+      in: query
+      required: false
+      description: Refund status.
+      schema:
+        type: string
+        description: Refund status.
+        example: pending
+        enum:
+          - pending
+          - succeeded
+          - failed
+    - name: reason
+      in: query
+      required: false
+      description: Reason.
+      schema:
+        type: string
+        description: Reason for issuing the credit note.
+        example: duplicated_charge
+        enum:
+          - duplicated_charge
+          - product_unsatisfactory
+          - order_change
+          - order_cancellation
+          - fraudulent_charge
+          - other
+    - name: self_billed
+      in: query
+      required: false
+      description: Self billed.
+      schema:
+        type: boolean
+        description: Whether the invoice is self-billed.
+        example: false
+    - name: issuing_date_from
+      in: query
+      required: false
+      description: Issuing date from.
+      schema:
+        type: string
+        description: Issuing date bound.
+        example: 2022-04-29
+        format: date
+    - name: issuing_date_to
+      in: query
+      required: false
+      description: Issuing date to.
+      schema:
+        type: string
+        description: Issuing date bound.
+        example: 2022-04-29
+        format: date
+    - name: amount_from
+      in: query
+      required: false
+      description: Amount from.
+      schema:
+        type: integer
+        description: Credit note amount bound, in cents.
+        example: 100
+    - name: amount_to
+      in: query
+      required: false
+      description: Amount to.
+      schema:
+        type: integer
+        description: Credit note amount bound, in cents.
+        example: 100
+    - name: billing_entity_codes[]
+      in: query
+      required: false
+      description: Billing entity codes[].
+      schema:
+        type: array
+        description: Billing entities.
+        items:
+          type: string
+          description: Billing entity code.
+          example: main
+    - name: types[]
+      in: query
+      required: false
+      description: Types[].
+      schema:
+        type: array
+        description: Amount types to include.
+        items:
+          type: string
+          description: Credit note amount type.
+          example: credit
+          enum:
+            - credit
+            - refund
+            - offset
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/CreditNotesPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - credit_notes
+  summary: Create credit note
+  description: >-
+    Requires a premium license and an eligible invoice. Credits are allocated
+    across credit, refund and offset amounts. Product and legacy invoice fees
+    can be credited.
+
+    Requires the product catalog to be enabled and credit_note write permission on the API key.
+  operationId: createCreditNote
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/CreditNoteCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/CreditNote.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

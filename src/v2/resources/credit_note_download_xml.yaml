@@ -1,0 +1,45 @@
+parameters:
+  - name: lago_id
+    in: path
+    required: true
+    description: Unique identifier created by Lago.
+    schema:
+      type: string
+      description: Unique identifier created by Lago.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+post:
+  tags:
+    - credit_notes
+  summary: Download a credit note XML
+  description: >-
+    For finalized credit notes only. Returns 200 with the credit note if its XML
+    already exists. Otherwise, queues XML generation and returns 202 with an empty body.
+
+    Requires the product catalog to be enabled and credit_note write permission on the API key.
+  operationId: downloadXmlCreditNote
+  responses:
+    "200":
+      description: Credit note with an existing XML
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/CreditNote.yaml
+    "202":
+      description: XML generation queued with an empty response body
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

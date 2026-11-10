@@ -4,9 +4,9 @@ info:
   description: >-
     Beta API for organizations using the product catalog.
 
-    This document covers taxes, catalog resources and contracts. Other native v2 endpoints will be added separately.
+    This document covers taxes, the product catalog, contracts and billing. Other native v2 endpoints will be added separately.
 
-    Native v2 endpoints use structured errors and support only the expansions documented for each action.
+    Only the documented actions and expansions are supported. Some lists, such as rates and phases, are returned without pagination.
   version: 2.0.0-beta
   license:
     name: AGPLv3
@@ -48,6 +48,18 @@ tags:
     description: contract rate phases operations
   - name: contracts
     description: contracts operations
+  - name: invoices
+    description: invoices operations
+  - name: fees
+    description: fees operations
+  - name: payments
+    description: payments operations
+  - name: payment_requests
+    description: payment requests operations
+  - name: payment_receipts
+    description: payment receipts operations
+  - name: credit_notes
+    description: credit notes operations
 paths:
   /taxes:
     $ref: './resources/taxes.yaml'
@@ -99,6 +111,64 @@ paths:
     $ref: ./resources/contract.yaml
   "/contracts/{external_id}/current_usage":
     $ref: ./resources/contract_current_usage.yaml
+  /invoices:
+    $ref: ./resources/invoices.yaml
+  "/invoices/{lago_id}":
+    $ref: ./resources/invoice.yaml
+  /fees:
+    $ref: ./resources/fees.yaml
+  "/fees/{lago_id}":
+    $ref: ./resources/fee.yaml
+  "/invoices/{lago_id}/void":
+    $ref: ./resources/invoice_void.yaml
+  "/invoices/{lago_id}/lose_dispute":
+    $ref: ./resources/invoice_lose_dispute.yaml
+  "/invoices/{lago_id}/download_pdf":
+    $ref: ./resources/invoice_download_pdf.yaml
+  "/invoices/{lago_id}/resend_email":
+    $ref: ./resources/invoice_resend_email.yaml
+  "/invoices/{lago_id}/retry_taxes":
+    $ref: ./resources/invoice_retry_taxes.yaml
+  "/invoices/{lago_id}/retry_payment":
+    $ref: ./resources/invoice_retry_payment.yaml
+  "/invoices/{lago_id}/finalize":
+    $ref: ./resources/invoice_finalize.yaml
+  "/invoices/{lago_id}/refresh":
+    $ref: ./resources/invoice_refresh.yaml
+  "/invoices/{lago_id}/payment_url":
+    $ref: ./resources/invoice_payment_url.yaml
+  /payments:
+    $ref: ./resources/payments.yaml
+  "/payments/{lago_id}":
+    $ref: ./resources/payment.yaml
+  /payment_requests:
+    $ref: ./resources/payment_requests.yaml
+  "/payment_requests/{lago_id}":
+    $ref: ./resources/payment_request.yaml
+  /payment_receipts:
+    $ref: ./resources/payment_receipts.yaml
+  "/payment_receipts/{lago_id}":
+    $ref: ./resources/payment_receipt.yaml
+  "/payment_receipts/{lago_id}/resend_email":
+    $ref: ./resources/payment_receipt_resend_email.yaml
+  /credit_notes:
+    $ref: ./resources/credit_notes.yaml
+  "/credit_notes/{lago_id}":
+    $ref: ./resources/credit_note.yaml
+  /credit_notes/estimate:
+    $ref: ./resources/credit_note_estimate.yaml
+  "/credit_notes/{lago_id}/download_pdf":
+    $ref: ./resources/credit_note_download_pdf.yaml
+  "/credit_notes/{lago_id}/download_xml":
+    $ref: ./resources/credit_note_download_xml.yaml
+  "/credit_notes/{lago_id}/resend_email":
+    $ref: ./resources/credit_note_resend_email.yaml
+  "/credit_notes/{lago_id}/void":
+    $ref: ./resources/credit_note_void.yaml
+  "/credit_notes/{credit_note_id}/metadata":
+    $ref: ./resources/credit_note_metadata.yaml
+  "/credit_notes/{credit_note_id}/metadata/{key}":
+    $ref: ./resources/credit_note_metadata_key.yaml
 components:
   securitySchemes:
     bearerAuth:

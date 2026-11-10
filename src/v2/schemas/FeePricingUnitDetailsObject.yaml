@@ -1,0 +1,48 @@
+type: object
+description: Fee Pricing Unit Details.
+required:
+  - lago_pricing_unit_id
+  - pricing_unit_code
+  - short_name
+  - amount_cents
+  - precise_amount_cents
+  - unit_amount_cents
+  - precise_unit_amount
+  - conversion_rate
+properties:
+  lago_pricing_unit_id:
+    type: string
+    description: Pricing unit identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  pricing_unit_code:
+    type: string
+    description: Pricing unit code.
+    example: tokens
+  short_name:
+    type: string
+    description: Short name.
+    example: example
+  amount_cents:
+    type: integer
+    description: Amount cents.
+    example: 100
+  precise_amount_cents:
+    type: string
+    description: Precise amount cents. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  unit_amount_cents:
+    type: integer
+    description: Unit amount cents.
+    example: 100
+  precise_unit_amount:
+    type: string
+    description: Precise unit amount. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  conversion_rate:
+    type: string
+    description: Conversion rate. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$

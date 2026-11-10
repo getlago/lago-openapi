@@ -1,0 +1,13 @@
+type: object
+description: fees list.
+required:
+  - fees
+  - meta
+properties:
+  fees:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./FeeObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml
