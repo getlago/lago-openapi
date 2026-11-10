@@ -1,0 +1,68 @@
+type: object
+description: Contract Applied Rate Card.
+required:
+  - lago_id
+  - external_contract_id
+  - rate_card_code
+  - units
+  - effective_date
+  - billing_anchor_date
+  - next_billing_at
+  - created_at
+  - updated_at
+  - deleted_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_contract_id:
+    type: string
+    description: External identifier of the contract.
+    example: contract_123
+  rate_card_code:
+    type: string
+    description: Code of the applied rate card.
+    example: compute_usd
+  units:
+    type:
+      - string
+      - "null"
+    description: Quantity. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  effective_date:
+    type: string
+    description: Effective date.
+    example: 2022-04-29
+    format: date
+  billing_anchor_date:
+    type: string
+    description: Billing anchor date.
+    example: 2022-04-29
+    format: date
+  next_billing_at:
+    type:
+      - string
+      - "null"
+    description: Next billing at.
+    example: null
+    format: date-time
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time

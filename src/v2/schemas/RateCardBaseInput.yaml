@@ -1,0 +1,85 @@
+type: object
+minProperties: 1
+properties:
+  name:
+    type: string
+    description: Name shown in the catalog.
+    example: Compute
+  code:
+    type: string
+    description: Unique code within the organization.
+    example: example_code
+    pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+  description:
+    type:
+      - string
+      - "null"
+    description: Internal description.
+    example: Compute charges.
+  currency:
+    type: string
+    description: ISO 4217 billing currency.
+    example: USD
+    pattern: ^[A-Z]{3}$
+  billing_timing:
+    type: string
+    description: When fees are billed.
+    example: arrears
+    enum:
+      - arrears
+      - advance
+    default: arrears
+  proration:
+    type: boolean
+    description: Whether charges are prorated.
+    example: false
+    default: false
+  display_on_invoice:
+    type: boolean
+    description: Whether generated fees are shown on invoices.
+    example: true
+    default: true
+  regroup_paid_fees:
+    type:
+      - string
+      - "null"
+    description: Only for hidden advance fees. Null keeps paid fees standalone.
+    example: invoice
+    enum:
+      - invoice
+      - null
+  applied_pricing_unit_code:
+    type:
+      - string
+      - "null"
+    description: Pricing unit code, or null for currency pricing.
+    example: tokens
+  tax_codes:
+    type: array
+    description: Tax codes to assign. An empty array clears the assignments.
+    items:
+      type: string
+      description: Tax code.
+      example: standard_vat
+  product_code:
+    type: string
+    description: Code of the product being priced.
+    example: api_requests
+  product_filter_code:
+    type:
+      - string
+      - "null"
+    description: Filter code belonging to this product.
+    example: eu
+  rates:
+    type: array
+    description: Initial effective-dated rates. A failure rolls back the card and its rates.
+    items:
+      allOf:
+        - $ref: ./RateCardRateBaseInput.yaml
+        - type: object
+          required:
+            - code
+            - effective_from
+            - rate_model
+            - billing_interval_unit

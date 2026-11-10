@@ -1,0 +1,14 @@
+type: object
+description: Create rate card.
+required:
+  - rate_card
+properties:
+  rate_card:
+    allOf:
+      - $ref: ./RateCardBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code
+          - currency
+          - product_code

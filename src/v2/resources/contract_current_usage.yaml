@@ -1,0 +1,86 @@
+parameters:
+  - name: external_id
+    in: path
+    required: true
+    description: External id.
+    schema:
+      type: string
+      description: External id.
+      example: external_123
+get:
+  tags:
+    - contracts
+  summary: Retrieve contract current usage
+  description: >-
+    Returns usage across the open billing windows of the active or pending
+    contract. Pending contracts have no usage. Totals may span multiple
+    invoices.
+
+    Requires the product catalog to be enabled and customer_usage read permission on the API key.
+  operationId: findContractCurrentUsage
+  parameters:
+    - name: apply_taxes
+      in: query
+      required: false
+      description: Apply taxes.
+      schema:
+        type: boolean
+        description: Whether to include tax calculation.
+        example: true
+        default: true
+    - name: rate_card_code
+      in: query
+      required: false
+      description: Rate card code.
+      schema:
+        type: string
+        description: Exact code.
+        example: example_code
+    - name: product_code
+      in: query
+      required: false
+      description: Product code.
+      schema:
+        type: string
+        description: Exact code.
+        example: example_code
+    - name: product_filter_code
+      in: query
+      required: false
+      description: Product filter code.
+      schema:
+        type: string
+        description: Exact code.
+        example: example_code
+    - name: product_type
+      in: query
+      required: false
+      description: Product type.
+      schema:
+        type: string
+        description: Type of product. Metered products require a billable metric; fixed
+          products must not reference one.
+        example: metered
+        enum:
+          - metered
+          - fixed
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ContractUsage.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
