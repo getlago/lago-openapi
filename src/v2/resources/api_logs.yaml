@@ -1,0 +1,116 @@
+get:
+  tags:
+    - api_logs
+  summary: List api logs
+  description: >-
+    Returns a cursor-paginated list ordered by log time, newest first. Use after
+    or before to navigate. The page and per_page parameters are rejected.
+
+    Requires a premium license and available log storage. Results are ordered by logged_at and request_id, both descending, within the configured retention period.
+
+    Requires the product catalog to be enabled and api_log read permission on the API key.
+  operationId: findAllApiLogs
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - name: from_date
+      in: query
+      required: false
+      description: Inclusive lower log-time bound as an ISO 8601 date or timestamp.
+        A date is interpreted as midnight UTC.
+      schema:
+        type: string
+        description: Inclusive lower log-time bound as an ISO 8601 date or timestamp.
+          A date is interpreted as midnight UTC.
+        example: 2022-04-29T08:59:51.123456Z
+    - name: to_date
+      in: query
+      required: false
+      description: Inclusive upper log-time bound as an ISO 8601 date or timestamp.
+        A date is interpreted as midnight UTC.
+      schema:
+        type: string
+        description: Inclusive upper log-time bound as an ISO 8601 date or timestamp.
+          A date is interpreted as midnight UTC.
+        example: 2022-04-29T08:59:51.123456Z
+    - name: http_methods[]
+      in: query
+      required: false
+      description: Http methods[].
+      schema:
+        type: array
+        description: Http methods.
+        items:
+          type: string
+          description: Http methods.
+          example: example
+    - name: http_statuses[]
+      in: query
+      required: false
+      description: HTTP status codes or status groups. succeeded selects codes up to
+        399; failed selects codes above 399. Groups take precedence over numeric
+        codes. Selecting both groups returns no matches.
+      schema:
+        type: array
+        description: Http statuses.
+        items:
+          anyOf:
+            - type: integer
+              description: HTTP status code.
+              example: 200
+            - type: string
+              description: HTTP status group.
+              example: succeeded
+              enum:
+                - succeeded
+                - failed
+    - name: request_paths[]
+      in: query
+      required: false
+      description: Request paths[].
+      schema:
+        type: array
+        description: Request paths.
+        items:
+          type: string
+          description: Request paths.
+          example: example
+    - name: clients[]
+      in: query
+      required: false
+      description: Clients[].
+      schema:
+        type: array
+        description: Clients.
+        items:
+          type: string
+          description: Clients.
+          example: example
+    - name: api_version
+      in: query
+      required: false
+      description: Api version.
+      schema:
+        type: string
+        description: Api version.
+        example: example
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ApiLogsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

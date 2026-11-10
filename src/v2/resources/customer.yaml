@@ -1,0 +1,167 @@
+parameters:
+  - name: external_id
+    in: path
+    required: true
+    description: External id.
+    schema:
+      type: string
+      description: External id.
+      example: external_123
+get:
+  tags:
+    - customers
+  summary: Retrieve customer
+  description: >-
+    Returns the record without nested relationships unless a supported expansion
+    is requested.
+
+    Requires the product catalog to be enabled and customer read permission on the API key.
+  operationId: findCustomer
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - metadata
+            - taxes
+            - integration_customers
+          example: metadata
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Customer.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - customers
+  summary: Update customer
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+    When metadata or integration_customers is supplied, it replaces the entire
+    corresponding list. Send each existing entry with its id to keep or update
+    it; omitted entries are deleted. Use the response lago_id as the request id.
+    An empty array removes all entries.
+
+    The path identifies the existing customer. A missing customer returns 404. Billing and payment settings are top-level fields. Relationships are not expanded in the update response.
+
+    Requires the product catalog to be enabled and customer write permission on the API key.
+  operationId: updateCustomer
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/CustomerUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Customer.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - customers
+  summary: Update customer
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+    When metadata or integration_customers is supplied, it replaces the entire
+    corresponding list. Send each existing entry with its id to keep or update
+    it; omitted entries are deleted. Use the response lago_id as the request id.
+    An empty array removes all entries.
+
+    The path identifies the existing customer. A missing customer returns 404. Billing and payment settings are top-level fields. Relationships are not expanded in the update response.
+
+    Requires the product catalog to be enabled and customer write permission on the API key.
+  operationId: patchCustomer
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/CustomerUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Customer.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - customers
+  summary: Delete customer
+  description: >-
+    Soft-deletes the customer and queues the related termination work. The
+    response includes deleted_at.
+
+    Requires the product catalog to be enabled and customer write permission on the API key.
+  operationId: destroyCustomer
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Customer.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

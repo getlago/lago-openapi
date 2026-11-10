@@ -1,0 +1,13 @@
+type: object
+description: events list.
+required:
+  - events
+  - meta
+properties:
+  events:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./EventObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

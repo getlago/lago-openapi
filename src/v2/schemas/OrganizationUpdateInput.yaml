@@ -1,0 +1,19 @@
+type: object
+description: Organization update.
+required:
+  - organization
+properties:
+  organization:
+    type: object
+    minProperties: 1
+    properties:
+      email:
+        type:
+          - string
+          - "null"
+        description: Organization email.
+        example: billing@acme.example
+      slug:
+        type: string
+        description: Organization slug.
+        example: acme

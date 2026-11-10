@@ -1,0 +1,13 @@
+type: object
+description: webhook endpoints list.
+required:
+  - webhook_endpoints
+  - meta
+properties:
+  webhook_endpoints:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./WebhookEndpointObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

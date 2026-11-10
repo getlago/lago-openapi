@@ -1,0 +1,197 @@
+parameters:
+  - name: customer_external_id
+    in: path
+    required: true
+    description: Customer external identifier.
+    schema:
+      type: string
+      description: Customer external identifier.
+      example: external_123
+get:
+  tags:
+    - customers
+  summary: List customer invoices
+  description: >-
+    Returns a cursor-paginated list for the customer identified in the path. No
+    expansions are supported.
+
+    Requires the product catalog to be enabled and invoice read permission on the API key.
+  operationId: findAllCustomerInvoices
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+    - name: invoice_type
+      in: query
+      required: false
+      description: Invoice type.
+      schema:
+        type: string
+        description: Type of catalog invoice to list.
+        example: contract
+        enum:
+          - contract
+          - advance_fees
+    - name: billing_entity_codes[]
+      in: query
+      required: false
+      description: Billing entity codes[].
+      schema:
+        type: array
+        description: Billing entity codes.
+        items:
+          type: string
+          description: Billing entity code.
+          example: main
+    - name: payment_status[]
+      in: query
+      required: false
+      description: Payment statuses. Also accepts scalar payment_status or the
+        payment_statuses[] alias.
+      schema:
+        type: array
+        description: Payment statuses.
+        items:
+          type: string
+          description: Payment status.
+          example: pending
+          enum:
+            - pending
+            - succeeded
+            - failed
+    - name: status[]
+      in: query
+      required: false
+      description: Invoice statuses. Also accepts scalar status or the statuses[] alias.
+      schema:
+        type: array
+        description: Invoice statuses.
+        items:
+          type: string
+          description: Invoice status.
+          example: finalized
+          enum:
+            - draft
+            - finalized
+            - voided
+            - failed
+            - pending
+    - name: currency
+      in: query
+      required: false
+      description: Currency as an ISO 4217 code.
+      schema:
+        type: string
+        description: Currency as an ISO 4217 code.
+        example: example
+    - name: purchase_order_number
+      in: query
+      required: false
+      description: Purchase order number.
+      schema:
+        type: string
+        description: Purchase order number.
+        example: example
+    - name: search_term
+      in: query
+      required: false
+      description: Search term.
+      schema:
+        type: string
+        description: Search term.
+        example: example
+    - name: partially_paid
+      in: query
+      required: false
+      description: Partially paid.
+      schema:
+        type: boolean
+        description: Partially paid.
+        example: false
+    - name: payment_dispute_lost
+      in: query
+      required: false
+      description: Payment dispute lost.
+      schema:
+        type: boolean
+        description: Payment dispute lost.
+        example: false
+    - name: payment_overdue
+      in: query
+      required: false
+      description: Payment overdue.
+      schema:
+        type: boolean
+        description: Payment overdue.
+        example: false
+    - name: amount_from
+      in: query
+      required: false
+      description: Amount from.
+      schema:
+        type: integer
+        description: Invoice total amount bound, in cents.
+        example: 1000
+    - name: amount_to
+      in: query
+      required: false
+      description: Amount to.
+      schema:
+        type: integer
+        description: Invoice total amount bound, in cents.
+        example: 1000
+    - name: issuing_date_from
+      in: query
+      required: false
+      description: Issuing date from.
+      schema:
+        type: string
+        description: Inclusive issuing date bound.
+        example: 2022-04-29
+        format: date
+    - name: issuing_date_to
+      in: query
+      required: false
+      description: Issuing date to.
+      schema:
+        type: string
+        description: Inclusive issuing date bound.
+        example: 2022-04-29
+        format: date
+    - name: settlements[]
+      in: query
+      required: false
+      description: Settlements[].
+      schema:
+        type: array
+        description: Settlement types.
+        items:
+          type: string
+          description: Settlement type.
+          example: payment
+          enum:
+            - payment
+            - credit_note
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/InvoicesPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

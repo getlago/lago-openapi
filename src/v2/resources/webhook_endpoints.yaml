@@ -1,0 +1,73 @@
+get:
+  tags:
+    - webhook_endpoints
+  summary: List webhook endpoints
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+
+    Requires the product catalog to be enabled and webhook_endpoint read permission on the API key.
+  operationId: findAllWebhookEndpoints
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/WebhookEndpointsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - webhook_endpoints
+  summary: Create webhook endpoint
+  description: >-
+    Creates a webhook endpoint. The organization can have at most ten endpoints,
+    each with a distinct URL.
+
+    Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
+  operationId: createWebhookEndpoint
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/WebhookEndpointCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/WebhookEndpoint.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

@@ -1,0 +1,31 @@
+type: object
+description: Customer checkout URL.
+required:
+  - lago_customer_id
+  - external_customer_id
+  - payment_provider
+  - payment_provider_code
+  - checkout_url
+properties:
+  lago_customer_id:
+    type: string
+    description: Customer identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_customer_id:
+    type: string
+    description: Customer external identifier.
+    example: customer_123
+  payment_provider:
+    type: string
+    description: Payment provider.
+    example: stripe
+  payment_provider_code:
+    type: string
+    description: Payment provider code.
+    example: stripe
+  checkout_url:
+    type: string
+    description: URL of the provider checkout page.
+    example: https://pay.acme.example/checkout
+    format: uri
