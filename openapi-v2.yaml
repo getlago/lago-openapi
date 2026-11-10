@@ -258,6 +258,7 @@ paths:
         The applied_to_organization parameter is ignored and existing assignments are not changed by this parameter.
         Taxes have no supported expansions; a nonempty expands[] returns 400 before updating the tax.
       operationId: patchTax
+      x-lago-cli-action: patch
       requestBody:
         required: true
         description: Tax update payload
@@ -1011,6 +1012,7 @@ paths:
         Soft-deletes the filter, its values, its scoped rate cards and their rates. Deletion is rejected while the product is used by a plan or contract.
         Requires the product catalog to be enabled and product write permission on the API key.
       operationId: destroyProductFilter
+      x-lago-cli-action: delete
       responses:
         '200':
           description: Successful response
@@ -1504,6 +1506,7 @@ paths:
         Only pending rates can be deleted. Active and terminated rates remain for history.
         Requires the product catalog to be enabled and rate_card write permission on the API key.
       operationId: destroyRateCardRate
+      x-lago-cli-action: delete
       responses:
         '200':
           description: Successful response
@@ -1974,6 +1977,7 @@ paths:
         Removes the rate card from an editable plan.
         Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
       operationId: destroyPlanAppliedRateCard
+      x-lago-cli-action: delete
       responses:
         '200':
           description: Successful response
@@ -2180,6 +2184,7 @@ paths:
         Removes the phase and renumbers later positions. The final indefinite phase and the only remaining phase cannot be deleted.
         Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
       operationId: destroyPlanRatePhase
+      x-lago-cli-action: delete
       responses:
         '200':
           description: Successful response
@@ -2405,6 +2410,7 @@ paths:
         Removes the rate card from a pending contract.
         Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
       operationId: destroyContractAppliedRateCard
+      x-lago-cli-action: delete
       responses:
         '200':
           description: Successful response
@@ -2611,6 +2617,7 @@ paths:
         Removes the phase and renumbers later positions. The final indefinite phase and the only remaining phase cannot be deleted.
         Requires the product catalog to be enabled and contract_rate_card write permission on the API key.
       operationId: destroyContractRatePhase
+      x-lago-cli-action: delete
       responses:
         '200':
           description: Successful response
@@ -5026,6 +5033,7 @@ paths:
         The credit note must be finalized. POST replaces all metadata; PUT and PATCH merge keys; DELETE clears all metadata. The response contains only the metadata object or null.
         Requires the product catalog to be enabled and credit_note write permission on the API key.
       operationId: postCreditNoteMetadata
+      x-lago-cli-action: replace-metadata
       requestBody:
         required: false
         description: Request payload
@@ -5061,6 +5069,7 @@ paths:
         The credit note must be finalized. POST replaces all metadata; PUT and PATCH merge keys; DELETE clears all metadata. The response contains only the metadata object or null.
         Requires the product catalog to be enabled and credit_note write permission on the API key.
       operationId: putCreditNoteMetadata
+      x-lago-cli-action: merge-metadata
       requestBody:
         required: false
         description: Request payload
@@ -5096,6 +5105,7 @@ paths:
         The credit note must be finalized. POST replaces all metadata; PUT and PATCH merge keys; DELETE clears all metadata. The response contains only the metadata object or null.
         Requires the product catalog to be enabled and credit_note write permission on the API key.
       operationId: patchCreditNoteMetadata
+      x-lago-cli-action: patch-metadata
       requestBody:
         required: false
         description: Request payload
@@ -5131,6 +5141,7 @@ paths:
         The credit note must be finalized. POST replaces all metadata; PUT and PATCH merge keys; DELETE clears all metadata. The response contains only the metadata object or null.
         Requires the product catalog to be enabled and credit_note write permission on the API key.
       operationId: deleteCreditNoteMetadata
+      x-lago-cli-action: delete-metadata
       responses:
         '200':
           description: Successful response
@@ -5178,6 +5189,7 @@ paths:
         Deletes one metadata key from a finalized credit note and returns the remaining metadata.
         Requires the product catalog to be enabled and credit_note write permission on the API key.
       operationId: deleteCreditNoteMetadataKey
+      x-lago-cli-action: delete-metadata-key
       responses:
         '200':
           description: Successful response
@@ -6736,6 +6748,7 @@ paths:
         Deletes the payment method and returns it with deleted_at set.
         Requires the product catalog to be enabled and payment_method write permission on the API key.
       operationId: destroyCustomerPaymentMethod
+      x-lago-cli-action: delete-payment-method
       responses:
         '200':
           description: Successful response
@@ -6783,6 +6796,7 @@ paths:
         Sets this payment method as the customer default. No request body is required.
         Requires the product catalog to be enabled and payment_method write permission on the API key.
       operationId: setDefaultCustomerPaymentMethod
+      x-lago-cli-action: set-default-payment-method
       responses:
         '200':
           description: Successful response

@@ -88,6 +88,7 @@ patch:
     The applied_to_organization parameter is ignored and existing assignments are not changed by this parameter.
     Taxes have no supported expansions; a nonempty expands[] returns 400 before updating the tax.
   operationId: patchTax
+  x-lago-cli-action: patch
   requestBody:
     required: true
     description: Tax update payload

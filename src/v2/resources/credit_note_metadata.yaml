@@ -19,6 +19,7 @@ post:
 
     Requires the product catalog to be enabled and credit_note write permission on the API key.
   operationId: postCreditNoteMetadata
+  x-lago-cli-action: replace-metadata
   requestBody:
     required: false
     description: Request payload
@@ -57,6 +58,7 @@ put:
 
     Requires the product catalog to be enabled and credit_note write permission on the API key.
   operationId: putCreditNoteMetadata
+  x-lago-cli-action: merge-metadata
   requestBody:
     required: false
     description: Request payload
@@ -95,6 +97,7 @@ patch:
 
     Requires the product catalog to be enabled and credit_note write permission on the API key.
   operationId: patchCreditNoteMetadata
+  x-lago-cli-action: patch-metadata
   requestBody:
     required: false
     description: Request payload
@@ -133,6 +136,7 @@ delete:
 
     Requires the product catalog to be enabled and credit_note write permission on the API key.
   operationId: deleteCreditNoteMetadata
+  x-lago-cli-action: delete-metadata
   responses:
     "200":
       description: Successful response
