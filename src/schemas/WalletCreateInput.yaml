@@ -105,6 +105,11 @@ properties:
           - "null"
         example: "PO-123"
         description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
+      payment_term:
+        oneOf:
+          - $ref: "./PaymentTermObject.yaml"
+          - type: "null"
+        description: The structured payment term applied to the invoices generated for wallet top-ups. When not sent or `null`, the term of the customer, then of the billing entity, applies.
       applies_to:
         type:
           - object
