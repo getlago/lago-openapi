@@ -25,6 +25,7 @@ delete:
 
     Requires the product catalog to be enabled and payment_method write permission on the API key.
   operationId: destroyCustomerPaymentMethod
+  x-lago-cli-action: delete-payment-method
   responses:
     "200":
       description: Successful response

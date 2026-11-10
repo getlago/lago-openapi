@@ -26,6 +26,7 @@ put:
 
     Requires the product catalog to be enabled and payment_method write permission on the API key.
   operationId: setDefaultCustomerPaymentMethod
+  x-lago-cli-action: set-default-payment-method
   responses:
     "200":
       description: Successful response
