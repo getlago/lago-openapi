@@ -174,7 +174,7 @@ properties:
           - integer
           - "null"
         example: 30
-        description: "**Deprecated.** Use `payment_term` instead. The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized."
+        description: "**Deprecated.** Use `payment_term` instead. The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized. When a non-null `payment_term` is sent in the same request, `payment_term` wins and this field is ignored; see `payment_term` for the full rules."
       external_salesforce_id:
         type:
           - string
