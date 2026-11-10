@@ -33,6 +33,11 @@ properties:
           - "null"
         example: "PO-123"
         description: The purchase order number to associate with the invoice.
+      payment_term:
+        oneOf:
+          - $ref: "./PaymentTermObject.yaml"
+          - type: "null"
+        description: The structured payment term of the invoice, used to compute its payment due date. When not sent or `null`, the term of the customer, then of the billing entity, applies.
       fees:
         type: array
         items:

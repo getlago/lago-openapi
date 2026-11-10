@@ -18708,6 +18708,7 @@ components:
         - name
         - code
         - purchase_order_number
+        - payment_term
         - rate_amount
         - credits_balance
         - credits_ongoing_balance
@@ -18897,6 +18898,11 @@ components:
             - 'null'
           example: PO-123
           description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
+        payment_term:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentTermObject'
+            - type: 'null'
+          description: The structured payment term applied to the invoices generated for wallet top-ups. It is `null` when the wallet has no term of its own, in which case the term of the customer, then of the billing entity, applies.
         metadata:
           $ref: '#/components/schemas/MetadataObject'
     WalletsPaginated:
@@ -19034,6 +19040,11 @@ components:
                 - 'null'
               example: PO-123
               description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
+            payment_term:
+              oneOf:
+                - $ref: '#/components/schemas/PaymentTermObject'
+                - type: 'null'
+              description: The structured payment term applied to the invoices generated for wallet top-ups. When not sent or `null`, the term of the customer, then of the billing entity, applies.
             applies_to:
               type:
                 - object
@@ -19269,6 +19280,11 @@ components:
                 - 'null'
               example: PO-123
               description: The purchase order number associated with the wallet. It will be added to invoices generated for wallet top-ups, unless a more specific purchase order number is set on the wallet transaction or recurring transaction rule that triggered the top-up.
+            payment_term:
+              oneOf:
+                - $ref: '#/components/schemas/PaymentTermObject'
+                - type: 'null'
+              description: The structured payment term applied to the invoices generated for wallet top-ups. Send `null` to remove it, so the term of the customer, then of the billing entity, applies.
             invoice_custom_section:
               $ref: '#/components/schemas/InvoiceCustomSectionInput'
             recurring_transaction_rules:
@@ -20945,6 +20961,11 @@ components:
                 - 'null'
               example: PO-123
               description: The purchase order number to associate with the invoice.
+            payment_term:
+              oneOf:
+                - $ref: '#/components/schemas/PaymentTermObject'
+                - type: 'null'
+              description: The structured payment term of the invoice, used to compute its payment due date. When not sent or `null`, the term of the customer, then of the billing entity, applies.
             fees:
               type: array
               items:
