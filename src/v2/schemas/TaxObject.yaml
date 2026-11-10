@@ -1,0 +1,56 @@
+type: object
+required:
+  - lago_id
+  - name
+  - code
+  - rate
+  - description
+  - created_at
+  - updated_at
+  - deleted_at
+properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the tax, created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  name:
+    type: string
+    description: Name of the tax.
+    example: VAT
+  code:
+    type: string
+    description: Unique code of the tax within the organization.
+    example: standard_vat
+  rate:
+    type: number
+    description: Percentage rate of the tax, returned as a JSON number.
+    example: 20
+  description:
+    type: [string, 'null']
+    description: Internal description of the tax.
+    example: Standard VAT
+  created_at:
+    type: string
+    format: date-time
+    description: UTC creation timestamp, with microsecond precision.
+    example: '2022-04-29T08:59:51.123456Z'
+  updated_at:
+    type: string
+    format: date-time
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: '2022-04-29T09:30:00.123456Z'
+  deleted_at:
+    type: [string, 'null']
+    format: date-time
+    description: UTC deletion timestamp, with microsecond precision. It is null until the tax is deleted.
+    example: null
+example:
+  lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+  name: VAT
+  code: standard_vat
+  rate: 20
+  description: Standard VAT
+  created_at: '2022-04-29T08:59:51.123456Z'
+  updated_at: '2022-04-29T09:30:00.123456Z'
+  deleted_at: null

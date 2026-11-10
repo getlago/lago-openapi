@@ -1,0 +1,12 @@
+type: object
+required:
+  - tax
+properties:
+  tax:
+    allOf:
+      - $ref: ./TaxBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code
+          - rate
