@@ -3765,12 +3765,12 @@ paths:
         - invoices
       summary: Download an invoice PDF
       description: |-
-        For finalized invoices only. Returns the invoice if its PDF already exists; otherwise queues generation and returns an empty body.
+        For finalized invoices only. Returns 200 with the invoice if its PDF already exists. Otherwise, queues PDF generation and returns 202 with an empty body.
         Requires the product catalog to be enabled and invoice write permission on the API key.
       operationId: downloadPdfInvoice
       responses:
         '200':
-          description: Record returned if the document exists; otherwise an empty body while generation is queued
+          description: Invoice with an existing PDF
           headers:
             X-Lago-Endpoint-Status:
               $ref: '#/components/headers/EndpointStatus'
@@ -3778,6 +3778,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Invoice'
+        '202':
+          description: PDF generation queued with an empty response body
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -4834,12 +4839,12 @@ paths:
         - credit_notes
       summary: Download a credit note PDF
       description: |-
-        Returns the finalized credit note if its PDF exists; otherwise queues generation and returns an empty body.
+        For finalized credit notes only. Returns 200 with the credit note if its PDF already exists. Otherwise, queues PDF generation and returns 202 with an empty body.
         Requires the product catalog to be enabled and credit_note write permission on the API key.
       operationId: downloadPdfCreditNote
       responses:
         '200':
-          description: Record returned if the document exists; otherwise an empty body while generation is queued
+          description: Credit note with an existing PDF
           headers:
             X-Lago-Endpoint-Status:
               $ref: '#/components/headers/EndpointStatus'
@@ -4847,6 +4852,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreditNote'
+        '202':
+          description: PDF generation queued with an empty response body
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -4873,12 +4883,12 @@ paths:
         - credit_notes
       summary: Download a credit note XML
       description: |-
-        Returns the finalized credit note if its XML exists; otherwise queues generation and returns an empty body.
+        For finalized credit notes only. Returns 200 with the credit note if its XML already exists. Otherwise, queues XML generation and returns 202 with an empty body.
         Requires the product catalog to be enabled and credit_note write permission on the API key.
       operationId: downloadXmlCreditNote
       responses:
         '200':
-          description: Record returned if the document exists; otherwise an empty body while generation is queued
+          description: Credit note with an existing XML
           headers:
             X-Lago-Endpoint-Status:
               $ref: '#/components/headers/EndpointStatus'
@@ -4886,6 +4896,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreditNote'
+        '202':
+          description: XML generation queued with an empty response body
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

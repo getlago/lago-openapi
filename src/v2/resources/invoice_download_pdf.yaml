@@ -13,15 +13,14 @@ post:
     - invoices
   summary: Download an invoice PDF
   description: >-
-    For finalized invoices only. Returns the invoice if its PDF already exists;
-    otherwise queues generation and returns an empty body.
+    For finalized invoices only. Returns 200 with the invoice if its PDF already
+    exists. Otherwise, queues PDF generation and returns 202 with an empty body.
 
     Requires the product catalog to be enabled and invoice write permission on the API key.
   operationId: downloadPdfInvoice
   responses:
     "200":
-      description: Record returned if the document exists; otherwise an empty body
-        while generation is queued
+      description: Invoice with an existing PDF
       headers:
         X-Lago-Endpoint-Status:
           $ref: ../headers/EndpointStatus.yaml
@@ -29,6 +28,11 @@ post:
         application/json:
           schema:
             $ref: ../schemas/Invoice.yaml
+    "202":
+      description: PDF generation queued with an empty response body
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
     "400":
       $ref: ../responses/BadRequest.yaml
     "401":

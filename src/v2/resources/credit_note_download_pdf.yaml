@@ -13,15 +13,14 @@ post:
     - credit_notes
   summary: Download a credit note PDF
   description: >-
-    Returns the finalized credit note if its PDF exists; otherwise queues
-    generation and returns an empty body.
+    For finalized credit notes only. Returns 200 with the credit note if its PDF
+    already exists. Otherwise, queues PDF generation and returns 202 with an empty body.
 
     Requires the product catalog to be enabled and credit_note write permission on the API key.
   operationId: downloadPdfCreditNote
   responses:
     "200":
-      description: Record returned if the document exists; otherwise an empty body
-        while generation is queued
+      description: Credit note with an existing PDF
       headers:
         X-Lago-Endpoint-Status:
           $ref: ../headers/EndpointStatus.yaml
@@ -29,6 +28,11 @@ post:
         application/json:
           schema:
             $ref: ../schemas/CreditNote.yaml
+    "202":
+      description: PDF generation queued with an empty response body
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
     "400":
       $ref: ../responses/BadRequest.yaml
     "401":
