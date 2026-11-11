@@ -1,6 +1,8 @@
 type: object
 description: "Values used to apply differentiated pricing based on additional event properties."
 required:
+  - lago_id
+  - charge_code
   - invoice_display_name
   - properties
   - values
