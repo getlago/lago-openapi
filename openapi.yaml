@@ -23084,8 +23084,10 @@ components:
         - tax_identification_number
         - timezone
         - email_settings
+        - customer_portal_locked_fields
         - billing_configuration
         - finalize_zero_amount_invoice
+        - document_url_expiration_days
         - events_store
       properties:
         lago_id:
@@ -23226,6 +23228,31 @@ components:
               - invoice.finalized
               - credit_note.created
               - payment_receipt.created
+        customer_portal_locked_fields:
+          type: array
+          description: The customer fields that your customers cannot edit from the customer portal. Every other field of the list below stays editable. By default `country`, `zipcode` and `tax_identification_number` are locked, because they drive the EU tax rate applied to the customer.
+          example:
+            - country
+            - zipcode
+            - tax_identification_number
+          items:
+            type: string
+            enum:
+              - customer_type
+              - document_locale
+              - email
+              - firstname
+              - lastname
+              - legal_name
+              - name
+              - tax_identification_number
+              - address_line1
+              - address_line2
+              - city
+              - country
+              - state
+              - zipcode
+              - shipping_address
         billing_configuration:
           $ref: '#/components/schemas/OrganizationBillingConfiguration'
         taxes:
@@ -23237,6 +23264,13 @@ components:
           type: boolean
           example: false
           description: Indicates whether invoices with a zero total amount should be finalized. If set to true, zero amount invoices will be finalized. If set to false, zero amount invoices will not be finalized.
+        document_url_expiration_days:
+          type: integer
+          minimum: 30
+          maximum: 120
+          default: 30
+          example: 30
+          description: The number of days a document download URL stays valid, counted from the date the document is anchored to. It applies to invoices, credit notes and payment receipts. An expired URL answers `410`.
         events_store:
           type: string
           enum:
@@ -23366,12 +23400,44 @@ components:
                   - invoice.finalized
                   - credit_note.created
                   - payment_receipt.created
+            customer_portal_locked_fields:
+              type: array
+              description: Sets the customer fields that your customers cannot edit from the customer portal. Every other field of the list below stays editable. Sending this array replaces the current one, so send the full list. Duplicates are removed. By default `country`, `zipcode` and `tax_identification_number` are locked, because they drive the EU tax rate applied to the customer.
+              example:
+                - country
+                - zipcode
+                - tax_identification_number
+              items:
+                type: string
+                enum:
+                  - customer_type
+                  - document_locale
+                  - email
+                  - firstname
+                  - lastname
+                  - legal_name
+                  - name
+                  - tax_identification_number
+                  - address_line1
+                  - address_line2
+                  - city
+                  - country
+                  - state
+                  - zipcode
+                  - shipping_address
             billing_configuration:
               $ref: '#/components/schemas/OrganizationBillingConfiguration'
             finalize_zero_amount_invoice:
               type: boolean
               example: false
               description: Determines whether invoices with a zero total amount should be finalized. If set to true, zero amount invoices will be finalized. If set to false, zero amount invoices will not be finalized.
+            document_url_expiration_days:
+              type: integer
+              minimum: 30
+              maximum: 120
+              default: 30
+              example: 30
+              description: Sets the number of days a document download URL stays valid, counted from the date the document is anchored to. It applies to invoices, credit notes and payment receipts. It must be between 30 and 120 days.
             slug:
               type: string
               example: name1
