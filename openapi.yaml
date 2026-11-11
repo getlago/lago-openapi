@@ -6769,6 +6769,8 @@ paths:
       summary: Retrieve subscription lifetime usage
       description: This endpoint enables the retrieval of the lifetime usage of a subscription.
       operationId: getSubscriptionLifetimeUsage
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       responses:
         '200':
           description: Subscription lifetime usage
@@ -6786,6 +6788,8 @@ paths:
       summary: Update a subscription lifetime usage
       description: This endpoint allows you to update the lifetime usage of a subscription.
       operationId: updateSubscriptionLifetimeUsage
+      parameters:
+        - $ref: '#/components/parameters/subscription_status'
       requestBody:
         description: Update the lifetime usage of a subscription
         content:
