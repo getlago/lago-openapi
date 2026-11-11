@@ -5176,7 +5176,7 @@ paths:
       tags:
         - payment_receipts
       summary: List all payment receipts
-      description: This endpoint is used to list all existing payment receipts.
+      description: This endpoint is used to list all existing payment receipts. Payment receipts are ordered by creation date, from the most recent to the oldest.
       operationId: findAllPaymentReceipts
       parameters:
         - $ref: '#/components/parameters/page'
@@ -5199,6 +5199,8 @@ paths:
                 $ref: '#/components/schemas/PaymentReceiptsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /payment_receipts/{lago_id}:
@@ -5226,6 +5228,8 @@ paths:
                 $ref: '#/components/schemas/PaymentReceipt'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /payment_requests:
