@@ -3,7 +3,7 @@ get:
     - analytics
   summary: List of finalized invoices
   description: |-
-    Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`. Self-billed invoices and invoices with a lost payment dispute are excluded.
+    Represents a monthly aggregation, detailing both the total count and the cumulative amount of invoices that have been marked as `finalized`. This report sorts invoices categorically based on their `payment_status`. Self-billed invoices and invoices with a lost payment dispute are excluded. Every month is returned, including the months without a finalized invoice, from the oldest to the most recent, and within a month by payment status and currency.
     This is a premium feature.
   operationId: findAllInvoiceCollections
   parameters:
