@@ -2,7 +2,7 @@ post:
   tags:
     - events
   summary: Batch multiple events
-  description: This endpoint can be used to send a batch of usage records. Each request may include up to 100 events.
+  description: This endpoint can be used to send a batch of usage records. Each request must include at least one event and may include up to 100 events.
   operationId: createBatchEvents
   requestBody:
     description: Batch events payload
