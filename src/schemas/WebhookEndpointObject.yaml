@@ -29,6 +29,7 @@ properties:
     enum:
       - jwt
       - hmac
+      - standard_webhooks
   name:
     type:
       - string
@@ -48,3 +49,11 @@ properties:
     format: 'date-time'
     description: The date of the webhook endpoint creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
     example: '2022-04-29T08:59:51Z'
+  signing_keys:
+    type: array
+    description: |-
+      The signing keys of the endpoint, oldest first, used to verify the `webhook-signature` header of `standard_webhooks` deliveries.
+      The list is empty when the endpoint uses the `jwt` or `hmac` signature algorithm.
+      Returned only by the create, update and retrieve endpoints, and only to an API key with write access to webhook endpoints.
+    items:
+      $ref: './WebhookEndpointSigningKeyObject.yaml'

@@ -7252,7 +7252,7 @@ paths:
         - webhook_endpoints
       summary: List webhook endpoints
       description: |-
-        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected.
+        Returns a cursor-paginated list ordered by creation time, newest first. Use after or before to navigate. The page and per_page parameters are rejected. Expansions are not supported; a nonempty expands[] returns 400 expand_not_supported.
 
         Requires the product catalog to be enabled and webhook_endpoint read permission on the API key.
       operationId: findAllWebhookEndpoints
@@ -7286,9 +7286,22 @@ paths:
         - webhook_endpoints
       summary: Create webhook endpoint
       description: |-
-        Creates a webhook endpoint. The organization can have at most ten endpoints, each with a distinct URL.
+        Creates a webhook endpoint. The organization can have at most ten endpoints, each with a distinct URL. The endpoint signs its deliveries with Standard Webhooks; request expands[]=signing_keys to read its signing key.
         Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
       operationId: createWebhookEndpoint
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - signing_keys
+              example: signing_keys
       requestBody:
         required: true
         description: Request payload
@@ -7333,8 +7346,21 @@ paths:
       summary: Retrieve webhook endpoint
       description: |-
         Returns the record without nested relationships unless a supported expansion is requested.
-        Requires the product catalog to be enabled and webhook_endpoint read permission on the API key.
+        Requires the product catalog to be enabled and webhook_endpoint read permission on the API key. Requesting expands[]=signing_keys also requires webhook_endpoint write permission and returns 403 without it.
       operationId: findWebhookEndpoint
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - signing_keys
+              example: signing_keys
       responses:
         '200':
           description: Successful response
@@ -7358,10 +7384,23 @@ paths:
         - webhook_endpoints
       summary: Update webhook endpoint
       description: |-
-        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged. Switching to standard_webhooks creates the endpoint's signing key, or reuses the key kept from an earlier switch; request expands[]=signing_keys to read it.
 
         Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
       operationId: updateWebhookEndpoint
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - signing_keys
+              example: signing_keys
       requestBody:
         required: true
         description: Request payload
@@ -7394,10 +7433,23 @@ paths:
         - webhook_endpoints
       summary: Update webhook endpoint
       description: |-
-        PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+        PUT and PATCH both accept partial updates. Omitted fields are unchanged. Switching to standard_webhooks creates the endpoint's signing key, or reuses the key kept from an earlier switch; request expands[]=signing_keys to read it.
 
         Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
       operationId: patchWebhookEndpoint
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - signing_keys
+              example: signing_keys
       requestBody:
         required: true
         description: Request payload
@@ -7430,7 +7482,7 @@ paths:
         - webhook_endpoints
       summary: Delete webhook endpoint
       description: |-
-        Permanently deletes the endpoint and its delivery records. Returns the deleted endpoint configuration without a deleted_at field.
+        Permanently deletes the endpoint and its delivery records. Returns the deleted endpoint configuration without a deleted_at field. Expansions are not supported; a nonempty expands[] returns 400 expand_not_supported.
         Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
       operationId: destroyWebhookEndpoint
       responses:
@@ -14746,6 +14798,29 @@ components:
         - wallet_transaction.created
         - wallet_transaction.updated
         - wallet_transaction.payment_failure
+    WebhookEndpointSigningKeyObject:
+      type: object
+      description: Webhook endpoint signing key.
+      required:
+        - lago_id
+        - secret_key
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          description: Unique identifier created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+        secret_key:
+          type: string
+          pattern: ^whsec_
+          description: Secret key to set up a Standard Webhooks library with, prefixed with `whsec_`.
+          example: whsec_ZmFrZS1zZWNyZXQtZm9yLWRvY3VtZW50YXRpb24tb25seQ==
+        created_at:
+          type: string
+          description: UTC creation timestamp, with microsecond precision.
+          example: '2022-04-29T08:59:51.123456Z'
+          format: date-time
     WebhookEndpointObject:
       type: object
       description: Webhook Endpoint.
@@ -14776,11 +14851,12 @@ components:
           format: uri
         signature_algo:
           type: string
-          description: Webhook signature algorithm.
-          example: jwt
+          description: Webhook signature algorithm. Endpoints created before `standard_webhooks` keep `jwt` or `hmac`.
+          example: standard_webhooks
           enum:
             - jwt
             - hmac
+            - standard_webhooks
         event_types:
           type:
             - array
@@ -14798,6 +14874,11 @@ components:
           description: UTC timestamp of the last update, with microsecond precision.
           example: '2022-04-29T08:59:51.123456Z'
           format: date-time
+        signing_keys:
+          type: array
+          description: Signing keys of the endpoint, oldest first, used to verify the webhook-signature header of `standard_webhooks` deliveries. Empty for a `jwt` or `hmac` endpoint. Included only with expands[]=signing_keys.
+          items:
+            $ref: '#/components/schemas/WebhookEndpointSigningKeyObject'
     WebhookEndpointsPaginated:
       type: object
       description: webhook endpoints list.
@@ -14829,12 +14910,11 @@ components:
           format: uri
         signature_algo:
           type: string
-          description: Webhook signature algorithm.
-          example: jwt
+          description: Webhook signature algorithm. Only `standard_webhooks` is accepted, and it is the default on create. Another value returns 422 with `value_is_invalid` on `signature_algo` and the accepted algorithms in `allowed_values`. An existing `jwt` or `hmac` endpoint keeps its algorithm when the field is omitted or unchanged.
+          example: standard_webhooks
           enum:
-            - jwt
-            - hmac
-          default: jwt
+            - standard_webhooks
+          default: standard_webhooks
         event_types:
           type:
             - array
