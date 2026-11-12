@@ -16,8 +16,8 @@ properties:
     type: string
     description: Webhook signature algorithm. Only `standard_webhooks` is accepted, and it is the
       default on create. Another value returns 422 with `value_is_invalid` on `signature_algo`
-      and the accepted algorithms in `allowed_values`. An existing `jwt` or `hmac` endpoint keeps
-      its algorithm when the field is omitted or unchanged.
+      and the accepted algorithms in `allowed_values`. An existing endpoint keeps its algorithm
+      when the field is omitted or sent with its current value.
     example: standard_webhooks
     enum:
       - standard_webhooks

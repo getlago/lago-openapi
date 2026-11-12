@@ -12159,7 +12159,7 @@ components:
     standard_webhooks_id:
       name: webhook-id
       in: header
-      description: Unique identifier of the webhook, which can be used for idempotency. A retry of the webhook keeps the same value. Sent only to endpoints that use the `standard_webhooks` signature algorithm.
+      description: Unique identifier of the webhook, which can be used for idempotency. A retry of the webhook keeps the same value. Sent only to endpoints that use the `standard_webhooks` signature algorithm, which is in beta and not yet available to every organization.
       required: false
       schema:
         type: string
@@ -12168,7 +12168,7 @@ components:
     standard_webhooks_timestamp:
       name: webhook-timestamp
       in: header
-      description: Time the webhook was sent, in seconds since the Unix epoch. Each retry carries its own send time. Sent only to endpoints that use the `standard_webhooks` signature algorithm.
+      description: Time the webhook was sent, in seconds since the Unix epoch. Each retry carries its own send time. Sent only to endpoints that use the `standard_webhooks` signature algorithm, which is in beta and not yet available to every organization.
       required: false
       schema:
         type: string
@@ -12178,7 +12178,7 @@ components:
       name: webhook-signature
       in: header
       description: |-
-        Standard Webhooks signature of the webhook, sent only to endpoints that use the `standard_webhooks` signature algorithm.
+        Standard Webhooks signature of the webhook, sent only to endpoints that use the `standard_webhooks` signature algorithm, which is in beta and not yet available to every organization.
         The value is `v1,` followed by the Base64 encoding of the HMAC-SHA256 digest of `{webhook-id}.{webhook-timestamp}.{body}`,
         keyed with the endpoint's signing key (the Base64 part of its `whsec_` secret key, decoded).
         Any Standard Webhooks library verifies it with the endpoint's `whsec_` secret key.
@@ -27867,7 +27867,7 @@ components:
           example: https://foo.bar
         signature_algo:
           type: string
-          description: The algorithm used to sign the webhook payload.
+          description: The algorithm used to sign the webhook payload. `standard_webhooks` is in beta and not yet available to every organization.
           example: hmac
           enum:
             - jwt
@@ -27897,7 +27897,7 @@ components:
         signing_keys:
           type: array
           description: |-
-            The signing keys of the endpoint, oldest first, used to verify the `webhook-signature` header of `standard_webhooks` deliveries.
+            The signing keys of the endpoint, oldest first, used to verify the `webhook-signature` header of `standard_webhooks` deliveries. `standard_webhooks` is in beta and not yet available to every organization.
             The list is empty when the endpoint uses the `jwt` or `hmac` signature algorithm.
             Returned only by the create, update and retrieve endpoints, and only to an API key with write access to webhook endpoints.
           items:
@@ -27934,7 +27934,7 @@ components:
                 - 'null'
               description: |-
                 The algorithm used to sign the webhook payload. Defaults to `jwt` when no value is passed.
-                `standard_webhooks` is available on request: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
+                `standard_webhooks` is in beta and not yet available to every organization: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
                 Creating a `standard_webhooks` endpoint creates its signing key, returned in `signing_keys`.
               default: jwt
               example: hmac
@@ -27984,7 +27984,7 @@ components:
                 - 'null'
               description: |-
                 The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept.
-                `standard_webhooks` is available on request: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
+                `standard_webhooks` is in beta and not yet available to every organization: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
                 Switching to `standard_webhooks` creates the endpoint's signing key, or reuses the key it kept from an earlier switch.
               example: hmac
               enum:
