@@ -1,6 +1,6 @@
 name: "webhook-timestamp"
 in: header
-description: Time the webhook was sent, in seconds since the Unix epoch. Each retry carries its own send time. Sent only to endpoints that use the `standard_webhooks` signature algorithm.
+description: Time the webhook was sent, in seconds since the Unix epoch. Each retry carries its own send time. Sent only to endpoints that use the `standard_webhooks` signature algorithm, which is in beta and not yet available to every organization.
 required: false
 schema:
   type: string

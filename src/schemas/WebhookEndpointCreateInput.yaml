@@ -17,7 +17,7 @@ properties:
           - "null"
         description: |-
           The algorithm used to sign the webhook payload. Defaults to `jwt` when no value is passed.
-          `standard_webhooks` is available on request: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
+          `standard_webhooks` is in beta and not yet available to every organization: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
           Creating a `standard_webhooks` endpoint creates its signing key, returned in `signing_keys`.
         default: jwt
         example: "hmac"
