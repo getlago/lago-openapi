@@ -27,11 +27,13 @@ properties:
     format: uri
   signature_algo:
     type: string
-    description: Webhook signature algorithm.
-    example: jwt
+    description: Webhook signature algorithm. Endpoints created before `standard_webhooks` keep
+      `jwt` or `hmac`.
+    example: standard_webhooks
     enum:
       - jwt
       - hmac
+      - standard_webhooks
   event_types:
     type:
       - array
@@ -50,3 +52,10 @@ properties:
     description: UTC timestamp of the last update, with microsecond precision.
     example: 2022-04-29T08:59:51.123456Z
     format: date-time
+  signing_keys:
+    type: array
+    description: Signing keys of the endpoint, oldest first, used to verify the webhook-signature
+      header of `standard_webhooks` deliveries. Empty for a `jwt` or `hmac` endpoint. Included
+      only with expands[]=signing_keys.
+    items:
+      $ref: ./WebhookEndpointSigningKeyObject.yaml

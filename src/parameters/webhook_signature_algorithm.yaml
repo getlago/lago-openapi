@@ -1,7 +1,7 @@
 name: "X-Lago-Signature-Algorithm"
 in: header
-description: Algorithm used to generate the signature
-required: true
+description: Algorithm used to generate the `X-Lago-Signature` header, sent only to endpoints that use the `jwt` or `hmac` signature algorithm.
+required: false
 schema:
   type: string
   enum:
