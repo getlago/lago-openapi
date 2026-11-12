@@ -1,7 +1,7 @@
 name: "webhook-signature"
 in: header
 description: |-
-  Standard Webhooks signature of the webhook, sent only to endpoints that use the `standard_webhooks` signature algorithm, which is in beta and not yet available to every organization.
+  Standard Webhooks signature of the webhook, sent only to endpoints that use the `standard_webhooks` signature algorithm.
   The value is `v1,` followed by the Base64 encoding of the HMAC-SHA256 digest of `{webhook-id}.{webhook-timestamp}.{body}`,
   keyed with the endpoint's signing key (the Base64 part of its `whsec_` secret key, decoded).
   Any Standard Webhooks library verifies it with the endpoint's `whsec_` secret key.
