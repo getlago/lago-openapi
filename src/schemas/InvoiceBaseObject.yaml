@@ -25,6 +25,7 @@ required:
   - prepaid_granted_credit_amount_cents
   - prepaid_purchased_credit_amount_cents
   - progressive_billing_credit_amount_cents
+  - progressive_billing_trigger
   - total_amount_cents
   - total_paid_amount_cents
   - total_offsetted_credit_note_amount_cents
@@ -197,6 +198,16 @@ properties:
     type: integer
     description: The usage already billed in previous invoices. Only apply to `progressive_billing` and `subscription` invoices.
     example: 0
+  progressive_billing_trigger:
+    type:
+      - string
+      - "null"
+    enum:
+      - usage_threshold
+      - wallet_expiration
+      - null
+    description: "What triggered the progressive billing invoice. Possible values are `usage_threshold` and `wallet_expiration`. `null` for invoices that are not progressive billing."
+    example: "usage_threshold"
   total_amount_cents:
     type: integer
     description: The sum of the amount and taxes amount on the invoice, expressed in cents. It calculates the total financial value of the invoice, including both the original amount and any applicable taxes.
