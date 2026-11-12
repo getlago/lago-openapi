@@ -15,7 +15,7 @@ properties:
           - "null"
         description: |-
           The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept.
-          `standard_webhooks` is in beta and not yet available to every organization: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
+          `standard_webhooks` is available on request: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
           Switching to `standard_webhooks` creates the endpoint's signing key, or reuses the key it kept from an earlier switch.
         example: "hmac"
         enum:

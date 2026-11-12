@@ -24,7 +24,7 @@ properties:
     example: "https://foo.bar"
   signature_algo:
     type: string
-    description: The algorithm used to sign the webhook payload. `standard_webhooks` is in beta and not yet available to every organization.
+    description: The algorithm used to sign the webhook payload.
     example: 'hmac'
     enum:
       - jwt
@@ -52,7 +52,7 @@ properties:
   signing_keys:
     type: array
     description: |-
-      The signing keys of the endpoint, oldest first, used to verify the `webhook-signature` header of `standard_webhooks` deliveries. `standard_webhooks` is in beta and not yet available to every organization.
+      The signing keys of the endpoint, oldest first, used to verify the `webhook-signature` header of `standard_webhooks` deliveries.
       The list is empty when the endpoint uses the `jwt` or `hmac` signature algorithm.
       Returned only by the create, update and retrieve endpoints, and only to an API key with write access to webhook endpoints.
     items:
