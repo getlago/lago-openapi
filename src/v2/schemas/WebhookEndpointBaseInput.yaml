@@ -14,12 +14,14 @@ properties:
     format: uri
   signature_algo:
     type: string
-    description: Webhook signature algorithm.
-    example: jwt
+    description: Webhook signature algorithm. Only `standard_webhooks` is accepted, and it is the
+      default on create. Another value returns 422 with `value_is_invalid` on `signature_algo`
+      and the accepted algorithms in `allowed_values`. An existing endpoint keeps its algorithm
+      when the field is omitted or sent with its current value.
+    example: standard_webhooks
     enum:
-      - jwt
-      - hmac
-    default: jwt
+      - standard_webhooks
+    default: standard_webhooks
   event_types:
     type:
       - array

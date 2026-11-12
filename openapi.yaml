@@ -8252,7 +8252,7 @@ paths:
       tags:
         - webhook_endpoints
       summary: Create a webhook endpoint
-      description: This endpoint is used to create a webhook endpoint. An organization can have at most 10 webhook endpoints.
+      description: This endpoint is used to create a webhook endpoint. An organization can have at most 10 webhook endpoints. The response includes the endpoint's `signing_keys` when the API key has write access to webhook endpoints.
       operationId: createWebhookEndpoint
       requestBody:
         description: Webhook endpoint payload
@@ -8278,7 +8278,7 @@ paths:
       tags:
         - webhook_endpoints
       summary: List all webhook endpoints
-      description: This endpoint is used to list all webhook endpoints.
+      description: This endpoint is used to list all webhook endpoints. The listed endpoints do not include their `signing_keys`.
       operationId: findAllWebhookEndpoints
       parameters:
         - $ref: '#/components/parameters/page'
@@ -8306,7 +8306,7 @@ paths:
       tags:
         - webhook_endpoints
       summary: Update a webhook endpoint
-      description: This endpoint is used to update an existing webhook endpoint.
+      description: This endpoint is used to update an existing webhook endpoint. The response includes the endpoint's `signing_keys` when the API key has write access to webhook endpoints.
       operationId: updateWebhookEndpoint
       requestBody:
         description: Webhook endpoint update payload
@@ -8334,7 +8334,7 @@ paths:
       tags:
         - webhook_endpoints
       summary: Retrieve a webhook endpoint
-      description: This endpoint is used to retrieve an existing webhook endpoint.
+      description: This endpoint is used to retrieve an existing webhook endpoint. The response includes the endpoint's `signing_keys` when the API key has write access to webhook endpoints.
       operationId: findWebhookEndpoint
       responses:
         '200':
@@ -8351,7 +8351,7 @@ paths:
       tags:
         - webhook_endpoints
       summary: Delete a webhook endpoint
-      description: This endpoint is used to delete an existing webhook endpoint.
+      description: This endpoint is used to delete an existing webhook endpoint. The deleted endpoint does not include its `signing_keys`.
       operationId: destroyWebhookEndpoint
       responses:
         '200':
@@ -8374,6 +8374,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new add-on
         content:
@@ -8413,6 +8416,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the updated add-on
         content:
@@ -8452,6 +8458,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the add-on
         content:
@@ -8494,6 +8503,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the resolved alert
         content:
@@ -8533,6 +8545,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the triggered alert
         content:
@@ -8572,6 +8587,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new billable metric
         content:
@@ -8611,6 +8629,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the billable metric
         content:
@@ -8650,6 +8671,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the billable metric
         content:
@@ -8689,6 +8713,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new customer
         content:
@@ -8728,6 +8755,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer
         content:
@@ -8767,6 +8797,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer
         content:
@@ -8806,6 +8839,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer and of the provider error
         content:
@@ -8845,6 +8881,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer
         content:
@@ -8884,6 +8923,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer and of the CRM provider error
         content:
@@ -8923,6 +8965,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer
         content:
@@ -8962,6 +9007,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer and of the payment provider error
         content:
@@ -9001,6 +9049,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer with the generated checkout URL
         content:
@@ -9040,6 +9091,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer and of the tax provider error
         content:
@@ -9079,6 +9133,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the customer with the VIES VAT check status
         content:
@@ -9118,6 +9175,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new credit note
         content:
@@ -9157,6 +9217,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the credit note
         content:
@@ -9196,6 +9259,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the credit note and of the provider error
         content:
@@ -9235,6 +9301,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new coupon
         content:
@@ -9274,6 +9343,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the updated coupon
         content:
@@ -9313,6 +9385,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the coupon
         content:
@@ -9352,6 +9427,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the terminated coupon
         content:
@@ -9391,6 +9469,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the finished dunning campaign and the overdue balance
         content:
@@ -9431,6 +9512,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the event and of the error
         content:
@@ -9470,6 +9554,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the events errors
         content:
@@ -9509,6 +9596,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new feature
         content:
@@ -9548,6 +9638,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the feature
         content:
@@ -9587,6 +9680,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the feature
         content:
@@ -9626,6 +9722,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new fee
         content:
@@ -9665,6 +9764,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the fee and of the tax provider error
         content:
@@ -9704,6 +9806,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new invoice
         content:
@@ -9743,6 +9848,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new invoice
         content:
@@ -9783,6 +9891,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new invoice
         content:
@@ -9822,6 +9933,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new invoice
         content:
@@ -9861,6 +9975,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the invoice
         content:
@@ -9900,6 +10017,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new invoice
         content:
@@ -9939,6 +10059,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the draft invoice ready to be finalized
         content:
@@ -9978,6 +10101,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the invoice
         content:
@@ -10017,6 +10143,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the invoice
         content:
@@ -10056,6 +10185,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the invoice and of the payment dispute
         content:
@@ -10095,6 +10227,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the invoice
         content:
@@ -10134,6 +10269,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the invoice
         content:
@@ -10173,6 +10311,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the invoice and of the payment provider error
         content:
@@ -10212,6 +10353,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the invoice
         content:
@@ -10251,6 +10395,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the integration and of the integration error
         content:
@@ -10293,6 +10440,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new order
         content:
@@ -10336,6 +10486,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the executed order
         content:
@@ -10377,6 +10530,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new order form
         content:
@@ -10418,6 +10574,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the signed order form
         content:
@@ -10459,6 +10618,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the expired order form
         content:
@@ -10500,6 +10662,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the voided order form
         content:
@@ -10539,6 +10704,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the payment and of the required action
         content:
@@ -10578,6 +10746,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the successfully processed payment
         content:
@@ -10617,6 +10788,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the payment provider and of the error
         content:
@@ -10656,6 +10830,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new payment receipt
         content:
@@ -10695,6 +10872,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the payment receipt whose PDF has been generated
         content:
@@ -10734,6 +10914,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new payment request
         content:
@@ -10773,6 +10956,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the payment request and of the provider error
         content:
@@ -10812,6 +10998,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the payment request
         content:
@@ -10851,6 +11040,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new plan
         content:
@@ -10890,6 +11082,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the plan
         content:
@@ -10929,6 +11124,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the plan
         content:
@@ -10970,6 +11168,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new quote
         content:
@@ -11011,6 +11212,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the approved quote
         content:
@@ -11052,6 +11256,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the voided quote
         content:
@@ -11091,6 +11298,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the subscription
         content:
@@ -11130,6 +11340,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the subscription
         content:
@@ -11169,6 +11382,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the subscription
         content:
@@ -11208,6 +11424,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the subscription
         content:
@@ -11247,6 +11466,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the subscription
         content:
@@ -11286,6 +11508,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the subscription
         content:
@@ -11325,6 +11550,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the subscription
         content:
@@ -11364,6 +11592,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the subscription and of the reached threshold
         content:
@@ -11403,6 +11634,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the new wallet
         content:
@@ -11442,6 +11676,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the updated wallet
         content:
@@ -11481,6 +11718,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the terminated wallet
         content:
@@ -11520,6 +11760,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the wallet
         content:
@@ -11559,6 +11802,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the wallet transaction
         content:
@@ -11598,6 +11844,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the wallet transaction
         content:
@@ -11637,6 +11886,9 @@ webhooks:
         - $ref: '#/components/parameters/webhook_signature'
         - $ref: '#/components/parameters/webhook_signature_algorithm'
         - $ref: '#/components/parameters/webhook_unique_key'
+        - $ref: '#/components/parameters/standard_webhooks_id'
+        - $ref: '#/components/parameters/standard_webhooks_timestamp'
+        - $ref: '#/components/parameters/standard_webhooks_signature'
       requestBody:
         description: Details of the wallet transaction and of the provider error
         content:
@@ -11876,18 +12128,19 @@ components:
       name: X-Lago-Signature
       in: header
       description: |-
-        Signature of the webhook payload. The format depends on `X-Lago-Signature-Algorithm`:
+        Signature of the webhook payload, sent only to endpoints that use the `jwt` or `hmac` signature algorithm.
+        The format depends on `X-Lago-Signature-Algorithm`:
         `hmac` is the Base64 encoding of an HMAC-SHA256 digest of the payload,
         `jwt` is an RS256 JSON Web Token (a string starting with `eyJ`).
-      required: true
+      required: false
       schema:
         type: string
         example: AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=
     webhook_signature_algorithm:
       name: X-Lago-Signature-Algorithm
       in: header
-      description: Algorithm used to generate the signature
-      required: true
+      description: Algorithm used to generate the `X-Lago-Signature` header, sent only to endpoints that use the `jwt` or `hmac` signature algorithm.
+      required: false
       schema:
         type: string
         enum:
@@ -11897,12 +12150,43 @@ components:
     webhook_unique_key:
       name: X-Lago-Unique-Key
       in: header
-      description: Unique id of the webhook. It can be used for idempotency
-      required: true
+      description: Unique identifier of the webhook, which can be used for idempotency. Sent only to endpoints that use the `jwt` or `hmac` signature algorithm.
+      required: false
       schema:
         type: string
         format: uuid
         example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    standard_webhooks_id:
+      name: webhook-id
+      in: header
+      description: Unique identifier of the webhook, which can be used for idempotency. A retry of the webhook keeps the same value. Sent only to endpoints that use the `standard_webhooks` signature algorithm.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    standard_webhooks_timestamp:
+      name: webhook-timestamp
+      in: header
+      description: Time the webhook was sent, in seconds since the Unix epoch. Each retry carries its own send time. Sent only to endpoints that use the `standard_webhooks` signature algorithm.
+      required: false
+      schema:
+        type: string
+        pattern: ^[0-9]+$
+        example: '1651222791'
+    standard_webhooks_signature:
+      name: webhook-signature
+      in: header
+      description: |-
+        Standard Webhooks signature of the webhook, sent only to endpoints that use the `standard_webhooks` signature algorithm.
+        The value is `v1,` followed by the Base64 encoding of the HMAC-SHA256 digest of `{webhook-id}.{webhook-timestamp}.{body}`,
+        keyed with the endpoint's signing key (the Base64 part of its `whsec_` secret key, decoded).
+        Any Standard Webhooks library verifies it with the endpoint's `whsec_` secret key.
+      required: false
+      schema:
+        type: string
+        pattern: ^v1,
+        example: v1,AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=
   schemas:
     Currency:
       type: string
@@ -27534,6 +27818,28 @@ components:
       properties:
         webhook:
           $ref: '#/components/schemas/WebhookPublicKeyObject'
+    WebhookEndpointSigningKeyObject:
+      type: object
+      required:
+        - lago_id
+        - secret_key
+        - created_at
+      properties:
+        lago_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the signing key, created by Lago.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        secret_key:
+          type: string
+          pattern: ^whsec_
+          description: The secret key to set up a Standard Webhooks library with, prefixed with `whsec_`.
+          example: whsec_ZmFrZS1zZWNyZXQtZm9yLWRvY3VtZW50YXRpb24tb25seQ==
+        created_at:
+          type: string
+          format: date-time
+          description: The date of the signing key creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
+          example: '2022-04-29T08:59:51Z'
     WebhookEndpointObject:
       type: object
       required:
@@ -27566,6 +27872,7 @@ components:
           enum:
             - jwt
             - hmac
+            - standard_webhooks
         name:
           type:
             - string
@@ -27587,6 +27894,14 @@ components:
           format: date-time
           description: The date of the webhook endpoint creation, represented in ISO 8601 datetime format and expressed in Coordinated Universal Time (UTC).
           example: '2022-04-29T08:59:51Z'
+        signing_keys:
+          type: array
+          description: |-
+            The signing keys of the endpoint, oldest first, used to verify the `webhook-signature` header of `standard_webhooks` deliveries.
+            The list is empty when the endpoint uses the `jwt` or `hmac` signature algorithm.
+            Returned only by the create, update and retrieve endpoints, and only to an API key with write access to webhook endpoints.
+          items:
+            $ref: '#/components/schemas/WebhookEndpointSigningKeyObject'
     WebhookEndpointsPaginated:
       type: object
       required:
@@ -27617,12 +27932,16 @@ components:
               type:
                 - string
                 - 'null'
-              description: The algorithm used to sign the webhook payload. Defaults to `jwt` when no value is passed.
+              description: |-
+                The algorithm used to sign the webhook payload. Defaults to `jwt` when no value is passed.
+                `standard_webhooks` is available on request: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
+                Creating a `standard_webhooks` endpoint creates its signing key, returned in `signing_keys`.
               default: jwt
               example: hmac
               enum:
                 - jwt
                 - hmac
+                - standard_webhooks
                 - null
             name:
               type:
@@ -27663,11 +27982,15 @@ components:
               type:
                 - string
                 - 'null'
-              description: The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept.
+              description: |-
+                The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept.
+                `standard_webhooks` is available on request: an organization that does not have it gets a `422` error with `value_is_invalid` on `signature_algo`.
+                Switching to `standard_webhooks` creates the endpoint's signing key, or reuses the key it kept from an earlier switch.
               example: hmac
               enum:
                 - jwt
                 - hmac
+                - standard_webhooks
                 - null
             name:
               type:

@@ -2,7 +2,7 @@ post:
   tags:
     - webhook_endpoints
   summary: Create a webhook endpoint
-  description: This endpoint is used to create a webhook endpoint. An organization can have at most 10 webhook endpoints.
+  description: This endpoint is used to create a webhook endpoint. An organization can have at most 10 webhook endpoints. The response includes the endpoint's `signing_keys` when the API key has write access to webhook endpoints.
   operationId: createWebhookEndpoint
   requestBody:
     description: Webhook endpoint payload
@@ -28,7 +28,7 @@ get:
   tags:
     - webhook_endpoints
   summary: List all webhook endpoints
-  description: This endpoint is used to list all webhook endpoints.
+  description: This endpoint is used to list all webhook endpoints. The listed endpoints do not include their `signing_keys`.
   operationId: findAllWebhookEndpoints
   parameters:
     - $ref: '../parameters/page.yaml'
