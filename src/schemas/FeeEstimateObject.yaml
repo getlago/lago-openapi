@@ -52,33 +52,33 @@ properties:
     description: Unique identifier assigned to the subscription in your application. This field is specifically displayed when the fee type is charge or subscription.
     example: "external_id"
   amount_cents:
-    type: integer
-    description: The cost of this specific fee, excluding any applicable taxes.
-    example: 100
+    type: string
+    description: The cost of this specific fee, excluding any applicable taxes. On this endpoint the value is a decimal string, not an integer.
+    example: "40.0"
   precise_amount:
-    type: number
-    description: The cost of this specific fee, excluding any applicable taxes, with precision.
-    example: 1.0001
+    type: string
+    description: The cost of this specific fee, in the currency unit and excluding any applicable taxes, with precision.
+    example: "0.4"
   precise_total_amount:
-    type: number
-    description: The cost of this specific fee, including any applicable taxes, with precision.
-    example: 1.0212
+    type: string
+    description: The cost of this specific fee, in the currency unit and including any applicable taxes, with precision. Taxes are not estimated on this endpoint, so it has the same value as `precise_amount`.
+    example: "0.4"
   amount_currency:
     $ref: "./Currency.yaml"
     description: The currency of this specific fee. It indicates the monetary unit in which the fee's cost is expressed.
     example: "EUR"
   taxes_amount_cents:
     type: integer
-    description: The cost of the tax associated with this specific fee.
+    description: The cost of the tax associated with this specific fee. Taxes are not estimated on this endpoint, so the value is always `0`.
     example: 0
   taxes_precise_amount:
     type: number
-    description: The cost of the tax associated with this specific fee, with precision.
+    description: The cost of the tax associated with this specific fee, with precision. Taxes are not estimated on this endpoint, so the value is always `0`.
     example: 0
   taxes_rate:
     type: number
-    description: The tax rate associated with this specific fee.
-    example: 20.0
+    description: The tax rate associated with this specific fee. Taxes are not estimated on this endpoint, so the value is always `0`.
+    example: 0
   units:
     type: string
     description: The number of units used to charge the customer. This field indicates the quantity or count of units consumed or utilized in the context of the charge. It helps in determining the basis for calculating the fee or cost associated with the usage of the service or product provided to the customer.
@@ -86,17 +86,17 @@ properties:
   description:
     type: "null"
   precise_unit_amount:
-    type: number
-    description: The unit amount of the fee per unit, with precision.
-    example: 312.5
+    type: string
+    description: The cost of one unit of this specific fee, in cents and with precision.
+    example: "0.1"
   precise_coupons_amount_cents:
     type: string
     description: The coupon amount applied to the estimated instant fee. It is always `0.0`.
     example: "0.0"
   total_amount_cents:
-    type: integer
-    description: The cost of this specific fee, including any applicable taxes.
-    example: 120
+    type: string
+    description: The cost of this specific fee, including any applicable taxes. On this endpoint the value is a decimal string, not an integer, and taxes are not estimated, so it has the same value as `amount_cents`.
+    example: "40.0"
   total_amount_currency:
     $ref: "./Currency.yaml"
     description: The currency of this specific fee, including any applicable taxes.

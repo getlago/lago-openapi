@@ -1,11 +1,15 @@
 type: object
 required:
+  - lago_id
   - transaction_id
   - lago_customer_id
   - code
   - timestamp
+  - precise_total_amount_cents
+  - properties
   - lago_subscription_id
   - external_subscription_id
+  - created_at
 properties:
   lago_id:
     type:
