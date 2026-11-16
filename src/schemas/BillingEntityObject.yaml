@@ -110,14 +110,14 @@ properties:
     oneOf:
       - $ref: "./PaymentTermObject.yaml"
       - type: "null"
-    description: The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. New billing entities default to a `net` term of `0` days.
+    description: The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. New billing entities default to a `net` term of `0` days. It is `null` when the term was removed, and invoices are then due on their issuing date.
   net_payment_term:
     deprecated: true
     type:
       - integer
       - "null"
     example: 0
-    description: "**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type."
+    description: "**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type or when the billing entity has no term."
   address_line1:
     type: 
       - string
