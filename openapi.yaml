@@ -5240,6 +5240,8 @@ paths:
                 $ref: '#/components/schemas/Organization'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
     put:
       tags:
         - organizations
@@ -5264,6 +5266,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /payment_receipts:
@@ -23212,6 +23216,7 @@ components:
         - finalize_zero_amount_invoice
         - document_url_expiration_days
         - events_store
+        - taxes
       properties:
         lago_id:
           type: string
@@ -23242,7 +23247,7 @@ components:
           example:
             - https://webhook.brex.com
             - https://webhook2.brex.com
-          description: The array containing your webhooks URLs.
+          description: The URLs of every webhook endpoint of your organization, ordered by the Lago identifier of the endpoint. The first value is always the one returned in `webhook_url`.
         country:
           $ref: '#/components/schemas/CountryOrNull'
           description: The country of your organization.
@@ -23419,7 +23424,7 @@ components:
             webhook_url:
               type: string
               example: https://webhook.brex.com
-              description: Sets the URL of the first webhook endpoint of your organization. This URL allows your organization to receive important messages, notifications, or data from the Lago system. When your organization has no webhook endpoint yet, this creates one.
+              description: Sets the URL of the first webhook endpoint of your organization. This URL allows your organization to receive important messages, notifications, or data from the Lago system. When your organization has no webhook endpoint yet, this creates one, with `jwt` as its signature algorithm. The value must be an HTTP or HTTPS URL with a host, and it must not already be used by another webhook endpoint of your organization.
             country:
               $ref: '#/components/schemas/CountryOrNull'
               description: The country of your organization.
