@@ -4,14 +4,14 @@ post:
   tags:
     - wallets
   summary: Create a wallet
-  description: This endpoint is used to create a wallet with prepaid credits.
+  description: This endpoint is used to create a wallet with prepaid credits. The customer comes from the path, so the body takes no `external_customer_id`.
   operationId: createCustomerWallet
   requestBody:
     description: Wallet payload
     content:
       application/json:
         schema:
-          $ref: "../schemas/WalletCreateInput.yaml"
+          $ref: "../schemas/CustomerWalletCreateInput.yaml"
     required: true
   responses:
     "200":
@@ -42,7 +42,7 @@ get:
     - $ref: "../parameters/currency.yaml"
     - name: billing_entity_codes[]
       in: query
-      description: Filter wallets by billing entity codes.
+      description: Filter wallets by billing entity codes. A code that does not match a billing entity of the organization returns a `404` error.
       required: false
       explode: true
       schema:
