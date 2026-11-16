@@ -5,7 +5,9 @@ post:
   tags:
     - subscriptions
   summary: Create a charge filter
-  description: This endpoint creates a new filter for a specific charge on a subscription.
+  description: |-
+    This endpoint creates a new filter for a specific charge on a subscription.
+    This is a premium feature.
   operationId: createSubscriptionChargeFilter
   parameters:
     - $ref: "../parameters/subscription_status.yaml"
@@ -27,6 +29,8 @@ post:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
     '422':

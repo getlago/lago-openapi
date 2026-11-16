@@ -27,7 +27,9 @@ put:
   summary: Update a charge filter
   parameters:
     - $ref: "../parameters/subscription_status.yaml"
-  description: This endpoint updates a specific filter for a charge on a subscription.
+  description: |-
+    This endpoint updates a specific filter for a charge on a subscription.
+    This is a premium feature.
   operationId: updateSubscriptionChargeFilter
   requestBody:
     description: Charge filter payload
@@ -47,6 +49,8 @@ put:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
     '422':
@@ -55,7 +59,9 @@ delete:
   tags:
     - subscriptions
   summary: Delete a charge filter
-  description: This endpoint deletes a specific filter from a charge on a subscription.
+  description: |-
+    This endpoint deletes a specific filter from a charge on a subscription.
+    This is a premium feature.
   operationId: destroySubscriptionChargeFilter
   parameters:
     - $ref: "../parameters/subscription_status.yaml"
@@ -68,5 +74,7 @@ delete:
             $ref: '../schemas/ChargeFilterResponse.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'

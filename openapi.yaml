@@ -7340,7 +7340,9 @@ paths:
       tags:
         - subscriptions
       summary: Create a charge filter
-      description: This endpoint creates a new filter for a specific charge on a subscription.
+      description: |-
+        This endpoint creates a new filter for a specific charge on a subscription.
+        This is a premium feature.
       operationId: createSubscriptionChargeFilter
       parameters:
         - $ref: '#/components/parameters/subscription_status'
@@ -7362,6 +7364,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -7417,7 +7421,9 @@ paths:
       summary: Update a charge filter
       parameters:
         - $ref: '#/components/parameters/subscription_status'
-      description: This endpoint updates a specific filter for a charge on a subscription.
+      description: |-
+        This endpoint updates a specific filter for a charge on a subscription.
+        This is a premium feature.
       operationId: updateSubscriptionChargeFilter
       requestBody:
         description: Charge filter payload
@@ -7437,6 +7443,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -7445,7 +7453,9 @@ paths:
       tags:
         - subscriptions
       summary: Delete a charge filter
-      description: This endpoint deletes a specific filter from a charge on a subscription.
+      description: |-
+        This endpoint deletes a specific filter from a charge on a subscription.
+        This is a premium feature.
       operationId: destroySubscriptionChargeFilter
       parameters:
         - $ref: '#/components/parameters/subscription_status'
@@ -7458,6 +7468,8 @@ paths:
                 $ref: '#/components/schemas/ChargeFilterResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /subscriptions/{external_id}/fixed_charges/{fixed_charge_code}:
@@ -23943,6 +23955,8 @@ components:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
       required:
+        - lago_id
+        - charge_code
         - invoice_display_name
         - properties
         - values
@@ -24515,19 +24529,25 @@ components:
               min_amount_cents: 0
               properties: {}
               filters:
-                - invoice_display_name: Europe
+                - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a95
+                  charge_code: seats_standard
+                  invoice_display_name: Europe
                   properties:
                     amount: '10'
                   values:
                     region:
                       - Europe
-                - invoice_display_name: USA
+                - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a96
+                  charge_code: seats_standard
+                  invoice_display_name: USA
                   properties:
                     amount: '5'
                   values:
                     region:
                       - USA
-                - invoice_display_name: Africa
+                - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a97
+                  charge_code: seats_standard
+                  invoice_display_name: Africa
                   properties:
                     amount: '8'
                   values:
@@ -24699,7 +24719,6 @@ components:
       type: object
       description: Values used to apply differentiated pricing based on additional event properties.
       required:
-        - properties
         - values
       properties:
         invoice_display_name:
@@ -25705,7 +25724,6 @@ components:
         filter:
           type: object
           required:
-            - properties
             - values
           properties:
             cascade_updates:
