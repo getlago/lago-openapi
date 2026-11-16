@@ -19838,7 +19838,7 @@ components:
           example: warn
         notify_on:
           type: array
-          description: The transitions this threshold notifies on. `triggered` is always included. Opting in to `resolved` additionally sends an `alert.resolved` webhook when the value returns past the threshold, and requires the threshold to carry a code that is unique within the alert. Not available on recurring thresholds.
+          description: The transitions this threshold notifies on. `triggered` is always part of the list, and a request that leaves it out returns a `422` error with `triggered_is_mandatory` on `thresholds:notify_on`. Opting in to `resolved` additionally sends an `alert.resolved` webhook when the value returns past the threshold, and requires the threshold to carry a code that is unique within the alert. Not available on recurring thresholds.
           items:
             type: string
             enum:
@@ -19905,6 +19905,7 @@ components:
           description: Always null. An alert returned by the wallet endpoints is never attached to a subscription.
         lago_wallet_id:
           type: string
+          format: uuid
           description: Unique identifier of the wallet, created by Lago.
           example: 1a901a90-1a90-1a90-1a90-1a901a901a90
         wallet_code:
