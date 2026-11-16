@@ -2,7 +2,7 @@ get:
   tags:
     - fees
   summary: List all fees
-  description: This endpoint is used for retrieving all fees that have been issued.
+  description: This endpoint is used for retrieving all fees that have been issued. Fees are returned from the oldest to the most recent.
   operationId: findAllFees
   parameters:
     - $ref: "../parameters/page.yaml"
@@ -143,5 +143,7 @@ get:
             $ref: "../schemas/FeesPaginated.yaml"
     "401":
       $ref: "../responses/Unauthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
     "422":
       $ref: "../responses/UnprocessableEntity.yaml"
