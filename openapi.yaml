@@ -16358,7 +16358,7 @@ components:
         - Pacific/Tongatapu
     CustomerBillingConfiguration:
       type: object
-      description: Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.
+      description: The billing configuration fields shared by the customer create payload and the customer object. They hold the settings used to invoice the customer and to process their payments.
       properties:
         invoice_grace_period:
           type:
@@ -16410,18 +16410,6 @@ components:
             - 'null'
           example: stripe-eu-1
           description: Unique code used to identify a payment provider connection.
-        provider_customer_id:
-          type: string
-          example: cus_12345
-          description: The customer ID within the payment provider's system. If this field is not provided, Lago has the option to create a new customer record within the payment provider's system on behalf of the customer
-        sync:
-          type: boolean
-          example: true
-          description: Set this field to `true` if you want to create the customer in the payment provider synchronously with the customer creation process in Lago. This option is applicable only when the `provider_customer_id` is `null` and the customer is automatically created in the payment provider through Lago. By default, the value is set to `false`
-        sync_with_provider:
-          type: boolean
-          example: true
-          description: Set this field to `true` if you want to create a customer record in the payment provider's system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
         document_locale:
           type:
             - string
@@ -16444,6 +16432,25 @@ components:
             - boleto
             - crypto
             - customer_balance
+    CustomerBillingConfigurationObject:
+      allOf:
+        - $ref: '#/components/schemas/CustomerBillingConfiguration'
+        - type: object
+          description: Configuration specific to the payment provider, utilized for billing the customer. `provider_customer_id` and `provider_payment_methods` are only returned when the customer has a payment provider. The `sync` and `sync_with_provider` fields of the create payload are never returned.
+          required:
+            - invoice_grace_period
+            - subscription_invoice_issuing_date_anchor
+            - subscription_invoice_issuing_date_adjustment
+            - payment_provider
+            - payment_provider_code
+            - document_locale
+          properties:
+            provider_customer_id:
+              type:
+                - string
+                - 'null'
+              example: cus_12345
+              description: The customer ID within the payment provider's system. It is `null` until the customer record exists in that system.
     Address:
       type: object
       description: The shipping address of the customer.
@@ -16748,7 +16755,7 @@ components:
           example: false
           description: Set to true to exclude all invoice custom sections from PDF generation for this customer only.
         billing_configuration:
-          $ref: '#/components/schemas/CustomerBillingConfiguration'
+          $ref: '#/components/schemas/CustomerBillingConfigurationObject'
         shipping_address:
           $ref: '#/components/schemas/Address'
         metadata:
@@ -17484,6 +17491,24 @@ components:
             $ref: '#/components/schemas/CustomerObjectExtended'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    CustomerBillingConfigurationInput:
+      allOf:
+        - $ref: '#/components/schemas/CustomerBillingConfiguration'
+        - type: object
+          description: Configuration specific to the payment provider, utilized for billing the customer. Every field is optional.
+          properties:
+            provider_customer_id:
+              type: string
+              example: cus_12345
+              description: The customer ID within the payment provider's system. If this field is not provided, Lago has the option to create a new customer record within the payment provider's system on behalf of the customer
+            sync:
+              type: boolean
+              example: true
+              description: Set this field to `true` if you want to create the customer in the payment provider synchronously with the customer creation process in Lago. This option is applicable only when the `provider_customer_id` is `null` and the customer is automatically created in the payment provider through Lago. By default, the value is set to `false`
+            sync_with_provider:
+              type: boolean
+              example: true
+              description: Set this field to `true` if you want to create a customer record in the payment provider's system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
     CustomerCreateInput:
       type: object
       required:
@@ -17680,7 +17705,7 @@ components:
                 - `finalize`: Invoices are issued and finalized even if the total amount is zero.
                 - `skip`: Invoices with a total amount of zero are not finalized.
             billing_configuration:
-              $ref: '#/components/schemas/CustomerBillingConfiguration'
+              $ref: '#/components/schemas/CustomerBillingConfigurationInput'
             shipping_address:
               allOf:
                 - $ref: '#/components/schemas/Address'

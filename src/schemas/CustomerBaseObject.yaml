@@ -231,7 +231,7 @@ properties:
     example: false
     description: Set to true to exclude all invoice custom sections from PDF generation for this customer only.
   billing_configuration:
-    $ref: "./CustomerBillingConfiguration.yaml"
+    $ref: "./CustomerBillingConfigurationObject.yaml"
   shipping_address:
     $ref: "./Address.yaml"
   metadata:

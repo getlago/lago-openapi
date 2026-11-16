@@ -193,7 +193,7 @@ properties:
           - `finalize`: Invoices are issued and finalized even if the total amount is zero.
           - `skip`: Invoices with a total amount of zero are not finalized.
       billing_configuration:
-        $ref: "./CustomerBillingConfiguration.yaml"
+        $ref: "./CustomerBillingConfigurationInput.yaml"
       shipping_address:
         allOf:
           - $ref: "./Address.yaml"
