@@ -2646,6 +2646,8 @@ paths:
                 $ref: '#/components/schemas/InvoicesPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -4267,6 +4269,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -4474,6 +4478,8 @@ paths:
                 $ref: '#/components/schemas/InvoicesPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -4505,6 +4511,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '405':
@@ -4526,6 +4534,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     delete:
@@ -4543,6 +4553,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '405':
@@ -4567,6 +4579,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /invoices/{lago_id}/download_xml:
@@ -4589,6 +4603,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /invoices/{lago_id}/finalize:
@@ -4631,6 +4647,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '405':
@@ -4675,6 +4693,8 @@ paths:
                 $ref: '#/components/schemas/Invoice'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '405':
@@ -4697,6 +4717,8 @@ paths:
                 $ref: '#/components/schemas/InvoicePaymentUrl'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -4707,7 +4729,7 @@ paths:
         - invoices
       summary: Create an invoice preview
       description: |
-        This endpoint is used for generating invoice preview.
+        This endpoint is used for generating invoice preview. This is a premium feature. Previewing existing subscriptions also needs the invoice preview premium integration; without it the request fails with a `405` and the error code `premium_integration_missing`.
 
         The payment due date of the preview follows the resolved payment term: the subscription's, then the customer's, then the billing entity's, defaulting to `due_on_receipt`. When several subscriptions are previewed, they must resolve to terms giving the same due date, as subscriptions with different terms are billed on separate invoices; otherwise the request fails with a `422` and the error code `subscription_payment_terms_do_not_match`.
       operationId: invoicePreview
@@ -4729,8 +4751,12 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/NotAllowed'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /invoices/{lago_id}/retry_payment:
@@ -4757,6 +4783,8 @@ paths:
           description: Invoice payment retried
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '405':
@@ -14546,6 +14574,7 @@ components:
             - type
             - code
             - name
+            - description
           properties:
             lago_item_id:
               type: string
@@ -17886,7 +17915,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/PaymentTermObject'
             - type: 'null'
-          description: The payment term applied to the invoice, snapshotted when the invoice was created. It is resolved from the subscription, then the customer, then the billing entity, and defaults to `due_on_receipt`. Invoices created before structured payment terms existed report a `net` term derived from their `net_payment_term`.
+          description: The payment term applied to the invoice, snapshotted when the invoice was created. A term sent on the one-off invoice create wins. Otherwise it comes from the wallet for a wallet top-up invoice, then from the subscription, the customer and the billing entity, and defaults to `due_on_receipt`. Invoices created before structured payment terms existed report a `net` term derived from their `net_payment_term`.
         net_payment_term:
           deprecated: true
           type:
@@ -21627,7 +21656,7 @@ components:
               oneOf:
                 - $ref: '#/components/schemas/PaymentTermObject'
                 - type: 'null'
-              description: The structured payment term of the invoice, used to compute its payment due date. When not sent or `null`, the term of the customer, then of the billing entity, applies.
+              description: The structured payment term of the invoice, used to compute its payment due date. When not sent or `null`, the term of the customer, then of the billing entity, applies, defaulting to `due_on_receipt`.
             fees:
               type: array
               items:

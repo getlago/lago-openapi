@@ -90,7 +90,7 @@ properties:
     oneOf:
       - $ref: "./PaymentTermObject.yaml"
       - type: "null"
-    description: The payment term applied to the invoice, snapshotted when the invoice was created. It is resolved from the subscription, then the customer, then the billing entity, and defaults to `due_on_receipt`. Invoices created before structured payment terms existed report a `net` term derived from their `net_payment_term`.
+    description: The payment term applied to the invoice, snapshotted when the invoice was created. A term sent on the one-off invoice create wins. Otherwise it comes from the wallet for a wallet top-up invoice, then from the subscription, the customer and the billing entity, and defaults to `due_on_receipt`. Invoices created before structured payment terms existed report a `net` term derived from their `net_payment_term`.
   net_payment_term:
     deprecated: true
     type:
