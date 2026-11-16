@@ -63,7 +63,7 @@ get:
         example: '2022-08-09'
     - name: search_term
       in: query
-      description: Search credit notes by id, number, customer name, customer external_id or customer email.
+      description: Search credit notes by id, number, customer name, customer first name, customer last name, customer external_id or customer email.
       required: false
       explode: true
       schema:
@@ -181,5 +181,7 @@ get:
             $ref: '../schemas/CreditNotesPaginated.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
