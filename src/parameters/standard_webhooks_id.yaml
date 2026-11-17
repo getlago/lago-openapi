@@ -1,0 +1,8 @@
+name: "webhook-id"
+in: header
+description: Unique identifier of the webhook, which can be used for idempotency. A retry of the webhook keeps the same value. Sent only to endpoints that use the `standard_webhooks` signature algorithm.
+required: false
+schema:
+  type: string
+  format: uuid
+  example: "1a901a90-1a90-1a90-1a90-1a901a901a90"

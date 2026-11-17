@@ -16,8 +16,22 @@ get:
     Returns the record without nested relationships unless a supported expansion
     is requested.
 
-    Requires the product catalog to be enabled and webhook_endpoint read permission on the API key.
+    Requires the product catalog to be enabled and webhook_endpoint read permission on the API key. Requesting expands[]=signing_keys also requires webhook_endpoint write permission and returns 403 without it.
   operationId: findWebhookEndpoint
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - signing_keys
+          example: signing_keys
   responses:
     "200":
       description: Successful response
@@ -42,10 +56,26 @@ put:
   summary: Update webhook endpoint
   description: >-
     PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+    Switching to standard_webhooks creates the endpoint's signing key, or reuses
+    the key kept from an earlier switch; request expands[]=signing_keys to read it.
 
 
     Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
   operationId: updateWebhookEndpoint
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - signing_keys
+          example: signing_keys
   requestBody:
     required: true
     description: Request payload
@@ -79,10 +109,26 @@ patch:
   summary: Update webhook endpoint
   description: >-
     PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+    Switching to standard_webhooks creates the endpoint's signing key, or reuses
+    the key kept from an earlier switch; request expands[]=signing_keys to read it.
 
 
     Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
   operationId: patchWebhookEndpoint
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - signing_keys
+          example: signing_keys
   requestBody:
     required: true
     description: Request payload
@@ -116,7 +162,8 @@ delete:
   summary: Delete webhook endpoint
   description: >-
     Permanently deletes the endpoint and its delivery records. Returns the
-    deleted endpoint configuration without a deleted_at field.
+    deleted endpoint configuration without a deleted_at field. Expansions are
+    not supported; a nonempty expands[] returns 400 expand_not_supported.
 
     Requires the product catalog to be enabled and webhook_endpoint write permission on the API key.
   operationId: destroyWebhookEndpoint

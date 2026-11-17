@@ -11,11 +11,15 @@ properties:
         example: "https://foo.bar"
       signature_algo:
         type: string
-        description: The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept. `null` is refused.
+        description: |-
+          The algorithm used to sign the webhook payload. When the field is omitted, the current value is kept. `null` is refused.
+          `standard_webhooks` is available to every organization. An unknown value returns a `422` error with `value_is_invalid` on `signature_algo`.
+          Switching to `standard_webhooks` creates the endpoint's signing key, or reuses the key it kept from an earlier switch.
         example: "hmac"
         enum:
           - jwt
           - hmac
+          - standard_webhooks
       name:
         type:
           - string
