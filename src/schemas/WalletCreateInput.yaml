@@ -68,6 +68,10 @@ properties:
         type: boolean
         description: A boolean setting that, when set to true, delays issuing an invoice for a wallet top-up until a successful payment is made; if false, the invoice is issued immediately upon wallet top-up, regardless of the payment status. Default value of false.
         example: false
+      invoice_usage_on_expiration:
+        type: boolean
+        description: Whether to issue a progressive billing invoice for the subscription usage when the wallet expires. The invoice covers usage from the start of the current billing period until `expiration_at` and is paid first with the remaining credits of this wallet, before the wallet is terminated. The invoice is issued even when the wallet has no credits left or cannot pay its fees. What the wallet does not cover is paid by the other wallets of the customer or is due. Until its expiration invoices are settled (for example while their taxes are computed), the wallet stays active and only pays them. Remaining usage is billed by the regular period invoice, which deducts this invoice. Setting it to `true` requires a premium license and the feature to be enabled for your organization, otherwise the request returns a `403` with code `feature_unavailable`. Default value of false.
+        example: false
       transaction_metadata:
         type:
           - array
