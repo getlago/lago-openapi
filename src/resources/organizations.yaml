@@ -13,6 +13,8 @@ get:
             $ref: '../schemas/Organization.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
 put:
   tags:
     - organizations
@@ -37,5 +39,7 @@ put:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '422':
       $ref: '../responses/UnprocessableEntity.yaml'
