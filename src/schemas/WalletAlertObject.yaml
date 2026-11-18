@@ -30,6 +30,7 @@ properties:
     description: Always null. An alert returned by the wallet endpoints is never attached to a subscription.
   lago_wallet_id:
     type: string
+    format: uuid
     description: Unique identifier of the wallet, created by Lago.
     example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
   wallet_code:
