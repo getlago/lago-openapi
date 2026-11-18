@@ -2718,6 +2718,8 @@ paths:
                 $ref: '#/components/schemas/PaymentRequestsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/portal_url:
@@ -5332,7 +5334,9 @@ paths:
       tags:
         - payment_requests
       summary: Create a payment request
-      description: This endpoint is used to create a payment request to collect the payment of the overdue invoices of a customer.
+      description: |-
+        This endpoint is used to create a payment request to collect the payment of the overdue invoices of a customer.
+        This is a premium feature.
       operationId: createPaymentRequest
       requestBody:
         description: Payment request payload
@@ -5393,6 +5397,8 @@ paths:
                 $ref: '#/components/schemas/PaymentRequestsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /payment_requests/{lago_id}:
@@ -5420,6 +5426,8 @@ paths:
                 $ref: '#/components/schemas/PaymentRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /payments:
