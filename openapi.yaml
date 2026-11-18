@@ -4023,7 +4023,7 @@ paths:
       tags:
         - fees
       summary: List all fees
-      description: This endpoint is used for retrieving all fees that have been issued.
+      description: This endpoint is used for retrieving all fees that have been issued. Fees are returned from the oldest to the most recent.
       operationId: findAllFees
       parameters:
         - $ref: '#/components/parameters/page'
@@ -4164,6 +4164,8 @@ paths:
                 $ref: '#/components/schemas/FeesPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
   /fees/{lago_id}:
@@ -4191,6 +4193,8 @@ paths:
                 $ref: '#/components/schemas/Fee'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     put:
@@ -4217,6 +4221,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '405':
@@ -4238,6 +4244,8 @@ paths:
                 $ref: '#/components/schemas/Fee'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '405':
@@ -16446,11 +16454,10 @@ components:
           items:
             $ref: '#/components/schemas/FeeAppliedTaxObject'
         pricing_unit_details:
-          type:
-            - object
-            - 'null'
-          description: Details about the pricing unit used and amounts for this fee.
-          $ref: '#/components/schemas/PricingUnitDetailsObject'
+          oneOf:
+            - $ref: '#/components/schemas/PricingUnitDetailsObject'
+            - type: 'null'
+          description: Details about the pricing unit used and amounts for this fee. It is `null` on fees that are not charged in a pricing unit.
         presentation_breakdowns:
           $ref: '#/components/schemas/PresentationBreakdownsObject'
     CreditNoteItemObject:
