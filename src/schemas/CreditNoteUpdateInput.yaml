@@ -20,3 +20,4 @@ properties:
         example: 'succeeded'
       metadata:
         $ref: "./CreditNoteMetadataInput.yaml"
+        description: Metadata to merge with the metadata already stored on the credit note. Keys that are not in the request are kept, new keys are added and existing keys are updated. To replace every key at once, use the credit note metadata endpoint.
