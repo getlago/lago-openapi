@@ -2820,7 +2820,7 @@ paths:
               - pending
         - name: billing_entity_codes[]
           in: query
-          description: Filter subscriptions by billing entity codes.
+          description: Filter subscriptions by billing entity codes. A code that does not match a billing entity of the organization returns a `404` error.
           required: false
           explode: true
           schema:
@@ -2839,6 +2839,8 @@ paths:
                 $ref: '#/components/schemas/SubscriptionsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /customers/{external_customer_id}/wallets:
@@ -6691,6 +6693,8 @@ paths:
                 $ref: '#/components/schemas/SubscriptionsPaginated'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
   /subscriptions/{external_id}:
@@ -6735,6 +6739,8 @@ paths:
                 $ref: '#/components/schemas/SubscriptionExtended'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
     put:
@@ -6847,6 +6853,8 @@ paths:
                 $ref: '#/components/schemas/SubscriptionExtended'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '405':
