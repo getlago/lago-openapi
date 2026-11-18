@@ -12977,14 +12977,14 @@ components:
           oneOf:
             - $ref: '#/components/schemas/PaymentTermObject'
             - type: 'null'
-          description: The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. New billing entities default to a `net` term of `0` days.
+          description: The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. New billing entities default to a `net` term of `0` days. It is `null` when the term was removed, and invoices are then due on their issuing date.
         net_payment_term:
           deprecated: true
           type:
             - integer
             - 'null'
           example: 0
-          description: '**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type.'
+          description: '**Deprecated.** Use `payment_term` instead. Legacy alias of `payment_term`, expressed in days. It is the `days` of a `net` term, `0` for a `due_on_receipt` term, and `null` for every other term type or when the billing entity has no term.'
         address_line1:
           type:
             - string
@@ -13202,13 +13202,17 @@ components:
                 The structured payment term of the billing entity. It applies to every customer and subscription of the billing entity that has no term of its own. When neither `payment_term` nor `net_payment_term` is sent, the billing entity gets a `net` term of `0` days.
 
                 It supersedes the legacy `net_payment_term`, which is kept in sync as an alias. Whenever `payment_term` is sent, it wins and `net_payment_term` is ignored, even when `payment_term` is `null`, which clears both.
+
+                When only `net_payment_term` is sent, the term becomes a `net` term of that many days, and `null` clears both.
             net_payment_term:
               deprecated: true
-              type: integer
+              type:
+                - integer
+                - 'null'
               minimum: 0
               maximum: 365
               example: 0
-              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules. It must be between 0 and 365 days.'
+              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules. It must be between 0 and 365 days. Send `null` to create the billing entity with no term of its own.'
             address_line1:
               type:
                 - string
@@ -13548,11 +13552,13 @@ components:
                 When only `net_payment_term` is sent, the term becomes a `net` term of that many days, and `null` clears both.
             net_payment_term:
               deprecated: true
-              type: integer
+              type:
+                - integer
+                - 'null'
               minimum: 0
               maximum: 365
               example: 0
-              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules. It must be between 0 and 365 days.'
+              description: '**Deprecated.** Use `payment_term` instead. The net payment term (in days) for this billing entity. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules. It must be between 0 and 365 days. Send `null` to remove the billing entity''s term.'
             address_line1:
               type:
                 - string
