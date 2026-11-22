@@ -12,6 +12,8 @@ get:
   summary: Retrieve subscription lifetime usage
   description: This endpoint enables the retrieval of the lifetime usage of a subscription.
   operationId: getSubscriptionLifetimeUsage
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   responses:
     "200":
       description: Subscription lifetime usage
@@ -29,6 +31,8 @@ put:
   summary: Update a subscription lifetime usage
   description: This endpoint allows you to update the lifetime usage of a subscription.
   operationId: updateSubscriptionLifetimeUsage
+  parameters:
+    - $ref: "../parameters/subscription_status.yaml"
   requestBody:
     description: Update the lifetime usage of a subscription
     content:
