@@ -129,6 +129,8 @@ paths:
     $ref: ./resources/contracts.yaml
   "/contracts/{external_id}":
     $ref: ./resources/contract.yaml
+  "/contracts/{external_id}/publish":
+    $ref: ./resources/contract_publish.yaml
   "/contracts/{external_id}/current_usage":
     $ref: ./resources/contract_current_usage.yaml
   /invoices:

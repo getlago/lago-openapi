@@ -13,6 +13,19 @@ properties:
           - "null"
         description: Contract name.
         example: Annual agreement
+      status:
+        type: string
+        description: Accepted only when it equals the contract's current status, as when
+          sending back a contract read from the API. Any other value answers 422
+          value_is_invalid. A status changes only by publishing or deleting the
+          contract.
+        example: draft
+        enum:
+          - draft
+          - pending
+          - active
+          - terminated
+          - canceled
       plan_code:
         type:
           - string

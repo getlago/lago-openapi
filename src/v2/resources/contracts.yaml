@@ -42,6 +42,7 @@ get:
           description: Lifecycle status.
           example: pending
           enum:
+            - draft
             - pending
             - active
             - terminated
@@ -114,8 +115,12 @@ post:
   summary: Create contract
   description: >-
     Creates a contract for an existing customer. The plan is optional. One
-    pending or active contract may use an external_id at a time. A plan supplies
-    the initial applied rate cards.
+    draft, pending or active contract may use an external_id at a time. A plan
+    supplies the initial applied rate cards.
+
+    With status draft, the contract is prepared without billing, whatever its
+    start date: its rate cards and overrides can be edited until it is
+    published with POST /contracts/{external_id}/publish.
 
     Requires the product catalog to be enabled and contract write permission on the API key.
   operationId: createContract

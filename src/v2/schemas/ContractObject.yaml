@@ -53,9 +53,10 @@ properties:
     example: standard
   status:
     type: string
-    description: Lifecycle status.
+    description: Lifecycle status. A draft never bills until it is published.
     example: pending
     enum:
+      - draft
       - pending
       - active
       - terminated

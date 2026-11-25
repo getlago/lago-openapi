@@ -2675,6 +2675,7 @@ paths:
               description: Lifecycle status.
               example: pending
               enum:
+                - draft
                 - pending
                 - active
                 - terminated
@@ -2746,7 +2747,8 @@ paths:
         - contracts
       summary: Create contract
       description: |-
-        Creates a contract for an existing customer. The plan is optional. One pending or active contract may use an external_id at a time. A plan supplies the initial applied rate cards.
+        Creates a contract for an existing customer. The plan is optional. One draft, pending or active contract may use an external_id at a time. A plan supplies the initial applied rate cards.
+        With status draft, the contract is prepared without billing, whatever its start date: its rate cards and overrides can be edited until it is published with POST /contracts/{external_id}/publish.
         Requires the product catalog to be enabled and contract write permission on the API key.
       operationId: createContract
       requestBody:
@@ -2918,9 +2920,65 @@ paths:
         - contracts
       summary: Delete contract
       description: |-
-        DELETE ends the contract lifecycle; it does not delete the record. Active contracts are terminated and pending contracts are canceled.
+        DELETE ends the contract lifecycle; it does not delete the record. Active contracts are terminated; draft and pending contracts are canceled.
         Requires the product catalog to be enabled and contract write permission on the API key.
       operationId: destroyContract
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            X-Lago-Endpoint-Status:
+              $ref: '#/components/headers/EndpointStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /contracts/{external_id}/publish:
+    parameters:
+      - name: external_id
+        in: path
+        required: true
+        description: External id.
+        schema:
+          type: string
+          description: External id.
+          example: external_123
+    post:
+      tags:
+        - contracts
+      summary: Publish contract
+      description: |-
+        Publishes a draft contract so billing can start; it is the only way out of draft. A draft whose start is ahead becomes pending and starts on its start date. A draft whose start has passed becomes active now: the first period is billed at once and the other periods elapsed since the start are billed within the hour. Usage billed in advance and received while the contract was a draft is not billed.
+        Publishing a pending or active contract sends nothing, so a retry is safe; a pending contract whose start has passed is activated. Sends the contract.published webhook, then contract.started when the contract becomes active.
+        Errors (422): cannot_publish on contract for a terminated or canceled contract, value_is_mandatory on started_at, already_ended on ended_at, customer_deleted on customer, and active_contract_exists or value_already_exists on external_id when another active or pending contract uses the external id.
+        Requires Lago v1.58.0 or later, the product catalog to be enabled and contract write permission on the API key.
+      operationId: publishContract
+      parameters:
+        - name: expands[]
+          in: query
+          required: false
+          description: Relationships to include in this response. Only one expansion level is supported.
+          schema:
+            type: array
+            description: Relationships to include.
+            items:
+              type: string
+              enum:
+                - applied_rate_cards
+                - plan
+                - customer
+                - invoice_custom_sections
+              example: applied_rate_cards
       responses:
         '200':
           description: Successful response
@@ -10290,9 +10348,10 @@ components:
           example: standard
         status:
           type: string
-          description: Lifecycle status.
+          description: Lifecycle status. A draft never bills until it is published.
           example: pending
           enum:
+            - draft
             - pending
             - active
             - terminated
@@ -10426,6 +10485,15 @@ components:
             - 'null'
           description: Optional plan code. Plan-less contracts use directly attached rate cards.
           example: standard
+        status:
+          type:
+            - string
+            - 'null'
+          description: Set to draft to prepare the contract without billing it, whatever its start date, until it is published. Omitted or null, the start date decides between pending and active. Any other value answers 422 value_is_invalid. Requires Lago v1.58.0 or later; older servers ignore it and create a contract that bills.
+          example: draft
+          enum:
+            - draft
+            - null
         billing_time:
           type: string
           description: Whether billing aligns to the calendar or contract anniversary.
@@ -10445,7 +10513,7 @@ components:
           type:
             - string
             - 'null'
-          description: Start timestamp. Defaults to now. A future start creates a pending contract.
+          description: Start timestamp. Defaults to now. A future start creates a pending contract. Required for a draft (422 value_is_mandatory otherwise).
           example: null
           format: date-time
         ended_at:
@@ -10518,6 +10586,16 @@ components:
                 - 'null'
               description: Contract name.
               example: Annual agreement
+            status:
+              type: string
+              description: Accepted only when it equals the contract's current status, as when sending back a contract read from the API. Any other value answers 422 value_is_invalid. A status changes only by publishing or deleting the contract.
+              example: draft
+              enum:
+                - draft
+                - pending
+                - active
+                - terminated
+                - canceled
             plan_code:
               type:
                 - string
@@ -14777,6 +14855,7 @@ components:
         - contract_rate_card.deleted
         - contract.created
         - contract.updated
+        - contract.published
         - contract.started
         - contract.terminated
         - contract.canceled

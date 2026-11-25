@@ -1,0 +1,72 @@
+parameters:
+  - name: external_id
+    in: path
+    required: true
+    description: External id.
+    schema:
+      type: string
+      description: External id.
+      example: external_123
+post:
+  tags:
+    - contracts
+  summary: Publish contract
+  description: >-
+    Publishes a draft contract so billing can start; it is the only way out of
+    draft. A draft whose start is ahead becomes pending and starts on its start
+    date. A draft whose start has passed becomes active now: the first period
+    is billed at once and the other periods elapsed since the start are billed
+    within the hour. Usage billed in advance and received while the contract
+    was a draft is not billed.
+
+    Publishing a pending or active contract sends nothing, so a retry is safe;
+    a pending contract whose start has passed is activated. Sends the
+    contract.published webhook, then contract.started when the contract
+    becomes active.
+
+    Errors (422): cannot_publish on contract for a terminated or canceled
+    contract, value_is_mandatory on started_at, already_ended on ended_at,
+    customer_deleted on customer, and active_contract_exists or
+    value_already_exists on external_id when another active or pending contract
+    uses the external id.
+
+    Requires Lago v1.58.0 or later, the product catalog to be enabled and
+    contract write permission on the API key.
+  operationId: publishContract
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - applied_rate_cards
+            - plan
+            - customer
+            - invoice_custom_sections
+          example: applied_rate_cards
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Contract.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
