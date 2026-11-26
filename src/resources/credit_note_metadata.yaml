@@ -20,7 +20,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: "../schemas/CreditNoteMetadataResponse.yaml"
+          $ref: "../schemas/CreditNoteMetadataRequest.yaml"
   responses:
     '200':
       description: Credit note metadata replaced
@@ -30,6 +30,8 @@ post:
             $ref: "../schemas/CreditNoteMetadataResponse.yaml"
     '401':
       $ref: "../responses/Unauthorized.yaml"
+    '403':
+      $ref: "../responses/Forbidden.yaml"
     '404':
       $ref: "../responses/NotFound.yaml"
     '422':
@@ -57,7 +59,7 @@ patch:
     content:
       application/json:
         schema:
-          $ref: "../schemas/CreditNoteMetadataResponse.yaml"
+          $ref: "../schemas/CreditNoteMetadataRequest.yaml"
   responses:
     '200':
       description: Credit note metadata merged
@@ -67,6 +69,8 @@ patch:
             $ref: "../schemas/CreditNoteMetadataResponse.yaml"
     '401':
       $ref: "../responses/Unauthorized.yaml"
+    '403':
+      $ref: "../responses/Forbidden.yaml"
     '404':
       $ref: "../responses/NotFound.yaml"
     '422':
@@ -96,5 +100,7 @@ delete:
             $ref: "../schemas/CreditNoteMetadataResponse.yaml"
     '401':
       $ref: "../responses/Unauthorized.yaml"
+    '403':
+      $ref: "../responses/Forbidden.yaml"
     '404':
       $ref: "../responses/NotFound.yaml"
