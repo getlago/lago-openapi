@@ -28,6 +28,7 @@ required:
   - finalize_zero_amount_invoice
   - document_url_expiration_days
   - events_store
+  - taxes
 properties:
   lago_id:
     type: string
@@ -58,7 +59,7 @@ properties:
     example:
       - https://webhook.brex.com
       - https://webhook2.brex.com
-    description: The array containing your webhooks URLs.
+    description: The URLs of every webhook endpoint of your organization, ordered by the Lago identifier of the endpoint. The first value is always the one returned in `webhook_url`.
   country:
     $ref: "./CountryOrNull.yaml"
     description: The country of your organization.
