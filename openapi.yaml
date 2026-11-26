@@ -9961,6 +9961,7 @@ webhooks:
           description: Return a 200 status to indicate that the data was received successfully
   fee_tax_provider_error:
     post:
+      deprecated: true
       operationId: feeTaxProviderError
       summary: An error was encountered while fetching taxes for a fee on a tax provider
       description: An error was encountered while fetching taxes for a fee on a tax provider
