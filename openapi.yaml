@@ -17151,12 +17151,13 @@ components:
           example: netsuite
           description: |-
             The integration type used for accounting, tax and CRM syncs.
-            Accepted values: `netsuite`, `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
+            Accepted values: `netsuite`, `anrok`, `avalara`, `xero`, `quickbooks`, `hubspot`, `salesforce`.
           enum:
             - netsuite
             - anrok
             - avalara
             - xero
+            - quickbooks
             - hubspot
             - salesforce
         integration_code:
@@ -18111,12 +18112,13 @@ components:
                     example: netsuite
                     description: |-
                       The integration type used for accounting, tax and CRM syncs.
-                      Accepted values: `netsuite`, `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
+                      Accepted values: `netsuite`, `anrok`, `avalara`, `xero`, `quickbooks`, `hubspot`, `salesforce`.
                     enum:
                       - netsuite
                       - anrok
                       - avalara
                       - xero
+                      - quickbooks
                       - hubspot
                       - salesforce
                   integration_code:
@@ -22286,11 +22288,12 @@ components:
                     example: anrok
                     description: |-
                       The integration type used for accounting, tax and CRM syncs.
-                      Accepted values: `anrok`, `avalara`, `xero`, `hubspot`, `salesforce`.
+                      Accepted values: `anrok`, `avalara`, `xero`, `quickbooks`, `hubspot`, `salesforce`.
                     enum:
                       - anrok
                       - avalara
                       - xero
+                      - quickbooks
                       - hubspot
                       - salesforce
                   integration_code:
