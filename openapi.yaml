@@ -19624,7 +19624,7 @@ components:
           example: false
         invoice_usage_on_expiration:
           type: boolean
-          description: Whether a progressive billing invoice for the subscription usage is issued when the wallet expires. The invoice covers usage from the start of the current billing period until `expiration_at` and is paid first with the remaining credits of this wallet, before the wallet is terminated. The invoice is issued even when the wallet has no credits left or cannot pay its fees. What the wallet does not cover is paid by the other wallets of the customer or is due. Until its expiration invoices are settled (for example while their taxes are computed), the wallet stays active and only pays them. Remaining usage is billed by the regular period invoice, which deducts this invoice. Only present when `true`.
+          description: Whether the wallet is set to issue a progressive billing invoice for the subscription usage when it expires. The invoice is only issued while the feature is available to the organization (premium license and feature enabled). The invoice covers usage from the start of the current billing period until `expiration_at` and is paid first with the remaining credits of this wallet, before the wallet is terminated. The invoice is issued even when the wallet has no credits left or cannot pay its fees. What the wallet does not cover is paid by the other wallets of the customer or is due. Until its expiration invoices are settled (for example while their taxes are computed), the wallet stays active and only pays them. Remaining usage is billed by the regular period invoice, which deducts this invoice. Only present when `true`.
           example: true
         applies_to:
           type: object
@@ -20049,7 +20049,7 @@ components:
                 - string
                 - 'null'
               format: date-time
-              description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC). Once the usage of an expired wallet with `invoice_usage_on_expiration` is invoiced, the date can no longer be changed or removed, and the request returns a `422` with code `expiration_already_invoiced`.
+              description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC). From the moment the usage of an expired wallet is invoiced on its expiration until the wallet is terminated, any update that includes `expiration_at` returns a `422` with code `expiration_already_invoiced`, even when the date is unchanged.
               example: '2022-07-07T23:59:59Z'
             invoice_requires_successful_payment:
               type: boolean

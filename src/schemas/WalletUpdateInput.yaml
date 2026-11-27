@@ -28,7 +28,7 @@ properties:
           - string
           - "null"
         format: "date-time"
-        description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC). Once the usage of an expired wallet with `invoice_usage_on_expiration` is invoiced, the date can no longer be changed or removed, and the request returns a `422` with code `expiration_already_invoiced`.
+        description: The date and time that determines when the wallet will expire. It follows the ISO 8601 datetime format and is expressed in Coordinated Universal Time (UTC). From the moment the usage of an expired wallet is invoiced on its expiration until the wallet is terminated, any update that includes `expiration_at` returns a `422` with code `expiration_already_invoiced`, even when the date is unchanged.
         example: "2022-07-07T23:59:59Z"
       invoice_requires_successful_payment:
         type: boolean
