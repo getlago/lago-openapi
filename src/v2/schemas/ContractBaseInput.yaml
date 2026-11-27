@@ -21,6 +21,19 @@ properties:
       - "null"
     description: Optional plan code. Plan-less contracts use directly attached rate cards.
     example: standard
+  status:
+    type:
+      - string
+      - "null"
+    description: Set to draft to prepare the contract without billing it, whatever its
+      start date, until it is published. Omitted or null, the start date decides
+      between pending and active. Any other value answers 422 value_is_invalid.
+      Requires Lago v1.58.0 or later; older servers ignore it and create a contract
+      that bills.
+    example: draft
+    enum:
+      - draft
+      - null
   billing_time:
     type: string
     description: Whether billing aligns to the calendar or contract anniversary.
@@ -41,7 +54,7 @@ properties:
       - string
       - "null"
     description: Start timestamp. Defaults to now. A future start creates a pending
-      contract.
+      contract. Required for a draft (422 value_is_mandatory otherwise).
     example: null
     format: date-time
   ended_at:

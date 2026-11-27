@@ -147,7 +147,7 @@ delete:
   summary: Delete contract
   description: >-
     DELETE ends the contract lifecycle; it does not delete the record. Active
-    contracts are terminated and pending contracts are canceled.
+    contracts are terminated; draft and pending contracts are canceled.
 
     Requires the product catalog to be enabled and contract write permission on the API key.
   operationId: destroyContract
