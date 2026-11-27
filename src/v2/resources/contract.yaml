@@ -1,0 +1,173 @@
+parameters:
+  - name: external_id
+    in: path
+    required: true
+    description: External id.
+    schema:
+      type: string
+      description: External id.
+      example: external_123
+get:
+  tags:
+    - contracts
+  summary: Retrieve contract
+  description: >-
+    Without status, retrieves the live pending or active contract. A status can
+    select a historical terminated or canceled contract.
+
+    Requires the product catalog to be enabled and contract read permission on the API key.
+  operationId: findContract
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - applied_rate_cards
+            - plan
+            - customer
+            - invoice_custom_sections
+          example: applied_rate_cards
+    - name: status
+      in: query
+      required: false
+      description: Selects a lifecycle status. An unknown value falls back to active.
+      schema:
+        type: string
+        description: Lifecycle status.
+        example: pending
+        enum:
+          - pending
+          - active
+          - terminated
+          - canceled
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Contract.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - contracts
+  summary: Update contract
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Identifiers and customer are immutable. Lifecycle status determines which other fields can change.
+
+    Requires the product catalog to be enabled and contract write permission on the API key.
+  operationId: updateContract
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ContractUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Contract.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - contracts
+  summary: Update contract
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Identifiers and customer are immutable. Lifecycle status determines which other fields can change.
+
+    Requires the product catalog to be enabled and contract write permission on the API key.
+  operationId: patchContract
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ContractUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Contract.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - contracts
+  summary: Delete contract
+  description: >-
+    DELETE ends the contract lifecycle; it does not delete the record. Active
+    contracts are terminated and pending contracts are canceled.
+
+    Requires the product catalog to be enabled and contract write permission on the API key.
+  operationId: destroyContract
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Contract.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

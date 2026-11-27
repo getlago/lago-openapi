@@ -1,0 +1,47 @@
+type: object
+description: Organization.
+required:
+  - lago_id
+  - name
+  - slug
+  - email
+  - events_store
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  name:
+    type: string
+    description: Name.
+    example: example
+  slug:
+    type: string
+    description: Slug.
+    example: example
+  email:
+    type:
+      - string
+      - "null"
+    description: Email.
+    example: billing@acme.example
+  events_store:
+    type: string
+    description: Event storage used by the organization.
+    example: clickhouse
+    enum:
+      - clickhouse
+      - postgres
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

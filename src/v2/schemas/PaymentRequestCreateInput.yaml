@@ -1,0 +1,12 @@
+type: object
+description: Create payment request.
+required:
+  - payment_request
+properties:
+  payment_request:
+    allOf:
+      - $ref: ./PaymentRequestBaseInput.yaml
+      - type: object
+        required:
+          - external_customer_id
+          - lago_invoice_ids

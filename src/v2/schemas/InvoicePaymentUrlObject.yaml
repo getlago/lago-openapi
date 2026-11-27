@@ -1,0 +1,36 @@
+type: object
+description: Invoice payment URL.
+required:
+  - lago_customer_id
+  - external_customer_id
+  - payment_provider
+  - lago_invoice_id
+  - payment_url
+properties:
+  lago_customer_id:
+    type:
+      - string
+      - "null"
+    description: Customer identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_customer_id:
+    type: string
+    description: External customer identifier.
+    example: customer_123
+  payment_provider:
+    type:
+      - string
+      - "null"
+    description: Payment provider.
+    example: stripe
+  lago_invoice_id:
+    type: string
+    description: Invoice identifier.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  payment_url:
+    type: string
+    description: URL where the customer can pay.
+    example: https://payments.example/invoice
+    format: uri

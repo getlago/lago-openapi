@@ -1,0 +1,7 @@
+type: object
+description: payment method response.
+required:
+  - payment_method
+properties:
+  payment_method:
+    $ref: ./PaymentMethodObject.yaml

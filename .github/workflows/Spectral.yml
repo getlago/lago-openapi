@@ -13,8 +13,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: npm install
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
       - name: Validate OpenAPI definition
         uses: stoplightio/spectral-action@latest
         with:
-          file_glob: "openapi.yaml"
+          file_glob: "openapi*.yaml"

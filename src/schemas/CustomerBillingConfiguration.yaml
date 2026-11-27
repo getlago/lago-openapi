@@ -1,5 +1,5 @@
 type: object
-description: Configuration specific to the payment provider, utilized for billing the customer. This object contains settings and parameters necessary for processing payments and invoicing the customer.
+description: The billing configuration fields shared by the customer create payload and the customer object. They hold the settings used to invoice the customer and to process their payments.
 properties:
   invoice_grace_period:
     type:
@@ -49,18 +49,6 @@ properties:
       - "null"
     example: stripe-eu-1
     description: Unique code used to identify a payment provider connection.
-  provider_customer_id:
-    type: string
-    example: "cus_12345"
-    description: The customer ID within the payment provider's system. If this field is not provided, Lago has the option to create a new customer record within the payment provider's system on behalf of the customer
-  sync:
-    type: boolean
-    example: true
-    description: Set this field to `true` if you want to create the customer in the payment provider synchronously with the customer creation process in Lago. This option is applicable only when the `provider_customer_id` is `null` and the customer is automatically created in the payment provider through Lago. By default, the value is set to `false`
-  sync_with_provider:
-    type: boolean
-    example: true
-    description: Set this field to `true` if you want to create a customer record in the payment provider's system. This option is applicable only when the `provider_customer_id` is null and the `sync_with_provider` field is set to `true`. By default, the value is set to `false`
   document_locale:
     type:
       - string

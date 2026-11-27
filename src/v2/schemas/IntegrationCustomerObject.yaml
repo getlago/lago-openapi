@@ -1,0 +1,66 @@
+type: object
+description: Customer mapping to an integration. Provider-specific settings are
+  included as additional top-level fields.
+required:
+  - lago_id
+  - external_customer_id
+  - type
+  - integration_code
+  - code
+  - is_default
+  - category
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  external_customer_id:
+    type:
+      - string
+      - "null"
+    description: Customer identifier in the integration.
+    example: customer_123
+  type:
+    type:
+      - string
+      - "null"
+    description: Integration type.
+    example: netsuite
+    enum:
+      - netsuite
+      - anrok
+      - avalara
+      - xero
+      - hubspot
+      - salesforce
+      - null
+  integration_code:
+    type:
+      - string
+      - "null"
+    description: Integration code.
+    example: anrok
+  code:
+    type:
+      - string
+      - "null"
+    description: Mapping code.
+    example: default
+  is_default:
+    type: boolean
+    description: Whether this mapping is the default.
+    example: false
+  category:
+    type:
+      - string
+      - "null"
+    description: Integration category.
+    example: payment
+    enum:
+      - payment
+      - tax
+      - accounting
+      - crm
+      - null
+additionalProperties: true

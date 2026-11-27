@@ -4,5 +4,8 @@ required:
 properties:
   events:
     type: array
+    minItems: 1
+    maxItems: 100
+    description: The usage events to ingest. An empty list returns a `422` error with `no_events`, and more than 100 events returns a `422` error with `too_many_events`.
     items:
       $ref: './EventInputObject.yaml'

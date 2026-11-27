@@ -1,0 +1,63 @@
+type: object
+description: Fee Applied Tax.
+required:
+  - lago_id
+  - lago_fee_id
+  - lago_tax_id
+  - tax_name
+  - tax_code
+  - tax_rate
+  - tax_description
+  - amount_cents
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_fee_id:
+    type: string
+    description: Identifier of the taxed record.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  lago_tax_id:
+    type:
+      - string
+      - "null"
+    description: Tax identifier. Null when the tax was removed or supplied by a provider.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  tax_name:
+    type: string
+    description: Tax name.
+    example: example
+  tax_code:
+    type: string
+    description: Tax code.
+    example: example
+  tax_rate:
+    type: number
+    description: Tax rate.
+    example: 20
+  tax_description:
+    type:
+      - string
+      - "null"
+    description: Tax description.
+    example: example
+  amount_cents:
+    type: integer
+    description: Amount cents.
+    example: 100
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

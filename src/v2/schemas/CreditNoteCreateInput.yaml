@@ -1,0 +1,12 @@
+type: object
+description: Create credit note.
+required:
+  - credit_note
+properties:
+  credit_note:
+    allOf:
+      - $ref: ./CreditNoteBaseInput.yaml
+      - type: object
+        required:
+          - invoice_id
+          - items

@@ -1,0 +1,73 @@
+type: object
+required:
+  - lago_id
+  - lago_organization_id
+  - code
+  - name
+  - description
+  - attribution_keys
+  - role
+  - lago_parent_id
+  - parent_code
+  - created_at
+  - updated_at
+properties:
+  lago_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the usage attribution type, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  lago_organization_id:
+    type: string
+    format: uuid
+    description: Unique identifier of the organization, created by Lago.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  code:
+    type: string
+    description: Unique code used to identify the usage attribution type within the organization.
+    example: "team"
+  name:
+    type:
+      - string
+      - "null"
+    description: Name of the usage attribution type.
+    example: "Team"
+  description:
+    type:
+      - string
+      - "null"
+    description: Description of the usage attribution type.
+    example: "Team that consumed the usage."
+  attribution_keys:
+    type: array
+    items:
+      type: string
+    description: Keys of the event properties that attribute usage to this type. A key belongs to a single usage attribution type of the organization.
+    example:
+      - team
+      - team_id
+  role:
+    $ref: "./UsageAttributionTypeRoleEnum.yaml"
+  lago_parent_id:
+    type:
+      - string
+      - "null"
+    format: uuid
+    description: Unique identifier of the parent usage attribution type, created by Lago. It is `null` when the type has no parent.
+    example: "1a901a90-1a90-1a90-1a90-1a901a901a90"
+  parent_code:
+    type:
+      - string
+      - "null"
+    description: Code of the parent usage attribution type. It is `null` when the type has no parent.
+    example: "department"
+  created_at:
+    type: string
+    format: date-time
+    description: Creation date of the usage attribution type, in UTC.
+    example: "2022-04-29T08:59:51Z"
+  updated_at:
+    type: string
+    format: date-time
+    description: Date of the last update of the usage attribution type, in UTC.
+    example: "2022-04-29T08:59:51Z"

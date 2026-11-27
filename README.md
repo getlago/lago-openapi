@@ -15,6 +15,13 @@ Open API specification for Lago project
 
 This repository is used to serve http://swagger.getlago.com/
 
+The specifications are published separately:
+
+- `openapi.yaml`: API v1. Its URL remains unchanged for existing consumers.
+- `openapi-v2.yaml`: API v2 (beta). It documents native v2 endpoints for taxes, the product catalog, contracts, billing, customers, organizations, billing entities, billable metrics, events, logs and webhook endpoints.
+
+Swagger UI has a version selector and opens API v1 by default. The v2 specification only lists endpoints that have been checked against their v2 implementation. Do not assume that every v1 endpoint is available in v2 or has the same response format.
+
 ## Documentation
 
 The Lago documentation is available at [doc.getlago.com](https://doc.getlago.com/docs/api/intro).
@@ -39,17 +46,28 @@ npm install
 
 You may also need Docker to run some commands.
 
-### Build openapi.yaml
+### Build the specifications
 
 ```
 npm run build
 ```
+
+`redocly.yaml` maps each source document to its generated bundle:
+
+| Version | Source | Bundle |
+| --- | --- | --- |
+| v1 | `src/openapi.yaml` | `openapi.yaml` |
+| v2 | `src/v2/openapi.yaml` | `openapi-v2.yaml` |
+
+Use `npm run build:v1` or `npm run build:v2` to build one version. Do not edit the bundles by hand.
 
 ### Lint
 
 ```
 npm run test
 ```
+
+This builds and lints both versions. V2 examples are also checked against their schemas. CI checks both specifications and verifies that the committed bundles match a fresh build.
 
 ### Preview using Redoc
 
@@ -72,3 +90,5 @@ npm run preview:swagger
 ```
 
 The Swagger UI will be available at `http://localhost:8080/`.
+
+Use the selector at the top of the page to switch between v1 and v2.

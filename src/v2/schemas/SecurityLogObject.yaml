@@ -1,0 +1,48 @@
+type: object
+description: Recorded log entry.
+required:
+  - log_id
+  - log_type
+  - log_event
+  - user_email
+  - resources
+  - device_info
+  - logged_at
+  - created_at
+properties:
+  log_id:
+    type: string
+    description: Log identifier.
+    example: log_123
+  log_type:
+    type: string
+    description: Security log type.
+    example: user
+  log_event:
+    type: string
+    description: Security event.
+    example: user.login
+  user_email:
+    type:
+      - string
+      - "null"
+    description: User email, if known.
+    example: user@acme.example
+  resources:
+    type: object
+    description: Resources associated with the event.
+    additionalProperties: true
+  device_info:
+    type: object
+    description: Device information associated with the event.
+    additionalProperties: true
+  logged_at:
+    type: string
+    description: Time the event was logged.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  created_at:
+    type: string
+    description: Time the log record was created.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

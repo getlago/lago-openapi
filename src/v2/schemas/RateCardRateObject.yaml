@@ -1,0 +1,104 @@
+type: object
+description: Rate Card Rate.
+required:
+  - lago_id
+  - code
+  - rate_card_code
+  - status
+  - rate_model
+  - rate_properties
+  - min_amount_cents
+  - billing_interval_count
+  - billing_interval_unit
+  - applied_pricing_unit_conversion_rate
+  - effective_from
+  - created_at
+  - updated_at
+  - deleted_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  code:
+    type: string
+    description: Code.
+    example: example
+  rate_card_code:
+    type:
+      - string
+      - "null"
+    description: Code of the parent rate card.
+    example: compute_usd
+  status:
+    type: string
+    description: Status derived from the effective-dated rate timeline.
+    example: pending
+    enum:
+      - pending
+      - active
+      - terminated
+  rate_model:
+    type: string
+    description: Pricing model. Fixed products support standard, graduated and
+      volume. Volume cannot be billed in advance; dynamic requires a sum metric.
+      Proration and aggregation can impose further restrictions.
+    example: standard
+    enum:
+      - standard
+      - graduated
+      - package
+      - percentage
+      - volume
+      - graduated_percentage
+      - custom
+      - dynamic
+  rate_properties:
+    $ref: ./RatePropertiesObject.yaml
+  min_amount_cents:
+    type: integer
+    description: Minimum amount, in cents.
+    example: 100
+  billing_interval_count:
+    type: integer
+    description: Billing interval count.
+    example: 1
+  billing_interval_unit:
+    type: string
+    description: Unit of the billing interval.
+    example: day
+    enum:
+      - day
+      - week
+      - month
+      - year
+  applied_pricing_unit_conversion_rate:
+    type:
+      - string
+      - "null"
+    description: Applied pricing unit conversion rate. Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  effective_from:
+    type: string
+    description: Effective from.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time

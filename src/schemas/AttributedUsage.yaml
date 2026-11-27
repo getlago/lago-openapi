@@ -1,0 +1,9 @@
+type: object
+required:
+  - attributed_usage
+  - meta
+properties:
+  attributed_usage:
+    $ref: "./AttributedUsageObject.yaml"
+  meta:
+    $ref: "./PaginationMeta.yaml"

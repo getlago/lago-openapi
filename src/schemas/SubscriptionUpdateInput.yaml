@@ -84,6 +84,11 @@ properties:
           - "null"
         example: "PO-123"
         description: The purchase order number associated with the subscription. It will be added to invoices generated for this subscription.
+      payment_term:
+        oneOf:
+          - $ref: "./PaymentTermObject.yaml"
+          - type: "null"
+        description: The structured payment term of the subscription. It takes precedence over the customer's and the billing entity's terms for the invoices of this subscription. Send `null` to remove it. A pending downgrade of this subscription that shared the previous term gets the new one too.
       progressive_billing_disabled:
         type: boolean
         default: false

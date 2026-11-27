@@ -1,0 +1,15 @@
+description: Invalid request body, pagination or relationship expansion
+headers:
+  X-Lago-Endpoint-Status:
+    $ref: '../headers/EndpointStatus.yaml'
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/ApiError.yaml'
+    example:
+      code: invalid_expand
+      details:
+        - code: malformed
+          field: expands
+          meta:
+            allowed_values: []

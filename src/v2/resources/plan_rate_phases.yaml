@@ -1,0 +1,86 @@
+parameters:
+  - name: plan_code
+    in: path
+    required: true
+    description: Plan code.
+    schema:
+      type: string
+      description: Plan code.
+      example: example_code
+  - name: applied_rate_card_code
+    in: path
+    required: true
+    description: Code of the rate card applied to the parent, returned as
+      rate_card_code on the applied rate card.
+    schema:
+      type: string
+      description: Code of the rate card applied to the parent, returned as
+        rate_card_code on the applied rate card.
+      example: compute_usd
+get:
+  tags:
+    - plan_rate_phases
+  summary: List plan rate phases
+  description: >-
+    Returns the complete list without cursor metadata.
+
+    Phases are returned in position order.
+
+    Requires the product catalog to be enabled and plan_rate_card read permission on the API key.
+  operationId: findAllPlanRatePhases
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PlanRatePhasesCollection.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+post:
+  tags:
+    - plan_rate_phases
+  summary: Create rate phase
+  description: >-
+    Inserts a phase and renumbers later positions. The last phase must be
+    indefinite and no earlier phase may be indefinite. Parent locking rules
+    apply.
+
+    Requires the product catalog to be enabled and plan_rate_card write permission on the API key.
+  operationId: createPlanRatePhase
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RatePhaseCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PlanRatePhase.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

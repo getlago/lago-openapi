@@ -1,0 +1,43 @@
+type: object
+minProperties: 1
+properties:
+  name:
+    type: string
+    description: Name shown in the catalog.
+    example: Compute
+  code:
+    type: string
+    description: Unique code within the organization.
+    example: example_code
+    pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+  description:
+    type:
+      - string
+      - "null"
+    description: Internal description.
+    example: Compute charges.
+  invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Name used on invoices. Defaults to the name when blank.
+    example: Compute
+  product_type:
+    type: string
+    description: Type of product. Metered products require a billable metric; fixed
+      products must not reference one.
+    example: metered
+    enum:
+      - metered
+      - fixed
+  product_category_code:
+    type:
+      - string
+      - "null"
+    description: Category code. Omit or clear it to leave the product uncategorized.
+    example: compute
+  billable_metric_code:
+    type: string
+    description: Billable metric code. Required for metered products and not allowed
+      for fixed products.
+    example: api_requests

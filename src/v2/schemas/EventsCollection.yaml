@@ -1,0 +1,10 @@
+type: object
+description: events list.
+required:
+  - events
+properties:
+  events:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./EventObject.yaml

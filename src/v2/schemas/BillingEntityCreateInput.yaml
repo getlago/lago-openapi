@@ -1,0 +1,12 @@
+type: object
+description: Create billing entity.
+required:
+  - billing_entity
+properties:
+  billing_entity:
+    allOf:
+      - $ref: ./BillingEntityBaseInput.yaml
+      - type: object
+        required:
+          - code
+          - name

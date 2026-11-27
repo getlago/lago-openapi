@@ -1,8 +1,12 @@
 type: object
 required:
   - organization_id
+  - start_of_period_dt
+  - end_of_period_dt
   - amount_cents
   - amount_currency
+  - billable_metric_code
+  - units
   - is_billable_metric_deleted
 properties:
   organization_id:
@@ -33,10 +37,9 @@ properties:
     description: The code of the usage-based billable metrics.
     example: 'code1'
   units:
-    type: string
+    type: number
     description: The total number of units for the usage-based billable metrics.
-    pattern: "^[0-9]+.?[0-9]*$"
-    example: "1.0"
+    example: 1.0
   is_billable_metric_deleted:
     type: boolean
     description: Indicates whether the billable metric associated with the usage has been deleted. It is set on every entry of the response.

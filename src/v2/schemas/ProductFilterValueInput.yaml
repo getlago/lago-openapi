@@ -1,0 +1,16 @@
+type: object
+description: A value matched against a filter key defined by the product billable metric.
+required:
+  - key
+properties:
+  key:
+    type: string
+    description: Billable metric filter key.
+    example: region
+  value:
+    type:
+      - string
+      - "null"
+    description: Value to match. Null or an omitted value selects all configured
+      values for this key.
+    example: eu

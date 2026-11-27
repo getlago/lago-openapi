@@ -16,6 +16,8 @@ AddOnsPaginated:
   $ref: "./AddOnsPaginated.yaml"
 AddOnUpdateInput:
   $ref: "./AddOnUpdateInput.yaml"
+ApiErrorAttributedUsageQueryLimit:
+  $ref: "./ApiErrorAttributedUsageQueryLimit.yaml"
 ApiErrorBadRequest:
   $ref: "./ApiErrorBadRequest.yaml"
 ApiErrorForbidden:
@@ -40,6 +42,16 @@ AppliedCouponsPaginated:
   $ref: "./AppliedCouponsPaginated.yaml"
 AppliedUsageThresholdObject:
   $ref: "./AppliedUsageThresholdObject.yaml"
+AttributedUsage:
+  $ref: "./AttributedUsage.yaml"
+AttributedUsageChargeUsageObject:
+  $ref: "./AttributedUsageChargeUsageObject.yaml"
+AttributedUsageObject:
+  $ref: "./AttributedUsageObject.yaml"
+AttributedUsageRowObject:
+  $ref: "./AttributedUsageRowObject.yaml"
+AttributedUsageTotalsObject:
+  $ref: "./AttributedUsageTotalsObject.yaml"
 BaseAppliedTax:
   $ref: "./BaseAppliedTax.yaml"
 BillableMetric:
@@ -166,6 +178,10 @@ Address:
   $ref: "./Address.yaml"
 CustomerBillingConfiguration:
   $ref: "./CustomerBillingConfiguration.yaml"
+CustomerBillingConfigurationInput:
+  $ref: "./CustomerBillingConfigurationInput.yaml"
+CustomerBillingConfigurationObject:
+  $ref: "./CustomerBillingConfigurationObject.yaml"
 IntegrationCustomer:
   $ref: "./IntegrationCustomer.yaml"
 IntegrationProviderErrorObject:
@@ -184,6 +200,8 @@ CustomerMetadata:
   $ref: "./CustomerMetadata.yaml"
 CustomerObject:
   $ref: "./CustomerObject.yaml"
+CustomerWalletCreateInput:
+  $ref: "./CustomerWalletCreateInput.yaml"
 CustomerObjectExtended:
   $ref: "./CustomerObjectExtended.yaml"
 CustomerPastUsage:
@@ -318,6 +336,8 @@ PaymentRequestPaymentFailureObject:
   $ref: "./PaymentRequestPaymentFailureObject.yaml"
 PaymentRequestsPaginated:
   $ref: "./PaymentRequestsPaginated.yaml"
+PaymentTermObject:
+  $ref: "./PaymentTermObject.yaml"
 Plan:
   $ref: "./Plan.yaml"
 PlanCreateInput:
@@ -370,12 +390,28 @@ Timezone:
   $ref: "./Timezone.yaml"
 TimezoneOrNull:
   $ref: "./TimezoneOrNull.yaml"
+UsageAttributionType:
+  $ref: "./UsageAttributionType.yaml"
+UsageAttributionTypeBaseInput:
+  $ref: "./UsageAttributionTypeBaseInput.yaml"
+UsageAttributionTypeCreateInput:
+  $ref: "./UsageAttributionTypeCreateInput.yaml"
+UsageAttributionTypeObject:
+  $ref: "./UsageAttributionTypeObject.yaml"
+UsageAttributionTypeRoleEnum:
+  $ref: "./UsageAttributionTypeRoleEnum.yaml"
+UsageAttributionTypeUpdateInput:
+  $ref: "./UsageAttributionTypeUpdateInput.yaml"
+UsageAttributionTypesPaginated:
+  $ref: "./UsageAttributionTypesPaginated.yaml"
 UsageThresholdInput:
   $ref: "./UsageThresholdInput.yaml"
 UsageThresholdObject:
   $ref: "./UsageThresholdObject.yaml"
 Wallet:
   $ref: "./Wallet.yaml"
+WalletBaseInput:
+  $ref: "./WalletBaseInput.yaml"
 WalletCreateInput:
   $ref: "./WalletCreateInput.yaml"
 WalletFeeTypeEnum:
@@ -404,6 +440,8 @@ WebhookEndpointCreateInput:
   $ref: "./WebhookEndpointCreateInput.yaml"
 WebhookEndpointObject:
   $ref: "./WebhookEndpointObject.yaml"
+WebhookEndpointSigningKeyObject:
+  $ref: "./WebhookEndpointSigningKeyObject.yaml"
 WebhookEndpointsPaginated:
   $ref: "./WebhookEndpointsPaginated.yaml"
 WebhookEndpointUpdateInput:

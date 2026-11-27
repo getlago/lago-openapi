@@ -1,0 +1,92 @@
+get:
+  tags:
+    - taxes
+  summary: List all taxes
+  description: |-
+    Lists the organization's taxes, excluding deleted taxes.
+    Requires the product catalog to be enabled and tax read permission on the API key.
+    Results are ordered by creation time, newest first, with the tax identifier as a tiebreaker.
+    Use after or before to navigate. The page and per_page parameters return 400.
+    Relationships and assignment counts are not returned. Taxes have no supported expansions; a nonempty expands[] returns 400.
+    Invalid date filters return 422.
+  operationId: findAllTaxes
+  parameters:
+    - $ref: '../parameters/limit.yaml'
+    - $ref: '../parameters/after.yaml'
+    - $ref: '../parameters/before.yaml'
+    - $ref: '../parameters/include_total_count.yaml'
+    - $ref: '../parameters/created_at_from.yaml'
+    - $ref: '../parameters/created_at_to.yaml'
+  responses:
+    '200':
+      description: Taxes
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/TaxesPaginated.yaml'
+          example:
+            taxes:
+              - lago_id: 1a901a90-1a90-1a90-1a90-1a901a901a90
+                name: VAT
+                code: standard_vat
+                rate: 20
+                description: Standard VAT
+                created_at: '2022-04-29T08:59:51.123456Z'
+                updated_at: '2022-04-29T09:30:00.123456Z'
+                deleted_at: null
+            meta:
+              next_cursor: null
+              prev_cursor: null
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'
+post:
+  tags:
+    - taxes
+  summary: Create a tax
+  description: |-
+    Creates a tax rate for the organization.
+    Requires the product catalog to be enabled and tax write permission on the API key.
+    Name, code and rate are required. A code already used by another tax of the organization, including a deleted one, returns 422.
+    The applied_to_organization parameter is ignored and is not returned. Creating a tax does not assign it to any resource.
+    Taxes have no supported expansions; a nonempty expands[] returns 400 before creation.
+  operationId: createTax
+  requestBody:
+    required: true
+    description: Tax creation payload
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/TaxCreateInput.yaml'
+        example:
+          tax:
+            name: VAT
+            code: standard_vat
+            rate: 20
+            description: Standard VAT
+  responses:
+    '200':
+      description: Tax created
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: '../headers/EndpointStatus.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Tax.yaml'
+    '400':
+      $ref: '../responses/BadRequest.yaml'
+    '401':
+      $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
+    '422':
+      $ref: '../responses/UnprocessableEntity.yaml'

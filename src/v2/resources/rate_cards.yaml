@@ -1,0 +1,126 @@
+get:
+  tags:
+    - rate_cards
+  summary: List rate cards
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+
+    Requires the product catalog to be enabled and rate_card read permission on the API key.
+  operationId: findAllRateCards
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+    - name: search_term
+      in: query
+      required: false
+      description: Searches names and codes.
+      schema:
+        type: string
+        description: Text to search.
+        example: example
+    - name: product_id[]
+      in: query
+      required: false
+      description: Filter by matching resource identifiers.
+      schema:
+        type: array
+        description: Resource identifiers.
+        items:
+          type: string
+          description: Resource identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    - name: product_filter_id[]
+      in: query
+      required: false
+      description: Filter by matching resource identifiers.
+      schema:
+        type: array
+        description: Resource identifiers.
+        items:
+          type: string
+          description: Resource identifier.
+          example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+          format: uuid
+    - name: code
+      in: query
+      required: false
+      description: Code.
+      schema:
+        type: string
+        description: Exact code.
+        example: example_code
+    - name: product_code
+      in: query
+      required: false
+      description: Product code.
+      schema:
+        type: string
+        description: Exact code.
+        example: example_code
+    - name: product_filter_code
+      in: query
+      required: false
+      description: Product filter code.
+      schema:
+        type: string
+        description: Exact code.
+        example: example_code
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCardsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - rate_cards
+  summary: Create rate card
+  description: Requires the product catalog to be enabled and rate_card write
+    permission on the API key.
+  operationId: createRateCard
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RateCardCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

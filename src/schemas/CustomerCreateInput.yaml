@@ -155,12 +155,25 @@ properties:
         maxLength: 255
         example: "91364"
         description: "The zipcode of the customer's billing address (255 characters max)."
+      payment_term:
+        oneOf:
+          - $ref: "./PaymentTermObject.yaml"
+          - type: "null"
+        description: |
+          The structured payment term of the customer. Send `null` to remove the customer's own term, so the term of the billing entity applies.
+
+          It supersedes the legacy `net_payment_term`, which is kept in sync as an alias. Whenever `payment_term` is sent, it wins and `net_payment_term` is ignored, even when `payment_term` is `null`, which clears both.
+
+          When only `net_payment_term` is sent, the term becomes a `net` term of that many days, and `null` clears both.
       net_payment_term:
+        deprecated: true
         type:
           - integer
           - "null"
+        minimum: 0
+        maximum: 365
         example: 30
-        description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+        description: "**Deprecated.** Use `payment_term` instead. The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized. When `payment_term` is sent in the same request, even as `null`, `payment_term` wins and this field is ignored; see `payment_term` for the full rules. It must be between 0 and 365 days. Send `null` to remove the customer's own term, so the term of the billing entity applies."
       external_salesforce_id:
         type:
           - string
@@ -180,7 +193,7 @@ properties:
           - `finalize`: Invoices are issued and finalized even if the total amount is zero.
           - `skip`: Invoices with a total amount of zero are not finalized.
       billing_configuration:
-        $ref: "./CustomerBillingConfiguration.yaml"
+        $ref: "./CustomerBillingConfigurationInput.yaml"
       shipping_address:
         allOf:
           - $ref: "./Address.yaml"

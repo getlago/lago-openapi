@@ -1,0 +1,141 @@
+parameters:
+  - name: code
+    in: path
+    required: true
+    description: Code.
+    schema:
+      type: string
+      description: Code.
+      example: example_code
+get:
+  tags:
+    - product_categories
+  summary: Retrieve product category
+  description: >-
+    Returns the record without nested relationships unless a supported expansion
+    is requested.
+
+    Requires the product catalog to be enabled and product_category read permission on the API key.
+  operationId: findProductCategory
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ProductCategory.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - product_categories
+  summary: Update product category
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+
+    Requires the product catalog to be enabled and product_category write permission on the API key.
+  operationId: updateProductCategory
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ProductCategoryUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ProductCategory.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - product_categories
+  summary: Update product category
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+
+    Requires the product catalog to be enabled and product_category write permission on the API key.
+  operationId: patchProductCategory
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ProductCategoryUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ProductCategory.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - product_categories
+  summary: Delete product category
+  description: >-
+    Deletes the category and its products, filters, rate cards and rates. A
+    category attached to a plan or subscription cannot be deleted.
+
+    Requires the product catalog to be enabled and product_category write permission on the API key.
+  operationId: destroyProductCategory
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/ProductCategory.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

@@ -1,0 +1,290 @@
+type: object
+description: Customer.
+required:
+  - lago_id
+  - billing_entity_code
+  - external_id
+  - account_type
+  - name
+  - firstname
+  - lastname
+  - customer_type
+  - sequential_id
+  - slug
+  - country
+  - address_line1
+  - address_line2
+  - state
+  - zipcode
+  - email
+  - city
+  - url
+  - phone
+  - logo_url
+  - legal_name
+  - legal_number
+  - currency
+  - tax_identification_number
+  - timezone
+  - applicable_timezone
+  - external_salesforce_id
+  - finalize_zero_amount_invoice
+  - skip_invoice_custom_sections
+  - invoice_grace_period
+  - periodic_invoice_issuing_date_anchor
+  - periodic_invoice_issuing_date_adjustment
+  - payment_provider
+  - payment_provider_code
+  - provider_customer_id
+  - provider_payment_methods
+  - document_locale
+  - created_at
+  - updated_at
+  - deleted_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  billing_entity_code:
+    type: string
+    description: Code of the customer billing entity.
+    example: main
+  external_id:
+    type: string
+    description: Unique customer identifier in your application.
+    example: customer_123
+  account_type:
+    type: string
+    description: Account type.
+    example: customer
+    enum:
+      - customer
+      - partner
+  name:
+    type:
+      - string
+      - "null"
+    description: Name.
+    example: example
+  firstname:
+    type:
+      - string
+      - "null"
+    description: Firstname.
+    example: example
+  lastname:
+    type:
+      - string
+      - "null"
+    description: Lastname.
+    example: example
+  customer_type:
+    type:
+      - string
+      - "null"
+    description: Type of customer.
+    example: company
+    enum:
+      - company
+      - individual
+      - null
+  sequential_id:
+    type:
+      - integer
+      - "null"
+    description: Sequential id.
+    example: 100
+  slug:
+    type:
+      - string
+      - "null"
+    description: Slug.
+    example: example
+  country:
+    type:
+      - string
+      - "null"
+    description: Country.
+    example: example
+  address_line1:
+    type:
+      - string
+      - "null"
+    description: Address line1.
+    example: example
+  address_line2:
+    type:
+      - string
+      - "null"
+    description: Address line2.
+    example: example
+  state:
+    type:
+      - string
+      - "null"
+    description: State.
+    example: example
+  zipcode:
+    type:
+      - string
+      - "null"
+    description: Zipcode.
+    example: example
+  email:
+    type:
+      - string
+      - "null"
+    description: Email.
+    example: billing@acme.example
+  city:
+    type:
+      - string
+      - "null"
+    description: City.
+    example: example
+  url:
+    type:
+      - string
+      - "null"
+    description: Url.
+    example: example
+  phone:
+    type:
+      - string
+      - "null"
+    description: Phone.
+    example: example
+  logo_url:
+    type:
+      - string
+      - "null"
+    description: Logo url.
+    example: example
+  legal_name:
+    type:
+      - string
+      - "null"
+    description: Legal name.
+    example: example
+  legal_number:
+    type:
+      - string
+      - "null"
+    description: Legal number.
+    example: example
+  currency:
+    type:
+      - string
+      - "null"
+    description: Currency as an ISO 4217 code.
+    example: USD
+  tax_identification_number:
+    type:
+      - string
+      - "null"
+    description: Tax identification number.
+    example: example
+  timezone:
+    type:
+      - string
+      - "null"
+    description: Timezone.
+    example: example
+  applicable_timezone:
+    type: string
+    description: Timezone used for customer billing.
+    example: Europe/Paris
+  external_salesforce_id:
+    type:
+      - string
+      - "null"
+    description: External salesforce id.
+    example: example
+  finalize_zero_amount_invoice:
+    type: string
+    description: Whether invoices with a zero amount are finalized.
+    example: inherit
+    enum:
+      - inherit
+      - skip
+      - finalize
+  skip_invoice_custom_sections:
+    type: boolean
+    description: Skip invoice custom sections.
+    example: false
+  invoice_grace_period:
+    type:
+      - integer
+      - "null"
+    description: Invoice grace period.
+    example: 1
+  periodic_invoice_issuing_date_anchor:
+    type:
+      - string
+      - "null"
+    description: Anchor used to determine the issuing date of periodic invoices.
+    example: current_period_end
+  periodic_invoice_issuing_date_adjustment:
+    type:
+      - string
+      - "null"
+    description: Adjustment applied to the periodic invoice issuing date.
+    example: keep_anchor
+  payment_provider:
+    type:
+      - string
+      - "null"
+    description: Payment provider.
+    example: example
+  payment_provider_code:
+    type:
+      - string
+      - "null"
+    description: Payment provider code.
+    example: example
+  provider_customer_id:
+    type:
+      - string
+      - "null"
+    description: Customer identifier in the payment provider.
+    example: cus_example
+  provider_payment_methods:
+    type:
+      - array
+      - "null"
+    description: Payment methods allowed by the provider.
+    items:
+      type: string
+      description: Payment method type.
+      example: card
+  document_locale:
+    type:
+      - string
+      - "null"
+    description: Document locale.
+    example: example
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time
+  x402_agent_address:
+    type:
+      - string
+      - "null"
+    description: Agent address. Present only when x402 payments are enabled.
+    example: "0x0000000000000000000000000000000000000000"

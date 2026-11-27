@@ -1,0 +1,74 @@
+type: object
+description: Recorded log entry.
+required:
+  - activity_id
+  - activity_type
+  - activity_source
+  - activity_object
+  - activity_object_changes
+  - user_email
+  - resource_id
+  - resource_type
+  - external_customer_id
+  - external_subscription_id
+  - logged_at
+  - created_at
+properties:
+  activity_id:
+    type: string
+    description: Activity identifier.
+    example: activity_123
+  activity_type:
+    type: string
+    description: Activity type.
+    example: customer.created
+  activity_source:
+    type: string
+    description: Activity source.
+    example: api
+  activity_object:
+    type: object
+    description: Recorded object. JSON-encoded object and array values are parsed
+      one level deep.
+    additionalProperties: true
+  activity_object_changes:
+    type: object
+    description: Recorded changes. JSON-encoded object and array values are parsed
+      one level deep.
+    additionalProperties: true
+  user_email:
+    type:
+      - string
+      - "null"
+    description: Email of the user, if known.
+    example: user@acme.example
+  resource_id:
+    type: string
+    description: Affected resource identifier.
+    example: resource_123
+  resource_type:
+    type: string
+    description: Affected resource type.
+    example: Customer
+  external_customer_id:
+    type:
+      - string
+      - "null"
+    description: Customer external identifier.
+    example: customer_123
+  external_subscription_id:
+    type:
+      - string
+      - "null"
+    description: Subscription external identifier.
+    example: subscription_123
+  logged_at:
+    type: string
+    description: Time the event was logged.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  created_at:
+    type: string
+    description: Time the log record was created.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

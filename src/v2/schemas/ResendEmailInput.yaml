@@ -1,0 +1,26 @@
+type: object
+properties:
+  to:
+    type: array
+    description: Recipients. When omitted or empty, the customer email is used.
+    items:
+      type: string
+      description: Email recipient.
+      example: billing@acme.example
+      format: email
+  cc:
+    type: array
+    description: Additional recipients.
+    items:
+      type: string
+      description: Email recipient.
+      example: billing@acme.example
+      format: email
+  bcc:
+    type: array
+    description: Additional recipients.
+    items:
+      type: string
+      description: Email recipient.
+      example: billing@acme.example
+      format: email

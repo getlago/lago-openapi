@@ -1,0 +1,13 @@
+type: object
+description: customers list.
+required:
+  - customers
+  - meta
+properties:
+  customers:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./CustomerEndpointObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

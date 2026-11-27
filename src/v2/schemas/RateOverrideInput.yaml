@@ -1,0 +1,56 @@
+type: object
+properties:
+  rate_model:
+    type: string
+    description: Pricing model. Fixed products support standard, graduated and
+      volume. Volume cannot be billed in advance; dynamic requires a sum metric.
+      Proration and aggregation can impose further restrictions.
+    example: standard
+    enum:
+      - standard
+      - graduated
+      - package
+      - percentage
+      - volume
+      - graduated_percentage
+      - custom
+      - dynamic
+  rate_properties:
+    $ref: ./RatePropertiesInput.yaml
+  min_amount_cents:
+    type: integer
+    description: Minimum charge in cents. Allowed only for arrears billing.
+    example: 0
+    minimum: 0
+    default: 0
+  billing_interval_count:
+    type:
+      - integer
+      - "null"
+    description: Number of billing interval units. Omit or set to null to inherit the rate interval count.
+    example: 1
+    minimum: 1
+  billing_interval_unit:
+    type:
+      - string
+      - "null"
+    description: Unit of the billing interval.
+    example: day
+    enum:
+      - day
+      - week
+      - month
+      - year
+      - null
+  pricing_unit_conversion_rate:
+    type:
+      - string
+      - "null"
+    description: Conversion rate. Required when the rate card uses a pricing unit.
+      Sent as a decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+required:
+  - rate_model
+description: A complete pricing override. Structural fields such as currency,
+  billing timing and proration cannot be overridden.

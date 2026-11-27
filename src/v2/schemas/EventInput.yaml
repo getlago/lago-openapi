@@ -1,0 +1,44 @@
+type: object
+description: Event to ingest.
+required:
+  - transaction_id
+  - code
+properties:
+  transaction_id:
+    type: string
+    description: Transaction identifier supplied by the sender.
+    example: transaction_123
+    minLength: 1
+    maxLength: 1000
+  code:
+    type: string
+    description: Event code.
+    example: compute
+    minLength: 1
+  external_contract_id:
+    type:
+      - string
+      - "null"
+    description: External contract identifier.
+    example: contract_123
+  timestamp:
+    type:
+      - number
+      - string
+    description: Unix timestamp in seconds. Defaults to the request time. Must be on
+      or after 1970-01-01 and before 2300-01-01; deployment-specific time limits
+      may also apply.
+    example: 1651222791.123456
+  precise_total_amount_cents:
+    type:
+      - number
+      - string
+      - "null"
+    description: Finite amount in cents, as a number or decimal string.
+    example: "125.5"
+  properties:
+    type:
+      - object
+      - "null"
+    additionalProperties: true
+    description: Event properties. Defaults to an empty object.

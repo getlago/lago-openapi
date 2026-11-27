@@ -1,0 +1,47 @@
+type: object
+required:
+  - value
+  - rank
+  - amount_cents
+  - precise_amount_cents
+  - events_count
+  - split_charge_units
+  - charges_usage
+properties:
+  value:
+    type: string
+    description: Attribution value the usage is attributed to, at the level of the `group_by` usage attribution type.
+    example: "engineering"
+  rank:
+    type: integer
+    description: Rank of the value in the level, starting at 1. Values are ranked by amount when `basis` is `amount`, and by units, summed across the selected charges, when `basis` is `units`. Values with the same amount or units are ranked by value, in ascending order.
+    example: 1
+  amount_cents:
+    type:
+      - integer
+      - "null"
+    description: Amount of the usage in cents, rounded to the nearest cent. It is `null` when `basis` is `units`.
+    example: 1200
+  precise_amount_cents:
+    type:
+      - string
+      - "null"
+    pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+    description: Amount of the usage in cents, sent as a decimal string. It is `null` when `basis` is `units`.
+    example: "1200.4567"
+  events_count:
+    type: integer
+    description: Number of events.
+    example: 42
+  split_charge_units:
+    type:
+      - string
+      - "null"
+    pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+    description: Units of the charge split by `split_charge_code`, across all its filters and the usage that matches none of them, sent as a decimal string. Unlike `charges_usage`, it covers the filters of every page. It is `null` when no charge is split.
+    example: "15000.5"
+  charges_usage:
+    type: array
+    items:
+      $ref: "./AttributedUsageChargeUsageObject.yaml"
+    description: Usage of each charge of the plan, in the order of the charges. A charge split by `split_charge_code` has one entry per filter of the page selected by `split_filters_offset`, then one for the usage that matches none of its filters. The filters of other pages have no entry, but their usage still counts in the amount.

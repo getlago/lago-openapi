@@ -1,0 +1,12 @@
+type: object
+description: Create product category.
+required:
+  - product_category
+properties:
+  product_category:
+    allOf:
+      - $ref: ./ProductCategoryBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code

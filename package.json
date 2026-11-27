@@ -4,11 +4,14 @@
   "description": "Open API specification for Lago project.",
   "main": "index.js",
   "scripts": {
-    "build": "redocly bundle src/openapi.yaml --output openapi.yaml --ext yaml",
-    "test": "npm run build && redocly lint openapi.yaml && spectral lint openapi.yaml",
+    "build": "redocly bundle",
+    "build:v1": "redocly bundle v1",
+    "build:v2": "redocly bundle v2",
+    "lint": "redocly lint && spectral lint openapi.yaml openapi-v2.yaml",
+    "test": "npm run build && npm run lint",
     "clean": "rm -r _build",
-    "preview:swagger": "npm run build && docker run -p 8080:8080 -e SWAGGER_JSON=/swagger/openapi.yaml -v './openapi.yaml:/swagger/openapi.yaml' swaggerapi/swagger-ui",
-    "preview:redocly": "redocly preview --project-dir=./src --port 8080"
+    "preview:swagger": "npm run build && sh scripts/preview-swagger.sh",
+    "preview:redocly": "redocly preview --project-dir=. --port 8080"
   },
   "repository": {
     "type": "git",

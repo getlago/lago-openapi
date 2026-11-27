@@ -1,0 +1,18 @@
+allOf:
+  - $ref: "./CustomerBillingConfiguration.yaml"
+  - type: object
+    description: Configuration specific to the payment provider, utilized for billing the customer. `provider_customer_id` and `provider_payment_methods` are only returned when the customer has a payment provider. The `sync` and `sync_with_provider` fields of the create payload are never returned.
+    required:
+      - invoice_grace_period
+      - subscription_invoice_issuing_date_anchor
+      - subscription_invoice_issuing_date_adjustment
+      - payment_provider
+      - payment_provider_code
+      - document_locale
+    properties:
+      provider_customer_id:
+        type:
+          - string
+          - "null"
+        example: "cus_12345"
+        description: The customer ID within the payment provider's system. It is `null` until the customer record exists in that system.

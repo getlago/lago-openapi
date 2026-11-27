@@ -1,0 +1,13 @@
+type: object
+description: invoices list.
+required:
+  - invoices
+  - meta
+properties:
+  invoices:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./InvoiceObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

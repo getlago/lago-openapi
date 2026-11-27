@@ -1,0 +1,115 @@
+get:
+  tags:
+    - payment_requests
+  summary: List payment requests
+  description: >-
+    Returns a cursor-paginated list ordered by creation time, newest first. Use
+    after or before to navigate. The page and per_page parameters are rejected.
+
+
+    Requires the product catalog to be enabled and payment_request read permission on the API key.
+  operationId: findAllPaymentRequests
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - $ref: ../parameters/created_at_from.yaml
+    - $ref: ../parameters/created_at_to.yaml
+    - name: external_customer_id
+      in: query
+      required: false
+      description: External customer id.
+      schema:
+        type: string
+        description: External customer identifier.
+        example: customer_123
+    - name: payment_status
+      in: query
+      required: false
+      description: Payment status.
+      schema:
+        type: string
+        description: Payment status.
+        example: pending
+        enum:
+          - pending
+          - succeeded
+          - failed
+    - name: currency
+      in: query
+      required: false
+      description: Currency as an ISO 4217 code.
+      schema:
+        type: string
+        description: Currency as an ISO 4217 code.
+        example: USD
+    - name: billing_entity_codes[]
+      in: query
+      required: false
+      description: Also accepts a scalar billing_entity_codes. Unknown codes return 404.
+      schema:
+        type: array
+        description: Billing entity codes.
+        items:
+          type: string
+          description: Billing entity code.
+          example: main
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PaymentRequestsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - payment_requests
+  summary: Create payment request
+  description: >-
+    Requires a premium license. Selected customer invoices must be overdue,
+    ready for payment processing, and share the same currency and billing
+    entity. Payment collection and email delivery are asynchronous.
+
+    Requires the product catalog to be enabled and payment_request write permission on the API key.
+  operationId: createPaymentRequest
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/PaymentRequestCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/PaymentRequest.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

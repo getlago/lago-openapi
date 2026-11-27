@@ -1,0 +1,14 @@
+type: object
+properties:
+  generate_credit_note:
+    type: boolean
+    description: Whether to generate credit notes. Requires a premium license.
+    example: false
+  refund_amount:
+    type: integer
+    description: Requested refund amount, in cents.
+    example: 0
+  credit_amount:
+    type: integer
+    description: Requested credit amount, in cents.
+    example: 0

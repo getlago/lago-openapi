@@ -1,0 +1,164 @@
+parameters:
+  - name: lago_id
+    in: path
+    required: true
+    description: Unique identifier created by Lago.
+    schema:
+      type: string
+      description: Unique identifier created by Lago.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+get:
+  tags:
+    - invoices
+  summary: Retrieve invoice
+  description: >-
+    Returns a product-catalog invoice. Legacy-only invoices return 404.
+    Expanding more than 1000 fees returns 400 expansion_too_large.
+
+    Requires the product catalog to be enabled and invoice read permission on the API key.
+  operationId: findInvoice
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - fees
+            - applied_taxes
+            - customer
+            - contracts
+            - applied_invoice_custom_sections
+            - error_details
+          example: fees
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Invoice.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - invoices
+  summary: Update invoice
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Only payment_status is editable. Voided invoices reject updates.
+
+    Requires the product catalog to be enabled and invoice write permission on the API key.
+  operationId: updateInvoice
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/InvoiceUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Invoice.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - invoices
+  summary: Update invoice
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Only payment_status is editable. Voided invoices reject updates.
+
+    Requires the product catalog to be enabled and invoice write permission on the API key.
+  operationId: patchInvoice
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/InvoiceUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Invoice.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - invoices
+  summary: Delete invoice
+  description: >-
+    Only draft invoices not synchronized to an external integration can be
+    deleted. The response has status deleted; the invoice object does not expose
+    deleted_at.
+
+    Requires the product catalog to be enabled and invoice write permission on the API key.
+  operationId: destroyInvoice
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Invoice.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

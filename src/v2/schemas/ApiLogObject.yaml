@@ -1,0 +1,69 @@
+type: object
+description: Recorded log entry.
+required:
+  - request_id
+  - client
+  - http_method
+  - http_status
+  - request_origin
+  - request_path
+  - request_body
+  - request_response
+  - api_version
+  - logged_at
+  - created_at
+properties:
+  request_id:
+    type: string
+    description: Request identifier.
+    example: request_123
+  client:
+    type: string
+    description: API client.
+    example: curl
+  http_method:
+    type: string
+    description: HTTP method.
+    example: get
+    enum:
+      - get
+      - post
+      - put
+      - delete
+      - patch
+  http_status:
+    type: integer
+    description: HTTP response status.
+    example: 200
+  request_origin:
+    type: string
+    description: Request origin.
+    example: https://app.acme.example
+  request_path:
+    type: string
+    description: Request path.
+    example: /api/v2/customers
+  request_body:
+    type: object
+    description: Request body. JSON-encoded object and array values are parsed one
+      level deep.
+    additionalProperties: true
+  request_response:
+    type: object
+    description: Response body. JSON-encoded object and array values are parsed one
+      level deep.
+    additionalProperties: true
+  api_version:
+    type: string
+    description: API version.
+    example: v2
+  logged_at:
+    type: string
+    description: Time the event was logged.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  created_at:
+    type: string
+    description: Time the log record was created.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

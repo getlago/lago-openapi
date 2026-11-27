@@ -1,0 +1,25 @@
+type: object
+minProperties: 1
+properties:
+  external_customer_id:
+    type: string
+    description: External customer identifier.
+    example: customer_123
+  lago_invoice_ids:
+    type: array
+    description: Customer invoices to include.
+    items:
+      type: string
+      description: Invoice identifier.
+      example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+      format: uuid
+    minItems: 1
+  email:
+    type:
+      - string
+      - "null"
+    description: Recipient email. Defaults to the customer email.
+    example: billing@acme.example
+    format: email
+  payment_method:
+    $ref: ./PaymentMethodSelectionInput.yaml

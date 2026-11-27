@@ -1,0 +1,129 @@
+get:
+  tags:
+    - events
+  summary: List events
+  description: >-
+    Lists events using event-time filters. ClickHouse returns enriched events
+    ordered by timestamp, external_contract_id, code and transaction_id, all
+    descending. PostgreSQL orders by creation time and identifier, both
+    descending. Cursors are opaque and must not be constructed from response
+    fields. external_subscription_id, created_at_from and created_at_to are
+    rejected. No expansions are supported.
+
+    Requires the product catalog to be enabled and event read permission on the API key.
+  operationId: findAllEvents
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - name: code
+      in: query
+      required: false
+      description: Code.
+      schema:
+        type: string
+        description: Code.
+        example: compute
+    - name: transaction_id
+      in: query
+      required: false
+      description: Transaction id.
+      schema:
+        type: string
+        description: Transaction id.
+        example: transaction_id_123
+    - name: external_contract_id
+      in: query
+      required: false
+      description: External contract id.
+      schema:
+        type: string
+        description: External contract id.
+        example: external_contract_id_123
+    - name: timestamp_from_started_at
+      in: query
+      required: false
+      description: Timestamp from started at.
+      schema:
+        type: boolean
+        description: Use the contract start time as the lower event-time bound. Requires
+          external_contract_id and cannot be combined with timestamp_from.
+        example: false
+    - name: timestamp_from
+      in: query
+      required: false
+      description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is
+        interpreted as midnight UTC.
+      schema:
+        type: string
+        description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is
+          interpreted as midnight UTC.
+        example: 2022-04-29T08:59:51.123456Z
+    - name: timestamp_to
+      in: query
+      required: false
+      description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is
+        interpreted as midnight UTC.
+      schema:
+        type: string
+        description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is
+          interpreted as midnight UTC.
+        example: 2022-04-29T08:59:51.123456Z
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/EventsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+post:
+  tags:
+    - events
+  summary: Ingest an event
+  description: >-
+    Accepts product-catalog events. external_subscription_id is not supported
+    and returns 422. For ClickHouse organizations, the product event pipeline
+    must be configured, and success acknowledges ingestion rather than completed
+    enrichment. Newly accepted events may not appear in the list immediately.
+
+    Requires the product catalog to be enabled and event write permission on the API key.
+  operationId: createEvent
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/EventCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Event.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

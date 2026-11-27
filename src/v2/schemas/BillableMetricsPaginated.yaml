@@ -1,0 +1,13 @@
+type: object
+description: billable metrics list.
+required:
+  - billable_metrics
+  - meta
+properties:
+  billable_metrics:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./BillableMetricEndpointObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

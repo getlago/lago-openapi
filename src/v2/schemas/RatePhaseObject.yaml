@@ -1,0 +1,48 @@
+type: object
+description: Rate Phase.
+required:
+  - lago_id
+  - code
+  - position
+  - name
+  - billing_interval_cycle_count
+  - rate_override
+  - deleted_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  code:
+    type: string
+    description: Code.
+    example: example
+  position:
+    type: integer
+    description: Position.
+    example: 1
+  name:
+    type:
+      - string
+      - "null"
+    description: Name.
+    example: example
+  billing_interval_cycle_count:
+    type:
+      - integer
+      - "null"
+    description: Billing interval cycle count.
+    example: 1
+  rate_override:
+    anyOf:
+      - $ref: ./RateOverrideObject.yaml
+      - type: "null"
+    description: Pricing override, or null to use the effective rate card rate.
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time

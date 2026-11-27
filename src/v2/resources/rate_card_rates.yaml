@@ -1,0 +1,75 @@
+parameters:
+  - name: rate_card_code
+    in: path
+    required: true
+    description: Rate card code.
+    schema:
+      type: string
+      description: Rate card code.
+      example: example_code
+get:
+  tags:
+    - rate_card_rates
+  summary: List rate card rates
+  description: >-
+    Returns the complete list without cursor metadata.
+
+    Rates are ordered by effective_from, newest first. Offset pagination parameters are rejected.
+
+    Requires the product catalog to be enabled and rate_card read permission on the API key.
+  operationId: findAllRateCardRates
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCardRatesCollection.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+post:
+  tags:
+    - rate_card_rates
+  summary: Create rate
+  description: >-
+    Adds a rate after the currently active rate, with a unique effective
+    timestamp. Amount and range fields must match rate_model.
+
+    Requires the product catalog to be enabled and rate_card write permission on the API key.
+  operationId: createRateCardRate
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RateCardRateCreateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCardRate.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

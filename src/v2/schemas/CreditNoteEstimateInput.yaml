@@ -1,0 +1,22 @@
+type: object
+description: Estimate a credit note.
+required:
+  - credit_note
+properties:
+  credit_note:
+    type: object
+    description: Invoice and fee credits.
+    required:
+      - invoice_id
+      - items
+    properties:
+      invoice_id:
+        type: string
+        description: Invoice identifier.
+        example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+        format: uuid
+      items:
+        type: array
+        description: Fees to credit.
+        items:
+          $ref: ./CreditNoteItemInput.yaml

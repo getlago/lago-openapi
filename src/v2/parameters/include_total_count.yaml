@@ -1,0 +1,8 @@
+name: include_total_count
+in: query
+description: Requests the total number of matching records. Supported only on the first page, without after or before. The count can be estimated; total_count_estimated is then present and true.
+required: false
+schema:
+  type: boolean
+  default: false
+  example: true

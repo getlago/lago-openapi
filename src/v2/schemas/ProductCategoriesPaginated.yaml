@@ -1,0 +1,13 @@
+type: object
+description: product categories list.
+required:
+  - product_categories
+  - meta
+properties:
+  product_categories:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./ProductCategoryObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

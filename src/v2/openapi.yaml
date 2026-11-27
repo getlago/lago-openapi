@@ -1,0 +1,246 @@
+openapi: 3.1.0
+info:
+  title: Lago API v2 documentation
+  description: Lago API v2. Documents native v2 endpoints for the product catalog, billing,
+    customers, organizations, billing entities, billable metrics, events, logs
+    and webhook endpoints. Paginated lists use cursor pagination. Some lists,
+    such as rates and phases, return the complete list without pagination.
+    Native v2 endpoints use opt-in relationship expansions and structured error
+    responses. Only the documented actions and expansions are supported. Some
+    other /api/v2 paths still fall back to v1 controllers and are not described
+    here.
+  version: 2.0.0-beta
+  license:
+    name: AGPLv3
+    url: https://github.com/getlago/lago-openapi/blob/main/LICENSE
+  contact:
+    email: tech@getlago.com
+externalDocs:
+  description: Lago documentation
+  url: https://getlago.com/docs
+servers:
+  - url: https://api.getlago.com/api/v2
+    description: US Lago cluster
+  - url: https://api.eu.getlago.com/api/v2
+    description: EU Lago cluster
+security:
+  - bearerAuth: []
+tags:
+  - name: taxes
+    description: Tax rates
+  - name: product_categories
+    description: product categories operations
+  - name: products
+    description: products operations
+  - name: product_filters
+    description: product filters operations
+  - name: rate_cards
+    description: rate cards operations
+  - name: rate_card_rates
+    description: rate card rates operations
+  - name: catalog_plans
+    description: catalog plans operations
+  - name: plan_applied_rate_cards
+    description: plan applied rate cards operations
+  - name: plan_rate_phases
+    description: plan rate phases operations
+  - name: contract_applied_rate_cards
+    description: contract applied rate cards operations
+  - name: contract_rate_phases
+    description: contract rate phases operations
+  - name: contracts
+    description: contracts operations
+  - name: invoices
+    description: invoices operations
+  - name: fees
+    description: fees operations
+  - name: payments
+    description: payments operations
+  - name: payment_requests
+    description: payment requests operations
+  - name: payment_receipts
+    description: payment receipts operations
+  - name: credit_notes
+    description: credit notes operations
+  - name: customers
+    description: customers operations
+  - name: organizations
+    description: Organization operations
+  - name: billing_entities
+    description: billing entities operations
+  - name: billable_metrics
+    description: billable metrics operations
+  - name: events
+    description: Event operations
+  - name: activity_logs
+    description: activity logs operations
+  - name: api_logs
+    description: api logs operations
+  - name: security_logs
+    description: security logs operations
+  - name: webhook_endpoints
+    description: webhook endpoints operations
+paths:
+  /taxes:
+    $ref: './resources/taxes.yaml'
+  "/taxes/{code}":
+    $ref: './resources/tax.yaml'
+  /product_categories:
+    $ref: ./resources/product_categories.yaml
+  "/product_categories/{code}":
+    $ref: ./resources/product_category.yaml
+  /products:
+    $ref: ./resources/products.yaml
+  "/products/{code}":
+    $ref: ./resources/product.yaml
+  "/products/{product_code}/filters":
+    $ref: ./resources/product_filters.yaml
+  "/products/{product_code}/filters/{code}":
+    $ref: ./resources/product_filter.yaml
+  /rate_cards:
+    $ref: ./resources/rate_cards.yaml
+  "/rate_cards/{code}":
+    $ref: ./resources/rate_card.yaml
+  "/rate_cards/{rate_card_code}/rates":
+    $ref: ./resources/rate_card_rates.yaml
+  "/rate_cards/{rate_card_code}/rates/{code}":
+    $ref: ./resources/rate_card_rate.yaml
+  /plans:
+    $ref: ./resources/catalog_plans.yaml
+  "/plans/{code}":
+    $ref: ./resources/catalog_plan.yaml
+  "/plans/{plan_code}/applied_rate_cards":
+    $ref: ./resources/plan_applied_rate_cards.yaml
+  "/plans/{plan_code}/applied_rate_cards/{code}":
+    $ref: ./resources/plan_applied_rate_card.yaml
+  "/plans/{plan_code}/applied_rate_cards/{applied_rate_card_code}/rate_phases":
+    $ref: ./resources/plan_rate_phases.yaml
+  "/plans/{plan_code}/applied_rate_cards/{applied_rate_card_code}/rate_phases/{code}":
+    $ref: ./resources/plan_rate_phase.yaml
+  "/contracts/{contract_external_id}/applied_rate_cards":
+    $ref: ./resources/contract_applied_rate_cards.yaml
+  "/contracts/{contract_external_id}/applied_rate_cards/{code}":
+    $ref: ./resources/contract_applied_rate_card.yaml
+  "/contracts/{contract_external_id}/applied_rate_cards/{applied_rate_card_code}/rate_phases":
+    $ref: ./resources/contract_rate_phases.yaml
+  "/contracts/{contract_external_id}/applied_rate_cards/{applied_rate_card_code}/rate_phases/{code}":
+    $ref: ./resources/contract_rate_phase.yaml
+  /contracts:
+    $ref: ./resources/contracts.yaml
+  "/contracts/{external_id}":
+    $ref: ./resources/contract.yaml
+  "/contracts/{external_id}/current_usage":
+    $ref: ./resources/contract_current_usage.yaml
+  /invoices:
+    $ref: ./resources/invoices.yaml
+  "/invoices/{lago_id}":
+    $ref: ./resources/invoice.yaml
+  /fees:
+    $ref: ./resources/fees.yaml
+  "/fees/{lago_id}":
+    $ref: ./resources/fee.yaml
+  "/invoices/{lago_id}/void":
+    $ref: ./resources/invoice_void.yaml
+  "/invoices/{lago_id}/lose_dispute":
+    $ref: ./resources/invoice_lose_dispute.yaml
+  "/invoices/{lago_id}/download_pdf":
+    $ref: ./resources/invoice_download_pdf.yaml
+  "/invoices/{lago_id}/resend_email":
+    $ref: ./resources/invoice_resend_email.yaml
+  "/invoices/{lago_id}/retry_taxes":
+    $ref: ./resources/invoice_retry_taxes.yaml
+  "/invoices/{lago_id}/retry_payment":
+    $ref: ./resources/invoice_retry_payment.yaml
+  "/invoices/{lago_id}/finalize":
+    $ref: ./resources/invoice_finalize.yaml
+  "/invoices/{lago_id}/refresh":
+    $ref: ./resources/invoice_refresh.yaml
+  "/invoices/{lago_id}/payment_url":
+    $ref: ./resources/invoice_payment_url.yaml
+  /payments:
+    $ref: ./resources/payments.yaml
+  "/payments/{lago_id}":
+    $ref: ./resources/payment.yaml
+  /payment_requests:
+    $ref: ./resources/payment_requests.yaml
+  "/payment_requests/{lago_id}":
+    $ref: ./resources/payment_request.yaml
+  /payment_receipts:
+    $ref: ./resources/payment_receipts.yaml
+  "/payment_receipts/{lago_id}":
+    $ref: ./resources/payment_receipt.yaml
+  "/payment_receipts/{lago_id}/resend_email":
+    $ref: ./resources/payment_receipt_resend_email.yaml
+  /credit_notes:
+    $ref: ./resources/credit_notes.yaml
+  "/credit_notes/{lago_id}":
+    $ref: ./resources/credit_note.yaml
+  /credit_notes/estimate:
+    $ref: ./resources/credit_note_estimate.yaml
+  "/credit_notes/{lago_id}/download_pdf":
+    $ref: ./resources/credit_note_download_pdf.yaml
+  "/credit_notes/{lago_id}/download_xml":
+    $ref: ./resources/credit_note_download_xml.yaml
+  "/credit_notes/{lago_id}/resend_email":
+    $ref: ./resources/credit_note_resend_email.yaml
+  "/credit_notes/{lago_id}/void":
+    $ref: ./resources/credit_note_void.yaml
+  "/credit_notes/{credit_note_id}/metadata":
+    $ref: ./resources/credit_note_metadata.yaml
+  "/credit_notes/{credit_note_id}/metadata/{key}":
+    $ref: ./resources/credit_note_metadata_key.yaml
+  /customers:
+    $ref: ./resources/customers.yaml
+  "/customers/{external_id}":
+    $ref: ./resources/customer.yaml
+  /organizations:
+    $ref: ./resources/organizations.yaml
+  /billing_entities:
+    $ref: ./resources/billing_entities.yaml
+  "/billing_entities/{code}":
+    $ref: ./resources/billing_entity.yaml
+  /billable_metrics:
+    $ref: ./resources/billable_metrics.yaml
+  "/billable_metrics/{code}":
+    $ref: ./resources/billable_metric.yaml
+  /events:
+    $ref: ./resources/events.yaml
+  /events/batch:
+    $ref: ./resources/events_batch.yaml
+  "/customers/{customer_external_id}/checkout_url":
+    $ref: ./resources/customer_checkout_url.yaml
+  "/customers/{customer_external_id}/invoices":
+    $ref: ./resources/customer_invoices.yaml
+  "/customers/{customer_external_id}/credit_notes":
+    $ref: ./resources/customer_credit_notes.yaml
+  "/customers/{customer_external_id}/payments":
+    $ref: ./resources/customer_payments.yaml
+  "/customers/{customer_external_id}/payment_requests":
+    $ref: ./resources/customer_payment_requests.yaml
+  "/customers/{customer_external_id}/payment_methods":
+    $ref: ./resources/customer_payment_methods.yaml
+  "/customers/{customer_external_id}/payment_methods/{lago_id}":
+    $ref: ./resources/customer_payment_method.yaml
+  "/customers/{customer_external_id}/payment_methods/{lago_id}/set_as_default":
+    $ref: ./resources/customer_payment_method_set_as_default.yaml
+  /activity_logs:
+    $ref: ./resources/activity_logs.yaml
+  "/activity_logs/{activity_id}":
+    $ref: ./resources/activity_log.yaml
+  /api_logs:
+    $ref: ./resources/api_logs.yaml
+  "/api_logs/{request_id}":
+    $ref: ./resources/api_log.yaml
+  /security_logs:
+    $ref: ./resources/security_logs.yaml
+  "/security_logs/{log_id}":
+    $ref: ./resources/security_log.yaml
+  /webhook_endpoints:
+    $ref: ./resources/webhook_endpoints.yaml
+  "/webhook_endpoints/{lago_id}":
+    $ref: ./resources/webhook_endpoint.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

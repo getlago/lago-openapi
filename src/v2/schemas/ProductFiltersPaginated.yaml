@@ -1,0 +1,13 @@
+type: object
+description: filters list.
+required:
+  - filters
+  - meta
+properties:
+  filters:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./ProductFilterObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

@@ -1,0 +1,11 @@
+type: object
+minProperties: 1
+properties:
+  payment_status:
+    type: string
+    description: Payment status.
+    example: pending
+    enum:
+      - pending
+      - succeeded
+      - failed

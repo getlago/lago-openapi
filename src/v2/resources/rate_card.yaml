@@ -1,0 +1,161 @@
+parameters:
+  - name: code
+    in: path
+    required: true
+    description: Code.
+    schema:
+      type: string
+      description: Code.
+      example: example_code
+get:
+  tags:
+    - rate_cards
+  summary: Retrieve rate card
+  description: >-
+    Returns the record without nested relationships unless a supported expansion
+    is requested.
+
+    Requires the product catalog to be enabled and rate_card read permission on the API key.
+  operationId: findRateCard
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - active_rate
+            - taxes
+            - rates
+            - product
+            - product_filter
+          example: active_rate
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - rate_cards
+  summary: Update rate card
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Product and product filter are fixed at creation. Once any rate exists, currency, applied_pricing_unit_code, billing_timing, proration, regroup_paid_fees and display_on_invoice cannot change. Code and currency also cannot change while the card is attached to a plan or contract. Tax assignments remain editable.
+
+    Requires the product catalog to be enabled and rate_card write permission on the API key.
+  operationId: updateRateCard
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RateCardUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - rate_cards
+  summary: Update rate card
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Product and product filter are fixed at creation. Once any rate exists, currency, applied_pricing_unit_code, billing_timing, proration, regroup_paid_fees and display_on_invoice cannot change. Code and currency also cannot change while the card is attached to a plan or contract. Tax assignments remain editable.
+
+    Requires the product catalog to be enabled and rate_card write permission on the API key.
+  operationId: patchRateCard
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/RateCardUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - rate_cards
+  summary: Delete rate card
+  description: >-
+    Deletes an unused rate card and its rates. Cards attached to plans or
+    subscriptions cannot be deleted.
+
+    Requires the product catalog to be enabled and rate_card write permission on the API key.
+  operationId: destroyRateCard
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/RateCard.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

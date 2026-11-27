@@ -8,7 +8,7 @@ properties:
       webhook_url:
         type: string
         example: "https://webhook.brex.com"
-        description: "Sets the URL of the first webhook endpoint of your organization. This URL allows your organization to receive important messages, notifications, or data from the Lago system. When your organization has no webhook endpoint yet, this creates one."
+        description: "Sets the URL of the first webhook endpoint of your organization. This URL allows your organization to receive important messages, notifications, or data from the Lago system. When your organization has no webhook endpoint yet, this creates one, with `jwt` as its signature algorithm. The value must be an HTTP or HTTPS URL with a host, and it must not already be used by another webhook endpoint of your organization."
       country:
         $ref: "./CountryOrNull.yaml"
         description: The country of your organization.
@@ -84,9 +84,12 @@ properties:
         example: "ORG-1234"
         description: Sets the prefix for invoices and credit notes. Default is the first three letters of your organization name plus the last four characters of your organization ID. Customizable within 1-10 characters, and automatically capitalized by Lago.
       net_payment_term:
+        deprecated: true
         type: integer
+        minimum: 0
+        maximum: 365
         example: 30
-        description: The net payment term, expressed in days, specifies the duration within which a customer is expected to remit payment after the invoice is finalized.
+        description: "**Deprecated.** Use `payment_term` on the billing entity endpoints instead. The net payment term, expressed in days, applied to the organization's default billing entity. It sets the billing entity's `payment_term` to a `net` term of that many days."
       tax_identification_number:
         type:
           - string
@@ -104,12 +107,41 @@ properties:
         items:
           type: string
           enum: [invoice.finalized, credit_note.created, payment_receipt.created]
+      customer_portal_locked_fields:
+        type: array
+        description: Sets the customer fields that your customers cannot edit from the customer portal. Every other field of the list below stays editable. Sending this array replaces the current one, so send the full list. Duplicates are removed. By default `country`, `zipcode` and `tax_identification_number` are locked, because they drive the EU tax rate applied to the customer.
+        example: ["country", "zipcode", "tax_identification_number"]
+        items:
+          type: string
+          enum:
+            - customer_type
+            - document_locale
+            - email
+            - firstname
+            - lastname
+            - legal_name
+            - name
+            - tax_identification_number
+            - address_line1
+            - address_line2
+            - city
+            - country
+            - state
+            - zipcode
+            - shipping_address
       billing_configuration:
         $ref: "./OrganizationBillingConfiguration.yaml"
       finalize_zero_amount_invoice:
         type: boolean
         example: false
         description: Determines whether invoices with a zero total amount should be finalized. If set to true, zero amount invoices will be finalized. If set to false, zero amount invoices will not be finalized.
+      document_url_expiration_days:
+        type: integer
+        minimum: 30
+        maximum: 120
+        default: 30
+        example: 30
+        description: Sets the number of days a document download URL stays valid, counted from the date the document is anchored to. It applies to invoices, credit notes and payment receipts. It must be between 30 and 120 days.
       slug:
         type: string
         example: "name1"

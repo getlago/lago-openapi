@@ -1,0 +1,10 @@
+type: object
+description: rate phases list.
+required:
+  - rate_phases
+properties:
+  rate_phases:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./RatePhaseObject.yaml

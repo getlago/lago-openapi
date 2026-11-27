@@ -11,7 +11,7 @@ put:
   tags:
     - webhook_endpoints
   summary: Update a webhook endpoint
-  description: This endpoint is used to update an existing webhook endpoint.
+  description: This endpoint is used to update an existing webhook endpoint. The response includes the endpoint's `signing_keys` when the API key has write access to webhook endpoints.
   operationId: updateWebhookEndpoint
   requestBody:
     description: Webhook endpoint update payload
@@ -31,6 +31,8 @@ put:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
     '422':
@@ -39,7 +41,7 @@ get:
   tags:
     - webhook_endpoints
   summary: Retrieve a webhook endpoint
-  description: This endpoint is used to retrieve an existing webhook endpoint.
+  description: This endpoint is used to retrieve an existing webhook endpoint. The response includes the endpoint's `signing_keys` when the API key has write access to webhook endpoints.
   operationId: findWebhookEndpoint
   responses:
     '200':
@@ -50,13 +52,15 @@ get:
             $ref: '../schemas/WebhookEndpoint.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
 delete:
   tags:
     - webhook_endpoints
   summary: Delete a webhook endpoint
-  description: This endpoint is used to delete an existing webhook endpoint.
+  description: This endpoint is used to delete an existing webhook endpoint. The deleted endpoint does not include its `signing_keys`.
   operationId: destroyWebhookEndpoint
   responses:
     '200':
@@ -67,5 +71,7 @@ delete:
             $ref: '../schemas/WebhookEndpoint.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'

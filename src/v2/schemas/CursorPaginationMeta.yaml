@@ -1,0 +1,26 @@
+type: object
+required:
+  - next_cursor
+  - prev_cursor
+dependentRequired:
+  total_count_estimated:
+    - total_count
+properties:
+  next_cursor:
+    type: [string, 'null']
+    description: Opaque cursor to pass as after for the next page. It is null when there is no next page.
+    example: null
+  prev_cursor:
+    type: [string, 'null']
+    description: Opaque cursor to pass as before for the previous page. It is null when there is no previous page.
+    example: null
+  total_count:
+    type: integer
+    minimum: 0
+    description: Number of matching records, returned only when include_total_count is true on the first page. The count can be estimated.
+    example: 42
+  total_count_estimated:
+    type: boolean
+    enum: [true]
+    description: Present and true only when total_count is an estimate. Omitted for an exact count.
+    example: true

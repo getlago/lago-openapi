@@ -1,0 +1,22 @@
+type: object
+description: Webhook endpoint signing key.
+required:
+  - lago_id
+  - secret_key
+  - created_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  secret_key:
+    type: string
+    pattern: ^whsec_
+    description: Secret key to set up a Standard Webhooks library with, prefixed with `whsec_`.
+    example: whsec_ZmFrZS1zZWNyZXQtZm9yLWRvY3VtZW50YXRpb24tb25seQ==
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time

@@ -1,0 +1,158 @@
+parameters:
+  - name: code
+    in: path
+    required: true
+    description: Code.
+    schema:
+      type: string
+      description: Code.
+      example: example_code
+get:
+  tags:
+    - products
+  summary: Retrieve product
+  description: >-
+    Returns the record without nested relationships unless a supported expansion
+    is requested.
+
+    Requires the product catalog to be enabled and product read permission on the API key.
+  operationId: findProduct
+  parameters:
+    - name: expands[]
+      in: query
+      required: false
+      description: Relationships to include in this response. Only one expansion level
+        is supported.
+      schema:
+        type: array
+        description: Relationships to include.
+        items:
+          type: string
+          enum:
+            - product_category
+            - billable_metric
+          example: product_category
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Product.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+put:
+  tags:
+    - products
+  summary: Update product
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Product type and billable metric cannot be changed through this endpoint. A blank product_category_code detaches the category.
+
+    Requires the product catalog to be enabled and product write permission on the API key.
+  operationId: updateProduct
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ProductUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Product.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+patch:
+  tags:
+    - products
+  summary: Update product
+  description: >-
+    PUT and PATCH both accept partial updates. Omitted fields are unchanged.
+
+    Product type and billable metric cannot be changed through this endpoint. A blank product_category_code detaches the category.
+
+    Requires the product catalog to be enabled and product write permission on the API key.
+  operationId: patchProduct
+  requestBody:
+    required: true
+    description: Request payload
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/ProductUpdateInput.yaml
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Product.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml
+delete:
+  tags:
+    - products
+  summary: Delete product
+  description: >-
+    Deletes the product, its filters, rate cards and rates. Products attached to
+    a plan or subscription cannot be deleted.
+
+    Requires the product catalog to be enabled and product write permission on the API key.
+  operationId: destroyProduct
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Product.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

@@ -1,0 +1,13 @@
+type: object
+description: payments list.
+required:
+  - payments
+  - meta
+properties:
+  payments:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./PaymentObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

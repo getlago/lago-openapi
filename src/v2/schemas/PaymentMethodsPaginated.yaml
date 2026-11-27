@@ -1,0 +1,13 @@
+type: object
+description: payment methods list.
+required:
+  - payment_methods
+  - meta
+properties:
+  payment_methods:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./PaymentMethodObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

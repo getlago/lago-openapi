@@ -1,0 +1,10 @@
+type: object
+description: rates list.
+required:
+  - rates
+properties:
+  rates:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./RateCardRateObject.yaml

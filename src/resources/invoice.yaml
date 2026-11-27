@@ -24,6 +24,8 @@ put:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
     '405':
@@ -45,6 +47,8 @@ get:
             $ref: '../schemas/Invoice.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
 delete:
@@ -63,6 +67,8 @@ delete:
             $ref: '../schemas/Invoice.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
     '405':

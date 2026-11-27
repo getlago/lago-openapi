@@ -1,0 +1,12 @@
+type: object
+required:
+  - taxes
+  - meta
+properties:
+  taxes:
+    type: array
+    description: Tax rates on the requested page.
+    items:
+      $ref: './TaxObject.yaml'
+  meta:
+    $ref: './CursorPaginationMeta.yaml'

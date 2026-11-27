@@ -1,0 +1,13 @@
+type: object
+description: Create filter.
+required:
+  - filter
+properties:
+  filter:
+    allOf:
+      - $ref: ./ProductFilterBaseInput.yaml
+      - type: object
+        required:
+          - name
+          - code
+          - values

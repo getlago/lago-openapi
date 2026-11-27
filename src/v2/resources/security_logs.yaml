@@ -1,0 +1,100 @@
+get:
+  tags:
+    - security_logs
+  summary: List security logs
+  description: >-
+    Returns a cursor-paginated list ordered by log time, newest first. Use after
+    or before to navigate. The page and per_page parameters are rejected.
+
+    Requires a premium license and available log storage. Security logs must also be enabled for the organization. Results are ordered by logged_at and log_id, both descending, within the fixed 90-day retention period.
+
+    Requires the product catalog to be enabled and security_log read permission on the API key.
+  operationId: findAllSecurityLogs
+  parameters:
+    - $ref: ../parameters/limit.yaml
+    - $ref: ../parameters/after.yaml
+    - $ref: ../parameters/before.yaml
+    - $ref: ../parameters/include_total_count.yaml
+    - name: from_date
+      in: query
+      required: false
+      description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is
+        interpreted as midnight UTC.
+      schema:
+        type: string
+        description: Inclusive lower bound as an ISO 8601 date or timestamp. A date is
+          interpreted as midnight UTC.
+        example: 2022-04-29T08:59:51.123456Z
+    - name: to_date
+      in: query
+      required: true
+      description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is
+        interpreted as midnight UTC. Required; a request without it returns 422.
+      schema:
+        type: string
+        description: Inclusive upper bound as an ISO 8601 date or timestamp. A date is
+          interpreted as midnight UTC. Required; a request without it returns
+          422.
+        example: 2022-04-29T08:59:51.123456Z
+    - name: user_ids[]
+      in: query
+      required: false
+      description: User ids[].
+      schema:
+        type: array
+        description: User ids.
+        items:
+          type: string
+          description: User ids.
+          example: example
+    - name: api_key_ids[]
+      in: query
+      required: false
+      description: Api key ids[].
+      schema:
+        type: array
+        description: Api key ids.
+        items:
+          type: string
+          description: Api key ids.
+          example: example
+    - name: log_types[]
+      in: query
+      required: false
+      description: Log types[].
+      schema:
+        type: array
+        description: Log types.
+        items:
+          type: string
+          description: Log types.
+          example: example
+    - name: log_events[]
+      in: query
+      required: false
+      description: Log events[].
+      schema:
+        type: array
+        description: Log events.
+        items:
+          type: string
+          description: Log events.
+          example: example
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/SecurityLogsPaginated.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

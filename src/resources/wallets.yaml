@@ -48,7 +48,7 @@ get:
         example: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba"
     - name: billing_entity_codes[]
       in: query
-      description: Filter wallets by billing entity codes.
+      description: Filter wallets by billing entity codes. A code that does not match a billing entity of the organization returns a `404` error.
       required: false
       explode: true
       schema:

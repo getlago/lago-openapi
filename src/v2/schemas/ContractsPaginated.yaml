@@ -1,0 +1,13 @@
+type: object
+description: contracts list.
+required:
+  - contracts
+  - meta
+properties:
+  contracts:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./ContractObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

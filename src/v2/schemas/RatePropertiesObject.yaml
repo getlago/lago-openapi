@@ -1,0 +1,88 @@
+type: object
+description: Pricing configuration for the selected rate model. Standard
+  requires amount; package also requires package_size. Graduated, volume and
+  graduated_percentage models use their matching ranges array. Custom properties
+  remain model-specific.
+properties:
+  amount:
+    type:
+      - number
+      - string
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  pricing_group_keys:
+    type: array
+    description: Event property keys used to group prices.
+    items:
+      type: string
+      description: Event property key.
+      example: region
+  free_units:
+    type: integer
+    description: Free units per billing period.
+    example: 0
+  package_size:
+    type: integer
+    description: Units in one package.
+    example: 100
+  rate:
+    type:
+      - number
+      - string
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  fixed_amount:
+    type:
+      - number
+      - string
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  free_units_per_events:
+    type:
+      - integer
+      - "null"
+    description: Number of free transactions.
+    example: 0
+  free_units_per_total_aggregation:
+    type:
+      - number
+      - string
+      - "null"
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  per_transaction_min_amount:
+    type:
+      - number
+      - string
+      - "null"
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  per_transaction_max_amount:
+    type:
+      - number
+      - string
+      - "null"
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  graduated_ranges:
+    type: array
+    description: Ordered pricing tiers. The final tier is open-ended.
+    items:
+      $ref: ./RateTierObject.yaml
+  volume_ranges:
+    type: array
+    description: Ordered pricing tiers. The final tier is open-ended.
+    items:
+      $ref: ./RateTierObject.yaml
+  graduated_percentage_ranges:
+    type: array
+    description: Ordered pricing tiers. The final tier is open-ended.
+    items:
+      $ref: ./RateTierObject.yaml
+additionalProperties: true

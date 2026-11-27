@@ -1,0 +1,39 @@
+parameters:
+  - name: customer_external_id
+    in: path
+    required: true
+    description: Customer external identifier.
+    schema:
+      type: string
+      description: Customer external identifier.
+      example: external_123
+post:
+  tags:
+    - customers
+  summary: Create a customer checkout URL
+  description: >-
+    Creates a checkout URL using the customer payment provider. No request body
+    is required.
+
+    Requires the product catalog to be enabled and customer write permission on the API key.
+  operationId: createCustomerCheckoutUrl
+  responses:
+    "200":
+      description: Successful response
+      headers:
+        X-Lago-Endpoint-Status:
+          $ref: ../headers/EndpointStatus.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/CheckoutUrl.yaml
+    "400":
+      $ref: ../responses/BadRequest.yaml
+    "401":
+      $ref: ../responses/Unauthorized.yaml
+    "403":
+      $ref: ../responses/Forbidden.yaml
+    "404":
+      $ref: ../responses/NotFound.yaml
+    "422":
+      $ref: ../responses/UnprocessableEntity.yaml

@@ -1,0 +1,54 @@
+type: object
+description: Product Category.
+required:
+  - lago_id
+  - name
+  - code
+  - description
+  - invoice_display_name
+  - created_at
+  - updated_at
+  - deleted_at
+properties:
+  lago_id:
+    type: string
+    description: Unique identifier created by Lago.
+    example: 1a901a90-1a90-1a90-1a90-1a901a901a90
+    format: uuid
+  name:
+    type: string
+    description: Name.
+    example: example
+  code:
+    type: string
+    description: Code.
+    example: example
+  description:
+    type:
+      - string
+      - "null"
+    description: Description.
+    example: example
+  invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Invoice display name.
+    example: example
+  created_at:
+    type: string
+    description: UTC creation timestamp, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  updated_at:
+    type: string
+    description: UTC timestamp of the last update, with microsecond precision.
+    example: 2022-04-29T08:59:51.123456Z
+    format: date-time
+  deleted_at:
+    type:
+      - string
+      - "null"
+    description: UTC deletion timestamp, with microsecond precision. Null until deletion.
+    example: null
+    format: date-time

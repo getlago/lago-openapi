@@ -5,7 +5,8 @@ parameters:
     required: true
     schema:
       type: string
-      example: '12345'
+      format: 'uuid'
+      example: '1a901a90-1a90-1a90-1a90-1a901a901a90'
 put:
   tags:
     - credit_notes
@@ -30,6 +31,8 @@ put:
       $ref: '../responses/BadRequest.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'
     '422':
@@ -49,5 +52,7 @@ get:
             $ref: '../schemas/CreditNoteExtended.yaml'
     '401':
       $ref: '../responses/Unauthorized.yaml'
+    '403':
+      $ref: '../responses/Forbidden.yaml'
     '404':
       $ref: '../responses/NotFound.yaml'

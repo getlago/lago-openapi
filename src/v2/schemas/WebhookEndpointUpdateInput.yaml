@@ -1,0 +1,7 @@
+type: object
+description: Update webhook endpoint.
+required:
+  - webhook_endpoint
+properties:
+  webhook_endpoint:
+    $ref: ./WebhookEndpointBaseInput.yaml

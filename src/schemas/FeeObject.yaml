@@ -361,10 +361,9 @@ properties:
     items:
       $ref: "./FeeAppliedTaxObject.yaml"
   pricing_unit_details:
-    type:
-      - object
-      - "null"
-    description: Details about the pricing unit used and amounts for this fee.
-    $ref: "./PricingUnitDetailsObject.yaml"
+    oneOf:
+      - $ref: "./PricingUnitDetailsObject.yaml"
+      - type: "null"
+    description: Details about the pricing unit used and amounts for this fee. It is `null` on fees that are not charged in a pricing unit.
   presentation_breakdowns:
     $ref: "./PresentationBreakdownsObject.yaml"

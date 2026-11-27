@@ -1,0 +1,13 @@
+type: object
+description: rate cards list.
+required:
+  - rate_cards
+  - meta
+properties:
+  rate_cards:
+    type: array
+    description: Records in this response.
+    items:
+      $ref: ./RateCardObject.yaml
+  meta:
+    $ref: ./CursorPaginationMeta.yaml

@@ -1,0 +1,7 @@
+type: object
+description: webhook endpoint response.
+required:
+  - webhook_endpoint
+properties:
+  webhook_endpoint:
+    $ref: ./WebhookEndpointObject.yaml

@@ -1,0 +1,7 @@
+type: object
+description: Update billable metric.
+required:
+  - billable_metric
+properties:
+  billable_metric:
+    $ref: ./BillableMetricBaseInput.yaml

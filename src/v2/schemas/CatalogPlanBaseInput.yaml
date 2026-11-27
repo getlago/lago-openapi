@@ -1,0 +1,36 @@
+type: object
+minProperties: 1
+properties:
+  name:
+    type: string
+    description: Name shown in the catalog.
+    example: Compute
+  code:
+    type: string
+    description: Unique code within the organization.
+    example: example_code
+    pattern: ^(?!\.+$)[a-zA-Z0-9_\-.]+$
+  description:
+    type:
+      - string
+      - "null"
+    description: Internal description.
+    example: Compute charges.
+  invoice_display_name:
+    type:
+      - string
+      - "null"
+    description: Name used on invoices. Defaults to the name when blank.
+    example: Compute
+  currency:
+    type: string
+    description: ISO 4217 billing currency.
+    example: USD
+    pattern: ^[A-Z]{3}$
+  tax_codes:
+    type: array
+    description: Tax codes to assign. An empty array clears the assignments.
+    items:
+      type: string
+      description: Tax code.
+      example: standard_vat

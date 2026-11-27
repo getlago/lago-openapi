@@ -1,0 +1,48 @@
+type: object
+description: |
+  A structured payment term. It defines how the payment due date of an invoice is computed from its issuing date.
+
+  The fields accepted and returned depend on `term_type`:
+  - `due_on_receipt`: no other field. The invoice is due on its issuing date.
+  - `net`: `days`. Due `days` days after the issuing date.
+  - `end_of_month`: no other field. Due on the last day of the issuing month.
+  - `net_end_of_month`: `days`. Due `days` days after the last day of the issuing month.
+  - `days_end_of_month`: `days`. Due on the last day of the month reached `days` days after the issuing date.
+  - `day_of_month`: `day_of_month` and `month_offset`. Due on `day_of_month` of the month `month_offset` months after the issuing month. A day past the end of the target month is clamped to its last day. With a `month_offset` of `0`, a day already past on the issuing date rolls over to the following month.
+
+  Any field not listed for the `term_type` is rejected with a `422` and the error code `unexpected_fields`. Other error codes on this field: `invalid_format`, `invalid_term_type`, `invalid_days`, `invalid_day_of_month`, `invalid_month_offset`.
+
+  The legacy integer field `net_payment_term` is an alias of this object: `days` for a `net` term, `0` for `due_on_receipt`, and `null` for every other term type.
+required:
+  - term_type
+properties:
+  term_type:
+    type: string
+    enum:
+      - due_on_receipt
+      - net
+      - end_of_month
+      - net_end_of_month
+      - days_end_of_month
+      - day_of_month
+    example: net
+    description: The type of payment term. It decides which other fields are accepted and returned.
+  days:
+    type: integer
+    minimum: 0
+    maximum: 365
+    example: 30
+    description: The number of days. Required for `net`, `net_end_of_month` and `days_end_of_month`; not accepted for other term types.
+  day_of_month:
+    type: integer
+    minimum: 1
+    maximum: 31
+    example: 15
+    description: The day of the month the invoice is due on. Required for `day_of_month`; not accepted for other term types.
+  month_offset:
+    type: integer
+    minimum: 0
+    maximum: 12
+    default: 1
+    example: 1
+    description: The number of months after the issuing month. Only accepted for `day_of_month`. Defaults to `1` (the following month) when omitted; always returned for a `day_of_month` term.

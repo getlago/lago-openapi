@@ -1,0 +1,38 @@
+type: object
+description: Pricing tier. Upper bounds must increase and the final tier must
+  have a null upper bound. Do not send from_value.
+not:
+  required:
+    - from_value
+  properties:
+    from_value: {}
+properties:
+  to_value:
+    type:
+      - string
+      - number
+      - "null"
+    description: Upper bound of this tier, sent as a decimal string. Null marks the
+      final, open-ended tier.
+    example: null
+  flat_amount:
+    type:
+      - number
+      - string
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  per_unit_amount:
+    type:
+      - number
+      - string
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$
+  rate:
+    type:
+      - number
+      - string
+    description: Amount, as a number or decimal string.
+    example: "1.5"
+    pattern: ^-?[0-9]+(\.[0-9]+)?$

@@ -1,0 +1,8 @@
+description: Invalid fields or filters
+headers:
+  X-Lago-Endpoint-Status:
+    $ref: '../headers/EndpointStatus.yaml'
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/ApiError.yaml'
